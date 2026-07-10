@@ -1,4 +1,4 @@
-﻿{
+{
   // Place your ea_ui workspace TS snippets here.
   "ea-component.ts": {
     "scope": "typescript",
@@ -33,11 +33,11 @@
       "      this.updateContainerClasslist();",
       "    },",
       "  })",
-      "  $4: string = '';",
+      "  type: string = '';",
       "",
       "  updateContainerClasslist(): string {",
       "    const className = bem({",
-      "      // ['--' + this.$4]: this.$4,",
+      "      // [this.type]: this.type,",
       "    });",
       "",
       "    if (this._container) this._container.className = className;",
@@ -58,12 +58,12 @@
       "    // TODO",
       "  }",
       "",
-      "  $mount(): void {",
+      "  \\$mount(): void {",
       "    this.updateContainerClasslist();",
       "  }",
       "}",
     ],
-    "description": "ea-ts-template"
+    "description": "ea-ts-template",
   },
   "ea-ts-getter+setter": {
     "scope": "typescript",
@@ -79,9 +79,9 @@
       "    this.#states.$0 = value;",
       "  }",
       "  // #endregion",
-      "  // ------- end -------"
+      "  // ------- end -------",
     ],
-    "description": "ts-getter+setter for #states"
+    "description": "ts-getter+setter for #states",
   },
   "ea-ts-prop": {
     "scope": "typescript",
@@ -97,9 +97,9 @@
       "    this.#props.$0 = value;",
       "  }",
       "  // #endregion",
-      "  // ------- end -------"
+      "  // ------- end -------",
     ],
-    "description": "ts-prop getter+setter for #props"
+    "description": "ts-prop getter+setter for #props",
   },
   "ea-ts-attribute": {
     "scope": "typescript",
@@ -112,18 +112,15 @@
       "      $2",
       "    },",
       "  })",
-      "  $0: $3 = $4;"
+      "  $0: $3 = $4;",
     ],
-    "description": "ts-attribute decorator"
+    "description": "ts-attribute decorator",
   },
   "ea-ts-query": {
     "scope": "typescript",
     "prefix": "ea-ts-query",
-    "body": [
-      "  @query(${1:bem.cb()})",
-      "  private _$0!: $2;"
-    ],
-    "description": "ts-query decorator"
+    "body": ["  @query(${1:bem.cb()})", "  private _$0!: $2;"],
+    "description": "ts-query decorator",
   },
   "ea-ts-listen": {
     "scope": "typescript",
@@ -132,18 +129,18 @@
       "  @listen('$1'${2:, '${3:selector}'})",
       "  private _$0(e: $4): void {",
       "    $5",
-      "  }"
+      "  }",
     ],
-    "description": "ts-listen decorator"
+    "description": "ts-listen decorator",
   },
   "ea-ts-bem": {
     "scope": "typescript",
     "prefix": "ea-ts-bem",
     "body": [
       "const TAG_NAME = \"$1\" as const;",
-      "const bem = createBEM(TAG_NAME);"
+      "const bem = createBEM(TAG_NAME);",
     ],
-    "description": "ts-bem constant"
+    "description": "ts-bem constant",
   },
   "ea-ts-custom-element": {
     "scope": "typescript",
@@ -152,9 +149,9 @@
       "@CustomElement(TAG_NAME, { styles: [stylesheet] })",
       "export class Ea$1 extends EaBase {",
       "  $2",
-      "}"
+      "}",
     ],
-    "description": "ts-CustomElement decorator"
+    "description": "ts-CustomElement decorator",
   },
   "ea-ts-listen-click": {
     "scope": "typescript",
@@ -163,9 +160,9 @@
       "  @listen('click', '${1:bem.ce(\"close\")}')",
       "  private _handle${2:Click}(e: Event): void {",
       "    $3",
-      "  }"
+      "  }",
     ],
-    "description": "ts-click listener with selector"
+    "description": "ts-click listener with selector",
   },
   "ea-ts-html": {
     "scope": "typescript",
@@ -177,9 +174,9 @@
       "        <slot></slot>",
       "      </div>",
       "    `;",
-      "  }"
+      "  }",
     ],
-    "description": "ts-html template method"
+    "description": "ts-html template method",
   },
   "ea-ts-mount": {
     "scope": "typescript",
@@ -188,8 +185,8 @@
       "  $mount(): void {",
       "    this.updateContainerClasslist();",
       "    $1",
-      "  }"
+      "  }",
     ],
-    "description": "ts-$mount lifecycle hook"
-  }
+    "description": "ts-$mount lifecycle hook",
+  },
 }

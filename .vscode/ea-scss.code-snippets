@@ -1,23 +1,23 @@
-﻿{
+{
   "ea-component.scss": {
     "scope": "scss",
     "prefix": "ea-scss-template",
     "body": [
-      "$name: ea-$1;",
+      "\\$name: ea-$1;",
       "",
       ":host {",
-      "  --#{$name}-border-radius: var(--border-radius-sm);",
-      "  --#{$name}-font-size: var(--font-size-md);",
-      "  --#{$name}-transition: var(--transition-fast);",
+      "  --#{\\$name}-border-radius: var(--border-radius-sm);",
+      "  --#{\\$name}-font-size: var(--font-size-md);",
+      "  --#{\\$name}-transition: var(--transition-fast);",
       "",
-      "  --#{$name}-text: var(--grey-900);",
-      "  --#{$name}-bg: var(--color-white);",
-      "  --#{$name}-border-color: var(--grey-300);",
+      "  --#{\\$name}-text: var(--grey-900);",
+      "  --#{\\$name}-bg: var(--color-white);",
+      "  --#{\\$name}-border-color: var(--grey-300);",
       "",
       "  display: block;",
       "}",
       "",
-      "@include block($name) {",
+      "@include block(#{\\$name}) {",
       "  box-sizing: border-box;",
       "",
       "  @include element(content) {",
@@ -31,68 +31,45 @@
       "  @include state($5) {",
       "    $6",
       "  }",
-      "}"
+      "}",
     ],
-    "description": "ea-scss-template"
+    "description": "ea-scss-template",
   },
   "ea-scss-block": {
     "scope": "scss",
     "prefix": "ea-scss-block",
-    "body": [
-      "@include block($name) {",
-      "  $1",
-      "}"
-    ],
-    "description": "scss block mixin"
+    "body": ["@include block($name) {", "  $1", "}"],
+    "description": "scss block mixin",
   },
   "ea-scss-element": {
     "scope": "scss",
     "prefix": "ea-scss-element",
-    "body": [
-      "@include element($1) {",
-      "  $2",
-      "}"
-    ],
-    "description": "scss element mixin"
+    "body": ["@include element($1) {", "  $2", "}"],
+    "description": "scss element mixin",
   },
   "ea-scss-modifier": {
     "scope": "scss",
     "prefix": "ea-scss-modifier",
-    "body": [
-      "@include modifier($1) {",
-      "  $2",
-      "}"
-    ],
-    "description": "scss modifier mixin"
+    "body": ["@include modifier($1) {", "  $2", "}"],
+    "description": "scss modifier mixin",
   },
   "ea-scss-state": {
     "scope": "scss",
     "prefix": "ea-scss-state",
-    "body": [
-      "@include state($1) {",
-      "  $2",
-      "}"
-    ],
-    "description": "scss state mixin"
+    "body": ["@include state($1) {", "  $2", "}"],
+    "description": "scss state mixin",
   },
   "ea-scss-host": {
     "scope": "scss",
     "prefix": "ea-scss-host",
-    "body": [
-      ":host {",
-      "  --#{$name}-$1: $2;",
-      "  $3",
-      "}"
-    ],
-    "description": "scss :host block"
+    "body": [":host {", "  --#{$name}-$1: $2;", "  $3", "}"],
+    "description": "scss :host block",
   },
   "ea-scss-css-var": {
     "scope": "scss",
     "prefix": "ea-scss-css-var",
-    "body": [
-      "--#{$name}-$1: $2;"
-    ],
-    "description": "scss css custom property"
+    "body": ["--#{$name}-$1: $2;"],
+    "description": "scss css custom property",
   },
   "ea-scss-type-map": {
     "scope": "scss",
@@ -108,9 +85,9 @@
       "",
       "@each $type, $color in $name-type {",
       "  --#{$name}-#{$type}: var(--#{$color}-500);",
-      "}"
+      "}",
     ],
-    "description": "scss type map with each loop"
+    "description": "scss type map with each loop",
   },
   "ea-scss-each": {
     "scope": "scss",
@@ -120,28 +97,20 @@
       "  @include modifier(#{$type}) {",
       "    $1",
       "  }",
-      "}"
+      "}",
     ],
-    "description": "scss each loop"
+    "description": "scss each loop",
   },
   "ea-scss-nested": {
     "scope": "scss",
     "prefix": "ea-scss-nested",
-    "body": [
-      ".#{$name}__$1 {",
-      "  $2",
-      "}"
-    ],
-    "description": "scss nested element ref"
+    "body": [".#{$name}__$1 {", "  $2", "}"],
+    "description": "scss nested element ref",
   },
   "ea-scss-nested-state": {
     "scope": "scss",
     "prefix": "ea-scss-nested-state",
-    "body": [
-      "&.is-$1 {",
-      "  $2",
-      "}"
-    ],
-    "description": "scss nested state ref"
-  }
+    "body": ["&.is-$1 {", "  $2", "}"],
+    "description": "scss nested state ref",
+  },
 }

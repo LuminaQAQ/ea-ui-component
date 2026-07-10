@@ -1,0 +1,26 @@
+$name: ea-upload;
+
+:host {
+  --#{$name}-border-radius: var(--border-radius-sm);
+  --#{$name}-font-size: var(--font-size-md);
+  --#{$name}-transition: var(--transition-fast);
+
+  --#{$name}-text: var(--grey-900);
+  --#{$name}-bg: var(--color-white);
+  --#{$name}-border-color: var(--grey-300);
+
+  display: block;
+}
+
+@include block(#{$name}) {
+  box-sizing: border-box;
+
+  @include element(content) {
+  }
+
+  @include modifier() {
+  }
+
+  @include state() {
+  }
+}
