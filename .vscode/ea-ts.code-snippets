@@ -1,0 +1,195 @@
+﻿{
+  // Place your ea_ui workspace TS snippets here.
+  "ea-component.ts": {
+    "scope": "typescript",
+    "prefix": "ea-ts-template",
+    "body": [
+      "import EaBase, { createBEM } from \"@core/EaBase\";",
+      "import { CustomElement, attribute, query, listen } from \"@decorator\";",
+      "import { Enum } from \"@utils/Enum\";",
+      "import stylesheet from \"./index.scss?inline\";",
+      "",
+      "const TAG_NAME = \"ea-$1\" as const;",
+      "const bem = createBEM(TAG_NAME);",
+      "",
+      "/**",
+      " * @summary $2",
+      " * @status stable",
+      " * @since 3.0",
+      " *",
+      " * @slot default - default slot.",
+      " *",
+      " * @csspart container - container element.",
+      " */",
+      "@CustomElement(TAG_NAME, { styles: [stylesheet] })",
+      "export class Ea$3 extends EaBase {",
+      "  @query(bem.cb())",
+      "  private _container!: HTMLElement;",
+      "",
+      "  @attribute({",
+      "    type: String,",
+      "    default: '',",
+      "    observer(this: Ea$3, newVal: string) {",
+      "      this.updateContainerClasslist();",
+      "    },",
+      "  })",
+      "  $4: string = '';",
+      "",
+      "  updateContainerClasslist(): string {",
+      "    const className = bem({",
+      "      // ['--' + this.$4]: this.$4,",
+      "    });",
+      "",
+      "    if (this._container) this._container.className = className;",
+      "",
+      "    return className;",
+      "  }",
+      "",
+      "  html(): string {",
+      "    return `",
+      "      <div class=\"${bem()}\" part=\"container\">",
+      "        <slot></slot>",
+      "      </div>",
+      "    `;",
+      "  }",
+      "",
+      "  @listen('click')",
+      "  private _handleClick(e: Event): void {",
+      "    // TODO",
+      "  }",
+      "",
+      "  $mount(): void {",
+      "    this.updateContainerClasslist();",
+      "  }",
+      "}",
+    ],
+    "description": "ea-ts-template"
+  },
+  "ea-ts-getter+setter": {
+    "scope": "typescript",
+    "prefix": "ea-ts-getter+setter",
+    "body": [
+      "  // ------- $0 -------",
+      "  // #region",
+      "  get $0(): $5 {",
+      "    return this.#states.$0;",
+      "  }",
+      "",
+      "  set $0(value: $5) {",
+      "    this.#states.$0 = value;",
+      "  }",
+      "  // #endregion",
+      "  // ------- end -------"
+    ],
+    "description": "ts-getter+setter for #states"
+  },
+  "ea-ts-prop": {
+    "scope": "typescript",
+    "prefix": "ea-ts-prop",
+    "body": [
+      "  // ------- $0 -------",
+      "  // #region",
+      "  get $0(): $5 {",
+      "    return this.#props.$0;",
+      "  }",
+      "",
+      "  set $0(value: $5) {",
+      "    this.#props.$0 = value;",
+      "  }",
+      "  // #endregion",
+      "  // ------- end -------"
+    ],
+    "description": "ts-prop getter+setter for #props"
+  },
+  "ea-ts-attribute": {
+    "scope": "typescript",
+    "prefix": "ea-ts-attribute",
+    "body": [
+      "  @attribute({",
+      "    type: $5,",
+      "    default: $6,",
+      "    observer(this: Ea$1, newVal: $7) {",
+      "      $2",
+      "    },",
+      "  })",
+      "  $0: $3 = $4;"
+    ],
+    "description": "ts-attribute decorator"
+  },
+  "ea-ts-query": {
+    "scope": "typescript",
+    "prefix": "ea-ts-query",
+    "body": [
+      "  @query(${1:bem.cb()})",
+      "  private _$0!: $2;"
+    ],
+    "description": "ts-query decorator"
+  },
+  "ea-ts-listen": {
+    "scope": "typescript",
+    "prefix": "ea-ts-listen",
+    "body": [
+      "  @listen('$1'${2:, '${3:selector}'})",
+      "  private _$0(e: $4): void {",
+      "    $5",
+      "  }"
+    ],
+    "description": "ts-listen decorator"
+  },
+  "ea-ts-bem": {
+    "scope": "typescript",
+    "prefix": "ea-ts-bem",
+    "body": [
+      "const TAG_NAME = \"$1\" as const;",
+      "const bem = createBEM(TAG_NAME);"
+    ],
+    "description": "ts-bem constant"
+  },
+  "ea-ts-custom-element": {
+    "scope": "typescript",
+    "prefix": "ea-ts-custom-element",
+    "body": [
+      "@CustomElement(TAG_NAME, { styles: [stylesheet] })",
+      "export class Ea$1 extends EaBase {",
+      "  $2",
+      "}"
+    ],
+    "description": "ts-CustomElement decorator"
+  },
+  "ea-ts-listen-click": {
+    "scope": "typescript",
+    "prefix": "ea-ts-click",
+    "body": [
+      "  @listen('click', '${1:bem.ce(\"close\")}')",
+      "  private _handle${2:Click}(e: Event): void {",
+      "    $3",
+      "  }"
+    ],
+    "description": "ts-click listener with selector"
+  },
+  "ea-ts-html": {
+    "scope": "typescript",
+    "prefix": "ea-ts-html",
+    "body": [
+      "  html(): string {",
+      "    return `",
+      "      <div class=\"${bem()}\" part=\"container\">",
+      "        <slot></slot>",
+      "      </div>",
+      "    `;",
+      "  }"
+    ],
+    "description": "ts-html template method"
+  },
+  "ea-ts-mount": {
+    "scope": "typescript",
+    "prefix": "ea-ts-mount",
+    "body": [
+      "  $mount(): void {",
+      "    this.updateContainerClasslist();",
+      "    $1",
+      "  }"
+    ],
+    "description": "ts-$mount lifecycle hook"
+  }
+}
