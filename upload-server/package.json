@@ -1,0 +1,29 @@
+{
+  "name": "ea-upload-test-server",
+  "version": "1.0.0",
+  "description": "ea-upload 组件的文件上传测试服务器",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "upload",
+    "test-server",
+    "multer",
+    "express",
+    "ea-ui-component"
+  ],
+  "license": "MIT",
+  "author": "LuminaQAQ",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "morgan": "^1.10.0",
+    "multer": "^2.0.0",
+    "nanoid": "^3.3.7"
+  }
+}
