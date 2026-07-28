@@ -404,6 +404,10 @@
     "./ea-tree": {
       "import": "./dist/components/ea-tree.js",
       "types": "./dist/types/components/ea-tree/index.d.ts"
+    },
+    "./ea-upload": {
+      "import": "./dist/components/ea-upload.js",
+      "types": "./dist/types/components/ea-upload/index.d.ts"
     }
   }
 }

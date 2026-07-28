@@ -13,14 +13,19 @@ $name: ea-upload;
 }
 
 @include block(#{$name}) {
+  display: contents;
   box-sizing: border-box;
+
+  #original {
+    display: none;
+  }
 
   @include element(content) {
   }
 
-  @include modifier() {
-  }
+  // @include modifier() {
+  // }
 
-  @include state() {
-  }
+  // @include state() {
+  // }
 }

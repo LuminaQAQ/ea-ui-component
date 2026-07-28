@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ea-upload</title>
+    <link rel="stylesheet" href="../dist/assets/icon.css" />
+
+    <style>
+      hr {
+        margin: 3rem 0;
+      }
+
+      .demo-section {
+        margin-bottom: 2rem;
+        padding: 1rem;
+        border: 1px solid #eee;
+        border-radius: 8px;
+      }
+
+      .demo-section h3 {
+        margin-top: 0;
+        color: #333;
+      }
+
+      .demo-section pre {
+        background: #f5f5f5;
+        padding: 1rem;
+        border-radius: 4px;
+        overflow-x: auto;
+        font-size: 12px;
+        margin: 1rem 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script type="module" src="../src/components/ea-upload/index.ts"></script>
+    <script type="module" src="../src/components/ea-button/index.ts"></script>
+
+    <h2>ea-upload 组件测试</h2>
+
+    <div class="demo-section">
+      <h3>基础用法 - 点击选择文件</h3>
+      <ea-upload
+        id="basicUpload"
+        action="http://localhost:3100/api/upload/single"
+      >
+        <ea-button type="button">上传</ea-button>
+      </ea-upload>
+    </div>
+
+    <div class="demo-section">
+      <h3>拖拽上传</h3>
+      <ea-upload
+        id="dragUpload"
+        type="drag"
+        url="http://localhost:3100/api/upload/single"
+      >
+        test
+      </ea-upload>
+    </div>
+
+    <div class="demo-section">
+      <h3>多文件上传</h3>
+      <ea-upload
+        id="multipleUpload"
+        multiple
+        action="http://localhost:3100/api/upload/multiple"
+      >
+        <ea-button type="button">上传</ea-button>
+      </ea-upload>
+    </div>
+
+    <div class="demo-section">
+      <h3>带进度显示</h3>
+      <ea-upload
+        id="progressUpload"
+        show-progress
+        action="http://localhost:3100/api/upload/single"
+      ></ea-upload>
+    </div>
+
+    <div class="demo-section">
+      <h3>限制文件类型</h3>
+      <ea-upload
+        id="acceptUpload"
+        accept="image/*"
+        url="http://localhost:3100/api/upload/single"
+      ></ea-upload>
+    </div>
+
+    <div class="demo-section">
+      <h3>限制文件大小 (5MB)</h3>
+      <ea-upload
+        id="sizeUpload"
+        max-size="5242880"
+        url="http://localhost:3100/api/upload/single"
+      ></ea-upload>
+    </div>
+
+    <div class="demo-section">
+      <h3>限制文件数量</h3>
+      <ea-upload
+        id="countUpload"
+        multiple="multiple"
+        max-count="3"
+        url="http://localhost:3100/api/upload/multiple"
+      ></ea-upload>
+    </div>
+
+    <div class="demo-section">
+      <h3>禁用状态</h3>
+      <ea-upload
+        id="disabledUpload"
+        disabled
+        url="http://localhost:3100/api/upload/single"
+      ></ea-upload>
+    </div>
+
+    <div class="demo-section">
+      <h3>自定义占位符和图标</h3>
+      <ea-upload
+        id="customUpload"
+        placeholder="点击或拖拽文件到这里"
+        upload-icon="cloud-arrow-up"
+        url="http://localhost:3100/api/upload/single"
+      ></ea-upload>
+    </div>
+
+    <div class="demo-section">
+      <h3>事件监听示例</h3>
+      <ea-upload
+        id="eventUpload"
+        url="http://localhost:3100/api/upload/single"
+      ></ea-upload>
+      <div
+        id="eventLog"
+        style="
+          margin-top: 1rem;
+          padding: 1rem;
+          background: #f5f5f5;
+          border-radius: 4px;
+          font-size: 12px;
+          max-height: 200px;
+          overflow-y: auto;
+        "
+      ></div>
+    </div>
+
+    <script>
+      const eventUpload = document.getElementById("eventUpload");
+      const eventLog = document.getElementById("eventLog");
+
+      function logEvent(eventName, detail) {
+        const div = document.createElement("div");
+        div.style.marginBottom = "4px";
+        div.innerHTML = `<strong>${eventName}:</strong> ${JSON.stringify(detail, null, 2)}`;
+        eventLog.appendChild(div);
+        eventLog.scrollTop = eventLog.scrollHeight;
+      }
+
+      eventUpload.addEventListener("ea-change", e => {
+        logEvent("ea-change", e.detail);
+      });
+
+      eventUpload.addEventListener("ea-progress", e => {
+        logEvent("ea-progress", {
+          percentage: e.detail.percentage,
+          fileName: e.detail.file.name,
+        });
+      });
+
+      eventUpload.addEventListener("ea-success", e => {
+        logEvent("ea-success", {
+          fileName: e.detail.file.name,
+          response: e.detail.response,
+        });
+      });
+
+      eventUpload.addEventListener("ea-error", e => {
+        logEvent("ea-error", e.detail);
+      });
+    </script>
+  </body>
+</html>
