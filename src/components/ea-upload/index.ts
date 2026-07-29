@@ -11,8 +11,10 @@ import type {
   ListType,
   Method,
   UploadRequestOptions,
+  UploadRequestResult,
 } from "./type";
-import { fileDataBuilder, fileUpload } from "./utils/ajax";
+import { buildFormData, createUploadRequest } from "./utils/ajax";
+import { EaUploadAjaxError } from "./events/EaUploadAjaxError";
 
 const TAG_NAME = "ea-upload" as const;
 const bem = createBEM(TAG_NAME);
@@ -31,14 +33,16 @@ export class EaUpload extends EaFormAssociatedBase {
   @query(bem.cb())
   private _container!: HTMLElement;
 
-  @query("#default")
+  @query("#defaultSlot")
   private _defaultSlot!: HTMLSlotElement;
+  @query("#triggerSlot")
+  private _triggerSlot!: HTMLSlotElement;
   @query("#original")
   private _originalInput!: HTMLInputElement;
   @query(bem.ce("list"))
   private _listElement!: HTMLUListElement;
 
-  private _requestList: XMLHttpRequest[] | null = [];
+  private _requestList: UploadRequestResult[] = [];
 
   @attribute({
     type: Boolean,
@@ -126,38 +130,43 @@ export class EaUpload extends EaFormAssociatedBase {
   // directory: boolean = false;
 
   @property({
+    type: Object,
+    default: {},
+  })
+  data: Record<string, any> = {};
+
+  @property({
     type: Array,
     default: [],
   })
-  fileList: FileList | File[] | null = [];
+  fileList: File[] = [];
 
   @property({
     type: Function,
-    default: fileUpload,
+    default: createUploadRequest,
   })
-  httpRequest: (options: UploadRequestOptions) => XMLHttpRequest = fileUpload;
+  httpRequest: (options: UploadRequestOptions) => UploadRequestResult =
+    createUploadRequest;
 
   @property({
     type: Function,
-    default: null,
+    default: (evt: Event, error: EaUploadAjaxError) => {
+      console.error(error);
+    },
   })
-  onError: (evt: Event) => void | null = evt => {
-    console.error(evt);
+  onError: (error: Error) => void | null = error => {
+    console.error(error);
   };
   @property({
     type: Function,
-    default: null,
+    default: (evt: ProgressEvent) => {},
   })
-  onProgress: (evt: ProgressEvent) => void | null = evt => {
-    console.log(evt);
-  };
+  onProgress: (evt: ProgressEvent) => void | null = evt => {};
   @property({
     type: Function,
-    default: null,
+    default: (response: any) => {},
   })
-  onSuccess: (response: any) => void | null = response => {
-    console.log(response);
-  };
+  onSuccess: (response: any) => void | null = response => {};
 
   @property({
     type: Function,
@@ -179,8 +188,9 @@ export class EaUpload extends EaFormAssociatedBase {
   html(): string {
     return `
       <div class="${bem()}" part="container">
-        <label for="original">
-          <slot id="default"></slot>
+        <label class="${bem.e("content")}" for="original">
+          <slot id="triggerSlot" name="trigger"></slot>
+          <slot id="defaultSlot"></slot>
           <input
             id="original"
             name="original"
@@ -203,51 +213,51 @@ export class EaUpload extends EaFormAssociatedBase {
   }
 
   submit(): void {
-    if (!this.fileList) return;
-    if (this.fileList.length === 0)
-      throw Promise.reject(new Error("fileList is empty"));
+    if (!this.fileList || this.fileList.length === 0) {
+      console.warn("No files to upload.");
+      return;
+    }
 
-    // for (const file of this.fileList) {
-    //   const formData = fileDataBuilder(this.method, {
-    //     file,
-    //   }) as FormData;
-    //   const xhr = this.httpRequest({
-    //     action: this.action,
-    //     method: this.method,
-    //     filename: this.name,
-    //     file,
-    //     headers: this.headers,
-    //     onError: this.onError,
-    //     onProgress: this.onProgress,
-    //     onSuccess: this.onSuccess,
-    //     withCredentials: this.withCredentials,
-    //   });
+    const fileField = {
+      name: this.name || (this.multiple ? "files" : "file"),
+      file: this.fileList,
+    };
 
-    //   xhr.send(formData);
-    //   this._requestList?.push(xhr);
-    // }
-
-    const formData = fileDataBuilder(
-      {
-        name: this.name || (this.multiple ? "files" : "file"),
-        file: this.fileList,
-      },
-      {}
-    );
-    const xhr = this.httpRequest({
+    const controller = this.httpRequest({
       action: this.action,
       method: this.method,
       headers: this.headers,
-      onError: this.onError,
+      withCredentials: this.withCredentials,
+
+      fileField,
+      data: this.data,
+
+      onError: (evt, error) => {
+        // const xhr = controller.xhr;
+
+        this.onError(error,);
+
+        // const xhr = controller.xhr;
+        // this.dispatchEvent(
+        //   new CustomEvent("upload-error", {
+        //     detail: {
+        //       status: xhr.status,
+        //       response: xhr.response,
+        //       error: error,
+        //       file: fileField.file,
+        //     },
+        //     bubbles: true,
+        //     composed: true,
+        //   })
+        // );
+      },
       onProgress: this.onProgress,
       onSuccess: this.onSuccess,
-      withCredentials: this.withCredentials,
     });
 
-    console.log(Object.fromEntries(formData));
+    this._requestList?.push(controller);
 
-    xhr.send(formData);
-    this._requestList?.push(xhr);
+    controller.submit();
 
     if (this.showFileList) {
       this._listElement.innerHTML = "";
@@ -256,54 +266,61 @@ export class EaUpload extends EaFormAssociatedBase {
         li.textContent = file.name;
         this._listElement.appendChild(li);
       }
+      // this._renderFileList();
     }
   }
 
-  abort() {
+  abort(): void {
     this._requestList?.forEach(xhr => xhr.abort());
     this._requestList = [];
   }
 
-  @listen("click", "#default")
-  private _handleUploadClick(e: Event): void {
-    this.handleFileSelect();
+  clearFiles(): void {
+    this.fileList = [];
+    if (this.showFileList) {
+      this._listElement.innerHTML = "";
+    }
   }
 
-  @listen("change", "#original", { capture: true, passive: true })
+  @listen("click", bem.ce("content"))
+  private _handleUploadClick(e: Event): void {
+    const triggerElements = this._triggerSlot.assignedElements();
+    const hasTrigger = triggerElements.length > 0;
+
+    if (hasTrigger) {
+      if (triggerElements.includes(e.target as HTMLElement)) {
+        this.handleFileSelect();
+      }
+    } else {
+      this.handleFileSelect();
+    }
+  }
+
+  @listen("change", "#original")
   private _handleChange(e: Event): void {
     e.preventDefault();
     e.stopImmediatePropagation();
 
-    const files = (e.target as HTMLInputElement).files;
-
-    if (!files) return;
-    if (files.length === 0) return;
-
-    // const fs = new FileReader();
-    // fs.readAsArrayBuffer(files[0]);
-
-    // fs.onload = e => {
-    //   // console.log(e.target?.result);
-    //   console.log(e.target);
-    // };
-
-    // console.log(files[0]);
+    const input = e.target as HTMLInputElement;
+    const files = input.files;
+    if (!files || files.length === 0) return;
 
     this.dispatchEvent(new CustomEvent("change", { detail: files[0] }));
 
     if (this.multiple) {
-      (this.fileList as File[]).push(...files);
-      // this.fileList = files;
+      this.fileList = [...(this.fileList as File[]), ...files];
     } else {
       this.fileList = [files[0]];
-      // this.fileList = files;
     }
+
+    input.value = "";
 
     if (this.autoUpload) {
       this.submit();
     } else {
-      // if (!this.fileList) this.fileList = [];
-      // (this.fileList as File[]).push(files[0]);
+      // if (this.showFileList) {
+      //   this._renderFileList();
+      // }
     }
   }
 
