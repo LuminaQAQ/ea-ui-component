@@ -10,21 +10,28 @@ export type UploadRequest = (
 
 export type EaUploadErrorCallback = (
   error: EaUploadAjaxError,
-  uploadFile: File | File[],
-  uploadFiles: File[]
+  uploadFile: FileItem | FileItem[],
+  uploadFiles: FileItem[]
 ) => void;
 
 export type EaUploadSuccessCallback = (
   response: any,
-  file: File | File[],
-  files: File[]
+  file: FileItem | FileItem[],
+  files: FileItem[]
 ) => void;
 
 export type EaUploadProgressCallback = (
   evt: ProgressEvent,
-  file: File | File[],
-  files: File[]
+  file: FileItem | FileItem[],
+  files: FileItem[]
 ) => void;
+
+export interface FileItem extends File {
+  uid: string;
+  status: "pending" | "uploading" | "done" | "error";
+  progress?: number;
+  controller?: UploadRequestResult;
+}
 
 export interface EaUploadProgressEvent extends ProgressEvent {
   percent: number;
@@ -41,7 +48,7 @@ export interface UploadRequestOptions {
   method: Method;
   headers: Headers | Record<string, string | number | null | undefined>;
   withCredentials: boolean;
-  fileField: { name: string; file: File | File[]; files: File[] };
+  fileField: { name: string; file: FileItem; files: FileItem[] };
   data?: Record<string, any>;
 
   onError?: EaUploadErrorCallback;
@@ -56,5 +63,5 @@ export interface UploadRequestOptions {
  */
 export interface FileField {
   name: string;
-  file: File | File[];
+  file: FileItem | FileItem[];
 }

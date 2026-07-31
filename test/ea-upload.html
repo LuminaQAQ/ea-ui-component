@@ -50,6 +50,17 @@
       </ea-upload>
     </div>
 
+    <script type="module">
+      const basicUpload = document.getElementById("basicUpload");
+
+      basicUpload.addEventListener("change", e => {
+        console.log(e.detail, e.target.fileList);
+      });
+
+      basicUpload.fileList = [];
+      basicUpload.fileList = [new File(["test"], "test.txt")];
+    </script>
+
     <div class="demo-section">
       <h3>拖拽上传</h3>
       <ea-upload

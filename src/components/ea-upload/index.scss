@@ -20,12 +20,19 @@ $name: ea-upload;
     display: none;
   }
 
-  @include element(content) {
+  @include element(list) {
+    margin-top: var(--spacing-md);
+
+    .#{$name}__file-item {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+
+    .#{$name}__icon {
+      margin-right: var(--spacing-sm);
+    }
   }
-
-  // @include modifier() {
-  // }
-
-  // @include state() {
-  // }
 }

@@ -11,36 +11,43 @@ import type {
   EaUploadErrorCallback,
   EaUploadProgressCallback,
   EaUploadSuccessCallback,
+  FileItem,
   ListType,
   Method,
   UploadRequestOptions,
   UploadRequestResult,
 } from "./type";
-import { buildFormData, createUploadRequest } from "./utils/ajax";
+import { createUploadRequest } from "./utils/ajax";
 import {
   EaUploadAjaxError,
   EaUploadAjaxErrorEvent,
 } from "./events/EaUploadAjaxError";
+import html from "@/utils/html";
+import { EaUploadProgressEvent } from "./events/EaUploadProgressEvent";
+import { EaUploadSuccessEvent } from "./events/EaUploadSuccessEvent";
+import { nanoid } from "nanoid";
 
 const TAG_NAME = "ea-upload" as const;
 const bem = createBEM(TAG_NAME);
 
 /**
- * @summary
+ * @summary 文件上传组件
  * @status stable
- * @since 3.0
+ * @since 4.0
  *
- * @slot default - default slot.
+ * @slot default - 默认插槽
+ * @slot trigger - 触发按钮插槽
+ * @slot tip - 提示信息插槽
  *
- * @csspart container - container element.
+ * @csspart container - 容器
+ * @csspart list - 文件列表
+ * @csspart file-item - 文件项
  */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaUpload extends EaFormAssociatedBase {
   @query(bem.cb())
   private _container!: HTMLElement;
 
-  @query("#defaultSlot")
-  private _defaultSlot!: HTMLSlotElement;
   @query("#triggerSlot")
   private _triggerSlot!: HTMLSlotElement;
   @query("#original")
@@ -48,109 +55,70 @@ export class EaUpload extends EaFormAssociatedBase {
   @query(bem.ce("list"))
   private _listElement!: HTMLUListElement;
 
-  private _requestList: UploadRequestResult[] = [];
-
-  @attribute({
-    type: Boolean,
-    default: false,
-  })
+  @attribute({ type: Boolean, default: false })
   disabled: boolean = false;
 
-  @attribute({
-    type: String,
-    default: "",
-  })
+  @attribute({ type: String, default: "" })
   action: string = "";
 
-  @attribute({
-    type: Object,
-    default: {},
-  })
+  @attribute({ type: Object, default: {} })
   headers: Headers | Record<string, string> = {};
 
-  @attribute({
-    type: Enum(["GET", "POST", "PUT", "DELETE"]),
-    default: "POST",
-  })
+  @attribute({ type: Enum(["GET", "POST", "PUT", "DELETE"]), default: "POST" })
   method: Method = "POST";
 
-  @attribute({
-    type: Boolean,
-    default: false,
-  })
+  @attribute({ type: Boolean, default: false })
   multiple: boolean = false;
 
-  @attribute({
-    type: String,
-    default: "",
-  })
+  @attribute({ type: String, default: "" })
   name: string = "";
 
-  @attribute({
-    type: Boolean,
-    default: false,
-  })
+  @attribute({ type: Boolean, default: false })
   withCredentials: boolean = false;
 
-  @attribute({
-    type: Boolean,
-    default: true,
-  })
+  @attribute({ type: Boolean, default: true })
   showFileList: boolean = true;
 
-  @attribute({
-    type: String,
-    default: "",
-  })
+  @attribute({ type: String, default: "" })
   accept: string = "";
 
-  @attribute({
-    type: Enum(["", "anonymous", "use-credentials"]),
-    default: "",
-  })
+  @attribute({ type: Enum(["", "anonymous", "use-credentials"]), default: "" })
   crossorigin: Crossorigin = "";
 
-  @attribute({
-    type: String,
-    default: "text",
-  })
+  @attribute({ type: String, default: "text" })
   listType: ListType = "text";
 
-  @attribute({
-    type: Boolean,
-    default: true,
-  })
+  @attribute({ type: Boolean, default: true })
   autoUpload: boolean = true;
 
-  @attribute({
-    type: Number,
-    default: Number.MAX_SAFE_INTEGER,
-  })
+  @attribute({ type: Number, default: Number.MAX_SAFE_INTEGER })
   limit: number | null = null;
 
-  // TODO: 默认未非标准属性
-  // @attribute({
-  //   type: Boolean,
-  //   default: false,
-  // })
-  // directory: boolean = false;
-
-  @property({
-    type: Object,
-    default: {},
-  })
+  @property({ type: Object, default: {} })
   data: Record<string, any> = {};
 
   @property({
     type: Array,
     default: [],
-  })
-  fileList: File[] = [];
+    observer: function (this: EaUpload, newVal: FileItem[]) {
+      for (const item of newVal) {
+        if (!item.uid) {
+          item.uid = nanoid();
+        }
+        if (!item.status) {
+          item.status = "pending";
+        }
+      }
+      this._renderFileList();
 
-  @property({
-    type: Function,
-    default: createUploadRequest,
+      if (this.autoUpload && newVal.length > 0) {
+        this.submit();
+      }
+    },
   })
+  fileList: FileItem[] = [];
+
+  @property({ type: Function, default: createUploadRequest })
   httpRequest: (options: UploadRequestOptions) => UploadRequestResult =
     createUploadRequest;
 
@@ -158,40 +126,329 @@ export class EaUpload extends EaFormAssociatedBase {
     type: Function,
     default: (
       error: EaUploadAjaxError,
-      file: File | File[],
-      files?: File[]
+      file: FileItem | FileItem[],
+      files?: FileItem[]
     ) => {
       console.error(error);
     },
   })
-  onError: EaUploadErrorCallback | null = (error, file, files) => {
-    console.error(error);
-  };
+  onError: EaUploadErrorCallback | null = null;
+
   @property({
     type: Function,
-    default: (evt: ProgressEvent, file: File | File[], files: File[]) => {},
+    default: (
+      evt: ProgressEvent,
+      file: FileItem | FileItem[],
+      files: FileItem[]
+    ) => {},
   })
   onProgress: EaUploadProgressCallback | null = null;
-  @property({
-    type: Function,
-    default: (response: any, file: File | File[], files: File[]) => {},
-  })
-  onSuccess: EaUploadSuccessCallback | null = (response, file, files) => {};
 
   @property({
     type: Function,
-    default: null,
+    default: (
+      response: any,
+      file: FileItem | FileItem[],
+      files: FileItem[]
+    ) => {},
   })
-  beforeRemove: ((uploadFile: File, uploadFiles: FileList) => void) | null =
-    null;
+  onSuccess: EaUploadSuccessCallback | null = null;
+
+  @property({ type: Function, default: null })
+  beforeRemove:
+    | ((uploadFile: FileItem, uploadFiles: FileItem[]) => void)
+    | null = null;
+
+  /**
+   * 清空所有
+   */
+  clearFiles(): void {
+    this.abort();
+    this.fileList = [];
+    this._originalInput.value = "";
+    this._renderFileList();
+    this._dispatchChangeEvent();
+  }
+
+  /**
+   * 触发文件选择对话框
+   */
+  handleFileSelect() {
+    if (!this.disabled) {
+      this._originalInput.click();
+    }
+  }
+
+  /**
+   * 提交上传
+   */
+  submit(): void {
+    if (this.fileList.length === 0) {
+      console.warn("No files to upload.");
+      return;
+    }
+
+    if (this._listElement.children.length === 0) {
+      this._renderFileList();
+    }
+
+    for (const item of this.fileList) {
+      if (item.status !== "pending") continue;
+
+      item.status = "uploading";
+      this._updateFileItem(item.uid);
+
+      const fileField = {
+        name: this.name || "file",
+        uid: item.uid,
+        file: item,
+        files: this.fileList,
+      };
+
+      const controller = this.httpRequest({
+        action: this.action,
+        method: this.method,
+        headers: this.headers,
+        withCredentials: this.withCredentials,
+        fileField,
+        data: this.data,
+
+        onError: (error, uploadFile, uploadFiles) => {
+          this.onError?.(error, uploadFile, uploadFiles);
+          this.dispatchEvent(
+            new EaUploadAjaxErrorEvent({ error, uploadFile, uploadFiles })
+          );
+          const target = this.fileList.find(i => i.uid === item.uid);
+          if (target) {
+            target.status = "error";
+            target.controller = undefined;
+            this._updateFileItem(item.uid);
+          }
+        },
+
+        onProgress: (evt, file, files) => {
+          this.onProgress?.(evt, file, files);
+          this.dispatchEvent(
+            new EaUploadProgressEvent({
+              event: evt,
+              uploadFile: file,
+              uploadFiles: files,
+            })
+          );
+          const target = this.fileList.find(i => i.uid === item.uid);
+          if (target) {
+            target.progress = (evt.loaded / evt.total) * 100;
+          }
+        },
+
+        onSuccess: (response, file, files) => {
+          this.onSuccess?.(response, file, files);
+          this.dispatchEvent(
+            new EaUploadSuccessEvent({
+              response,
+              uploadFile: file,
+              uploadFiles: files,
+            })
+          );
+          const target = this.fileList.find(i => i.uid === item.uid);
+          if (target) {
+            target.status = "done";
+            target.controller = undefined;
+            this._updateFileItem(item.uid);
+          }
+        },
+      });
+
+      item.controller = controller;
+      controller.submit();
+    }
+  }
+
+  /**
+   * 中止上传
+   * @param uid 可选，若提供则只中止该文件
+   */
+  abort(uid?: string): void {
+    if (uid) {
+      const item = this.fileList.find(i => i.uid === uid);
+      if (item?.controller) {
+        item.controller.abort();
+        item.controller = undefined;
+        item.status = "pending";
+        this._updateFileItem(uid);
+      }
+    } else {
+      for (const item of this.fileList) {
+        if (item.controller) {
+          item.controller.abort();
+          item.controller = undefined;
+          item.status = "pending";
+        }
+      }
+      this._renderFileList();
+    }
+  }
+
+  /**
+   * 移除单个文件
+   */
+  private _removeFile(uid: string): void {
+    const index = this.fileList.findIndex(item => item.uid === uid);
+    if (index === -1) return;
+
+    const item = this.fileList[index];
+    if (item.controller) {
+      item.controller.abort();
+    }
+    this.fileList.splice(index, 1);
+
+    const li = this._listElement.querySelector(`li[data-uid="${uid}"]`);
+    if (li) li.remove();
+
+    this._dispatchChangeEvent();
+  }
+
+  private _renderFileList(): void {
+    if (!this.showFileList) {
+      this._listElement.innerHTML = "";
+      return;
+    }
+    this._listElement.innerHTML = "";
+
+    const template = this._getTemplate();
+
+    for (const item of this.fileList) {
+      const isExists = this._listElement.querySelector(
+        `li[data-uid="${item.uid}"]`
+      );
+      if (isExists) continue;
+
+      const liTemplate = document.createElement("template");
+      liTemplate.innerHTML = html(`
+        <li class="${bem.e("file-item")} ${bem.m(this.listType)}" part="file-item" data-uid="${item.uid}">
+          ${template(item)}
+        </li>
+      `);
+      this._listElement.appendChild(
+        liTemplate.content.firstElementChild as HTMLElement
+      );
+    }
+  }
+
+  private _updateFileItem(uid: string): void {
+    const li = this._listElement.querySelector(`li[data-uid="${uid}"]`);
+    if (!li) return;
+
+    const item = this.fileList.find(i => i.uid === uid);
+    if (!item) {
+      li.remove();
+      return;
+    }
+
+    const template = this._getTemplate();
+    li.innerHTML = html(template(item));
+  }
+
+  private _getTemplate() {
+    const templates = {
+      text: (item: FileItem) =>
+        `<span class="${bem.e("status")}">
+            <ea-icon name="file" class="${bem.e("icon")}"></ea-icon>${item.name}[${item.status}]
+          </span>
+          <ea-icon name="xmark" class="${bem.e("icon")}"></ea-icon>`,
+      picture: (item: FileItem) =>
+        `<ea-icon name="image" class="${bem.e("icon")}"></ea-icon>
+          ${item.name}
+          <span class="${bem.e("status")}">${item.name}[${item.status}]</span>`,
+      "picture-card": (item: FileItem) =>
+        `<ea-icon name="image" class="${bem.e("icon")}"></ea-icon>
+          ${item.name}
+          <span class="${bem.e("status")}">${item.name}[${item.status}]</span>`,
+    };
+    return templates[this.listType] || templates.text;
+  }
+
+  private _dispatchChangeEvent() {
+    this.dispatchEvent(
+      new CustomEvent("change", { detail: { files: this.fileList } })
+    );
+  }
+
+  @listen("click", bem.ce("list"))
+  private _handleListClick(e: Event): void {
+    const target = e.target as HTMLElement;
+    const deleteIcon = target.closest('ea-icon[name="xmark"]');
+    if (!deleteIcon) return;
+
+    const li = deleteIcon.closest("li[data-uid]");
+    if (!li) return;
+
+    const uid = li.getAttribute("data-uid");
+    if (uid) {
+      e.stopPropagation();
+      this._removeFile(uid);
+    }
+  }
+
+  @listen("click", bem.ce("content"))
+  private _handleUploadClick(e: Event): void {
+    const triggerElements = this._triggerSlot.assignedElements();
+    const hasTrigger = triggerElements.length > 0;
+    if (hasTrigger) {
+      if (triggerElements.includes(e.target as HTMLElement)) {
+        this.handleFileSelect();
+      }
+    } else {
+      this.handleFileSelect();
+    }
+  }
+
+  @listen("change", "#original")
+  private _handleChange(e: Event): void {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+
+    const input = e.target as HTMLInputElement;
+    const files = input.files;
+    if (!files || files.length === 0) return;
+
+    const newItems: FileItem[] = [];
+    for (let i = 0; i < files.length; i++) {
+      newItems.push(
+        Object.assign(files[i] as FileItem, {
+          uid: nanoid(),
+          status: "pending" as const,
+        })
+      );
+    }
+
+    if (this.multiple) {
+      this.fileList = [...this.fileList, ...newItems];
+    } else {
+      this.fileList = newItems;
+      // this.abort();
+    }
+
+    if (this.showFileList) {
+      this._renderFileList();
+    }
+
+    input.value = "";
+    this._dispatchChangeEvent();
+
+    if (this.autoUpload) {
+      this.submit();
+    }
+  }
+
+  $mount(): void {
+    this.updateContainerClasslist();
+    this._renderFileList();
+  }
 
   updateContainerClasslist(): string {
-    const className = bem({
-      // ['--' + this.type]: this.type,
-    });
-
+    const className = bem({});
     if (this._container) this._container.className = className;
-
     return className;
   }
 
@@ -216,126 +473,5 @@ export class EaUpload extends EaFormAssociatedBase {
         <ul class="${bem.e("list")}" part="list"></ul>
       </div>
     `;
-  }
-
-  handleFileSelect() {
-    this._originalInput.click();
-  }
-
-  submit(): void {
-    if (!this.fileList || this.fileList.length === 0) {
-      console.warn("No files to upload.");
-      return;
-    }
-
-    for (const file of this.fileList) {
-      const fileField = {
-        name: this.name || "file",
-        file: file,
-        files: this.fileList,
-      };
-
-      const controller = this.httpRequest({
-        action: this.action,
-        method: this.method,
-        headers: this.headers,
-        withCredentials: this.withCredentials,
-
-        fileField,
-        data: this.data,
-
-        onError: (error, uploadFile, uploadFiles) => {
-          if (!this.onError) return;
-          this.onError(error, uploadFile, uploadFiles);
-          this.dispatchEvent(
-            new EaUploadAjaxErrorEvent({
-              error: error,
-              uploadFile: uploadFile,
-              uploadFiles: uploadFiles,
-            })
-          );
-        },
-        onProgress: (evt, file, files) => {
-          if (!this.onProgress) return;
-          this.onProgress(evt, file, files);
-        },
-        onSuccess: (response, file, files) => {
-          if (!this.onSuccess) return;
-          this.onSuccess(response, file, files);
-        },
-      });
-
-      this._requestList?.push(controller);
-
-      controller.submit();
-    }
-
-    if (this.showFileList) {
-      this._listElement.innerHTML = "";
-      for (const file of this.fileList) {
-        const li = document.createElement("li");
-        li.textContent = file.name;
-        this._listElement.appendChild(li);
-      }
-      // this._renderFileList();
-    }
-  }
-
-  abort(): void {
-    this._requestList?.forEach(xhr => xhr.abort());
-    this._requestList = [];
-  }
-
-  clearFiles(): void {
-    this.fileList = [];
-    if (this.showFileList) {
-      this._listElement.innerHTML = "";
-    }
-  }
-
-  @listen("click", bem.ce("content"))
-  private _handleUploadClick(e: Event): void {
-    const triggerElements = this._triggerSlot.assignedElements();
-    const hasTrigger = triggerElements.length > 0;
-
-    if (hasTrigger) {
-      if (triggerElements.includes(e.target as HTMLElement)) {
-        this.handleFileSelect();
-      }
-    } else {
-      this.handleFileSelect();
-    }
-  }
-
-  @listen("change", "#original")
-  private _handleChange(e: Event): void {
-    e.preventDefault();
-    e.stopImmediatePropagation();
-
-    const input = e.target as HTMLInputElement;
-    const files = input.files;
-    if (!files || files.length === 0) return;
-
-    this.dispatchEvent(new CustomEvent("change", { detail: files[0] }));
-
-    if (this.multiple) {
-      this.fileList = [...(this.fileList as File[]), ...files];
-    } else {
-      this.fileList = [files[0]];
-    }
-
-    input.value = "";
-
-    if (this.autoUpload) {
-      this.submit();
-    } else {
-      // if (this.showFileList) {
-      //   this._renderFileList();
-      // }
-    }
-  }
-
-  $mount(): void {
-    this.updateContainerClasslist();
   }
 }
