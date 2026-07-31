@@ -1,3 +1,9 @@
+export interface EaUploadAjaxErrorDetail {
+  error: EaUploadAjaxError;
+  uploadFile: File | File[];
+  uploadFiles: File[];
+}
+
 export class EaUploadAjaxError extends Error {
   readonly name = "EaUploadAjaxError";
 
@@ -15,9 +21,15 @@ export class EaUploadAjaxError extends Error {
 }
 
 export class EaUploadAjaxErrorEvent extends Event {
-  readonly detail: EaUploadAjaxError;
-  constructor(detail: EaUploadAjaxError) {
+  readonly detail: EaUploadAjaxErrorDetail;
+  constructor(detail: EaUploadAjaxErrorDetail) {
     super("ea-upload-error", { bubbles: true, composed: true });
     this.detail = detail;
+  }
+}
+
+declare global {
+  interface GlobalEventHandlersEventMap {
+    "ea-upload-error": EaUploadAjaxErrorEvent;
   }
 }

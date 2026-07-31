@@ -1,3 +1,5 @@
+import { EaUploadAjaxError } from "./events/EaUploadAjaxError";
+
 export type Crossorigin = "" | "anonymous" | "use-credentials";
 export type ListType = "text" | "picture" | "picture-card";
 export type Method = "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "HEAD";
@@ -5,6 +7,28 @@ export type Method = "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "HEAD";
 export type UploadRequest = (
   options: UploadRequestOptions
 ) => UploadRequestResult;
+
+export type EaUploadErrorCallback = (
+  error: EaUploadAjaxError,
+  uploadFile: File | File[],
+  uploadFiles: File[]
+) => void;
+
+export type EaUploadSuccessCallback = (
+  response: any,
+  file: File | File[],
+  files: File[]
+) => void;
+
+export type EaUploadProgressCallback = (
+  evt: ProgressEvent,
+  file: File | File[],
+  files: File[]
+) => void;
+
+export interface EaUploadProgressEvent extends ProgressEvent {
+  percent: number;
+}
 
 interface UploadRequestResult {
   xhr: XMLHttpRequest;
@@ -17,12 +41,12 @@ export interface UploadRequestOptions {
   method: Method;
   headers: Headers | Record<string, string | number | null | undefined>;
   withCredentials: boolean;
-  fileField: { name: string; file: File | File[] };
+  fileField: { name: string; file: File | File[]; files: File[] };
   data?: Record<string, any>;
 
-  onError?: (evt: Event, error: Error) => void;
-  onProgress?: (evt: ProgressEvent) => void;
-  onSuccess?: (response: any) => void;
+  onError?: EaUploadErrorCallback;
+  onProgress?: EaUploadProgressCallback;
+  onSuccess?: EaUploadSuccessCallback;
 }
 
 /**

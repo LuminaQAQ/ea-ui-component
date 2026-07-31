@@ -6,7 +6,7 @@ const config = {
 
   upload: {
     dest: path.join(__dirname, "..", "uploads"),
-    maxFileSize: 10 * 1024 * 1024,
+    maxFileSize: 2000 * 1024 * 1024,
     maxFiles: 10,
     allowedTypes: null,
   },

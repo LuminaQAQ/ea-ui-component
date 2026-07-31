@@ -8,13 +8,19 @@ import "@components/ea-button/index";
 
 import type {
   Crossorigin,
+  EaUploadErrorCallback,
+  EaUploadProgressCallback,
+  EaUploadSuccessCallback,
   ListType,
   Method,
   UploadRequestOptions,
   UploadRequestResult,
 } from "./type";
 import { buildFormData, createUploadRequest } from "./utils/ajax";
-import { EaUploadAjaxError } from "./events/EaUploadAjaxError";
+import {
+  EaUploadAjaxError,
+  EaUploadAjaxErrorEvent,
+} from "./events/EaUploadAjaxError";
 
 const TAG_NAME = "ea-upload" as const;
 const bem = createBEM(TAG_NAME);
@@ -150,23 +156,27 @@ export class EaUpload extends EaFormAssociatedBase {
 
   @property({
     type: Function,
-    default: (evt: Event, error: EaUploadAjaxError) => {
+    default: (
+      error: EaUploadAjaxError,
+      file: File | File[],
+      files?: File[]
+    ) => {
       console.error(error);
     },
   })
-  onError: (error: Error) => void | null = error => {
+  onError: EaUploadErrorCallback | null = (error, file, files) => {
     console.error(error);
   };
   @property({
     type: Function,
-    default: (evt: ProgressEvent) => {},
+    default: (evt: ProgressEvent, file: File | File[], files: File[]) => {},
   })
-  onProgress: (evt: ProgressEvent) => void | null = evt => {};
+  onProgress: EaUploadProgressCallback | null = null;
   @property({
     type: Function,
-    default: (response: any) => {},
+    default: (response: any, file: File | File[], files: File[]) => {},
   })
-  onSuccess: (response: any) => void | null = response => {};
+  onSuccess: EaUploadSuccessCallback | null = (response, file, files) => {};
 
   @property({
     type: Function,
@@ -218,46 +228,47 @@ export class EaUpload extends EaFormAssociatedBase {
       return;
     }
 
-    const fileField = {
-      name: this.name || (this.multiple ? "files" : "file"),
-      file: this.fileList,
-    };
+    for (const file of this.fileList) {
+      const fileField = {
+        name: this.name || "file",
+        file: file,
+        files: this.fileList,
+      };
 
-    const controller = this.httpRequest({
-      action: this.action,
-      method: this.method,
-      headers: this.headers,
-      withCredentials: this.withCredentials,
+      const controller = this.httpRequest({
+        action: this.action,
+        method: this.method,
+        headers: this.headers,
+        withCredentials: this.withCredentials,
 
-      fileField,
-      data: this.data,
+        fileField,
+        data: this.data,
 
-      onError: (evt, error) => {
-        // const xhr = controller.xhr;
+        onError: (error, uploadFile, uploadFiles) => {
+          if (!this.onError) return;
+          this.onError(error, uploadFile, uploadFiles);
+          this.dispatchEvent(
+            new EaUploadAjaxErrorEvent({
+              error: error,
+              uploadFile: uploadFile,
+              uploadFiles: uploadFiles,
+            })
+          );
+        },
+        onProgress: (evt, file, files) => {
+          if (!this.onProgress) return;
+          this.onProgress(evt, file, files);
+        },
+        onSuccess: (response, file, files) => {
+          if (!this.onSuccess) return;
+          this.onSuccess(response, file, files);
+        },
+      });
 
-        this.onError(error,);
+      this._requestList?.push(controller);
 
-        // const xhr = controller.xhr;
-        // this.dispatchEvent(
-        //   new CustomEvent("upload-error", {
-        //     detail: {
-        //       status: xhr.status,
-        //       response: xhr.response,
-        //       error: error,
-        //       file: fileField.file,
-        //     },
-        //     bubbles: true,
-        //     composed: true,
-        //   })
-        // );
-      },
-      onProgress: this.onProgress,
-      onSuccess: this.onSuccess,
-    });
-
-    this._requestList?.push(controller);
-
-    controller.submit();
+      controller.submit();
+    }
 
     if (this.showFileList) {
       this._listElement.innerHTML = "";

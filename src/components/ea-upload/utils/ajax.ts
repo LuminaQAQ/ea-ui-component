@@ -1,5 +1,9 @@
 import { EaUploadAjaxError } from "../events/EaUploadAjaxError";
 import type {
+  EaUploadErrorCallback,
+  EaUploadProgressCallback,
+  EaUploadProgressEvent,
+  EaUploadSuccessCallback,
   FileField,
   Method,
   UploadRequest,
@@ -27,7 +31,7 @@ interface FormDataBuilder {
 const createErrorHandler = (
   xhr: XMLHttpRequest,
   options: UploadRequestOptions,
-  callback?: (evt: Event, error: Error) => void
+  callback?: EaUploadErrorCallback
 ) => {
   let msg: string;
   if (xhr.response) {
@@ -39,37 +43,55 @@ const createErrorHandler = (
   }
 
   return (evt: Event) => {
-    if (callback) {
-      callback(
-        evt,
-        new EaUploadAjaxError(msg, xhr.status, options.method, options.action)
-      );
-    }
+    if (!callback) return;
+
+    const { fileField } = options;
+    callback(
+      new EaUploadAjaxError(msg, xhr.status, options.method, options.action),
+      fileField.file,
+      fileField.files
+    );
   };
 };
 
-// const createSuccessHandler = (
-//   xhr: XMLHttpRequest,
-//   options: UploadRequestOptions,
-//   callback?: (evt: Event, data: any) => void
-// ) => {
-//   return (evt: Event) => {
-//     if (xhr.status < 200 || xhr.status >= 300) {
-//     }
+const createSuccessHandler = (
+  xhr: XMLHttpRequest,
+  options: UploadRequestOptions,
+  callback?: EaUploadSuccessCallback
+) => {
+  return (evt: Event) => {
+    if (xhr.status < 200 || xhr.status >= 300) {
+      return createErrorHandler(xhr, options, options.onError)(evt);
+    }
 
-//     let text = xhr.responseText || xhr.response;
+    let text = xhr.responseText || xhr.response;
+    if (text) {
+      try {
+        text = JSON.parse(text);
+      } catch {}
+    }
 
-//     if (text) {
-//       try {
-//         text = JSON.parse(text);
-//       } catch {}
-//     }
+    if (!callback) return;
 
-//     if (callback) {
-//       callback(evt, text);
-//     }
-//   };
-// };
+    const { fileField } = options;
+    callback(text, fileField.file, fileField.files);
+  };
+};
+
+const createProgressHandler = (
+  xhr: XMLHttpRequest,
+  options: UploadRequestOptions,
+  callback?: EaUploadProgressCallback
+) => {
+  return (evt: ProgressEvent<XMLHttpRequestEventTarget>) => {
+    if (!callback) return;
+
+    const progressEvt = evt as EaUploadProgressEvent;
+    progressEvt.percent = (progressEvt.loaded / progressEvt.total) * 100;
+    const { fileField } = options;
+    callback(progressEvt, fileField.file, fileField.files);
+  };
+};
 
 /**
  * 构建文件上传所需的 FormData
@@ -141,13 +163,21 @@ export const createUploadRequest = (
   const { onSuccess, onError, onProgress } = options;
   const data = buildFormData(fileField, additionalData);
 
-  xhr.addEventListener("load", onSuccess, { signal: abortController.signal });
+  xhr.addEventListener("load", createSuccessHandler(xhr, options, onSuccess), {
+    signal: abortController.signal,
+  });
   xhr.addEventListener("error", createErrorHandler(xhr, options, onError), {
     signal: abortController.signal,
   });
-  xhr.addEventListener("progress", onProgress, {
-    signal: abortController.signal,
-  });
+  if (xhr.upload) {
+    xhr.upload.addEventListener(
+      "progress",
+      createProgressHandler(xhr, options, onProgress),
+      {
+        signal: abortController.signal,
+      }
+    );
+  }
 
   xhr.open(method, action, true);
   xhr.withCredentials = withCredentials;
