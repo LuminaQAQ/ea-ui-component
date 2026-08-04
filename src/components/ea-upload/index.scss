@@ -25,14 +25,64 @@ $name: ea-upload;
 
     .#{$name}__file-item {
       display: flex;
+      flex-direction: column;
+      width: 100%;
+      padding: var(--spacing-sm) 0;
+
+      &:hover .#{$name}__delete {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      &--error {
+        color: var(--red-500);
+
+        .#{$name}__delete {
+          opacity: 1;
+          pointer-events: auto;
+        }
+      }
+    }
+
+    .#{$name}__file-main {
+      display: flex;
       flex-direction: row;
-      flex-wrap: nowrap;
-      align-items: baseline;
+      align-items: center;
       justify-content: space-between;
+      width: 100%;
+    }
+
+    .#{$name}__file-info {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      min-width: 0;
     }
 
     .#{$name}__icon {
       margin-right: var(--spacing-sm);
+    }
+
+    .#{$name}__filename {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .#{$name}__delete {
+      opacity: 0;
+      pointer-events: none;
+      cursor: pointer;
+      transition: opacity var(--transition-fast);
+      margin-left: var(--spacing-md);
+      flex-shrink: 0;
+    }
+
+    .#{$name}__progress {
+      width: 100%;
+      margin-top: var(--spacing-sm);
     }
   }
 }

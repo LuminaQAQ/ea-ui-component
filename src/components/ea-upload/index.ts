@@ -5,6 +5,7 @@ import { Enum } from "@utils/Enum";
 import stylesheet from "./index.scss?inline";
 
 import "@components/ea-button/index";
+import "@components/ea-progress/index";
 
 import type {
   Crossorigin,
@@ -222,6 +223,17 @@ export class EaUpload extends EaFormAssociatedBase {
           if (target) {
             target.status = "error";
             target.controller = undefined;
+
+            const li = this._listElement.querySelector(
+              `li[data-uid="${item.uid}"]`
+            );
+            if (li) {
+              const progressEl = li.querySelector("ea-progress");
+              if (progressEl) {
+                progressEl.setAttribute("status", "exception");
+              }
+            }
+
             this._updateFileItem(item.uid);
           }
         },
@@ -238,6 +250,19 @@ export class EaUpload extends EaFormAssociatedBase {
           const target = this.fileList.find(i => i.uid === item.uid);
           if (target) {
             target.progress = (evt.loaded / evt.total) * 100;
+
+            const li = this._listElement.querySelector(
+              `li[data-uid="${item.uid}"]`
+            );
+            if (li) {
+              const progressEl = li.querySelector("ea-progress");
+              if (progressEl) {
+                progressEl.setAttribute("percentage", String(target.progress));
+                if (target.progress >= 100) {
+                  progressEl.setAttribute("status", "success");
+                }
+              }
+            }
           }
         },
 
@@ -253,6 +278,7 @@ export class EaUpload extends EaFormAssociatedBase {
           const target = this.fileList.find(i => i.uid === item.uid);
           if (target) {
             target.status = "done";
+            target.progress = 100;
             target.controller = undefined;
             this._updateFileItem(item.uid);
           }
@@ -325,7 +351,7 @@ export class EaUpload extends EaFormAssociatedBase {
 
       const liTemplate = document.createElement("template");
       liTemplate.innerHTML = html(`
-        <li class="${bem.e("file-item")} ${bem.m(this.listType)}" part="file-item" data-uid="${item.uid}">
+        <li class="${bem.e("file-item")} ${bem.m(this.listType)} ${bem.m(item.status)}" part="file-item" data-uid="${item.uid}">
           ${template(item)}
         </li>
       `);
@@ -345,17 +371,40 @@ export class EaUpload extends EaFormAssociatedBase {
       return;
     }
 
+    li.classList.remove(
+      bem.m("pending"),
+      bem.m("uploading"),
+      bem.m("done"),
+      bem.m("error")
+    );
+    li.classList.add(bem.m(item.status));
+
     const template = this._getTemplate();
     li.innerHTML = html(template(item));
   }
 
   private _getTemplate() {
     const templates = {
-      text: (item: FileItem) =>
-        `<span class="${bem.e("status")}">
-            <ea-icon name="file" class="${bem.e("icon")}"></ea-icon>${item.name}[${item.status}]
-          </span>
-          <ea-icon name="xmark" class="${bem.e("icon")}"></ea-icon>`,
+      text: (item: FileItem) => {
+        const isUploading = item.status === "uploading";
+        const iconName = isUploading ? "spinner" : "file";
+        const spinAttr = isUploading ? " spin" : "";
+
+        return `
+          <div class="${bem.e("file-main")}">
+            <div class="${bem.e("file-info")}">
+              <ea-icon name="${iconName}" class="${bem.e("icon")}"${spinAttr}></ea-icon>
+              <span class="${bem.e("filename")}">${item.name}</span>
+            </div>
+            <ea-icon name="xmark" class="${bem.e("icon")} ${bem.e("delete")}"></ea-icon>
+          </div>
+          ${
+            isUploading
+              ? `<ea-progress class="${bem.e("progress")}" variant="line" show-text="false" percentage="${item.progress || 0}"></ea-progress>`
+              : ""
+          }
+        `;
+      },
       picture: (item: FileItem) =>
         `<ea-icon name="image" class="${bem.e("icon")}"></ea-icon>
           ${item.name}
@@ -422,12 +471,7 @@ export class EaUpload extends EaFormAssociatedBase {
       );
     }
 
-    if (this.multiple) {
-      this.fileList = [...this.fileList, ...newItems];
-    } else {
-      this.fileList = newItems;
-      // this.abort();
-    }
+    this.fileList = [...this.fileList, ...newItems];
 
     if (this.showFileList) {
       this._renderFileList();
