@@ -9,8 +9,12 @@ import "@components/ea-progress/index";
 
 import type {
   Crossorigin,
+  EaUploadBeforeRemoveCallback,
+  EaUploadBeforeUploadCallback,
+  EaUploadChangeCallback,
   EaUploadErrorCallback,
   EaUploadProgressCallback,
+  EaUploadRemoveCallback,
   EaUploadSuccessCallback,
   FileItem,
   ListType,
@@ -25,6 +29,8 @@ import {
 } from "./events/EaUploadAjaxError";
 import html from "@/utils/html";
 import { EaUploadProgressEvent } from "./events/EaUploadProgressEvent";
+import { EaUploadRemoveEvent } from "./events/EaUploadRemoveEvent";
+import { EaUploadChangeEvent } from "./events/EaUploadChangeEvent";
 import { EaUploadSuccessEvent } from "./events/EaUploadSuccessEvent";
 import { nanoid } from "nanoid";
 
@@ -156,9 +162,25 @@ export class EaUpload extends EaFormAssociatedBase {
   onSuccess: EaUploadSuccessCallback | null = null;
 
   @property({ type: Function, default: null })
-  beforeRemove:
-    | ((uploadFile: FileItem, uploadFiles: FileItem[]) => void)
-    | null = null;
+  beforeRemove: EaUploadBeforeRemoveCallback | null = null;
+
+  @property({
+    type: Function,
+    default: (uploadFile: FileItem, uploadFiles: FileItem[]) => {},
+  })
+  onRemove: EaUploadRemoveCallback | null = null;
+
+  @property({
+    type: Function,
+    default: (uploadFile: FileItem | undefined, uploadFiles: FileItem[]) => {},
+  })
+  onChange: EaUploadChangeCallback | null = null;
+
+  @property({
+    type: Function,
+    default: (uploadFile: FileItem, uploadFiles: FileItem[]) => true,
+  })
+  beforeUpload: EaUploadBeforeUploadCallback | null = null;
 
   /**
    * 清空所有
@@ -183,7 +205,7 @@ export class EaUpload extends EaFormAssociatedBase {
   /**
    * 提交上传
    */
-  submit(): void {
+  async submit(): Promise<void> {
     if (this.fileList.length === 0) {
       console.warn("No files to upload.");
       return;
@@ -195,6 +217,12 @@ export class EaUpload extends EaFormAssociatedBase {
 
     for (const item of this.fileList) {
       if (item.status !== "pending") continue;
+
+      if (this.beforeUpload) {
+        const result = this.beforeUpload(item, this.fileList);
+        const shouldUpload = result instanceof Promise ? await result : result;
+        if (shouldUpload === false) continue;
+      }
 
       item.status = "uploading";
       this._updateFileItem(item.uid);
@@ -318,11 +346,18 @@ export class EaUpload extends EaFormAssociatedBase {
   /**
    * 移除单个文件
    */
-  private _removeFile(uid: string): void {
+  private async _removeFile(uid: string): Promise<void> {
     const index = this.fileList.findIndex(item => item.uid === uid);
     if (index === -1) return;
 
     const item = this.fileList[index];
+
+    if (this.beforeRemove) {
+      const result = this.beforeRemove(item, this.fileList);
+      const shouldRemove = result instanceof Promise ? await result : result;
+      if (shouldRemove === false) return;
+    }
+
     if (item.controller) {
       item.controller.abort();
     }
@@ -331,7 +366,12 @@ export class EaUpload extends EaFormAssociatedBase {
     const li = this._listElement.querySelector(`li[data-uid="${uid}"]`);
     if (li) li.remove();
 
-    this._dispatchChangeEvent();
+    this.onRemove?.(item, this.fileList);
+    this.dispatchEvent(
+      new EaUploadRemoveEvent({ uploadFile: item, uploadFiles: this.fileList })
+    );
+
+    this._dispatchChangeEvent(item);
   }
 
   private _renderFileList(): void {
@@ -417,9 +457,19 @@ export class EaUpload extends EaFormAssociatedBase {
     return templates[this.listType] || templates.text;
   }
 
-  private _dispatchChangeEvent() {
+  /**
+   * 派发 change 事件
+   * @param uploadFile 发生变化的文件
+   */
+  private _dispatchChangeEvent(uploadFile?: FileItem): void {
+    this.onChange?.(uploadFile, this.fileList);
     this.dispatchEvent(
-      new CustomEvent("change", { detail: { files: this.fileList } })
+      new CustomEvent("change", {
+        detail: { uploadFile, uploadFiles: this.fileList },
+      })
+    );
+    this.dispatchEvent(
+      new EaUploadChangeEvent({ uploadFile, uploadFiles: this.fileList })
     );
   }
 
@@ -478,7 +528,7 @@ export class EaUpload extends EaFormAssociatedBase {
     }
 
     input.value = "";
-    this._dispatchChangeEvent();
+    this._dispatchChangeEvent(newItems[0]);
 
     if (this.autoUpload) {
       this.submit();

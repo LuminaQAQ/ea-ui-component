@@ -26,6 +26,26 @@ export type EaUploadProgressCallback = (
   files: FileItem[]
 ) => void;
 
+export type EaUploadRemoveCallback = (
+  uploadFile: FileItem,
+  uploadFiles: FileItem[]
+) => void;
+
+export type EaUploadChangeCallback = (
+  uploadFile: FileItem | undefined,
+  uploadFiles: FileItem[]
+) => void;
+
+export type EaUploadBeforeUploadCallback = (
+  uploadFile: FileItem,
+  uploadFiles: FileItem[]
+) => boolean | Promise<boolean> | undefined;
+
+export type EaUploadBeforeRemoveCallback = (
+  uploadFile: FileItem,
+  uploadFiles: FileItem[]
+) => boolean | Promise<boolean> | undefined;
+
 export interface FileItem extends File {
   uid: string;
   status: "pending" | "uploading" | "done" | "error";
