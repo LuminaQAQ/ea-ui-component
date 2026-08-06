@@ -10,56 +10,156 @@
       hr {
         margin: 3rem 0;
       }
-
-      .demo-section {
-        margin-bottom: 2rem;
-        padding: 1rem;
-        border: 1px solid #eee;
-        border-radius: 8px;
-      }
-
-      .demo-section h3 {
-        margin-top: 0;
-        color: #333;
-      }
-
-      .demo-section pre {
-        background: #f5f5f5;
-        padding: 1rem;
-        border-radius: 4px;
-        overflow-x: auto;
-        font-size: 12px;
-        margin: 1rem 0;
-      }
     </style>
   </head>
 
   <body>
     <script type="module" src="../src/components/ea-upload/index.ts"></script>
     <script type="module" src="../src/components/ea-button/index.ts"></script>
+    <script
+      type="module"
+      src="../src/components/ea-message-box/index.ts"
+    ></script>
 
-    <h2>ea-upload 组件测试</h2>
+    <!--  基础用法 -->
+    <!-- #region -->
+    <h1>基础用法</h1>
 
-    <div class="demo-section">
-      <h3>基础用法 - 点击选择文件</h3>
+    <style>
+      .tip {
+        color: #909399;
+        font-size: 12px;
+        margin: 4px;
+      }
+    </style>
+
+    <div class="demo">
       <ea-upload
         id="basicUpload"
-        action="http://localhost:3100/api/upload/single"
+        class="upload-demo"
+        action="https://m1.apifoxmock.com/m1/8609267-8388194-default/file"
+        multiple
       >
-        <ea-button type="button">上传</ea-button>
+        <ea-button type="primary">Click to upload</ea-button>
+        <div class="tip" slot="tip">
+          jpg/png files with a size less than 500KB.
+        </div>
       </ea-upload>
     </div>
 
     <script type="module">
       const basicUpload = document.getElementById("basicUpload");
+      basicUpload.defaultFileList = [
+        {
+          uid: "1",
+          name: "test.txt",
+          status: "uploading",
+          url: "http://example.com/test.txt",
+          percent: 33,
+        },
+        {
+          uid: "2",
+          name: "test.txt",
+          status: "done",
+          url: "http://example.com/test.txt",
+        },
+        {
+          uid: "3",
+          name: "test.txt",
+          status: "error",
+          response: "404 Not Found",
+          url: "http://example.com/test.txt",
+        },
+      ];
 
       basicUpload.addEventListener("change", e => {
-        console.log(e.detail, e.target.fileList);
+        console.log(e, e.detail, e.target.fileList);
       });
-
-      basicUpload.fileList = [];
-      basicUpload.fileList = [new File(["test"], "test.txt")];
+      basicUpload.onRemove = (file, fileList) => {
+        console.log(file, fileList);
+      };
+      basicUpload.beforeRemove = (file, fileList) => {
+        return window.$confirm(`Cancel the transfer of ${file.name} ?`);
+      };
     </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  覆盖前一个文件 -->
+    <!-- #region -->
+    <h1>覆盖前一个文件</h1>
+
+    <div class="demo"></div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  用户头像 -->
+    <!-- #region -->
+    <h1>用户头像</h1>
+
+    <div class="demo"></div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  照片墙 -->
+    <!-- #region -->
+    <h1>照片墙</h1>
+
+    <div class="demo">
+      <ea-upload
+        id="pictureUpload"
+        action="https://m1.apifoxmock.com/m1/8609267-8388194-default/file"
+        list-type="picture-card"
+      >
+        <ea-icon name="plus"></ea-icon>
+      </ea-upload>
+    </div>
+
+    <script type="module">
+      const pictureUpload = document.getElementById("pictureUpload");
+      pictureUpload.defaultFileList = [
+        {
+          uid: "1",
+          name: "test.txt",
+          status: "uploading",
+          url: "http://example.com/test.txt",
+          percent: 33,
+        },
+        {
+          uid: "2",
+          name: "test.txt",
+          status: "done",
+          url: "http://example.com/test.txt",
+        },
+        {
+          uid: "3",
+          name: "test.txt",
+          status: "error",
+          response: "404 Not Found",
+          url: "http://example.com/test.txt",
+        },
+      ];
+
+      pictureUpload.addEventListener("change", e => {
+        console.log(e, e.detail, e.target.fileList);
+      });
+      pictureUpload.onRemove = (file, fileList) => {
+        console.log(file, fileList);
+      };
+      pictureUpload.beforeRemove = (file, fileList) => {
+        return window.$confirm(`Cancel the transfer of ${file.name} ?`);
+      };
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
 
     <div class="demo-section">
       <h3>拖拽上传</h3>

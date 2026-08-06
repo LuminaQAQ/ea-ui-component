@@ -14,7 +14,7 @@ import type {
 /**
  * 表单数据构建器函数类型
  * @param field - 文件字段信息
- * @param data - 附加的普通键值对数据（支持数组自动展开）
+ * @param data - 附加数据
  * @returns 构建完成的 FormData 对象
  */
 interface FormDataBuilder {
@@ -24,8 +24,8 @@ interface FormDataBuilder {
 /**
  * 创建 XHR 错误处理回调
  * @param xhr - XMLHttpRequest 实例
- * @param options - 上传请求配置（用于构造错误信息）
- * @param callback - 外部错误回调，会被传入事件和错误对象
+ * @param options - 上传请求配置
+ * @param callback - 外部错误回调
  * @returns 一个错误事件处理器
  */
 const createErrorHandler = (
@@ -95,9 +95,6 @@ const createProgressHandler = (
 
 /**
  * 构建文件上传所需的 FormData
- * - 附加数据中若值为数组，则每个元素单独追加（同名多值）
- * - 文件字段支持单文件或文件数组
- *
  * @param field - 文件字段信息（字段名和文件）
  * @param data - 额外附加数据（可选）
  * @returns 填充好的 FormData 实例
@@ -119,12 +116,17 @@ export const buildFormData: FormDataBuilder = (
   }
 
   const { name, file } = field;
+  const appendFile = (f: FileItem): void => {
+    const blob = f.raw ?? (f instanceof Blob ? f : undefined);
+    if (!blob) return;
+    formData.append(name, blob, f.name);
+  };
   if (Array.isArray(file)) {
     for (const f of file) {
-      formData.append(name, f, f.name);
+      appendFile(f);
     }
   } else {
-    formData.append(name, file, file.name);
+    appendFile(file);
   }
 
   return formData;

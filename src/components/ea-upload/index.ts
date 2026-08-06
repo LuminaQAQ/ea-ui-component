@@ -6,9 +6,11 @@ import stylesheet from "./index.scss?inline";
 
 import "@components/ea-button/index";
 import "@components/ea-progress/index";
+import "@components/ea-image/index";
 
 import type {
   Crossorigin,
+  DefaultFileItem,
   EaUploadBeforeRemoveCallback,
   EaUploadBeforeUploadCallback,
   EaUploadChangeCallback,
@@ -33,6 +35,7 @@ import { EaUploadRemoveEvent } from "./events/EaUploadRemoveEvent";
 import { EaUploadChangeEvent } from "./events/EaUploadChangeEvent";
 import { EaUploadSuccessEvent } from "./events/EaUploadSuccessEvent";
 import { nanoid } from "nanoid";
+import EaProgress from "@components/ea-progress/index";
 
 const TAG_NAME = "ea-upload" as const;
 const bem = createBEM(TAG_NAME);
@@ -125,6 +128,15 @@ export class EaUpload extends EaFormAssociatedBase {
   })
   fileList: FileItem[] = [];
 
+  @property({
+    type: Array,
+    default: [],
+    observer: function (this: EaUpload, newVal: DefaultFileItem[]) {
+      this._mergeDefaultFileList();
+    },
+  })
+  defaultFileList: DefaultFileItem[] = [];
+
   @property({ type: Function, default: createUploadRequest })
   httpRequest: (options: UploadRequestOptions) => UploadRequestResult =
     createUploadRequest;
@@ -187,6 +199,9 @@ export class EaUpload extends EaFormAssociatedBase {
    */
   clearFiles(): void {
     this.abort();
+    for (const item of this.fileList) {
+      if (item.url?.startsWith("blob:")) URL.revokeObjectURL(item.url);
+    }
     this.fileList = [];
     this._originalInput.value = "";
     this._renderFileList();
@@ -250,6 +265,7 @@ export class EaUpload extends EaFormAssociatedBase {
           const target = this.fileList.find(i => i.uid === item.uid);
           if (target) {
             target.status = "error";
+            target.response = error;
             target.controller = undefined;
 
             const li = this._listElement.querySelector(
@@ -277,7 +293,7 @@ export class EaUpload extends EaFormAssociatedBase {
           );
           const target = this.fileList.find(i => i.uid === item.uid);
           if (target) {
-            target.progress = (evt.loaded / evt.total) * 100;
+            target.percent = (evt.loaded / evt.total) * 100;
 
             const li = this._listElement.querySelector(
               `li[data-uid="${item.uid}"]`
@@ -285,8 +301,8 @@ export class EaUpload extends EaFormAssociatedBase {
             if (li) {
               const progressEl = li.querySelector("ea-progress");
               if (progressEl) {
-                progressEl.setAttribute("percentage", String(target.progress));
-                if (target.progress >= 100) {
+                progressEl.setAttribute("percentage", String(target.percent));
+                if (target.percent >= 100) {
                   progressEl.setAttribute("status", "success");
                 }
               }
@@ -306,7 +322,8 @@ export class EaUpload extends EaFormAssociatedBase {
           const target = this.fileList.find(i => i.uid === item.uid);
           if (target) {
             target.status = "done";
-            target.progress = 100;
+            target.percent = 100;
+            target.response = response;
             target.controller = undefined;
             this._updateFileItem(item.uid);
           }
@@ -354,13 +371,20 @@ export class EaUpload extends EaFormAssociatedBase {
 
     if (this.beforeRemove) {
       const result = this.beforeRemove(item, this.fileList);
-      const shouldRemove = result instanceof Promise ? await result : result;
-      if (shouldRemove === false) return;
+
+      try {
+        let shouldRemove = result instanceof Promise ? await result : result;
+        if (shouldRemove === false) return;
+      } catch (error) {
+        return;
+      }
     }
 
     if (item.controller) {
       item.controller.abort();
     }
+    item.status = "removed";
+    if (item.url?.startsWith("blob:")) URL.revokeObjectURL(item.url);
     this.fileList.splice(index, 1);
 
     const li = this._listElement.querySelector(`li[data-uid="${uid}"]`);
@@ -374,14 +398,33 @@ export class EaUpload extends EaFormAssociatedBase {
     this._dispatchChangeEvent(item);
   }
 
+  /**
+   * 合并 defaultFileList 到 fileList
+   */
+  private _mergeDefaultFileList(): void {
+    if (this.defaultFileList.length === 0 || this.fileList.length > 0) return;
+
+    const merged: FileItem[] = this.defaultFileList.map(item => ({
+      uid: item.uid || nanoid(),
+      name: item.name,
+      status: item.status || "done",
+      percent: item.percent,
+      url: item.url,
+      thumbUrl: item.thumbUrl,
+      response: item.response,
+      crossOrigin: item.crossOrigin,
+      raw: item.raw,
+    }));
+
+    this.fileList = merged;
+  }
+
   private _renderFileList(): void {
     if (!this.showFileList) {
       this._listElement.innerHTML = "";
       return;
     }
     this._listElement.innerHTML = "";
-
-    const template = this._getTemplate();
 
     for (const item of this.fileList) {
       const isExists = this._listElement.querySelector(
@@ -391,8 +434,8 @@ export class EaUpload extends EaFormAssociatedBase {
 
       const liTemplate = document.createElement("template");
       liTemplate.innerHTML = html(`
-        <li class="${bem.e("file-item")} ${bem.m(this.listType)} ${bem.m(item.status)}" part="file-item" data-uid="${item.uid}">
-          ${template(item)}
+        <li class="${bem.e("file-item")} ${bem.m(this.listType)} ${bem.s(item.status)}" part="file-item" data-uid="${item.uid}">
+          ${this._getTemplate(item)}
         </li>
       `);
       this._listElement.appendChild(
@@ -412,49 +455,109 @@ export class EaUpload extends EaFormAssociatedBase {
     }
 
     li.classList.remove(
-      bem.m("pending"),
-      bem.m("uploading"),
-      bem.m("done"),
-      bem.m("error")
+      bem.s("pending"),
+      bem.s("uploading"),
+      bem.s("done"),
+      bem.s("error"),
+      bem.s("removed")
     );
-    li.classList.add(bem.m(item.status));
+    li.classList.add(bem.s(item.status));
 
-    const template = this._getTemplate();
-    li.innerHTML = html(template(item));
+    li.innerHTML = html(this._getTemplate(item));
   }
 
-  private _getTemplate() {
+  /**
+   * 生成单个文件项的模板, 根据 listType 渲染不同结构
+   * @param item 文件项
+   */
+  private _getTemplate(item: FileItem): string {
+    const progress = `<ea-progress class="${bem.e("progress")}" part="file-progress" variant="line" show-text="false" stroke-width="3px" percentage="${item.percent || 0}"></ea-progress>`;
+
+    const response =
+      item.status === "error" && typeof item.response === "string"
+        ? `<span class="${bem.e("response")}" part="file-response">${item.response}</span>`
+        : "";
+
+    const thumb = (width = "40px", height = "40px"): string => {
+      if (item.status === "error") {
+        return `<ea-icon name="image" class="${bem.e("thumb")} ${bem.e("thumb-error")}"></ea-icon>`;
+      }
+
+      const raw: Blob | undefined =
+        item.raw ?? (item instanceof Blob ? item : undefined);
+
+      if (item.status === "done" && !item.thumbUrl && !item.url && raw) {
+        item.url = URL.createObjectURL(raw);
+      }
+
+      const src = item.thumbUrl || item.url || "";
+      const crossOriginAttr = item.crossOrigin
+        ? ` crossorigin="${item.crossOrigin}"`
+        : "";
+
+      return `
+        <ea-image
+          class="${bem.e("thumb")}"
+          src="${item.status === "done" ? src : ""}"
+          fit="cover"
+          width="${width}"
+          height="${height}"${crossOriginAttr}
+        >
+          <ea-icon name="image" slot="placeholder" class="${bem.e("thumb-placeholder")}"></ea-icon>
+        </ea-image>
+      `;
+    };
+
     const templates = {
-      text: (item: FileItem) => {
+      text: () => {
         const isUploading = item.status === "uploading";
-        const iconName = isUploading ? "spinner" : "file";
+        const iconName = isUploading ? "spinner" : "paperclip";
         const spinAttr = isUploading ? " spin" : "";
 
         return `
+          <ea-icon name="${iconName}" class="${bem.e("icon")}" part="file-icon"${spinAttr}></ea-icon>
+          <div class="${bem.e("file-info")}" part="file-info">
+            <div class="${bem.e("file-info-main")}" part="file-info-main">
+              <span class="${bem.e("filename")}" part="file-name">${item.name}</span>
+              <div class="${bem.e("file-info-actions")}" part="file-info-actions">
+                ${response}
+                <ea-icon name="xmark" class="${bem.e("icon")} ${bem.e("delete")}" part="file-delete"></ea-icon>
+              </div>
+            </div>
+            ${progress}
+          </div>
+        `;
+      },
+      picture: () => {
+        return `
           <div class="${bem.e("file-main")}">
             <div class="${bem.e("file-info")}">
-              <ea-icon name="${iconName}" class="${bem.e("icon")}"${spinAttr}></ea-icon>
+              ${thumb()}
               <span class="${bem.e("filename")}">${item.name}</span>
+              ${response}
             </div>
             <ea-icon name="xmark" class="${bem.e("icon")} ${bem.e("delete")}"></ea-icon>
           </div>
-          ${
-            isUploading
-              ? `<ea-progress class="${bem.e("progress")}" variant="line" show-text="false" percentage="${item.progress || 0}"></ea-progress>`
-              : ""
-          }
+          ${progress}
         `;
       },
-      picture: (item: FileItem) =>
-        `<ea-icon name="image" class="${bem.e("icon")}"></ea-icon>
-          ${item.name}
-          <span class="${bem.e("status")}">${item.name}[${item.status}]</span>`,
-      "picture-card": (item: FileItem) =>
-        `<ea-icon name="image" class="${bem.e("icon")}"></ea-icon>
-          ${item.name}
-          <span class="${bem.e("status")}">${item.name}[${item.status}]</span>`,
+      "picture-card": () => {
+        return `
+          <div class="${bem.e("card")}">
+            <div class="${bem.e("card-thumb")}">
+              ${thumb("100%", "100px")}
+            </div>
+            <div class="${bem.e("card-footer")}">
+              <span class="${bem.e("filename")}">${item.name}</span>
+              ${response}
+            </div>
+          </div>
+          ${progress}
+        `;
+      },
     };
-    return templates[this.listType] || templates.text;
+
+    return templates[this.listType || "text"]();
   }
 
   /**
@@ -463,11 +566,6 @@ export class EaUpload extends EaFormAssociatedBase {
    */
   private _dispatchChangeEvent(uploadFile?: FileItem): void {
     this.onChange?.(uploadFile, this.fileList);
-    this.dispatchEvent(
-      new CustomEvent("change", {
-        detail: { uploadFile, uploadFiles: this.fileList },
-      })
-    );
     this.dispatchEvent(
       new EaUploadChangeEvent({ uploadFile, uploadFiles: this.fileList })
     );
@@ -513,10 +611,13 @@ export class EaUpload extends EaFormAssociatedBase {
 
     const newItems: FileItem[] = [];
     for (let i = 0; i < files.length; i++) {
+      let file = files[i];
+
       newItems.push(
-        Object.assign(files[i] as FileItem, {
+        Object.assign(file as unknown as FileItem, {
           uid: nanoid(),
-          status: "pending" as const,
+          status: "pending",
+          raw: file,
         })
       );
     }
@@ -535,8 +636,20 @@ export class EaUpload extends EaFormAssociatedBase {
     }
   }
 
+  @listen("change", bem.ce("list"))
+  private _handleProgressElChange(e: Event): void {
+    if (
+      e.target instanceof EaProgress ||
+      (e.target as HTMLElement).tagName === "EA-PROGRESS"
+    ) {
+      e.stopImmediatePropagation();
+      e.preventDefault();
+    }
+  }
+
   $mount(): void {
     this.updateContainerClasslist();
+    this._mergeDefaultFileList();
     this._renderFileList();
   }
 

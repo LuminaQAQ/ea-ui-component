@@ -25,16 +25,37 @@ $name: ea-upload;
 
     .#{$name}__file-item {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
+      align-items: center;
       width: 100%;
-      padding: var(--spacing-sm) 0;
+      padding: var(--spacing-sm);
+      border-radius: var(--border-radius-sm);
+      transition:
+        background-color var(--transition-fast),
+        color var(--transition-fast);
 
-      &:hover .#{$name}__delete {
-        opacity: 1;
-        pointer-events: auto;
+      &:hover {
+        background-color: var(--grey-100);
+
+        .#{$name}__delete {
+          opacity: 1;
+          pointer-events: auto;
+        }
       }
 
-      &--error {
+      @include state(uploading) {
+        color: var(--blue-500);
+
+        .#{$name}__progress {
+          display: block;
+        }
+      }
+
+      @include state(done) {
+        color: var(--green-500);
+      }
+
+      @include state(error) {
         color: var(--red-500);
 
         .#{$name}__delete {
@@ -42,21 +63,6 @@ $name: ea-upload;
           pointer-events: auto;
         }
       }
-    }
-
-    .#{$name}__file-main {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-    }
-
-    .#{$name}__file-info {
-      display: flex;
-      align-items: center;
-      flex: 1;
-      min-width: 0;
     }
 
     .#{$name}__icon {
@@ -71,6 +77,16 @@ $name: ea-upload;
       min-width: 0;
     }
 
+    .#{$name}__response {
+      color: var(--red-500);
+      font-size: var(--font-size-xs);
+      margin-left: var(--spacing-sm);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
     .#{$name}__delete {
       opacity: 0;
       pointer-events: none;
@@ -80,9 +96,122 @@ $name: ea-upload;
       flex-shrink: 0;
     }
 
+    .#{$name}__thumb {
+      flex-shrink: 0;
+      margin-right: var(--spacing-sm);
+      border-radius: var(--border-radius-sm);
+      overflow: hidden;
+    }
+
+    .#{$name}__thumb-error {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background-color: var(--grey-100);
+      color: var(--grey-400);
+    }
+
+    .#{$name}__thumb-placeholder {
+      color: var(--grey-400);
+    }
+
     .#{$name}__progress {
+      display: none;
       width: 100%;
       margin-top: var(--spacing-sm);
+    }
+  }
+
+  @include modifier(text) {
+    .#{$name}__file-info {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .#{$name}__file-info-main {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .#{$name}__file-info-actions {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+  }
+
+  @include modifier(picture) {
+    .#{$name}__file-main {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .#{$name}__file-info {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+
+  @include modifier(picture-card) {
+    display: inline-flex;
+    padding: 0;
+    width: auto;
+
+    &:hover {
+      background-color: transparent;
+    }
+
+    .#{$name}__card {
+      width: 148px;
+      border: var(--ea-border);
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      background-color: var(--color-white);
+      transition: border-color var(--transition-fast);
+
+      &:hover {
+        border-color: var(--grey-400);
+      }
+
+      .#{$name}__progress {
+        margin: 0 var(--spacing-sm) var(--spacing-sm);
+        width: auto;
+      }
+    }
+
+    .#{$name}__card-thumb {
+      width: 100%;
+      height: 100px;
+      background-color: var(--grey-100);
+
+      .#{$name}__thumb {
+        margin-right: 0;
+        border-radius: 0;
+      }
+
+      .#{$name}__thumb-error {
+        width: 100%;
+        height: 100px;
+        border-radius: 0;
+      }
+    }
+
+    .#{$name}__card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--spacing-sm);
+      padding: var(--spacing-sm);
     }
   }
 }
