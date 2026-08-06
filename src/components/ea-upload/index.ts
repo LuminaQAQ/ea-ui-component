@@ -6,7 +6,7 @@ import stylesheet from "./index.scss?inline";
 
 import "@components/ea-button/index";
 import "@components/ea-progress/index";
-import "@components/ea-image/index";
+import "@components/ea-image-preview/index";
 
 import type {
   Crossorigin,
@@ -36,6 +36,7 @@ import { EaUploadChangeEvent } from "./events/EaUploadChangeEvent";
 import { EaUploadSuccessEvent } from "./events/EaUploadSuccessEvent";
 import { nanoid } from "nanoid";
 import EaProgress from "@components/ea-progress/index";
+import type { EaImagePreview } from "@components/ea-image-preview/index";
 
 const TAG_NAME = "ea-upload" as const;
 const bem = createBEM(TAG_NAME);
@@ -52,6 +53,16 @@ const bem = createBEM(TAG_NAME);
  * @csspart container - 容器
  * @csspart list - 文件列表
  * @csspart file-item - 文件项
+ * @csspart file-icon - 文件类型图标
+ * @csspart file-info - 文件信息区域
+ * @csspart file-info-main - 文件信息主区域
+ * @csspart file-name - 文件名
+ * @csspart file-info-actions - 文件信息操作区域
+ * @csspart file-progress - 进度条
+ * @csspart file-response - 错误响应文案
+ * @csspart file-delete - 删除图标
+ * @csspart file-toolbar - 图片工具栏
+ * @csspart file-preview - 预览图标
  */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaUpload extends EaFormAssociatedBase {
@@ -64,6 +75,9 @@ export class EaUpload extends EaFormAssociatedBase {
   private _originalInput!: HTMLInputElement;
   @query(bem.ce("list"))
   private _listElement!: HTMLUListElement;
+
+  @query(bem.ce("preview"))
+  private _imagePreview!: EaImagePreview;
 
   @attribute({ type: Boolean, default: false })
   disabled: boolean = false;
@@ -95,7 +109,14 @@ export class EaUpload extends EaFormAssociatedBase {
   @attribute({ type: Enum(["", "anonymous", "use-credentials"]), default: "" })
   crossorigin: Crossorigin = "";
 
-  @attribute({ type: String, default: "text" })
+  @attribute({
+    type: String,
+    default: "text",
+    observer(this: EaUpload) {
+      this.updateContainerClasslist();
+      if (this._listElement) this._renderFileList();
+    },
+  })
   listType: ListType = "text";
 
   @attribute({ type: Boolean, default: true })
@@ -434,13 +455,13 @@ export class EaUpload extends EaFormAssociatedBase {
 
       const liTemplate = document.createElement("template");
       liTemplate.innerHTML = html(`
-        <li class="${bem.e("file-item")} ${bem.m(this.listType)} ${bem.s(item.status)}" part="file-item" data-uid="${item.uid}">
+        <li class="${bem.e("file-item")} ${bem.s(item.status)}" part="file-item" data-uid="${item.uid}">
           ${this._getTemplate(item)}
         </li>
       `);
-      this._listElement.appendChild(
-        liTemplate.content.firstElementChild as HTMLElement
-      );
+      const li = liTemplate.content.firstElementChild as HTMLElement;
+      this._listElement.appendChild(li);
+      this._bindThumbEvents(li);
     }
   }
 
@@ -464,6 +485,31 @@ export class EaUpload extends EaFormAssociatedBase {
     li.classList.add(bem.s(item.status));
 
     li.innerHTML = html(this._getTemplate(item));
+    this._bindThumbEvents(li);
+  }
+
+  /**
+   * 绑定缩略图加载事件, 图片加载完成后显示原生 img, 否则保持占位图标
+   * @param root 文件项根节点
+   */
+  private _bindThumbEvents(root: Element): void {
+    root
+      .querySelectorAll<HTMLImageElement>(`.${bem.e("thumb-img")}`)
+      .forEach(img => {
+        const thumb = img.closest<HTMLElement>(`.${bem.e("thumb")}`);
+        if (!thumb || !img.src) return;
+
+        img.onload = () => thumb.classList.add(bem.s("loaded"));
+        img.onerror = () => thumb.classList.remove(bem.s("loaded"));
+
+        if (img.complete) {
+          if (img.naturalWidth > 0) {
+            thumb.classList.add(bem.s("loaded"));
+          } else {
+            thumb.classList.remove(bem.s("loaded"));
+          }
+        }
+      });
   }
 
   /**
@@ -471,16 +517,26 @@ export class EaUpload extends EaFormAssociatedBase {
    * @param item 文件项
    */
   private _getTemplate(item: FileItem): string {
-    const progress = `<ea-progress class="${bem.e("progress")}" part="file-progress" variant="line" show-text="false" stroke-width="3px" percentage="${item.percent || 0}"></ea-progress>`;
+    const isPicture =
+      this.listType === "picture" || this.listType === "picture-card";
 
     const response =
       item.status === "error" && typeof item.response === "string"
         ? `<span class="${bem.e("response")}" part="file-response">${item.response}</span>`
         : "";
 
-    const thumb = (width = "40px", height = "40px"): string => {
+    const progress = (size = "48px"): string =>
+      isPicture
+        ? `<ea-progress class="${bem.e("progress")}" part="file-progress" variant="circle" size="${size}" show-text="false" percentage="${item.percent || 0}"></ea-progress>`
+        : `<ea-progress class="${bem.e("progress")}" part="file-progress" variant="line" show-text="false" stroke-width="3px" percentage="${item.percent || 0}"></ea-progress>`;
+
+    const thumb = (
+      width = "40px",
+      height = "40px",
+      circleSize = "30px"
+    ): string => {
       if (item.status === "error") {
-        return `<ea-icon name="image" class="${bem.e("thumb")} ${bem.e("thumb-error")}"></ea-icon>`;
+        return `<ea-icon name="image" class="${bem.e("thumb")} ${bem.e("thumb-error")}" style="width:${width};height:${height}"></ea-icon>`;
       }
 
       const raw: Blob | undefined =
@@ -491,22 +547,26 @@ export class EaUpload extends EaFormAssociatedBase {
       }
 
       const src = item.thumbUrl || item.url || "";
+      const imgSrc = item.status === "done" ? src : "";
       const crossOriginAttr = item.crossOrigin
         ? ` crossorigin="${item.crossOrigin}"`
         : "";
 
       return `
-        <ea-image
-          class="${bem.e("thumb")}"
-          src="${item.status === "done" ? src : ""}"
-          fit="cover"
-          width="${width}"
-          height="${height}"${crossOriginAttr}
-        >
-          <ea-icon name="image" slot="placeholder" class="${bem.e("thumb-placeholder")}"></ea-icon>
-        </ea-image>
+        <div class="${bem.e("thumb")}" style="width:${width};height:${height}">
+          <img class="${bem.e("thumb-img")}" src="${imgSrc}" alt="${item.name}"${crossOriginAttr} />
+          <ea-icon name="image" class="${bem.e("thumb-placeholder")}"></ea-icon>
+          ${progress(circleSize)}
+        </div>
       `;
     };
+
+    const toolbar = `
+      <div class="${bem.e("toolbar")}" part="file-toolbar">
+        <ea-icon name="magnifying-glass" class="${bem.e("tool")}" data-action="preview" part="file-preview"></ea-icon>
+        <ea-icon name="xmark" class="${bem.e("tool")}" data-action="remove" part="file-delete"></ea-icon>
+      </div>
+    `;
 
     const templates = {
       text: () => {
@@ -524,37 +584,32 @@ export class EaUpload extends EaFormAssociatedBase {
                 <ea-icon name="xmark" class="${bem.e("icon")} ${bem.e("delete")}" part="file-delete"></ea-icon>
               </div>
             </div>
-            ${progress}
+            ${progress()}
           </div>
         `;
       },
-      picture: () => {
-        return `
-          <div class="${bem.e("file-main")}">
-            <div class="${bem.e("file-info")}">
-              ${thumb()}
-              <span class="${bem.e("filename")}">${item.name}</span>
-              ${response}
-            </div>
-            <ea-icon name="xmark" class="${bem.e("icon")} ${bem.e("delete")}"></ea-icon>
+      picture: () => `
+        <div class="${bem.e("file-main")}">
+          <div class="${bem.e("file-info")}">
+            ${thumb("40px", "40px")}
+            <span class="${bem.e("filename")}" part="file-name">${item.name}</span>
+            ${response}
           </div>
-          ${progress}
-        `;
-      },
-      "picture-card": () => {
-        return `
-          <div class="${bem.e("card")}">
-            <div class="${bem.e("card-thumb")}">
-              ${thumb("100%", "100px")}
-            </div>
-            <div class="${bem.e("card-footer")}">
-              <span class="${bem.e("filename")}">${item.name}</span>
-              ${response}
-            </div>
+          <ea-icon name="xmark" class="${bem.e("icon")} ${bem.e("delete")}" part="file-delete"></ea-icon>
+        </div>
+      `,
+      "picture-card": () => `
+        <div class="${bem.e("card")}">
+          <div class="${bem.e("card-thumb")}">
+            ${thumb("100%", "100px", "48px")}
+            ${toolbar}
           </div>
-          ${progress}
-        `;
-      },
+          <div class="${bem.e("card-footer")}">
+            <span class="${bem.e("filename")}" part="file-name">${item.name}</span>
+            ${response}
+          </div>
+        </div>
+      `,
     };
 
     return templates[this.listType || "text"]();
@@ -574,17 +629,44 @@ export class EaUpload extends EaFormAssociatedBase {
   @listen("click", bem.ce("list"))
   private _handleListClick(e: Event): void {
     const target = e.target as HTMLElement;
-    const deleteIcon = target.closest('ea-icon[name="xmark"]');
-    if (!deleteIcon) return;
-
-    const li = deleteIcon.closest("li[data-uid]");
+    const li = target.closest("li[data-uid]");
     if (!li) return;
 
     const uid = li.getAttribute("data-uid");
-    if (uid) {
+    if (!uid) return;
+
+    if (target.closest('[data-action="preview"]')) {
+      e.stopPropagation();
+      const index = this.fileList.findIndex(item => item.uid === uid);
+      if (index !== -1) this._showPreview(index);
+      return;
+    }
+
+    if (target.closest('ea-icon[name="xmark"]')) {
       e.stopPropagation();
       this._removeFile(uid);
     }
+  }
+
+  /**
+   * 打开图片预览, 使用 ea-image-preview 全屏放大展示
+   * @param index 文件在 fileList 中的索引
+   */
+  private async _showPreview(index: number): Promise<void> {
+    await customElements.whenDefined("ea-image-preview");
+
+    const urlList = this.fileList
+      .filter(item => item.status === "done")
+      .map(item => item.thumbUrl || item.url || "")
+      .filter(Boolean);
+
+    const target = this.fileList[index];
+    const targetUrl = target ? target.thumbUrl || target.url || "" : "";
+    const targetIndex = Math.max(0, urlList.indexOf(targetUrl));
+
+    this._imagePreview.initialIndex = targetIndex;
+    this._imagePreview.urlList = urlList;
+    this._imagePreview.visible = true;
   }
 
   @listen("click", bem.ce("content"))
@@ -654,7 +736,7 @@ export class EaUpload extends EaFormAssociatedBase {
   }
 
   updateContainerClasslist(): string {
-    const className = bem({});
+    const className = bem({ [this.listType]: true });
     if (this._container) this._container.className = className;
     return className;
   }
@@ -678,6 +760,7 @@ export class EaUpload extends EaFormAssociatedBase {
           <slot name="tip"></slot>
         </div>
         <ul class="${bem.e("list")}" part="list"></ul>
+        <ea-image-preview class="${bem.e("preview")}" part="preview"></ea-image-preview>
       </div>
     `;
   }
