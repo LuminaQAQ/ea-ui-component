@@ -76,7 +76,7 @@ export class EaImage extends EaBase {
   private _lazyObserver: IntersectionObserver | null = null;
 
   private _states = {
-    imageStatus: "loading" as ImageStatus,
+    imageStatus: "error" as ImageStatus,
   };
 
   // ==================== 属性定义 ====================
@@ -296,10 +296,6 @@ export class EaImage extends EaBase {
   // ==================== 方法 ====================
 
   updateContainerClasslist(): string {
-    if (!this.src) {
-      this._states.imageStatus = "error";
-    }
-
     const className = bem({ [this._states.imageStatus]: true }, {});
 
     if (this._container) this._container.className = className;
@@ -351,17 +347,10 @@ export class EaImage extends EaBase {
    * @param src - 图片地址
    */
   private _loadImage(src: string): void {
+    this._states.imageStatus = "loading";
     this.updateContainerClasslist();
 
-    if (!src) return;
-
     const img = new Image();
-
-    if (this.lazy) {
-      this._setupLazyLoad(img);
-    } else {
-      img.src = src;
-    }
 
     img.onload = () => {
       this._image.setAttribute("src", src);
@@ -377,6 +366,12 @@ export class EaImage extends EaBase {
 
       this.dispatchEvent(new EaImageErrorEvent());
     };
+
+    if (this.lazy) {
+      this._setupLazyLoad(img);
+    } else {
+      img.src = src;
+    }
   }
 
   /**
