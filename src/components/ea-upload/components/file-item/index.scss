@@ -1,6 +1,7 @@
 $name: ea-upload-file-item;
 
 @include block(#{$name}) {
+  box-sizing: border-box;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -137,6 +138,15 @@ $name: ea-upload-file-item;
   }
 
   @include modifier(picture) {
+    padding: var(--spacing-sm);
+    border: var(--border-width) solid var(--grey-200);
+    border-radius: var(--border-radius);
+    margin-bottom: var(--spacing-sm);
+
+    &:hover {
+      border-color: var(--grey-400);
+    }
+
     .#{$name}__file-main {
       display: flex;
       flex-direction: row;
@@ -151,6 +161,15 @@ $name: ea-upload-file-item;
       align-items: center;
       flex: 1;
       min-width: 0;
+    }
+
+    .#{$name}__thumb {
+      margin-right: var(--spacing-md);
+    }
+
+    .#{$name}__filename {
+      font-size: var(--font-size-md);
+      color: var(--grey-900);
     }
   }
 

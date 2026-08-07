@@ -227,16 +227,21 @@ export class EaUploadFileItem extends EaBase {
           </div>
         `;
       },
-      picture: () => `
-        <div class="${bem.e("file-main")}">
-          <div class="${bem.e("file-info")}">
-            ${thumb("40px", "40px")}
-            <span class="${bem.e("filename")}" part="file-name">${item.name}</span>
-            ${response}
+      picture: () => {
+        const isUploading = item.status === "uploading";
+        const isError = item.status === "error";
+
+        return `
+          <div class="${bem.e("file-main")}">
+            <div class="${bem.e("file-info")}" part="file-info">
+              ${thumb("70px", "70px", "40px")}
+              <span class="${bem.e("filename")}" part="file-name">${item.name}</span>
+              ${isError ? response : ""}
+            </div>
+            ${isUploading ? "" : `<ea-icon name="xmark" class="${bem.e("delete")}" data-action="remove" part="file-delete"></ea-icon>`}
           </div>
-          <ea-icon name="xmark" class="${bem.e("icon")} ${bem.e("delete")}" data-action="remove" part="file-delete"></ea-icon>
-        </div>
-      `,
+        `;
+      },
       "picture-card": () => {
         const isUploading = item.status === "uploading";
         const isError = item.status === "error";

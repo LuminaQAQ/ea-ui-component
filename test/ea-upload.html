@@ -116,11 +116,79 @@
 
     <div class="demo">
       <ea-upload
-        id="pictureUpload"
+        id="pictureCardUpload"
         action="http://localhost:3100/api/upload/single"
         list-type="picture-card"
       >
         <ea-icon name="plus"></ea-icon>
+      </ea-upload>
+    </div>
+
+    <script type="module">
+      const pictureUpload = document.getElementById("pictureCardUpload");
+      pictureUpload.defaultFileList = [
+        {
+          uid: "1",
+          name: "test.txt",
+          status: "uploading",
+          url: "http://example.com/test.txt",
+          percent: 33,
+        },
+        {
+          uid: "2",
+          name: "test.txt",
+          status: "done",
+          url: "http://example.com/test.txt",
+        },
+        {
+          uid: "3",
+          name: "test.txt",
+          status: "error",
+          response: "404 Not Found",
+          url: "http://example.com/test.txt",
+        },
+      ];
+
+      pictureUpload.addEventListener("change", e => {
+        console.log(e, e.detail, e.target.fileList);
+      });
+      pictureUpload.onRemove = (file, fileList) => {
+        console.log(file, fileList);
+      };
+      pictureUpload.beforeRemove = (file, fileList) => {
+        return window.$confirm(`Cancel the transfer of ${file.name} ?`);
+      };
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  自定义缩略图 -->
+    <!-- #region -->
+    <h1>自定义缩略图</h1>
+
+    <div class="demo"></div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  图片列表缩略图 -->
+    <!-- #region -->
+    <h1>图片列表缩略图</h1>
+
+    <div class="demo">
+      <ea-upload
+        id="pictureUpload"
+        class="upload-demo"
+        action="http://localhost:3100/api/upload/single"
+        list-type="picture"
+      >
+        <ea-button type="primary">Click to upload</ea-button>
+        <div class="tip" slot="tip">
+          jpg/png files with a size less than 500KB.
+        </div>
       </ea-upload>
     </div>
 
