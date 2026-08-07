@@ -29,12 +29,13 @@ import {
   EaUploadAjaxError,
   EaUploadAjaxErrorEvent,
 } from "./events/EaUploadAjaxError";
-import html from "@/utils/html";
 import { EaUploadProgressEvent } from "./events/EaUploadProgressEvent";
 import { EaUploadRemoveEvent } from "./events/EaUploadRemoveEvent";
 import { EaUploadChangeEvent } from "./events/EaUploadChangeEvent";
 import { EaUploadSuccessEvent } from "./events/EaUploadSuccessEvent";
 import { nanoid } from "nanoid";
+import "./components/file-item/index";
+import type { EaUploadFileItem } from "./components/file-item/index";
 import EaProgress from "@components/ea-progress/index";
 import type { EaImagePreview } from "@components/ea-image-preview/index";
 
@@ -453,15 +454,19 @@ export class EaUpload extends EaFormAssociatedBase {
       );
       if (isExists) continue;
 
-      const liTemplate = document.createElement("template");
-      liTemplate.innerHTML = html(`
-        <li class="${bem.e("file-item")} ${bem.s(item.status)}" part="file-item" data-uid="${item.uid}">
-          ${this._getTemplate(item)}
-        </li>
-      `);
-      const li = liTemplate.content.firstElementChild as HTMLElement;
+      const li = document.createElement("li");
+      li.className = `${bem.e("file-item")} ${bem.s(item.status)}`;
+      li.setAttribute("part", "file-item");
+      li.setAttribute("data-uid", item.uid);
+
+      const fileItem = document.createElement(
+        "ea-upload-file-item"
+      ) as EaUploadFileItem;
+      fileItem.item = item;
+      fileItem.listType = this.listType;
+      li.appendChild(fileItem);
+
       this._listElement.appendChild(li);
-      this._bindThumbEvents(li);
     }
   }
 
@@ -484,135 +489,14 @@ export class EaUpload extends EaFormAssociatedBase {
     );
     li.classList.add(bem.s(item.status));
 
-    li.innerHTML = html(this._getTemplate(item));
-    this._bindThumbEvents(li);
-  }
-
-  /**
-   * 绑定缩略图加载事件, 图片加载完成后显示原生 img, 否则保持占位图标
-   * @param root 文件项根节点
-   */
-  private _bindThumbEvents(root: Element): void {
-    root
-      .querySelectorAll<HTMLImageElement>(`.${bem.e("thumb-img")}`)
-      .forEach(img => {
-        const thumb = img.closest<HTMLElement>(`.${bem.e("thumb")}`);
-        if (!thumb || !img.src) return;
-
-        img.onload = () => thumb.classList.add(bem.s("loaded"));
-        img.onerror = () => thumb.classList.remove(bem.s("loaded"));
-
-        if (img.complete) {
-          if (img.naturalWidth > 0) {
-            thumb.classList.add(bem.s("loaded"));
-          } else {
-            thumb.classList.remove(bem.s("loaded"));
-          }
-        }
-      });
-  }
-
-  /**
-   * 生成单个文件项的模板, 根据 listType 渲染不同结构
-   * @param item 文件项
-   */
-  private _getTemplate(item: FileItem): string {
-    const isPicture =
-      this.listType === "picture" || this.listType === "picture-card";
-
-    const response =
-      item.status === "error" && typeof item.response === "string"
-        ? `<span class="${bem.e("response")}" part="file-response">${item.response}</span>`
-        : "";
-
-    const progress = (size = "48px"): string =>
-      isPicture
-        ? `<ea-progress class="${bem.e("progress")}" part="file-progress" variant="circle" size="${size}" show-text="false" percentage="${item.percent || 0}"></ea-progress>`
-        : `<ea-progress class="${bem.e("progress")}" part="file-progress" variant="line" show-text="false" stroke-width="3px" percentage="${item.percent || 0}"></ea-progress>`;
-
-    const thumb = (
-      width = "40px",
-      height = "40px",
-      circleSize = "30px"
-    ): string => {
-      if (item.status === "error") {
-        return `<ea-icon name="image" class="${bem.e("thumb")} ${bem.e("thumb-error")}" style="width:${width};height:${height}"></ea-icon>`;
-      }
-
-      const raw: Blob | undefined =
-        item.raw ?? (item instanceof Blob ? item : undefined);
-
-      if (item.status === "done" && !item.thumbUrl && !item.url && raw) {
-        item.url = URL.createObjectURL(raw);
-      }
-
-      const src = item.thumbUrl || item.url || "";
-      const imgSrc = item.status === "done" ? src : "";
-      const crossOriginAttr = item.crossOrigin
-        ? ` crossorigin="${item.crossOrigin}"`
-        : "";
-
-      return `
-        <div class="${bem.e("thumb")}" style="width:${width};height:${height}">
-          <img class="${bem.e("thumb-img")}" src="${imgSrc}" alt="${item.name}"${crossOriginAttr} />
-          <ea-icon name="image" class="${bem.e("thumb-placeholder")}"></ea-icon>
-          ${progress(circleSize)}
-        </div>
-      `;
-    };
-
-    const toolbar = `
-      <div class="${bem.e("toolbar")}" part="file-toolbar">
-        <ea-icon name="magnifying-glass" class="${bem.e("tool")}" data-action="preview" part="file-preview"></ea-icon>
-        <ea-icon name="xmark" class="${bem.e("tool")}" data-action="remove" part="file-delete"></ea-icon>
-      </div>
-    `;
-
-    const templates = {
-      text: () => {
-        const isUploading = item.status === "uploading";
-        const iconName = isUploading ? "spinner" : "paperclip";
-        const spinAttr = isUploading ? " spin" : "";
-
-        return `
-          <ea-icon name="${iconName}" class="${bem.e("icon")}" part="file-icon"${spinAttr}></ea-icon>
-          <div class="${bem.e("file-info")}" part="file-info">
-            <div class="${bem.e("file-info-main")}" part="file-info-main">
-              <span class="${bem.e("filename")}" part="file-name">${item.name}</span>
-              <div class="${bem.e("file-info-actions")}" part="file-info-actions">
-                ${response}
-                <ea-icon name="xmark" class="${bem.e("icon")} ${bem.e("delete")}" part="file-delete"></ea-icon>
-              </div>
-            </div>
-            ${progress()}
-          </div>
-        `;
-      },
-      picture: () => `
-        <div class="${bem.e("file-main")}">
-          <div class="${bem.e("file-info")}">
-            ${thumb("40px", "40px")}
-            <span class="${bem.e("filename")}" part="file-name">${item.name}</span>
-            ${response}
-          </div>
-          <ea-icon name="xmark" class="${bem.e("icon")} ${bem.e("delete")}" part="file-delete"></ea-icon>
-        </div>
-      `,
-      "picture-card": () => `
-        <div class="${bem.e("card")}">
-          <div class="${bem.e("card-thumb")}">
-            ${thumb("100%", "100px", "48px")}
-            ${toolbar}
-          </div>
-          <div class="${bem.e("card-footer")}">
-            <span class="${bem.e("filename")}" part="file-name">${item.name}</span>
-            ${response}
-          </div>
-        </div>
-      `,
-    };
-
-    return templates[this.listType || "text"]();
+    const fileItemEl = li.querySelector<EaUploadFileItem>(
+      "ea-upload-file-item"
+    );
+    if (fileItemEl) {
+      fileItemEl.item = item;
+      fileItemEl.listType = this.listType;
+      fileItemEl.render();
+    }
   }
 
   /**
@@ -626,25 +510,22 @@ export class EaUpload extends EaFormAssociatedBase {
     );
   }
 
-  @listen("click", bem.ce("list"))
-  private _handleListClick(e: Event): void {
-    const target = e.target as HTMLElement;
-    const li = target.closest("li[data-uid]");
-    if (!li) return;
-
-    const uid = li.getAttribute("data-uid");
-    if (!uid) return;
-
-    if (target.closest('[data-action="preview"]')) {
-      e.stopPropagation();
-      const index = this.fileList.findIndex(item => item.uid === uid);
-      if (index !== -1) this._showPreview(index);
-      return;
+  @listen("ea-upload-file-delete", bem.ce("list"))
+  private _handleFileDelete(e: Event): void {
+    e.stopPropagation();
+    const detail = (e as CustomEvent).detail;
+    if (detail?.uid) {
+      this._removeFile(detail.uid);
     }
+  }
 
-    if (target.closest('ea-icon[name="xmark"]')) {
-      e.stopPropagation();
-      this._removeFile(uid);
+  @listen("ea-upload-file-preview", bem.ce("list"))
+  private _handleFilePreview(e: Event): void {
+    e.stopPropagation();
+    const detail = (e as CustomEvent).detail;
+    if (detail?.uid) {
+      const index = this.fileList.findIndex(item => item.uid === detail.uid);
+      if (index !== -1) this._showPreview(index);
     }
   }
 

@@ -1,0 +1,200 @@
+$name: ea-upload-file-item;
+
+@include block(#{$name}) {
+  .#{$name}__icon {
+    margin-right: var(--spacing-sm);
+  }
+
+  .#{$name}__filename {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .#{$name}__response {
+    color: var(--red-500);
+    font-size: var(--font-size-xs);
+    margin-left: var(--spacing-sm);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .#{$name}__delete {
+    opacity: 0;
+    pointer-events: none;
+    cursor: pointer;
+    transition: opacity var(--transition-fast);
+    margin-left: var(--spacing-md);
+    flex-shrink: 0;
+  }
+
+  .#{$name}__thumb {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-right: var(--spacing-sm);
+    border-radius: var(--border-radius-sm);
+    overflow: hidden;
+    background-color: var(--grey-100);
+
+    .#{$name}__progress {
+      width: auto;
+      height: auto;
+      margin: 0;
+    }
+  }
+
+  .#{$name}__thumb-img {
+    position: absolute;
+    inset: 0;
+    display: none;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .#{$name}__thumb.is-loaded .#{$name}__thumb-img {
+    display: block;
+  }
+
+  .#{$name}__thumb-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--grey-400);
+  }
+
+  .#{$name}__thumb.is-loaded .#{$name}__thumb-placeholder {
+    display: none;
+  }
+
+  .#{$name}__thumb-error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--grey-100);
+    color: var(--grey-400);
+  }
+
+  .#{$name}__progress {
+    display: none;
+    width: 100%;
+    margin-top: var(--spacing-sm);
+  }
+
+  @include modifier(text) {
+    .#{$name}__file-info {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .#{$name}__file-info-main {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .#{$name}__file-info-actions {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+  }
+
+  @include modifier(picture) {
+    .#{$name}__file-main {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .#{$name}__file-info {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      flex: 1;
+      min-width: 0;
+    }
+  }
+
+  @include modifier(picture-card) {
+    .#{$name}__card {
+      position: relative;
+      width: 148px;
+      border: var(--ea-border);
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      background-color: var(--color-white);
+      transition: border-color var(--transition-fast);
+
+      &:hover {
+        border-color: var(--grey-400);
+      }
+    }
+
+    .#{$name}__card-thumb {
+      position: relative;
+      width: 100%;
+      height: 100px;
+      background-color: var(--grey-100);
+
+      .#{$name}__thumb {
+        margin-right: 0;
+        border-radius: 0;
+      }
+
+      .#{$name}__thumb-error {
+        border-radius: 0;
+      }
+    }
+
+    .#{$name}__toolbar {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-md);
+      background-color: rgba(0, 0, 0, 0.4);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition-fast);
+    }
+
+    .#{$name}__card:hover .#{$name}__toolbar {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .#{$name}__tool {
+      --ea-icon-size: var(--font-size-lg);
+      color: var(--color-white);
+      cursor: pointer;
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+
+    .#{$name}__card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--spacing-sm);
+      padding: var(--spacing-sm);
+    }
+  }
+}
