@@ -388,11 +388,13 @@ export class EaImagePreview extends EaOverlay {
       const errorSlotHTML = viewerErrorSlot
         ? '<slot name="viewer-error" slot="error"></slot>'
         : "";
-      const imgStr = `<ea-image class="ea-image-preview__img" src="${src}" fit="contain">${errorSlotHTML}</ea-image>`;
+      const imgStr = `<ea-image class="ea-image-preview__img" fit="contain">${errorSlotHTML}</ea-image>`;
       this._overlayContent.insertAdjacentHTML("afterbegin", html(imgStr));
       const img = this._overlayContent.querySelector(
         ".ea-image-preview__img"
       ) as HTMLElement;
+
+      img.setAttribute("src", src);
 
       const onImgErrorEvent = () => {
         this._states.status = "error";
