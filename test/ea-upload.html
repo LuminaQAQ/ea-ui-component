@@ -94,7 +94,33 @@
     <!-- #region -->
     <h1>覆盖前一个文件</h1>
 
-    <div class="demo"></div>
+    <div class="demo">
+      <ea-upload
+        id="limitUpload"
+        class="upload-demo"
+        action="http://localhost:3100/api/upload/single"
+        limit="1"
+      >
+        <ea-button type="primary">Click to upload</ea-button>
+        <div class="tip" slot="tip">
+          Only one file can be uploaded at a time.
+        </div>
+      </ea-upload>
+    </div>
+
+    <script type="module">
+      const limitUpload = document.getElementById("limitUpload");
+      limitUpload.onExceed = async (files, uploadFiles) => {
+        try {
+          await window.$confirm(
+            "You can only upload up to 1 file. Replace the existing file?"
+          );
+          return true;
+        } catch {
+          return false;
+        }
+      };
+    </script>
 
     <hr />
     <!-- #endregion  -->

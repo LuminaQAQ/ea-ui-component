@@ -14,6 +14,7 @@ import type {
   EaUploadBeforeUploadCallback,
   EaUploadChangeCallback,
   EaUploadErrorCallback,
+  EaUploadExceedCallback,
   EaUploadProgressCallback,
   EaUploadRemoveCallback,
   EaUploadSuccessCallback,
@@ -123,7 +124,7 @@ export class EaUpload extends EaFormAssociatedBase {
   autoUpload: boolean = true;
 
   @attribute({ type: Number, default: Number.MAX_SAFE_INTEGER })
-  limit: number | null = null;
+  limit: number = Number.MAX_SAFE_INTEGER;
 
   @property({ type: Object, default: {} })
   data: Record<string, any> = {};
@@ -214,6 +215,12 @@ export class EaUpload extends EaFormAssociatedBase {
     default: (uploadFile: FileItem, uploadFiles: FileItem[]) => true,
   })
   beforeUpload: EaUploadBeforeUploadCallback | null = null;
+
+  @property({
+    type: Function,
+    default: (files: File[], uploadFiles: FileItem[]) => {},
+  })
+  onExceed: EaUploadExceedCallback | null = null;
 
   /**
    * 清空所有
@@ -602,13 +609,28 @@ export class EaUpload extends EaFormAssociatedBase {
   }
 
   @listen("change", "#original")
-  private _handleChange(e: Event): void {
+  private async _handleChange(e: Event): Promise<void> {
     e.preventDefault();
     e.stopImmediatePropagation();
 
     const input = e.target as HTMLInputElement;
     const files = input.files;
     if (!files || files.length === 0) return;
+
+    const remain = this.limit - this.fileList.length;
+    if (files.length > remain) {
+      const result = this.onExceed?.(Array.from(files), this.fileList);
+      const shouldReplace = result instanceof Promise ? await result : result;
+      if (shouldReplace !== true) {
+        input.value = "";
+        return;
+      }
+      this.abort();
+      for (const item of this.fileList) {
+        if (item.url?.startsWith("blob:")) URL.revokeObjectURL(item.url);
+      }
+      this.fileList = [];
+    }
 
     const newItems: FileItem[] = [];
     for (let i = 0; i < files.length; i++) {

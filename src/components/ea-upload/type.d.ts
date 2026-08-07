@@ -47,6 +47,11 @@ export type EaUploadBeforeUploadCallback = (
   uploadFiles: FileItem[]
 ) => boolean | Promise<boolean> | undefined;
 
+export type EaUploadExceedCallback = (
+  files: File[],
+  uploadFiles: FileItem[]
+) => boolean | Promise<boolean> | undefined;
+
 export type EaUploadBeforeRemoveCallback = (
   uploadFile: FileItem,
   uploadFiles: FileItem[]
