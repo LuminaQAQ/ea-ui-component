@@ -1,7 +1,9 @@
+import type { FileItem } from "../type";
+
 export interface EaUploadAjaxErrorDetail {
   error: EaUploadAjaxError;
-  uploadFile: File | File[];
-  uploadFiles: File[];
+  uploadFile: FileItem | FileItem[];
+  uploadFiles: FileItem[];
 }
 
 export class EaUploadAjaxError extends Error {

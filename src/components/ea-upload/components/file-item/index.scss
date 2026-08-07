@@ -1,11 +1,30 @@
 $name: ea-upload-file-item;
 
 @include block(#{$name}) {
-  .#{$name}__icon {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  padding: var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast);
+
+  &:hover {
+    background-color: var(--grey-100);
+
+    .#{$name}__delete {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  @include element(icon) {
     margin-right: var(--spacing-sm);
   }
 
-  .#{$name}__filename {
+  @include element(filename) {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -13,7 +32,7 @@ $name: ea-upload-file-item;
     min-width: 0;
   }
 
-  .#{$name}__response {
+  @include element(response) {
     color: var(--red-500);
     font-size: var(--font-size-xs);
     margin-left: var(--spacing-sm);
@@ -23,7 +42,7 @@ $name: ea-upload-file-item;
     flex-shrink: 0;
   }
 
-  .#{$name}__delete {
+  @include element(delete) {
     opacity: 0;
     pointer-events: none;
     cursor: pointer;
@@ -32,7 +51,7 @@ $name: ea-upload-file-item;
     flex-shrink: 0;
   }
 
-  .#{$name}__thumb {
+  @include element(thumb) {
     position: relative;
     display: flex;
     align-items: center;
@@ -48,9 +67,19 @@ $name: ea-upload-file-item;
       height: auto;
       margin: 0;
     }
+
+    @include state(loaded) {
+      .#{$name}__thumb-img {
+        display: block;
+      }
+
+      .#{$name}__thumb-placeholder {
+        display: none;
+      }
+    }
   }
 
-  .#{$name}__thumb-img {
+  @include element(thumb-img) {
     position: absolute;
     inset: 0;
     display: none;
@@ -59,32 +88,27 @@ $name: ea-upload-file-item;
     object-fit: cover;
   }
 
-  .#{$name}__thumb.is-loaded .#{$name}__thumb-img {
-    display: block;
-  }
-
-  .#{$name}__thumb-placeholder {
+  @include element(thumb-placeholder) {
     position: absolute;
     inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--grey-400);
+
+    font-size: var(--font-size-lg);
   }
 
-  .#{$name}__thumb.is-loaded .#{$name}__thumb-placeholder {
-    display: none;
-  }
-
-  .#{$name}__thumb-error {
+  @include element(thumb-error) {
+    --ea-icon-color: var(--red-500);
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: var(--grey-100);
-    color: var(--grey-400);
+    color: var(--red-500);
   }
 
-  .#{$name}__progress {
+  @include element(progress) {
     display: none;
     width: 100%;
     margin-top: var(--spacing-sm);
@@ -131,9 +155,18 @@ $name: ea-upload-file-item;
   }
 
   @include modifier(picture-card) {
+    display: inline-flex;
+    padding: 0;
+    width: auto;
+
+    &:hover {
+      background-color: transparent;
+    }
+
     .#{$name}__card {
       position: relative;
       width: 148px;
+      height: 148px;
       border: var(--ea-border);
       border-radius: var(--border-radius);
       overflow: hidden;
@@ -148,7 +181,7 @@ $name: ea-upload-file-item;
     .#{$name}__card-thumb {
       position: relative;
       width: 100%;
-      height: 100px;
+      height: 100%;
       background-color: var(--grey-100);
 
       .#{$name}__thumb {
@@ -165,9 +198,10 @@ $name: ea-upload-file-item;
       position: absolute;
       inset: 0;
       display: flex;
+      flex-direction: column;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
-      gap: var(--spacing-md);
+      padding: var(--spacing-md);
       background-color: rgba(0, 0, 0, 0.4);
       opacity: 0;
       pointer-events: none;
@@ -177,6 +211,13 @@ $name: ea-upload-file-item;
     .#{$name}__card:hover .#{$name}__toolbar {
       opacity: 1;
       pointer-events: auto;
+    }
+
+    .#{$name}__tool-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+      margin: auto 0;
     }
 
     .#{$name}__tool {
@@ -189,12 +230,26 @@ $name: ea-upload-file-item;
       }
     }
 
-    .#{$name}__card-footer {
+    .#{$name}__tool-info {
       display: flex;
       align-items: center;
-      justify-content: space-between;
       gap: var(--spacing-sm);
-      padding: var(--spacing-sm);
+      width: 100%;
+      font-size: var(--font-size-xs);
+      color: var(--color-white);
+    }
+  }
+
+  @include state(uploading) {
+    .#{$name}__progress {
+      display: block;
+    }
+  }
+
+  @include state(error) {
+    .#{$name}__delete {
+      opacity: 1;
+      pointer-events: auto;
     }
   }
 }

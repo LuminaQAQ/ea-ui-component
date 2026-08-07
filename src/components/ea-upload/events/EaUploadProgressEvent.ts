@@ -1,7 +1,9 @@
+import type { FileItem } from "../type";
+
 export interface EaUploadProgressEventDetail {
   event: ProgressEvent;
-  uploadFile: File | File[];
-  uploadFiles: File[];
+  uploadFile: FileItem | FileItem[];
+  uploadFiles: FileItem[];
 }
 
 export class EaUploadProgressEvent extends Event {

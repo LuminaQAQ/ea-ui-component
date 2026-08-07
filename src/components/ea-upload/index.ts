@@ -5,7 +5,6 @@ import { Enum } from "@utils/Enum";
 import stylesheet from "./index.scss?inline";
 
 import "@components/ea-button/index";
-import "@components/ea-progress/index";
 import "@components/ea-image-preview/index";
 
 import type {
@@ -36,7 +35,6 @@ import { EaUploadSuccessEvent } from "./events/EaUploadSuccessEvent";
 import { nanoid } from "nanoid";
 import "./components/file-item/index";
 import type { EaUploadFileItem } from "./components/file-item/index";
-import EaProgress from "@components/ea-progress/index";
 import type { EaImagePreview } from "@components/ea-image-preview/index";
 
 const TAG_NAME = "ea-upload" as const;
@@ -53,6 +51,7 @@ const bem = createBEM(TAG_NAME);
  *
  * @csspart container - 容器
  * @csspart list - 文件列表
+ * @csspart trigger - 上传按钮容器
  * @csspart file-item - 文件项
  * @csspart file-icon - 文件类型图标
  * @csspart file-info - 文件信息区域
@@ -441,33 +440,72 @@ export class EaUpload extends EaFormAssociatedBase {
     this.fileList = merged;
   }
 
+  /**
+   * 渲染文件列表
+   */
   private _renderFileList(): void {
+    const listElement = this._listElement;
+
     if (!this.showFileList) {
-      this._listElement.innerHTML = "";
+      listElement.querySelectorAll("li[data-uid]").forEach(li => li.remove());
       return;
     }
-    this._listElement.innerHTML = "";
+
+    const triggerEl = listElement.querySelector<HTMLLIElement>(
+      bem.ce("trigger")
+    );
+    const anchor = triggerEl || null;
+
+    const existing = new Map<string, HTMLLIElement>();
+    listElement.querySelectorAll<HTMLLIElement>("li[data-uid]").forEach(li => {
+      existing.set(li.getAttribute("data-uid")!, li);
+    });
 
     for (const item of this.fileList) {
-      const isExists = this._listElement.querySelector(
-        `li[data-uid="${item.uid}"]`
-      );
-      if (isExists) continue;
+      const li = existing.get(item.uid);
+      if (li) {
+        existing.delete(item.uid);
+        const fileItemEl = li.querySelector<EaUploadFileItem>(
+          "ea-upload-file-item"
+        );
+        if (fileItemEl) {
+          const changed =
+            fileItemEl.item !== item || fileItemEl.listType !== this.listType;
+          fileItemEl.item = item;
+          fileItemEl.listType = this.listType;
+          if (changed) fileItemEl.render();
+        }
+        li.classList.remove(
+          bem.s("pending"),
+          bem.s("uploading"),
+          bem.s("done"),
+          bem.s("error"),
+          bem.s("removed")
+        );
+        li.classList.add(bem.s(item.status));
+        continue;
+      }
 
-      const li = document.createElement("li");
-      li.className = `${bem.e("file-item")} ${bem.s(item.status)}`;
-      li.setAttribute("part", "file-item");
-      li.setAttribute("data-uid", item.uid);
+      const newLi = document.createElement("li");
+      newLi.className = `${bem.e("file-item")} ${bem.s(item.status)}`;
+      newLi.setAttribute("part", "file-item");
+      newLi.setAttribute("data-uid", item.uid);
 
       const fileItem = document.createElement(
         "ea-upload-file-item"
       ) as EaUploadFileItem;
       fileItem.item = item;
       fileItem.listType = this.listType;
-      li.appendChild(fileItem);
+      newLi.appendChild(fileItem);
 
-      this._listElement.appendChild(li);
+      if (anchor) {
+        listElement.insertBefore(newLi, anchor);
+      } else {
+        listElement.appendChild(newLi);
+      }
     }
+
+    existing.forEach(li => li.remove());
   }
 
   private _updateFileItem(uid: string): void {
@@ -599,17 +637,6 @@ export class EaUpload extends EaFormAssociatedBase {
     }
   }
 
-  @listen("change", bem.ce("list"))
-  private _handleProgressElChange(e: Event): void {
-    if (
-      e.target instanceof EaProgress ||
-      (e.target as HTMLElement).tagName === "EA-PROGRESS"
-    ) {
-      e.stopImmediatePropagation();
-      e.preventDefault();
-    }
-  }
-
   $mount(): void {
     this.updateContainerClasslist();
     this._mergeDefaultFileList();
@@ -623,24 +650,38 @@ export class EaUpload extends EaFormAssociatedBase {
   }
 
   html(): string {
+    const isPictureCard = this.listType === "picture-card";
+
+    const triggerContent = `
+    <slot id="triggerSlot" name="trigger"></slot>
+    <slot id="defaultSlot"></slot>
+    <input
+      id="original"
+      name="original"
+      type="file"
+      ${this.accept ? `accept="${this.accept}"` : ""}
+      ${this.multiple ? "multiple" : ""}
+      ${this.disabled ? "disabled" : ""}
+    />
+  `;
+
     return `
       <div class="${bem()}" part="container">
-        <label class="${bem.e("content")}" for="original">
-          <slot id="triggerSlot" name="trigger"></slot>
-          <slot id="defaultSlot"></slot>
-          <input
-            id="original"
-            name="original"
-            type="file"
-            ${this.accept ? `accept="${this.accept}"` : ""}
-            ${this.multiple ? "multiple" : ""}
-            ${this.disabled ? "disabled" : ""}
-          />
-        </label>
+        ${
+          isPictureCard
+            ? ""
+            : `<label class="${bem.e("content")}" for="original">${triggerContent}</label>`
+        }
         <div class="${bem.e("tip")}" part="tip">
           <slot name="tip"></slot>
         </div>
-        <ul class="${bem.e("list")}" part="list"></ul>
+        <ul class="${bem.e("list")}" part="list">
+          ${
+            isPictureCard
+              ? `<li class="${bem.e("trigger")}" part="trigger"><label class="${bem.e("content")}" for="original">${triggerContent}</label></li>`
+              : ""
+          }
+        </ul>
         <ea-image-preview class="${bem.e("preview")}" part="preview"></ea-image-preview>
       </div>
     `;

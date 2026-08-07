@@ -24,20 +24,6 @@ $name: ea-upload;
     margin-top: var(--spacing-md);
 
     .#{$name}__file-item {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      width: 100%;
-      padding: var(--spacing-sm);
-      border-radius: var(--border-radius-sm);
-      transition:
-        background-color var(--transition-fast),
-        color var(--transition-fast);
-
-      &:hover {
-        background-color: var(--grey-100);
-      }
-
       @include state(uploading) {
         color: var(--blue-500);
       }
@@ -59,37 +45,29 @@ $name: ea-upload;
       gap: var(--spacing-sm);
     }
 
-    .#{$name}__file-item {
-      display: inline-flex;
-      padding: 0;
-      width: auto;
+    .#{$name}__trigger {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 148px;
+      height: 148px;
+      border: var(--border-width) dashed var(--#{$name}-border-color);
+      border-radius: var(--border-radius);
+      background-color: var(--#{$name}-bg);
+      transition: border-color var(--#{$name}-transition);
+      cursor: pointer;
 
       &:hover {
-        background-color: transparent;
-      }
-    }
-  }
-
-  @include element(list) {
-    .#{$name}__file-item {
-      &:hover {
-        &::part(file-delete) {
-          opacity: 1;
-          pointer-events: auto;
-        }
+        border-color: var(--grey-400);
       }
 
-      @include state(error) {
-        &::part(file-delete) {
-          opacity: 1;
-          pointer-events: auto;
-        }
-      }
-
-      @include state(uploading) {
-        &::part(file-progress) {
-          display: block;
-        }
+      .#{$name}__content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
       }
     }
   }

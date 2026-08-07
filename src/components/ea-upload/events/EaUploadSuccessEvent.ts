@@ -1,7 +1,9 @@
+import type { FileItem } from "../type";
+
 export interface EaUploadSuccessEventDetail {
   response: any;
-  uploadFile: File | File[];
-  uploadFiles: File[];
+  uploadFile: FileItem | FileItem[];
+  uploadFiles: FileItem[];
 }
 
 export class EaUploadSuccessEvent extends Event {

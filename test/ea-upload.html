@@ -21,6 +21,9 @@
       src="../src/components/ea-message-box/index.ts"
     ></script>
 
+    <!-- action="http://localhost:3100/api/upload/single" -->
+    <!-- action="https://m1.apifoxmock.com/m1/8609267-8388194-default/file" -->
+
     <!--  基础用法 -->
     <!-- #region -->
     <h1>基础用法</h1>
@@ -114,7 +117,7 @@
     <div class="demo">
       <ea-upload
         id="pictureUpload"
-        action="https://m1.apifoxmock.com/m1/8609267-8388194-default/file"
+        action="http://localhost:3100/api/upload/single"
         list-type="picture-card"
       >
         <ea-icon name="plus"></ea-icon>
@@ -166,7 +169,7 @@
       <ea-upload
         id="dragUpload"
         type="drag"
-        url="http://localhost:3100/api/upload/single"
+        action="http://localhost:3100/api/upload/single"
       >
         test
       </ea-upload>

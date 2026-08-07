@@ -3,6 +3,7 @@ import { CustomElement, attribute, property, query, listen } from "@decorator";
 import { html } from "@utils/html";
 import stylesheet from "./index.scss?inline";
 import type { FileItem, ListType } from "../../type";
+import EaProgress from "@/components/ea-progress";
 
 const TAG_NAME = "ea-upload-file-item" as const;
 const bem = createBEM(TAG_NAME);
@@ -17,9 +18,6 @@ export class EaUploadFileItem extends EaBase {
   @query(`.${bem()}`)
   private _container!: HTMLElement;
 
-  @query(".ea-upload-file-item__body")
-  private _body!: HTMLElement;
-
   @property({ type: Object, default: null })
   item: FileItem | null = null;
 
@@ -30,7 +28,10 @@ export class EaUploadFileItem extends EaBase {
    * 更新容器类名
    */
   updateContainerClasslist(): string {
-    const className = bem({ [this.listType]: true });
+    const className = bem(
+      { [this.listType]: true },
+      this.item?.status ? { [this.item.status]: true } : {}
+    );
     this._container.className = className;
     return className;
   }
@@ -38,6 +39,7 @@ export class EaUploadFileItem extends EaBase {
   $mount(): void {
     this._handleThumbUrl();
     this.updateContainerClasslist();
+    this._bindThumbEvents();
   }
 
   $beforeUnmount(): void {
@@ -50,10 +52,41 @@ export class EaUploadFileItem extends EaBase {
    * 重新渲染文件项
    */
   render(): void {
-    if (!this.item || !this._body) return;
+    if (!this.item || !this._container) return;
     this._handleThumbUrl();
-    this._body.innerHTML = html(this._getBodyTemplate());
+    this._container.innerHTML = html(this._getBodyTemplate());
     this.updateContainerClasslist();
+    this._bindThumbEvents();
+  }
+
+  /**
+   * 绑定缩略图加载事件, 图片加载完成后显示原生 img, 否则保持占位图标
+   */
+  private _bindThumbEvents(): void {
+    if (!this._container) return;
+    this._container
+      .querySelectorAll<HTMLImageElement>(`.${bem.e("thumb-img")}`)
+      .forEach(img => {
+        const thumb = img.closest<HTMLElement>(`.${bem.e("thumb")}`);
+        if (!thumb) return;
+
+        const src = this.item?.thumbUrl || this.item?.url || "";
+        if (!img.hasAttribute("src") && src) {
+          img.src = src;
+        }
+        if (!img.hasAttribute("src")) return;
+
+        img.onload = () => thumb.classList.add(bem.s("loaded"));
+        img.onerror = () => thumb.classList.remove(bem.s("loaded"));
+
+        if (img.complete) {
+          if (img.naturalWidth > 0) {
+            thumb.classList.add(bem.s("loaded"));
+          } else {
+            thumb.classList.remove(bem.s("loaded"));
+          }
+        }
+      });
   }
 
   /**
@@ -76,18 +109,32 @@ export class EaUploadFileItem extends EaBase {
       (el): el is Element =>
         el instanceof Element && el.getAttribute("data-action") === "remove"
     );
+
     if (removeEl) {
       e.stopPropagation();
       this._emitDelete();
       return;
     }
+
     const previewEl = path.find(
       (el): el is Element =>
         el instanceof Element && el.getAttribute("data-action") === "preview"
     );
+
     if (previewEl) {
       e.stopPropagation();
       this._emitPreview();
+    }
+  }
+
+  @listen("change", bem())
+  private _handleProgressElChange(e: Event): void {
+    if (
+      e.target instanceof EaProgress ||
+      (e.target as HTMLElement).tagName === "EA-PROGRESS"
+    ) {
+      e.stopImmediatePropagation();
+      e.preventDefault();
     }
   }
 
@@ -115,10 +162,9 @@ export class EaUploadFileItem extends EaBase {
 
   /** @override */
   html(): string {
-    return `<div class="${bem()}">
-      <div class="ea-upload-file-item__body">${
-        this.item ? this._getBodyTemplate() : ""
-      }</div>
+    return `
+    <div class="${bem()}">
+      ${this.item ? this._getBodyTemplate() : ""}
     </div>`;
   }
 
@@ -132,7 +178,7 @@ export class EaUploadFileItem extends EaBase {
         ? `<span class="${bem.e("response")}" part="file-response">${item.response}</span>`
         : "";
 
-    const progress = (size = "48px"): string =>
+    const progress = (size = "64px"): string =>
       isPicture
         ? `<ea-progress class="${bem.e("progress")}" part="file-progress" variant="circle" size="${size}" show-text="false" percentage="${item.percent || 0}"></ea-progress>`
         : `<ea-progress class="${bem.e("progress")}" part="file-progress" variant="line" show-text="false" stroke-width="3px" percentage="${item.percent || 0}"></ea-progress>`;
@@ -160,13 +206,6 @@ export class EaUploadFileItem extends EaBase {
         </div>
       `;
     };
-
-    const toolbar = `
-      <div class="${bem.e("toolbar")}" part="file-toolbar">
-        <ea-icon name="magnifying-glass" class="${bem.e("tool")}" data-action="preview" part="file-preview"></ea-icon>
-        <ea-icon name="xmark" class="${bem.e("tool")}" data-action="remove" part="file-delete"></ea-icon>
-      </div>
-    `;
 
     const templates: Record<string, () => string> = {
       text: () => {
@@ -198,18 +237,38 @@ export class EaUploadFileItem extends EaBase {
           <ea-icon name="xmark" class="${bem.e("icon")} ${bem.e("delete")}" data-action="remove" part="file-delete"></ea-icon>
         </div>
       `,
-      "picture-card": () => `
-        <div class="${bem.e("card")}" part="card">
-          <div class="${bem.e("card-thumb")}" part="card-thumb">
-            ${thumb("100%", "100px", "48px")}
-            ${toolbar}
+      "picture-card": () => {
+        const isUploading = item.status === "uploading";
+        const isError = item.status === "error";
+
+        const toolbar = isUploading
+          ? ""
+          : `
+          <div class="${bem.e("toolbar")}" part="file-toolbar">
+            <div class="${bem.e("tool-actions")}">
+              ${
+                isError
+                  ? ""
+                  : `<ea-icon name="magnifying-glass" class="${bem.e("tool")}" data-action="preview" part="file-preview"></ea-icon>`
+              }
+              <ea-icon name="trash" class="${bem.e("tool")}" data-action="remove" part="file-delete"></ea-icon>
+            </div>
+            <div class="${bem.e("tool-info")}">
+              <span class="${bem.e("filename")}" part="file-name">${item.name}</span>
+              ${response}
+            </div>
           </div>
-          <div class="${bem.e("card-footer")}" part="card-footer">
-            <span class="${bem.e("filename")}" part="file-name">${item.name}</span>
-            ${response}
+        `;
+
+        return `
+          <div class="${bem.e("card")}" part="card">
+            <div class="${bem.e("card-thumb")}" part="card-thumb">
+              ${thumb("100%", "100%", "64px")}
+              ${toolbar}
+            </div>
           </div>
-        </div>
-      `,
+        `;
+      },
     };
 
     return templates[this.listType || "text"]();
