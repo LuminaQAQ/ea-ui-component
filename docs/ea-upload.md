@@ -615,10 +615,12 @@ avatarUpload.onSuccess = (response, uploadFile) => {
 
 使用 `list-type="picture"` 以图片列表形式展示文件，文件名旁显示缩略图。
 
+<div class="demo">
 <ea-upload id="pictureUpload" class="upload-demo" action="https://m1.apifoxmock.com/m1/8609267-8388194-default/file" list-type="picture">
   <ea-button type="primary">Click to upload</ea-button>
   <div class="tip" slot="tip">jpg/png files with a size less than 500KB.</div>
 </ea-upload>
+</div>
 
 :::: details 查看代码
 
