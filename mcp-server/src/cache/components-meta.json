@@ -1,8 +1,8 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-06-09T14:32:52.498Z",
-  "totalComponents": 62,
-  "successCount": 62,
+  "generatedAt": "2026-08-08T19:02:31.555Z",
+  "totalComponents": 63,
+  "successCount": 63,
   "failCount": 0,
   "components": [
     {
@@ -36,7 +36,8 @@
           "default": "VARIANT_DEFAULT",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["primary", "success", "warning", "danger", "info"]
         },
         {
           "name": "effect",
@@ -44,7 +45,8 @@
           "default": "\"light\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["light", "dark"]
         },
         {
           "name": "closeText",
@@ -279,11 +281,12 @@
         },
         {
           "name": "shape",
-          "type": "any",
+          "type": "Enum",
           "default": "\"circle\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["circle", "square"]
         },
         {
           "name": "size",
@@ -319,11 +322,12 @@
         },
         {
           "name": "fit",
-          "type": "any",
+          "type": "Enum",
           "default": "\"cover\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["fill", "contain", "cover", "none", "scale-down"]
         }
       ],
       "events": [
@@ -566,7 +570,8 @@
           "default": "BADGE_VARIANT_DEFAULT",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["primary", "success", "warning", "danger", "info"]
         },
         {
           "name": "color",
@@ -789,7 +794,15 @@
           "default": "\"normal\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": [
+            "primary",
+            "success",
+            "warning",
+            "danger",
+            "info",
+            "normal"
+          ]
         },
         {
           "name": "text",
@@ -841,11 +854,12 @@
         },
         {
           "name": "size",
-          "type": "any",
+          "type": "Enum",
           "default": "\"medium\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["small", "medium", "large"]
         },
         {
           "name": "loading",
@@ -872,7 +886,8 @@
           "default": "\"button\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["button", "submit", "reset"]
         },
         {
           "name": "target",
@@ -1306,7 +1321,8 @@
           "default": "\"always\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["always", "hover", "never"]
         },
         {
           "name": "header",
@@ -1436,7 +1452,8 @@
           "default": "\"horizontal\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["horizontal", "vertical"]
         },
         {
           "name": "index",
@@ -1452,7 +1469,8 @@
           "default": "\"hover\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["click", "hover"]
         },
         {
           "name": "interval",
@@ -1468,7 +1486,8 @@
           "default": "\"hover\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["never", "always", "hover"]
         },
         {
           "name": "autoplay",
@@ -1500,7 +1519,8 @@
           "default": "\"\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["", "none", "outside"]
         }
       ],
       "events": [
@@ -1686,7 +1706,8 @@
           "default": "\"default\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["small", "default", "large"]
         },
         {
           "name": "value",
@@ -2075,11 +2096,12 @@
         },
         {
           "name": "size",
-          "type": "any",
+          "type": "Enum",
           "default": "\"\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["small", "medium", "large"]
         },
         {
           "name": "colorFormat",
@@ -2087,7 +2109,8 @@
           "default": "\"hex\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["hsl", "hsv", "hex", "rgb", "rgba"]
         },
         {
           "name": "showAlpha",
@@ -2119,7 +2142,21 @@
           "default": "\"bottom\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": [
+            "top",
+            "top-start",
+            "top-end",
+            "bottom",
+            "bottom-start",
+            "bottom-end",
+            "left",
+            "left-start",
+            "left-end",
+            "right",
+            "right-start",
+            "right-end"
+          ]
         },
         {
           "name": "predefine",
@@ -2609,7 +2646,8 @@
           "default": "\"left\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["left", "center", "right"]
         },
         {
           "name": "displayFormat",
@@ -2633,7 +2671,8 @@
           "default": "\"date\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["date", "month", "year"]
         },
         {
           "name": "size",
@@ -2641,7 +2680,8 @@
           "default": "\"default\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["large", "default", "small"]
         },
         {
           "name": "required",
@@ -2878,7 +2918,8 @@
           "default": "\"horizontal\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["horizontal", "vertical"]
         },
         {
           "name": "size",
@@ -2886,7 +2927,8 @@
           "default": "\"default\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["large", "default", "small"]
         },
         {
           "name": "labelWidth",
@@ -3311,7 +3353,8 @@
           "default": "\"rtl\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["rtl", "ltr", "ttb", "btt"]
         },
         {
           "name": "withHeader",
@@ -3530,7 +3573,8 @@
           "default": "\"hover\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["click", "hover", "contextmenu"]
         },
         {
           "name": "hideOnClick",
@@ -3546,7 +3590,8 @@
           "default": "\"\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["small", "default", "large"]
         }
       ],
       "events": [
@@ -3960,7 +4005,8 @@
           "default": "\"\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["", "fill", "contain", "cover", "none", "scale-down"]
         },
         {
           "name": "alt",
@@ -3976,7 +4022,8 @@
           "default": "\"eager\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["lazy", "eager"]
         },
         {
           "name": "referrerpolicy",
@@ -4487,7 +4534,8 @@
           "isAttribute": true,
           "a11y": {
             "ariaAttr": "aria-busy"
-          }
+          },
+          "enumValues": ["finished", "loading", "noMore"]
         },
         {
           "name": "distance",
@@ -4612,7 +4660,32 @@
           "default": "\"text\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": [
+            "textarea",
+            "text",
+            "button",
+            "checkbox",
+            "color",
+            "date",
+            "datetime-local",
+            "email",
+            "file",
+            "hidden",
+            "image",
+            "month",
+            "number",
+            "password",
+            "radio",
+            "range",
+            "reset",
+            "search",
+            "submit",
+            "tel",
+            "time",
+            "url",
+            "week"
+          ]
         },
         {
           "name": "size",
@@ -4620,7 +4693,8 @@
           "default": "\"default\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["large", "default", "small"]
         },
         {
           "name": "value",
@@ -4819,7 +4893,8 @@
           "default": "\"vertical\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["none", "both", "horizontal", "vertical"]
         },
         {
           "name": "autofocus",
@@ -5582,7 +5657,15 @@
           "default": "\"normal\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": [
+            "primary",
+            "success",
+            "warning",
+            "danger",
+            "info",
+            "normal"
+          ]
         },
         {
           "name": "disabled",
@@ -5601,7 +5684,8 @@
           "default": "\"\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["always", "hover", "never"]
         },
         {
           "name": "href",
@@ -5904,7 +5988,8 @@
           "default": "\"vertical\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["horizontal", "vertical"]
         },
         {
           "name": "backgroundColor",
@@ -6518,7 +6603,8 @@
           "default": "\"\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["large", "default", "small"]
         },
         {
           "name": "hideOnSinglePage",
@@ -6805,7 +6891,8 @@
           "default": "\"primary\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["normal", "primary", "success", "warning", "danger"]
         },
         {
           "name": "cancelButtonType",
@@ -6813,7 +6900,8 @@
           "default": "\"normal\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["normal", "primary", "success", "warning", "danger"]
         }
       ],
       "events": [
@@ -6944,7 +7032,8 @@
           "default": "\"hover\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["click", "focus", "hover", "contextmenu", "customized"]
         },
         {
           "name": "heading",
@@ -7089,7 +7178,8 @@
           "default": "\"line\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["line", "circle", "dashboard"]
         },
         {
           "name": "percentage",
@@ -7108,7 +7198,8 @@
           "default": "\"\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["success", "warning", "exception"]
         },
         {
           "name": "strokeWidth",
@@ -7334,7 +7425,8 @@
           "default": "\"default\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["small", "default", "large"]
         },
         {
           "name": "value",
@@ -7570,7 +7662,8 @@
           "default": "\"\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["large", "default", "small"]
         },
         {
           "name": "readonly",
@@ -7740,7 +7833,8 @@
           "default": "\"\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["primary", "success", "warning", "danger", "info"]
         },
         {
           "name": "heading",
@@ -8073,7 +8167,8 @@
           "default": "\"\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["large", "default", "small"]
         },
         {
           "name": "direction",
@@ -8081,7 +8176,8 @@
           "default": "\"\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["horizontal", "vertical"]
         },
         {
           "name": "disabled",
@@ -8668,7 +8764,21 @@
           "default": "\"top\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": [
+            "top",
+            "top-start",
+            "top-end",
+            "bottom",
+            "bottom-start",
+            "bottom-end",
+            "left",
+            "left-start",
+            "left-end",
+            "right",
+            "right-start",
+            "right-end"
+          ]
         },
         {
           "name": "showInput",
@@ -8684,7 +8794,8 @@
           "default": "\"\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["large", "default", "small"]
         },
         {
           "name": "required",
@@ -8907,7 +9018,15 @@
           "default": "\"\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": [
+            "",
+            "center",
+            "flex-start",
+            "flex-end",
+            "baseline",
+            "stretch"
+          ]
         },
         {
           "name": "direction",
@@ -8915,7 +9034,8 @@
           "default": "\"horizontal\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["horizontal", "vertical"]
         },
         {
           "name": "size",
@@ -9227,7 +9347,8 @@
           "default": "\"\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["", "wait", "process", "finish", "error", "success"]
         },
         {
           "name": "index",
@@ -9484,7 +9605,8 @@
           "default": "\"default\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["large", "default", "small"]
         },
         {
           "name": "inactiveText",
@@ -10155,7 +10277,8 @@
           "default": "\"\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["", "card", "border-card"]
         },
         {
           "name": "disabled",
@@ -10324,7 +10447,8 @@
           "default": "\"primary\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["primary", "success", "warning", "danger", "info"]
         }
       ],
       "events": [
@@ -10423,7 +10547,8 @@
           "default": "\"normal\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["normal"]
         },
         {
           "name": "size",
@@ -10431,7 +10556,8 @@
           "default": "\"medium\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["large", "medium", "small"]
         },
         {
           "name": "truncated",
@@ -10455,7 +10581,18 @@
           "default": "\"span\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": [
+            "span",
+            "p",
+            "b",
+            "i",
+            "sub",
+            "sup",
+            "ins",
+            "del",
+            "mark"
+          ]
         }
       ],
       "events": [],
@@ -10668,7 +10805,8 @@
           "default": "\"left\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["left", "center", "right"]
         },
         {
           "name": "size",
@@ -10676,7 +10814,8 @@
           "default": "\"default\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["large", "default", "small"]
         },
         {
           "name": "limitRangeStart",
@@ -10927,7 +11066,8 @@
           "default": "\"hover\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["click", "focus", "hover", "contextmenu", "customized"]
         },
         {
           "name": "effect",
@@ -10935,7 +11075,8 @@
           "default": "\"dark\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["dark", "light", "customized"]
         },
         {
           "name": "content",
@@ -11106,7 +11247,8 @@
           "default": "\"default\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": ["default", "primary"]
         },
         {
           "name": "placement",
@@ -11114,7 +11256,21 @@
           "default": "\"bottom\"",
           "required": false,
           "description": "",
-          "isAttribute": true
+          "isAttribute": true,
+          "enumValues": [
+            "top",
+            "top-start",
+            "top-end",
+            "bottom",
+            "bottom-start",
+            "bottom-end",
+            "left",
+            "left-start",
+            "left-end",
+            "right",
+            "right-start",
+            "right-end"
+          ]
         }
       ],
       "events": [
@@ -11666,6 +11822,448 @@
           "title": "默认展开以及默认选中",
           "description": "",
           "code": "<div class=\"demo\">\n  <ea-tree id=\"defaultExpandedTree\" node-key=\"id\" show-checkbox></ea-tree>\n</div>",
+          "type": "advanced"
+        }
+      ]
+    },
+    {
+      "name": "ea-upload",
+      "displayName": "文件上传",
+      "category": "basic",
+      "status": "stable",
+      "since": "4.0",
+      "description": "文件上传组件，支持拖拽上传、多文件上传、自定义文件列表类型、上传进度展示、图片预览等功能。",
+      "sourcePath": "src/components/ea-upload",
+      "props": [
+        {
+          "name": "disabled",
+          "type": "Boolean",
+          "default": "false",
+          "required": false,
+          "description": "",
+          "isAttribute": true
+        },
+        {
+          "name": "action",
+          "type": "String",
+          "default": "\"\"",
+          "required": false,
+          "description": "",
+          "isAttribute": true
+        },
+        {
+          "name": "headers",
+          "type": "Object",
+          "default": "{}",
+          "required": false,
+          "description": "",
+          "isAttribute": true
+        },
+        {
+          "name": "method",
+          "type": "Enum",
+          "default": "\"POST\"",
+          "required": false,
+          "description": "",
+          "isAttribute": true,
+          "enumValues": ["GET", "POST", "PUT", "DELETE"]
+        },
+        {
+          "name": "multiple",
+          "type": "Boolean",
+          "default": "false",
+          "required": false,
+          "description": "",
+          "isAttribute": true
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "default": "\"\"",
+          "required": false,
+          "description": "",
+          "isAttribute": true
+        },
+        {
+          "name": "withCredentials",
+          "type": "Boolean",
+          "default": "false",
+          "required": false,
+          "description": "",
+          "isAttribute": true
+        },
+        {
+          "name": "showFileList",
+          "type": "Boolean",
+          "default": "true",
+          "required": false,
+          "description": "",
+          "isAttribute": true
+        },
+        {
+          "name": "accept",
+          "type": "String",
+          "default": "\"\"",
+          "required": false,
+          "description": "",
+          "isAttribute": true
+        },
+        {
+          "name": "crossorigin",
+          "type": "Enum",
+          "default": "\"\"",
+          "required": false,
+          "description": "",
+          "isAttribute": true,
+          "enumValues": ["", "anonymous", "use-credentials"]
+        },
+        {
+          "name": "listType",
+          "type": "String",
+          "default": "\"text\"",
+          "required": false,
+          "description": "",
+          "isAttribute": true
+        },
+        {
+          "name": "autoUpload",
+          "type": "Boolean",
+          "default": "true",
+          "required": false,
+          "description": "",
+          "isAttribute": true
+        },
+        {
+          "name": "drag",
+          "type": "Boolean",
+          "default": "false",
+          "required": false,
+          "description": "",
+          "isAttribute": true
+        },
+        {
+          "name": "limit",
+          "type": "Number",
+          "default": "Number.MAX_SAFE_INTEGER",
+          "required": false,
+          "description": "",
+          "isAttribute": true
+        },
+        {
+          "name": "directory",
+          "type": "Boolean",
+          "default": "false",
+          "required": false,
+          "description": "",
+          "isAttribute": true
+        },
+        {
+          "name": "data",
+          "type": "Object",
+          "default": "{}",
+          "required": false,
+          "description": "",
+          "isAttribute": false
+        },
+        {
+          "name": "fileList",
+          "type": "Array",
+          "default": "[]",
+          "required": false,
+          "description": "",
+          "isAttribute": false
+        },
+        {
+          "name": "defaultFileList",
+          "type": "Array",
+          "default": "[]",
+          "required": false,
+          "description": "",
+          "isAttribute": false
+        },
+        {
+          "name": "httpRequest",
+          "type": "Function",
+          "default": "createUploadRequest",
+          "required": false,
+          "description": "",
+          "isAttribute": false
+        },
+        {
+          "name": "onError",
+          "type": "Function",
+          "default": "(\r\n      error: EaUploadAjaxError,\r\n      file: FileItem | FileItem[],\r\n      files?: FileItem[]\r\n    ) => {\r\n      console.error(error);\r\n    }",
+          "required": false,
+          "description": "",
+          "isAttribute": false
+        },
+        {
+          "name": "onProgress",
+          "type": "Function",
+          "default": "(\r\n      evt: ProgressEvent,\r\n      file: FileItem | FileItem[],\r\n      files: FileItem[]\r\n    ) => {}",
+          "required": false,
+          "description": "",
+          "isAttribute": false
+        },
+        {
+          "name": "onSuccess",
+          "type": "Function",
+          "default": "(\r\n      response: any,\r\n      file: FileItem | FileItem[],\r\n      files: FileItem[]\r\n    ) => {}",
+          "required": false,
+          "description": "",
+          "isAttribute": false
+        },
+        {
+          "name": "beforeRemove",
+          "type": "Function",
+          "default": "null",
+          "required": false,
+          "description": "",
+          "isAttribute": false
+        },
+        {
+          "name": "onRemove",
+          "type": "Function",
+          "default": "(uploadFile: FileItem, uploadFiles: FileItem[]) => {}",
+          "required": false,
+          "description": "",
+          "isAttribute": false
+        },
+        {
+          "name": "onChange",
+          "type": "Function",
+          "default": "(uploadFile: FileItem | undefined, uploadFiles: FileItem[]) => {}",
+          "required": false,
+          "description": "",
+          "isAttribute": false
+        },
+        {
+          "name": "beforeUpload",
+          "type": "Function",
+          "default": "(uploadFile: FileItem, uploadFiles: FileItem[]) => true",
+          "required": false,
+          "description": "",
+          "isAttribute": false
+        },
+        {
+          "name": "onExceed",
+          "type": "Function",
+          "default": "(files: File[], uploadFiles: FileItem[]) => {}",
+          "required": false,
+          "description": "",
+          "isAttribute": false
+        }
+      ],
+      "events": [
+        {
+          "name": "ea-upload-error",
+          "params": "",
+          "description": "",
+          "isCustomEventClass": true,
+          "className": "EaUploadAjaxErrorEvent"
+        },
+        {
+          "name": "change",
+          "params": "{ uploadFile: FileItem | undefined, uploadFiles: FileItem[] }",
+          "description": "文件列表变化时触发，detail: `{ uploadFile: FileItem | undefined, uploadFiles: FileItem[] }`。",
+          "isCustomEventClass": true,
+          "className": "EaUploadChangeEvent"
+        },
+        {
+          "name": "ea-upload-progress",
+          "params": "{ event: ProgressEvent, uploadFile: FileItem | FileItem[], uploadFiles: FileItem[] }",
+          "description": "",
+          "isCustomEventClass": true,
+          "className": "EaUploadProgressEvent"
+        },
+        {
+          "name": "ea-upload-remove",
+          "params": "{ uploadFile: FileItem, uploadFiles: FileItem[] }",
+          "description": "",
+          "isCustomEventClass": true,
+          "className": "EaUploadRemoveEvent"
+        },
+        {
+          "name": "ea-upload-success",
+          "params": "{ response: any, uploadFile: FileItem | FileItem[], uploadFiles: FileItem[] }",
+          "description": "",
+          "isCustomEventClass": true,
+          "className": "EaUploadSuccessEvent"
+        },
+        {
+          "name": "remove",
+          "params": "",
+          "description": "文件被移除时触发，detail: `{ uploadFile: FileItem, uploadFiles: FileItem[] }`。",
+          "isCustomEventClass": true
+        },
+        {
+          "name": "ea-ajax-error",
+          "params": "",
+          "description": "上传请求失败时触发，detail: `{ error: EaUploadAjaxError, uploadFile: FileItem | FileItem[], uploadFiles: FileItem[] }`。",
+          "isCustomEventClass": true
+        },
+        {
+          "name": "ea-progress",
+          "params": "",
+          "description": "上传进度更新时触发，detail: `{ event: ProgressEvent, uploadFile: FileItem | FileItem[], uploadFiles: FileItem[] }`。",
+          "isCustomEventClass": true
+        },
+        {
+          "name": "ea-success",
+          "params": "",
+          "description": "上传成功时触发，detail: `{ response: any, uploadFile: FileItem | FileItem[], uploadFiles: FileItem[] }`。",
+          "isCustomEventClass": true
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "description": "默认插槽，上传按钮区域内容。"
+        },
+        {
+          "name": "trigger",
+          "description": "触发按钮插槽，覆盖默认的上传触发器。"
+        },
+        {
+          "name": "tip",
+          "description": "提示信息插槽，显示在文件列表上方。"
+        }
+      ],
+      "cssVars": [
+        {
+          "name": "--ea-upload-border-radius",
+          "description": "组件圆角。"
+        },
+        {
+          "name": "--ea-upload-font-size",
+          "description": "组件字体大小。"
+        },
+        {
+          "name": "--ea-upload-transition",
+          "description": "组件过渡动画。"
+        },
+        {
+          "name": "--ea-upload-text",
+          "description": "组件文字颜色。"
+        },
+        {
+          "name": "--ea-upload-bg",
+          "description": "组件背景色。"
+        },
+        {
+          "name": "--ea-upload-border-color",
+          "description": "组件边框颜色。"
+        },
+        {
+          "name": "--ea-upload-tip-color",
+          "description": "提示文字颜色。"
+        },
+        {
+          "name": "--ea-upload-drag-bg",
+          "description": "拖拽区域背景色。"
+        },
+        {
+          "name": "--ea-upload-drag-icon-size",
+          "description": "拖拽区域图标大小。"
+        },
+        {
+          "name": "--ea-upload-drag-icon-color",
+          "description": "拖拽区域图标颜色。"
+        },
+        {
+          "name": "--ea-upload-trigger-width",
+          "description": "上传触发器宽度（仅 picture-card 模式）。"
+        },
+        {
+          "name": "--ea-upload-trigger-height",
+          "description": "上传触发器高度（仅 picture-card 模式）。"
+        }
+      ],
+      "cssParts": [
+        {
+          "name": "container",
+          "description": "容器。"
+        },
+        {
+          "name": "content",
+          "description": "上传触发区域容器。"
+        },
+        {
+          "name": "tip",
+          "description": "提示信息区域。"
+        },
+        {
+          "name": "list",
+          "description": "文件列表。"
+        },
+        {
+          "name": "trigger",
+          "description": "上传按钮容器（仅 picture-card 模式）。"
+        },
+        {
+          "name": "file-item",
+          "description": "文件列表项。"
+        },
+        {
+          "name": "preview",
+          "description": "图片预览组件。"
+        }
+      ],
+      "subComponents": [],
+      "dependencies": ["ea-button", "ea-image-preview", "ea-upload-file-item"],
+      "examples": [
+        {
+          "title": "基础用法",
+          "description": "",
+          "code": "<div class=\"demo\">\n  <ea-upload\n    id=\"basicUpload\"\n    class=\"upload-demo\"\n    action=\"https://m1.apifoxmock.com/m1/8609267-8388194-default/file\"\n    multiple\n  >\n    <ea-button type=\"primary\">Click to upload</ea-button>\n    <div class=\"tip\" slot=\"tip\">jpg/png files with a size less than 500KB.</div>\n  </ea-upload>\n</div>",
+          "type": "basic"
+        },
+        {
+          "title": "覆盖前一个文件",
+          "description": "",
+          "code": "<div class=\"demo\">\n  <ea-upload\n    id=\"limitUpload\"\n    class=\"upload-demo\"\n    action=\"https://m1.apifoxmock.com/m1/8609267-8388194-default/file\"\n    limit=\"1\"\n  >\n    <ea-button type=\"primary\">Click to upload</ea-button>\n    <div class=\"tip\" slot=\"tip\">Only one file can be uploaded at a time.</div>\n  </ea-upload>\n</div>",
+          "type": "advanced"
+        },
+        {
+          "title": "照片墙",
+          "description": "",
+          "code": "<div class=\"demo\">\n  <ea-upload\n    id=\"pictureCardUpload\"\n    action=\"https://m1.apifoxmock.com/m1/8609267-8388194-default/file\"\n    list-type=\"picture-card\"\n  >\n    <ea-icon name=\"plus\"></ea-icon>\n  </ea-upload>\n</div>",
+          "type": "advanced"
+        },
+        {
+          "title": "自定义缩略图",
+          "description": "",
+          "code": "<div class=\"demo avatar-uploader\">\n  <ea-upload\n    id=\"avatarUpload\"\n    class=\"upload-demo\"\n    action=\"https://m1.apifoxmock.com/m1/8609267-8388194-default/file\"\n    show-file-list=\"false\"\n  >\n    <img\n      id=\"avatarImage\"\n      class=\"avatar-uploader__image\"\n      style=\"display: none\"\n    />\n    <div id=\"avatarPlaceholder\" class=\"avatar-uploader__trigger\">\n      <span class=\"avatar-uploader__icon\">+</span>\n    </div>\n  </ea-upload>\n</div>",
+          "type": "advanced"
+        },
+        {
+          "title": "图片列表缩略图",
+          "description": "",
+          "code": "<div class=\"demo\">\n  <ea-upload\n    id=\"pictureUpload\"\n    class=\"upload-demo\"\n    action=\"https://m1.apifoxmock.com/m1/8609267-8388194-default/file\"\n    list-type=\"picture\"\n  >\n    <ea-button type=\"primary\">Click to upload</ea-button>\n    <div class=\"tip\" slot=\"tip\">jpg/png files with a size less than 500KB.</div>\n  </ea-upload>\n</div>",
+          "type": "advanced"
+        },
+        {
+          "title": "上传文件列表控制",
+          "description": "",
+          "code": "<div class=\"demo\">\n  <ea-upload\n    id=\"listControlUpload\"\n    class=\"upload-demo\"\n    action=\"https://m1.apifoxmock.com/m1/8609267-8388194-default/file\"\n  >\n    <ea-button type=\"primary\">Click to upload</ea-button>\n    <div class=\"tip\" slot=\"tip\">\n      jpg/png files with a size less than 500KB, only the latest 3 files are\n      kept.\n    </div>\n  </ea-upload>\n</div>",
+          "type": "advanced"
+        },
+        {
+          "title": "拖拽上传",
+          "description": "",
+          "code": "<div class=\"demo upload-dragger\">\n  <ea-upload\n    id=\"dragUpload\"\n    class=\"upload-demo\"\n    action=\"https://m1.apifoxmock.com/m1/8609267-8388194-default/file\"\n    drag\n    multiple\n  >\n    <ea-icon name=\"upload\"></ea-icon>\n    <div class=\"ea-upload__text\">\n      Drop file here or <em>click to upload</em>\n    </div>\n  </ea-upload>\n</div>",
+          "type": "advanced"
+        },
+        {
+          "title": "上传目录",
+          "description": "",
+          "code": "<div class=\"demo\">\n  <ea-upload\n    id=\"directoryUpload\"\n    class=\"upload-demo\"\n    action=\"https://m1.apifoxmock.com/m1/8609267-8388194-default/file\"\n    drag\n    directory\n    multiple\n  >\n    <ea-icon name=\"upload\"></ea-icon>\n    <div class=\"ea-upload__text\">\n      Drop directory here or <em>click to upload</em>\n    </div>\n  </ea-upload>\n</div>",
+          "type": "advanced"
+        },
+        {
+          "title": "手动上传",
+          "description": "",
+          "code": "<div class=\"demo\">\n  <ea-upload\n    id=\"manualUpload\"\n    class=\"upload-demo\"\n    action=\"https://m1.apifoxmock.com/m1/8609267-8388194-default/file\"\n    auto-upload=\"false\"\n  >\n    <ea-button type=\"primary\" slot=\"trigger\">select file</ea-button>\n    <ea-button type=\"success\" id=\"submitBtn\">upload to server</ea-button>\n    <div class=\"tip\" slot=\"tip\">jpg/png files with a size less than 500KB.</div>\n  </ea-upload>\n</div>",
           "type": "advanced"
         }
       ]

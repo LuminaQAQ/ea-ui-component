@@ -17,6 +17,8 @@ export interface PropInfo {
     ariaAttr: string;
     target?: string;
   };
+  /** Enum 类型的可选值列表 */
+  enumValues?: string[];
 }
 
 /** 事件信息 */

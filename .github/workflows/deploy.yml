@@ -28,6 +28,7 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
+      - run: cd mcp-server && npm ci
       - run: npm run build
       - run: npm run build:doc
       - uses: actions/upload-pages-artifact@v3

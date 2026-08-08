@@ -11,10 +11,16 @@ export interface DecoratorParseResult {
   properties: PropInfo[];
 }
 
+/** 全局常量映射（如 VARIANT_TYPES），由调用方注入 */
+export type GlobalConstantsMap = Record<string, string[]>;
+
 /**
  * 解析组件源码中的装饰器信息
  */
-export function parseDecorators(sourceFile: ts.SourceFile): DecoratorParseResult {
+export function parseDecorators(
+  sourceFile: ts.SourceFile,
+  globalConstants?: GlobalConstantsMap
+): DecoratorParseResult {
   const result: DecoratorParseResult = {
     tagName: "",
     attributes: [],
@@ -32,14 +38,14 @@ export function parseDecorators(sourceFile: ts.SourceFile): DecoratorParseResult
       if (!ts.isPropertyDeclaration(member)) return;
 
       // 解析 @attribute
-      const attrInfo = parseAttributeDecorator(member, sourceFile);
+      const attrInfo = parseAttributeDecorator(member, sourceFile, globalConstants);
       if (attrInfo) {
         result.attributes.push(attrInfo);
         return;
       }
 
       // 解析 @property
-      const propInfo = parsePropertyDecorator(member, sourceFile);
+      const propInfo = parsePropertyDecorator(member, sourceFile, globalConstants);
       if (propInfo) {
         result.properties.push(propInfo);
       }
@@ -87,22 +93,25 @@ function parseCustomElementDecorator(
  */
 function parseAttributeDecorator(
   propNode: ts.PropertyDeclaration,
-  sourceFile: ts.SourceFile
+  sourceFile: ts.SourceFile,
+  globalConstants?: GlobalConstantsMap
 ): PropInfo | null {
   const dec = findDecoratorByName(propNode, "attribute");
   if (!dec) return null;
 
   const options = extractDecoratorOptions(dec);
   const propName = propNode.name.getText(sourceFile);
+  const typeInfo = extractTypeFromOptions(options, sourceFile, globalConstants);
 
   return {
     name: propName,
-    type: extractTypeFromOptions(options),
+    type: typeInfo.type,
     default: extractDefaultFromOptions(options, sourceFile),
     required: false,
     description: extractJSDocFromProperty(propNode),
     isAttribute: true,
     a11y: extractA11yFromOptions(options),
+    enumValues: typeInfo.enumValues,
   };
 }
 
@@ -111,7 +120,8 @@ function parseAttributeDecorator(
  */
 function parsePropertyDecorator(
   propNode: ts.PropertyDeclaration,
-  sourceFile: ts.SourceFile
+  sourceFile: ts.SourceFile,
+  globalConstants?: GlobalConstantsMap
 ): PropInfo | null {
   const dec = findDecoratorByName(propNode, "property");
   if (!dec) return null;
@@ -122,14 +132,17 @@ function parsePropertyDecorator(
   // 跳过以 _ 开头的私有属性
   if (propName.startsWith("_")) return null;
 
+  const typeInfo = extractTypeFromOptions(options, sourceFile, globalConstants);
+
   return {
     name: propName,
-    type: extractTypeFromOptions(options),
+    type: typeInfo.type,
     default: extractDefaultFromOptions(options, sourceFile),
     required: false,
     description: extractJSDocFromProperty(propNode),
     isAttribute: false,
     a11y: extractA11yFromOptions(options),
+    enumValues: typeInfo.enumValues,
   };
 }
 
@@ -196,11 +209,13 @@ function extractDecoratorOptions(
   return null;
 }
 
-/** 从选项对象中提取 type 字段 */
+/** 从选项对象中提取 type 字段和 enumValues */
 function extractTypeFromOptions(
-  options: ts.ObjectLiteralExpression | null
-): string {
-  if (!options) return "any";
+  options: ts.ObjectLiteralExpression | null,
+  sourceFile: ts.SourceFile,
+  globalConstants?: GlobalConstantsMap
+): { type: string; enumValues?: string[] } {
+  if (!options) return { type: "any" };
 
   const typeProp = options.properties.find(
     (p) =>
@@ -209,28 +224,97 @@ function extractTypeFromOptions(
       p.name.text === "type"
   ) as ts.PropertyAssignment | undefined;
 
-  if (!typeProp || !typeProp.initializer) return "any";
+  if (!typeProp || !typeProp.initializer) return { type: "any" };
 
   const init = typeProp.initializer;
 
-  // 直接引用：String, Boolean, Number, Date
+  // 直接引用：String, Boolean, Number, Date, Array, Function, Object, RegExp
   if (ts.isIdentifier(init)) {
     const name = init.text;
     if (["String", "Boolean", "Number", "Date", "Array", "Function", "Object", "RegExp"].includes(name)) {
-      return name;
+      return { type: name };
     }
-    // Enum() 调用
-    return "Enum";
+    // 非 Enum 的标识符引用（如 VARIANT_TYPES 常量），尝试解析为数组
+    const constArray = findConstArrayValue(sourceFile, name) ?? globalConstants?.[name];
+    if (constArray) {
+      return { type: "Enum", enumValues: constArray };
+    }
+    return { type: "Enum" };
   }
 
   // Enum(...) 调用
   if (ts.isCallExpression(init)) {
     if (ts.isIdentifier(init.expression) && init.expression.text === "Enum") {
-      return "Enum";
+      const firstArg = init.arguments[0];
+      if (firstArg) {
+        const values = extractArrayLiteral(firstArg, sourceFile, globalConstants);
+        if (values && values.length > 0) return { type: "Enum", enumValues: values };
+      }
+      return { type: "Enum" };
     }
   }
 
-  return "any";
+  // 直接数组字面量（如 ["small", "medium", "large"] as const）
+  if (ts.isArrayLiteralExpression(init) || ts.isAsExpression(init)) {
+    let arrayNode: ts.Node = init;
+    while (ts.isAsExpression(arrayNode)) {
+      arrayNode = arrayNode.expression;
+    }
+    if (ts.isArrayLiteralExpression(arrayNode)) {
+      const values = extractStringArrayFromLiteral(arrayNode, sourceFile, globalConstants);
+      if (values.length > 0) return { type: "Enum", enumValues: values };
+    }
+  }
+
+  return { type: "any" };
+}
+
+/** 从数组字面量或扩展表达式中提取字符串值 */
+function extractArrayLiteral(
+  node: ts.Node,
+  sourceFile: ts.SourceFile,
+  globalConstants?: GlobalConstantsMap
+): string[] | null {
+  // 直接数组字面量：["a", "b", "c"] 或 [...VARIANT_TYPES, "normal"]
+  if (ts.isArrayLiteralExpression(node)) {
+    return extractStringArrayFromLiteral(node, sourceFile, globalConstants);
+  }
+
+  // 标识符引用：VARIANT_TYPES
+  if (ts.isIdentifier(node)) {
+    return findConstArrayValue(sourceFile, node.text) ?? globalConstants?.[node.text] ?? null;
+  }
+
+  return null;
+}
+
+/** 从 ArrayLiteralExpression 中提取字符串元素（支持 SpreadElement 解析） */
+function extractStringArrayFromLiteral(
+  node: ts.ArrayLiteralExpression,
+  sourceFile: ts.SourceFile,
+  globalConstants?: GlobalConstantsMap
+): string[] {
+  const values: string[] = [];
+
+  for (const elem of node.elements) {
+    // 普通字符串元素："primary"
+    if (ts.isStringLiteral(elem)) {
+      values.push(elem.text);
+    }
+    // SpreadElement：...VARIANT_TYPES
+    else if (ts.isSpreadElement(elem)) {
+      const spreadExpr = elem.expression;
+      if (ts.isIdentifier(spreadExpr)) {
+        // 先在当前文件中查找，再查全局常量
+        const constArray = findConstArrayValue(sourceFile, spreadExpr.text) ?? globalConstants?.[spreadExpr.text];
+        if (constArray) {
+          values.push(...constArray);
+        }
+      }
+    }
+  }
+
+  return values;
 }
 
 /** 从选项对象中提取 default 字段 */
@@ -333,6 +417,42 @@ function findConstValue(sourceFile: ts.SourceFile, name: string): string | null 
           ts.isStringLiteral(decl.initializer)
         ) {
           value = decl.initializer.text;
+        }
+      }
+    }
+  });
+
+  return value;
+}
+
+/** 在源文件中查找 const 声明的字符串数组值 */
+function findConstArrayValue(sourceFile: ts.SourceFile, name: string): string[] | null {
+  let value: string[] | null = null;
+
+  ts.forEachChild(sourceFile, (node) => {
+    if (value) return;
+    if (
+      ts.isVariableStatement(node) &&
+      node.declarationList.flags & ts.NodeFlags.Const
+    ) {
+      for (const decl of node.declarationList.declarations) {
+        if (value) break;
+        if (
+          ts.isIdentifier(decl.name) &&
+          decl.name.text === name &&
+          decl.initializer
+        ) {
+          let init: ts.Expression = decl.initializer;
+          // 处理 as const
+          while (ts.isAsExpression(init)) {
+            init = init.expression;
+          }
+          if (ts.isArrayLiteralExpression(init)) {
+            const items = extractStringArrayFromLiteral(init, sourceFile);
+            if (items.length > 0) {
+              value = items;
+            }
+          }
         }
       }
     }

@@ -3,10 +3,67 @@ import fs from "node:fs";
 import path from "node:path";
 import type { ComponentMeta, EventInfo } from "../types.js";
 import { parseJSDoc } from "./jsdoc-parser.js";
-import { parseDecorators } from "./decorator-parser.js";
+import { parseDecorators, type GlobalConstantsMap } from "./decorator-parser.js";
 import { parseEvents } from "./event-parser.js";
 import { parseScss, mergeCSSVarsWithJSDoc } from "./scss-parser.js";
 import { parseDependencies } from "./dependency-parser.js";
+
+/** 全局常量缓存（从 src/constants/ 解析） */
+let _globalConstantsCache: GlobalConstantsMap | null = null;
+
+/**
+ * 解析 src/constants/ 目录下的全局常量
+ * 目前主要解析 VARIANT_TYPES
+ */
+function loadGlobalConstants(projectRoot: string): GlobalConstantsMap {
+  if (_globalConstantsCache) return _globalConstantsCache;
+
+  const constants: GlobalConstantsMap = {};
+
+  // 解析 src/constants/variant.ts
+  const variantPath = path.join(projectRoot, "src/constants/variant.ts");
+  if (fs.existsSync(variantPath)) {
+    const content = fs.readFileSync(variantPath, "utf-8");
+    const sourceFile = ts.createSourceFile(
+      variantPath,
+      content,
+      ts.ScriptTarget.Latest,
+      true
+    );
+
+    ts.forEachChild(sourceFile, (node) => {
+      if (
+        ts.isVariableStatement(node) &&
+        node.declarationList.flags & ts.NodeFlags.Const
+      ) {
+        for (const decl of node.declarationList.declarations) {
+          if (!ts.isIdentifier(decl.name) || !decl.initializer) continue;
+
+          // 处理 as const：initializer 可能是 AsExpression，需要取其 expression
+          let init: ts.Expression = decl.initializer;
+          while (ts.isAsExpression(init)) {
+            init = init.expression;
+          }
+
+          if (ts.isArrayLiteralExpression(init)) {
+            const values: string[] = [];
+            for (const elem of init.elements) {
+              if (ts.isStringLiteral(elem)) {
+                values.push(elem.text);
+              }
+            }
+            if (values.length > 0) {
+              constants[decl.name.text] = values;
+            }
+          }
+        }
+      }
+    });
+  }
+
+  _globalConstantsCache = constants;
+  return constants;
+}
 
 /**
  * 解析单个组件目录，输出完整 ComponentMeta
@@ -43,8 +100,9 @@ export function parseComponent(
     // 1. 解析 JSDoc
     const jsDocResult = parseJSDoc(sourceFile);
 
-    // 2. 解析装饰器
-    const decoratorResult = parseDecorators(sourceFile);
+    // 2. 解析装饰器（注入全局常量，如 VARIANT_TYPES）
+    const globalConstants = loadGlobalConstants(projectRoot);
+    const decoratorResult = parseDecorators(sourceFile, globalConstants);
 
     // 3. 解析事件
     const eventResults = parseEvents(componentDir, sourceFile);
