@@ -25,6 +25,7 @@ import type {
   UploadRequestResult,
 } from "./type";
 import { createUploadRequest } from "./utils/ajax";
+import { nanoid } from "nanoid";
 import {
   EaUploadAjaxError,
   EaUploadAjaxErrorEvent,
@@ -33,7 +34,6 @@ import { EaUploadProgressEvent } from "./events/EaUploadProgressEvent";
 import { EaUploadRemoveEvent } from "./events/EaUploadRemoveEvent";
 import { EaUploadChangeEvent } from "./events/EaUploadChangeEvent";
 import { EaUploadSuccessEvent } from "./events/EaUploadSuccessEvent";
-import { nanoid } from "nanoid";
 import "./components/file-item/index";
 import type { EaUploadFileItem } from "./components/file-item/index";
 import type { EaImagePreview } from "@components/ea-image-preview/index";
@@ -42,28 +42,43 @@ const TAG_NAME = "ea-upload" as const;
 const bem = createBEM(TAG_NAME);
 
 /**
- * @summary 文件上传组件
+ * @summary 文件上传组件，支持拖拽上传、多文件上传、自定义文件列表类型、上传进度展示、图片预览等功能。
  * @status stable
  * @since 4.0
  *
- * @slot default - 默认插槽
- * @slot trigger - 触发按钮插槽
- * @slot tip - 提示信息插槽
+ * @dependency ea-image-preview
+ * @dependency ea-upload-file-item
  *
- * @csspart container - 容器
- * @csspart list - 文件列表
- * @csspart trigger - 上传按钮容器
- * @csspart file-item - 文件项
- * @csspart file-icon - 文件类型图标
- * @csspart file-info - 文件信息区域
- * @csspart file-info-main - 文件信息主区域
- * @csspart file-name - 文件名
- * @csspart file-info-actions - 文件信息操作区域
- * @csspart file-progress - 进度条
- * @csspart file-response - 错误响应文案
- * @csspart file-delete - 删除图标
- * @csspart file-toolbar - 图片工具栏
- * @csspart file-preview - 预览图标
+ * @slot default - 默认插槽，上传按钮区域内容。
+ * @slot trigger - 触发按钮插槽，覆盖默认的上传触发器。
+ * @slot tip - 提示信息插槽，显示在文件列表上方。
+ *
+ * @event change - 文件列表变化时触发，detail: `{ uploadFile: FileItem | undefined, uploadFiles: FileItem[] }`。
+ * @event remove - 文件被移除时触发，detail: `{ uploadFile: FileItem, uploadFiles: FileItem[] }`。
+ * @event ea-ajax-error - 上传请求失败时触发，detail: `{ error: EaUploadAjaxError, uploadFile: FileItem | FileItem[], uploadFiles: FileItem[] }`。
+ * @event ea-progress - 上传进度更新时触发，detail: `{ event: ProgressEvent, uploadFile: FileItem | FileItem[], uploadFiles: FileItem[] }`。
+ * @event ea-success - 上传成功时触发，detail: `{ response: any, uploadFile: FileItem | FileItem[], uploadFiles: FileItem[] }`。
+ *
+ * @csspart container - 容器。
+ * @csspart content - 上传触发区域容器。
+ * @csspart tip - 提示信息区域。
+ * @csspart list - 文件列表。
+ * @csspart trigger - 上传按钮容器（仅 picture-card 模式）。
+ * @csspart file-item - 文件列表项。
+ * @csspart preview - 图片预览组件。
+ *
+ * @cssproperty --ea-upload-border-radius - 组件圆角。
+ * @cssproperty --ea-upload-font-size - 组件字体大小。
+ * @cssproperty --ea-upload-transition - 组件过渡动画。
+ * @cssproperty --ea-upload-text - 组件文字颜色。
+ * @cssproperty --ea-upload-bg - 组件背景色。
+ * @cssproperty --ea-upload-border-color - 组件边框颜色。
+ * @cssproperty --ea-upload-tip-color - 提示文字颜色。
+ * @cssproperty --ea-upload-drag-bg - 拖拽区域背景色。
+ * @cssproperty --ea-upload-drag-icon-size - 拖拽区域图标大小。
+ * @cssproperty --ea-upload-drag-icon-color - 拖拽区域图标颜色。
+ * @cssproperty --ea-upload-trigger-width - 上传触发器宽度（仅 picture-card 模式）。
+ * @cssproperty --ea-upload-trigger-height - 上传触发器高度（仅 picture-card 模式）。
  */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaUpload extends EaFormAssociatedBase {
@@ -79,6 +94,8 @@ export class EaUpload extends EaFormAssociatedBase {
 
   @query(bem.ce("preview"))
   private _imagePreview!: EaImagePreview;
+
+  private _dragEnterCount: number = 0;
 
   @attribute({ type: Boolean, default: false })
   disabled: boolean = false;
@@ -139,7 +156,9 @@ export class EaUpload extends EaFormAssociatedBase {
     type: Boolean,
     default: false,
     observer(this: EaUpload) {
-      this._originalInput.webkitdirectory = this.directory;
+      if (this._originalInput) {
+        this._originalInput.webkitdirectory = this.directory;
+      }
     },
   })
   directory: boolean = false;
@@ -243,12 +262,19 @@ export class EaUpload extends EaFormAssociatedBase {
   /**
    * 清空所有
    */
-  clearFiles(): void {
+  private _clearFileList(): void {
     this.abort();
     for (const item of this.fileList) {
       if (item.url?.startsWith("blob:")) URL.revokeObjectURL(item.url);
     }
     this.fileList = [];
+  }
+
+  /**
+   * 清空所有
+   */
+  clearFiles(): void {
+    this._clearFileList();
     this._originalInput.value = "";
     this._renderFileList();
     this._dispatchChangeEvent();
@@ -261,6 +287,30 @@ export class EaUpload extends EaFormAssociatedBase {
     if (!this.disabled) {
       this._originalInput.click();
     }
+  }
+
+  /**
+   * 根据 uid 查找文件数据
+   * @param uid - 文件唯一标识
+   */
+  private _getFileItem(uid: string): FileItem | undefined {
+    return this.fileList.find(i => i.uid === uid);
+  }
+
+  /**
+   * 根据 uid 查找文件列表项元素
+   * @param uid - 文件唯一标识
+   */
+  private _getFileLi(uid: string): HTMLLIElement | null {
+    return this._listElement.querySelector(`li[data-uid="${uid}"]`);
+  }
+
+  /**
+   * 获取文件列表项中的进度条元素
+   * @param li - 文件列表项元素
+   */
+  private _getProgressEl(li: HTMLLIElement): Element | null {
+    return li.querySelector("ea-progress");
   }
 
   /**
@@ -308,17 +358,15 @@ export class EaUpload extends EaFormAssociatedBase {
           this.dispatchEvent(
             new EaUploadAjaxErrorEvent({ error, uploadFile, uploadFiles })
           );
-          const target = this.fileList.find(i => i.uid === item.uid);
+          const target = this._getFileItem(item.uid);
           if (target) {
             target.status = "error";
             target.response = error;
             target.controller = undefined;
 
-            const li = this._listElement.querySelector(
-              `li[data-uid="${item.uid}"]`
-            );
+            const li = this._getFileLi(item.uid);
             if (li) {
-              const progressEl = li.querySelector("ea-progress");
+              const progressEl = this._getProgressEl(li);
               if (progressEl) {
                 progressEl.setAttribute("status", "exception");
               }
@@ -337,15 +385,13 @@ export class EaUpload extends EaFormAssociatedBase {
               uploadFiles: files,
             })
           );
-          const target = this.fileList.find(i => i.uid === item.uid);
+          const target = this._getFileItem(item.uid);
           if (target) {
             target.percent = (evt.loaded / evt.total) * 100;
 
-            const li = this._listElement.querySelector(
-              `li[data-uid="${item.uid}"]`
-            );
+            const li = this._getFileLi(item.uid);
             if (li) {
-              const progressEl = li.querySelector("ea-progress");
+              const progressEl = this._getProgressEl(li);
               if (progressEl) {
                 progressEl.setAttribute("percentage", String(target.percent));
                 if (target.percent >= 100) {
@@ -365,7 +411,7 @@ export class EaUpload extends EaFormAssociatedBase {
               uploadFiles: files,
             })
           );
-          const target = this.fileList.find(i => i.uid === item.uid);
+          const target = this._getFileItem(item.uid);
           if (target) {
             target.status = "done";
             target.percent = 100;
@@ -490,24 +536,7 @@ export class EaUpload extends EaFormAssociatedBase {
       const li = existing.get(item.uid);
       if (li) {
         existing.delete(item.uid);
-        const fileItemEl = li.querySelector<EaUploadFileItem>(
-          "ea-upload-file-item"
-        );
-        if (fileItemEl) {
-          const changed =
-            fileItemEl.item !== item || fileItemEl.listType !== this.listType;
-          fileItemEl.item = item;
-          fileItemEl.listType = this.listType;
-          if (changed) fileItemEl.render();
-        }
-        li.classList.remove(
-          bem.s("pending"),
-          bem.s("uploading"),
-          bem.s("done"),
-          bem.s("error"),
-          bem.s("removed")
-        );
-        li.classList.add(bem.s(item.status));
+        this._updateFileItemElement(li, item);
         continue;
       }
 
@@ -533,6 +562,10 @@ export class EaUpload extends EaFormAssociatedBase {
     existing.forEach(li => li.remove());
   }
 
+  /**
+   * 更新单个文件项的 UI 状态
+   * @param uid - 文件唯一标识
+   */
   private _updateFileItem(uid: string): void {
     const li = this._listElement.querySelector(`li[data-uid="${uid}"]`);
     if (!li) return;
@@ -543,6 +576,15 @@ export class EaUpload extends EaFormAssociatedBase {
       return;
     }
 
+    this._updateFileItemElement(li as HTMLLIElement, item);
+  }
+
+  /**
+   * 更新文件项 li 元素的状态类和 file-item 子组件
+   * @param li - 文件列表项元素
+   * @param item - 文件数据
+   */
+  private _updateFileItemElement(li: HTMLLIElement, item: FileItem): void {
     li.classList.remove(
       bem.s("pending"),
       bem.s("uploading"),
@@ -556,9 +598,11 @@ export class EaUpload extends EaFormAssociatedBase {
       "ea-upload-file-item"
     );
     if (fileItemEl) {
+      const changed =
+        fileItemEl.item !== item || fileItemEl.listType !== this.listType;
       fileItemEl.item = item;
       fileItemEl.listType = this.listType;
-      fileItemEl.render();
+      if (changed) fileItemEl.render();
     }
   }
 
@@ -573,6 +617,9 @@ export class EaUpload extends EaFormAssociatedBase {
     );
   }
 
+  /**
+   * 处理文件项删除事件
+   */
   @listen("ea-upload-file-delete", bem.ce("list"))
   private _handleFileDelete(e: Event): void {
     e.stopPropagation();
@@ -582,6 +629,9 @@ export class EaUpload extends EaFormAssociatedBase {
     }
   }
 
+  /**
+   * 处理文件项预览事件
+   */
   @listen("ea-upload-file-preview", bem.ce("list"))
   private _handleFilePreview(e: Event): void {
     e.stopPropagation();
@@ -613,6 +663,9 @@ export class EaUpload extends EaFormAssociatedBase {
     this._imagePreview.visible = true;
   }
 
+  /**
+   * 处理上传区域点击事件
+   */
   @listen("click", bem.ce("content"))
   private _handleUploadClick(e: Event): void {
     const triggerElements = this._triggerSlot.assignedElements();
@@ -625,8 +678,6 @@ export class EaUpload extends EaFormAssociatedBase {
       this.handleFileSelect();
     }
   }
-
-  private _dragEnterCount: number = 0;
 
   /**
    * 处理拖拽悬浮
@@ -685,6 +736,9 @@ export class EaUpload extends EaFormAssociatedBase {
     await this._addFiles(files);
   }
 
+  /**
+   * 处理文件选择 input 变化事件
+   */
   @listen("change", "#original")
   private async _handleChange(e: Event): Promise<void> {
     e.preventDefault();
@@ -708,11 +762,7 @@ export class EaUpload extends EaFormAssociatedBase {
       const result = this.onExceed?.(Array.from(files), this.fileList);
       const shouldReplace = result instanceof Promise ? await result : result;
       if (shouldReplace !== true) return;
-      this.abort();
-      for (const item of this.fileList) {
-        if (item.url?.startsWith("blob:")) URL.revokeObjectURL(item.url);
-      }
-      this.fileList = [];
+      this._clearFileList();
     }
 
     const newItems: FileItem[] = [];
@@ -773,7 +823,7 @@ export class EaUpload extends EaFormAssociatedBase {
         ${
           isPictureCard
             ? ""
-            : `<label class="${bem.e("content")}" for="original">${triggerContent}</label>`
+            : `<label class="${bem.e("content")}" part="content" for="original">${triggerContent}</label>`
         }
         <div class="${bem.e("tip")}" part="tip">
           <slot name="tip"></slot>
@@ -781,7 +831,7 @@ export class EaUpload extends EaFormAssociatedBase {
         <ul class="${bem.e("list")}" part="list">
           ${
             isPictureCard
-              ? `<li class="${bem.e("trigger")}" part="trigger"><label class="${bem.e("content")}" for="original">${triggerContent}</label></li>`
+              ? `<li class="${bem.e("trigger")}" part="trigger"><label class="${bem.e("content")}" part="content" for="original">${triggerContent}</label></li>`
               : ""
           }
         </ul>

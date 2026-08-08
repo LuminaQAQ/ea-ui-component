@@ -9,9 +9,45 @@ const TAG_NAME = "ea-upload-file-item" as const;
 const bem = createBEM(TAG_NAME);
 
 /**
- * @summary 上传文件列表项组件，支持 text / picture / picture-card 三种列表类型
+ * @summary 上传文件列表项组件，支持 text / picture / picture-card 三种列表类型。
  * @status stable
  * @since 4.0
+ *
+ * @dependency ea-progress
+ * @dependency ea-icon
+ *
+ * @event ea-upload-file-delete - 删除文件时触发，detail: `{ uid: string }`。
+ * @event ea-upload-file-preview - 预览文件时触发，detail: `{ uid: string }`。
+ *
+ * @csspart file-icon - 文件类型图标。
+ * @csspart file-info - 文件信息区域。
+ * @csspart file-info-main - 文件信息主区域。
+ * @csspart file-name - 文件名。
+ * @csspart file-info-actions - 文件信息操作区域。
+ * @csspart file-progress - 进度条。
+ * @csspart file-response - 错误响应文案。
+ * @csspart file-delete - 删除图标。
+ * @csspart file-thumb - 缩略图容器。
+ * @csspart file-toolbar - 图片工具栏（仅 picture-card 模式）。
+ * @csspart file-preview - 预览图标（仅 picture-card 模式）。
+ * @csspart card - 卡片容器（仅 picture-card 模式）。
+ * @csspart card-thumb - 卡片缩略图区域（仅 picture-card 模式）。
+ *
+ * @cssproperty --ea-upload-file-item-card-width - 卡片宽度（仅 picture-card 模式）。
+ * @cssproperty --ea-upload-file-item-card-height - 卡片高度（仅 picture-card 模式）。
+ * @cssproperty --ea-upload-file-item-card-border - 卡片边框样式。
+ * @cssproperty --ea-upload-file-item-card-border-radius - 卡片圆角。
+ * @cssproperty --ea-upload-file-item-card-bg - 卡片背景色。
+ * @cssproperty --ea-upload-file-item-transition - 过渡动画。
+ * @cssproperty --ea-upload-file-item-toolbar-bg - 工具栏背景色（仅 picture-card 模式）。
+ * @cssproperty --ea-upload-file-item-toolbar-icon-color - 工具栏图标颜色。
+ * @cssproperty --ea-upload-file-item-toolbar-icon-size - 工具栏图标大小。
+ * @cssproperty --ea-upload-file-item-thumb-error-color - 缩略图加载失败图标颜色。
+ * @cssproperty --ea-upload-file-item-thumb-placeholder-color - 缩略图占位图标颜色。
+ * @cssproperty --ea-upload-file-item-thumb-placeholder-font-size - 缩略图占位图标大小。
+ * @cssproperty --ea-upload-file-item-thumb-bg - 缩略图背景色。
+ * @cssproperty --ea-upload-file-item-response-color - 错误响应文案颜色。
+ * @cssproperty --ea-upload-file-item-response-font-size - 错误响应文案字体大小。
  */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaUploadFileItem extends EaBase {
@@ -102,6 +138,9 @@ export class EaUploadFileItem extends EaBase {
     }
   }
 
+  /**
+   * 处理文件项点击事件
+   */
   @listen("click")
   private _handleClick(e: Event): void {
     const path = e.composedPath();
@@ -127,6 +166,9 @@ export class EaUploadFileItem extends EaBase {
     }
   }
 
+  /**
+   * 阻止 ea-progress 的 change 事件冒泡到父组件. 因为和 upload 的 change 重叠了.
+   */
   @listen("change", bem())
   private _handleProgressElChange(e: Event): void {
     if (
@@ -138,6 +180,9 @@ export class EaUploadFileItem extends EaBase {
     }
   }
 
+  /**
+   * 删除
+   */
   private _emitDelete(): void {
     if (!this.item?.uid) return;
     this.dispatchEvent(
@@ -149,6 +194,9 @@ export class EaUploadFileItem extends EaBase {
     );
   }
 
+  /**
+   * 预览
+   */
   private _emitPreview(): void {
     if (!this.item?.uid) return;
     this.dispatchEvent(
@@ -168,6 +216,9 @@ export class EaUploadFileItem extends EaBase {
     </div>`;
   }
 
+  /**
+   * 生成文件项内容模板
+   */
   private _getBodyTemplate(): string {
     const item = this.item!;
     const isPicture =

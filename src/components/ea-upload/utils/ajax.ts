@@ -5,6 +5,7 @@ import type {
   EaUploadProgressEvent,
   EaUploadSuccessCallback,
   FileField,
+  FileItem,
   Method,
   UploadRequest,
   UploadRequestOptions,

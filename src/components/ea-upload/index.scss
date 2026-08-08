@@ -9,7 +9,22 @@ $name: ea-upload;
   --#{$name}-bg: var(--color-white);
   --#{$name}-border-color: var(--grey-300);
 
+  --#{$name}-tip-color: var(--grey-500);
+  --#{$name}-tip-font-size: var(--font-size-sm);
+
+  --#{$name}-trigger-width: 148px;
+  --#{$name}-trigger-height: 148px;
+
+  --#{$name}-drag-bg: rgba(64, 158, 255, 0.05);
+  --#{$name}-drag-icon-size: 48px;
+  --#{$name}-drag-icon-color: var(--grey-400);
+  --#{$name}-drag-icon-color-hover: var(--primary-color);
+
   display: block;
+}
+
+:host([disabled]) {
+  cursor: not-allowed;
 }
 
 @include block(#{$name}) {
@@ -21,7 +36,13 @@ $name: ea-upload;
   }
 
   @include element(content) {
-    display: block;
+    display: contents;
+  }
+
+  @include element(tip) {
+    color: var(--#{$name}-tip-color);
+    font-size: var(--#{$name}-tip-font-size);
+    margin-top: var(--spacing-sm);
   }
 
   @include element(list) {
@@ -44,6 +65,8 @@ $name: ea-upload;
 
   @include modifier(drag) {
     .#{$name}__content {
+      display: block;
+
       border: var(--border-width) dashed var(--#{$name}-border-color);
       border-radius: var(--border-radius);
       padding: var(--spacing-lg);
@@ -59,8 +82,8 @@ $name: ea-upload;
     }
 
     .#{$name}__icon {
-      font-size: 48px;
-      color: var(--grey-400);
+      font-size: var(--#{$name}-drag-icon-size);
+      color: var(--#{$name}-drag-icon-color);
       margin-bottom: var(--spacing-sm);
     }
 
@@ -72,11 +95,11 @@ $name: ea-upload;
     @include state(dragover) {
       .#{$name}__content {
         border-color: var(--primary-color);
-        background-color: rgba(64, 158, 255, 0.05);
+        background-color: var(--#{$name}-drag-bg);
       }
 
       .#{$name}__icon {
-        color: var(--primary-color);
+        color: var(--#{$name}-drag-icon-color-hover);
       }
     }
   }
@@ -92,8 +115,8 @@ $name: ea-upload;
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 148px;
-      height: 148px;
+      width: var(--#{$name}-trigger-width);
+      height: var(--#{$name}-trigger-height);
       border: var(--border-width) dashed var(--#{$name}-border-color);
       border-radius: var(--border-radius);
       background-color: var(--#{$name}-bg);

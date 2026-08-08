@@ -1,5 +1,30 @@
 $name: ea-upload-file-item;
 
+:host {
+  --#{$name}-card-width: 148px;
+  --#{$name}-card-height: 148px;
+  --#{$name}-card-border: var(--border-width) var(--border-style)
+    var(--border-color);
+  --#{$name}-card-border-radius: var(--border-radius);
+  --#{$name}-card-bg: var(--color-white);
+
+  --#{$name}-transition: var(--transition-fast);
+
+  --#{$name}-toolbar-bg: rgba(0, 0, 0, 0.4);
+  --#{$name}-toolbar-icon-color: var(--color-white);
+  --#{$name}-toolbar-icon-size: var(--font-size-lg);
+
+  --#{$name}-thumb-error-color: var(--red-500);
+  --#{$name}-thumb-placeholder-color: var(--grey-400);
+  --#{$name}-thumb-placeholder-font-size: var(--font-size-lg);
+  --#{$name}-thumb-bg: var(--grey-100);
+
+  --#{$name}-response-color: var(--red-500);
+  --#{$name}-response-font-size: var(--font-size-xs);
+
+  display: block;
+}
+
 @include block(#{$name}) {
   box-sizing: border-box;
   display: flex;
@@ -9,8 +34,8 @@ $name: ea-upload-file-item;
   padding: var(--spacing-sm);
   border-radius: var(--border-radius-sm);
   transition:
-    background-color var(--transition-fast),
-    color var(--transition-fast);
+    background-color var(--#{$name}-transition),
+    color var(--#{$name}-transition);
 
   &:hover {
     background-color: var(--grey-100);
@@ -34,8 +59,8 @@ $name: ea-upload-file-item;
   }
 
   @include element(response) {
-    color: var(--red-500);
-    font-size: var(--font-size-xs);
+    color: var(--#{$name}-response-color);
+    font-size: var(--#{$name}-response-font-size);
     margin-left: var(--spacing-sm);
     overflow: hidden;
     text-overflow: ellipsis;
@@ -47,7 +72,7 @@ $name: ea-upload-file-item;
     opacity: 0;
     pointer-events: none;
     cursor: pointer;
-    transition: opacity var(--transition-fast);
+    transition: opacity var(--#{$name}-transition);
     margin-left: var(--spacing-md);
     flex-shrink: 0;
   }
@@ -61,7 +86,7 @@ $name: ea-upload-file-item;
     margin-right: var(--spacing-sm);
     border-radius: var(--border-radius-sm);
     overflow: hidden;
-    background-color: var(--grey-100);
+    background-color: var(--#{$name}-thumb-bg);
 
     .#{$name}__progress {
       width: auto;
@@ -95,18 +120,17 @@ $name: ea-upload-file-item;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--grey-400);
-
-    font-size: var(--font-size-lg);
+    color: var(--#{$name}-thumb-placeholder-color);
+    font-size: var(--#{$name}-thumb-placeholder-font-size);
   }
 
   @include element(thumb-error) {
-    --ea-icon-color: var(--red-500);
+    --ea-icon-color: var(--#{$name}-thumb-error-color);
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--grey-100);
-    color: var(--red-500);
+    background-color: var(--#{$name}-thumb-bg);
+    color: var(--#{$name}-thumb-error-color);
   }
 
   @include element(progress) {
@@ -184,13 +208,13 @@ $name: ea-upload-file-item;
 
     .#{$name}__card {
       position: relative;
-      width: 148px;
-      height: 148px;
-      border: var(--ea-border);
-      border-radius: var(--border-radius);
+      width: var(--#{$name}-card-width);
+      height: var(--#{$name}-card-height);
+      border: var(--#{$name}-card-border);
+      border-radius: var(--#{$name}-card-border-radius);
       overflow: hidden;
-      background-color: var(--color-white);
-      transition: border-color var(--transition-fast);
+      background-color: var(--#{$name}-card-bg);
+      transition: border-color var(--#{$name}-transition);
 
       &:hover {
         border-color: var(--grey-400);
@@ -201,7 +225,7 @@ $name: ea-upload-file-item;
       position: relative;
       width: 100%;
       height: 100%;
-      background-color: var(--grey-100);
+      background-color: var(--#{$name}-thumb-bg);
 
       .#{$name}__thumb {
         margin-right: 0;
@@ -221,10 +245,10 @@ $name: ea-upload-file-item;
       justify-content: space-between;
       align-items: center;
       padding: var(--spacing-md);
-      background-color: rgba(0, 0, 0, 0.4);
+      background-color: var(--#{$name}-toolbar-bg);
       opacity: 0;
       pointer-events: none;
-      transition: opacity var(--transition-fast);
+      transition: opacity var(--#{$name}-transition);
     }
 
     .#{$name}__card:hover .#{$name}__toolbar {
@@ -240,8 +264,8 @@ $name: ea-upload-file-item;
     }
 
     .#{$name}__tool {
-      --ea-icon-size: var(--font-size-lg);
-      color: var(--color-white);
+      --ea-icon-size: var(--#{$name}-toolbar-icon-size);
+      color: var(--#{$name}-toolbar-icon-color);
       cursor: pointer;
 
       &:hover {
@@ -255,7 +279,7 @@ $name: ea-upload-file-item;
       gap: var(--spacing-sm);
       width: 100%;
       font-size: var(--font-size-xs);
-      color: var(--color-white);
+      color: var(--#{$name}-toolbar-icon-color);
     }
   }
 
