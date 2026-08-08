@@ -151,7 +151,7 @@ export default defineConfig({
           // { text: "Time Select 时间选择 [ ]", link: "/ea-time-select" },
           { text: "Transfer 穿梭框", link: "/ea-transfer" },
           // { text: "TreeSelect 树形选择 [ ]", link: "/ea-tree-select" },
-          // { text: "Upload 上传器", link: "/ea-upload" },
+          { text: "Upload 上传器", link: "/ea-upload" },
         ],
       },
       {

@@ -598,11 +598,9 @@ export class EaUpload extends EaFormAssociatedBase {
       "ea-upload-file-item"
     );
     if (fileItemEl) {
-      const changed =
-        fileItemEl.item !== item || fileItemEl.listType !== this.listType;
       fileItemEl.item = item;
       fileItemEl.listType = this.listType;
-      if (changed) fileItemEl.render();
+      fileItemEl.render();
     }
   }
 
@@ -730,10 +728,54 @@ export class EaUpload extends EaFormAssociatedBase {
     this._dragEnterCount = 0;
     this.updateContainerClasslist();
 
-    const files = e.dataTransfer?.files;
-    if (!files || files.length === 0) return;
+    if (this.directory) {
+      const items = e.dataTransfer?.items;
+      if (!items || items.length === 0) return;
+      const files: File[] = [];
+      const entries: FileSystemEntry[] = [];
+      for (let i = 0; i < items.length; i++) {
+        const entry = items[i].webkitGetAsEntry();
+        if (entry) entries.push(entry);
+      }
+      for (const entry of entries) {
+        await this._traverseEntry(entry, files);
+      }
+      if (files.length > 0) await this._addFiles(files);
+    } else {
+      const dtFiles = e.dataTransfer?.files;
+      if (!dtFiles || dtFiles.length === 0) return;
+      await this._addFiles(Array.from(dtFiles));
+    }
+  }
 
-    await this._addFiles(files);
+  /**
+   * 递归遍历文件系统条目，收集所有文件
+   * @param entry 文件系统条目
+   * @param files 收集结果
+   */
+  private _traverseEntry(entry: FileSystemEntry, files: File[]): Promise<void> {
+    return new Promise(resolve => {
+      if (entry.isFile) {
+        (entry as FileSystemFileEntry).file(file => {
+          files.push(file);
+          resolve();
+        });
+      } else if (entry.isDirectory) {
+        const dirReader = (entry as FileSystemDirectoryEntry).createReader();
+        dirReader.readEntries(entries => {
+          if (entries.length === 0) {
+            resolve();
+            return;
+          }
+          const promises = entries.map(subEntry =>
+            this._traverseEntry(subEntry, files)
+          );
+          Promise.all(promises).then(() => resolve());
+        });
+      } else {
+        resolve();
+      }
+    });
   }
 
   /**
@@ -748,7 +790,7 @@ export class EaUpload extends EaFormAssociatedBase {
     const files = input.files;
     if (!files || files.length === 0) return;
 
-    await this._addFiles(files);
+    await this._addFiles(Array.from(files));
     input.value = "";
   }
 
@@ -756,10 +798,10 @@ export class EaUpload extends EaFormAssociatedBase {
    * 添加文件到 fileList
    * @param files 文件列表
    */
-  private async _addFiles(files: FileList): Promise<void> {
+  private async _addFiles(files: File[]): Promise<void> {
     const remain = this.limit - this.fileList.length;
     if (files.length > remain) {
-      const result = this.onExceed?.(Array.from(files), this.fileList);
+      const result = this.onExceed?.(files, this.fileList);
       const shouldReplace = result instanceof Promise ? await result : result;
       if (shouldReplace !== true) return;
       this._clearFileList();
