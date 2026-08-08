@@ -123,8 +123,26 @@ export class EaUpload extends EaFormAssociatedBase {
   @attribute({ type: Boolean, default: true })
   autoUpload: boolean = true;
 
+  @attribute({
+    type: Boolean,
+    default: false,
+    observer(this: EaUpload) {
+      this.updateContainerClasslist();
+    },
+  })
+  drag: boolean = false;
+
   @attribute({ type: Number, default: Number.MAX_SAFE_INTEGER })
   limit: number = Number.MAX_SAFE_INTEGER;
+
+  @attribute({
+    type: Boolean,
+    default: false,
+    observer(this: EaUpload) {
+      this._originalInput.webkitdirectory = this.directory;
+    },
+  })
+  directory: boolean = false;
 
   @property({ type: Object, default: {} })
   data: Record<string, any> = {};
@@ -608,6 +626,65 @@ export class EaUpload extends EaFormAssociatedBase {
     }
   }
 
+  private _dragEnterCount: number = 0;
+
+  /**
+   * 处理拖拽悬浮
+   */
+  @listen("dragover", bem.ce("content"))
+  private _handleDragOver(e: DragEvent): void {
+    if (!this.drag || this.disabled) return;
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  /**
+   * 处理拖拽进入
+   */
+  @listen("dragenter", bem.ce("content"))
+  private _handleDragEnter(e: DragEvent): void {
+    if (!this.drag || this.disabled) return;
+    e.preventDefault();
+    e.stopPropagation();
+    this._dragEnterCount++;
+    if (this._dragEnterCount === 1) {
+      this.updateContainerClasslist();
+      this._container.classList.add(bem.s("dragover"));
+    }
+  }
+
+  /**
+   * 处理拖拽离开
+   */
+  @listen("dragleave", bem.ce("content"))
+  private _handleDragLeave(e: DragEvent): void {
+    if (!this.drag || this.disabled) return;
+    e.preventDefault();
+    e.stopPropagation();
+    this._dragEnterCount--;
+    if (this._dragEnterCount <= 0) {
+      this._dragEnterCount = 0;
+      this.updateContainerClasslist();
+    }
+  }
+
+  /**
+   * 处理拖拽放置
+   */
+  @listen("drop", bem.ce("content"))
+  private async _handleDrop(e: DragEvent): Promise<void> {
+    if (!this.drag || this.disabled) return;
+    e.preventDefault();
+    e.stopPropagation();
+    this._dragEnterCount = 0;
+    this.updateContainerClasslist();
+
+    const files = e.dataTransfer?.files;
+    if (!files || files.length === 0) return;
+
+    await this._addFiles(files);
+  }
+
   @listen("change", "#original")
   private async _handleChange(e: Event): Promise<void> {
     e.preventDefault();
@@ -617,14 +694,20 @@ export class EaUpload extends EaFormAssociatedBase {
     const files = input.files;
     if (!files || files.length === 0) return;
 
+    await this._addFiles(files);
+    input.value = "";
+  }
+
+  /**
+   * 添加文件到 fileList
+   * @param files 文件列表
+   */
+  private async _addFiles(files: FileList): Promise<void> {
     const remain = this.limit - this.fileList.length;
     if (files.length > remain) {
       const result = this.onExceed?.(Array.from(files), this.fileList);
       const shouldReplace = result instanceof Promise ? await result : result;
-      if (shouldReplace !== true) {
-        input.value = "";
-        return;
-      }
+      if (shouldReplace !== true) return;
       this.abort();
       for (const item of this.fileList) {
         if (item.url?.startsWith("blob:")) URL.revokeObjectURL(item.url);
@@ -634,15 +717,13 @@ export class EaUpload extends EaFormAssociatedBase {
 
     const newItems: FileItem[] = [];
     for (let i = 0; i < files.length; i++) {
-      let file = files[i];
-
-      newItems.push(
-        Object.assign(file as unknown as FileItem, {
-          uid: nanoid(),
-          status: "pending",
-          raw: file,
-        })
-      );
+      const file = files[i];
+      newItems.push({
+        uid: nanoid(),
+        name: file.name,
+        status: "pending",
+        raw: file,
+      });
     }
 
     this.fileList = [...this.fileList, ...newItems];
@@ -651,7 +732,6 @@ export class EaUpload extends EaFormAssociatedBase {
       this._renderFileList();
     }
 
-    input.value = "";
     this._dispatchChangeEvent(newItems[0]);
 
     if (this.autoUpload) {
@@ -666,7 +746,7 @@ export class EaUpload extends EaFormAssociatedBase {
   }
 
   updateContainerClasslist(): string {
-    const className = bem({ [this.listType]: true });
+    const className = bem({ [this.listType]: true, drag: this.drag });
     if (this._container) this._container.className = className;
     return className;
   }
@@ -684,6 +764,7 @@ export class EaUpload extends EaFormAssociatedBase {
       ${this.accept ? `accept="${this.accept}"` : ""}
       ${this.multiple ? "multiple" : ""}
       ${this.disabled ? "disabled" : ""}
+      ${this.directory ? "webkitdirectory" : ""}
     />
   `;
 

@@ -126,16 +126,6 @@
     <!-- #endregion  -->
     <!-- end  -->
 
-    <!--  用户头像 -->
-    <!-- #region -->
-    <h1>用户头像</h1>
-
-    <div class="demo"></div>
-
-    <hr />
-    <!-- #endregion  -->
-    <!-- end  -->
-
     <!--  照片墙 -->
     <!-- #region -->
     <h1>照片墙</h1>
@@ -194,7 +184,79 @@
     <!-- #region -->
     <h1>自定义缩略图</h1>
 
-    <div class="demo"></div>
+    <style>
+      .avatar-uploader .avatar-uploader__trigger {
+        border: 1px dashed var(--grey-300);
+        border-radius: 6px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        transition: border-color var(--transition-fast);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 178px;
+        height: 178px;
+      }
+
+      .avatar-uploader .avatar-uploader__trigger:hover {
+        border-color: var(--primary-color);
+      }
+
+      .avatar-uploader .avatar-uploader__icon {
+        font-size: 28px;
+        color: #8c939d;
+      }
+
+      .avatar-uploader .avatar-uploader__image {
+        width: 178px;
+        height: 178px;
+        display: block;
+        object-fit: cover;
+      }
+    </style>
+
+    <div class="demo avatar-uploader">
+      <ea-upload
+        id="avatarUpload"
+        class="upload-demo"
+        action="https://m1.apifoxmock.com/m1/8609267-8388194-default/file"
+        show-file-list="false"
+      >
+        <img
+          id="avatarImage"
+          class="avatar-uploader__image"
+          style="display: none"
+        />
+        <div id="avatarPlaceholder" class="avatar-uploader__trigger">
+          <span class="avatar-uploader__icon">+</span>
+        </div>
+      </ea-upload>
+    </div>
+
+    <script type="module">
+      const avatarUpload = document.getElementById("avatarUpload");
+      const avatarImage = document.getElementById("avatarImage");
+      const avatarPlaceholder = document.getElementById("avatarPlaceholder");
+
+      avatarUpload.beforeUpload = uploadFile => {
+        const rawFile = uploadFile.raw;
+        if (rawFile.type !== "image/jpeg" && rawFile.type !== "image/png") {
+          alert("Avatar picture must be JPG or PNG format!");
+          return false;
+        } else if (rawFile.size / 1024 / 1024 > 2) {
+          alert("Avatar picture size can not exceed 2MB!");
+          return false;
+        }
+        return true;
+      };
+
+      avatarUpload.onSuccess = (response, uploadFile) => {
+        avatarImage.src = URL.createObjectURL(uploadFile.raw);
+        avatarImage.style.display = "block";
+        avatarPlaceholder.style.display = "none";
+      };
+    </script>
 
     <hr />
     <!-- #endregion  -->
@@ -258,137 +320,175 @@
     <!-- #endregion  -->
     <!-- end  -->
 
-    <div class="demo-section">
-      <h3>拖拽上传</h3>
+    <!--  上传文件列表控制 -->
+    <!-- #region -->
+    <h1>上传文件列表控制</h1>
+
+    <div class="demo">
+      <ea-upload
+        id="listControlUpload"
+        class="upload-demo"
+        action="https://m1.apifoxmock.com/m1/8609267-8388194-default/file"
+      >
+        <ea-button type="primary">Click to upload</ea-button>
+        <div class="tip" slot="tip">
+          jpg/png files with a size less than 500KB, only the latest 3 files are
+          kept.
+        </div>
+      </ea-upload>
+    </div>
+
+    <script type="module">
+      const listControlUpload = document.getElementById("listControlUpload");
+      listControlUpload.defaultFileList = [
+        {
+          name: "food.jpeg",
+          url: "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100",
+        },
+        {
+          name: "food2.jpeg",
+          url: "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100",
+        },
+      ];
+      listControlUpload.onChange = (uploadFile, uploadFiles) => {
+        listControlUpload.fileList = uploadFiles.slice(-3);
+      };
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  拖拽上传 -->
+    <!-- #region -->
+    <h1>拖拽上传</h1>
+
+    <style>
+      .upload-dragger .ea-upload__icon {
+        font-size: 48px;
+        color: var(--grey-400);
+        margin-bottom: var(--spacing-sm);
+      }
+    </style>
+
+    <div class="demo upload-dragger">
       <ea-upload
         id="dragUpload"
-        type="drag"
-        action="http://localhost:3100/api/upload/single"
-      >
-        test
-      </ea-upload>
-    </div>
-
-    <div class="demo-section">
-      <h3>多文件上传</h3>
-      <ea-upload
-        id="multipleUpload"
+        class="upload-demo"
+        action="https://m1.apifoxmock.com/m1/8609267-8388194-default/file"
+        drag
         multiple
-        action="http://localhost:3100/api/upload/single"
       >
-        <ea-button type="button">上传</ea-button>
+        <ea-icon name="upload"></ea-icon>
+        <div class="ea-upload__text">
+          Drop file here or <em>click to upload</em>
+        </div>
       </ea-upload>
     </div>
 
-    <div class="demo-section">
-      <h3>带进度显示</h3>
-      <ea-upload
-        id="progressUpload"
-        show-progress
-        action="http://localhost:3100/api/upload/single"
-      ></ea-upload>
-    </div>
-
-    <div class="demo-section">
-      <h3>限制文件类型</h3>
-      <ea-upload
-        id="acceptUpload"
-        accept="image/*"
-        url="http://localhost:3100/api/upload/single"
-      ></ea-upload>
-    </div>
-
-    <div class="demo-section">
-      <h3>限制文件大小 (5MB)</h3>
-      <ea-upload
-        id="sizeUpload"
-        max-size="5242880"
-        url="http://localhost:3100/api/upload/single"
-      ></ea-upload>
-    </div>
-
-    <div class="demo-section">
-      <h3>限制文件数量</h3>
-      <ea-upload
-        id="countUpload"
-        multiple="multiple"
-        max-count="3"
-        url="http://localhost:3100/api/upload/multiple"
-      ></ea-upload>
-    </div>
-
-    <div class="demo-section">
-      <h3>禁用状态</h3>
-      <ea-upload
-        id="disabledUpload"
-        disabled
-        url="http://localhost:3100/api/upload/single"
-      ></ea-upload>
-    </div>
-
-    <div class="demo-section">
-      <h3>自定义占位符和图标</h3>
-      <ea-upload
-        id="customUpload"
-        placeholder="点击或拖拽文件到这里"
-        upload-icon="cloud-arrow-up"
-        url="http://localhost:3100/api/upload/single"
-      ></ea-upload>
-    </div>
-
-    <div class="demo-section">
-      <h3>事件监听示例</h3>
-      <ea-upload
-        id="eventUpload"
-        url="http://localhost:3100/api/upload/single"
-      ></ea-upload>
-      <div
-        id="eventLog"
-        style="
-          margin-top: 1rem;
-          padding: 1rem;
-          background: #f5f5f5;
-          border-radius: 4px;
-          font-size: 12px;
-          max-height: 200px;
-          overflow-y: auto;
-        "
-      ></div>
-    </div>
-
-    <script>
-      const eventUpload = document.getElementById("eventUpload");
-      const eventLog = document.getElementById("eventLog");
-
-      function logEvent(eventName, detail) {
-        const div = document.createElement("div");
-        div.style.marginBottom = "4px";
-        div.innerHTML = `<strong>${eventName}:</strong> ${JSON.stringify(detail, null, 2)}`;
-        eventLog.appendChild(div);
-        eventLog.scrollTop = eventLog.scrollHeight;
-      }
-
-      eventUpload.addEventListener("ea-change", e => {
-        logEvent("ea-change", e.detail);
-      });
-
-      eventUpload.addEventListener("ea-progress", e => {
-        logEvent("ea-progress", {
-          percentage: e.detail.percentage,
-          fileName: e.detail.file.name,
-        });
-      });
-
-      eventUpload.addEventListener("ea-success", e => {
-        logEvent("ea-success", {
-          fileName: e.detail.file.name,
-          response: e.detail.response,
-        });
-      });
-
-      eventUpload.addEventListener("ea-error", e => {
-        logEvent("ea-error", e.detail);
-      });
+    <script type="module">
+      const dragUpload = document.getElementById("dragUpload");
+      dragUpload.onChange = (uploadFile, uploadFiles) => {
+        console.log(uploadFile, uploadFiles);
+      };
     </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  上传目录 -->
+    <!-- #region -->
+    <h1>上传目录</h1>
+
+    <div class="demo">
+      <ea-upload
+        id="directoryUpload"
+        class="upload-demo"
+        action="https://m1.apifoxmock.com/m1/8609267-8388194-default/file"
+        drag
+        directory
+        multiple
+      >
+        <ea-icon name="upload"></ea-icon>
+        <div class="ea-upload__text">
+          Drop directory here or <em>click to upload</em>
+        </div>
+      </ea-upload>
+    </div>
+
+    <script type="module">
+      const directoryUpload = document.getElementById("directoryUpload");
+      directoryUpload.onChange = (uploadFile, uploadFiles) => {
+        console.log(uploadFile, uploadFiles);
+      };
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  手动上传 -->
+    <!-- #region -->
+    <h1>手动上传</h1>
+
+    <style>
+      .tip {
+        color: #909399;
+        font-size: 12px;
+        margin: 4px;
+      }
+    </style>
+
+    <div class="demo">
+      <ea-upload
+        id="manualUpload"
+        class="upload-demo"
+        action="https://m1.apifoxmock.com/m1/8609267-8388194-default/file"
+        auto-upload="false"
+      >
+        <ea-button type="primary" slot="trigger">select file</ea-button>
+        <ea-button type="success" id="submitBtn">upload to server</ea-button>
+        <div class="tip" slot="tip">
+          jpg/png files with a size less than 500KB.
+        </div>
+      </ea-upload>
+    </div>
+
+    <script type="module">
+      const manualUpload = document.getElementById("manualUpload");
+      const submitBtn = document.getElementById("submitBtn");
+
+      submitBtn.addEventListener("click", () => {
+        manualUpload.submit();
+      });
+
+      manualUpload.defaultFileList = [
+        {
+          uid: "1",
+          name: "test.txt",
+          status: "uploading",
+          url: "http://example.com/test.txt",
+          percent: 33,
+        },
+        {
+          uid: "2",
+          name: "test.txt",
+          status: "done",
+          url: "http://example.com/test.txt",
+        },
+        {
+          uid: "3",
+          name: "test.txt",
+          status: "error",
+          response: "404 Not Found",
+          url: "http://example.com/test.txt",
+        },
+      ];
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
   </body>
 </html>

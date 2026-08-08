@@ -20,6 +20,10 @@ $name: ea-upload;
     display: none;
   }
 
+  @include element(content) {
+    display: block;
+  }
+
   @include element(list) {
     margin-top: var(--spacing-md);
 
@@ -34,6 +38,45 @@ $name: ea-upload;
 
       @include state(error) {
         color: var(--red-500);
+      }
+    }
+  }
+
+  @include modifier(drag) {
+    .#{$name}__content {
+      border: var(--border-width) dashed var(--#{$name}-border-color);
+      border-radius: var(--border-radius);
+      padding: var(--spacing-lg);
+      text-align: center;
+      cursor: pointer;
+      transition:
+        border-color var(--#{$name}-transition),
+        background-color var(--#{$name}-transition);
+
+      &:hover {
+        border-color: var(--primary-color);
+      }
+    }
+
+    .#{$name}__icon {
+      font-size: 48px;
+      color: var(--grey-400);
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .#{$name}__text {
+      color: var(--grey-600);
+      font-size: var(--font-size-md);
+    }
+
+    @include state(dragover) {
+      .#{$name}__content {
+        border-color: var(--primary-color);
+        background-color: rgba(64, 158, 255, 0.05);
+      }
+
+      .#{$name}__icon {
+        color: var(--primary-color);
       }
     }
   }
