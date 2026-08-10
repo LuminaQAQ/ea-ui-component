@@ -1,0 +1,4 @@
+const e = ":host{--ea-table-column-label-color: var(--grey-900);--ea-table-column-content-color: var(--grey-700);--ea-table-column-border-color: var(--grey-200);--ea-table-column-spacing: var(--spacing-lg) 16px;--ea-table-column-font-size: var(--font-size-md);--ea-table-column-label-weight: var(--font-weight-bold);--ea-table-column-content-weight: var(--font-weight-md)}:host{display:inline-block}.ea-table-column{gap:var(--spacing-lg);padding:var(--ea-table-column-spacing);border:1px solid var(--ea-table-column-border-color)}.ea-table-column__label{color:var(--ea-table-column-label-color);font-weight:var(--ea-table-column-label-weight);white-space:nowrap;vertical-align:middle}.ea-table-column__content{color:var(--ea-table-column-content-color);font-weight:var(--ea-table-column-content-weight);flex:1;vertical-align:middle}";
+export {
+  e as s
+};

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://luminaqaq.github.io/ea-ui-component/sitemap.xml

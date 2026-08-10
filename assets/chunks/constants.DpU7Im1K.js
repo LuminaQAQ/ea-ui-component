@@ -1,0 +1,1 @@
+const r=["primary","success","warning","danger","info"],c="info",i={primary:"circle-info",success:"circle-check",info:"circle-info",warning:"triangle-exclamation",danger:"circle-xmark",error:"circle-xmark"};export{r as c,i,c as r};

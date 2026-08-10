@@ -1,0 +1,4 @@
+const e = ":host{--ea-header-height: 60px;--ea-header-padding: 0 20px}:host{display:block}.ea-header{box-sizing:border-box;padding:var(--ea-header-padding);height:var(--ea-header-height);line-height:var(--ea-header-height)}";
+export {
+  e as s
+};

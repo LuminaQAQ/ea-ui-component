@@ -1,0 +1,4 @@
+const a = ":host{--ea-space-direction: row;--ea-space-alignment: center;--ea-space-wrap: nowrap;--ea-space-gap-small: var(--spacing-md);--ea-space-gap-default: var(--spacing-lg);--ea-space-gap-large: 1rem;--ea-space-gap: var(--ea-space-gap-default);--ea-space-fill-ratio: 100%}:host{display:block;width:100%}.ea-space{display:flex;align-items:var(--ea-space-alignment);flex-direction:var(--ea-space-direction);flex-wrap:var(--ea-space-wrap);gap:var(--ea-space-gap)}.ea-space ::slotted(*){box-sizing:border-box}.ea-space--vertical{--ea-space-direction: column}.ea-space--small{--ea-space-gap: var(--ea-space-gap-small)}.ea-space--large{--ea-space-gap: var(--ea-space-gap-large)}.ea-space--fill ::slotted(*){flex-grow:var(--ea-space-fill-ratio);min-width:var(--ea-space-fill-ratio)}.ea-space.is-wrap{--ea-space-wrap: wrap}";
+export {
+  a as s
+};

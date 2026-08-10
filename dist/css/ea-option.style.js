@@ -1,0 +1,4 @@
+const o = ":host{--ea-option-spacing: var(--spacing-md) var(--spacing-lg);--ea-option-color: var(--grey-900);--ea-option-disabled-color: var(--grey-300);--ea-option-selected-color: var(--blue-500);--ea-option-hover-color: var(--grey-900);--ea-option-hover-bg-color: var(--blue-100);--ea-option-active-bg-color: var(--blue-100);--ea-option-font-size: var(--font-size-md)}:host{display:block}.ea-option{box-sizing:border-box;padding:var(--ea-option-spacing);font-size:var(--ea-option-font-size);color:var(--ea-option-color);cursor:pointer}.ea-option:hover{color:var(--ea-option-hover-color);background-color:var(--ea-option-hover-bg-color)}.ea-option.is-disabled{cursor:not-allowed;color:var(--ea-option-disabled-color)}.ea-option.is-disabled:hover{background-color:unset}.ea-option.is-selected{color:var(--ea-option-selected-color)}.ea-option.is-active{background-color:var(--ea-option-active-bg-color)}";
+export {
+  o as s
+};

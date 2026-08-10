@@ -1,0 +1,4 @@
+const a = ":host{--ea-col-span: 24;--ea-col-offset: 0;--ea-col-push: 0;--ea-col-pull: 0}:host{box-sizing:border-box;flex:0 0 calc(var(--ea-col-span) / 24 * 100%);max-width:calc(var(--ea-col-span) / 24 * 100%);display:block}::slotted(*){display:block}.ea-col{box-sizing:border-box;padding-left:var(--ea-row-gutter);padding-right:var(--ea-row-gutter);margin-left:calc(var(--ea-col-offset) / 24 * 100%);translate:calc((var(--ea-col-push) - var(--ea-col-pull)) / 24 * 100%)}";
+export {
+  a as s
+};

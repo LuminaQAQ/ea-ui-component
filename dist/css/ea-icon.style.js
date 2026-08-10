@@ -1,0 +1,4 @@
+const e = ":host{--ea-icon-size: var(--font-size-md);--ea-icon-color: inherit;display:inline-flex;align-items:center;justify-content:center;text-align:center;font-size:var(--ea-icon-size);color:var(--ea-icon-color)}.ea-icon{display:block;width:calc(var(--ea-icon-size) * 1.25);height:var(--ea-icon-size);line-height:var(--ea-icon-size);font-style:normal}";
+export {
+  e as s
+};

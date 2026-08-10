@@ -1,0 +1,4 @@
+const r = ':host{--ea-splitter-bar-size: 1rem;--ea-splitter-bar-color: var(--color-border);--ea-splitter-bar-hover-color: var(--color-blue);display:block;position:relative;flex-shrink:0}:host([layout=horizontal]){cursor:col-resize;width:var(--ea-splitter-bar-size);height:100%}:host([layout=vertical]){cursor:row-resize;width:100%;height:var(--ea-splitter-bar-size)}.ea-splitter-bar{position:absolute;top:0;left:0;width:100%;height:100%;background-color:transparent}.ea-splitter-bar:after{content:"";position:absolute;background-color:var(--ea-splitter-bar-color)}.ea-splitter-bar:hover:after{background-color:var(--ea-splitter-bar-hover-color)}.ea-splitter-bar--horizontal:after{width:1px;height:100%;top:0;left:50%;transform:translate(-50%)}.ea-splitter-bar--vertical:after{width:100%;height:1px;top:50%;left:0;transform:translateY(-50%)}';
+export {
+  r as s
+};

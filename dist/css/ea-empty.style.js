@@ -1,0 +1,4 @@
+const e = ":host{--ea-empty-size: 120px;--ea-empty-image-color: var(--grey-400);--ea-empty-color: var(--grey-500);--ea-empty-description-font-size: var(--font-size-lg);--ea-empty-spacing: var(--spacing-lg);display:flex}.ea-empty{display:flex;justify-content:center;align-items:center;flex-direction:column;width:100%}.ea-empty__default{width:100%;height:100%}.ea-empty__default .border{stroke:var(--ea-empty-image-color)}.ea-empty__default .front{fill:var(--ea-empty-image-color)}.ea-empty__placeholder{display:flex;align-items:center;justify-content:center;width:var(--ea-empty-size);height:var(--ea-empty-size)}.ea-empty__image{width:100%;height:100%;object-fit:cover}.ea-empty__description{font-size:var(--ea-empty-description-font-size);color:var(--ea-empty-color);margin-top:var(--ea-empty-spacing)}.ea-empty__bottom{margin-top:var(--ea-empty-spacing)}";
+export {
+  e as s
+};
