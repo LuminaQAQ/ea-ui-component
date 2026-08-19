@@ -1,8 +1,7 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { CustomElement, attribute, query } from "@decorator";
+import { CustomElement, attribute, listen, query } from "@decorator";
 import { html } from "@utils/html";
 import stylesheet from "./index.scss?inline";
-import effectsMeta from "./constants/effects";
 
 const TAG_NAME = "ea-effects" as const;
 const bem = createBEM(TAG_NAME);
@@ -12,18 +11,23 @@ export class EaEffects extends EaBase {
   @query(bem.cb())
   private _container!: HTMLElement;
 
-  @query(bem.ce("content"))
-  private _content!: HTMLElement;
-
   private _startController: AbortController | null = null;
   private _endController: AbortController | null = null;
   private _isPlaying = false;
 
   private _reduceMotion = false;
+  private _reduceMotionMediaQuery: MediaQueryList | null = null;
+  private _reduceMotionController: AbortController | null = null;
 
   @attribute({
     type: String,
     default: "",
+    observer(this: EaEffects, newVal: string, oldVal: string) {
+      if (newVal !== oldVal) {
+        this.reset();
+        this.visible ? this.show() : this.hide();
+      }
+    },
   })
   effect: string = "";
 
@@ -36,17 +40,29 @@ export class EaEffects extends EaBase {
   })
   visible: boolean = true;
 
-  @attribute({ type: String, default: "" })
+  @attribute({
+    type: String,
+    default: "",
+    observer(this: EaEffects, newVal: string) {
+      this._container?.style.setProperty("--ea-effects-duration", newVal || "");
+    },
+  })
   duration: string = "";
 
-  @attribute({ type: String, default: "" })
+  @attribute({
+    type: String,
+    default: "",
+    observer(this: EaEffects, newVal: string) {
+      this._container?.style.setProperty("--ea-effects-delay", newVal || "");
+    },
+  })
   delay: string = "";
 
   @attribute({
     type: String,
     default: "",
     observer(this: EaEffects, newVal: string) {
-      this._container.style.setProperty(
+      this._container?.style.setProperty(
         "--ea-effects-timing-function",
         newVal || ""
       );
@@ -54,20 +70,17 @@ export class EaEffects extends EaBase {
   })
   timingFunction: string = "";
 
-  @attribute({ type: Number, default: 1 })
+  @attribute({
+    type: Number,
+    default: 1,
+    observer(this: EaEffects, newVal: number) {
+      this._container?.style.setProperty(
+        "--ea-effects-iteration-count",
+        String(newVal)
+      );
+    },
+  })
   iteration: number = 1;
-
-  @attribute({ type: String, default: "normal" })
-  direction: string = "normal";
-
-  @attribute({ type: String, default: "none" })
-  fill: string = "none";
-
-  @attribute({ type: Boolean, default: false })
-  repeat: boolean = false;
-
-  @attribute({ type: Boolean, default: false })
-  once: boolean = false;
 
   reset(): void {
     this._startController?.abort();
@@ -76,15 +89,25 @@ export class EaEffects extends EaBase {
     this._endController = null;
     this._isPlaying = false;
 
-    this._container.classList.remove(
-      bem.m(`${this.effect}-before-leave`),
-      bem.m(`${this.effect}-leave`),
-      bem.m(`${this.effect}-after-leave`),
-      bem.m(`${this.effect}-enter`)
-    );
+    if (this._container) {
+      const effect = this.effect;
+      this._container.classList.remove(
+        bem.m(`${effect}-before-enter`),
+        bem.m(`${effect}-enter`),
+        bem.m(`${effect}-before-leave`),
+        bem.m(`${effect}-leave`)
+      );
+    }
   }
 
   show(): void {
+    if (this._reduceMotion) {
+      this.reset();
+      this._container?.style.removeProperty("display");
+      this._container?.classList.remove(bem.m(`${this.effect}-leave`));
+      return;
+    }
+
     this.reset();
 
     this._startController = new AbortController();
@@ -109,6 +132,12 @@ export class EaEffects extends EaBase {
   }
 
   hide(): void {
+    if (this._reduceMotion) {
+      this.reset();
+      this._container?.style.setProperty("display", "none");
+      return;
+    }
+
     this.reset();
 
     this._endController = new AbortController();
@@ -122,7 +151,6 @@ export class EaEffects extends EaBase {
       () => {
         this._container.classList.remove(bem.m(`${this.effect}-before-leave`));
         this._container.classList.add(bem.m(`${this.effect}-leave`));
-
         this._isPlaying = false;
         this._endController?.abort();
         this._endController = null;
@@ -132,7 +160,7 @@ export class EaEffects extends EaBase {
   }
 
   toggle(): void {
-    this.visible = this.visible === true ? false : true;
+    this.visible = !this.visible;
   }
 
   /** 更新容器类名 */
@@ -156,11 +184,32 @@ export class EaEffects extends EaBase {
     `;
   }
 
-  $mount(): void {}
+  private _onReduceMotionChange = (e: MediaQueryListEvent) => {
+    this._reduceMotion = e.matches;
+    this.visible ? this.show() : this.hide();
+  };
+
+  $mount(): void {
+    this._reduceMotionController?.abort();
+
+    this._reduceMotionMediaQuery = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    );
+    this._reduceMotion = this._reduceMotionMediaQuery.matches;
+
+    this._reduceMotionController = new AbortController();
+    this._reduceMotionMediaQuery.addEventListener(
+      "change",
+      this._onReduceMotionChange
+    );
+  }
 
   $beforeUnmount(): void {
+    this._reduceMotionController?.abort();
     this._startController?.abort();
     this._endController?.abort();
+
+    this._reduceMotionController = null;
     this._startController = null;
     this._endController = null;
   }

@@ -9,6 +9,17 @@
   --#{$name}-fill-mode: both;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  :host {
+    --#{$name}-duration: 0.001s !important;
+  }
+
+  * {
+    animation-duration: 0.001s !important;
+    transition-duration: 0.001s !important;
+  }
+}
+
 :host {
   display: contents;
 }
