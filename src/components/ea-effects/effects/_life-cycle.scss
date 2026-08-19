@@ -1,0 +1,30 @@
+@use "themes/namespace" as *;
+
+@mixin life-cycle-before-enter($transition-name) {
+  @include modifier(#{$transition-name}-before-enter) {
+    opacity: 0;
+    display: block;
+    @content;
+  }
+}
+
+@mixin life-cycle-enter($transition-name) {
+  @include modifier(#{$transition-name}-enter) {
+    opacity: 1;
+    @content;
+  }
+}
+
+@mixin life-cycle-before-leave($transition-name) {
+  @include modifier(#{$transition-name}-before-leave) {
+    opacity: 0;
+    @content;
+  }
+}
+
+@mixin life-cycle-leave($transition-name) {
+  @include modifier(#{$transition-name}-leave) {
+    display: none;
+    @content;
+  }
+}

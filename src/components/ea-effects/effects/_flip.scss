@@ -1,0 +1,40 @@
+@use "sass:map";
+@use "./utils" as *;
+
+@function _flip-transform($axis) {
+  $before: null;
+  $enter: null;
+  @if ($axis == x) {
+    $before: rotateX(-90deg);
+    $enter: rotateX(0);
+  } @else if ($axis == y) {
+    $before: rotateY(-90deg);
+    $enter: rotateY(0);
+  }
+  @return (
+    before: $before,
+    enter: $enter,
+    before-leave: if(sass($axis == x): rotateX(-90deg) ;else: rotateY(90deg))
+  );
+}
+
+@mixin flip($axis) {
+  $transition-name: flip-#{$axis};
+  $transforms: _flip-transform($axis);
+
+  @include modifier(#{$transition-name}) {
+    opacity: 1;
+    transform-style: preserve-3d;
+  }
+
+  @include life-cycle-before-enter($transition-name) {
+    transform: map.get($transforms, before);
+  }
+  @include life-cycle-enter($transition-name) {
+    transform: map.get($transforms, enter);
+  }
+  @include life-cycle-before-leave($transition-name) {
+    transform: map.get($transforms, before-leave);
+  }
+  @include life-cycle-leave($transition-name);
+}

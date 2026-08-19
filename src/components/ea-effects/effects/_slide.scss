@@ -1,0 +1,37 @@
+@use "sass:map";
+@use "./utils" as *;
+
+@function _slide-transform($direction) {
+  $before: null;
+  $enter: translate(0, 0);
+  @if ($direction == top) {
+    $before: translateY(-100%);
+  } @else if ($direction == bottom) {
+    $before: translateY(100%);
+  } @else if ($direction == left) {
+    $before: translateX(-100%);
+  } @else if ($direction == right) {
+    $before: translateX(100%);
+  }
+  @return (before: $before, enter: $enter, before-leave: $before);
+}
+
+@mixin slide($direction) {
+  $transition-name: slide-#{$direction};
+  $transforms: _slide-transform($direction);
+
+  @include modifier(#{$transition-name}) {
+    opacity: 1;
+  }
+
+  @include life-cycle-before-enter($transition-name) {
+    transform: map.get($transforms, before);
+  }
+  @include life-cycle-enter($transition-name) {
+    transform: map.get($transforms, enter);
+  }
+  @include life-cycle-before-leave($transition-name) {
+    transform: map.get($transforms, before-leave);
+  }
+  @include life-cycle-leave($transition-name);
+}

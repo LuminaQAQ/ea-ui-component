@@ -1,0 +1,37 @@
+@use "./effects/index.scss" as *;
+
+:host {
+  --#{$name}-duration: 0.3s;
+  --#{$name}-delay: 0;
+  --#{$name}-timing-function: ease-in-out;
+  --#{$name}-iteration-count: 1;
+  --#{$name}-direction: normal;
+  --#{$name}-fill-mode: both;
+}
+
+:host {
+  display: contents;
+}
+
+@include block($name) {
+  display: inline-block;
+  position: relative;
+
+  transition-property: transform, opacity;
+  transition-duration: var(--#{$name}-duration);
+  transition-delay: var(--#{$name}-delay);
+  transition-timing-function: var(--#{$name}-timing-function);
+}
+
+@include block($name) {
+  @include fade();
+
+  @each $dir in $directions {
+    @include zoom($dir);
+    @include slide($dir);
+  }
+
+  @each $axis in $axis {
+    @include flip($axis);
+  }
+}

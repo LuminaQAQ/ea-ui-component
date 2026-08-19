@@ -17,6 +17,7 @@ import './ea-descriptions/index';
 import './ea-dialog/index';
 import './ea-drawer/index';
 import './ea-dropdown/index';
+import './ea-effects/index';
 import './ea-empty/index';
 import './ea-icon/index';
 import './ea-image/index';

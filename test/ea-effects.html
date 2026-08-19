@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>effects</title>
+    <link rel="stylesheet" href="../dist/assets/icon.css" />
+
+    <style>
+        hr {
+            margin: 3rem 0;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            min-height: 100px;
+            margin-top: 20px;
+        }
+
+        .transition-box {
+            width: 200px;
+            height: 100px;
+            border-radius: 8px;
+            background-color: #409eff;
+            text-align: center;
+            color: #fff;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script type="module" src="../src/components/ea-effects/index.ts"></script>
+    <script type="module" src="../src/components/ea-button/index.ts"></script>
+
+
+    <!--  Zoom 缩放 -->
+    <!-- #region -->
+    <h1>Zoom 缩放</h1>
+
+    <div class="demo">
+        <ea-button id="zoomButton">Click Me</ea-button>
+
+        <div id="zoomEffectsContainer" class="container">
+            <ea-effects effect="zoom-center">
+                <div class="transition-box">zoom-center</div>
+            </ea-effects>
+            <ea-effects effect="zoom-center" timing-function="linear">
+                <div class="transition-box">zoom-center-linear</div>
+            </ea-effects>
+            <ea-effects effect="zoom-top">
+                <div class="transition-box">zoom-top</div>
+            </ea-effects>
+            <ea-effects effect="zoom-right">
+                <div class="transition-box">zoom-right</div>
+            </ea-effects>
+            <ea-effects effect="zoom-bottom">
+                <div class="transition-box">zoom-bottom</div>
+            </ea-effects>
+            <ea-effects effect="zoom-left">
+                <div class="transition-box">zoom-left</div>
+            </ea-effects>
+        </div>
+
+    </div>
+
+    <script type="module">
+        const zoomEffects = {
+            btn: document.querySelector("#zoomButton"),
+            effects: document.querySelectorAll("#zoomEffectsContainer ea-effects"),
+
+            init() {
+                this.btn.addEventListener("click", () => {
+                    this.effects.forEach(effect => effect.toggle());
+                });
+            }
+        }
+        zoomEffects.init();
+    </script>
+
+    <hr>
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  Fade 淡入淡出 -->
+    <!-- #region -->
+    <h1>Fade 淡入淡出</h1>
+
+    <div class="demo">
+        <ea-button id="fadeButton">Click Me</ea-button>
+
+        <div id="fadeEffectsContainer" class="container">
+            <ea-effects effect="fade">
+                <div class="transition-box">fade-1</div>
+            </ea-effects>
+            <ea-effects effect="fade" visible="false">
+                <div class="transition-box">fade-2</div>
+            </ea-effects>
+        </div>
+
+    </div>
+
+    <script type="module">
+        const fadeEffects = {
+            btn: document.querySelector("#fadeButton"),
+            effects: document.querySelectorAll("#fadeEffectsContainer ea-effects"),
+
+            init() {
+                this.btn.addEventListener("click", () => {
+                    this.effects.forEach(effect => effect.toggle());
+                });
+            }
+        }
+        fadeEffects.init();
+    </script>
+
+    <hr>
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  Slide 滑动 -->
+    <!-- #region -->
+    <h1>Slide 滑动</h1>
+
+    <div class="demo">
+        <ea-button id="slideButton">Click Me</ea-button>
+
+        <div id="slideEffectsContainer" class="container">
+            <ea-effects effect="slide-top">
+                <div class="transition-box">slide-top</div>
+            </ea-effects>
+            <ea-effects effect="slide-right">
+                <div class="transition-box">slide-right</div>
+            </ea-effects>
+            <ea-effects effect="slide-bottom">
+                <div class="transition-box">slide-bottom</div>
+            </ea-effects>
+            <ea-effects effect="slide-left">
+                <div class="transition-box">slide-left</div>
+            </ea-effects>
+        </div>
+
+    </div>
+
+    <script type="module">
+        const slideEffects = {
+            btn: document.querySelector("#slideButton"),
+            effects: document.querySelectorAll("#slideEffectsContainer ea-effects"),
+
+            init() {
+                this.btn.addEventListener("click", () => {
+                    this.effects.forEach(effect => effect.toggle());
+                });
+            }
+        }
+        slideEffects.init();
+    </script>
+
+    <hr>
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  Flip 翻转 -->
+    <!-- #region -->
+    <h1>Flip 翻转</h1>
+
+    <div class="demo">
+        <ea-button id="flipButton">Click Me</ea-button>
+
+        <div id="flipEffectsContainer" class="container">
+            <ea-effects effect="flip-x">
+                <div class="transition-box">flip-x</div>
+            </ea-effects>
+            <ea-effects effect="flip-y">
+                <div class="transition-box">flip-y</div>
+            </ea-effects>
+        </div>
+
+    </div>
+
+    <script type="module">
+        const flipEffects = {
+            btn: document.querySelector("#flipButton"),
+            effects: document.querySelectorAll("#flipEffectsContainer ea-effects"),
+
+            init() {
+                this.btn.addEventListener("click", () => {
+                    this.effects.forEach(effect => effect.toggle());
+                });
+            }
+        }
+        flipEffects.init();
+    </script>
+
+    <hr>
+    <!-- #endregion  -->
+    <!-- end  -->
+</body>
+
+</html>

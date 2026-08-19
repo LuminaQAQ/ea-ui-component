@@ -1,0 +1,42 @@
+@use "sass:map";
+@use "./utils" as *;
+
+@function _zoom-transform($direction) {
+  $before: scale(0);
+  $enter: scale(1);
+  @if ($direction == top or $direction == bottom) {
+    $before: scaleY(0);
+    $enter: scaleY(1);
+  } @else if ($direction == left or $direction == right) {
+    $before: scaleX(0);
+    $enter: scaleX(1);
+  }
+  @return (before: $before, enter: $enter, before-leave: $before);
+}
+
+@mixin zoom($direction) {
+  $transition-name: zoom-#{$direction};
+  $transforms: _zoom-transform($direction);
+
+  @include modifier(#{$transition-name}) {
+    opacity: 1;
+    @if ($direction == top or $direction == bottom) {
+      transform-origin: center #{$direction};
+    } @else if ($direction == left or $direction == right) {
+      transform-origin: #{$direction} center;
+    } @else {
+      transform-origin: center center;
+    }
+  }
+
+  @include life-cycle-before-enter($transition-name) {
+    transform: map.get($transforms, before);
+  }
+  @include life-cycle-enter($transition-name) {
+    transform: map.get($transforms, enter);
+  }
+  @include life-cycle-before-leave($transition-name) {
+    transform: map.get($transforms, before-leave);
+  }
+  @include life-cycle-leave($transition-name);
+}

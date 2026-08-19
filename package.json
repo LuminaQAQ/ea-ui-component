@@ -233,6 +233,10 @@
       "import": "./dist/components/ea-dropdown.js",
       "types": "./dist/types/components/ea-dropdown/index.d.ts"
     },
+    "./ea-effects": {
+      "import": "./dist/components/ea-effects.js",
+      "types": "./dist/types/components/ea-effects/index.d.ts"
+    },
     "./ea-empty": {
       "import": "./dist/components/ea-empty.js",
       "types": "./dist/types/components/ea-empty/index.d.ts"

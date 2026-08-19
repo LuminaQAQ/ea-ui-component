@@ -1,0 +1,14 @@
+@use "./utils" as *;
+
+@mixin fade() {
+  $transition-name: fade;
+
+  @include modifier(#{$transition-name}) {
+    opacity: 1;
+  }
+
+  @include life-cycle-before-enter($transition-name);
+  @include life-cycle-enter($transition-name);
+  @include life-cycle-before-leave($transition-name);
+  @include life-cycle-leave($transition-name);
+}
