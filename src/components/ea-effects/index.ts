@@ -2,6 +2,7 @@ import EaBase, { createBEM } from "@core/EaBase";
 import { CustomElement, attribute, listen, query } from "@decorator";
 import { html } from "@utils/html";
 import stylesheet from "./index.scss?inline";
+import { Enum } from "@/utils/Enum";
 
 const TAG_NAME = "ea-effects" as const;
 const bem = createBEM(TAG_NAME);
@@ -11,6 +12,8 @@ export class EaEffects extends EaBase {
   @query(bem.cb())
   private _container!: HTMLElement;
 
+  private _isInitialVisible = true;
+
   private _startController: AbortController | null = null;
   private _endController: AbortController | null = null;
   private _isPlaying = false;
@@ -18,6 +21,9 @@ export class EaEffects extends EaBase {
   private _reduceMotion = false;
   private _reduceMotionMediaQuery: MediaQueryList | null = null;
   private _reduceMotionController: AbortController | null = null;
+
+  private _triggerController: AbortController | null = null;
+  private _scrollObserver: IntersectionObserver | null = null;
 
   @attribute({
     type: String,
@@ -82,6 +88,21 @@ export class EaEffects extends EaBase {
   })
   iteration: number = 1;
 
+  @attribute({
+    type: Enum(["hover", "click", "manual", "scroll"]),
+    default: "manual",
+    observer(this: EaEffects, newVal: "hover" | "click" | "manual" | "scroll") {
+      this._rebuildTriggerListeners();
+    },
+  })
+  trigger: "hover" | "click" | "manual" | "scroll" = "manual";
+
+  @attribute({ type: Boolean, default: true })
+  scrollOnce: boolean = true;
+
+  @attribute({ type: String, default: "" })
+  scrollTarget: string = "";
+
   reset(): void {
     this._startController?.abort();
     this._endController?.abort();
@@ -97,18 +118,21 @@ export class EaEffects extends EaBase {
         bem.m(`${effect}-before-leave`),
         bem.m(`${effect}-leave`)
       );
+
+      this._container.style.removeProperty("display");
     }
   }
 
   show(): void {
+    this.reset();
+
+    this.style.removeProperty("display");
+
     if (this._reduceMotion) {
-      this.reset();
       this._container?.style.removeProperty("display");
       this._container?.classList.remove(bem.m(`${this.effect}-leave`));
       return;
     }
-
-    this.reset();
 
     this._startController = new AbortController();
     this._isPlaying = true;
@@ -132,13 +156,12 @@ export class EaEffects extends EaBase {
   }
 
   hide(): void {
+    this.reset();
+
     if (this._reduceMotion) {
-      this.reset();
       this._container?.style.setProperty("display", "none");
       return;
     }
-
-    this.reset();
 
     this._endController = new AbortController();
     this._isPlaying = true;
@@ -189,6 +212,79 @@ export class EaEffects extends EaBase {
     this.visible ? this.show() : this.hide();
   };
 
+  private _rebuildTriggerListeners(): void {
+    this._triggerController?.abort();
+    this._triggerController = new AbortController();
+    const signal = this._triggerController.signal;
+
+    switch (this.trigger) {
+      case "hover":
+        this._container.addEventListener(
+          "mouseenter",
+          () => {
+            this.visible = true;
+          },
+          { signal }
+        );
+        this._container.addEventListener(
+          "mouseleave",
+          () => {
+            this.visible = false;
+          },
+          { signal }
+        );
+        break;
+
+      case "click":
+        this._container.addEventListener(
+          "click",
+          () => {
+            this.visible = !this.visible;
+          },
+          { signal }
+        );
+        break;
+
+      case "scroll": {
+        this.visible = false;
+
+        const observeTarget = this.scrollTarget
+          ? document.querySelector(this.scrollTarget)
+          : this.parentElement;
+
+        const observer = new IntersectionObserver(
+          entries => {
+            const entry = entries[0];
+            if (entry.isIntersecting) {
+              this.visible = true;
+              if (this.scrollOnce) {
+                observer.disconnect();
+              }
+            } else {
+              if (!this.scrollOnce) {
+                this.visible = false;
+              }
+            }
+          },
+          { threshold: 0.1 }
+        );
+
+        observer.observe(observeTarget || this);
+        this._scrollObserver = observer;
+
+        this._triggerController?.signal.addEventListener("abort", () => {
+          observer.disconnect();
+        });
+
+        break;
+      }
+
+      case "manual":
+      default:
+        break;
+    }
+  }
+
   $mount(): void {
     this._reduceMotionController?.abort();
 
@@ -200,7 +296,8 @@ export class EaEffects extends EaBase {
     this._reduceMotionController = new AbortController();
     this._reduceMotionMediaQuery.addEventListener(
       "change",
-      this._onReduceMotionChange
+      this._onReduceMotionChange,
+      { signal: this._reduceMotionController.signal }
     );
   }
 
@@ -208,6 +305,8 @@ export class EaEffects extends EaBase {
     this._reduceMotionController?.abort();
     this._startController?.abort();
     this._endController?.abort();
+
+    this._scrollObserver?.disconnect();
 
     this._reduceMotionController = null;
     this._startController = null;

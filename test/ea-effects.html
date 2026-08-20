@@ -98,7 +98,7 @@
             <ea-effects effect="fade">
                 <div class="transition-box">fade-1</div>
             </ea-effects>
-            <ea-effects effect="fade" visible="false">
+            <ea-effects effect="fade" visible="false" style="display: none;">
                 <div class="transition-box">fade-2</div>
             </ea-effects>
         </div>
@@ -195,6 +195,49 @@
             }
         }
         flipEffects.init();
+    </script>
+
+    <hr>
+    <!-- #endregion  -->
+    <!-- end  -->
+
+
+    <!--  Trigger 触发 -->
+    <!-- #region -->
+    <h1>Trigger 触发</h1>
+
+    <div class="demo">
+        <ea-button id="triggerButton">Click Me</ea-button>
+
+        <div id="triggerEffectsContainer" class="container">
+            <ea-effects effect="zoom-center" trigger="click">
+                <div class="transition-box">trigger: click</div>
+            </ea-effects>
+            <ea-effects effect="fade" trigger="hover">
+                <div class="transition-box">trigger: hover</div>
+            </ea-effects>
+            <ea-effects effect="flip-x" trigger="manual">
+                <div class="transition-box">trigger: manual</div>
+            </ea-effects>
+            <ea-effects effect="slide-top" trigger="scroll" scroll-once="false">
+                <div class="transition-box">trigger: scroll</div>
+            </ea-effects>
+        </div>
+
+    </div>
+
+    <script type="module">
+        const triggerEffects = {
+            btn: document.querySelector("#triggerButton"),
+            effects: document.querySelectorAll("#triggerEffectsContainer ea-effects"),
+
+            init() {
+                this.btn.addEventListener("click", () => {
+                    this.effects.forEach(effect => effect.toggle());
+                });
+            }
+        }
+        triggerEffects.init();
     </script>
 
     <hr>
