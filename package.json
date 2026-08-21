@@ -173,6 +173,10 @@
       "import": "./dist/components/ea-badge.js",
       "types": "./dist/types/components/ea-badge/index.d.ts"
     },
+    "./ea-border-beam": {
+      "import": "./dist/components/ea-border-beam.js",
+      "types": "./dist/types/components/ea-border-beam/index.d.ts"
+    },
     "./ea-breadcrumb": {
       "import": "./dist/components/ea-breadcrumb.js",
       "types": "./dist/types/components/ea-breadcrumb/index.d.ts"

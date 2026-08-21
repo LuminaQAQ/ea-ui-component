@@ -2,6 +2,7 @@ import './ea-alert/index';
 import './ea-avatar/index';
 import './ea-backtop/index';
 import './ea-badge/index';
+import './ea-border-beam/index';
 import './ea-breadcrumb/index';
 import './ea-button/index';
 import './ea-calendar/index';

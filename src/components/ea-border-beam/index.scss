@@ -1,0 +1,69 @@
+$name: ea-border-beam;
+
+:host {
+  --#{$name}-border-radius: var(--border-radius-sm);
+  --#{$name}-font-size: var(--font-size-md);
+  --#{$name}-transition: var(--transition-fast);
+
+  --#{$name}-text: var(--grey-900);
+  --#{$name}-bg: var(--color-white);
+  --#{$name}-border-color: var(--grey-300);
+
+  --#{$name}-indicator-size: 100px;
+  --#{$name}-start-delay: 0s;
+  --#{$name}-initial-distance: 0;
+  --#{$name}-duration: 20s;
+
+  display: block;
+}
+
+@include block(#{$name}) {
+  box-sizing: border-box;
+  position: relative;
+
+  padding: 1px;
+  border-radius: var(--#{$name}-border-radius);
+
+  overflow: hidden;
+
+  @include element("indicator") {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    inset: 0;
+
+    z-index: -1;
+
+    &::before {
+      content: "";
+      position: absolute;
+
+      inset: -1px -1px -1px -1px;
+
+      width: var(--#{$name}-indicator-size);
+      offset-path: rect(
+        auto auto auto auto round var(--#{$name}-indicator-size)
+      );
+      offset-anchor: 90% 50%;
+
+      background-image: linear-gradient(
+        to right,
+        transparent 50%,
+        var(--red-500)
+      );
+
+      animation: #{$name}-beam var(--#{$name}-duration) linear infinite;
+      animation-delay: var(--#{$name}-start-delay);
+      animation-fill-mode: forwards;
+    }
+  }
+}
+
+@keyframes #{$name}-beam {
+  0% {
+    offset-distance: var(--#{$name}-initial-distance, 0%);
+  }
+  100% {
+    offset-distance: calc(100% + var(--#{$name}-initial-distance, 0%));
+  }
+}

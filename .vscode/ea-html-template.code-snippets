@@ -28,7 +28,7 @@
       "",
       "<body>",
       "",
-      "<script type=\"module\" src=\"../src/components/ea-$0/index.js\"></script>",
+      "<script type=\"module\" src=\"../src/components/ea-$0/index.ts\"></script>",
       "",
       "</body>",
 
