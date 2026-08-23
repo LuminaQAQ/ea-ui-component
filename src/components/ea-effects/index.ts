@@ -1,12 +1,26 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { CustomElement, attribute, listen, query } from "@decorator";
+import { CustomElement, attribute, query } from "@decorator";
 import { html } from "@utils/html";
+import { Enum } from "@utils/Enum";
 import stylesheet from "./index.scss?inline";
-import { Enum } from "@/utils/Enum";
 
 const TAG_NAME = "ea-effects" as const;
 const bem = createBEM(TAG_NAME);
 
+/**
+ * @summary 动画效果组件，用于为子元素添加进入/离开动画效果，支持缩放、淡入淡出、滑动、翻转等多种效果。
+ * @status stable
+ * @since 3.0
+ *
+ * @slot default - 默认插槽，需要应用动画效果的内容。
+ *
+ * @csspart container - 动画容器元素。
+ *
+ * @cssproperty --ea-effects-duration - 动画持续时间，默认值 `0.3s`。
+ * @cssproperty --ea-effects-delay - 动画延迟时间，默认值 `0`。
+ * @cssproperty --ea-effects-timing-function - 动画缓动函数，默认值 `ease-in-out`。
+ * @cssproperty --ea-effects-iteration-count - 动画播放次数，默认值 `1`。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaEffects extends EaBase {
   @query(bem.cb())
@@ -30,6 +44,7 @@ export class EaEffects extends EaBase {
     default: "",
     observer(this: EaEffects, newVal: string, oldVal: string) {
       if (newVal !== oldVal) {
+        this.updateContainerClasslist();
         this.reset();
         this.visible ? this.show() : this.hide();
       }
@@ -103,6 +118,7 @@ export class EaEffects extends EaBase {
   @attribute({ type: String, default: "" })
   scrollTarget: string = "";
 
+  /** 重置动画状态，清除所有过渡类名和样式 */
   reset(): void {
     this._startController?.abort();
     this._endController?.abort();
@@ -123,10 +139,13 @@ export class EaEffects extends EaBase {
     }
   }
 
+  /** 显示内容，触发进入动画 */
   show(): void {
     this.reset();
 
     this.style.removeProperty("display");
+
+    if (!this.effect) return;
 
     if (this._reduceMotion) {
       this._container?.style.removeProperty("display");
@@ -155,8 +174,11 @@ export class EaEffects extends EaBase {
     );
   }
 
+  /** 隐藏内容，触发离开动画 */
   hide(): void {
     this.reset();
+
+    if (!this.effect) return;
 
     if (this._reduceMotion) {
       this._container?.style.setProperty("display", "none");
@@ -182,6 +204,7 @@ export class EaEffects extends EaBase {
     );
   }
 
+  /** 切换可见状态 */
   toggle(): void {
     this.visible = !this.visible;
   }
@@ -207,11 +230,16 @@ export class EaEffects extends EaBase {
     `;
   }
 
+  /**
+   * 响应 prefers-reduced-motion 媒体查询变化
+   * @param e - 媒体查询事件
+   */
   private _onReduceMotionChange = (e: MediaQueryListEvent) => {
     this._reduceMotion = e.matches;
     this.visible ? this.show() : this.hide();
   };
 
+  /** 重建触发器事件监听，根据 trigger 属性值切换不同的交互模式 */
   private _rebuildTriggerListeners(): void {
     this._triggerController?.abort();
     this._triggerController = new AbortController();

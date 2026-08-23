@@ -116,6 +116,7 @@ export default defineConfig({
         items: [
           { text: "Button 按钮", link: "/ea-button" },
           { text: "Container 布局容器", link: "/ea-container" },
+          { text: "Effects 特效", link: "/ea-effects" },
           { text: "Icon 图标", link: "/ea-icon" },
           { text: "Layout 布局", link: "/ea-layout" },
           { text: "Link 链接", link: "/ea-link" },
