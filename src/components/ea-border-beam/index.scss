@@ -10,9 +10,10 @@ $name: ea-border-beam;
   --#{$name}-border-color: var(--grey-300);
 
   --#{$name}-indicator-size: 100px;
+  --#{$name}-indicator-line-width: 1px;
+  --#{$name}-duration: 10s;
   --#{$name}-start-delay: 0s;
-  --#{$name}-initial-distance: 0;
-  --#{$name}-duration: 20s;
+  --#{$name}-initial-distance: 0%;
 
   display: block;
 }
@@ -21,7 +22,7 @@ $name: ea-border-beam;
   box-sizing: border-box;
   position: relative;
 
-  padding: 1px;
+  padding: var(--#{$name}-indicator-line-width);
   border-radius: var(--#{$name}-border-radius);
 
   overflow: hidden;
@@ -52,17 +53,18 @@ $name: ea-border-beam;
         var(--red-500)
       );
 
-      animation: #{$name}-beam var(--#{$name}-duration) linear infinite;
+      animation: #{$name}-animation var(--#{$name}-duration) linear infinite;
       animation-delay: var(--#{$name}-start-delay);
       animation-fill-mode: forwards;
     }
   }
 }
 
-@keyframes #{$name}-beam {
+@keyframes ea-border-beam-animation {
   0% {
     offset-distance: var(--#{$name}-initial-distance, 0%);
   }
+
   100% {
     offset-distance: calc(100% + var(--#{$name}-initial-distance, 0%));
   }

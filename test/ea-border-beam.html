@@ -10,6 +10,46 @@
       hr {
         margin: 3rem 0;
       }
+
+      .demo {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-top: 20px;
+        align-items: stretch;
+      }
+
+      .demo > ea-border-beam {
+        flex: 1;
+        min-width: 220px;
+        max-width: 360px;
+      }
+
+      .demo ea-card {
+        display: block;
+      }
+
+      .demo-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 32px;
+        max-width: 960px;
+        margin-top: 20px;
+      }
+
+      .demo-grid .span-full {
+        grid-column: 1 / -1;
+      }
+
+      .demo-grid ea-border-beam {
+        display: block;
+      }
+
+      .demo-tag {
+        font-size: 12px;
+        color: var(--grey-500);
+        margin-top: 8px;
+      }
     </style>
   </head>
 
@@ -25,10 +65,120 @@
     <h1>基础用法</h1>
 
     <div class="demo">
-      <ea-border-beam count="3">
+      <ea-border-beam>
         <ea-card header="Workspace overview">
           Review task status, deployment health, and recent automation activity
           in one panel.
+        </ea-card>
+      </ea-border-beam>
+      <ea-border-beam trigger="hover">
+        <ea-card header="Hover over the card">
+          The border beam appears when the pointer moves over this card.
+        </ea-card>
+      </ea-border-beam>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  多条流光 -->
+    <!-- #region -->
+    <h1>多条流光</h1>
+
+    <div class="demo">
+      <ea-border-beam count="3">
+        <ea-card header="Multiple beams (3)">
+          Set count to distribute multiple beams evenly around the container
+          border.
+        </ea-card>
+      </ea-border-beam>
+      <ea-border-beam count="2">
+        <ea-card header="Multiple beams (2)">
+          Set count to distribute multiple beams evenly around the container
+          border.
+        </ea-card>
+      </ea-border-beam>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  动画时长 -->
+    <!-- #region -->
+    <h1>动画时长</h1>
+
+    <div class="demo">
+      <ea-border-beam duration="3">
+        <ea-card header="Fast">
+          <div slot="description">
+            A quick loop for temporary highlights and active modules.
+            <div class="demo-tag">3s</div>
+          </div>
+        </ea-card>
+      </ea-border-beam>
+      <ea-border-beam duration="6">
+        <ea-card header="Default">
+          <div slot="description">
+            The original pacing for most emphasized containers.
+            <div class="demo-tag">6s</div>
+          </div>
+        </ea-card>
+      </ea-border-beam>
+      <ea-border-beam duration="12">
+        <ea-card header="Slow">
+          <div slot="description">
+            A calmer loop for persistent panels and ambient surfaces.
+            <div class="demo-tag">12s</div>
+          </div>
+        </ea-card>
+      </ea-border-beam>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  线宽 -->
+    <!-- #region -->
+    <h1>线宽</h1>
+
+    <div class="demo">
+      <ea-border-beam line-width="2">
+        <ea-card header="Custom line width">
+          Set line-width to match the border width of this container.
+        </ea-card>
+      </ea-border-beam>
+      <ea-border-beam line-width="3">
+        <ea-card header="Wider line">
+          A thicker border beam for a more prominent highlight effect.
+        </ea-card>
+      </ea-border-beam>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  尺寸 -->
+    <!-- #region -->
+    <h1>尺寸</h1>
+
+    <div class="demo">
+      <ea-border-beam>
+        <ea-card header="Default (100px)">
+          Uses the default 100px visible beam segment.
+        </ea-card>
+      </ea-border-beam>
+      <ea-border-beam size="56">
+        <ea-card header="Compact (56px)">
+          Keeps the highlight shorter for dense card groups.
+        </ea-card>
+      </ea-border-beam>
+      <ea-border-beam size="160">
+        <ea-card header="Extended (160px)">
+          Creates a longer highlight for wider feature panels.
         </ea-card>
       </ea-border-beam>
     </div>
