@@ -47,9 +47,7 @@ $name: ea-border-beam;
       inset: -1px -1px -1px -1px;
 
       width: var(--#{$name}-indicator-size);
-      offset-path: rect(
-        auto auto auto auto round var(--#{$name}-indicator-size)
-      );
+      offset-path: rect(0px 100% 100% 0px round var(--#{$name}-indicator-size));
       offset-anchor: 90% 50%;
 
       background-image: var(--#{$name}-indicator-color);

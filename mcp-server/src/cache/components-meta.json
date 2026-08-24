@@ -1,8 +1,8 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-08-08T19:02:31.555Z",
-  "totalComponents": 63,
-  "successCount": 63,
+  "generatedAt": "2026-08-24T04:03:21.628Z",
+  "totalComponents": 65,
+  "successCount": 65,
   "failCount": 0,
   "components": [
     {
@@ -700,6 +700,167 @@
           "title": "自定义显示内容",
           "description": "",
           "code": "<div class=\"demo\">\n  <ea-badge class=\"item\" value=\"0\" offset-x=\"10\" offset-y=\"5\">\n    <ea-button>offset</ea-button>\n  </ea-badge>\n</div>",
+          "type": "advanced"
+        }
+      ]
+    },
+    {
+      "name": "ea-border-beam",
+      "displayName": "边框光束动画",
+      "category": "basic",
+      "status": "stable",
+      "since": "3.0",
+      "description": "边框光束动画组件，用于为元素添加动态的边框光束扫描效果，支持多条光束和悬停触发。",
+      "sourcePath": "src/components/ea-border-beam",
+      "props": [
+        {
+          "name": "count",
+          "type": "Number",
+          "default": "1",
+          "required": false,
+          "description": "",
+          "isAttribute": true
+        },
+        {
+          "name": "trigger",
+          "type": "Enum",
+          "default": "\"\"",
+          "required": false,
+          "description": "",
+          "isAttribute": true,
+          "enumValues": ["", "hover"]
+        },
+        {
+          "name": "size",
+          "type": "Number",
+          "default": "100",
+          "required": false,
+          "description": "",
+          "isAttribute": true
+        },
+        {
+          "name": "lineWidth",
+          "type": "Number",
+          "default": "1",
+          "required": false,
+          "description": "",
+          "isAttribute": true
+        },
+        {
+          "name": "duration",
+          "type": "Number",
+          "default": "10",
+          "required": false,
+          "description": "",
+          "isAttribute": true
+        },
+        {
+          "name": "startDelay",
+          "type": "Number",
+          "default": "0",
+          "required": false,
+          "description": "光束动画开始延迟，单位 s",
+          "isAttribute": true
+        }
+      ],
+      "events": [],
+      "slots": [
+        {
+          "name": "default",
+          "description": "默认插槽，需要应用边框光束效果的内容。"
+        }
+      ],
+      "cssVars": [
+        {
+          "name": "--ea-border-beam-indicator-size",
+          "description": "光束指示器尺寸，默认值 `100px`。"
+        },
+        {
+          "name": "--ea-border-beam-indicator-color",
+          "description": "光束指示器颜色渐变，默认值 `transparent 50% → var(--blue-500)`。"
+        },
+        {
+          "name": "--ea-border-beam-indicator-line-width",
+          "description": "光束指示器线条宽度，默认值 `1px`。"
+        },
+        {
+          "name": "--ea-border-beam-duration",
+          "description": "光束动画持续时间，默认值 `10s`。"
+        },
+        {
+          "name": "--ea-border-beam-start-delay",
+          "description": "光束动画开始延迟，默认值 `0s`。"
+        },
+        {
+          "name": "--ea-border-beam-initial-distance",
+          "description": "光束初始偏移距离，默认值 `0%`。"
+        },
+        {
+          "name": "--ea-border-beam-border-radius",
+          "description": "组件边框圆角，默认值 `var(--border-radius-sm)`。"
+        },
+        {
+          "name": "--ea-border-beam-font-size",
+          "description": "组件字体大小，默认值 `var(--font-size-md)`。"
+        },
+        {
+          "name": "--ea-border-beam-transition",
+          "description": "组件过渡动画，默认值 `var(--transition-normal)`。"
+        },
+        {
+          "name": "--ea-border-beam-text",
+          "description": "文字颜色，默认值 `var(--grey-900)`。"
+        },
+        {
+          "name": "--ea-border-beam-bg",
+          "description": "背景颜色，默认值 `var(--blue-500)`。"
+        },
+        {
+          "name": "--ea-border-beam-border-color",
+          "description": "边框颜色，默认值 `var(--grey-300)`。"
+        }
+      ],
+      "cssParts": [
+        {
+          "name": "container",
+          "description": "容器元素。"
+        },
+        {
+          "name": "indicator",
+          "description": "光束指示器元素。"
+        }
+      ],
+      "subComponents": [],
+      "dependencies": [],
+      "examples": [
+        {
+          "title": "基础用法",
+          "description": "",
+          "code": "<ea-border-beam>\n  <ea-card header=\"Workspace overview\">\n    Review task status, deployment health, and recent automation activity\n    in one panel.\n  </ea-card>\n</ea-border-beam>\n<ea-border-beam trigger=\"hover\">\n  <ea-card header=\"Hover over the card\">\n    The border beam appears when the pointer moves over this card.\n  </ea-card>\n</ea-border-beam>",
+          "type": "basic"
+        },
+        {
+          "title": "多条流光",
+          "description": "",
+          "code": "<ea-border-beam count=\"3\">\n  <ea-card header=\"Multiple beams (3)\">\n    Set count to distribute multiple beams evenly...\n  </ea-card>\n</ea-border-beam>\n<ea-border-beam count=\"2\">\n  <ea-card header=\"Multiple beams (2)\">\n    Set count to distribute multiple beams evenly...\n  </ea-card>\n</ea-border-beam>",
+          "type": "advanced"
+        },
+        {
+          "title": "动画时长",
+          "description": "",
+          "code": "<ea-border-beam duration=\"3\">\n  <ea-card header=\"Fast\">...</ea-card>\n</ea-border-beam>\n<ea-border-beam duration=\"6\">\n  <ea-card header=\"Default\">...</ea-card>\n</ea-border-beam>\n<ea-border-beam duration=\"12\">\n  <ea-card header=\"Slow\">...</ea-card>\n</ea-border-beam>",
+          "type": "advanced"
+        },
+        {
+          "title": "线宽",
+          "description": "",
+          "code": "<ea-border-beam line-width=\"2\">\n  <ea-card header=\"Custom line width\">...</ea-card>\n</ea-border-beam>\n<ea-border-beam line-width=\"3\">\n  <ea-card header=\"Wider line\">...</ea-card>\n</ea-border-beam>",
+          "type": "advanced"
+        },
+        {
+          "title": "尺寸",
+          "description": "",
+          "code": "<ea-border-beam>\n  <ea-card header=\"Default (100px)\">...</ea-card>\n</ea-border-beam>\n<ea-border-beam size=\"56\">\n  <ea-card header=\"Compact (56px)\">...</ea-card>\n</ea-border-beam>\n<ea-border-beam size=\"160\">\n  <ea-card header=\"Extended (160px)\">...</ea-card>\n</ea-border-beam>",
           "type": "advanced"
         }
       ]
@@ -3716,6 +3877,155 @@
           "title": "下拉方法",
           "description": "",
           "code": "<ea-button id=\"methodsDropdownShowBtn\">show</ea-button>\n<ea-button id=\"methodsDropdownHideBtn\">hide</ea-button>\n<ea-dropdown id=\"methodsDropdown\">\n  <span slot=\"reference\" class=\"ea-dropdown-reference\">\n    Dropdown List <ea-icon name=\"angle-down\"></ea-icon>\n  </span>\n  <ea-dropdown-menu>\n    <ea-dropdown-item>Action 1</ea-dropdown-item>\n    <ea-dropdown-item>Action 2</ea-dropdown-item>\n    <ea-dropdown-item>Action 3</ea-dropdown-item>\n  </ea-dropdown-menu>\n</ea-dropdown>",
+          "type": "advanced"
+        }
+      ]
+    },
+    {
+      "name": "ea-effects",
+      "displayName": "动画效果",
+      "category": "basic",
+      "status": "stable",
+      "since": "3.0",
+      "description": "动画效果组件，用于为子元素添加进入/离开动画效果，支持缩放、淡入淡出、滑动、翻转等多种效果。",
+      "sourcePath": "src/components/ea-effects",
+      "props": [
+        {
+          "name": "effect",
+          "type": "String",
+          "default": "\"\"",
+          "required": false,
+          "description": "",
+          "isAttribute": true
+        },
+        {
+          "name": "visible",
+          "type": "Boolean",
+          "default": "true",
+          "required": false,
+          "description": "",
+          "isAttribute": true
+        },
+        {
+          "name": "duration",
+          "type": "String",
+          "default": "\"\"",
+          "required": false,
+          "description": "",
+          "isAttribute": true
+        },
+        {
+          "name": "delay",
+          "type": "String",
+          "default": "\"\"",
+          "required": false,
+          "description": "",
+          "isAttribute": true
+        },
+        {
+          "name": "timingFunction",
+          "type": "String",
+          "default": "\"\"",
+          "required": false,
+          "description": "",
+          "isAttribute": true
+        },
+        {
+          "name": "iteration",
+          "type": "Number",
+          "default": "1",
+          "required": false,
+          "description": "",
+          "isAttribute": true
+        },
+        {
+          "name": "trigger",
+          "type": "Enum",
+          "default": "\"manual\"",
+          "required": false,
+          "description": "",
+          "isAttribute": true,
+          "enumValues": ["hover", "click", "manual", "scroll"]
+        },
+        {
+          "name": "scrollOnce",
+          "type": "Boolean",
+          "default": "true",
+          "required": false,
+          "description": "",
+          "isAttribute": true
+        },
+        {
+          "name": "scrollTarget",
+          "type": "String",
+          "default": "\"\"",
+          "required": false,
+          "description": "",
+          "isAttribute": true
+        }
+      ],
+      "events": [],
+      "slots": [
+        {
+          "name": "default",
+          "description": "默认插槽，需要应用动画效果的内容。"
+        }
+      ],
+      "cssVars": [
+        {
+          "name": "--ea-effects-duration",
+          "description": "动画持续时间，默认值 `0.3s`。"
+        },
+        {
+          "name": "--ea-effects-delay",
+          "description": "动画延迟时间，默认值 `0`。"
+        },
+        {
+          "name": "--ea-effects-timing-function",
+          "description": "动画缓动函数，默认值 `ease-in-out`。"
+        },
+        {
+          "name": "--ea-effects-iteration-count",
+          "description": "动画播放次数，默认值 `1`。"
+        }
+      ],
+      "cssParts": [
+        {
+          "name": "container",
+          "description": "动画容器元素。"
+        }
+      ],
+      "subComponents": [],
+      "dependencies": [],
+      "examples": [
+        {
+          "title": "Zoom 缩放",
+          "description": "",
+          "code": "<ea-effects effect=\"zoom-center\">\n  <div class=\"transition-box\">zoom-center</div>\n</ea-effects>\n<ea-effects effect=\"zoom-center\" timing-function=\"linear\">\n  <div class=\"transition-box\">zoom-center-linear</div>\n</ea-effects>\n<ea-effects effect=\"zoom-top\">\n  <div class=\"transition-box\">zoom-top</div>\n</ea-effects>\n<ea-effects effect=\"zoom-right\">\n  <div class=\"transition-box\">zoom-right</div>\n</ea-effects>\n<ea-effects effect=\"zoom-bottom\">\n  <div class=\"transition-box\">zoom-bottom</div>\n</ea-effects>\n<ea-effects effect=\"zoom-left\">\n  <div class=\"transition-box\">zoom-left</div>\n</ea-effects>",
+          "type": "advanced"
+        },
+        {
+          "title": "Fade 淡入淡出",
+          "description": "",
+          "code": "<ea-effects effect=\"fade\">\n  <div class=\"transition-box\">fade-1</div>\n</ea-effects>\n<ea-effects effect=\"fade\" visible=\"false\" style=\"display: none;\">\n  <div class=\"transition-box\">fade-2</div>\n</ea-effects>",
+          "type": "advanced"
+        },
+        {
+          "title": "Slide 滑动",
+          "description": "",
+          "code": "<ea-effects effect=\"slide-top\">\n  <div class=\"transition-box\">slide-top</div>\n</ea-effects>\n<ea-effects effect=\"slide-right\">\n  <div class=\"transition-box\">slide-right</div>\n</ea-effects>\n<ea-effects effect=\"slide-bottom\">\n  <div class=\"transition-box\">slide-bottom</div>\n</ea-effects>\n<ea-effects effect=\"slide-left\">\n  <div class=\"transition-box\">slide-left</div>\n</ea-effects>",
+          "type": "advanced"
+        },
+        {
+          "title": "Flip 翻转",
+          "description": "",
+          "code": "<ea-effects effect=\"flip-x\">\n  <div class=\"transition-box\">flip-x</div>\n</ea-effects>\n<ea-effects effect=\"flip-y\">\n  <div class=\"transition-box\">flip-y</div>\n</ea-effects>",
+          "type": "advanced"
+        },
+        {
+          "title": "Trigger 触发",
+          "description": "",
+          "code": "<ea-effects effect=\"zoom-center\" trigger=\"click\">\n  <div class=\"transition-box\">trigger: click</div>\n</ea-effects>\n<ea-effects effect=\"fade\" trigger=\"hover\">\n  <div class=\"transition-box\">trigger: hover</div>\n</ea-effects>\n<ea-effects effect=\"flip-x\" trigger=\"manual\">\n  <div class=\"transition-box\">trigger: manual</div>\n</ea-effects>\n<ea-effects effect=\"slide-top\" trigger=\"scroll\" scroll-once=\"false\">\n  <div class=\"transition-box\">trigger: scroll</div>\n</ea-effects>",
           "type": "advanced"
         }
       ]

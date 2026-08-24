@@ -114,6 +114,7 @@ export default defineConfig({
       {
         text: "Basic 基础组件",
         items: [
+          { text: "Border Beam 边框光束", link: "/ea-border-beam" },
           { text: "Button 按钮", link: "/ea-button" },
           { text: "Container 布局容器", link: "/ea-container" },
           { text: "Effects 特效", link: "/ea-effects" },
