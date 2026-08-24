@@ -16,6 +16,7 @@ import './ea-countdown/index';
 import './ea-date-picker/index';
 import './ea-descriptions/index';
 import './ea-dialog/index';
+import './ea-divider/index';
 import './ea-drawer/index';
 import './ea-dropdown/index';
 import './ea-effects/index';

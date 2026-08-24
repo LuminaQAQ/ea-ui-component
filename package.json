@@ -229,6 +229,10 @@
       "import": "./dist/components/ea-dialog.js",
       "types": "./dist/types/components/ea-dialog/index.d.ts"
     },
+    "./ea-divider": {
+      "import": "./dist/components/ea-divider.js",
+      "types": "./dist/types/components/ea-divider/index.d.ts"
+    },
     "./ea-drawer": {
       "import": "./dist/components/ea-drawer.js",
       "types": "./dist/types/components/ea-drawer/index.d.ts"
