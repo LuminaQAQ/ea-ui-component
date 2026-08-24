@@ -2,7 +2,6 @@ import EaBase, { createBEM } from "@core/EaBase";
 import { CustomElement, attribute, query, queryAll } from "@decorator";
 import { Enum } from "@utils/Enum";
 import stylesheet from "./index.scss?inline";
-import hoverStyles from "./styles/_hover.scss?inline";
 
 const TAG_NAME = "ea-border-beam" as const;
 const bem = createBEM(TAG_NAME);
@@ -28,13 +27,10 @@ const bem = createBEM(TAG_NAME);
  * @cssproperty --ea-border-beam-bg - 背景颜色，默认值 `var(--color-white)`。
  * @cssproperty --ea-border-beam-border-color - 边框颜色，默认值 `var(--grey-300)`。
  */
-@CustomElement(TAG_NAME, { styles: [stylesheet, hoverStyles] })
+@CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaBorderBeam extends EaBase {
   @query(bem.cb())
   private _container!: HTMLElement;
-
-  @query(bem.ce("indicator-wrap"))
-  private _indicatorWrap!: HTMLElement;
 
   @queryAll(bem.ce("indicator"))
   private _indicators!: HTMLElement[];
@@ -43,12 +39,7 @@ export class EaBorderBeam extends EaBase {
     type: Number,
     default: 1,
     observer(this: EaBorderBeam, newVal: number) {
-      this._indicators.forEach((indicator, index) => {
-        indicator.style.setProperty(
-          `--${TAG_NAME}-initial-distance`,
-          `${(100 / newVal) * index}%`
-        );
-      });
+      this._updateIndicators(newVal);
     },
   })
   count: number = 1;
@@ -115,15 +106,35 @@ export class EaBorderBeam extends EaBase {
     return `
       <div class="${bem()}" part="container">
         <slot></slot>
-        ${this._getIndicatorHtml()}
+        ${Array.from({ length: this.count })
+          .map((_, index) => `<div class="${bem.e("indicator")}"></div>`)
+          .join("")}
       </div>
     `;
   }
 
-  private _getIndicatorHtml(count = this.count): string {
-    return Array.from({ length: count })
-      .map((_, index) => `<div class="${bem.e("indicator")}"></div>`)
-      .join("");
+  private _updateIndicators(count: number = this.count): void {
+    count = Math.max(count, 1);
+
+    const indicators = this._indicators;
+
+    for (let i = count; i < indicators.length; i++) {
+      indicators[i].remove();
+    }
+
+    for (let i = indicators.length; i < count; i++) {
+      const indicator = document.createElement("div");
+      indicator.className = bem.e("indicator");
+      indicator.setAttribute("part", "indicator");
+      this._container.appendChild(indicator);
+    }
+
+    this._indicators.forEach((indicator, index) => {
+      indicator.style.setProperty(
+        `--${TAG_NAME}-initial-distance`,
+        `${(100 / count) * index}%`
+      );
+    });
   }
 
   $mount(): void {

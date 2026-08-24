@@ -3,13 +3,18 @@ $name: ea-border-beam;
 :host {
   --#{$name}-border-radius: var(--border-radius-sm);
   --#{$name}-font-size: var(--font-size-md);
-  --#{$name}-transition: var(--transition-fast);
+  --#{$name}-transition: var(--transition-normal);
 
   --#{$name}-text: var(--grey-900);
-  --#{$name}-bg: var(--color-white);
+  --#{$name}-bg: var(--blue-500);
   --#{$name}-border-color: var(--grey-300);
 
   --#{$name}-indicator-size: 100px;
+  --#{$name}-indicator-color: linear-gradient(
+    to right,
+    transparent 50%,
+    var(--blue-500)
+  );
   --#{$name}-indicator-line-width: 1px;
   --#{$name}-duration: 10s;
   --#{$name}-start-delay: 0s;
@@ -47,15 +52,30 @@ $name: ea-border-beam;
       );
       offset-anchor: 90% 50%;
 
-      background-image: linear-gradient(
-        to right,
-        transparent 50%,
-        var(--red-500)
-      );
+      background-image: var(--#{$name}-indicator-color);
 
       animation: #{$name}-animation var(--#{$name}-duration) linear infinite;
       animation-delay: var(--#{$name}-start-delay);
       animation-fill-mode: forwards;
+    }
+  }
+
+  @include state(trigger-hover) {
+    .#{$name}__indicator {
+      &::before {
+        opacity: 0;
+        animation-play-state: paused;
+        transition: opacity var(--#{$name}-transition);
+      }
+    }
+
+    &:hover {
+      .#{$name}__indicator {
+        &::before {
+          opacity: 1;
+          animation-play-state: running;
+        }
+      }
     }
   }
 }
