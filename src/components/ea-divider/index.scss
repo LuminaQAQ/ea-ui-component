@@ -1,5 +1,4 @@
 $name: ea-divider;
-$placements: start end center;
 
 @mixin content-position-short {
   width: calc(100% * var(--#{$name}-line-proportion));

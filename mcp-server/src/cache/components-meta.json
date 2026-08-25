@@ -1,8 +1,8 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-08-24T04:03:21.628Z",
-  "totalComponents": 65,
-  "successCount": 65,
+  "generatedAt": "2026-08-25T06:26:09.838Z",
+  "totalComponents": 66,
+  "successCount": 66,
   "failCount": 0,
   "components": [
     {
@@ -836,7 +836,7 @@
         {
           "title": "基础用法",
           "description": "",
-          "code": "<ea-border-beam>\n  <ea-card header=\"Workspace overview\">\n    Review task status, deployment health, and recent automation activity\n    in one panel.\n  </ea-card>\n</ea-border-beam>\n<ea-border-beam trigger=\"hover\">\n  <ea-card header=\"Hover over the card\">\n    The border beam appears when the pointer moves over this card.\n  </ea-card>\n</ea-border-beam>",
+          "code": "<ea-border-beam>\n  <ea-card header=\"Workspace overview\">\n    Review task status, deployment health, and recent automation activity in one\n    panel.\n  </ea-card>\n</ea-border-beam>\n<ea-border-beam trigger=\"hover\">\n  <ea-card header=\"Hover over the card\">\n    The border beam appears when the pointer moves over this card.\n  </ea-card>\n</ea-border-beam>",
           "type": "basic"
         },
         {
@@ -3495,6 +3495,140 @@
           "title": "事件",
           "description": "",
           "code": "<ea-dialog id=\"eventsDialog\" heading=\"Tips\" width=\"500px\">\n  <span>This is a message</span>\n  <section slot=\"footer\">\n    <div class=\"dialog-footer\">\n      <ea-button id=\"eventsDialogCancelBtn\">Cancel</ea-button>\n      <ea-button id=\"eventsDialogConfirmBtn\" variant=\"primary\">\n        Confirm\n      </ea-button>\n    </div>\n  </section>\n</ea-dialog>",
+          "type": "advanced"
+        }
+      ]
+    },
+    {
+      "name": "ea-divider",
+      "displayName": "分隔线",
+      "category": "basic",
+      "status": "stable",
+      "since": "3.0",
+      "description": "分隔线组件，用于分隔内容区块，支持水平 / 垂直方向、不同分隔线样式和文案位置。",
+      "sourcePath": "src/components/ea-divider",
+      "props": [
+        {
+          "name": "variant",
+          "type": "String",
+          "default": "\"\"",
+          "required": false,
+          "description": "",
+          "isAttribute": true
+        },
+        {
+          "name": "contentPosition",
+          "type": "Enum",
+          "default": "\"center\"",
+          "required": false,
+          "description": "",
+          "isAttribute": true,
+          "enumValues": ["start", "end", "center"]
+        },
+        {
+          "name": "direction",
+          "type": "Enum",
+          "default": "\"horizontal\"",
+          "required": false,
+          "description": "",
+          "isAttribute": true,
+          "enumValues": ["horizontal", "vertical"]
+        }
+      ],
+      "events": [],
+      "slots": [
+        {
+          "name": "default",
+          "description": "分隔线中间的自定义文案内容，为空时文案区域隐藏。"
+        }
+      ],
+      "cssVars": [
+        {
+          "name": "--ea-divider-border-color",
+          "description": "分隔线边框颜色，默认值 `var(--grey-300)`。"
+        },
+        {
+          "name": "--ea-divider-border-style",
+          "description": "分隔线边框样式，默认值 `solid`。"
+        },
+        {
+          "name": "--ea-divider-horizontal-spacing",
+          "description": "水平方向上下间距，默认值 `24px`。"
+        },
+        {
+          "name": "--ea-divider-vertical-spacing",
+          "description": "垂直方向左右间距，默认值 `var(--spacing-md)`。"
+        },
+        {
+          "name": "--ea-divider-text-spacing",
+          "description": "文案左右间距，默认值 `var(--spacing-lg)`。"
+        },
+        {
+          "name": "--ea-divider-line-proportion",
+          "description": "文案居左/居右时短边线的比例，默认值 `0.05`。"
+        },
+        {
+          "name": "--ea-divider-border-radius",
+          "description": "组件边框圆角，默认值 `var(--border-radius-sm)`。"
+        },
+        {
+          "name": "--ea-divider-font-size",
+          "description": "文案字体大小，默认值 `var(--font-size-md)`。"
+        },
+        {
+          "name": "--ea-divider-transition",
+          "description": "组件过渡动画，默认值 `var(--transition-fast)`。"
+        },
+        {
+          "name": "--ea-divider-text",
+          "description": "文案文字颜色，默认值 `var(--grey-900)`。"
+        },
+        {
+          "name": "--ea-divider-bg",
+          "description": "背景颜色，默认值 `var(--color-white)`。"
+        }
+      ],
+      "cssParts": [
+        {
+          "name": "container",
+          "description": "容器元素。"
+        },
+        {
+          "name": "content",
+          "description": "文案内容元素。"
+        },
+        {
+          "name": "line",
+          "description": "分隔线元素。"
+        },
+        {
+          "name": "line-start",
+          "description": "分隔线左侧元素。"
+        },
+        {
+          "name": "line-end",
+          "description": "分隔线右侧元素。"
+        }
+      ],
+      "subComponents": [],
+      "dependencies": [],
+      "examples": [
+        {
+          "title": "基础用法",
+          "description": "",
+          "code": "<ea-divider></ea-divider>\n<ea-divider variant=\"dashed\"></ea-divider>\n<ea-divider variant=\"dotted\"></ea-divider>",
+          "type": "basic"
+        },
+        {
+          "title": "设置文案",
+          "description": "",
+          "code": "<ea-divider content-position=\"start\">Rabindranath Tagore</ea-divider>\n<ea-divider>\n  <ea-icon name=\"star\"></ea-icon>\n</ea-divider>\n<ea-divider content-position=\"end\">Rabindranath Tagore</ea-divider>",
+          "type": "advanced"
+        },
+        {
+          "title": "垂直分隔线",
+          "description": "",
+          "code": "<span>Rain</span>\n<ea-divider direction=\"vertical\"></ea-divider>\n<span>Home</span>\n<ea-divider direction=\"vertical\" variant=\"dashed\"></ea-divider>\n<span>Grass</span>",
           "type": "advanced"
         }
       ]
