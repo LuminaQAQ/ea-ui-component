@@ -1,0 +1,36 @@
+$name: ea-watermark;
+
+:host {
+  --#{$name}-border-radius: var(--border-radius-sm);
+  --#{$name}-font-size: var(--font-size-md);
+  --#{$name}-transition: var(--transition-fast);
+
+  --#{$name}-text: var(--grey-900);
+  --#{$name}-bg: var(--color-white);
+  --#{$name}-border-color: var(--grey-300);
+
+  display: block;
+}
+
+@include block(#{$name}) {
+  box-sizing: border-box;
+
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  //   @include element(content) {
+
+  @include element(content) {
+    z-index: 1;
+
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background-repeat: repeat;
+    background-position: 0px 0px;
+  }
+}

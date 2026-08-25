@@ -201,6 +201,7 @@ export default defineConfig({
         items: [
           { text: "Alert 提示", link: "/ea-alert" },
           { text: "Dialog 对话框", link: "/ea-dialog" },
+          { text: "Divider 分割线", link: "/ea-divider" },
           { text: "Drawer 抽屉", link: "/ea-drawer" },
           { text: "Loading 加载", link: "/ea-loading" },
           { text: "Message 消息提示", link: "/ea-message" },

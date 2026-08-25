@@ -420,6 +420,10 @@
     "./ea-upload": {
       "import": "./dist/components/ea-upload.js",
       "types": "./dist/types/components/ea-upload/index.d.ts"
+    },
+    "./ea-watermark": {
+      "import": "./dist/components/ea-watermark.js",
+      "types": "./dist/types/components/ea-watermark/index.d.ts"
     }
   }
 }

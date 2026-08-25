@@ -53,7 +53,7 @@ describe("EaDivider", () => {
 
       await waitForRender();
 
-      const lines = el.shadowRoot.querySelectorAll('[part="line"]');
+      const lines = el.shadowRoot.querySelectorAll('.ea-divider__line');
       expect(lines.length).toBe(2);
     });
 
@@ -249,7 +249,7 @@ describe("EaDivider", () => {
 
       expect(el.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
       expect(
-        el.shadowRoot.querySelectorAll('[part="line"]').length
+        el.shadowRoot.querySelectorAll('.ea-divider__line').length
       ).toBe(2);
       expect(el.shadowRoot.querySelector('[part="content"]')).toBeTruthy();
     });
