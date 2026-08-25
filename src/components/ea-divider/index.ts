@@ -24,10 +24,10 @@ export class EaDivider extends EaBase {
   private _defaultSlot!: HTMLSlotElement;
 
   @attribute({
-    type: Enum(["dashed", "dotted", "solid"]),
+    type: String,
     default: "",
     observer(this: EaDivider, newVal: string) {
-      this.updateContainerClasslist();
+      this._container.style.setProperty(`--${TAG_NAME}-border-style`, newVal);
     },
   })
   variant: string = "";
@@ -39,16 +39,25 @@ export class EaDivider extends EaBase {
       this.updateContainerClasslist();
     },
   })
-  titlePlacement: "start" | "end" | "center" = "center";
+  contentPosition: "start" | "end" | "center" = "center";
+
+  @attribute({
+    type: Enum(["horizontal", "vertical"]),
+    default: "horizontal",
+    observer(this: EaDivider, newVal: string) {
+      this.updateContainerClasslist();
+    },
+  })
+  direction: "horizontal" | "vertical" = "horizontal";
 
   updateContainerClasslist(): string {
     const className = bem(
       {
-        [this.variant]: !!this.variant,
-        [this.titlePlacement]: !!this.titlePlacement,
+        [this.contentPosition]: !!this.contentPosition,
+        [this.direction]: !!this.direction,
       },
       {
-        "no-content": this._defaultSlot.assignedNodes().length <= 0,
+        empty: this._defaultSlot.assignedNodes().length <= 0,
       }
     );
 
@@ -60,18 +69,17 @@ export class EaDivider extends EaBase {
   html(): string {
     return `
       <div class="${bem()}" part="container" role="separator">
-        <span class="${bem.e("line")}" part="line"></span>
+        <span class="${bem.e("line")} ${bem.m("line-start")}" part="line"></span>
         <span class="${bem.e("content")}" part="content">
           <slot id="defaultSlot"></slot>
         </span>
-        <span class="${bem.e("line")}" part="line"></span>
+        <span class="${bem.e("line")} ${bem.m("line-end")}" part="line"></span>
       </div>
     `;
   }
 
   @listen("slotchange", "#defaultSlot")
   private _handleSlotChange(e: Event): void {
-    // console.log(e);
     this.updateContainerClasslist();
   }
 

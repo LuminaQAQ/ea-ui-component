@@ -1,12 +1,23 @@
 $name: ea-divider;
-$variants: dashed dotted solid;
+$placements: start end center;
+
+@mixin content-position-short {
+  width: calc(100% * var(--#{$name}-line-proportion));
+}
+
+@mixin content-position-long {
+  width: calc(100% - 100% * var(--#{$name}-line-proportion));
+}
 
 :host {
-  --#{$name}-spacing: 24px;
+  --#{$name}-horizontal-spacing: 24px;
+  --#{$name}-vertical-spacing: var(--spacing-md);
   --#{$name}-text-spacing: var(--spacing-lg);
 
   --#{$name}-border-color: var(--grey-300);
   --#{$name}-border-style: solid;
+
+  --#{$name}-line-proportion: 0.05;
 
   --#{$name}-border-radius: var(--border-radius-sm);
   --#{$name}-font-size: var(--font-size-md);
@@ -20,6 +31,10 @@ $variants: dashed dotted solid;
   display: block;
 }
 
+:host([direction="vertical"]) {
+  display: inline-block;
+}
+
 @include block(#{$name}) {
   box-sizing: border-box;
 
@@ -29,26 +44,65 @@ $variants: dashed dotted solid;
   align-items: center;
   justify-content: center;
 
-  margin: var(--#{$name}-spacing) 0;
+  margin: var(--#{$name}-horizontal-spacing) 0;
 
   @include element(content) {
     padding: 0 var(--#{$name}-text-spacing);
+    white-space: nowrap;
+    font-size: var(--#{$name}-font-size);
   }
 
   @include element(line) {
-    flex: 1 0 auto;
+    width: 50%;
     border-top: 1px var(--#{$name}-border-style) var(--#{$name}-border-color);
   }
 
-  @include state(no-content) {
+  @include state(empty) {
     .#{$name}__content {
       display: none;
     }
   }
 
-  @each $variant in $variants {
-    @include modifier($variant) {
-      --#{$name}-border-style: #{$variant};
+  @include modifier(start) {
+    .#{$name}__line.#{$name}--line-start {
+      @include content-position-short;
+    }
+
+    .#{$name}__line.#{$name}--line-end {
+      @include content-position-long;
+    }
+  }
+
+  @include modifier(end) {
+    .#{$name}__line.#{$name}--line-start {
+      @include content-position-long;
+    }
+
+    .#{$name}__line.#{$name}--line-end {
+      @include content-position-short;
+    }
+  }
+
+  @include modifier(vertical) {
+    display: inline-flex;
+    flex-direction: column;
+
+    height: 100%;
+    margin: 0 var(--#{$name}-vertical-spacing);
+
+    vertical-align: middle;
+
+    .#{$name}__line {
+      width: 1px;
+      height: var(--#{$name}-font-size);
+
+      border: 0;
+
+      border-left: 1px var(--#{$name}-border-style) var(--#{$name}-border-color);
+    }
+
+    .#{$name}__content {
+      display: none;
     }
   }
 }

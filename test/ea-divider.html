@@ -15,6 +15,7 @@
 
   <body>
     <script type="module" src="../src/components/ea-divider/index.ts"></script>
+    <script type="module" src="../src/components/ea-icon/index.ts"></script>
 
     <!--  基础用法 -->
     <!-- #region -->
@@ -44,6 +45,53 @@
         merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen,
         quo modo.
       </p>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  设置文案 -->
+    <!-- #region -->
+    <h1>设置文案</h1>
+
+    <div class="demo">
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne
+        merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen,
+        quo modo.
+      </p>
+      <ea-divider content-position="start">Rabindranath Tagore</ea-divider>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne
+        merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen,
+        quo modo.
+      </p>
+      <ea-divider>
+        <ea-icon name="star"></ea-icon>
+      </ea-divider>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne
+        merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen,
+        quo modo.
+      </p>
+      <ea-divider content-position="end">Rabindranath Tagore</ea-divider>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  垂直分隔线 -->
+    <!-- #region -->
+    <h1>垂直分隔线</h1>
+
+    <div class="demo">
+      <span>Rain</span>
+      <ea-divider direction="vertical"></ea-divider>
+      <span>Home</span>
+      <ea-divider direction="vertical" variant="dashed"></ea-divider>
+      <span>Grass</span>
     </div>
 
     <hr />
