@@ -1,3 +1,4 @@
+import './ea-affix/index';
 import './ea-alert/index';
 import './ea-avatar/index';
 import './ea-backtop/index';

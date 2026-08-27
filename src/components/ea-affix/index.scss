@@ -1,0 +1,27 @@
+$name: ea-affix;
+
+:host {
+  //   --#{$name}-border-radius: var(--border-radius-sm);
+  //   --#{$name}-font-size: var(--font-size-md);
+  //   --#{$name}-transition: var(--transition-fast);
+
+  //   --#{$name}-text: var(--grey-900);
+  //   --#{$name}-bg: var(--color-white);
+  //   --#{$name}-border-color: var(--grey-300);
+
+  --#{$name}-top: 0;
+  --#{$name}-left: 0;
+}
+
+@include block(#{$name}) {
+  display: inherit;
+  position: relative;
+  box-sizing: border-box;
+
+  @include state(affix) {
+    position: fixed;
+    top: var(--#{$name}-top);
+    left: var(--#{$name}-left);
+    z-index: 1000;
+  }
+}

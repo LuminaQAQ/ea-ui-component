@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>affix</title>
+    <link rel="stylesheet" href="../dist/assets/icon.css" />
+
+    <style>
+      hr {
+        margin: 3rem 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script type="module" src="../src/components/ea-affix/index.ts"></script>
+    <script type="module" src="../src/components/ea-button/index.ts"></script>
+
+    <div style="height: 100vh"></div>
+
+    <!--  基础用法 -->
+    <!-- #region -->
+    <h1>基础用法</h1>
+
+    <div class="demo">
+      <ea-affix offset="120">
+        <ea-button variant="primary">Offset top 120px</ea-button>
+      </ea-affix>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  指定容器 -->
+    <!-- #region -->
+    <h1>指定容器</h1>
+
+    <style>
+      .affix-container {
+        text-align: center;
+        height: 400px;
+        border-radius: 4px;
+        background: #409eff;
+      }
+    </style>
+
+    <div class="demo">
+      <div class="affix-container">
+        <ea-affix target=".affix-container" offset="80">
+          <ea-button type="primary">Target container</ea-button>
+        </ea-affix>
+      </div>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <div style="height: 100vh"></div>
+  </body>
+</html>
