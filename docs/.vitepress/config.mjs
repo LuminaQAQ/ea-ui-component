@@ -117,6 +117,7 @@ export default defineConfig({
           { text: "Border Beam 边框光束", link: "/ea-border-beam" },
           { text: "Button 按钮", link: "/ea-button" },
           { text: "Container 布局容器", link: "/ea-container" },
+          { text: "Divider 分割线", link: "/ea-divider" },
           { text: "Effects 特效", link: "/ea-effects" },
           { text: "Icon 图标", link: "/ea-icon" },
           { text: "Layout 布局", link: "/ea-layout" },
@@ -210,6 +211,7 @@ export default defineConfig({
           { text: "Popconfirm 气泡确认框", link: "/ea-popconfirm" },
           { text: "Popover 弹出框", link: "/ea-popover" },
           { text: "Tooltip 文字提示", link: "/ea-tooltip" },
+          { text: "Watermark 水印", link: "/ea-watermark" },
         ],
       },
       {
@@ -222,8 +224,6 @@ export default defineConfig({
       // {
       //   text: "Others 其他",
       //   items: [
-      //     { text: "Divider 分割线", link: "/ea-divider" },
-      //     { text: "Watermark 水印", link: "/ea-watermark" },
       //   ],
       // },
     ],

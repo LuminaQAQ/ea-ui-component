@@ -1,8 +1,8 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-08-25T06:26:09.838Z",
-  "totalComponents": 66,
-  "successCount": 66,
+  "generatedAt": "2026-08-27T03:34:48.943Z",
+  "totalComponents": 67,
+  "successCount": 67,
   "failCount": 0,
   "components": [
     {
@@ -12708,6 +12708,172 @@
           "title": "手动上传",
           "description": "",
           "code": "<div class=\"demo\">\n  <ea-upload\n    id=\"manualUpload\"\n    class=\"upload-demo\"\n    action=\"https://m1.apifoxmock.com/m1/8609267-8388194-default/file\"\n    auto-upload=\"false\"\n  >\n    <ea-button type=\"primary\" slot=\"trigger\">select file</ea-button>\n    <ea-button type=\"success\" id=\"submitBtn\">upload to server</ea-button>\n    <div class=\"tip\" slot=\"tip\">jpg/png files with a size less than 500KB.</div>\n  </ea-upload>\n</div>",
+          "type": "advanced"
+        }
+      ]
+    },
+    {
+      "name": "ea-watermark",
+      "displayName": "水印",
+      "category": "basic",
+      "status": "stable",
+      "since": "3.0",
+      "description": "水印组件，用于在容器上叠加文字或图片水印，防止内容被随意转载。",
+      "sourcePath": "src/components/ea-watermark",
+      "props": [
+        {
+          "name": "width",
+          "type": "Number",
+          "default": "120",
+          "required": false,
+          "description": "",
+          "isAttribute": true
+        },
+        {
+          "name": "height",
+          "type": "Number",
+          "default": "64",
+          "required": false,
+          "description": "",
+          "isAttribute": true
+        },
+        {
+          "name": "rotate",
+          "type": "Number",
+          "default": "-22",
+          "required": false,
+          "description": "",
+          "isAttribute": true
+        },
+        {
+          "name": "zIndex",
+          "type": "Number",
+          "default": "9",
+          "required": false,
+          "description": "",
+          "isAttribute": true
+        },
+        {
+          "name": "image",
+          "type": "String",
+          "default": "\"\"",
+          "required": false,
+          "description": "",
+          "isAttribute": true
+        },
+        {
+          "name": "content",
+          "type": "String",
+          "default": "\"watermark\"",
+          "required": false,
+          "description": "",
+          "isAttribute": true
+        },
+        {
+          "name": "font",
+          "type": "Object",
+          "default": "{ ...DEFAULT_FONT }",
+          "required": false,
+          "description": "",
+          "isAttribute": false
+        },
+        {
+          "name": "gap",
+          "type": "Array",
+          "default": "[100, 100]",
+          "required": false,
+          "description": "",
+          "isAttribute": false
+        },
+        {
+          "name": "offset",
+          "type": "Array",
+          "default": "null",
+          "required": false,
+          "description": "",
+          "isAttribute": false
+        }
+      ],
+      "events": [],
+      "slots": [
+        {
+          "name": "default",
+          "description": "默认插槽，需要叠加水印的内容。"
+        }
+      ],
+      "cssVars": [
+        {
+          "name": "--ea-watermark-border-radius",
+          "description": "组件边框圆角，默认值 `var(--border-radius-sm)`。"
+        },
+        {
+          "name": "--ea-watermark-font-size",
+          "description": "组件字体大小，默认值 `var(--font-size-md)`。"
+        },
+        {
+          "name": "--ea-watermark-transition",
+          "description": "组件过渡动画，默认值 `var(--transition-fast)`。"
+        },
+        {
+          "name": "--ea-watermark-text",
+          "description": "文字颜色，默认值 `var(--grey-900)`。"
+        },
+        {
+          "name": "--ea-watermark-bg",
+          "description": "背景颜色，默认值 `var(--color-white)`。"
+        },
+        {
+          "name": "--ea-watermark-border-color",
+          "description": "边框颜色，默认值 `var(--grey-300)`。"
+        }
+      ],
+      "cssParts": [
+        {
+          "name": "container",
+          "description": "容器元素。"
+        },
+        {
+          "name": "content",
+          "description": "水印内容元素。"
+        }
+      ],
+      "subComponents": [],
+      "dependencies": [],
+      "examples": [
+        {
+          "title": "基础用法",
+          "description": "",
+          "code": "<ea-watermark>\n  <div class=\"watermark-box\">\n    <div class=\"inner\">...</div>\n  </div>\n</ea-watermark>",
+          "type": "basic"
+        },
+        {
+          "title": "自定义内容",
+          "description": "",
+          "code": "<ea-watermark content=\"Confidential\">\n  <div class=\"watermark-box\">...</div>\n</ea-watermark>\n<ea-watermark id=\"multiLineWatermark\">\n  <div class=\"watermark-box\">...</div>\n</ea-watermark>",
+          "type": "advanced"
+        },
+        {
+          "title": "多行文本水印",
+          "description": "",
+          "code": "<ea-watermark id=\"multiLineWatermark2\" width=\"300\" height=\"180\">\n  <div class=\"watermark-box\">...</div>\n</ea-watermark>",
+          "type": "advanced"
+        },
+        {
+          "title": "旋转角度",
+          "description": "",
+          "code": "<ea-watermark rotate=\"-30\">\n  <div class=\"watermark-box\">...</div>\n</ea-watermark>\n<ea-watermark rotate=\"0\">\n  <div class=\"watermark-box\">...</div>\n</ea-watermark>",
+          "type": "advanced"
+        },
+        {
+          "title": "自定义字体与间距",
+          "description": "",
+          "code": "<ea-watermark id=\"fontWatermark\">\n  <div class=\"watermark-box\">...</div>\n</ea-watermark>",
+          "type": "advanced"
+        },
+        {
+          "title": "图片水印",
+          "description": "",
+          "code": "<ea-watermark image=\"/logo.png\" width=\"256\" height=\"128\">\n  <div class=\"watermark-box\">...</div>\n</ea-watermark>",
           "type": "advanced"
         }
       ]

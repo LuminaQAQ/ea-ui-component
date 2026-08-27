@@ -10,6 +10,23 @@
       hr {
         margin: 3rem 0;
       }
+
+      .demo {
+        margin-top: 20px;
+      }
+
+      .watermark-box {
+        height: 300px;
+        border: 1px solid var(--grey-300);
+        border-radius: 8px;
+        box-sizing: border-box;
+        overflow: hidden;
+      }
+
+      .watermark-box .inner {
+        padding: 24px;
+        color: var(--grey-600);
+      }
     </style>
   </head>
 
@@ -25,7 +42,129 @@
 
     <div class="demo">
       <ea-watermark>
-        <div class="content" style="height: 500px"></div>
+        <div class="watermark-box">
+          <div class="inner">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. The
+            watermark is rendered on top of the content as a repeated background
+            image, without blocking any user interaction.
+          </div>
+        </div>
+      </ea-watermark>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  自定义内容 -->
+    <!-- #region -->
+    <h1>自定义内容</h1>
+
+    <div class="demo">
+      <ea-watermark content="Confidential">
+        <div class="watermark-box">
+          <div class="inner">Text watermark with custom content.</div>
+        </div>
+      </ea-watermark>
+      <ea-watermark id="multiLineWatermark">
+        <div class="watermark-box">
+          <div class="inner">Multi-line watermark rendered via array.</div>
+        </div>
+      </ea-watermark>
+    </div>
+
+    <script type="module">
+      const multiLine = document.querySelector("#multiLineWatermark");
+      multiLine.content = "Top Secret\nInternal Use";
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  多行文本水印 -->
+    <!-- #region -->
+    <h1>多行文本水印</h1>
+
+    <div class="demo">
+      <ea-watermark id="multiLineWatermark2" width="300" height="180">
+        <div class="watermark-box">
+          <div class="inner">
+            Multi-line watermark rendered via an array of strings.
+          </div>
+        </div>
+      </ea-watermark>
+    </div>
+
+    <script type="module">
+      const multiLine2 = document.querySelector("#multiLineWatermark2");
+      multiLine2.gap = [300, 180];
+      multiLine2.content = "Top Secret\nConfidential\nInternal Use";
+      multiLine2.font = { fontSize: 20 };
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  旋转角度 -->
+    <!-- #region -->
+    <h1>旋转角度</h1>
+
+    <div class="demo">
+      <ea-watermark rotate="-30">
+        <div class="watermark-box">
+          <div class="inner">Watermark rotated by -30 degrees.</div>
+        </div>
+      </ea-watermark>
+      <ea-watermark rotate="0">
+        <div class="watermark-box">
+          <div class="inner">Watermark without rotation.</div>
+        </div>
+      </ea-watermark>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  自定义字体与间距 -->
+    <!-- #region -->
+    <h1>自定义字体与间距</h1>
+
+    <div class="demo">
+      <ea-watermark id="fontWatermark" width="240" height="120">
+        <div class="watermark-box">
+          <div class="inner">
+            Custom font color, size and gap set via JS property.
+          </div>
+        </div>
+      </ea-watermark>
+    </div>
+
+    <script type="module">
+      const fontWatermark = document.querySelector("#fontWatermark");
+      fontWatermark.gap = [240, 120];
+      fontWatermark.font = {
+        color: "rgba(0, 100, 200, 0.25)",
+        fontSize: 20,
+        fontWeight: "bold",
+      };
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  图片水印 -->
+    <!-- #region -->
+    <h1>图片水印</h1>
+
+    <div class="demo">
+      <ea-watermark image="/logo.png" width="256" height="128">
+        <div class="watermark-box">
+          <div class="inner">Image watermark using a custom source image.</div>
+        </div>
       </ea-watermark>
     </div>
 
