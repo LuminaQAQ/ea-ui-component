@@ -1,27 +1,42 @@
 $name: ea-affix;
 
 :host {
-  //   --#{$name}-border-radius: var(--border-radius-sm);
-  //   --#{$name}-font-size: var(--font-size-md);
-  //   --#{$name}-transition: var(--transition-fast);
+  --#{$name}-x: 0;
+  --#{$name}-y: 0;
 
-  //   --#{$name}-text: var(--grey-900);
-  //   --#{$name}-bg: var(--color-white);
-  //   --#{$name}-border-color: var(--grey-300);
+  --#{$name}-width: auto;
+  --#{$name}-height: auto;
+}
 
-  --#{$name}-top: 0;
-  --#{$name}-left: 0;
+:host {
+  display: flow-root;
+
+  width: var(--#{$name}-width);
+  height: var(--#{$name}-height);
 }
 
 @include block(#{$name}) {
-  display: inherit;
   position: relative;
   box-sizing: border-box;
 
+  width: var(--#{$name}-width);
+  height: var(--#{$name}-height);
+
   @include state(affix) {
     position: fixed;
-    top: var(--#{$name}-top);
-    left: var(--#{$name}-left);
+    left: var(--#{$name}-x);
     z-index: 1000;
+  }
+
+  @include modifier(top) {
+    &.is-affix {
+      top: var(--#{$name}-y);
+    }
+  }
+
+  @include modifier(bottom) {
+    &.is-affix {
+      bottom: var(--#{$name}-y);
+    }
   }
 }
