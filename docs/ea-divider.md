@@ -25,11 +25,14 @@ onMounted(() => {
 ::: code-group
 
 ```html [原生引入]
-<script type="module" src="path/to/ea-divider/index.ts"></script>
+<script
+  type="module"
+  src="./node_modules/easy-component-ui/dist/components/ea-divider.js"
+></script>
 ```
 
 ```html [Vite 导入]
-<script type="module" src="../src/components/ea-divider/index.ts"></script>
+import 'easy-component-ui/ea-divider'
 ```
 
 :::

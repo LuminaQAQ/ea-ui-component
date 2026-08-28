@@ -55,11 +55,14 @@ onMounted(() => {
 ::: code-group
 
 ```html [原生引入]
-<script type="module" src="path/to/ea-watermark/index.ts"></script>
+<script
+  type="module"
+  src="./node_modules/easy-component-ui/dist/components/ea-watermark.js"
+></script>
 ```
 
 ```html [Vite 导入]
-<script type="module" src="../src/components/ea-watermark/index.ts"></script>
+import 'easy-component-ui/ea-watermark'
 ```
 
 :::

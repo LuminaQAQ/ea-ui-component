@@ -25,13 +25,18 @@ onMounted(() => {
 ::: code-group
 
 ```html [原生引入]
-<script type="module" src="path/to/ea-affix/index.ts"></script>
-<script type="module" src="path/to/ea-button/index.ts"></script>
+<script
+  type="module"
+  src="./node_modules/easy-component-ui/dist/components/ea-affix.js"
+></script>
+<script
+  type="module"
+  src="./node_modules/easy-component-ui/dist/components/ea-button.js"
+></script>
 ```
 
 ```html [Vite 导入]
-<script type="module" src="../src/components/ea-affix/index.ts"></script>
-<script type="module" src="../src/components/ea-button/index.ts"></script>
+import 'easy-component-ui/ea-affix' import 'easy-component-ui/ea-button'
 ```
 
 :::

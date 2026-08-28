@@ -28,13 +28,18 @@ onMounted(() => {
 ::: code-group
 
 ```html [原生引入]
-<script type="module" src="path/to/ea-border-beam/index.ts"></script>
-<script type="module" src="path/to/ea-card/index.ts"></script>
+<script
+  type="module"
+  src="./node_modules/easy-component-ui/dist/components/ea-border-beam.js"
+></script>
+<script
+  type="module"
+  src="./node_modules/easy-component-ui/dist/components/ea-card.js"
+></script>
 ```
 
 ```html [Vite 导入]
-<script type="module" src="../src/components/ea-border-beam/index.ts"></script>
-<script type="module" src="../src/components/ea-card/index.ts"></script>
+import 'easy-component-ui/ea-border-beam' import 'easy-component-ui/ea-card'
 ```
 
 :::
