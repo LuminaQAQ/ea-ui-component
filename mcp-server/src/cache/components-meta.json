@@ -1,10 +1,99 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-08-27T03:34:48.943Z",
-  "totalComponents": 67,
-  "successCount": 67,
+  "generatedAt": "2026-08-28T08:44:40.797Z",
+  "totalComponents": 68,
+  "successCount": 68,
   "failCount": 0,
   "components": [
+    {
+      "name": "ea-affix",
+      "displayName": "固钉",
+      "category": "basic",
+      "status": "stable",
+      "since": "3.0",
+      "description": "固钉组件，将页面元素固定在可视范围内，常用于侧边导航或操作按钮。",
+      "sourcePath": "src/components/ea-affix",
+      "props": [
+        {
+          "name": "offset",
+          "type": "Number",
+          "default": "0",
+          "required": false,
+          "description": "",
+          "isAttribute": true
+        },
+        {
+          "name": "target",
+          "type": "String",
+          "default": "\"\"",
+          "required": false,
+          "description": "",
+          "isAttribute": true
+        },
+        {
+          "name": "position",
+          "type": "Enum",
+          "default": "\"top\"",
+          "required": false,
+          "description": "",
+          "isAttribute": true,
+          "enumValues": ["top", "bottom"]
+        }
+      ],
+      "events": [],
+      "slots": [
+        {
+          "name": "default",
+          "description": "默认插槽，需要固定的内容。"
+        }
+      ],
+      "cssVars": [
+        {
+          "name": "--ea-affix-x",
+          "description": "固钉水平偏移位置。"
+        },
+        {
+          "name": "--ea-affix-y",
+          "description": "固钉垂直偏移位置。"
+        },
+        {
+          "name": "--ea-affix-width",
+          "description": "固钉宽度，固定时保持原宽。"
+        },
+        {
+          "name": "--ea-affix-height",
+          "description": "固钉高度，固定时保持原高。"
+        }
+      ],
+      "cssParts": [
+        {
+          "name": "container",
+          "description": "容器元素。"
+        }
+      ],
+      "subComponents": [],
+      "dependencies": [],
+      "examples": [
+        {
+          "title": "基础用法",
+          "description": "",
+          "code": "<ea-affix offset=\"120\">\n  <ea-button variant=\"primary\">Offset top 120px</ea-button>\n</ea-affix>",
+          "type": "basic"
+        },
+        {
+          "title": "指定容器",
+          "description": "",
+          "code": "<div class=\"affix-container\">\n  <ea-affix target=\".affix-container\" offset=\"80\">\n    <ea-button variant=\"primary\">Target container</ea-button>\n  </ea-affix>\n</div>",
+          "type": "advanced"
+        },
+        {
+          "title": "固定位置",
+          "description": "",
+          "code": "<ea-affix position=\"bottom\" offset=\"20\">\n  <ea-button variant=\"primary\">Offset bottom 20px</ea-button>\n</ea-affix>",
+          "type": "advanced"
+        }
+      ]
+    },
     {
       "name": "ea-alert",
       "displayName": "警告提示",

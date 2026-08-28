@@ -6,12 +6,18 @@ import stylesheet from "./index.scss?inline";
 const TAG_NAME = "ea-affix" as const;
 const bem = createBEM(TAG_NAME);
 
+/**
+ * 固钉基础状态
+ */
 interface AffixState {
   isAffix: boolean;
   originalHeight: number;
   originalWidth: number;
 }
 
+/**
+ * 固钉计算后状态
+ */
 interface AffixComputedState {
   isAffix: boolean;
   x: number | null;
@@ -19,20 +25,25 @@ interface AffixComputedState {
 }
 
 /**
- * @summary
+ * @summary 固钉组件，将页面元素固定在可视范围内，常用于侧边导航或操作按钮。
  * @status stable
  * @since 3.0
  *
- * @slot default - default slot.
+ * @slot default - 默认插槽，需要固定的内容。
  *
- * @csspart container - container element.
+ * @csspart container - 容器元素。
+ *
+ * @cssproperty --ea-affix-x - 固钉水平偏移位置。
+ * @cssproperty --ea-affix-y - 固钉垂直偏移位置。
+ * @cssproperty --ea-affix-width - 固钉宽度，固定时保持原宽。
+ * @cssproperty --ea-affix-height - 固钉高度，固定时保持原高。
  */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaAffix extends EaBase {
   @query(bem.cb())
   private _container!: HTMLElement;
 
-  private afffixState: AffixState = {
+  private affixState: AffixState = {
     isAffix: false,
     originalHeight: 0,
     originalWidth: 0,
@@ -43,7 +54,7 @@ export class EaAffix extends EaBase {
   @attribute({
     type: Number,
     default: 0,
-    observer(this: EaAffix, newVal: number) {
+    observer(this: EaAffix) {
       this._handleScroll();
     },
   })
@@ -64,19 +75,23 @@ export class EaAffix extends EaBase {
   @attribute({
     type: Enum(["top", "bottom"]),
     default: "top",
-    observer(this: EaAffix, newVal: string) {
+    observer(this: EaAffix) {
       this._handleScroll();
     },
   })
   position: string = "top";
 
+  /**
+   * 更新容器类名
+   * @returns 更新后的类名字符串
+   */
   updateContainerClasslist(): string {
     const className = bem(
       {
         [this.position]: !!this.position,
       },
       {
-        affix: this.afffixState.isAffix,
+        affix: this.affixState.isAffix,
       }
     );
 
@@ -93,22 +108,31 @@ export class EaAffix extends EaBase {
     `;
   }
 
+  /**
+   * 初始化组件原始宽高，固定时保持占位
+   */
   private _initSize(): void {
     const rect = this.getBoundingClientRect();
 
-    this.afffixState.originalWidth = rect.width;
-    this.afffixState.originalHeight = rect.height;
+    this.affixState.originalWidth = rect.width;
+    this.affixState.originalHeight = rect.height;
 
     this.style.setProperty(`--${TAG_NAME}-width`, `${rect.width}px`);
     this.style.setProperty(`--${TAG_NAME}-height`, `${rect.height}px`);
   }
 
+  /**
+   * 初始化目标容器
+   */
   private _initTarget(): void {
     if (this.target) {
       this._targetElement = document.querySelector(this.target);
     }
   }
 
+  /**
+   * 初始化 ResizeObserver，监听组件尺寸变化
+   */
   private _initResizeObserver(): void {
     this._resizeObserver?.disconnect();
 
@@ -119,6 +143,10 @@ export class EaAffix extends EaBase {
     this._resizeObserver.observe(this);
   }
 
+  /**
+   * 计算固钉状态
+   * @returns 固钉状态与位置
+   */
   private _computeState(): AffixComputedState {
     const rect = this.getBoundingClientRect();
     const winHeight = window.innerHeight;
@@ -140,18 +168,19 @@ export class EaAffix extends EaBase {
       y = isAffix ? offset : null;
     } else {
       const targetElement = this._targetElement!;
-      const targetTop = targetElement.offsetTop;
-      const targetLeft = targetElement.offsetLeft;
+      const targetRect = targetElement.getBoundingClientRect();
+      const targetTop = targetRect.top + window.scrollY;
+      const targetLeft = targetRect.left + window.scrollX;
       const targetHeight = targetElement.offsetHeight;
 
-      const left = rect.left;
-      const offsetTop = this.offsetTop;
+      const top = rect.top + window.scrollY;
+      const left = rect.left + window.scrollX;
 
-      const originalHeight = this.afffixState.originalHeight;
+      const originalHeight = this.affixState.originalHeight;
 
-      isAffix = scrollY + this.offset >= offsetTop;
+      isAffix = scrollY + this.offset >= top;
 
-      if (scrollY + this.offset >= offsetTop + targetHeight - originalHeight) {
+      if (scrollY + this.offset >= top + targetHeight - originalHeight) {
         x = targetLeft;
         y = targetTop + targetHeight - originalHeight - scrollY;
       } else {
@@ -167,9 +196,13 @@ export class EaAffix extends EaBase {
     };
   }
 
+  /**
+   * 应用固钉状态到容器样式
+   * @param state 计算后的固钉状态
+   */
   private _applyState(state: AffixComputedState): void {
     const { isAffix, x, y } = state;
-    this.afffixState.isAffix = isAffix;
+    this.affixState.isAffix = isAffix;
 
     if (isAffix && x !== null && y !== null) {
       this._container.style.setProperty(`--${TAG_NAME}-x`, `${x}px`);
