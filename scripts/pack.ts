@@ -174,7 +174,7 @@ export const handlePackageExport = (): void => {
   const pkgPath = path.resolve(ROOT, "packages/components/package.json");
   const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf-8"));
   pkg.exports = exportsConfig;
-  fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
+  fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + "\n");
 };
 
 export const handleImportChildPages = (): void => {
