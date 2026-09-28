@@ -1,8 +1,8 @@
-import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
+﻿import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
 import { CustomElement, attribute, property, query, listen } from "@easy-component-ui/core/decorator";
 import { html } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
-import { VARIANT_ICON_MAP } from "@easy-component-ui/core/constants/variant";
+import { VARIANT_ICON_MAP } from "@constants/variant";
 import stylesheet from "./index.scss?inline";
 import "@/components/ea-icon/index";
 

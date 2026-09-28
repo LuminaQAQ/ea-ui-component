@@ -45,11 +45,11 @@ export default defineConfig({
       "@core": resolve(coreSrc, "core"),
       "@decorator": resolve(coreSrc, "decorator"),
       "@utils": resolve(coreSrc, "utils"),
-      "@constants": resolve(coreSrc, "constants"),
       "@stores": resolve(coreSrc, "stores"),
       "@": resolve(__dirname, "src/"),
       "@components": resolve(__dirname, "src/components"),
       "@common": resolve(__dirname, "src/common"),
+      "@constants": resolve(__dirname, "src/constants"),
     },
   },
   css: {

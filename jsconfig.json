@@ -5,6 +5,7 @@
       "@/*": ["packages/components/src/*"],
       "@components/*": ["packages/components/src/components/*"],
       "@common/*": ["packages/components/src/common/*"],
+      "@constants/*": ["packages/components/src/constants/*"],
       "@easy-component-ui/core/*": ["packages/core/src/*"],
       "@easy-component-ui/themes/*": ["packages/themes/src/*"]
     }

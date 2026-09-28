@@ -9,7 +9,6 @@
       "@decorator": ["./src/decorator"],
       "@decorator/*": ["./src/decorator/*"],
       "@utils/*": ["./src/utils/*"],
-      "@constants/*": ["./src/constants/*"],
       "@stores/*": ["./src/stores/*"]
     }
   },

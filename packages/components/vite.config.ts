@@ -148,6 +148,7 @@ export default defineConfig({
       "@": resolve(__dirname, "src/"),
       "@components": resolve(__dirname, "src/components"),
       "@common": resolve(__dirname, "src/common"),
+      "@constants": resolve(__dirname, "src/constants"),
     },
   },
 });

@@ -34,10 +34,6 @@
       "import": "./dist/utils/*.js",
       "types": "./dist/types/utils/*.d.ts"
     },
-    "./constants/*": {
-      "import": "./dist/constants/*.js",
-      "types": "./dist/types/constants/*.d.ts"
-    },
     "./stores/*": {
       "import": "./dist/stores/*.js",
       "types": "./dist/types/stores/*.d.ts"

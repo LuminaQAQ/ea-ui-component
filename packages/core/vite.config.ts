@@ -8,7 +8,7 @@ import dtsPlugin from "vite-plugin-dts";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const srcDir = resolve(__dirname, "src");
 
-const sourceDirs = ["core", "decorator", "utils", "constants", "stores"];
+const sourceDirs = ["core", "decorator", "utils", "stores"];
 
 const entryConfigs: Record<string, string> = {};
 sourceDirs.forEach(dir => {

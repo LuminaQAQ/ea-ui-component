@@ -3,7 +3,10 @@ import fs from "node:fs";
 import path from "node:path";
 import type { ComponentMeta, EventInfo } from "../types.js";
 import { parseJSDoc } from "./jsdoc-parser.js";
-import { parseDecorators, type GlobalConstantsMap } from "./decorator-parser.js";
+import {
+  parseDecorators,
+  type GlobalConstantsMap,
+} from "./decorator-parser.js";
 import { parseEvents } from "./event-parser.js";
 import { parseScss, mergeCSSVarsWithJSDoc } from "./scss-parser.js";
 import { parseDependencies } from "./dependency-parser.js";
@@ -20,10 +23,10 @@ function loadGlobalConstants(projectRoot: string): GlobalConstantsMap {
 
   const constants: GlobalConstantsMap = {};
 
-  // 解析 packages/core/src/constants/variant.ts
+  // 解析 packages/components/src/constants/variant.ts
   const variantPath = path.join(
     projectRoot,
-    "packages/core/src/constants/variant.ts"
+    "packages/components/src/constants/variant.ts"
   );
   if (fs.existsSync(variantPath)) {
     const content = fs.readFileSync(variantPath, "utf-8");
@@ -34,7 +37,7 @@ function loadGlobalConstants(projectRoot: string): GlobalConstantsMap {
       true
     );
 
-    ts.forEachChild(sourceFile, (node) => {
+    ts.forEachChild(sourceFile, node => {
       if (
         ts.isVariableStatement(node) &&
         node.declarationList.flags & ts.NodeFlags.Const
@@ -79,10 +82,9 @@ export function parseComponent(
   projectRoot: string
 ): ComponentMeta {
   const dirName = path.basename(componentDir);
-  const relativePath = path.relative(projectRoot, componentDir).replace(
-    /\\/g,
-    "/"
-  );
+  const relativePath = path
+    .relative(projectRoot, componentDir)
+    .replace(/\\/g, "/");
 
   // 查找主组件源文件
   const mainSourcePath = findMainSourceFile(componentDir);

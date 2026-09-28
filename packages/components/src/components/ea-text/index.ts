@@ -1,7 +1,7 @@
-import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
+﻿import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
 import { CustomElement, attribute, query } from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
-import { VARIANT_TYPES } from "@easy-component-ui/core/constants/variant";
+import { VARIANT_TYPES } from "@constants/variant";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-text" as const;

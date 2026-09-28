@@ -1,11 +1,11 @@
-import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
+﻿import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
 import { CustomElement, attribute, query } from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import {
   VARIANT_TYPES,
   VARIANT_ICON_MAP,
   type VariantType,
-} from "@easy-component-ui/core/constants/variant";
+} from "@constants/variant";
 import stylesheet from "./index.scss?inline";
 import "@/components/ea-icon/index";
 

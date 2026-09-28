@@ -30,11 +30,11 @@ export default defineConfig({
       "@core": resolve(coreSrc, "core"),
       "@decorator": resolve(coreSrc, "decorator"),
       "@utils": resolve(coreSrc, "utils"),
-      "@constants": resolve(coreSrc, "constants"),
       "@stores": resolve(coreSrc, "stores"),
       "@": resolve(__dirname, "packages/components/src/"),
       "@components": resolve(__dirname, "packages/components/src/components"),
       "@common": resolve(__dirname, "packages/components/src/common"),
+      "@constants": resolve(__dirname, "packages/components/src/constants"),
     },
   },
   css: {

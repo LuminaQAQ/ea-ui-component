@@ -1,4 +1,4 @@
-import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
+﻿import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
 import { CustomElement, attribute, property, query, listen } from "@easy-component-ui/core/decorator";
 import { html } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
@@ -7,7 +7,7 @@ import {
   VARIANT_DEFAULT,
   VARIANT_ICON_MAP,
   type VariantType,
-} from "@easy-component-ui/core/constants/variant";
+} from "@constants/variant";
 import { EaMessageCloseEvent } from "../events/EaMessageCloseEvent";
 import stylesheet from "./index.scss?inline";
 import "@/components/ea-icon/index";
