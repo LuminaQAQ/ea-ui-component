@@ -1,0 +1,7 @@
+packages:
+  - "packages/*"
+  - "internal/*"
+
+allowBuilds:
+  "@parcel/watcher": true
+  esbuild: true
