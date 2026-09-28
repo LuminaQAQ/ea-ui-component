@@ -1,8 +1,8 @@
-import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
+﻿import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
 import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
 import { html } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
-import { i18nManager } from "@easy-component-ui/core/utils/I18nManager";
+import { i18nManager } from "@/utils/I18nManager";
 import dayjs, { type Dayjs } from "dayjs";
 import "dayjs/locale/zh-cn";
 import { EaCalendarSelectEvent } from "./events/EaCalendarSelectEvent";

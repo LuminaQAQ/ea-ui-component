@@ -1,4 +1,4 @@
-import type { EaElement } from "@/types/index";
+﻿import type { EaElement } from "../types/index";
 
 /**
  * @description 自动从 shadowRoot 中查询 DOM 元素的装饰器

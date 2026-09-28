@@ -1,4 +1,4 @@
-import type { PropertyMap } from "@/types/index";
+﻿import type { PropertyMap } from "../types/index";
 
 /**
  * @description 属性配置映射表 - 用于存储类级别的属性配置

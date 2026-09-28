@@ -1,7 +1,7 @@
-import EaFormAssociatedBase from "@easy-component-ui/core/core/EaFormAssociatedBase";
+﻿import EaFormAssociatedBase from "@easy-component-ui/core/core/EaFormAssociatedBase";
 import { createBEM } from "@easy-component-ui/core/core/EaBase";
 import { CustomElement, attribute, property, query, listen } from "@easy-component-ui/core/decorator";
-import { i18nManager } from "@easy-component-ui/core/utils/I18nManager";
+import { i18nManager } from "@/utils/I18nManager";
 import { EaTransferLeftCheckChangeEvent } from "./events/EaTransferLeftCheckChangeEvent";
 import { EaTransferRightCheckChangeEvent } from "./events/EaTransferRightCheckChangeEvent";
 import "./components/panel/index";

@@ -39,9 +39,6 @@ export default defineConfig({
     alias: {
       "@easy-component-ui/core": coreSrc,
       "@easy-component-ui/themes": themesSrc,
-      "@/types": resolve(coreSrc, "types"),
-      "@/stores": resolve(coreSrc, "stores"),
-      "@/utils": resolve(coreSrc, "utils"),
       "@core": resolve(coreSrc, "core"),
       "@decorator": resolve(coreSrc, "decorator"),
       "@utils": resolve(coreSrc, "utils"),

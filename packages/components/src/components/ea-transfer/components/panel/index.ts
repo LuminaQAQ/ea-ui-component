@@ -1,7 +1,7 @@
-import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
+﻿import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
 import { CustomElement, attribute, property, query, listen } from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
-import { i18nManager } from "@easy-component-ui/core/utils/I18nManager";
+import { i18nManager } from "@/utils/I18nManager";
 import "@components/ea-checkbox/index.js";
 import "@components/ea-input/index.js";
 import stylesheet from "./index.scss?inline";

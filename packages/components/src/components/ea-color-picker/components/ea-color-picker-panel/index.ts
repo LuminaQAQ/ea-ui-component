@@ -1,9 +1,9 @@
-import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
+﻿import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
 import { CustomElement, attribute, property, query, listen } from "@easy-component-ui/core/decorator";
 import { html } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { Color, type ColorFormat as ColorUtilFormat } from "../../utils/Color";
-import { px2num } from "@easy-component-ui/core/utils/Utils";
+import { px2num } from "@easy-component-ui/core/utils/px2num";
 import { EaColorPickerActiveChangeEvent } from "../../events/EaColorPickerActiveChangeEvent";
 import { EaColorPickerPanelInvalidColorEvent } from "../../events/EaColorPickerPanelInvalidColorEvent";
 import "@components/ea-input/index";

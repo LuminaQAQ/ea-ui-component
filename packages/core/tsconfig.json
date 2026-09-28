@@ -4,7 +4,6 @@
     "rootDir": "./src",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
       "@core/*": ["./src/core/*"],
       "@decorator": ["./src/decorator"],
       "@decorator/*": ["./src/decorator/*"],

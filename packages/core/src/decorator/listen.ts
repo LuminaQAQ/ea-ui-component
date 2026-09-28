@@ -1,4 +1,4 @@
-import type { EaElement } from "@/types/index";
+﻿import type { EaElement } from "../types/index";
 
 export interface ListenOptions {
   capture?: boolean;

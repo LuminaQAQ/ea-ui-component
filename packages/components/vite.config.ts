@@ -63,11 +63,7 @@ export default defineConfig({
             path.resolve(__dirname, "src/components")
           );
           const normalizedId = normalizePath(id);
-          /**
-           * @param {Array<string>} pathChunks
-           * @returns
-           */
-          const findComponentName = pathChunks => {
+          const findComponentName = (pathChunks: string[]): string | null => {
             const chunk = pathChunks.pop();
             if (!chunk) return null;
             return chunk.startsWith("ea-")

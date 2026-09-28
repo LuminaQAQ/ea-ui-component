@@ -1,5 +1,5 @@
-import type { AttributeOptions } from "@/types/index";
-import { ElementAttributesMap } from "@/stores";
+﻿import type { AttributeOptions } from "../types/index";
+import { ElementAttributesMap } from "../stores";
 
 /**
  * @description 注册属性配置到 ElementAttributesMap

@@ -1,8 +1,8 @@
-import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
+﻿import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
 import { CustomElement, attribute, property, query, listen } from "@easy-component-ui/core/decorator";
 import { html } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
-import { i18nManager } from "@easy-component-ui/core/utils/I18nManager";
+import { i18nManager } from "@/utils/I18nManager";
 import { getPageItem } from "./components/pageItem.js";
 import { getMoreItem } from "./components/moreItem.js";
 import { EaPaginationCurrentChangeEvent } from "./events/EaPaginationCurrentChangeEvent";

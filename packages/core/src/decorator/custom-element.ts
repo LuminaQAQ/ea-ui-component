@@ -1,19 +1,19 @@
-import parseAttributeValue, {
+﻿import parseAttributeValue, {
   parseDefaultValue,
-} from "@/utils/parseAttributeValue";
+} from "../utils/parseAttributeValue";
 import {
   ElementAttributesMap,
   ElementPropertiesMap,
   StylesheetCache,
-} from "@/stores";
-import { html } from "@/utils/html";
-import { camelToKebab, kebabToCamel } from "@/utils/case-convert";
+} from "../stores";
+import { html } from "../utils/html";
+import { camelToKebab, kebabToCamel } from "../utils/case-convert";
 import type {
   AttributeOptions,
   PropertyOptions,
   EaElement,
   EaElementConstructor,
-} from "@/types/index";
+} from "../types/index";
 
 /**
  * @description ea-ui 自定义元素装饰器选项

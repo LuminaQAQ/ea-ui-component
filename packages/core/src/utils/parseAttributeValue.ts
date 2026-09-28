@@ -1,4 +1,4 @@
-import type { AttributeOptions, PropertyOptions } from "@/types/index";
+﻿import type { AttributeOptions, PropertyOptions } from "../types/index";
 
 /**
  * 解析默认值

@@ -57,11 +57,9 @@ export default defineConfig({
   resolve: {
     extensions: [".mjs", ".js", ".mts", ".ts", ".jsx", ".tsx", ".json"],
     alias: {
-      "@": srcDir,
       "@core": resolve(srcDir, "core"),
       "@decorator": resolve(srcDir, "decorator"),
       "@utils": resolve(srcDir, "utils"),
-      "@constants": resolve(srcDir, "constants"),
       "@stores": resolve(srcDir, "stores"),
     },
   },

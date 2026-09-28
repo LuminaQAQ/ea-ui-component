@@ -1,4 +1,4 @@
-import type { EaElement } from "@/types/index";
+﻿import type { EaElement } from "../types/index";
 
 /**
  * @description 自动从 Light DOM 中查询所有匹配子元素的装饰器

@@ -1,5 +1,5 @@
-import variable from "@easy-component-ui/themes/variables.scss?inline";
-import type { EaElement } from "@/types/index";
+﻿import variable from "@easy-component-ui/themes/variables.scss?inline";
+import type { EaElement } from "../types/index";
 import { createBEM } from "@utils/bem";
 import { attribute } from "@decorator/attribute";
 import { CustomElement } from "@decorator/custom-element";

@@ -1,4 +1,4 @@
-import { EaFormAssociatedBase } from "@easy-component-ui/core/core/EaFormAssociatedBase";
+﻿import { EaFormAssociatedBase } from "@easy-component-ui/core/core/EaFormAssociatedBase";
 import { createBEM } from "@easy-component-ui/core/utils/bem";
 
 import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
@@ -16,7 +16,7 @@ import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 dayjs.extend(advancedFormat);
 import "dayjs/locale/zh-cn";
-import { i18nManager } from "@easy-component-ui/core/utils/I18nManager";
+import { i18nManager } from "@/utils/I18nManager";
 import { EaDatePickerPanelChangeEvent } from "./events/EaDatePickerPanelChangeEvent";
 import { EaDatePickerVisibleChangeEvent } from "./events/EaDatePickerVisibleChangeEvent";
 import { EaDatePickerChangeEvent } from "./events/EaDatePickerChangeEvent";
