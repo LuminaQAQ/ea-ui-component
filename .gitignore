@@ -1,5 +1,7 @@
 docs/.vitepress/dist/
 docs/.vitepress/cache/
+docs/.vitepress/public/dist/
+docs/.vitepress/public/index.css
 coverage/
 
 # Vite timestamp cache files
