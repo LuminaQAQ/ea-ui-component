@@ -2,17 +2,12 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@events/*": ["src/events/*"],
-      "@components/*": ["src/components/*"],
-      "@common/*": ["src/common/*"],
-      "@themes/*": ["src/themes/*"],
-      "@utils/*": ["src/utils/*"],
-      "@decorator/*": ["src/decorator/*"],
-      "@types/*": ["src/types/*"],
-      "@stores/*": ["src/stores/*"],
-      "@core/*": ["src/core/*"]
+      "@/*": ["packages/components/src/*"],
+      "@components/*": ["packages/components/src/components/*"],
+      "@common/*": ["packages/components/src/common/*"],
+      "@easy-component-ui/core/*": ["packages/core/src/*"],
+      "@easy-component-ui/themes/*": ["packages/themes/src/*"]
     }
   },
-  "include": ["src"]
+  "include": ["packages/components/src"]
 }

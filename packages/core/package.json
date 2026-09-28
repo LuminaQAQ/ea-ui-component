@@ -1,0 +1,79 @@
+{
+  "name": "@easy-component-ui/core",
+  "version": "4.0.5",
+  "description": "easy-component-ui 核心包：EaBase 基类、表单关联基类、装饰器、工具函数与常量",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/types/index.d.ts"
+    },
+    "./core/EaBase": {
+      "import": "./dist/core/EaBase.js",
+      "types": "./dist/types/core/EaBase.d.ts"
+    },
+    "./core/EaFormAssociatedBase": {
+      "import": "./dist/core/EaFormAssociatedBase.js",
+      "types": "./dist/types/core/EaFormAssociatedBase.d.ts"
+    },
+    "./decorator": {
+      "import": "./dist/decorator/index.js",
+      "types": "./dist/types/decorator/index.d.ts"
+    },
+    "./decorator/*": {
+      "import": "./dist/decorator/*.js",
+      "types": "./dist/types/decorator/*.d.ts"
+    },
+    "./utils/*": {
+      "import": "./dist/utils/*.js",
+      "types": "./dist/types/utils/*.d.ts"
+    },
+    "./constants/*": {
+      "import": "./dist/constants/*.js",
+      "types": "./dist/types/constants/*.d.ts"
+    },
+    "./stores/*": {
+      "import": "./dist/stores/*.js",
+      "types": "./dist/types/stores/*.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "vite build",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "web-components",
+    "custom-elements",
+    "decorator",
+    "core"
+  ],
+  "author": "LuminaQAQ",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LuminaQAQ/ea-ui-component.git",
+    "directory": "packages/core"
+  },
+  "bugs": {
+    "url": "https://github.com/LuminaQAQ/ea-ui-component/issues"
+  },
+  "homepage": "https://luminaqaq.github.io/ea-ui-component/",
+  "dependencies": {
+    "@easy-component-ui/themes": "workspace:*",
+    "dayjs": "^1.11.19",
+    "dompurify": "^3.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.14",
+    "sass": "^1.77.2",
+    "typescript": "^5.8.3",
+    "vite": "^6.4.3",
+    "vite-plugin-dts": "^4.5.4"
+  }
+}

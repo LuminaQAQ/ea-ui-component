@@ -14,6 +14,7 @@ export default defineConfig([
       "docs/.vitepress/cache/",
       "docs/.vitepress/public/",
       "src/test/",
+      "packages/components/src/test/",
       "vite.config.js.timestamp-*",
       "upload-server/uploads/",
       "upload-server/logs/",
@@ -33,6 +34,7 @@ export default defineConfig([
   {
     files: ["**/*.ts"],
     plugins: {
+      // @ts-expect-error
       "@typescript-eslint": tseslint,
     },
     languageOptions: {

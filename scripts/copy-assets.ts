@@ -3,8 +3,8 @@ import { resolve } from "path";
 
 const root = resolve(import.meta.dirname, "..");
 
-const distAssetsDir = resolve(root, "dist/assets");
-const distThemesDir = resolve(root, "dist/themes");
+const distAssetsDir = resolve(root, "packages/components/dist/assets");
+const distThemesDir = resolve(root, "packages/components/dist/themes");
 const publicDistDir = resolve(root, "docs/.vitepress/public/dist");
 const publicAssetsDir = resolve(publicDistDir, "assets");
 const publicThemesDir = resolve(publicDistDir, "themes");

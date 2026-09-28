@@ -15,7 +15,7 @@ if (args.includes("--index-css")) {
     cpSync(indexCssSrc, indexCssDest);
   }
 
-  const buildDistDir = resolve(root, "dist");
+  const buildDistDir = resolve(root, "packages/components/dist");
   const publicDistDir = resolve(publicDir, "dist");
 
   if (existsSync(buildDistDir)) {

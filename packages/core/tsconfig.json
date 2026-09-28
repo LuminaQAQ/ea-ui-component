@@ -1,0 +1,18 @@
+{
+  "extends": "../../internal/tsconfig/base.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@core/*": ["./src/core/*"],
+      "@decorator": ["./src/decorator"],
+      "@decorator/*": ["./src/decorator/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@constants/*": ["./src/constants/*"],
+      "@stores/*": ["./src/stores/*"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

@@ -1,9 +1,9 @@
-<script setup>
+﻿<script setup>
 import { onMounted } from 'vue'
 
 onMounted(() => {
-  import("../dist/components/index.js")
-  import("../dist/assets/icon.css")
+  import("../packages/components/dist/components/index.js")
+  import("../packages/components/dist/assets/icon.css")
 
   // ------- Zoom 缩放 -------
   // #region
@@ -83,7 +83,7 @@ onMounted(() => {
 </script>
 
 <style>
-.container {
+.effects-container {
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
@@ -133,7 +133,7 @@ import "easy-component-ui/ea-effects";
 <div class="demo">
   <ea-button id="zoomButton">Click Me</ea-button>
 
-  <div id="zoomEffectsContainer" class="container">
+  <div id="zoomEffectsContainer" class="effects-container">
     <ea-effects effect="zoom-center">
       <div class="transition-box">zoom-center</div>
     </ea-effects>
@@ -201,7 +201,7 @@ zoomEffects.init();
 <div class="demo">
   <ea-button id="fadeButton">Click Me</ea-button>
 
-  <div id="fadeEffectsContainer" class="container">
+  <div id="fadeEffectsContainer" class="effects-container">
     <ea-effects effect="fade">
       <div class="transition-box">fade-1</div>
     </ea-effects>
@@ -245,7 +245,7 @@ fadeEffects.init();
 <div class="demo">
   <ea-button id="slideButton">Click Me</ea-button>
 
-  <div id="slideEffectsContainer" class="container">
+  <div id="slideEffectsContainer" class="effects-container">
     <ea-effects effect="slide-top">
       <div class="transition-box">slide-top</div>
     </ea-effects>
@@ -301,7 +301,7 @@ slideEffects.init();
 <div class="demo">
   <ea-button id="flipButton">Click Me</ea-button>
 
-  <div id="flipEffectsContainer" class="container">
+  <div id="flipEffectsContainer" class="effects-container">
     <ea-effects effect="flip-x">
       <div class="transition-box">flip-x</div>
     </ea-effects>
@@ -350,7 +350,7 @@ flipEffects.init();
 <div class="demo">
   <ea-button id="triggerButton">Click Me</ea-button>
 
-  <div id="triggerEffectsContainer" class="container">
+  <div id="triggerEffectsContainer" class="effects-container">
     <ea-effects effect="zoom-center" trigger="click">
       <div class="transition-box">trigger: click</div>
     </ea-effects>

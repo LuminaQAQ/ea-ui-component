@@ -1,0 +1,14 @@
+$name: ea-theme-toggle;
+
+:host {
+  --#{$name}-active-color: var(--blue-500);
+  --#{$name}-inactive-color: var(--grey-300);
+  display: inline-block;
+}
+
+@include block($name) {
+  @include element(switch) {
+    --ea-switch-active-bg-color: var(--#{$name}-active-color);
+    --ea-switch-inactive-bg-color: var(--#{$name}-inactive-color);
+  }
+}

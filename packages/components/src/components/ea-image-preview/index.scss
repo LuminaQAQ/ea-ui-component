@@ -1,0 +1,178 @@
+$name: ea-image-preview;
+
+:host {
+  --ea-overlay-content-width: 100%;
+  --ea-overlay-content-max-width: 100%;
+  --ea-overlay-content-height: 100%;
+
+  --#{$name}-img-move-x: 0px;
+  --#{$name}-img-move-y: 0px;
+
+  --#{$name}-tool-size: 20px;
+  --#{$name}-tool-color: var(--color-white);
+
+  --#{$name}-tool-offset-x: 1.5rem;
+  --#{$name}-tool-offset-y: 1.5rem;
+
+  --#{$name}-scale: 1;
+  --#{$name}-rotate: 0;
+}
+
+@include block($name) {
+  @include element(icon) {
+    --ea-icon-size: var(--#{$name}-tool-size);
+
+    padding: 0.65rem;
+    border-radius: var(--border-radius-round);
+    cursor: pointer;
+
+    width: var(--#{$name}-tool-size);
+    height: var(--#{$name}-tool-size);
+
+    font-size: var(--#{$name}-tool-size);
+    color: var(--#{$name}-tool-color);
+
+    background: var(--ea-overlay-background-color);
+  }
+
+  @include element(img) {
+    --ea-image-background: transparent;
+
+    max-width: 100%;
+    max-height: 100%;
+
+    &::part(preview) {
+      display: none;
+    }
+
+    &::part(error) {
+      color: var(--color-white);
+    }
+  }
+
+  .#{$name}__header,
+  .#{$name}__main,
+  .#{$name}__footer {
+    filter: opacity(0);
+    z-index: calc(var(--ea-overlay-z-index) + 2);
+    transition: filter var(--transition-normal);
+  }
+
+  @include element(header) {
+    position: fixed;
+
+    top: var(--#{$name}-tool-offset-y);
+    right: var(--#{$name}-tool-offset-x);
+  }
+
+  @include element(main) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+  }
+
+  @include element(footer) {
+    position: fixed;
+
+    bottom: var(--#{$name}-tool-offset-y);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  @include element(progress) {
+    display: none;
+
+    margin-bottom: 1.5rem;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: var(--font-size-lg);
+    color: var(--color-white);
+
+    cursor: default;
+    user-select: none;
+  }
+
+  @include element(toolbar) {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+    box-sizing: border-box;
+    padding: 0.25rem 1.25rem;
+    border-radius: var(--border-radius-round);
+
+    background: var(--ea-overlay-background-color);
+
+    font-size: var(--#{$name}-tool-size);
+    color: var(--#{$name}-tool-color);
+
+    .#{$name}__icon {
+      background: none;
+      margin: 0 0.25rem;
+    }
+  }
+
+  @include state(show-progress) {
+    .#{$name}__progress {
+      display: flex;
+    }
+  }
+
+  @include element(prev-icon) {
+    position: fixed;
+    top: 50%;
+    left: var(--#{$name}-tool-offset-x);
+    transform: translateY(-50%);
+    pointer-events: auto;
+  }
+
+  @include element(next-icon) {
+    position: fixed;
+    top: 50%;
+    right: var(--#{$name}-tool-offset-x);
+    transform: translateY(-50%);
+    pointer-events: auto;
+  }
+
+  @include modifier(loading) {
+    --ea-overlay-content-height: 50%;
+  }
+
+  @include modifier(error) {
+    --ea-overlay-content-height: 50%;
+  }
+}
+
+.ea-overlay.is-show {
+  .#{$name}__header,
+  .#{$name}__main,
+  .#{$name}__footer {
+    filter: opacity(1);
+  }
+}
+
+.ea-overlay.is-before-close {
+  .#{$name}__header,
+  .#{$name}__main,
+  .#{$name}__footer {
+    filter: opacity(0);
+  }
+}
+
+.ea-overlay__content {
+  width: auto;
+  height: auto;
+
+  translate: var(--#{$name}-img-move-x) var(--#{$name}-img-move-y);
+  transform: scale(var(--#{$name}-scale)) rotate(var(--#{$name}-rotate));
+
+  cursor: grab;
+  user-select: none;
+
+  transition: transform var(--transition-normal);
+}

@@ -1,0 +1,6 @@
+{
+  "name": "@easy-component-ui/tsconfig",
+  "version": "0.0.0",
+  "private": true,
+  "description": "easy-component-ui monorepo 共享 TypeScript 基础配置"
+}

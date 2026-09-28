@@ -1,10 +1,10 @@
-<script setup>
+﻿<script setup>
 import { onMounted } from 'vue'
 
 onMounted(() => {
-  import("../dist/components/index.js")
-  import("../dist/components/ea-message-box.js")
-  import("../dist/assets/icon.css")
+  import("../packages/components/dist/components/index.js")
+  import("../packages/components/dist/components/ea-message-box.js")
+  import("../packages/components/dist/assets/icon.css")
 
   const Drawer = {
     drawer: document.querySelector("#drawer"),

@@ -1,0 +1,652 @@
+import EaFormAssociatedBase from "@easy-component-ui/core/core/EaFormAssociatedBase";
+import { createBEM } from "@easy-component-ui/core/utils/bem";
+import { CustomElement, attribute, property, query, listen } from "@easy-component-ui/core/decorator";
+import { Enum } from "@easy-component-ui/core/utils/Enum";
+import { EaInputNumberChangeEvent } from "./events/EaInputNumberChangeEvent";
+import { EaInputNumberFocusEvent } from "./events/EaInputNumberFocusEvent";
+import { EaInputNumberBlurEvent } from "./events/EaInputNumberBlurEvent";
+import stylesheet from "./index.scss?inline";
+import "@/components/ea-icon/index";
+
+const TAG_NAME = "ea-input-number" as const;
+const bem = createBEM(TAG_NAME);
+
+export type InputNumberSize = "large" | "default" | "small";
+export type InputNumberAlign = "left" | "center" | "right";
+
+/**
+ * @summary 计数器组件，仅允许输入标准的数字值，可定义范围和步进。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-icon
+ *
+ * @slot prefix - 输入框前置插槽。
+ * @slot suffix - 输入框后置插槽。
+ *
+ * @event ea-change - 值发生变化时触发，detail: `{ currentValue: number, oldValue: number }`。
+ * @event focus - 输入框获得焦点时触发。
+ * @event blur - 输入框失去焦点时触发。
+ *
+ * @csspart container - 容器元素。
+ * @csspart label - 标签元素。
+ * @csspart region - 输入区域容器元素。
+ * @csspart decrease - 减号按钮元素。
+ * @csspart prefix - 前缀插槽容器元素。
+ * @csspart input - 输入框元素。
+ * @csspart suffix - 后缀插槽容器元素。
+ * @csspart increase - 加号按钮元素。
+ *
+ * @cssproperty --ea-input-number-width - 组件宽度。
+ * @cssproperty --ea-input-number-height - 组件高度。
+ * @cssproperty --ea-input-number-font-size - 组件字体大小。
+ * @cssproperty --ea-input-number-border-color - 边框颜色。
+ * @cssproperty --ea-input-number-text-color - 文字颜色。
+ * @cssproperty --ea-input-number-operator-color - 操作按钮颜色。
+ * @cssproperty --ea-input-number-operator-bg-color - 操作按钮背景颜色。
+ * @cssproperty --ea-input-number-operator-disabled-color - 操作按钮禁用颜色。
+ * @cssproperty --ea-input-number-input-disabled-color - 输入框禁用文字颜色。
+ * @cssproperty --ea-input-number-input-disabled-bg-color - 输入框禁用背景颜色。
+ * @cssproperty --ea-input-number-active-color - 激活状态颜色。
+ * @cssproperty --ea-input-number-transition - 过渡动画时长。
+ */
+@CustomElement(TAG_NAME, { styles: [stylesheet] })
+export class EaInputNumber extends EaFormAssociatedBase {
+  // ==================== DOM 元素引用 ====================
+
+  @query(bem.cb())
+  private _container!: HTMLElement;
+
+  @query(bem.ce("form-label"))
+  private _label!: HTMLElement;
+
+  @query(bem.ce("inner"))
+  private _inputEl!: HTMLInputElement;
+
+  @query(bem.ce("decrease"))
+  private _decreaseBtn!: HTMLElement;
+
+  @query(bem.ce("increase"))
+  private _increaseBtn!: HTMLElement;
+
+  private _repeatTimer: ReturnType<typeof setTimeout> | null = null;
+
+  private _repeatDelay: number = 400;
+
+  private _repeatInterval: number = 100;
+
+  private _inputId: string = `ea-input-number-input-${Math.random().toString(36).slice(2, 9)}`;
+
+  // ==================== @property 属性 ====================
+
+  @property({ type: Number, default: 0 })
+  defaultValue: number = 0;
+
+  @property({ type: Boolean, default: false })
+  _isFocus: boolean = false;
+
+  @property({ type: Boolean, default: false })
+  _isMin: boolean = false;
+
+  @property({ type: Boolean, default: false })
+  _isMax: boolean = false;
+
+  // ==================== @attribute 属性 ====================
+
+  @attribute({
+    type: String,
+    default: "",
+    observer(this: EaInputNumber, newVal: string) {
+      this._label.textContent = newVal;
+      if (this._inputEl) {
+        this._inputEl.setAttribute("aria-label", newVal || "数值输入");
+      }
+    },
+  })
+  label: string = "";
+
+  @attribute({
+    type: Number,
+    default: 0,
+    a11y: {
+      ariaAttr: "aria-valuenow",
+      target: bem.ce("inner"),
+    },
+    observer(this: EaInputNumber, newVal: number, oldVal: number) {
+      const fixedNewVal = Number(newVal).toFixed(this.precision);
+      const fixedOldVal = Number(oldVal).toFixed(this.precision);
+
+      this._inputEl.value = fixedNewVal;
+      this.setValue(fixedNewVal);
+
+      this._isMax = Number(fixedNewVal) >= this.max;
+      this._isMin = Number(fixedNewVal) <= this.min;
+
+      this._updateButtonDisabledState();
+
+      this.dispatchEvent(
+        new EaInputNumberChangeEvent({
+          currentValue: Number(fixedNewVal),
+          oldValue: Number(fixedOldVal),
+        })
+      );
+
+      this.updateContainerClasslist();
+    },
+  })
+  value: number = 0;
+
+  @attribute({
+    type: Number,
+    default: Number.MIN_SAFE_INTEGER,
+    a11y: {
+      ariaAttr: "aria-valuemin",
+      target: bem.ce("inner"),
+    },
+    observer(this: EaInputNumber, newVal: number) {
+      if (this._inputEl) this._inputEl.min = String(newVal);
+      this._updateButtonDisabledState();
+    },
+  })
+  min: number = Number.MIN_SAFE_INTEGER;
+
+  @attribute({
+    type: Number,
+    default: Number.MAX_SAFE_INTEGER,
+    a11y: {
+      ariaAttr: "aria-valuemax",
+      target: bem.ce("inner"),
+    },
+    observer(this: EaInputNumber, newVal: number) {
+      if (this._inputEl) this._inputEl.max = String(newVal);
+      this._updateButtonDisabledState();
+    },
+  })
+  max: number = Number.MAX_SAFE_INTEGER;
+
+  @attribute({
+    type: Boolean,
+    default: false,
+    observer(this: EaInputNumber, newVal: boolean) {
+      if (this._inputEl) this._inputEl.required = newVal;
+    },
+  })
+  required: boolean = false;
+
+  @attribute({
+    type: Number,
+    default: 1,
+  })
+  step: number = 1;
+
+  @attribute({
+    type: Boolean,
+    default: false,
+  })
+  stepStrictly: boolean = false;
+
+  @attribute({
+    type: Number,
+    default: 0,
+  })
+  precision: number = 0;
+
+  @attribute({
+    type: Enum(["large", "default", "small"] as const),
+    default: "default",
+    observer(this: EaInputNumber) {
+      this.updateContainerClasslist();
+    },
+  })
+  size: InputNumberSize = "default";
+
+  @attribute({
+    type: Boolean,
+    default: false,
+    observer(this: EaInputNumber, newVal: boolean) {
+      if (this._inputEl) this._inputEl.readOnly = newVal;
+    },
+  })
+  readonly: boolean = false;
+
+  @attribute({
+    type: Boolean,
+    default: false,
+    a11y: {
+      ariaAttr: "aria-disabled",
+      map: v => String(v),
+    },
+    observer(this: EaInputNumber) {
+      this.updateContainerClasslist();
+      this._updateButtonDisabledState();
+    },
+  })
+  disabled: boolean = false;
+
+  @attribute({
+    type: Boolean,
+    default: true,
+    a11y: {
+      ariaAttr: "inert",
+      target: ".ea-input-number__decrease, .ea-input-number__increase",
+      map: v => (v ? null : ""),
+    },
+    observer(this: EaInputNumber) {
+      this.updateContainerClasslist();
+    },
+  })
+  controls: boolean = true;
+
+  @attribute({
+    type: Number,
+    default: undefined,
+  })
+  valueOnClear: number | null = null;
+
+  @attribute({
+    type: Enum(["left", "center", "right"] as const),
+    default: "center",
+    observer(this: EaInputNumber) {
+      this.updateContainerClasslist();
+    },
+  })
+  align: InputNumberAlign = "center";
+
+  @attribute({
+    type: String,
+    default: "",
+    observer(this: EaInputNumber, newVal: string) {
+      if (this._inputEl) this._inputEl.setAttribute("name", newVal);
+    },
+  })
+  name: string = "";
+
+  @attribute({
+    type: String,
+    default: "",
+    observer(this: EaInputNumber, newVal: string) {
+      if (this._inputEl) this._inputEl.setAttribute("placeholder", newVal);
+    },
+  })
+  placeholder: string = "";
+
+  @attribute({
+    type: String,
+    default: "",
+    observer(this: EaInputNumber, newVal: string) {
+      if (this._inputEl) this._inputEl.setAttribute("inputmode", newVal);
+    },
+  })
+  inputmode: string = "";
+
+  // ==================== 抽象属性实现 ====================
+
+  get validationTarget() {
+    return this._inputEl;
+  }
+
+  // ==================== 方法 ====================
+
+  /**
+   * 更新容器 CSS 类名
+   * @returns 生成的类名字符串
+   */
+  updateContainerClasslist(): string {
+    const hasSize = this.size !== "default";
+
+    const className = bem(
+      {
+        ["size-" + this.size]: hasSize,
+        [this.align]: true,
+      },
+      {
+        focus: this._isFocus,
+        min: this._isMin,
+        max: this._isMax,
+        disabled: this.disabled,
+        "no-controls": !this.controls,
+      }
+    );
+
+    if (this._container) this._container.className = className;
+
+    return className;
+  }
+
+  /** 更新增减按钮的禁用状态和 ARIA 属性 */
+  private _updateButtonDisabledState(): void {
+    if (!this._decreaseBtn || !this._increaseBtn) return;
+
+    const isDecreaseDisabled = this._isMin || this.disabled;
+    const isIncreaseDisabled = this._isMax || this.disabled;
+
+    this._decreaseBtn.setAttribute("aria-disabled", String(isDecreaseDisabled));
+    this._decreaseBtn.setAttribute("title", "减少数值");
+    this._decreaseBtn.setAttribute("aria-controls", this._inputId);
+
+    this._increaseBtn.setAttribute("aria-disabled", String(isIncreaseDisabled));
+    this._increaseBtn.setAttribute("title", "增加数值");
+    this._increaseBtn.setAttribute("aria-controls", this._inputId);
+  }
+
+  html(): string {
+    return `
+      <label class='${bem()}' part='container'>
+        <span class='${bem.e("form-label")}' part='label'></span>
+        <section class='${bem.e("region")}' part='region'>
+          <ea-icon class='${bem.e("decrease")}' part='decrease' name='minus' tabindex='-1' aria-hidden='true'></ea-icon>
+          <span class='${bem.e("prefix")}' part='prefix'>
+            <slot name="prefix"></slot>
+          </span>
+          <input class='${bem.e("inner")}' part='input' type='text' role='spinbutton' />
+          <span class='${bem.e("suffix")}' part='suffix'>
+            <slot name="suffix"></slot>
+          </span>
+          <ea-icon class='${bem.e("increase")}' part='increase' name='plus' tabindex='-1' aria-hidden='true'></ea-icon>
+        </section>
+      </label>
+    `;
+  }
+
+  /**
+   * 聚焦输入框
+   * @param options - 焦点选项
+   */
+  focus(options?: FocusOptions) {
+    this._inputEl?.focus(options);
+  }
+
+  /** 失焦输入框 */
+  blur() {
+    this._inputEl?.blur();
+  }
+
+  /**
+   * 校验并修正数值，确保在 min/max 范围内并按 precision 格式化
+   * @param value - 待校验的数值
+   * @param options - 校验选项
+   * @returns 修正后的数值字符串
+   */
+  private _sanitizeNumber(
+    value: number = this.value,
+    {
+      precision,
+      min,
+      max,
+      defaultValue,
+    }: {
+      precision: number;
+      min: number;
+      max: number;
+      defaultValue?: number;
+    }
+  ): string {
+    value = Number(value);
+
+    if (isNaN(value) || !Number.isFinite(value))
+      return defaultValue?.toFixed(precision) || "0";
+
+    if (value < min) value = min;
+    else if (value > max) value = max;
+
+    return value.toFixed(precision);
+  }
+
+  /** 增加值 */
+  private _increase(): void {
+    if (this.disabled || !this.controls) return;
+
+    this.value = Number(
+      this._sanitizeNumber(this.value + this.step, {
+        precision: this.precision,
+        min: this.min,
+        max: this.max,
+        defaultValue: this.defaultValue,
+      })
+    );
+  }
+
+  /** 减少值 */
+  private _decrease(): void {
+    if (this.disabled || !this.controls) return;
+
+    this.value = Number(
+      this._sanitizeNumber(this.value - this.step, {
+        precision: this.precision,
+        min: this.min,
+        max: this.max,
+        defaultValue: this.defaultValue,
+      })
+    );
+  }
+
+  /**
+   * 校验输入值并修正
+   * @param e - blur 事件对象
+   */
+  private _ensureInputValueIsCorrect(e: Event): void {
+    const inputEl = e.target as HTMLInputElement;
+    let correctValue = this._sanitizeNumber(Number(inputEl.value), {
+      precision: this.precision,
+      min: this.min,
+      max: this.max,
+      defaultValue: this.defaultValue,
+    });
+
+    if (this.stepStrictly && Number(correctValue) % this.step !== 0) {
+      correctValue = this._sanitizeNumber(
+        Number(correctValue) + (Number(correctValue) % this.step),
+        {
+          precision: this.precision,
+          min: this.min,
+          max: this.max,
+          defaultValue: this.defaultValue,
+        }
+      );
+    }
+
+    this.value = Number(correctValue);
+
+    if (correctValue !== inputEl.value) inputEl.value = correctValue;
+
+    this._inputEl.removeAttribute("aria-invalid");
+    this._isFocus = false;
+  }
+
+  // ==================== 事件处理 ====================
+
+  /**
+   * 处理减号按钮按下事件，启动长按重复
+   * @param e - 指针事件对象
+   */
+  @listen("pointerdown", bem.ce("decrease"))
+  private _handleDecreasePointerDown(e: PointerEvent) {
+    if (this.disabled || !this.controls) return;
+    e.preventDefault();
+
+    this._startRepeat(() => this._decrease());
+  }
+
+  /**
+   * 处理加号按钮按下事件，启动长按重复
+   * @param e - 指针事件对象
+   */
+  @listen("pointerdown", bem.ce("increase"))
+  private _handleIncreasePointerDown(e: PointerEvent) {
+    if (this.disabled || !this.controls) return;
+    e.preventDefault();
+
+    this._startRepeat(() => this._increase());
+  }
+
+  /** 处理指针抬起和离开事件，停止长按重复 */
+  @listen("pointerup", bem.ce("decrease"))
+  @listen("pointerup", bem.ce("increase"))
+  @listen("pointerleave", bem.ce("decrease"))
+  @listen("pointerleave", bem.ce("increase"))
+  private _handlePointerUp() {
+    this._stopRepeat();
+  }
+
+  /**
+   * 启动长按重复执行
+   * @param action - 要重复执行的函数
+   */
+  private _startRepeat(action: () => void): void {
+    this._stopRepeat();
+    action();
+    this._repeatTimer = setTimeout(() => {
+      this._repeatTimer = setInterval(action, this._repeatInterval);
+    }, this._repeatDelay) as unknown as ReturnType<typeof setTimeout>;
+  }
+
+  /** 停止长按重复执行 */
+  private _stopRepeat(): void {
+    if (this._repeatTimer !== null) {
+      clearTimeout(this._repeatTimer);
+      clearInterval(this._repeatTimer);
+      this._repeatTimer = null;
+    }
+  }
+
+  /**
+   * 处理输入框获得焦点事件，阻止原生 focus 冒泡并派发自定义事件
+   * @param e - focus 事件对象
+   */
+  @listen("focus", bem.ce("inner"))
+  private _handleInputFocus(e: Event) {
+    e.stopPropagation();
+    this._isFocus = true;
+    this.updateContainerClasslist();
+    this.dispatchEvent(new EaInputNumberFocusEvent());
+  }
+
+  /**
+   * 处理键盘按下事件，实现 spinbutton 键盘交互
+   * @param e - 键盘事件对象
+   */
+  @listen("keydown", bem.ce("inner"))
+  private _handleKeyDown(e: KeyboardEvent) {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+    if (e.key === "Enter") {
+      this._ensureInputValueIsCorrect(e);
+      return;
+    }
+
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      const current = Number(this._inputEl.value) || this.value;
+      this.value = Number(
+        this._sanitizeNumber(current + this.step, {
+          precision: this.precision,
+          min: this.min,
+          max: this.max,
+          defaultValue: this.defaultValue,
+        })
+      );
+      return;
+    }
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      const current = Number(this._inputEl.value) || this.value;
+      this.value = Number(
+        this._sanitizeNumber(current - this.step, {
+          precision: this.precision,
+          min: this.min,
+          max: this.max,
+          defaultValue: this.defaultValue,
+        })
+      );
+      return;
+    }
+
+    if (e.key === "Home") {
+      e.preventDefault();
+      this.value = this.min;
+      return;
+    }
+
+    if (e.key === "End") {
+      e.preventDefault();
+      this.value = this.max;
+      return;
+    }
+  }
+
+  /**
+   * 处理输入事件，过滤非法字符并更新 aria-invalid 状态
+   * @param e - 输入事件对象
+   */
+  @listen("input", bem.ce("inner"))
+  private _handleInput(e: Event) {
+    const inputEl = e.target as HTMLInputElement;
+    const rawValue = inputEl.value;
+    const cursorPos = inputEl.selectionStart ?? rawValue.length;
+
+    const filtered = rawValue.replace(/[^\d.\-eE]/g, "");
+
+    if (filtered !== rawValue) {
+      if (filtered === "") {
+        inputEl.value = Number(this.value).toFixed(this.precision);
+        inputEl.setSelectionRange(inputEl.value.length, inputEl.value.length);
+      } else {
+        inputEl.value = filtered;
+        const newCursorPos = Math.min(cursorPos - 1, filtered.length);
+        inputEl.setSelectionRange(newCursorPos, newCursorPos);
+      }
+    }
+
+    const current = inputEl.value;
+    if (
+      current === "" ||
+      current === "-" ||
+      current === "." ||
+      /^-?\d*\.?\d*e?E?$/.test(current)
+    ) {
+      this._inputEl.removeAttribute("aria-invalid");
+      return;
+    }
+
+    const numValue = Number(current);
+    if (!isNaN(numValue) && (numValue < this.min || numValue > this.max)) {
+      this._inputEl.setAttribute("aria-invalid", "true");
+    } else {
+      this._inputEl.removeAttribute("aria-invalid");
+    }
+  }
+
+  /**
+   * 处理输入框失焦事件，阻止原生 blur 冒泡并派发自定义事件
+   * @param e - blur 事件对象
+   */
+  @listen("blur", bem.ce("inner"))
+  private _handleInputBlur(e: Event) {
+    this._ensureInputValueIsCorrect(e);
+    e.stopPropagation();
+    this.dispatchEvent(new EaInputNumberBlurEvent());
+  }
+
+  // ==================== 生命周期 ====================
+
+  formResetCallback() {
+    this.value = this.defaultValue;
+    this.internals.setValidity({});
+  }
+
+  $mount(): void {
+    this._inputEl.id = this._inputId;
+    this._inputEl.setAttribute("aria-label", this.label || "数值输入");
+
+    const initValue = this.hasAttribute("value") ? this.value : 0;
+    this.value = Number(Number(initValue).toFixed(this.precision));
+
+    this.updateContainerClasslist();
+    this._updateButtonDisabledState();
+  }
+
+  $beforeUnmount(): void {
+    this._stopRepeat();
+  }
+}

@@ -1,9 +1,9 @@
-<script setup>
+﻿<script setup>
 import { onMounted } from 'vue'
 
 onMounted(async () => {
-  await import("../dist/components/index.js")
-  await import("../dist/assets/icon.css")
+  await import("../packages/components/dist/components/index.js")
+  await import("../packages/components/dist/assets/icon.css")
 
     const customizedPopconfirmExample = {
         el: document.querySelector("#customizedPopconfirm"),

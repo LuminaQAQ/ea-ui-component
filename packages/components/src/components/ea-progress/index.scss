@@ -1,0 +1,254 @@
+$name: ea-progress;
+
+$progress-status: (
+  "default": blue,
+  "success": green,
+  "exception": red,
+  "warning": yellow,
+);
+
+%progress-base {
+  width: var(--#{$name}-size);
+  height: var(--#{$name}-size);
+
+  .#{$name}__path,
+  .#{$name}__track {
+    stroke-width: var(--#{$name}-stroke-width);
+    stroke-linecap: round;
+    transform-origin: center;
+  }
+
+  .#{$name}__path {
+    transition:
+      stroke-dashoffset var(--transition-normal),
+      stroke var(--transition-normal);
+    animation: none;
+  }
+
+  .#{$name}__percentage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    margin: 0;
+    min-width: auto;
+
+    width: auto;
+    height: auto;
+
+    font-size: var(--font-size-lg);
+  }
+
+  .#{$name}__status {
+    font-size: var(--font-size-lg);
+  }
+}
+
+:host {
+  --#{$name}-percentage: 0;
+  --#{$name}-stroke-width: 8px;
+
+  @each $status, $color in $progress-status {
+    --#{$name}-#{$status}-color: var(--#{$color}-500);
+  }
+
+  --#{$name}-percentage-color: var(--grey-900);
+  --#{$name}-track-color: var(--grey-200);
+  --#{$name}-path-color: var(--#{$name}-default-color);
+
+  --#{$name}-size: 126px;
+
+  --#{$name}-animation-duration: 3s;
+}
+
+:host([variant="circle"]) {
+  --#{$name}-stroke-width: 4px;
+}
+
+:host {
+  display: block;
+}
+
+@keyframes indeterminate {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(200%);
+  }
+}
+
+@keyframes striped-flow {
+  from {
+    background-position: 0 0;
+  }
+
+  to {
+    background-position: 100% 0;
+  }
+}
+
+@include block($name) {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+
+  .#{$name}__track,
+  .#{$name}__path {
+    height: var(--#{$name}-stroke-width);
+    line-height: 1;
+    border-radius: var(--border-radius-round);
+
+    transition: width var(--transition-normal);
+  }
+
+  @include element(track) {
+    width: 100%;
+    background-color: var(--#{$name}-track-color);
+
+    overflow: hidden;
+  }
+
+  @include element(path) {
+    position: relative;
+
+    box-sizing: border-box;
+
+    font-size: var(--font-size-sm);
+    text-align: right;
+
+    width: var(--#{$name}-percentage);
+    background-color: var(--#{$name}-path-color);
+
+    transition: width var(--transition-normal);
+  }
+
+  @include element(percentage) {
+    display: none;
+
+    min-width: 50px;
+
+    margin-left: var(--spacing-xs);
+    font-size: var(--font-size-sm);
+
+    color: var(--#{$name}-percentage-color);
+  }
+
+  @each $status, $color in $progress-status {
+    @include modifier($status) {
+      --#{$name}-percentage-color: var(--#{$name}-#{$status}-color);
+      --#{$name}-path-color: var(--#{$name}-#{$status}-color);
+    }
+  }
+
+  @include modifier(text-inside) {
+    .#{$name}__percentage {
+      position: absolute;
+      right: 0;
+      top: 50%;
+
+      transform: translateY(-50%);
+
+      margin-right: var(--spacing-md);
+
+      color: var(--white);
+    }
+  }
+
+  @include modifier(striped) {
+    .#{$name}__path {
+      background-image: linear-gradient(
+        60deg,
+        transparent 40%,
+        rgba(0, 0, 0, 0.15) 40%,
+        rgba(0, 0, 0, 0.15) 60%,
+        transparent 60%
+      );
+
+      background-size: var(--#{$name}-stroke-width);
+    }
+  }
+
+  @include state(striped-flow) {
+    .#{$name}__path {
+      animation: striped-flow var(--#{$name}-animation-duration) infinite linear;
+    }
+  }
+
+  @include state(indeterminate) {
+    .#{$name}__path {
+      animation: indeterminate var(--#{$name}-animation-duration) infinite
+        ease-in-out;
+    }
+  }
+
+  &.is-striped-flow.is-indeterminate,
+  &.is-indeterminate.is-striped-flow {
+    .#{$name}__path {
+      animation:
+        indeterminate var(--#{$name}-animation-duration) infinite ease-in-out,
+        striped-flow var(--#{$name}-animation-duration) infinite linear;
+    }
+  }
+
+  @include state(show-text) {
+    .#{$name}__percentage {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  @include state(circle) {
+    @extend %progress-base;
+
+    .#{$name}__path,
+    .#{$name}__track {
+      r: calc(49px - var(--#{$name}-stroke-width) / 2);
+      transform: rotate(-90deg);
+    }
+
+    .#{$name}__track {
+      stroke: var(--#{$name}-track-color);
+    }
+
+    .#{$name}__path {
+      stroke: var(--#{$name}-path-color);
+      stroke-dashoffset: var(--#{$name}-percentage);
+    }
+  }
+
+  @include state(dashboard) {
+    @extend %progress-base;
+
+    .#{$name}__path,
+    .#{$name}__track {
+      r: calc(49px - var(--#{$name}-stroke-width) / 2);
+      transform: rotate(135deg);
+    }
+
+    .#{$name}__track {
+      stroke: var(--#{$name}-track-color);
+      stroke-dasharray: 157px;
+    }
+
+    .#{$name}__path {
+      stroke: var(--#{$name}-path-color);
+      stroke-dasharray: 314px;
+
+      stroke-dashoffset: var(--#{$name}-percentage);
+    }
+
+    .mask {
+      transform-origin: center;
+      height: 100%;
+      width: 100%;
+
+      transform: rotate(-135deg) translateY(-30%);
+    }
+  }
+}

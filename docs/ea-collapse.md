@@ -1,10 +1,10 @@
-<script setup>
+﻿<script setup>
 import { onMounted } from 'vue'
 import PropTag from './components/PropTag.vue'
 
 onMounted(() => {
-  import('../dist/components/index.js')
-  import('../dist/assets/icon.css')
+  import('../packages/components/dist/components/index.js')
+  import('../packages/components/dist/assets/icon.css')
 
   // ------- 基础用法 -------
   // #region

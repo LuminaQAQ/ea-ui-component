@@ -1,8 +1,8 @@
-<script setup>
+﻿<script setup>
 import { onMounted } from 'vue'
 
 onMounted(() => {
-  import("../dist/components/ea-input.js")
+  import("../packages/components/dist/components/ea-input.js")
 
   const clearableExample = {
     element: document.querySelector("#clearableInput"),

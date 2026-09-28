@@ -1,0 +1,187 @@
+$name: ea-select;
+
+:host {
+  --#{$name}-height-small: 22px;
+  --#{$name}-height-default: 30px;
+  --#{$name}-height-large: 38px;
+
+  --#{$name}-dropdown-bg-color: var(--color-white);
+
+  --#{$name}-color: var(--grey-700);
+  --#{$name}-placeholder-color: var(--grey-500);
+
+  --#{$name}-transition: var(--transition-fast);
+
+  --#{$name}-border-color: var(--grey-300);
+  --#{$name}-border-invalid-color: var(--red-500);
+}
+
+:host {
+  display: inline-block;
+}
+
+:host(:focus-visible) {
+  .#{$name}__input::part(inner) {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px var(--blue-200);
+  }
+}
+
+:host([disabled]) {
+  cursor: not-allowed;
+}
+
+:host(:invalid) {
+  .#{$name}__input::part(inner) {
+    border-color: var(--#{$name}-border-invalid-color);
+  }
+}
+
+:host([filterable][multiple]) {
+  .#{$name}.is-has-value {
+    .#{$name}__input::part(prefix) {
+      width: 100%;
+    }
+  }
+
+  .#{$name}__input::part(original) {
+    display: block;
+  }
+}
+
+:host([multiple]) {
+  .#{$name}__input::part(prefix) {
+    width: 0;
+  }
+
+  .#{$name}.is-has-value {
+    .#{$name}__input::part(prefix) {
+      width: 100%;
+    }
+  }
+}
+
+@include block($name) {
+  position: relative;
+
+  @include element(dropdown) {
+    position: absolute;
+    bottom: 0;
+
+    box-sizing: border-box;
+    border: 1px solid var(--grey-200);
+
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+
+    transform-origin: bottom center;
+    transform: scaleY(0) translateY(100%);
+
+    background-color: var(--#{$name}-dropdown-bg-color);
+
+    transition: transform var(--#{$name}-transition);
+
+    z-index: 1000;
+  }
+
+  @include element(icon-wrap) {
+    display: flex;
+    flex-wrap: nowrap;
+  }
+
+  @include element(dropdown-icon) {
+    display: inline-block;
+    transition: transform var(--#{$name}-transition);
+  }
+
+  @include element(input) {
+    &::part(original-wrapper) {
+      display: block;
+      height: 100%;
+    }
+
+    &::part(suffix-icon) {
+      display: flex;
+      align-items: center;
+      flex-wrap: nowrap;
+      flex-direction: row;
+    }
+  }
+
+  @include element(clear-icon) {
+    display: none;
+
+    cursor: pointer;
+  }
+
+  @include element(tag-wrap) {
+    margin-right: 0;
+  }
+
+  @include state(focus) {
+    .#{$name}__dropdown {
+      transform: scaleY(1) translateY(100%);
+    }
+
+    .#{$name}__dropdown-icon {
+      transform: rotate(180deg);
+    }
+  }
+
+  @include state(clearable) {
+    .#{$name}__clear-icon {
+      display: block;
+    }
+  }
+
+  @include state(multiple) {
+    .ea-input__prefix::part(prefix) {
+      width: 0;
+    }
+
+    .#{$name}__tag {
+      box-sizing: border-box;
+      margin-right: 4px;
+      margin-bottom: 4px;
+    }
+
+    &.is-has-value {
+      .#{$name}__input::part(original-wrapper) {
+        display: none;
+      }
+
+      .#{$name}__input::part(original) {
+        padding: 8px 0;
+      }
+    }
+  }
+
+  @include state(filterable) {
+    &.is-has-value {
+      .#{$name}__input::part(original)::placeholder {
+        color: var(--#{$name}-color);
+      }
+
+      &.is-focus {
+        .#{$name}__input::part(original)::placeholder {
+          color: var(--#{$name}-placeholder-color);
+        }
+      }
+    }
+  }
+
+  &.is-multiple.is-filterable.is-has-value {
+    .#{$name}__input::part(original-wrapper) {
+      display: block;
+    }
+
+    .#{$name}__input::part(inner) {
+      display: grid;
+      grid-auto-flow: column;
+      grid-template:
+        "a a"
+        "b  c";
+    }
+  }
+}

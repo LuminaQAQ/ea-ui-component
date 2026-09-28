@@ -1,12 +1,12 @@
-<script setup>
+﻿<script setup>
 import { onMounted } from 'vue'
-import { EaMessage } from "../dist/components/ea-message.js";
-import { EaMessageBox } from "../dist/components/ea-message-box.js";
+import { EaMessage } from "../packages/components/dist/components/ea-message.js";
+import { EaMessageBox } from "../packages/components/dist/components/ea-message-box.js";
 import PropTag from './components/PropTag.vue'
 
 onMounted(() => {
-  import("../dist/components/index.js")
-  import("../dist/assets/icon.css")
+  import("../packages/components/dist/components/index.js")
+  import("../packages/components/dist/assets/icon.css")
 
   const alertExample = {
     btn: document.querySelector("#openAlertMessageBox"),

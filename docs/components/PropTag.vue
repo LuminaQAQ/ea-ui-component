@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import "../../dist/components/ea-tag";
+import "../../packages/components/dist/components/ea-tag";
 </script>
 
 <style></style>

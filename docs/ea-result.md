@@ -1,7 +1,7 @@
-<script setup>
+﻿<script setup>
 import { onMounted } from 'vue'
-import "../dist/components/index.js"
-import "../dist/assets/icon.css"
+import "../packages/components/dist/components/index.js"
+import "../packages/components/dist/assets/icon.css"
 
 onMounted(() => {
 })
@@ -199,12 +199,12 @@ import "easy-component-ui/ea-result";
 
 ### EaResult Attributes
 
-| 参数      | 说明                   | 类型   | 可选值                                             | 默认值 |
-| --------- | ---------------------- | ------ | -------------------------------------------------- | ------ |
-| variant   | 结果类型               | string | `"primary" \| "success" \| "warning" \| "danger" \| "info"` | ""     |
-| heading   | 标题                   | string | —                                                  | ""     |
-| sub-title | 副标题                 | string | —                                                  | ""     |
-| icon      | 自定义图标，优先于 variant 默认图标 | string | — | ""     |
+| 参数      | 说明                                | 类型   | 可选值                                                      | 默认值 |
+| --------- | ----------------------------------- | ------ | ----------------------------------------------------------- | ------ |
+| variant   | 结果类型                            | string | `"primary" \| "success" \| "warning" \| "danger" \| "info"` | ""     |
+| heading   | 标题                                | string | —                                                           | ""     |
+| sub-title | 副标题                              | string | —                                                           | ""     |
+| icon      | 自定义图标，优先于 variant 默认图标 | string | —                                                           | ""     |
 
 ### EaResult CSS Part
 
@@ -228,14 +228,14 @@ import "easy-component-ui/ea-result";
 
 ### EaResult CSS Custom Properties
 
-| 属性名                              | 说明           | 默认值             |
-| ----------------------------------- | -------------- | ------------------ |
-| --ea-result-icon-size               | 图标尺寸       | 64px               |
-| --ea-result-padding                 | 组件内边距     | 40px 30px          |
-| --ea-result-title-margin-top        | 标题上边距     | 20px               |
-| --ea-result-title-font-size         | 标题字体大小   | 20px               |
-| --ea-result-title-color             | 标题颜色       | var(--grey-900)    |
-| --ea-result-sub-title-margin-top    | 副标题上边距   | 10px               |
-| --ea-result-sub-title-font-size     | 副标题字体大小 | var(--font-size-md) |
-| --ea-result-sub-title-color         | 副标题颜色     | var(--grey-700)    |
-| --ea-result-extra-margin-top        | 额外内容上边距 | 30px               |
+| 属性名                           | 说明           | 默认值              |
+| -------------------------------- | -------------- | ------------------- |
+| --ea-result-icon-size            | 图标尺寸       | 64px                |
+| --ea-result-padding              | 组件内边距     | 40px 30px           |
+| --ea-result-title-margin-top     | 标题上边距     | 20px                |
+| --ea-result-title-font-size      | 标题字体大小   | 20px                |
+| --ea-result-title-color          | 标题颜色       | var(--grey-900)     |
+| --ea-result-sub-title-margin-top | 副标题上边距   | 10px                |
+| --ea-result-sub-title-font-size  | 副标题字体大小 | var(--font-size-md) |
+| --ea-result-sub-title-color      | 副标题颜色     | var(--grey-700)     |
+| --ea-result-extra-margin-top     | 额外内容上边距 | 30px                |

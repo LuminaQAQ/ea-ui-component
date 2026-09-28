@@ -1,9 +1,9 @@
-<script setup>
+﻿<script setup>
 import { onMounted, ref } from 'vue'
 
 onMounted(() => {
-  import("../dist/components/index.js")
-  import("../dist/assets/icon.css")
+  import("../packages/components/dist/components/index.js")
+  import("../packages/components/dist/assets/icon.css")
 
   // ------- 基础用法 -------
   // #region
@@ -309,9 +309,7 @@ import "easy-component-ui/ea-dialog";
 ::: details 查看代码
 
 ```html
-<ea-button id="basicDialogOpenBtn" plain>
-  Click to open the Dialog
-</ea-button>
+<ea-button id="basicDialogOpenBtn" plain> Click to open the Dialog </ea-button>
 
 <ea-dialog id="basicDialog" heading="Tips" width="500px">
   <span>This is a message</span>
@@ -543,8 +541,7 @@ nestingExample.init();
 ```html
 <ea-dialog id="centerDialog" heading="Tips" width="500px" center>
   <span>
-    It should be noted that the content will not be aligned in center by
-    default
+    It should be noted that the content will not be aligned in center by default
   </span>
   <section slot="footer">
     <div class="dialog-footer">
@@ -872,77 +869,77 @@ eventsExample.init();
 
 ### EaDialog Attributes
 
-| 参数 | 说明 | 类型 | 可选值 | 默认值 |
-| ---- | ---- | ---- | ------ | ------ |
-| `heading` | 对话框标题 | `string` | — | `""` |
-| `width` | 对话框宽度（支持 CSS 值） | `string` | — | `"50%"` |
-| `top` | 对话框顶部距离（支持 CSS 值） | `string` | — | `"50%"` |
-| `visible` | 是否可见 | `boolean` | — | `false` |
-| `center` | 头部和底部内容是否水平居中 | `boolean` | — | `false` |
-| `fullscreen` | 是否全屏显示 | `boolean` | — | `false` |
-| `movable` | 是否可拖拽 | `boolean` | — | `false` |
-| `modal` | 是否显示遮罩层 | `boolean` | — | `true` |
-| `modal-pentrable` | 遮罩层是否可穿透 | `boolean` | — | `false` |
-| `show-close` | 是否显示右上角关闭图标 | `boolean` | — | `true` |
-| `close-on-click-modal` | 点击遮罩层是否关闭 | `boolean` | — | `true` |
-| `close-on-press-escape` | 按 ESC 键是否关闭 | `boolean` | — | `true` |
-| `append-to-body` | 是否将弹窗追加到 body | `boolean` | — | `false` |
-| `append-to` | 指定追加到的选择器 | `string` | — | `"body"` |
-| `z-index` | 层级 | `string` | — | `""` |
-| `background-color` | 遮罩层背景色 | `string` | — | `""` |
-| `content-width` | 内容宽度 | `string` | — | `""` |
-| `content-max-width` | 内容最大宽度 | `string` | — | `""` |
-| `content-height` | 内容高度 | `string` | — | `""` |
-| `beforeClose` | 关闭前回调函数，`done()` 确认关闭，`done(true)` 取消关闭 | `Function` | — | `null` |
+| 参数                    | 说明                                                     | 类型       | 可选值 | 默认值   |
+| ----------------------- | -------------------------------------------------------- | ---------- | ------ | -------- |
+| `heading`               | 对话框标题                                               | `string`   | —      | `""`     |
+| `width`                 | 对话框宽度（支持 CSS 值）                                | `string`   | —      | `"50%"`  |
+| `top`                   | 对话框顶部距离（支持 CSS 值）                            | `string`   | —      | `"50%"`  |
+| `visible`               | 是否可见                                                 | `boolean`  | —      | `false`  |
+| `center`                | 头部和底部内容是否水平居中                               | `boolean`  | —      | `false`  |
+| `fullscreen`            | 是否全屏显示                                             | `boolean`  | —      | `false`  |
+| `movable`               | 是否可拖拽                                               | `boolean`  | —      | `false`  |
+| `modal`                 | 是否显示遮罩层                                           | `boolean`  | —      | `true`   |
+| `modal-pentrable`       | 遮罩层是否可穿透                                         | `boolean`  | —      | `false`  |
+| `show-close`            | 是否显示右上角关闭图标                                   | `boolean`  | —      | `true`   |
+| `close-on-click-modal`  | 点击遮罩层是否关闭                                       | `boolean`  | —      | `true`   |
+| `close-on-press-escape` | 按 ESC 键是否关闭                                        | `boolean`  | —      | `true`   |
+| `append-to-body`        | 是否将弹窗追加到 body                                    | `boolean`  | —      | `false`  |
+| `append-to`             | 指定追加到的选择器                                       | `string`   | —      | `"body"` |
+| `z-index`               | 层级                                                     | `string`   | —      | `""`     |
+| `background-color`      | 遮罩层背景色                                             | `string`   | —      | `""`     |
+| `content-width`         | 内容宽度                                                 | `string`   | —      | `""`     |
+| `content-max-width`     | 内容最大宽度                                             | `string`   | —      | `""`     |
+| `content-height`        | 内容高度                                                 | `string`   | —      | `""`     |
+| `beforeClose`           | 关闭前回调函数，`done()` 确认关闭，`done(true)` 取消关闭 | `Function` | —      | `null`   |
 
 ### EaDialog CSS Part
 
-| 名称 | 说明 |
-| ---- | ---- |
-| `container` | 对话框容器元素 |
-| `header` | 头部元素 |
-| `heading` | 标题文本元素 |
-| `close-icon` | 关闭图标元素 |
-| `content` | 主体内容元素 |
-| `footer` | 底部元素 |
+| 名称         | 说明           |
+| ------------ | -------------- |
+| `container`  | 对话框容器元素 |
+| `header`     | 头部元素       |
+| `heading`    | 标题文本元素   |
+| `close-icon` | 关闭图标元素   |
+| `content`    | 主体内容元素   |
+| `footer`     | 底部元素       |
 
 ### EaDialog Slots
 
-| 名称 | 说明 |
-| ---- | ---- |
+| 名称      | 说明           |
+| --------- | -------------- |
 | `default` | 对话框主体内容 |
-| `header` | 自定义头部内容 |
-| `footer` | 自定义底部内容 |
+| `header`  | 自定义头部内容 |
+| `footer`  | 自定义底部内容 |
 
 ### EaDialog Methods
 
-| 方法名 | 说明 | 参数 |
-| ------ | ---- | ---- |
-| `show()` | 显示对话框 | — |
-| `hide()` | 隐藏对话框 | — |
-| `resetPosition()` | 重置对话框位置（用于可拖拽场景） | — |
+| 方法名            | 说明                             | 参数 |
+| ----------------- | -------------------------------- | ---- |
+| `show()`          | 显示对话框                       | —    |
+| `hide()`          | 隐藏对话框                       | —    |
+| `resetPosition()` | 重置对话框位置（用于可拖拽场景） | —    |
 
 ### EaDialog Events
 
-| 事件名 | 说明 | 回调参数 |
-| ------ | ---- | -------- |
-| `ea-open` | 对话框打开时触发 | — |
-| `ea-opened` | 对话框打开动画结束时触发 | — |
-| `ea-close` | 对话框关闭时触发 | — |
-| `ea-closed` | 对话框关闭动画结束时触发 | — |
+| 事件名      | 说明                     | 回调参数 |
+| ----------- | ------------------------ | -------- |
+| `ea-open`   | 对话框打开时触发         | —        |
+| `ea-opened` | 对话框打开动画结束时触发 | —        |
+| `ea-close`  | 对话框关闭时触发         | —        |
+| `ea-closed` | 对话框关闭动画结束时触发 | —        |
 
 ### EaDialog CSS Custom Properties
 
-| 属性名 | 说明 | 默认值 |
-| ------ | ---- | ------ |
-| `--ea-dialog-padding` | 对话框内边距 | `var(--spacing-lg)` |
-| `--ea-dialog-padding-primary` | 对话框次级内边距 | `var(--spacing-md)` |
-| `--ea-dialog-box-shadow` | 对话框阴影 | `var(--box-shadow-md)` |
-| `--ea-dialog-border-radius` | 对话框圆角 | `var(--border-radius-sm)` |
-| `--ea-dialog-heading-font-size` | 标题字号 | `var(--font-size-lg)` |
-| `--ea-dialog-close-icon-size` | 关闭图标尺寸 | `var(--font-size-lg)` |
-| `--ea-dialog-content-font-size` | 内容字号 | `var(--font-size-md)` |
-| `--ea-dialog-heading-color` | 标题颜色 | `var(--grey-900)` |
-| `--ea-dialog-close-icon-color` | 关闭图标颜色 | `var(--grey-500)` |
-| `--ea-dialog-content-color` | 内容颜色 | `var(--grey-700)` |
-| `--ea-dialog-bg-color` | 对话框背景色 | `var(--white)` |
+| 属性名                          | 说明             | 默认值                    |
+| ------------------------------- | ---------------- | ------------------------- |
+| `--ea-dialog-padding`           | 对话框内边距     | `var(--spacing-lg)`       |
+| `--ea-dialog-padding-primary`   | 对话框次级内边距 | `var(--spacing-md)`       |
+| `--ea-dialog-box-shadow`        | 对话框阴影       | `var(--box-shadow-md)`    |
+| `--ea-dialog-border-radius`     | 对话框圆角       | `var(--border-radius-sm)` |
+| `--ea-dialog-heading-font-size` | 标题字号         | `var(--font-size-lg)`     |
+| `--ea-dialog-close-icon-size`   | 关闭图标尺寸     | `var(--font-size-lg)`     |
+| `--ea-dialog-content-font-size` | 内容字号         | `var(--font-size-md)`     |
+| `--ea-dialog-heading-color`     | 标题颜色         | `var(--grey-900)`         |
+| `--ea-dialog-close-icon-color`  | 关闭图标颜色     | `var(--grey-500)`         |
+| `--ea-dialog-content-color`     | 内容颜色         | `var(--grey-700)`         |
+| `--ea-dialog-bg-color`          | 对话框背景色     | `var(--white)`            |

@@ -1,9 +1,9 @@
-<script setup>
+﻿<script setup>
 import { onMounted } from 'vue'
 
 onMounted(() => {
-    import('../dist/assets/icon.css');
-    import('../dist/components/ea-container.js');
+    import('../packages/components/dist/assets/icon.css');
+    import('../packages/components/dist/components/ea-container.js');
 })
 </script>
 

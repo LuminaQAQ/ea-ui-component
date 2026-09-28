@@ -1,7 +1,7 @@
-<script setup>
+﻿<script setup>
 import { onMounted } from 'vue'
-import "../dist/components/index.js"
-import "../dist/assets/icon.css"
+import "../packages/components/dist/components/index.js"
+import "../packages/components/dist/assets/icon.css"
 
 onMounted(async () => {
   await customElements.whenDefined("ea-table");
@@ -1970,34 +1970,35 @@ const summaryExample = {
   summaryMethodsTable: document.querySelector("#summaryMethodsTable"),
 
   init() {
-    this.summaryMethodsTable.summaryMethod = /**
-     * @param {{columns: ColumnOption, data: any[]}} param
-     */ param => {
-      const { columns, data } = param;
-      const sums = [];
+    this.summaryMethodsTable.summaryMethod =
+      /**
+       * @param {{columns: ColumnOption, data: any[]}} param
+       */ param => {
+        const { columns, data } = param;
+        const sums = [];
 
-      columns.forEach((column, index) => {
-        if (index === 0) {
-          sums[index] = "Total Cost";
-          return;
-        }
-        const values = data.map(item => Number(item[column.prop]));
-        if (!values.every(value => Number.isNaN(value))) {
-          sums[index] = `$ ${values.reduce((prev, curr) => {
-            const value = Number(curr);
-            if (!Number.isNaN(value)) {
-              return prev + curr;
-            } else {
-              return prev;
-            }
-          }, 0)}`;
-        } else {
-          sums[index] = "N/A";
-        }
-      });
+        columns.forEach((column, index) => {
+          if (index === 0) {
+            sums[index] = "Total Cost";
+            return;
+          }
+          const values = data.map(item => Number(item[column.prop]));
+          if (!values.every(value => Number.isNaN(value))) {
+            sums[index] = `$ ${values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!Number.isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0)}`;
+          } else {
+            sums[index] = "N/A";
+          }
+        });
 
-      return sums;
-    };
+        return sums;
+      };
 
     this.table.setData(summaryData);
     this.summaryMethodsTable.setData(summaryData);
@@ -2014,129 +2015,129 @@ summaryExample.init();
 
 ### Table Attributes
 
-| Name | Description | Type | Options | Default |
-| ---- | ----------- | ---- | ------- | ------- |
-| stripe | 是否为斑马纹表格 | Boolean | - | false |
-| border | 是否为带边框表格 | Boolean | - | false |
-| height | 表格高度 | String | - | "" |
-| max-height | 表格最大高度 | String | - | "" |
-| highlight-current-row | 是否高亮当前行 | Boolean | - | false |
-| show-summary | 是否显示合计行 | Boolean | - | false |
+| Name                  | Description      | Type    | Options | Default |
+| --------------------- | ---------------- | ------- | ------- | ------- |
+| stripe                | 是否为斑马纹表格 | Boolean | -       | false   |
+| border                | 是否为带边框表格 | Boolean | -       | false   |
+| height                | 表格高度         | String  | -       | ""      |
+| max-height            | 表格最大高度     | String  | -       | ""      |
+| highlight-current-row | 是否高亮当前行   | Boolean | -       | false   |
+| show-summary          | 是否显示合计行   | Boolean | -       | false   |
 
 ### Table Properties
 
 > Properties 为纯 JavaScript 属性，不映射到 HTML attribute，需通过 JS 访问。
 
-| Name | Description | Type | Default |
-| ---- | ----------- | ---- | ------- |
-| data | 表格数据（等同于 [setData](#table-methods)） | Array | [] |
-| selectable | 行是否可选的判断函数，返回 `true` 表示可选 | Function \| null | null |
-| indexMethod | 自定义索引方法，参数为当前索引，返回显示值 | Function \| null | null |
-| summaryMethod | 自定义合计方法，参数为 `{ columns, data }`，返回合计值数组 | Function \| null | null |
+| Name          | Description                                                | Type             | Default |
+| ------------- | ---------------------------------------------------------- | ---------------- | ------- |
+| data          | 表格数据（等同于 [setData](#table-methods)）               | Array            | []      |
+| selectable    | 行是否可选的判断函数，返回 `true` 表示可选                 | Function \| null | null    |
+| indexMethod   | 自定义索引方法，参数为当前索引，返回显示值                 | Function \| null | null    |
+| summaryMethod | 自定义合计方法，参数为 `{ columns, data }`，返回合计值数组 | Function \| null | null    |
 
 ### Table Methods
 
-| Name | Description | Parameters |
-| ---- | ----------- | ---------- |
-| setData | 设置表格数据 | `(dataSource: any[]) => Promise<void>` |
-| sort | 对指定列进行排序 | `(prop: string, order?: 'asc' \| 'desc') => void` |
-| setRowStylePart | 设置行样式 part | `(handler: Function \| string) => void` |
-| getCurrentRow | 获取当前行数据 | `() => { target: HTMLTableRowElement \| null, value: any }` |
-| setCurrentRow | 设置当前行数据 | `(row?: any) => void` |
-| toggleRowSelection | 切换行选中状态 | `(row: any, selected?: boolean, ignoreSelectable?: boolean) => void` |
-| clearSelection | 清空选择 | `() => void` |
+| Name               | Description      | Parameters                                                           |
+| ------------------ | ---------------- | -------------------------------------------------------------------- |
+| setData            | 设置表格数据     | `(dataSource: any[]) => Promise<void>`                               |
+| sort               | 对指定列进行排序 | `(prop: string, order?: 'asc' \| 'desc') => void`                    |
+| setRowStylePart    | 设置行样式 part  | `(handler: Function \| string) => void`                              |
+| getCurrentRow      | 获取当前行数据   | `() => { target: HTMLTableRowElement \| null, value: any }`          |
+| setCurrentRow      | 设置当前行数据   | `(row?: any) => void`                                                |
+| toggleRowSelection | 切换行选中状态   | `(row: any, selected?: boolean, ignoreSelectable?: boolean) => void` |
+| clearSelection     | 清空选择         | `() => void`                                                         |
 
 ### Table Events
 
-| Name | Description | Detail |
-| ---- | ----------- | ------ |
-| ea-row-click | 行点击时触发 | `{ target, column, row }` |
-| ea-row-dblclick | 行双击时触发 | `{ target, column, row }` |
-| ea-row-contextmenu | 行右键点击时触发 | `{ target, column, row }` |
-| ea-cell-click | 单元格点击时触发 | `{ cell, column, row }` |
-| ea-cell-dblclick | 单元格双击时触发 | `{ cell, column, row }` |
-| ea-cell-contextmenu | 单元格右键点击时触发 | `{ cell, column, row }` |
-| ea-cell-mouse-enter | 单元格鼠标移入时触发 | `{ cell, column, row }` |
-| ea-cell-mouse-leave | 单元格鼠标移出时触发 | `{ cell, column, row }` |
-| ea-header-click | 表头单元格点击时触发 | `{ cell, column }` |
-| ea-header-contextmenu | 表头单元格右键点击时触发 | `{ cell, column }` |
-| ea-sort-change | 排序变化时触发 | `{ prop, order }` |
-| ea-current-change | 当前行变化时触发 | `{ target, column, row }` |
-| ea-selection-change | 选中项变化时触发 | `{ newSelection }` |
-| ea-select | 单行选中时触发 | `{ selection, row }` |
-| ea-select-all | 全选时触发 | `{ selection }` |
-| ea-template-cell-click | 模板单元格点击时触发 | `{ target, rowData, rowIndex, originalEvent }` |
-| ea-table-data-rendered | 数据渲染完成时触发 | - |
+| Name                   | Description              | Detail                                         |
+| ---------------------- | ------------------------ | ---------------------------------------------- |
+| ea-row-click           | 行点击时触发             | `{ target, column, row }`                      |
+| ea-row-dblclick        | 行双击时触发             | `{ target, column, row }`                      |
+| ea-row-contextmenu     | 行右键点击时触发         | `{ target, column, row }`                      |
+| ea-cell-click          | 单元格点击时触发         | `{ cell, column, row }`                        |
+| ea-cell-dblclick       | 单元格双击时触发         | `{ cell, column, row }`                        |
+| ea-cell-contextmenu    | 单元格右键点击时触发     | `{ cell, column, row }`                        |
+| ea-cell-mouse-enter    | 单元格鼠标移入时触发     | `{ cell, column, row }`                        |
+| ea-cell-mouse-leave    | 单元格鼠标移出时触发     | `{ cell, column, row }`                        |
+| ea-header-click        | 表头单元格点击时触发     | `{ cell, column }`                             |
+| ea-header-contextmenu  | 表头单元格右键点击时触发 | `{ cell, column }`                             |
+| ea-sort-change         | 排序变化时触发           | `{ prop, order }`                              |
+| ea-current-change      | 当前行变化时触发         | `{ target, column, row }`                      |
+| ea-selection-change    | 选中项变化时触发         | `{ newSelection }`                             |
+| ea-select              | 单行选中时触发           | `{ selection, row }`                           |
+| ea-select-all          | 全选时触发               | `{ selection }`                                |
+| ea-template-cell-click | 模板单元格点击时触发     | `{ target, rowData, rowIndex, originalEvent }` |
+| ea-table-data-rendered | 数据渲染完成时触发       | -                                              |
 
 ### Table CSS Part
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
-| Name | Description |
-| ---- | ----------- |
-| container | 表格容器 |
-| colgroup | 列分组 |
-| thead | 表头 |
-| tbody | 表体 |
-| tfoot | 表尾 |
-| default-slot | 默认插槽 |
-| thead-th | 表头单元格 |
-| thead-tr | 表头行 |
-| tfoot-tr | 表尾行 |
-| tfoot-td | 表尾单元格 |
-| tbody-tr | 表体行 |
-| tbody-td | 表体单元格 |
+| Name         | Description |
+| ------------ | ----------- |
+| container    | 表格容器    |
+| colgroup     | 列分组      |
+| thead        | 表头        |
+| tbody        | 表体        |
+| tfoot        | 表尾        |
+| default-slot | 默认插槽    |
+| thead-th     | 表头单元格  |
+| thead-tr     | 表头行      |
+| tfoot-tr     | 表尾行      |
+| tfoot-td     | 表尾单元格  |
+| tbody-tr     | 表体行      |
+| tbody-td     | 表体单元格  |
 
 ### Table CSS Custom Properties
 
-| Name | Description | Default |
-| ---- | ----------- | ------- |
-| --ea-table-cell-spacing | 单元格内边距 | var(--spacing-md) |
-| --ea-table-cell-width | 单元格最小宽度 | 100% |
-| --ea-table-height | 表格高度 | auto |
-| --ea-table-max-height | 表格最大高度 | unset |
-| --ea-table-sort-indicator-color | 排序指示器颜色 | var(--grey-500) |
-| --ea-table-sort-indicator-active-color | 排序指示器激活颜色 | var(--blue-500) |
-| --ea-table-sort-icon-size | 排序图标大小 | 14px |
-| --ea-table-header-color | 表头文字颜色 | var(--grey-700) |
-| --ea-table-header-font-size | 表头字体大小 | var(--font-size-lg) |
-| --ea-table-body-color | 表体文字颜色 | var(--grey-900) |
-| --ea-table-body-font-size | 表体字体大小 | var(--font-size-md) |
-| --ea-table-bg-color | 表格背景颜色 | var(--color-white) |
-| --ea-table-stripe-bg-color | 斑马纹背景颜色 | #fafafa |
-| --ea-table-hover-bg-color | 悬停背景颜色 | var(--grey-100) |
-| --ea-table-selected-bg-color | 选中行背景颜色 | var(--blue-100) |
-| --ea-table-border-color | 边框颜色 | var(--grey-200) |
-| --ea-table-fixed-x | 固定列偏移量 | 0 |
-| --ea-table-fixed-left-cell-box-shadow | 左固定列阴影 | 0px 10px 10px 0 rgba(0,0,0,0.12) |
-| --ea-table-fixed-right-cell-box-shadow | 右固定列阴影 | 0px 10px 10px 0 rgba(0,0,0,0.12) |
-| --ea-table-transition | 过渡动画 | var(--transition-fast) |
+| Name                                   | Description        | Default                          |
+| -------------------------------------- | ------------------ | -------------------------------- |
+| --ea-table-cell-spacing                | 单元格内边距       | var(--spacing-md)                |
+| --ea-table-cell-width                  | 单元格最小宽度     | 100%                             |
+| --ea-table-height                      | 表格高度           | auto                             |
+| --ea-table-max-height                  | 表格最大高度       | unset                            |
+| --ea-table-sort-indicator-color        | 排序指示器颜色     | var(--grey-500)                  |
+| --ea-table-sort-indicator-active-color | 排序指示器激活颜色 | var(--blue-500)                  |
+| --ea-table-sort-icon-size              | 排序图标大小       | 14px                             |
+| --ea-table-header-color                | 表头文字颜色       | var(--grey-700)                  |
+| --ea-table-header-font-size            | 表头字体大小       | var(--font-size-lg)              |
+| --ea-table-body-color                  | 表体文字颜色       | var(--grey-900)                  |
+| --ea-table-body-font-size              | 表体字体大小       | var(--font-size-md)              |
+| --ea-table-bg-color                    | 表格背景颜色       | var(--color-white)               |
+| --ea-table-stripe-bg-color             | 斑马纹背景颜色     | #fafafa                          |
+| --ea-table-hover-bg-color              | 悬停背景颜色       | var(--grey-100)                  |
+| --ea-table-selected-bg-color           | 选中行背景颜色     | var(--blue-100)                  |
+| --ea-table-border-color                | 边框颜色           | var(--grey-200)                  |
+| --ea-table-fixed-x                     | 固定列偏移量       | 0                                |
+| --ea-table-fixed-left-cell-box-shadow  | 左固定列阴影       | 0px 10px 10px 0 rgba(0,0,0,0.12) |
+| --ea-table-fixed-right-cell-box-shadow | 右固定列阴影       | 0px 10px 10px 0 rgba(0,0,0,0.12) |
+| --ea-table-transition                  | 过渡动画           | var(--transition-fast)           |
 
 ### Table Slots
 
-| Name | Description |
-| ---- | ----------- |
+| Name    | Description                              |
+| ------- | ---------------------------------------- |
 | default | 表格列定义插槽，仅支持 `ea-table-column` |
-| empty | 表格无数据时显示插槽 |
+| empty   | 表格无数据时显示插槽                     |
 
 ## TableColumn API
 
 ### TableColumn Attributes
 
-| Name | Description | Type | Options | Default |
-| ---- | ----------- | ---- | ------- | ------- |
-| type | 列类型 | String | `selection \| index` | "" |
-| align | 对齐方式 | String | `left \| center \| right` | left |
-| label | 表头标题 | String | - | "" |
-| prop | 数据字段名 | String | - | "" |
-| colspan | 列跨度 | Number | - | undefined |
-| width | 列宽 | String | - | "" |
-| sortable | 是否可排序 | Boolean | - | false |
-| fixed | 固定列 | String | `left \| right` | false |
+| Name     | Description | Type    | Options                   | Default   |
+| -------- | ----------- | ------- | ------------------------- | --------- |
+| type     | 列类型      | String  | `selection \| index`      | ""        |
+| align    | 对齐方式    | String  | `left \| center \| right` | left      |
+| label    | 表头标题    | String  | -                         | ""        |
+| prop     | 数据字段名  | String  | -                         | ""        |
+| colspan  | 列跨度      | Number  | -                         | undefined |
+| width    | 列宽        | String  | -                         | ""        |
+| sortable | 是否可排序  | Boolean | -                         | false     |
+| fixed    | 固定列      | String  | `left \| right`           | false     |
 
 ### TableColumn Slots
 
-| Name | Description |
-| ---- | ----------- |
+| Name    | Description      |
+| ------- | ---------------- |
 | default | 自定义列内容模板 |
-| header | 自定义表头内容 |
+| header  | 自定义表头内容   |

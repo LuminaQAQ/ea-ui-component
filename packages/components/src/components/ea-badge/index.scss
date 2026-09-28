@@ -1,0 +1,81 @@
+$name: ea-badge;
+
+$badge-type: (
+  primary: blue,
+  success: green,
+  warning: yellow,
+  danger: red,
+  info: grey,
+);
+
+:host {
+  --#{$name}-border-radius: var(--border-radius-round);
+  --#{$name}-spacing: 0 var(--spacing-md);
+  --#{$name}-size: 18px;
+  --#{$name}-dot-size: 6px;
+
+  @each $type, $color in $badge-type {
+    --#{$name}-#{$type}: var(--#{$color}-500);
+  }
+
+  --#{$name}-color: var(--#{$name}-danger);
+  --#{$name}-text-color: var(--color-white);
+  --#{$name}-font-size: var(--font-size-sm);
+
+  --#{$name}-offset-x: 0;
+  --#{$name}-offset-y: 0;
+
+  display: contents;
+}
+
+@include block($name) {
+  position: relative;
+  display: inline-block;
+
+  @include element(content) {
+    display: inline-flex;
+    box-sizing: border-box;
+    padding: var(--#{$name}-spacing);
+
+    height: var(--#{$name}-size);
+    line-height: var(--#{$name}-size);
+
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin-right: var(--#{$name}-offset-x);
+    z-index: 1;
+
+    transform: translate(calc(100% - var(--#{$name}-size) / 2), -50%);
+
+    border-radius: var(--#{$name}-border-radius);
+
+    color: var(--#{$name}-text-color);
+    font-size: var(--#{$name}-font-size);
+    background-color: var(--#{$name}-color);
+  }
+
+  @each $type, $color in $badge-type {
+    @include modifier($type) {
+      --#{$name}-color: var(--#{$name}-#{$type});
+    }
+  }
+
+  @include state(dot) {
+    --#{$name}-border-radius: var(--border-radius-circle);
+
+    .#{$name}__content {
+      padding: 0;
+      width: var(--#{$name}-dot-size);
+      height: var(--#{$name}-dot-size);
+
+      transform: translate(50%, -50%);
+    }
+  }
+
+  @include state(hidden) {
+    .#{$name}__content {
+      display: none;
+    }
+  }
+}

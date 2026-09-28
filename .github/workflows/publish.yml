@@ -20,8 +20,8 @@ jobs:
           cache: pnpm
           registry-url: https://registry.npmjs.org
       - run: pnpm install --frozen-lockfile
-      - run: cd mcp-server && npm ci
-      - run: npm run build
-      - run: npm publish --provenance --access public
+      - run: pnpm -r build
+      - run: pnpm publish --provenance --access public --no-git-checks
+        working-directory: packages/components
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

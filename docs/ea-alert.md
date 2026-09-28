@@ -1,12 +1,12 @@
-<script setup>
+﻿<script setup>
 import { onMounted } from 'vue'
 
 onMounted(() => {
-  // import("../dist/components/index.js")
-  // import("../dist/assets/icon.css")
+  // import("../packages/components/dist/components/index.js")
+  // import("../packages/components/dist/assets/icon.css")
 
-  import("../dist/components/ea-alert.js")
-  // import("../dist/assets/icon.css")
+  import("../packages/components/dist/components/ea-alert.js")
+  // import("../packages/components/dist/assets/icon.css")
 
   // ------- 自定义关闭按钮 -------
   // #region

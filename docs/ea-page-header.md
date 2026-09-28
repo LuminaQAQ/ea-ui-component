@@ -1,10 +1,10 @@
-<script setup>
+﻿<script setup>
 import { onMounted } from 'vue'
-import { EaNotification } from "../dist/components/ea-notification.js";
+import { EaNotification } from "../packages/components/dist/components/ea-notification.js";
 
 onMounted(() => {
-  import("../dist/components/index.js")
-  import("../dist/assets/icon.css")
+  import("../packages/components/dist/components/index.js")
+  import("../packages/components/dist/assets/icon.css")
 
   const completeExample = {
     pageHeader: document.querySelector("#completePageHeader"),

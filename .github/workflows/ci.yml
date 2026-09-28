@@ -17,6 +17,6 @@ jobs:
           node-version: 20
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - run: pnpm run typecheck
+      - run: pnpm -r typecheck
       - run: pnpm run test:run
-      - run: pnpm exec tsc --noEmit
-      - run: pnpm exec tsc --noEmit -p tsconfig.test.json

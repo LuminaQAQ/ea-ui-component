@@ -5,7 +5,7 @@ on:
     branches: [master]
     paths:
       - "docs/**"
-      - "src/**"
+      - "packages/**"
       - "package.json"
   workflow_dispatch:
 
@@ -29,9 +29,8 @@ jobs:
           node-version: 20
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: cd mcp-server && npm ci
-      - run: npm run build
-      - run: npm run build:doc
+      - run: pnpm run build
+      - run: pnpm run build:doc
       - uses: actions/upload-pages-artifact@v3
         with:
           path: docs/.vitepress/dist

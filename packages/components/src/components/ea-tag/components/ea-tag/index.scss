@@ -1,0 +1,103 @@
+$name: ea-tag;
+
+$tag-variant: (
+  "primary": blue,
+  "success": green,
+  "warning": yellow,
+  "danger": red,
+  "info": grey,
+);
+
+$tag-sizes: ("large", "default", "small");
+
+$tag-effects: ("light", "dark", "plain");
+
+:host {
+  --#{$name}-border-radius: var(--border-radius-sm);
+  --#{$name}-font-size: var(--font-size-sm);
+  --#{$name}-transition: var(--transition-normal);
+
+  --#{$name}-spacing-small: 0 6px;
+  --#{$name}-spacing-default: 2px 8px;
+  --#{$name}-spacing-large: 4px 12px;
+
+  @each $variant, $color in $tag-variant {
+    @each $effect in $tag-effects {
+      @if ($effect == "light") {
+        --#{$name}-#{$variant}-#{$effect}-bg-color: var(--#{$color}-100);
+        --#{$name}-#{$variant}-#{$effect}-text-color: var(--#{$color}-500);
+      } @else {
+        --#{$name}-#{$variant}-#{$effect}-bg-color: var(--#{$color}-500);
+      }
+    }
+  }
+
+  display: inline-block;
+}
+
+@include block($name) {
+  box-sizing: border-box;
+  border-radius: var(--#{$name}-border-radius);
+  border: 1px solid transparent;
+
+  font-size: var(--#{$name}-font-size);
+
+  filter: opacity(1);
+  transition: filter var(--#{$name}-transition);
+
+  @include element(content) {
+    display: inline;
+  }
+
+  @include element(close) {
+    display: none;
+    --ea-icon-size: var(--#{$name}-font-size);
+    cursor: pointer;
+  }
+
+  @each $size in $tag-sizes {
+    @include modifier(#{$size}-size) {
+      padding: var(--#{$name}-spacing-#{$size});
+    }
+  }
+
+  @each $variant, $color in $tag-variant {
+    @include modifier($variant) {
+      color: var(--#{$name}-#{$variant}-light-text-color);
+      background-color: var(--#{$name}-#{$variant}-light-bg-color);
+      border-color: var(--#{$name}-#{$variant}-light-bg-color);
+
+      @each $effect in $tag-effects {
+        &.#{$name}--#{$effect} {
+          @if ($effect == "dark") {
+            color: var(--color-white);
+            background-color: var(--#{$name}-#{$variant}-#{$effect}-bg-color);
+            border-color: var(--#{$name}-#{$variant}-#{$effect}-bg-color);
+          } @else if($effect == "plain") {
+            background-color: var(--color-transparent);
+            color: var(--#{$name}-#{$variant}-#{$effect}-bg-color);
+            border-color: var(--#{$name}-#{$variant}-#{$effect}-bg-color);
+          }
+        }
+      }
+    }
+  }
+
+  @include state(closable) {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+
+    .#{$name}__close {
+      display: inline-flex;
+    }
+  }
+
+  @include state(round) {
+    border-radius: var(--border-radius-round);
+  }
+
+  @include state(before-close) {
+    filter: opacity(0);
+  }
+}

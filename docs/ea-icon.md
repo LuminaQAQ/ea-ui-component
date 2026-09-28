@@ -1,8 +1,8 @@
-<script setup>
+﻿<script setup>
 import {onMounted} from "vue"
 
 onMounted(() => {
-  import("../dist/components/index.js")
+  import("../packages/components/dist/components/index.js")
 })
 </script>
 
@@ -182,14 +182,14 @@ import "easy-component-ui/ea-icon";
 
 ### EaIcon Attributes
 
-| 属性名  | 类型    | 可选值                                           | 默认值    | 说明                                                     |
-| ------- | ------- | ------------------------------------------------ | --------- | -------------------------------------------------------- |
-| name    | string  | —                                                | `""`      | 图标名称，如 `coffee`、`check`、`github`                 |
-| family  | string  | `classic` / `sharp` / `brands`                   | `classic` | 图标家族                                                 |
-| variant | string  | `solid` / `regular` / `light` / `thin` / `duotone` | `solid`   | 图标样式                                                 |
-| size    | string  | `small` / `medium` / `large` / 自定义数字值       | `""`      | 图标大小，预设值或数字（px）                              |
-| color   | string  | —                                                | `""`      | 图标颜色，支持任意 CSS 颜色值                             |
-| spin    | boolean | —                                                | `false`   | 是否开启旋转动画                                         |
+| 属性名  | 类型    | 可选值                                             | 默认值    | 说明                                     |
+| ------- | ------- | -------------------------------------------------- | --------- | ---------------------------------------- |
+| name    | string  | —                                                  | `""`      | 图标名称，如 `coffee`、`check`、`github` |
+| family  | string  | `classic` / `sharp` / `brands`                     | `classic` | 图标家族                                 |
+| variant | string  | `solid` / `regular` / `light` / `thin` / `duotone` | `solid`   | 图标样式                                 |
+| size    | string  | `small` / `medium` / `large` / 自定义数字值        | `""`      | 图标大小，预设值或数字（px）             |
+| color   | string  | —                                                  | `""`      | 图标颜色，支持任意 CSS 颜色值            |
+| spin    | boolean | —                                                  | `false`   | 是否开启旋转动画                         |
 
 ### EaIcon CSS Part
 
@@ -199,13 +199,13 @@ import "easy-component-ui/ea-icon";
 
 ### EaIcon Slots
 
-| 名称    | 说明               |
-| ------- | ------------------ |
+| 名称    | 说明                 |
+| ------- | -------------------- |
 | default | 默认插槽，自定义内容 |
 
 ### EaIcon CSS Custom Properties
 
-| 属性名            | 说明     | 默认值                |
-| ----------------- | -------- | --------------------- |
-| --ea-icon-size    | 图标大小 | `var(--font-size-md)` |
-| --ea-icon-color   | 图标颜色 | `inherit`             |
+| 属性名          | 说明     | 默认值                |
+| --------------- | -------- | --------------------- |
+| --ea-icon-size  | 图标大小 | `var(--font-size-md)` |
+| --ea-icon-color | 图标颜色 | `inherit`             |

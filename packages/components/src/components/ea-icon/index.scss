@@ -1,0 +1,22 @@
+$name: ea-icon;
+
+:host {
+  --#{$name}-size: var(--font-size-md);
+  --#{$name}-color: inherit;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  font-size: var(--#{$name}-size);
+  color: var(--#{$name}-color);
+}
+
+@include block($name) {
+  display: block;
+  width: calc(var(--#{$name}-size) * 1.25);
+  height: var(--#{$name}-size);
+  line-height: var(--#{$name}-size);
+  font-style: normal;
+}

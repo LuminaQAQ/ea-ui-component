@@ -1,0 +1,71 @@
+{
+  "name": "@easy-component-ui/themes",
+  "version": "4.0.5",
+  "description": "easy-component-ui 主题包：light/dark/source 主题样式与主题控制器",
+  "type": "module",
+  "main": "./dist/controller.js",
+  "module": "./dist/controller.js",
+  "files": [
+    "dist",
+    "src",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/controller.js",
+      "types": "./dist/types/controller.d.ts"
+    },
+    "./controller": {
+      "import": "./dist/controller.js",
+      "types": "./dist/types/controller.d.ts"
+    },
+    "./light": {
+      "import": "./dist/light.js",
+      "types": "./dist/types/light.d.ts"
+    },
+    "./dark": {
+      "import": "./dist/dark.js",
+      "types": "./dist/types/dark.d.ts"
+    },
+    "./source": {
+      "import": "./dist/source.js",
+      "types": "./dist/types/source.d.ts"
+    },
+    "./variables.scss": "./src/variables.scss",
+    "./light.scss": "./src/light.scss",
+    "./dark.scss": "./src/dark.scss",
+    "./source.scss": "./src/source.scss",
+    "./mixins.scss": "./src/mixins.scss",
+    "./namespace.scss": "./src/namespace.scss"
+  },
+  "scripts": {
+    "build": "vite build",
+    "test:run": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "web-components",
+    "theme",
+    "dark-mode"
+  ],
+  "author": "LuminaQAQ",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LuminaQAQ/ea-ui-component.git",
+    "directory": "packages/themes"
+  },
+  "bugs": {
+    "url": "https://github.com/LuminaQAQ/ea-ui-component/issues"
+  },
+  "homepage": "https://luminaqaq.github.io/ea-ui-component/",
+  "devDependencies": {
+    "@types/node": "^24.0.14",
+    "jsdom": "^29.0.1",
+    "sass": "^1.77.2",
+    "typescript": "^5.8.3",
+    "vite": "^6.4.3",
+    "vite-plugin-dts": "^4.5.4",
+    "vitest": "^4.1.0"
+  }
+}

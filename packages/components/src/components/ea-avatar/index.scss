@@ -1,0 +1,63 @@
+$name: ea-avatar;
+
+$size-type: (
+  small: 24px,
+  default: 40px,
+  large: 56px,
+);
+
+:host {
+  @each $size-name, $size in $size-type {
+    --#{$name}-size-#{$size-name}: #{$size};
+  }
+
+  --#{$name}-size: var(--#{$name}-size-default);
+  --#{$name}-square-border-radius: var(--border-radius-sm);
+  --#{$name}-circle-border-radius: var(--border-radius-circle);
+  --#{$name}-fit: cover;
+
+  --#{$name}-color: var(--color-white);
+  --#{$name}-font-size: var(--font-size-md);
+  --#{$name}-background-color: var(--grey-400);
+}
+
+:host {
+  display: inline-block;
+}
+
+@include block($name) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: var(--#{$name}-size);
+  height: var(--#{$name}-size);
+  line-height: var(--#{$name}-size);
+
+  white-space: nowrap;
+
+  background-color: var(--#{$name}-background-color);
+  color: var(--#{$name}-color);
+  font-size: var(--#{$name}-font-size);
+
+  @include element(img) {
+    width: 100%;
+    height: 100%;
+
+    object-fit: var(--#{$name}-fit);
+  }
+
+  @include element(icon) {
+    color: var(--#{$name}-color);
+  }
+
+  @include modifier(circle) {
+    border-radius: var(--#{$name}-circle-border-radius);
+
+    overflow: hidden;
+  }
+
+  @include modifier(square) {
+    border-radius: var(--#{$name}-square-border-radius);
+  }
+}

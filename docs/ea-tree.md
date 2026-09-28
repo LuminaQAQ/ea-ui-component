@@ -1,7 +1,7 @@
-<script setup>
+﻿<script setup>
 import { onMounted } from 'vue'
-import "../dist/components/index.js"
-import "../dist/assets/icon.css"
+import "../packages/components/dist/components/index.js"
+import "../packages/components/dist/assets/icon.css"
 import PropType from "./components/PropTag.vue"
 
 onMounted(async () => {

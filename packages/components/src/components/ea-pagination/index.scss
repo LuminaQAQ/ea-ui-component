@@ -1,0 +1,243 @@
+$name: ea-pagination;
+$ea-pagination-size-options: ("large", "default", "small");
+
+:host {
+  --#{$name}-color: var(--grey-900);
+  --#{$name}-active-color: var(--blue-500);
+  --#{$name}-disabled-active-color: var(--blue-300);
+  --#{$name}-disabled-color: var(--grey-300);
+  --#{$name}-background: var(--grey-200);
+
+  --#{$name}-font-size: var(--font-size-lg);
+  --#{$name}-font-size-default: var(--font-size-lg);
+  --#{$name}-font-size-small: var(--font-size-md);
+  --#{$name}-font-size-large: 18px;
+
+  --#{$name}-spacing: var(--spacing-sm) var(--spacing-lg);
+  --#{$name}-spacing-default: var(--spacing-sm) var(--spacing-lg);
+  --#{$name}-spacing-small: var(--spacing-xs) var(--spacing-md);
+  --#{$name}-spacing-large: var(--spacing-sm) 12px;
+
+  --#{$name}-jumper-height: 28px;
+  --#{$name}-jumper-height-default: 28px;
+  --#{$name}-jumper-height-small: 22px;
+  --#{$name}-jumper-height-large: 30px;
+}
+
+:host {
+  display: block;
+}
+
+:host([disabled]) {
+  cursor: var(--cursor-not-allowed);
+}
+
+@include block($name) {
+  display: flex;
+  align-items: center;
+
+  @include element(icon) {
+    display: inline-block;
+
+    box-sizing: border-box;
+    padding: var(--#{$name}-spacing);
+    border-radius: var(--border-radius-sm);
+
+    font-size: var(--#{$name}-font-size);
+    line-height: var(--#{$name}-font-size);
+
+    color: var(--#{$name}-color);
+    cursor: var(--cursor-pointer);
+    text-align: center;
+
+    &.is-disabled {
+      cursor: var(--cursor-not-allowed);
+      color: var(--#{$name}-disabled-color);
+    }
+
+    &:not(.is-disabled):hover {
+      color: var(--#{$name}-active-color);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--#{$name}-active-color);
+      outline-offset: 2px;
+    }
+  }
+
+  @include element(pager) {
+    user-select: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @include element(page) {
+    display: inline-block;
+
+    box-sizing: border-box;
+    padding: var(--#{$name}-spacing);
+    border-radius: var(--border-radius-sm);
+
+    font-size: var(--#{$name}-font-size);
+    line-height: var(--#{$name}-font-size);
+
+    color: var(--#{$name}-color);
+    cursor: var(--cursor-pointer);
+    text-align: center;
+
+    &:hover {
+      color: var(--#{$name}-active-color);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--#{$name}-active-color);
+      outline-offset: 2px;
+    }
+
+    &.is-active {
+      font-weight: var(--font-weight-bold);
+      color: var(--#{$name}-active-color);
+    }
+  }
+
+  @include element(more) {
+    display: inline-block;
+
+    box-sizing: border-box;
+    padding: var(--#{$name}-spacing);
+    border-radius: var(--border-radius-sm);
+
+    font-size: var(--#{$name}-font-size);
+    line-height: var(--#{$name}-font-size);
+
+    color: var(--#{$name}-color);
+    cursor: var(--cursor-pointer);
+    text-align: center;
+  }
+
+  @include element(total) {
+    color: var(--#{$name}-color);
+    font-size: var(--#{$name}-font-size);
+
+    margin: 0 0.5rem;
+
+    white-space: nowrap;
+  }
+
+  @include element(wrapper) {
+    display: flex;
+    align-items: center;
+
+    margin: 0 0.5rem;
+
+    color: var(--#{$name}-color);
+    font-size: var(--#{$name}-font-size);
+
+    white-space: nowrap;
+  }
+
+  @include element(jumper) {
+    margin-left: 0.5rem;
+
+    --ea-input-number-width: 56px;
+    --ea-input-number-height: var(--#{$name}-jumper-height);
+
+    color: var(--#{$name}-color);
+    font-size: var(--#{$name}-font-size);
+
+    &::part(region) {
+      height: var(--#{$name}-jumper-height);
+    }
+
+    &::part(input) {
+      text-align: center;
+    }
+  }
+
+  @include element(sizes) {
+    margin: 0 0.5rem;
+
+    width: 128px;
+  }
+
+  @include element(separator) {
+    flex: 1;
+  }
+
+  @include modifier(background) {
+    .#{$name}__icon,
+    .#{$name}__page {
+      background: var(--#{$name}-background);
+    }
+
+    .#{$name}__page {
+      margin: 0 var(--spacing-xs);
+
+      &.is-active {
+        color: var(--white);
+        background: var(--#{$name}-active-color);
+      }
+    }
+  }
+
+  @include state(hide) {
+    display: none;
+  }
+
+  @include state(disabled) {
+    cursor: var(--cursor-not-allowed);
+
+    .#{$name}__icon,
+    .#{$name}__page,
+    .#{$name}__total,
+    .#{$name}__wrapper {
+      color: var(--#{$name}-disabled-color);
+      pointer-events: none;
+    }
+
+    .#{$name}__page {
+      &.is-active {
+        cursor: var(--cursor-not-allowed);
+        color: var(--#{$name}-disabled-active-color);
+      }
+    }
+
+    &.#{$name}--background {
+      .#{$name}__page {
+        &.is-active {
+          cursor: var(--cursor-not-allowed);
+          color: var(--white);
+          background-color: var(--#{$name}-disabled-active-color);
+        }
+      }
+    }
+  }
+
+  @each $size in $ea-pagination-size-options {
+    @include modifier(size-#{$size}) {
+      .#{$name}__icon,
+      .#{$name}__page,
+      .#{$name}__more {
+        font-size: var(--#{$name}-font-size-#{$size});
+        line-height: var(--#{$name}-font-size-#{$size});
+        padding: var(--#{$name}-spacing-#{$size});
+      }
+
+      .#{$name}__total,
+      .#{$name}__wrapper {
+        font-size: var(--#{$name}-font-size-#{$size});
+        line-height: var(--#{$name}-font-size-#{$size});
+      }
+
+      .#{$name}__jumper {
+        --ea-input-number-height: var(--#{$name}-jumper-height-#{$size});
+
+        &::part(region) {
+          height: var(--#{$name}-jumper-height-#{$size});
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,249 @@
+$name: ea-button;
+
+$button-type: (
+  primary: blue,
+  success: green,
+  warning: yellow,
+  danger: red,
+  info: grey,
+);
+
+:host {
+  --#{$name}-border-radius: var(--border-radius-sm);
+  --#{$name}-font-size: var(--font-size-md);
+  --#{$name}-transition: var(--transition-fast);
+
+  --#{$name}-padding-sm: var(--spacing-sm) var(--spacing-md);
+  --#{$name}-padding-md: var(--spacing-md) var(--spacing-lg);
+  --#{$name}-padding-lg: var(--spacing-md) var(--spacing-lg);
+
+  --#{$name}-text: var(--grey-900);
+  --#{$name}-bg: var(--color-white);
+  --#{$name}-border-color: var(--grey-300);
+
+  --#{$name}-text-hover: var(--blue-600);
+  --#{$name}-bg-hover: var(--blue-100);
+  --#{$name}-border-color-hover: var(--blue-300);
+
+  --#{$name}-text-active: var(--blue-700);
+  --#{$name}-bg-active: var(--blue-100);
+  --#{$name}-border-color-active: var(--blue-700);
+
+  --#{$name}-text-disabled: var(--grey-400);
+  --#{$name}-bg-disabled: var(--grey-100);
+  --#{$name}-border-color-disabled: var(--grey-300);
+
+  @each $type, $color in $button-type {
+    --#{$name}-#{$type}-text: var(--color-white);
+    --#{$name}-#{$type}-bg: var(--#{$color}-500);
+    --#{$name}-#{$type}-border-color: var(--#{$color}-500);
+    --#{$name}-#{$type}-text-hover: var(--color-white);
+    --#{$name}-#{$type}-bg-hover: var(--#{$color}-400);
+    --#{$name}-#{$type}-border-color-hover: var(--#{$color}-400);
+    --#{$name}-#{$type}-text-active: var(--color-white);
+    --#{$name}-#{$type}-bg-active: var(--#{$color}-600);
+    --#{$name}-#{$type}-border-color-active: var(--#{$color}-600);
+    --#{$name}-#{$type}-text-disabled: var(--color-white);
+    --#{$name}-#{$type}-bg-disabled: var(--#{$color}-300);
+    --#{$name}-#{$type}-border-color-disabled: var(--#{$color}-300);
+  }
+
+  display: inline-block;
+  cursor: var(--cursor-pointer);
+}
+
+:host([disabled]),
+:host([loading]) {
+  cursor: var(--cursor-not-allowed);
+}
+
+@include block($name) {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+  padding: var(--#{$name}-padding-md);
+
+  border: var(--border-width) solid var(--#{$name}-border-color);
+  border-radius: var(--#{$name}-border-radius);
+  background-color: var(--#{$name}-bg);
+  color: var(--#{$name}-text);
+  font-size: var(--#{$name}-font-size);
+  line-height: 1;
+  white-space: nowrap;
+  text-decoration: none;
+
+  cursor: inherit;
+
+  transition:
+    background-color var(--#{$name}-transition),
+    border-color var(--#{$name}-transition),
+    color var(--#{$name}-transition);
+
+  &:hover {
+    color: var(--#{$name}-text-hover);
+    background-color: var(--#{$name}-bg-hover);
+    border-color: var(--#{$name}-border-color-hover);
+  }
+
+  &:active {
+    color: var(--#{$name}-text-active);
+    background-color: var(--#{$name}-bg-active);
+    border-color: var(--#{$name}-border-color-active);
+  }
+
+  @include element(loading-icon) {
+    display: none;
+  }
+
+  @include element(icon) {
+    display: none;
+  }
+
+  @include state(loading) {
+    .#{$name}__loading-icon {
+      display: inline-block;
+      margin-right: var(--spacing-md);
+    }
+  }
+
+  @include state(icon) {
+    .#{$name}__icon {
+      display: inline-block;
+    }
+  }
+
+  @include state(disabled) {
+    pointer-events: none;
+
+    color: var(--#{$name}-text-disabled);
+    background-color: var(--#{$name}-bg-disabled);
+    border-color: var(--#{$name}-border-color-disabled);
+
+    cursor: var(--cursor-not-allowed);
+  }
+
+  @include modifier(small) {
+    --#{$name}-font-size: var(--font-size-sm);
+    padding: var(--#{$name}-padding-sm);
+  }
+
+  @include modifier(large) {
+    --#{$name}-font-size: var(--font-size-lg);
+    padding: var(--#{$name}-padding-lg);
+  }
+
+  @include modifier(round) {
+    border-radius: var(--border-radius-round);
+  }
+
+  @include modifier(circle) {
+    border-radius: var(--border-radius-circle);
+    padding: var(--spacing-md);
+  }
+
+  @include modifier(text) {
+    background-color: transparent;
+    border-color: transparent;
+
+    &:hover {
+      background-color: transparent;
+      border-color: transparent;
+    }
+
+    &:active {
+      background-color: transparent;
+      border-color: transparent;
+    }
+
+    &.is-disabled {
+      background-color: transparent;
+      border-color: transparent;
+    }
+  }
+
+  @include modifier(plain) {
+    &:hover {
+      color: var(--#{$name}-text-hover);
+    }
+
+    &:active {
+      color: var(--#{$name}-text-active);
+    }
+  }
+
+  @include modifier(link) {
+    background-color: transparent;
+    border-color: transparent;
+    padding: 0;
+  }
+
+  @each $type, $color in $button-type {
+    @include modifier(#{$type}) {
+      --#{$name}-text: var(--#{$name}-#{$type}-text);
+      --#{$name}-bg: var(--#{$name}-#{$type}-bg);
+      --#{$name}-border-color: var(--#{$name}-#{$type}-border-color);
+      --#{$name}-text-hover: var(--#{$name}-#{$type}-text-hover);
+      --#{$name}-bg-hover: var(--#{$name}-#{$type}-bg-hover);
+      --#{$name}-border-color-hover: var(
+        --#{$name}-#{$type}-border-color-hover
+      );
+      --#{$name}-text-active: var(--#{$name}-#{$type}-text-active);
+      --#{$name}-bg-active: var(--#{$name}-#{$type}-bg-active);
+      --#{$name}-border-color-active: var(
+        --#{$name}-#{$type}-border-color-active
+      );
+      --#{$name}-text-disabled: var(--#{$name}-#{$type}-text-disabled);
+      --#{$name}-bg-disabled: var(--#{$name}-#{$type}-bg-disabled);
+      --#{$name}-border-color-disabled: var(
+        --#{$name}-#{$type}-border-color-disabled
+      );
+
+      &.#{$name}--text {
+        --#{$name}-text: var(--#{$color}-500);
+        --#{$name}-text-hover: var(--#{$color}-400);
+        --#{$name}-text-active: var(--#{$color}-600);
+        --#{$name}-text-disabled: var(--#{$color}-300);
+      }
+
+      &.#{$name}--plain {
+        --#{$name}-bg: var(--#{$color}-100);
+        --#{$name}-border-color: var(--#{$color}-300);
+        --#{$name}-text: var(--#{$color}-500);
+        --#{$name}-text-hover: var(--color-white);
+        --#{$name}-bg-hover: var(--#{$color}-400);
+        --#{$name}-border-color-hover: var(--#{$color}-400);
+        --#{$name}-text-active: var(--color-white);
+        --#{$name}-bg-active: var(--#{$color}-600);
+        --#{$name}-border-color-active: var(--#{$color}-600);
+        --#{$name}-text-disabled: var(--#{$color}-300);
+        --#{$name}-bg-disabled: var(--#{$color}-100);
+        --#{$name}-border-color-disabled: var(--#{$color}-300);
+      }
+    }
+  }
+
+  &.#{$name}--normal.#{$name}--text {
+    --#{$name}-text: var(--grey-900);
+    --#{$name}-text-hover: var(--blue-600);
+    --#{$name}-text-active: var(--blue-700);
+    --#{$name}-text-disabled: var(--grey-400);
+  }
+
+  &.#{$name}--normal.#{$name}--plain {
+    --#{$name}-bg: var(--color-white);
+    --#{$name}-text: var(--grey-900);
+    --#{$name}-text-hover: var(--blue-500);
+    --#{$name}-bg-hover: var(--blue-100);
+    --#{$name}-border-color-hover: var(--blue-300);
+    --#{$name}-text-active: var(--blue-700);
+    --#{$name}-bg-active: var(--blue-100);
+    --#{$name}-border-color-active: var(--blue-700);
+    --#{$name}-text-disabled: var(--grey-400);
+    --#{$name}-bg-disabled: var(--grey-100);
+    --#{$name}-border-color-disabled: var(--grey-300);
+  }
+}

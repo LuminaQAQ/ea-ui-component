@@ -1,7 +1,7 @@
-<script setup>
+﻿<script setup>
 import { onMounted } from 'vue'
-import "../dist/components/index.js"
-import "../dist/assets/icon.css"
+import "../packages/components/dist/components/index.js"
+import "../packages/components/dist/assets/icon.css"
 import PropTag from './components/PropTag.vue'
 
 onMounted(async () => {
@@ -154,7 +154,6 @@ import "easy-component-ui/ea-overlay";
 
 ::: details 查看代码
 
-
 ```css
 ea-card {
   height: 100%;
@@ -175,7 +174,6 @@ ea-card::part(content) {
   text-align: right;
 }
 ```
-
 
 :::
 
@@ -332,7 +330,9 @@ basicExample.init();
       </p>
     </ea-card>
   </ea-overlay>
-  <ea-button id="beforeCloseOverlayOpenButton" variant="primary">open</ea-button>
+  <ea-button id="beforeCloseOverlayOpenButton" variant="primary"
+    >open</ea-button
+  >
 </div>
 ```
 
@@ -354,30 +354,30 @@ overlay.beforeClose = async done => {
 
 ### Overlay Attributes
 
-| 参数 | 说明 | 类型 | 可选值 | 默认值 |
-| --- | --- | --- | --- | --- |
-| visible | 是否可见 | Boolean | — | false |
-| modal | 是否显示遮罩层 | Boolean | — | true |
-| close-on-click-modal | 点击遮罩层是否关闭 | Boolean | — | true |
-| close-on-press-escape | 按 ESC 键是否关闭 | Boolean | — | true |
-| append-to-body | 是否追加到 body | Boolean | — | false |
-| append-to | 追加到指定选择器容器 | String | — | body |
-| z-index | z-index 层级 | String | — | '' |
-| background-color | 遮罩层背景色 | String | — | '' |
-| content-width | 内容宽度 | String | — | '' |
-| content-max-width | 内容最大宽度 | String | — | '' |
-| content-height | 内容高度 | String | — | '' |
-| beforeClose <PropTag /> | 关闭前触发的回调函数，接收 `done` 回调作为参数。`done()` 确认关闭，`done(true)` 取消关闭 | Function | — | null |
+| 参数                    | 说明                                                                                     | 类型     | 可选值 | 默认值 |
+| ----------------------- | ---------------------------------------------------------------------------------------- | -------- | ------ | ------ |
+| visible                 | 是否可见                                                                                 | Boolean  | —      | false  |
+| modal                   | 是否显示遮罩层                                                                           | Boolean  | —      | true   |
+| close-on-click-modal    | 点击遮罩层是否关闭                                                                       | Boolean  | —      | true   |
+| close-on-press-escape   | 按 ESC 键是否关闭                                                                        | Boolean  | —      | true   |
+| append-to-body          | 是否追加到 body                                                                          | Boolean  | —      | false  |
+| append-to               | 追加到指定选择器容器                                                                     | String   | —      | body   |
+| z-index                 | z-index 层级                                                                             | String   | —      | ''     |
+| background-color        | 遮罩层背景色                                                                             | String   | —      | ''     |
+| content-width           | 内容宽度                                                                                 | String   | —      | ''     |
+| content-max-width       | 内容最大宽度                                                                             | String   | —      | ''     |
+| content-height          | 内容高度                                                                                 | String   | —      | ''     |
+| beforeClose <PropTag /> | 关闭前触发的回调函数，接收 `done` 回调作为参数。`done()` 确认关闭，`done(true)` 取消关闭 | Function | —      | null   |
 
 ### Overlay CSS Part
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
-| 名称 | 说明 |
-| --- | --- |
+| 名称      | 说明             |
+| --------- | ---------------- |
 | container | overlay 外层容器 |
-| mask | overlay 遮罩层 |
-| content | overlay 内容容器 |
+| mask      | overlay 遮罩层   |
+| content   | overlay 内容容器 |
 
 ### Overlay CSS Variables
 
@@ -394,22 +394,22 @@ ea-overlay {
 
 ### Overlay Events
 
-| 事件名 | 说明 | 回调参数 |
-| --- | --- | --- |
-| ea-open | 开启 Overlay 时触发的事件 | — |
-| ea-opened | 开启 Overlay 的动画结束时触发 | — |
-| ea-close | 关闭 Overlay 时触发的事件 | — |
-| ea-closed | 关闭 Overlay 的动画结束时触发 | — |
+| 事件名    | 说明                          | 回调参数 |
+| --------- | ----------------------------- | -------- |
+| ea-open   | 开启 Overlay 时触发的事件     | —        |
+| ea-opened | 开启 Overlay 的动画结束时触发 | —        |
+| ea-close  | 关闭 Overlay 时触发的事件     | —        |
+| ea-closed | 关闭 Overlay 的动画结束时触发 | —        |
 
 ### Overlay Methods
 
-| 方法名 | 说明 | 参数 |
-| --- | --- | --- |
-| show | 显示 Overlay | — |
-| hide | 隐藏 Overlay | — |
+| 方法名 | 说明         | 参数 |
+| ------ | ------------ | ---- |
+| show   | 显示 Overlay | —    |
+| hide   | 隐藏 Overlay | —    |
 
 ### Overlay Slots
 
-| 名称 | 说明 |
-| --- | --- |
+| 名称    | 说明             |
+| ------- | ---------------- |
 | default | Overlay 内容插槽 |

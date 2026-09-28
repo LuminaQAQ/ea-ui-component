@@ -1,9 +1,9 @@
-<script setup>
+﻿<script setup>
 import { onMounted } from 'vue'
 
 onMounted(() => {
-  import("../dist/components/index.js")
-  import("../dist/assets/icon.css")
+  import("../packages/components/dist/components/index.js")
+  import("../packages/components/dist/assets/icon.css")
 })
 </script>
 
@@ -173,36 +173,36 @@ import "easy-component-ui/ea-text";
 
 ### EaText Attributes
 
-| 属性名 | 说明 | 类型 | 可选值 | 默认值 |
-| --- | --- | --- | --- | --- |
-| variant | 文本类型 | string | normal / primary / success / warning / danger / info | normal |
-| size | 文本大小 | string | large / medium / small | medium |
-| truncated | 文本是否截断 | boolean | — | false |
-| line-clamp | 截断的行数 | number | — | 0 |
-| tag | 文本标签 | string | span / p / b / i / sub / sup / ins / del / mark | span |
+| 属性名     | 说明         | 类型    | 可选值                                               | 默认值 |
+| ---------- | ------------ | ------- | ---------------------------------------------------- | ------ |
+| variant    | 文本类型     | string  | normal / primary / success / warning / danger / info | normal |
+| size       | 文本大小     | string  | large / medium / small                               | medium |
+| truncated  | 文本是否截断 | boolean | —                                                    | false  |
+| line-clamp | 截断的行数   | number  | —                                                    | 0      |
+| tag        | 文本标签     | string  | span / p / b / i / sub / sup / ins / del / mark      | span   |
 
 ### EaText Slots
 
-| 插槽名 | 说明 |
-| --- | --- |
+| 插槽名  | 说明     |
+| ------- | -------- |
 | default | 默认内容 |
 
 ### EaText CSS Part
 
-| 名称 | 说明 |
-| --- | --- |
+| 名称      | 说明 |
+| --------- | ---- |
 | container | 容器 |
 
 ### EaText CSS Custom Properties
 
-| 属性名 | 说明 | 默认值 |
-| --- | --- | --- |
-| --ea-text-line-clamp | 截断行数 | 0 |
-| --ea-text-primary-color | 主色文本颜色 | var(--blue-500) |
-| --ea-text-success-color | 成功文本颜色 | var(--green-500) |
-| --ea-text-info-color | 信息文本颜色 | var(--grey-500) |
-| --ea-text-warning-color | 警告文本颜色 | var(--yellow-500) |
-| --ea-text-danger-color | 危险文本颜色 | var(--red-500) |
-| --ea-text-small-font-size | 小号字体大小 | var(--font-size-sm) |
+| 属性名                     | 说明         | 默认值              |
+| -------------------------- | ------------ | ------------------- |
+| --ea-text-line-clamp       | 截断行数     | 0                   |
+| --ea-text-primary-color    | 主色文本颜色 | var(--blue-500)     |
+| --ea-text-success-color    | 成功文本颜色 | var(--green-500)    |
+| --ea-text-info-color       | 信息文本颜色 | var(--grey-500)     |
+| --ea-text-warning-color    | 警告文本颜色 | var(--yellow-500)   |
+| --ea-text-danger-color     | 危险文本颜色 | var(--red-500)      |
+| --ea-text-small-font-size  | 小号字体大小 | var(--font-size-sm) |
 | --ea-text-medium-font-size | 中号字体大小 | var(--font-size-md) |
-| --ea-text-large-font-size | 大号字体大小 | var(--font-size-lg) |
+| --ea-text-large-font-size  | 大号字体大小 | var(--font-size-lg) |

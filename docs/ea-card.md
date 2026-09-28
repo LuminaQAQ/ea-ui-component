@@ -1,9 +1,9 @@
-<script setup>
+﻿<script setup>
 import { onMounted } from 'vue'
 
 onMounted(() => {
-  import('../dist/components/index.js')
-  import('../dist/assets/icon.css')
+  import('../packages/components/dist/components/index.js')
+  import('../packages/components/dist/assets/icon.css')
 })
 </script>
 
@@ -203,11 +203,11 @@ Card 组件由 `header` `content` 和 `footer` 组成。 `header` 和 `footer` �
 
 ### EaCard Attributes
 
-| 参数   | 说明                                                                                            | 类型   | 可选值                     | 默认值 |
-| ------ | ----------------------------------------------------------------------------------------------- | ------ | -------------------------- | ------ |
-| header | 卡片的标题。你既可以通过设置 header 来修改标题，也可以通过 `slot="header"` 传入 DOM 节点         | string | —                          | —      |
+| 参数   | 说明                                                                                           | 类型   | 可选值                     | 默认值 |
+| ------ | ---------------------------------------------------------------------------------------------- | ------ | -------------------------- | ------ |
+| header | 卡片的标题。你既可以通过设置 header 来修改标题，也可以通过 `slot="header"` 传入 DOM 节点       | string | —                          | —      |
 | footer | 卡片页脚。你既可以通过设置 footer 来修改卡片底部内容，也可以通过 `slot="footer"` 传入 DOM 节点 | string | —                          | —      |
-| shadow | 卡片阴影显示时机                                                                                | string | `always \| hover \| never` | always |
+| shadow | 卡片阴影显示时机                                                                               | string | `always \| hover \| never` | always |
 
 ### EaCard CSS Part
 
@@ -228,11 +228,11 @@ Card 组件由 `header` `content` 和 `footer` 组成。 `header` 和 `footer` �
 
 ### EaCard CSS Custom Properties
 
-| 属性名                         | 说明         | 默认值                    |
-| ------------------------------ | ------------ | ------------------------- |
-| --ea-card-border-color         | 边框颜色     | var(--grey-200)           |
-| --ea-card-border-radius        | 圆角大小     | var(--border-radius-sm)   |
-| --ea-card-box-shadow           | 阴影效果     | var(--box-shadow-md)      |
-| --ea-card-background-color     | 背景颜色     | var(--white)              |
-| --ea-card-padding              | 内边距       | var(--spacing-lg)         |
-| --ea-card-transition           | 过渡动画时长 | var(--transition-normal)  |
+| 属性名                     | 说明         | 默认值                   |
+| -------------------------- | ------------ | ------------------------ |
+| --ea-card-border-color     | 边框颜色     | var(--grey-200)          |
+| --ea-card-border-radius    | 圆角大小     | var(--border-radius-sm)  |
+| --ea-card-box-shadow       | 阴影效果     | var(--box-shadow-md)     |
+| --ea-card-background-color | 背景颜色     | var(--white)             |
+| --ea-card-padding          | 内边距       | var(--spacing-lg)        |
+| --ea-card-transition       | 过渡动画时长 | var(--transition-normal) |
