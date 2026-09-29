@@ -1,0 +1,16 @@
+{
+  "$schema": "https://unpkg.com/@changesets/config@3.1.1/schema.json",
+  "changelog": "@changesets/cli/changelog",
+  "commit": false,
+  "fixed": [
+    [
+      "@easy-component-ui/core",
+      "@easy-component-ui/themes",
+      "easy-component-ui"
+    ]
+  ],
+  "linked": [],
+  "access": "public",
+  "baseBranch": "feat/monorepo",
+  "updateInternalDependencies": "patch"
+}

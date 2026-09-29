@@ -20,9 +20,8 @@
     "format": "prettier --write \"**/*.{js,json,scss,css,md}\"",
     "prepare": "husky",
     "commit": "git add . && git-cz",
-    "version:patch": "tsx scripts/bump-version.ts patch",
-    "version:minor": "tsx scripts/bump-version.ts minor",
-    "version:major": "tsx scripts/bump-version.ts major"
+    "changeset": "changeset",
+    "changeset:version": "changeset version"
   },
   "repository": {
     "type": "git",
@@ -69,7 +68,7 @@
   },
   "homepage": "https://luminaqaq.github.io/ea-ui-component/",
   "devDependencies": {
-    "easy-component-ui": "workspace:*",
+    "@changesets/cli": "^3.0.3",
     "@commitlint/cli": "^20.2.0",
     "@commitlint/config-conventional": "^20.2.0",
     "@eslint/js": "^9.39.2",
@@ -81,6 +80,7 @@
     "cross-env": "^10.1.0",
     "cz-conventional-changelog": "^3.3.0",
     "dayjs": "^1.11.19",
+    "easy-component-ui": "workspace:*",
     "esbuild": "^0.28.0",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
