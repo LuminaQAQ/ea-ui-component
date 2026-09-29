@@ -1,6 +1,6 @@
 {
   "name": "@easy-component-ui/core",
-  "version": "4.0.5",
+  "version": "4.0.6",
   "description": "easy-component-ui 核心包：EaBase 基类、表单关联基类、装饰器、工具函数与常量",
   "type": "module",
   "main": "./dist/index.js",

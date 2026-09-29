@@ -1,6 +1,6 @@
 {
   "name": "@easy-component-ui/themes",
-  "version": "4.0.5",
+  "version": "4.0.6",
   "description": "easy-component-ui 主题包：light/dark/source 主题样式与主题控制器",
   "type": "module",
   "main": "./dist/controller.js",
