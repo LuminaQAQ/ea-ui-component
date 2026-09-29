@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-08-28T08:44:40.797Z",
+  "generatedAt": "2026-09-29T16:21:49.367Z",
   "totalComponents": 68,
   "successCount": 68,
   "failCount": 0,
@@ -12,7 +12,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "固钉组件，将页面元素固定在可视范围内，常用于侧边导航或操作按钮。",
-      "sourcePath": "src/components/ea-affix",
+      "sourcePath": "packages/components/src/components/ea-affix",
       "props": [
         {
           "name": "offset",
@@ -37,7 +37,10 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["top", "bottom"]
+          "enumValues": [
+            "top",
+            "bottom"
+          ]
         }
       ],
       "events": [],
@@ -101,7 +104,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "警告提示组件，用于展示重要的提示信息，支持多种类型和可关闭功能。",
-      "sourcePath": "src/components/ea-alert",
+      "sourcePath": "packages/components/src/components/ea-alert",
       "props": [
         {
           "name": "heading",
@@ -126,7 +129,13 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["primary", "success", "warning", "danger", "info"]
+          "enumValues": [
+            "primary",
+            "success",
+            "warning",
+            "danger",
+            "info"
+          ]
         },
         {
           "name": "effect",
@@ -135,7 +144,10 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["light", "dark"]
+          "enumValues": [
+            "light",
+            "dark"
+          ]
         },
         {
           "name": "closeText",
@@ -305,7 +317,9 @@
         }
       ],
       "subComponents": [],
-      "dependencies": ["ea-icon"],
+      "dependencies": [
+        "ea-icon"
+      ],
       "examples": [
         {
           "title": "基本用法",
@@ -358,7 +372,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "头像组件，以图标、图片或字符的形式展示用户或实体的标识信息。",
-      "sourcePath": "src/components/ea-avatar",
+      "sourcePath": "packages/components/src/components/ea-avatar",
       "props": [
         {
           "name": "icon",
@@ -375,7 +389,10 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["circle", "square"]
+          "enumValues": [
+            "circle",
+            "square"
+          ]
         },
         {
           "name": "size",
@@ -416,7 +433,13 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["fill", "contain", "cover", "none", "scale-down"]
+          "enumValues": [
+            "fill",
+            "contain",
+            "cover",
+            "none",
+            "scale-down"
+          ]
         }
       ],
       "events": [
@@ -478,7 +501,9 @@
         }
       ],
       "subComponents": [],
-      "dependencies": ["ea-icon"],
+      "dependencies": [
+        "ea-icon"
+      ],
       "examples": [
         {
           "title": "基本用法",
@@ -507,7 +532,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "回到顶部组件，用于快速返回页面顶部的操作按钮，支持自定义滚动目标、显示阈值和平滑滚动。",
-      "sourcePath": "src/components/ea-backtop",
+      "sourcePath": "packages/components/src/components/ea-backtop",
       "props": [
         {
           "name": "target",
@@ -635,7 +660,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "徽标组件，出现在按钮、图标旁的数字或状态标记，支持多种类型、最大值和小圆点模式。",
-      "sourcePath": "src/components/ea-badge",
+      "sourcePath": "packages/components/src/components/ea-badge",
       "props": [
         {
           "name": "value",
@@ -660,7 +685,13 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["primary", "success", "warning", "danger", "info"]
+          "enumValues": [
+            "primary",
+            "success",
+            "warning",
+            "danger",
+            "info"
+          ]
         },
         {
           "name": "color",
@@ -800,7 +831,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "边框光束动画组件，用于为元素添加动态的边框光束扫描效果，支持多条光束和悬停触发。",
-      "sourcePath": "src/components/ea-border-beam",
+      "sourcePath": "packages/components/src/components/ea-border-beam",
       "props": [
         {
           "name": "count",
@@ -817,7 +848,10 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["", "hover"]
+          "enumValues": [
+            "",
+            "hover"
+          ]
         },
         {
           "name": "size",
@@ -961,7 +995,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "面包屑导航组件，显示当前页面的路径，快速返回之前的任意页面。",
-      "sourcePath": "src/components/ea-breadcrumb",
+      "sourcePath": "packages/components/src/components/ea-breadcrumb",
       "props": [
         {
           "name": "separator",
@@ -1002,7 +1036,9 @@
           "sourcePath": "ea-breadcrumb/components/ea-breadcrumb-item"
         }
       ],
-      "dependencies": ["ea-icon"],
+      "dependencies": [
+        "ea-icon"
+      ],
       "examples": [
         {
           "title": "基础用法",
@@ -1025,7 +1061,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "按钮组件，用于触发操作，支持多种变体、尺寸和状态。",
-      "sourcePath": "src/components/ea-button",
+      "sourcePath": "packages/components/src/components/ea-button",
       "props": [
         {
           "name": "disabled",
@@ -1109,7 +1145,11 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["small", "medium", "large"]
+          "enumValues": [
+            "small",
+            "medium",
+            "large"
+          ]
         },
         {
           "name": "loading",
@@ -1137,7 +1177,11 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["button", "submit", "reset"]
+          "enumValues": [
+            "button",
+            "submit",
+            "reset"
+          ]
         },
         {
           "name": "target",
@@ -1222,7 +1266,9 @@
           "sourcePath": "ea-button/components/ea-button-group"
         }
       ],
-      "dependencies": ["ea-icon"],
+      "dependencies": [
+        "ea-icon"
+      ],
       "examples": [
         {
           "title": "基础用法",
@@ -1293,7 +1339,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "日历组件，用于显示和选择日期，支持按钮/下拉控制器和国际化。",
-      "sourcePath": "src/components/ea-calendar",
+      "sourcePath": "packages/components/src/components/ea-calendar",
       "props": [
         {
           "name": "value",
@@ -1528,7 +1574,10 @@
         }
       ],
       "subComponents": [],
-      "dependencies": ["ea-button", "ea-select"],
+      "dependencies": [
+        "ea-button",
+        "ea-select"
+      ],
       "examples": [
         {
           "title": "基础用法",
@@ -1563,7 +1612,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "卡片容器组件，将信息聚合在卡片容器中展示，支持标题、内容、页脚区域和阴影效果。",
-      "sourcePath": "src/components/ea-card",
+      "sourcePath": "packages/components/src/components/ea-card",
       "props": [
         {
           "name": "shadow",
@@ -1572,7 +1621,11 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["always", "hover", "never"]
+          "enumValues": [
+            "always",
+            "hover",
+            "never"
+          ]
         },
         {
           "name": "header",
@@ -1686,7 +1739,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "走马灯组件，在有限空间内循环播放同一类型的内容，支持自动播放、循环、方向切换等功能。",
-      "sourcePath": "src/components/ea-carousel",
+      "sourcePath": "packages/components/src/components/ea-carousel",
       "props": [
         {
           "name": "height",
@@ -1703,7 +1756,10 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["horizontal", "vertical"]
+          "enumValues": [
+            "horizontal",
+            "vertical"
+          ]
         },
         {
           "name": "index",
@@ -1720,7 +1776,10 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["click", "hover"]
+          "enumValues": [
+            "click",
+            "hover"
+          ]
         },
         {
           "name": "interval",
@@ -1737,7 +1796,11 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["never", "always", "hover"]
+          "enumValues": [
+            "never",
+            "always",
+            "hover"
+          ]
         },
         {
           "name": "autoplay",
@@ -1770,7 +1833,11 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["", "none", "outside"]
+          "enumValues": [
+            "",
+            "none",
+            "outside"
+          ]
         }
       ],
       "events": [
@@ -1907,7 +1974,9 @@
           "sourcePath": "ea-carousel/components/ea-carousel-item"
         }
       ],
-      "dependencies": ["ea-icon"],
+      "dependencies": [
+        "ea-icon"
+      ],
       "examples": [
         {
           "title": "基础用法",
@@ -1948,7 +2017,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "多选框组件，用于在多个备选项中进行多选，支持禁用、半选、边框等状态。",
-      "sourcePath": "src/components/ea-checkbox",
+      "sourcePath": "packages/components/src/components/ea-checkbox",
       "props": [
         {
           "name": "size",
@@ -1957,7 +2026,11 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["small", "default", "large"]
+          "enumValues": [
+            "small",
+            "default",
+            "large"
+          ]
         },
         {
           "name": "value",
@@ -2187,7 +2260,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "折叠面板组件，通过折叠面板收纳内容区域，支持手风琴模式和普通模式。",
-      "sourcePath": "src/components/ea-collapse",
+      "sourcePath": "packages/components/src/components/ea-collapse",
       "props": [
         {
           "name": "accordion",
@@ -2255,7 +2328,9 @@
           "sourcePath": "ea-collapse/components/ea-collapse-item"
         }
       ],
-      "dependencies": ["ea-collapse-item"],
+      "dependencies": [
+        "ea-collapse-item"
+      ],
       "examples": [
         {
           "title": "基础用法",
@@ -2302,7 +2377,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "颜色选择器组件，支持多种颜色格式、透明度选择和预定义颜色。",
-      "sourcePath": "src/components/ea-color-picker",
+      "sourcePath": "packages/components/src/components/ea-color-picker",
       "props": [
         {
           "name": "label",
@@ -2351,7 +2426,11 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["small", "medium", "large"]
+          "enumValues": [
+            "small",
+            "medium",
+            "large"
+          ]
         },
         {
           "name": "colorFormat",
@@ -2360,7 +2439,13 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["hsl", "hsv", "hex", "rgb", "rgba"]
+          "enumValues": [
+            "hsl",
+            "hsv",
+            "hex",
+            "rgb",
+            "rgba"
+          ]
         },
         {
           "name": "showAlpha",
@@ -2592,7 +2677,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "侧边栏容器组件，用于布局的侧边区域。",
-      "sourcePath": "src/components/ea-container",
+      "sourcePath": "packages/components/src/components/ea-container",
       "props": [
         {
           "name": "label",
@@ -2714,7 +2799,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "倒计时组件，用于显示剩余时间，支持多种时间格式和自定义刷新间隔。",
-      "sourcePath": "src/components/ea-countdown",
+      "sourcePath": "packages/components/src/components/ea-countdown",
       "props": [
         {
           "name": "value",
@@ -2845,7 +2930,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "日期选择器组件，用于选择或输入日期，支持日期、月份、年份三种模式。",
-      "sourcePath": "src/components/ea-date-picker",
+      "sourcePath": "packages/components/src/components/ea-date-picker",
       "props": [
         {
           "name": "label",
@@ -2897,7 +2982,11 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["left", "center", "right"]
+          "enumValues": [
+            "left",
+            "center",
+            "right"
+          ]
         },
         {
           "name": "displayFormat",
@@ -2922,7 +3011,11 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["date", "month", "year"]
+          "enumValues": [
+            "date",
+            "month",
+            "year"
+          ]
         },
         {
           "name": "size",
@@ -2931,7 +3024,11 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["large", "default", "small"]
+          "enumValues": [
+            "large",
+            "default",
+            "small"
+          ]
         },
         {
           "name": "required",
@@ -3107,7 +3204,11 @@
         }
       ],
       "subComponents": [],
-      "dependencies": ["ea-button", "ea-calendar", "ea-input"],
+      "dependencies": [
+        "ea-button",
+        "ea-calendar",
+        "ea-input"
+      ],
       "examples": [
         {
           "title": "选择某一天",
@@ -3136,7 +3237,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "描述列表组件，以表格形式展示多个字段信息，支持边框、垂直布局和多种尺寸。",
-      "sourcePath": "src/components/ea-descriptions",
+      "sourcePath": "packages/components/src/components/ea-descriptions",
       "props": [
         {
           "name": "column",
@@ -3169,7 +3270,10 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["horizontal", "vertical"]
+          "enumValues": [
+            "horizontal",
+            "vertical"
+          ]
         },
         {
           "name": "size",
@@ -3178,7 +3282,11 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["large", "default", "small"]
+          "enumValues": [
+            "large",
+            "default",
+            "small"
+          ]
         },
         {
           "name": "labelWidth",
@@ -3272,7 +3380,9 @@
           "sourcePath": "ea-descriptions/components/ea-descriptions-item"
         }
       ],
-      "dependencies": ["ea-descriptions-item"],
+      "dependencies": [
+        "ea-descriptions-item"
+      ],
       "examples": [
         {
           "title": "基础用法",
@@ -3313,7 +3423,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "对话框组件，用于弹出交互层，显示重要信息或要求用户确认/输入，支持拖拽、全屏、居中等模式。",
-      "sourcePath": "src/components/ea-dialog",
+      "sourcePath": "packages/components/src/components/ea-dialog",
       "props": [
         {
           "name": "heading",
@@ -3536,12 +3646,14 @@
         }
       ],
       "subComponents": [],
-      "dependencies": ["ea-icon"],
+      "dependencies": [
+        "ea-icon"
+      ],
       "examples": [
         {
           "title": "基础用法",
           "description": "",
-          "code": "<ea-button id=\"basicDialogOpenBtn\" plain>\n  Click to open the Dialog\n</ea-button>\n\n<ea-dialog id=\"basicDialog\" heading=\"Tips\" width=\"500px\">\n  <span>This is a message</span>\n  <section slot=\"footer\">\n    <div class=\"dialog-footer\">\n      <ea-button id=\"basicDialogCancelBtn\">Cancel</ea-button>\n      <ea-button id=\"basicDialogConfirmBtn\" variant=\"primary\">\n        Confirm\n      </ea-button>\n    </div>\n  </section>\n</ea-dialog>",
+          "code": "<ea-button id=\"basicDialogOpenBtn\" plain> Click to open the Dialog </ea-button>\n\n<ea-dialog id=\"basicDialog\" heading=\"Tips\" width=\"500px\">\n  <span>This is a message</span>\n  <section slot=\"footer\">\n    <div class=\"dialog-footer\">\n      <ea-button id=\"basicDialogCancelBtn\">Cancel</ea-button>\n      <ea-button id=\"basicDialogConfirmBtn\" variant=\"primary\">\n        Confirm\n      </ea-button>\n    </div>\n  </section>\n</ea-dialog>",
           "type": "basic"
         },
         {
@@ -3559,7 +3671,7 @@
         {
           "title": "内容居中",
           "description": "",
-          "code": "<ea-dialog id=\"centerDialog\" heading=\"Tips\" width=\"500px\" center>\n  <span>\n    It should be noted that the content will not be aligned in center by\n    default\n  </span>\n  <section slot=\"footer\">\n    <div class=\"dialog-footer\">\n      <ea-button id=\"centerDialogCancelBtn\">Cancel</ea-button>\n      <ea-button id=\"centerDialogConfirmBtn\" variant=\"primary\">\n        Confirm\n      </ea-button>\n    </div>\n  </section>\n</ea-dialog>",
+          "code": "<ea-dialog id=\"centerDialog\" heading=\"Tips\" width=\"500px\" center>\n  <span>\n    It should be noted that the content will not be aligned in center by default\n  </span>\n  <section slot=\"footer\">\n    <div class=\"dialog-footer\">\n      <ea-button id=\"centerDialogCancelBtn\">Cancel</ea-button>\n      <ea-button id=\"centerDialogConfirmBtn\" variant=\"primary\">\n        Confirm\n      </ea-button>\n    </div>\n  </section>\n</ea-dialog>",
           "type": "advanced"
         },
         {
@@ -3595,7 +3707,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "分隔线组件，用于分隔内容区块，支持水平 / 垂直方向、不同分隔线样式和文案位置。",
-      "sourcePath": "src/components/ea-divider",
+      "sourcePath": "packages/components/src/components/ea-divider",
       "props": [
         {
           "name": "variant",
@@ -3612,7 +3724,11 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["start", "end", "center"]
+          "enumValues": [
+            "start",
+            "end",
+            "center"
+          ]
         },
         {
           "name": "direction",
@@ -3621,7 +3737,10 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["horizontal", "vertical"]
+          "enumValues": [
+            "horizontal",
+            "vertical"
+          ]
         }
       ],
       "events": [],
@@ -3729,7 +3848,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "抽屉组件，用于从屏幕边缘滑出的临时面板，支持多方向打开、头部控制、关闭拦截等功能。",
-      "sourcePath": "src/components/ea-drawer",
+      "sourcePath": "packages/components/src/components/ea-drawer",
       "props": [
         {
           "name": "direction",
@@ -3738,7 +3857,12 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["rtl", "ltr", "ttb", "btt"]
+          "enumValues": [
+            "rtl",
+            "ltr",
+            "ttb",
+            "btt"
+          ]
         },
         {
           "name": "withHeader",
@@ -3914,7 +4038,9 @@
         }
       ],
       "subComponents": [],
-      "dependencies": ["ea-icon"],
+      "dependencies": [
+        "ea-icon"
+      ],
       "examples": [
         {
           "title": "基本用法",
@@ -3949,7 +4075,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "下拉菜单组件，将动作或菜单折叠到下拉菜单中，支持多种触发方式和位置。",
-      "sourcePath": "src/components/ea-dropdown",
+      "sourcePath": "packages/components/src/components/ea-dropdown",
       "props": [
         {
           "name": "trigger",
@@ -3958,7 +4084,11 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["click", "hover", "contextmenu"]
+          "enumValues": [
+            "click",
+            "hover",
+            "contextmenu"
+          ]
         },
         {
           "name": "hideOnClick",
@@ -3975,7 +4105,11 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["small", "default", "large"]
+          "enumValues": [
+            "small",
+            "default",
+            "large"
+          ]
         }
       ],
       "events": [
@@ -4058,7 +4192,9 @@
           "sourcePath": "ea-dropdown/components/ea-dropdown-menu"
         }
       ],
-      "dependencies": ["ea-popper"],
+      "dependencies": [
+        "ea-popper"
+      ],
       "examples": [
         {
           "title": "基本用法",
@@ -4111,7 +4247,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "动画效果组件，用于为子元素添加进入/离开动画效果，支持缩放、淡入淡出、滑动、翻转等多种效果。",
-      "sourcePath": "src/components/ea-effects",
+      "sourcePath": "packages/components/src/components/ea-effects",
       "props": [
         {
           "name": "effect",
@@ -4168,7 +4304,12 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["hover", "click", "manual", "scroll"]
+          "enumValues": [
+            "hover",
+            "click",
+            "manual",
+            "scroll"
+          ]
         },
         {
           "name": "scrollOnce",
@@ -4260,7 +4401,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "空状态组件，用于展示空数据时的占位提示，支持自定义图片、描述文字和底部内容。",
-      "sourcePath": "src/components/ea-empty",
+      "sourcePath": "packages/components/src/components/ea-empty",
       "props": [
         {
           "name": "image",
@@ -4390,7 +4531,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "图标组件，基于 Font Awesome 提供常用图标集合，支持多种家族、样式、颜色和大小配置。",
-      "sourcePath": "src/components/ea-icon",
+      "sourcePath": "packages/components/src/components/ea-icon",
       "props": [
         {
           "name": "name",
@@ -4506,7 +4647,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "图片组件，在保留原生 img 特性下，支持懒加载、自定义占位、加载失败和图片预览功能。",
-      "sourcePath": "src/components/ea-image",
+      "sourcePath": "packages/components/src/components/ea-image",
       "props": [
         {
           "name": "src",
@@ -4539,7 +4680,14 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["", "fill", "contain", "cover", "none", "scale-down"]
+          "enumValues": [
+            "",
+            "fill",
+            "contain",
+            "cover",
+            "none",
+            "scale-down"
+          ]
         },
         {
           "name": "alt",
@@ -4556,7 +4704,10 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["lazy", "eager"]
+          "enumValues": [
+            "lazy",
+            "eager"
+          ]
         },
         {
           "name": "referrerpolicy",
@@ -4758,7 +4909,9 @@
           "sourcePath": "ea-image/components/ea-image"
         }
       ],
-      "dependencies": ["ea-image-preview"],
+      "dependencies": [
+        "ea-image-preview"
+      ],
       "examples": [
         {
           "title": "基础用法",
@@ -4823,7 +4976,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "图片预览组件，用于全屏预览图片，支持缩放、旋转、切换和拖拽移动。",
-      "sourcePath": "src/components/ea-image-preview",
+      "sourcePath": "packages/components/src/components/ea-image-preview",
       "props": [
         {
           "name": "initialIndex",
@@ -5047,7 +5200,11 @@
         }
       ],
       "subComponents": [],
-      "dependencies": ["ea-icon", "ea-image", "ea-overlay"]
+      "dependencies": [
+        "ea-icon",
+        "ea-image",
+        "ea-overlay"
+      ]
     },
     {
       "name": "ea-infinite-scroll",
@@ -5056,7 +5213,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "无限滚动组件，滚动至底部时自动加载更多数据，遵循 WAI-ARIA Feed 模式。",
-      "sourcePath": "src/components/ea-infinite-scroll",
+      "sourcePath": "packages/components/src/components/ea-infinite-scroll",
       "props": [
         {
           "name": "status",
@@ -5068,7 +5225,11 @@
           "a11y": {
             "ariaAttr": "aria-busy"
           },
-          "enumValues": ["finished", "loading", "noMore"]
+          "enumValues": [
+            "finished",
+            "loading",
+            "noMore"
+          ]
         },
         {
           "name": "distance",
@@ -5177,7 +5338,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "输入框组件，支持多种输入类型、可清空、密码显示切换、字数统计等功能。",
-      "sourcePath": "src/components/ea-input",
+      "sourcePath": "packages/components/src/components/ea-input",
       "props": [
         {
           "name": "label",
@@ -5227,7 +5388,11 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["large", "default", "small"]
+          "enumValues": [
+            "large",
+            "default",
+            "small"
+          ]
         },
         {
           "name": "value",
@@ -5427,7 +5592,12 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["none", "both", "horizontal", "vertical"]
+          "enumValues": [
+            "none",
+            "both",
+            "horizontal",
+            "vertical"
+          ]
         },
         {
           "name": "autofocus",
@@ -5626,7 +5796,9 @@
         }
       ],
       "subComponents": [],
-      "dependencies": ["ea-icon"],
+      "dependencies": [
+        "ea-icon"
+      ],
       "examples": [
         {
           "title": "基础用法",
@@ -5709,7 +5881,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "计数器组件，仅允许输入标准的数字值，可定义范围和步进。",
-      "sourcePath": "src/components/ea-input-number",
+      "sourcePath": "packages/components/src/components/ea-input-number",
       "props": [
         {
           "name": "label",
@@ -5990,7 +6162,9 @@
         }
       ],
       "subComponents": [],
-      "dependencies": ["ea-icon"],
+      "dependencies": [
+        "ea-icon"
+      ],
       "examples": [
         {
           "title": "基础用法",
@@ -6049,7 +6223,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "栅格列组件，基于 24 分栏的 Flex 子项，支持列宽、偏移、推拉和自定义标签。",
-      "sourcePath": "src/components/ea-layout",
+      "sourcePath": "packages/components/src/components/ea-layout",
       "props": [
         {
           "name": "span",
@@ -6135,7 +6309,9 @@
           "sourcePath": "ea-layout/components/ea-row"
         }
       ],
-      "dependencies": ["ea-row"],
+      "dependencies": [
+        "ea-row"
+      ],
       "examples": [
         {
           "title": "基础布局",
@@ -6182,7 +6358,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "文字链接组件，用于文字超链接场景，支持多种类型、下划线控制、图标和原生链接属性。",
-      "sourcePath": "src/components/ea-link",
+      "sourcePath": "packages/components/src/components/ea-link",
       "props": [
         {
           "name": "variant",
@@ -6218,7 +6394,11 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["always", "hover", "never"]
+          "enumValues": [
+            "always",
+            "hover",
+            "never"
+          ]
         },
         {
           "name": "href",
@@ -6293,7 +6473,9 @@
         }
       ],
       "subComponents": [],
-      "dependencies": ["ea-icon"],
+      "dependencies": [
+        "ea-icon"
+      ],
       "examples": [
         {
           "title": "基础用法",
@@ -6334,7 +6516,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "加载组件，用于在数据加载过程中展示加载动画，支持区域遮罩、全屏模式和滚动锁定。",
-      "sourcePath": "src/components/ea-loading",
+      "sourcePath": "packages/components/src/components/ea-loading",
       "props": [
         {
           "name": "loading",
@@ -6472,7 +6654,9 @@
         }
       ],
       "subComponents": [],
-      "dependencies": ["ea-icon"],
+      "dependencies": [
+        "ea-icon"
+      ],
       "examples": [
         {
           "title": "区域加载",
@@ -6513,7 +6697,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "导航菜单组件，为网站提供导航功能，支持水平和垂直两种模式。",
-      "sourcePath": "src/components/ea-menu",
+      "sourcePath": "packages/components/src/components/ea-menu",
       "props": [
         {
           "name": "mode",
@@ -6522,7 +6706,10 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["horizontal", "vertical"]
+          "enumValues": [
+            "horizontal",
+            "vertical"
+          ]
         },
         {
           "name": "backgroundColor",
@@ -6641,7 +6828,11 @@
           "sourcePath": "ea-menu/components/ea-sub-menu"
         }
       ],
-      "dependencies": ["ea-menu-item", "ea-menu-item-group", "ea-sub-menu"],
+      "dependencies": [
+        "ea-menu-item",
+        "ea-menu-item-group",
+        "ea-sub-menu"
+      ],
       "examples": [
         {
           "title": "顶栏",
@@ -6676,7 +6867,7 @@
       "status": "stable",
       "since": "",
       "description": "",
-      "sourcePath": "src/components/ea-message",
+      "sourcePath": "packages/components/src/components/ea-message",
       "props": [],
       "events": [
         {
@@ -6732,7 +6923,7 @@
       "status": "stable",
       "since": "",
       "description": "",
-      "sourcePath": "src/components/ea-message-box",
+      "sourcePath": "packages/components/src/components/ea-message-box",
       "props": [],
       "events": [
         {
@@ -6826,7 +7017,7 @@
       "status": "stable",
       "since": "",
       "description": "",
-      "sourcePath": "src/components/ea-notification",
+      "sourcePath": "packages/components/src/components/ea-notification",
       "props": [],
       "events": [],
       "slots": [],
@@ -6874,7 +7065,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "页头组件，用于页面的路径导航，支持返回按钮、面包屑、标题内容和额外操作区。",
-      "sourcePath": "src/components/ea-page-header",
+      "sourcePath": "packages/components/src/components/ea-page-header",
       "props": [
         {
           "name": "icon",
@@ -7021,7 +7212,9 @@
         }
       ],
       "subComponents": [],
-      "dependencies": ["ea-icon"],
+      "dependencies": [
+        "ea-icon"
+      ],
       "examples": [
         {
           "title": "完整示例",
@@ -7080,7 +7273,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "分页组件，用于数据量过多时的分页处理，支持多种布局和交互模式。",
-      "sourcePath": "src/components/ea-pagination",
+      "sourcePath": "packages/components/src/components/ea-pagination",
       "props": [
         {
           "name": "defaultPageSize",
@@ -7137,7 +7330,11 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["large", "default", "small"]
+          "enumValues": [
+            "large",
+            "default",
+            "small"
+          ]
         },
         {
           "name": "hideOnSinglePage",
@@ -7315,7 +7512,11 @@
         }
       ],
       "subComponents": [],
-      "dependencies": ["ea-icon", "ea-input-number", "ea-select"],
+      "dependencies": [
+        "ea-icon",
+        "ea-input-number",
+        "ea-select"
+      ],
       "examples": [
         {
           "title": "基础用法",
@@ -7368,7 +7569,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "气泡确认框组件，点击元素弹出确认气泡，支持自定义图标、按钮和位置。",
-      "sourcePath": "src/components/ea-popconfirm",
+      "sourcePath": "packages/components/src/components/ea-popconfirm",
       "props": [
         {
           "name": "heading",
@@ -7425,7 +7626,13 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["normal", "primary", "success", "warning", "danger"]
+          "enumValues": [
+            "normal",
+            "primary",
+            "success",
+            "warning",
+            "danger"
+          ]
         },
         {
           "name": "cancelButtonType",
@@ -7434,7 +7641,13 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["normal", "primary", "success", "warning", "danger"]
+          "enumValues": [
+            "normal",
+            "primary",
+            "success",
+            "warning",
+            "danger"
+          ]
         }
       ],
       "events": [
@@ -7528,7 +7741,10 @@
         }
       ],
       "subComponents": [],
-      "dependencies": ["ea-button", "ea-icon"],
+      "dependencies": [
+        "ea-button",
+        "ea-icon"
+      ],
       "examples": [
         {
           "title": "展示位置",
@@ -7557,7 +7773,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "弹出框组件，基于 EaPopper 扩展，支持标题、内容和多种触发方式。",
-      "sourcePath": "src/components/ea-popover",
+      "sourcePath": "packages/components/src/components/ea-popover",
       "props": [
         {
           "name": "trigger",
@@ -7566,7 +7782,13 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["click", "focus", "hover", "contextmenu", "customized"]
+          "enumValues": [
+            "click",
+            "focus",
+            "hover",
+            "contextmenu",
+            "customized"
+          ]
         },
         {
           "name": "heading",
@@ -7703,7 +7925,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "进度条组件，用于展示操作进度，支持直线、环形和仪表盘三种形态。",
-      "sourcePath": "src/components/ea-progress",
+      "sourcePath": "packages/components/src/components/ea-progress",
       "props": [
         {
           "name": "variant",
@@ -7712,7 +7934,11 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["line", "circle", "dashboard"]
+          "enumValues": [
+            "line",
+            "circle",
+            "dashboard"
+          ]
         },
         {
           "name": "percentage",
@@ -7732,7 +7958,11 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["success", "warning", "exception"]
+          "enumValues": [
+            "success",
+            "warning",
+            "exception"
+          ]
         },
         {
           "name": "strokeWidth",
@@ -7891,7 +8121,9 @@
         }
       ],
       "subComponents": [],
-      "dependencies": ["ea-icon"],
+      "dependencies": [
+        "ea-icon"
+      ],
       "examples": [
         {
           "title": "直线进度条",
@@ -7950,7 +8182,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "单选框组件，用于在多个备选项中进行单选，支持禁用、边框和多种尺寸。",
-      "sourcePath": "src/components/ea-radio",
+      "sourcePath": "packages/components/src/components/ea-radio",
       "props": [
         {
           "name": "size",
@@ -7959,7 +8191,11 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["small", "default", "large"]
+          "enumValues": [
+            "small",
+            "default",
+            "large"
+          ]
         },
         {
           "name": "value",
@@ -8152,7 +8388,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "评分组件，支持自定义图标、悬停提示和可配置最大值。",
-      "sourcePath": "src/components/ea-rate",
+      "sourcePath": "packages/components/src/components/ea-rate",
       "props": [
         {
           "name": "label",
@@ -8196,7 +8432,11 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["large", "default", "small"]
+          "enumValues": [
+            "large",
+            "default",
+            "small"
+          ]
         },
         {
           "name": "readonly",
@@ -8299,7 +8539,9 @@
         }
       ],
       "subComponents": [],
-      "dependencies": ["ea-icon"],
+      "dependencies": [
+        "ea-icon"
+      ],
       "examples": [
         {
           "title": "基础用法",
@@ -8358,7 +8600,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "结果组件，用于展示操作结果或异常状态反馈，支持多种类型和自定义图标。",
-      "sourcePath": "src/components/ea-result",
+      "sourcePath": "packages/components/src/components/ea-result",
       "props": [
         {
           "name": "variant",
@@ -8367,7 +8609,13 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["primary", "success", "warning", "danger", "info"]
+          "enumValues": [
+            "primary",
+            "success",
+            "warning",
+            "danger",
+            "info"
+          ]
         },
         {
           "name": "heading",
@@ -8478,7 +8726,9 @@
         }
       ],
       "subComponents": [],
-      "dependencies": ["ea-icon"],
+      "dependencies": [
+        "ea-icon"
+      ],
       "examples": [
         {
           "title": "基础用法",
@@ -8507,7 +8757,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "滚动条组件，用于替换浏览器原生滚动条，支持自定义滚动条样式。",
-      "sourcePath": "src/components/ea-scrollbar",
+      "sourcePath": "packages/components/src/components/ea-scrollbar",
       "props": [
         {
           "name": "height",
@@ -8684,7 +8934,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "分段选择器组件，用于在一组互斥的选项中进行选择，支持多种尺寸、方向和自定义字段映射。",
-      "sourcePath": "src/components/ea-segmented",
+      "sourcePath": "packages/components/src/components/ea-segmented",
       "props": [
         {
           "name": "value",
@@ -8701,7 +8951,11 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["large", "default", "small"]
+          "enumValues": [
+            "large",
+            "default",
+            "small"
+          ]
         },
         {
           "name": "direction",
@@ -8710,7 +8964,10 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["horizontal", "vertical"]
+          "enumValues": [
+            "horizontal",
+            "vertical"
+          ]
         },
         {
           "name": "disabled",
@@ -8866,7 +9123,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "下拉选择器选项组件，用于定义选择器的可选项。",
-      "sourcePath": "src/components/ea-select",
+      "sourcePath": "packages/components/src/components/ea-select",
       "props": [
         {
           "name": "value",
@@ -9052,7 +9309,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "骨架屏组件，在需要等待加载内容的位置提供占位效果，支持自定义模板和节流防抖。",
-      "sourcePath": "src/components/ea-skeleton",
+      "sourcePath": "packages/components/src/components/ea-skeleton",
       "props": [
         {
           "name": "rows",
@@ -9146,7 +9403,9 @@
           "sourcePath": "ea-skeleton/components/ea-skeleton-item"
         }
       ],
-      "dependencies": ["ea-skeleton-item"],
+      "dependencies": [
+        "ea-skeleton-item"
+      ],
       "examples": [
         {
           "title": "基础用法",
@@ -9199,7 +9458,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "滑块组件，通过拖动滑块在固定区间内进行选择，支持离散值、标记点和输入框。",
-      "sourcePath": "src/components/ea-slider",
+      "sourcePath": "packages/components/src/components/ea-slider",
       "props": [
         {
           "name": "label",
@@ -9328,7 +9587,11 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["large", "default", "small"]
+          "enumValues": [
+            "large",
+            "default",
+            "small"
+          ]
         },
         {
           "name": "required",
@@ -9482,7 +9745,10 @@
         }
       ],
       "subComponents": [],
-      "dependencies": ["ea-input-number", "ea-tooltip"],
+      "dependencies": [
+        "ea-input-number",
+        "ea-tooltip"
+      ],
       "examples": [
         {
           "title": "基础用法",
@@ -9535,7 +9801,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "间距组件，用于在子元素之间提供统一的间距，支持方向、对齐、换行和填充等布局功能。",
-      "sourcePath": "src/components/ea-space",
+      "sourcePath": "packages/components/src/components/ea-space",
       "props": [
         {
           "name": "wrap",
@@ -9568,7 +9834,10 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["horizontal", "vertical"]
+          "enumValues": [
+            "horizontal",
+            "vertical"
+          ]
         },
         {
           "name": "size",
@@ -9706,7 +9975,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "分隔面板组件，可将区域水平或垂直分隔，并支持拖动调整各区域大小。",
-      "sourcePath": "src/components/ea-splitter",
+      "sourcePath": "packages/components/src/components/ea-splitter",
       "props": [
         {
           "name": "layout",
@@ -9772,7 +10041,10 @@
           "sourcePath": "ea-splitter/components/ea-splitter-panel"
         }
       ],
-      "dependencies": ["ea-splitter-bar", "ea-splitter-panel"],
+      "dependencies": [
+        "ea-splitter-bar",
+        "ea-splitter-panel"
+      ],
       "examples": [
         {
           "title": "基础用法",
@@ -9795,7 +10067,7 @@
       "status": "stable",
       "since": "",
       "description": "",
-      "sourcePath": "src/components/ea-statistic",
+      "sourcePath": "packages/components/src/components/ea-statistic",
       "props": [
         {
           "name": "heading",
@@ -9848,7 +10120,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "步骤条子组件，表示单个步骤，支持状态、图标、描述等功能。",
-      "sourcePath": "src/components/ea-steps",
+      "sourcePath": "packages/components/src/components/ea-steps",
       "props": [
         {
           "name": "heading",
@@ -9881,7 +10153,14 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["", "wait", "process", "finish", "error", "success"]
+          "enumValues": [
+            "",
+            "wait",
+            "process",
+            "finish",
+            "error",
+            "success"
+          ]
         },
         {
           "name": "index",
@@ -10043,7 +10322,9 @@
           "sourcePath": "ea-steps/components/ea-steps"
         }
       ],
-      "dependencies": ["ea-icon"],
+      "dependencies": [
+        "ea-icon"
+      ],
       "examples": [
         {
           "title": "基础用法",
@@ -10090,7 +10371,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "开关组件，表示两种相互对立的状态间的切换，多用于触发开/关，支持自定义值、尺寸和禁用状态。",
-      "sourcePath": "src/components/ea-switch",
+      "sourcePath": "packages/components/src/components/ea-switch",
       "props": [
         {
           "name": "label",
@@ -10139,7 +10420,11 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["large", "default", "small"]
+          "enumValues": [
+            "large",
+            "default",
+            "small"
+          ]
         },
         {
           "name": "inactiveText",
@@ -10336,7 +10621,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "表格组件，用于展示结构化数据，支持排序、选择、固定列、斑马纹、合计行等功能。",
-      "sourcePath": "src/components/ea-table",
+      "sourcePath": "packages/components/src/components/ea-table",
       "props": [
         {
           "name": "stripe",
@@ -10699,7 +10984,11 @@
           "sourcePath": "ea-table/components/ea-table-column"
         }
       ],
-      "dependencies": ["ea-checkbox", "ea-empty", "ea-table-column"],
+      "dependencies": [
+        "ea-checkbox",
+        "ea-empty",
+        "ea-table-column"
+      ],
       "examples": [
         {
           "title": "基础表格",
@@ -10794,7 +11083,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "标签项组件，用于在 ea-tabs 中定义单个标签，支持禁用、可关闭等状态。",
-      "sourcePath": "src/components/ea-tabs",
+      "sourcePath": "packages/components/src/components/ea-tabs",
       "props": [
         {
           "name": "panel",
@@ -10811,7 +11100,11 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["", "card", "border-card"]
+          "enumValues": [
+            "",
+            "card",
+            "border-card"
+          ]
         },
         {
           "name": "disabled",
@@ -10903,7 +11196,9 @@
           "sourcePath": "ea-tabs/components/ea-tabs"
         }
       ],
-      "dependencies": ["ea-icon"],
+      "dependencies": [
+        "ea-icon"
+      ],
       "examples": [
         {
           "title": "基础用法",
@@ -10950,7 +11245,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "可选中标签组件，用于类似复选框的标签选择场景，支持选中状态切换和多种类型。",
-      "sourcePath": "src/components/ea-tag",
+      "sourcePath": "packages/components/src/components/ea-tag",
       "props": [
         {
           "name": "checked",
@@ -10981,7 +11276,13 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["primary", "success", "warning", "danger", "info"]
+          "enumValues": [
+            "primary",
+            "success",
+            "warning",
+            "danger",
+            "info"
+          ]
         }
       ],
       "events": [
@@ -11072,7 +11373,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "文本组件，用于文本的常见操作，支持多种类型、尺寸、截断和标签覆盖。",
-      "sourcePath": "src/components/ea-text",
+      "sourcePath": "packages/components/src/components/ea-text",
       "props": [
         {
           "name": "variant",
@@ -11081,7 +11382,9 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["normal"]
+          "enumValues": [
+            "normal"
+          ]
         },
         {
           "name": "size",
@@ -11090,7 +11393,11 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["large", "medium", "small"]
+          "enumValues": [
+            "large",
+            "medium",
+            "small"
+          ]
         },
         {
           "name": "truncated",
@@ -11215,7 +11522,7 @@
       "status": "stable",
       "since": "3.1",
       "description": "主题切换组件，基于 ea-switch 封装，支持日间/夜间模式切换。",
-      "sourcePath": "src/components/ea-theme-toggle",
+      "sourcePath": "packages/components/src/components/ea-theme-toggle",
       "props": [
         {
           "name": "mode",
@@ -11287,7 +11594,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "时间选择器组件，用于选择或输入时间，支持限制时间范围和多种对齐方式。",
-      "sourcePath": "src/components/ea-time-picker",
+      "sourcePath": "packages/components/src/components/ea-time-picker",
       "props": [
         {
           "name": "label",
@@ -11339,7 +11646,11 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["left", "center", "right"]
+          "enumValues": [
+            "left",
+            "center",
+            "right"
+          ]
         },
         {
           "name": "size",
@@ -11348,7 +11659,11 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["large", "default", "small"]
+          "enumValues": [
+            "large",
+            "default",
+            "small"
+          ]
         },
         {
           "name": "limitRangeStart",
@@ -11487,7 +11802,10 @@
         }
       ],
       "subComponents": [],
-      "dependencies": ["ea-icon", "ea-input"],
+      "dependencies": [
+        "ea-icon",
+        "ea-input"
+      ],
       "examples": [
         {
           "title": "任意时间点",
@@ -11516,7 +11834,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "时间线组件，用于可视化地呈现时间流信息。",
-      "sourcePath": "src/components/ea-timeline",
+      "sourcePath": "packages/components/src/components/ea-timeline",
       "props": [],
       "events": [],
       "slots": [
@@ -11591,7 +11909,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "文字提示组件，常用于展示鼠标 hover 时的提示信息，支持多种主题、触发方式和位置。",
-      "sourcePath": "src/components/ea-tooltip",
+      "sourcePath": "packages/components/src/components/ea-tooltip",
       "props": [
         {
           "name": "trigger",
@@ -11600,7 +11918,13 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["click", "focus", "hover", "contextmenu", "customized"]
+          "enumValues": [
+            "click",
+            "focus",
+            "hover",
+            "contextmenu",
+            "customized"
+          ]
         },
         {
           "name": "effect",
@@ -11609,7 +11933,11 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["dark", "light", "customized"]
+          "enumValues": [
+            "dark",
+            "light",
+            "customized"
+          ]
         },
         {
           "name": "content",
@@ -11732,7 +12060,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "引导组件，用于分步骤引导用户了解界面功能，支持遮罩、自定义位置和多种弹出方向。",
-      "sourcePath": "src/components/ea-tour",
+      "sourcePath": "packages/components/src/components/ea-tour",
       "props": [
         {
           "name": "appendTo",
@@ -11781,7 +12109,10 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["default", "primary"]
+          "enumValues": [
+            "default",
+            "primary"
+          ]
         },
         {
           "name": "placement",
@@ -11852,7 +12183,10 @@
           "sourcePath": "ea-tour/components/ea-tour-step"
         }
       ],
-      "dependencies": ["ea-button", "ea-icon"],
+      "dependencies": [
+        "ea-button",
+        "ea-icon"
+      ],
       "examples": [
         {
           "title": "基础用法",
@@ -11881,7 +12215,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "穿梭框组件，用于在两个面板之间移动数据项，支持搜索过滤、自定义渲染和多选操作。",
-      "sourcePath": "src/components/ea-transfer",
+      "sourcePath": "packages/components/src/components/ea-transfer",
       "props": [
         {
           "name": "disabled",
@@ -12121,7 +12455,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "树形控件，用于展示层次结构数据，支持展开折叠、复选框选择、右键菜单等功能。",
-      "sourcePath": "src/components/ea-tree",
+      "sourcePath": "packages/components/src/components/ea-tree",
       "props": [
         {
           "name": "showCheckbox",
@@ -12325,7 +12659,10 @@
         }
       ],
       "subComponents": [],
-      "dependencies": ["ea-checkbox", "ea-icon"],
+      "dependencies": [
+        "ea-checkbox",
+        "ea-icon"
+      ],
       "examples": [
         {
           "title": "基础用法",
@@ -12366,7 +12703,7 @@
       "status": "stable",
       "since": "4.0",
       "description": "文件上传组件，支持拖拽上传、多文件上传、自定义文件列表类型、上传进度展示、图片预览等功能。",
-      "sourcePath": "src/components/ea-upload",
+      "sourcePath": "packages/components/src/components/ea-upload",
       "props": [
         {
           "name": "disabled",
@@ -12399,7 +12736,12 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["GET", "POST", "PUT", "DELETE"]
+          "enumValues": [
+            "GET",
+            "POST",
+            "PUT",
+            "DELETE"
+          ]
         },
         {
           "name": "multiple",
@@ -12448,7 +12790,11 @@
           "required": false,
           "description": "",
           "isAttribute": true,
-          "enumValues": ["", "anonymous", "use-credentials"]
+          "enumValues": [
+            "",
+            "anonymous",
+            "use-credentials"
+          ]
         },
         {
           "name": "listType",
@@ -12743,7 +13089,11 @@
         }
       ],
       "subComponents": [],
-      "dependencies": ["ea-button", "ea-image-preview", "ea-upload-file-item"],
+      "dependencies": [
+        "ea-button",
+        "ea-image-preview",
+        "ea-upload-file-item"
+      ],
       "examples": [
         {
           "title": "基础用法",
@@ -12808,7 +13158,7 @@
       "status": "stable",
       "since": "3.0",
       "description": "水印组件，用于在容器上叠加文字或图片水印，防止内容被随意转载。",
-      "sourcePath": "src/components/ea-watermark",
+      "sourcePath": "packages/components/src/components/ea-watermark",
       "props": [
         {
           "name": "width",
