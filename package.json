@@ -19,7 +19,10 @@
     "lint:fix": "eslint . --ext .js,.mjs,.cjs,.ts --fix",
     "format": "prettier --write \"**/*.{js,json,scss,css,md}\"",
     "prepare": "husky",
-    "commit": "git add . && git-cz"
+    "commit": "git add . && git-cz",
+    "version:patch": "tsx scripts/bump-version.ts patch",
+    "version:minor": "tsx scripts/bump-version.ts minor",
+    "version:major": "tsx scripts/bump-version.ts major"
   },
   "repository": {
     "type": "git",
