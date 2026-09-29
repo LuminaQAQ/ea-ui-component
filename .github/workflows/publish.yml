@@ -25,27 +25,20 @@ jobs:
           for pkg in packages/core/package.json packages/themes/package.json packages/components/package.json; do
             PKG_VERSION=$(node -p "require('./$pkg').version")
             if [ "$PKG_VERSION" != "$TAG_VERSION" ]; then
-              echo "::error::$pkg 版本 ($PKG_VERSION) 与 tag ($TAG_VERSION) 不一致，请先运行 pnpm version:patch|minor|major 同步版本"
+              echo "::error::$pkg 版本 ($PKG_VERSION) 与 tag ($TAG_VERSION) 不一致，请先通过 pnpm changeset + pnpm changeset:version 同步版本"
               exit 1
             fi
           done
       - run: pnpm install --frozen-lockfile
       - run: pnpm -r build
-      # 发布顺序遵循依赖方向 themes → core → components，pnpm publish 会将 workspace:* 替换为真实版本
+      # 发布走 OIDC Trusted Publishing（无需 NPM_TOKEN，需在 npm 各包 Settings 配置 trusted publisher）
+      # 顺序遵循依赖方向 themes → core → components，pnpm publish 会将 workspace:* 替换为真实版本
       - run: pnpm publish --provenance --access public --no-git-checks
         working-directory: packages/themes
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - run: pnpm publish --provenance --access public --no-git-checks
         working-directory: packages/core
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - run: pnpm publish --provenance --access public --no-git-checks
         working-directory: packages/components
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       # mcp-server 版本独立演进，不参与 lockstep
       - run: pnpm publish --provenance --access public --no-git-checks
         working-directory: packages/mcp-server
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

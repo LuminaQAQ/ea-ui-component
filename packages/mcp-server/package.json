@@ -1,6 +1,6 @@
 {
   "name": "ea-ui-mcp-server",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "ea-ui-component 组件库 MCP Server，提供组件文档检索能力",
   "type": "module",
   "main": "dist/index.js",
