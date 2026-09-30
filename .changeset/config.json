@@ -11,6 +11,6 @@
   ],
   "linked": [],
   "access": "public",
-  "baseBranch": "feat/monorepo",
+  "baseBranch": "master",
   "updateInternalDependencies": "patch"
 }
