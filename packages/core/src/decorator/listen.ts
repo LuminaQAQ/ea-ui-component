@@ -18,12 +18,15 @@ function createEventHandler(
   callback: (e: Event) => void,
   element: EaElement & HTMLElement
 ): (e: Event) => void {
-  // 没有 selector 或监听 window/document 时，直接调用回调
-  if (!selector || selector === "window" || selector === "document" || selector === "shadowRoot") {
+  if (
+    !selector ||
+    selector === "window" ||
+    selector === "document" ||
+    selector === "shadowRoot"
+  ) {
     return (e: Event) => callback.call(element, e);
   }
 
-  // 使用 composedPath 来正确处理跨 shadow boundary 的事件
   return function (e: Event) {
     const path = e.composedPath();
     const shadowRoot = element.shadowRoot;
@@ -32,10 +35,7 @@ function createEventHandler(
         el instanceof Element &&
         el.closest &&
         el.closest(selector) &&
-        // 确保元素在当前的 shadowRoot 内
-        (shadowRoot?.contains(el as Node) ||
-          // 或者是 shadow host 本身
-          el === element)
+        (shadowRoot?.contains(el as Node) || el === element)
     );
     if (matchedElement) {
       callback.call(element, e);
@@ -72,18 +72,18 @@ function getEventTarget(
 }
 
 /**
- * 创建 AbortController 的 symbol key
- * @param methodName 方法名
- * @returns symbol key
+ * 元素级事件监听控制器存储
+ * 键：组件实例
+ * 值：该实例上所有 @listen 绑定的 AbortController 集合
  */
-function createAbortControllerKey(methodName: string | symbol): symbol {
-  return Symbol(`listen_${String(methodName)}`);
-}
+const ElementListenersMap: WeakMap<
+  EaElement & HTMLElement,
+  Set<AbortController>
+> = new WeakMap();
 
 /**
- * 设置 up 事件监听
+ * 设置事件监听
  * @param element 组件实例
- * @param abortControllerKey AbortController 的 key
  * @param eventName 事件名称
  * @param selector CSS 选择器
  * @param callback 回调函数
@@ -91,14 +91,19 @@ function createAbortControllerKey(methodName: string | symbol): symbol {
  */
 function setupEventListener(
   element: EaElement & HTMLElement,
-  abortControllerKey: symbol,
   eventName: string,
   selector: string | undefined,
   callback: (e: Event) => void,
   options?: ListenOptions
 ): void {
+  let controllers = ElementListenersMap.get(element);
+  if (!controllers) {
+    controllers = new Set();
+    ElementListenersMap.set(element, controllers);
+  }
+
   const controller = new AbortController();
-  (element as any)[abortControllerKey] = controller;
+  controllers.add(controller);
 
   const handler = createEventHandler(selector, callback, element);
   const target = getEventTarget(selector, element);
@@ -112,14 +117,13 @@ function setupEventListener(
 /**
  * 清理事件监听
  * @param element 组件实例
- * @param abortControllerKey AbortController 的 key
  */
-function cleanupEventListener(
-  element: EaElement & HTMLElement,
-  abortControllerKey: symbol
-): void {
-  const controller = (element as any)[abortControllerKey];
-  controller?.abort();
+function cleanupEventListener(element: EaElement & HTMLElement): void {
+  const controllers = ElementListenersMap.get(element);
+  if (controllers) {
+    controllers.forEach(controller => controller.abort());
+    ElementListenersMap.delete(element);
+  }
 }
 
 /**
@@ -181,7 +185,6 @@ export function listen(
       // 新版装饰器
       const context = propertyKeyOrContext as ClassMethodDecoratorContext;
       const methodName = context.name;
-      const abortControllerKey = createAbortControllerKey(methodName);
 
       context.addInitializer(function (this: any) {
         const originalConnected = this.connectedCallback;
@@ -191,18 +194,15 @@ export function listen(
           originalConnected?.call(this);
           setupEventListener(
             this,
-            abortControllerKey,
             eventName,
             selector,
-            (e: Event) => {
-              (this as any)[methodName].call(this, e);
-            },
+            (this as any)[methodName],
             options
           );
         };
 
         this.disconnectedCallback = function (this: EaElement & HTMLElement) {
-          cleanupEventListener(this, abortControllerKey);
+          cleanupEventListener(this);
           originalDisconnected?.call(this);
         };
       });
@@ -223,9 +223,6 @@ export function listen(
         return;
       }
 
-      // 使用属性名生成唯一的 key，每个装饰器调用都有自己的 key
-      const abortControllerKey = createAbortControllerKey(propertyKey);
-
       const originalConnected = getPrototypeCallback(
         target,
         "connectedCallback"
@@ -240,7 +237,6 @@ export function listen(
         originalConnected?.call(this);
         setupEventListener(
           this,
-          abortControllerKey,
           eventName,
           selector,
           (e: Event) => {
@@ -260,7 +256,7 @@ export function listen(
       };
 
       target.disconnectedCallback = function (this: EaElement & HTMLElement) {
-        cleanupEventListener(this, abortControllerKey);
+        cleanupEventListener(this);
         originalDisconnected?.call(this);
       };
     }
