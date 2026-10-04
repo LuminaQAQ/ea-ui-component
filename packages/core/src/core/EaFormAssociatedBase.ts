@@ -231,8 +231,6 @@ export class EaFormAssociatedBase extends EaBase {
    * 使用内部 input 元素的 validity 状态
    */
   updateValidity(): void {
-    if (this.tagName === "EA-BUTTON") return;
-
     const formControl = this.validationTarget;
 
     if (formControl && "validity" in formControl) {
@@ -262,8 +260,6 @@ export class EaFormAssociatedBase extends EaBase {
    * @returns 如果字段有效返回 true，否则返回 false
    */
   checkValidity(): boolean {
-    if (this.tagName === "EA-BUTTON") return true;
-
     this.updateValidity();
     if (this.internals && typeof this.internals.checkValidity === "function") {
       return this.internals.checkValidity();
@@ -276,8 +272,6 @@ export class EaFormAssociatedBase extends EaBase {
    * @returns 如果字段有效返回 true，否则返回 false
    */
   reportValidity(): boolean {
-    if (this.tagName === "EA-BUTTON") return true;
-
     this.updateValidity();
     if (this.internals && typeof this.internals.reportValidity === "function") {
       return this.internals.reportValidity();
@@ -314,8 +308,6 @@ export class EaFormAssociatedBase extends EaBase {
    * @param message - 自定义错误消息，空字符串表示清除错误
    */
   setCustomValidity(message: string): void {
-    if (this.tagName === "EA-BUTTON") return;
-
     const target = this.validationTarget as HTMLElement | undefined;
     if (
       target &&
@@ -387,8 +379,7 @@ export class EaFormAssociatedBase extends EaBase {
             form.querySelectorAll("*")
           ) as EaFormAssociatedBase[];
           const sorted = allElements.filter(
-            el =>
-              el instanceof EaFormAssociatedBase && el.tagName !== "EA-BUTTON"
+            el => el instanceof EaFormAssociatedBase
           );
 
           let firstInvalid: EaFormAssociatedBase | null = null;
