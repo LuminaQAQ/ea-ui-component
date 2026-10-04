@@ -31,7 +31,7 @@ export interface EaElement extends HTMLElement {
   /** @abstract 组件模板渲染，返回 HTML 字符串 */
   html?(): string;
   /** @abstract 组件销毁前调用 */
-  $beforeUnmounted?(): void;
+  $beforeUnmount?(): void;
   /** @abstract 组件销毁后调用 */
   $unmounted?(): void;
 }
