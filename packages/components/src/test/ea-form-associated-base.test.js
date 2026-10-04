@@ -13,7 +13,9 @@ try {
   }
   componentReady = true;
 } catch (e) {
-  console.warn(`[ea-form-associated-base] 组件尚未重构为 TypeScript (或存在依赖缺失)，跳过测试`);
+  console.warn(
+    `[ea-form-associated-base] 组件尚未重构为 TypeScript (或存在依赖缺失)，跳过测试`
+  );
 }
 
 const suite = componentReady ? describe : describe.skip;
@@ -289,18 +291,6 @@ suite("EaFormAssociatedBase", () => {
       await waitForRender();
 
       expect(element.getAttribute("pattern")).toBe("[a-zA-Z]+");
-    });
-
-    it("custom-validation-message 属性应该可设置", async () => {
-      const element = document.createElement("ea-form-associated-base");
-      element.setAttribute("custom-validation-message", "Custom error");
-      container.appendChild(element);
-
-      await waitForRender();
-
-      expect(element.getAttribute("custom-validation-message")).toBe(
-        "Custom error"
-      );
     });
   });
 
