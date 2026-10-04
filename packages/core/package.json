@@ -62,7 +62,6 @@
   "homepage": "https://luminaqaq.github.io/ea-ui-component/",
   "dependencies": {
     "@easy-component-ui/themes": "workspace:*",
-    "dayjs": "^1.11.19",
     "dompurify": "^3.3.1"
   },
   "devDependencies": {

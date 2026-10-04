@@ -153,9 +153,6 @@ importers:
       '@easy-component-ui/themes':
         specifier: workspace:*
         version: link:../themes
-      dayjs:
-        specifier: ^1.11.19
-        version: 1.11.23
       dompurify:
         specifier: ^3.3.1
         version: 3.4.16

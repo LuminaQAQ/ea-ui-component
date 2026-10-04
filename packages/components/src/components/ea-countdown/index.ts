@@ -2,7 +2,7 @@ import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
 import { CustomElement, attribute, property, query } from "@easy-component-ui/core/decorator";
 import dayjs from "dayjs";
 import { timeout } from "@easy-component-ui/core/utils/timeout";
-import { parseToDate } from "@easy-component-ui/core/utils/parseTime";
+import { parseToDate } from "@/utils/parseTime";
 import { EaCountdownChangeEvent } from "./events/EaCountdownChangeEvent";
 import { EaCountdownFinishEvent } from "./events/EaCountdownFinishEvent";
 import stylesheet from "./index.scss?inline";
