@@ -2,6 +2,7 @@
 import { CustomElement, attribute, property, query, listen } from "@easy-component-ui/core/decorator";
 import { html } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
+import { cssLengthToNumber, numberToCssLength } from "@easy-component-ui/core/utils/css-length";
 import { VARIANT_ICON_MAP } from "@constants/variant";
 import stylesheet from "./index.scss?inline";
 import "@/components/ea-icon/index";
@@ -282,7 +283,9 @@ export class EaNotificationElement extends EaBase {
 
     this.style.setProperty(
       "--ea-notification-y",
-      `${Number(lastPosition.replace("px", "")) + lastEaNotificationRect.height + 8}px`
+      numberToCssLength(
+        (cssLengthToNumber(lastPosition) || 0) + lastEaNotificationRect.height + 8
+      )
     );
   }
 
@@ -298,14 +301,13 @@ export class EaNotificationElement extends EaBase {
     const height = this._container.getBoundingClientRect().height;
 
     els.forEach(notification => {
-      const posi = Number(
-        notification.style
-          .getPropertyValue("--ea-notification-y")
-          .replace("px", "")
-      );
+      const posi =
+        cssLengthToNumber(
+          notification.style.getPropertyValue("--ea-notification-y")
+        ) || 0;
       notification.style.setProperty(
         "--ea-notification-y",
-        `${posi - height - 8}px`
+        numberToCssLength(posi - height - 8)
       );
     });
   }

@@ -2,6 +2,7 @@ import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
 import { CustomElement, attribute, property, query } from "@easy-component-ui/core/decorator";
 import { html } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
+import { cssLengthToNumber } from "@easy-component-ui/core/utils/css-length";
 import { circleItem } from "./components/circleItem";
 import { dashboardItem } from "./components/dashboardItem";
 import { EaProgressChangeEvent } from "./events/EaProgressChangeEvent";
@@ -291,7 +292,7 @@ export class EaProgress extends EaBase {
       line: () => newVal + "%",
       circle: () => 302 * ((100 - newVal) / 100) + "px",
       dashboard: () => {
-        const width = Number(this.strokeWidth.replace("px", ""));
+        const width = cssLengthToNumber(this.strokeWidth) || 0;
         const r = 49 - width / 2;
         const C = 2 * Math.PI * r;
         const progress = (100 - newVal) / 100;

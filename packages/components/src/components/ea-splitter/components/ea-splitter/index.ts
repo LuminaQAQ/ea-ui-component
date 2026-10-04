@@ -1,6 +1,7 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
 import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
+import { cssLengthToNumber } from "@easy-component-ui/core/utils/css-length";
 import { EaSplitterPanelResizeStartEvent } from "./events/EaSplitterPanelResizeStartEvent";
 import { EaSplitterPanelResizeEvent } from "./events/EaSplitterPanelResizeEvent";
 import { EaSplitterPanelResizeEndEvent } from "./events/EaSplitterPanelResizeEndEvent";
@@ -12,14 +13,12 @@ const TAG_NAME = "ea-splitter" as const;
 const bem = createBEM(TAG_NAME);
 
 const parseCSSMinValue = (value: string): number => {
-  if (!value || value.trim() === "") return 0;
+  const text = value?.trim() ?? "";
+  if (text === "") return 0;
 
-  if (value.endsWith("px")) return parseInt(value.replace("px", ""));
+  if (text.endsWith("%")) return cssLengthToNumber(text) / 100;
 
-  if (value.endsWith("%")) return Number(value.replace("%", "")) / 100;
-
-  const parsed = parseInt(value);
-  return isNaN(parsed) ? 0 : parsed;
+  return cssLengthToNumber(text) || parseFloat(text) || 0;
 };
 
 /**

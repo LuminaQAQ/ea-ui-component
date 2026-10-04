@@ -3,7 +3,7 @@ import { CustomElement, attribute, property, query, listen } from "@easy-compone
 import { html } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { Color, type ColorFormat as ColorUtilFormat } from "../../utils/Color";
-import { px2num } from "@easy-component-ui/core/utils/px2num";
+import { cssLengthToNumber } from "@easy-component-ui/core/utils/css-length";
 import { EaColorPickerActiveChangeEvent } from "../../events/EaColorPickerActiveChangeEvent";
 import { EaColorPickerPanelInvalidColorEvent } from "../../events/EaColorPickerPanelInvalidColorEvent";
 import "@components/ea-input/index";
@@ -458,7 +458,7 @@ export class EaColorPickerPanel extends EaBase {
     dimension: "width" | "height"
   ): number {
     const rect = element.getBoundingClientRect();
-    const cssSize = px2num(this.style.getPropertyValue(cssVar)) || fallback;
+    const cssSize = cssLengthToNumber(this.style.getPropertyValue(cssVar)) || fallback;
     return Math.max(0, Math.min(rect[dimension], cssSize), cssSize);
   }
 

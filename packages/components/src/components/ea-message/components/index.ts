@@ -2,6 +2,7 @@
 import { CustomElement, attribute, property, query, listen } from "@easy-component-ui/core/decorator";
 import { html } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
+import { cssLengthToNumber, numberToCssLength } from "@easy-component-ui/core/utils/css-length";
 import {
   VARIANT_TYPES,
   VARIANT_DEFAULT,
@@ -242,7 +243,9 @@ export class EaMessageElement extends EaBase {
 
     this.style.setProperty(
       "--ea-message-y",
-      `${Number(lastPosition.replace("px", "")) + lastEaMessageRect.height + 8}px`
+      numberToCssLength(
+        (cssLengthToNumber(lastPosition) || 0) + lastEaMessageRect.height + 8
+      )
     );
   }
 
@@ -258,10 +261,9 @@ export class EaMessageElement extends EaBase {
     const height = this._container.getBoundingClientRect().height;
 
     els.forEach(message => {
-      const posi = Number(
-        message.style.getPropertyValue("--ea-message-y").replace("px", "")
-      );
-      message.style.setProperty("--ea-message-y", `${posi - height - 8}px`);
+      const posi =
+        cssLengthToNumber(message.style.getPropertyValue("--ea-message-y")) || 0;
+      message.style.setProperty("--ea-message-y", numberToCssLength(posi - height - 8));
     });
   }
 
