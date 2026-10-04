@@ -38,6 +38,28 @@ type CustomElementDecorator = (
 ) => void;
 
 /**
+ * 记录被显式设置为 false 的布尔属性
+ * 键：组件实例
+ * 值：被显式置为 false 的属性名集合
+ */
+const BooleanFalseAttrsMap: WeakMap<HTMLElement, Set<string>> = new WeakMap();
+
+/**
+ * 获取自定义元素类的原型链（不含 HTMLElement），按基类到派生类排序
+ * @param customElementClass 自定义元素类
+ * @returns 原型链上的类数组
+ */
+function getClassChain(customElementClass: any): any[] {
+  const chain: any[] = [];
+  let current: any = customElementClass;
+  while (current && current !== HTMLElement) {
+    chain.unshift(current);
+    current = Object.getPrototypeOf(current);
+  }
+  return chain;
+}
+
+/**
  * 查找属性配置，支持驼峰命名和连字符命名的自动转换
  * @param options 属性配置映射
  * @param name 属性名（可能是驼峰命名或连字符命名）
@@ -102,8 +124,6 @@ function createAttributeGetter(
   };
 }
 
-const BOOLEAN_FALSE_ATTRS = Symbol("booleanFalseAttrs");
-
 /**
  * 创建属性的 setter 函数（映射到 HTML attribute）
  * @param name 属性名（可能是驼峰命名）
@@ -117,13 +137,15 @@ function createAttributeSetter(name: string) {
     if (typeof newVal === "boolean") {
       if (newVal) {
         this.setAttribute(attrName, "");
-        const marked = (this as any)[BOOLEAN_FALSE_ATTRS];
-        if (marked) marked.delete(attrName);
+        BooleanFalseAttrsMap.get(this)?.delete(attrName);
       } else {
         this.removeAttribute(attrName);
-        if (!(this as any)[BOOLEAN_FALSE_ATTRS])
-          (this as any)[BOOLEAN_FALSE_ATTRS] = new Set();
-        (this as any)[BOOLEAN_FALSE_ATTRS].add(attrName);
+        let marked = BooleanFalseAttrsMap.get(this);
+        if (!marked) {
+          marked = new Set();
+          BooleanFalseAttrsMap.set(this, marked);
+        }
+        marked.add(attrName);
       }
     } else {
       this.setAttribute(attrName, String(newVal));
@@ -132,14 +154,23 @@ function createAttributeSetter(name: string) {
 }
 
 /**
+ * 生成纯 JS 属性的内部存储键
+ * @param name 属性名
+ * @returns 内部存储键
+ */
+function getPropertyStorageKey(name: string): string {
+  return `__prop_${name}`;
+}
+
+/**
  * 创建属性的 getter 函数（不映射到 HTML attribute，仅作为 JS 属性）
  * @param name 属性名
  * @param defaultValue 默认值
  */
 function createPropertyGetter(name: string, defaultValue: any) {
-  const privateName = `__prop_${name}`;
+  const storageKey = getPropertyStorageKey(name);
   return function (this: any) {
-    return privateName in this ? this[privateName] : defaultValue;
+    return storageKey in this ? this[storageKey] : defaultValue;
   };
 }
 
@@ -154,10 +185,10 @@ function createPropertySetter(
   observer?: (newVal: any, oldVal: any) => void,
   a11y?: AttributeOptions["a11y"]
 ) {
+  const storageKey = getPropertyStorageKey(name);
   return function (this: any, newVal: any) {
-    const privateName = `__prop_${name}`;
-    const oldVal = this[privateName];
-    this[privateName] = newVal;
+    const oldVal = this[storageKey];
+    this[storageKey] = newVal;
 
     if (observer) {
       observer.call(this, newVal, oldVal);
@@ -217,15 +248,13 @@ function defineReactiveAttribute(
   });
 }
 
-function initBooleanDefaults(instance: any, CustomElementClass: any) {
-  const chain: any[] = [];
-  let current: any = CustomElementClass;
-  while (current && current !== HTMLElement) {
-    chain.unshift(current);
-    current = Object.getPrototypeOf(current);
-  }
-
-  chain.forEach(cls => {
+/**
+ * 初始化布尔属性的默认值
+ * @param instance 组件实例
+ * @param classChain 组件类的原型链
+ */
+function initBooleanDefaults(instance: any, classChain: any[]) {
+  classChain.forEach(cls => {
     const attrs = ElementAttributesMap.get(cls);
     if (!attrs) return;
 
@@ -233,8 +262,7 @@ function initBooleanDefaults(instance: any, CustomElementClass: any) {
       const { type, default: defaultValue } = attrs[name];
       if (type === Boolean && defaultValue === true) {
         const attrName = camelToKebab(name);
-        const marked = instance[BOOLEAN_FALSE_ATTRS];
-        if (marked && marked.has(attrName)) return;
+        if (BooleanFalseAttrsMap.get(instance)?.has(attrName)) return;
         if (!instance.hasAttribute(attrName)) {
           instance.toggleAttribute(attrName, true);
         }
@@ -246,17 +274,10 @@ function initBooleanDefaults(instance: any, CustomElementClass: any) {
 /**
  * 初始化 @attribute 的 a11y 同步（首次 connectedCallback 时调用）
  * @param instance 组件实例
- * @param CustomElementClass 组件类
+ * @param classChain 组件类的原型链
  */
-function initA11yAttributes(instance: any, CustomElementClass: any) {
-  const chain: any[] = [];
-  let current: any = CustomElementClass;
-  while (current && current !== HTMLElement) {
-    chain.unshift(current);
-    current = Object.getPrototypeOf(current);
-  }
-
-  chain.forEach(cls => {
+function initA11yAttributes(instance: any, classChain: any[]) {
+  classChain.forEach(cls => {
     const attrs = ElementAttributesMap.get(cls);
     if (!attrs) return;
 
@@ -305,24 +326,22 @@ function defineReactiveProperty(
 
 /**
  * 收集并应用组件样式
- * @param elementClass 组件类
+ * @param classChain 组件类的原型链
  * @param shadowRoot 组件的 ShadowRoot
  */
-function applyStyles(elementClass: any, shadowRoot: ShadowRoot | null): void {
+function applyStyles(classChain: any[], shadowRoot: ShadowRoot | null): void {
   if (!shadowRoot) return;
 
   const allStyles: string[] = [];
-  let currentClass: any = elementClass;
-  while (currentClass && currentClass !== HTMLElement) {
-    const classOptions = currentClass.customElementOptions;
+  classChain.forEach(cls => {
+    const classOptions = cls.customElementOptions;
     if (classOptions?.styles) {
       const classStyles = Array.isArray(classOptions.styles)
         ? classOptions.styles
         : [classOptions.styles];
-      allStyles.unshift(...classStyles);
+      allStyles.push(...classStyles);
     }
-    currentClass = Object.getPrototypeOf(currentClass);
-  }
+  });
 
   const uniqueStyles = [...new Set(allStyles)];
 
@@ -368,16 +387,58 @@ function renderTemplate(
 /**
  * 挂载组件 - 应用样式并渲染模板
  * @param element 组件实例
- * @param elementClass 组件类
+ * @param classChain 组件类的原型链
  */
-function mount(element: EaElement & HTMLElement, elementClass: any): void {
+function mount(element: EaElement & HTMLElement, classChain: any[]): void {
   const shadowRoot = element.shadowRoot;
   if (!shadowRoot) return;
 
   shadowRoot.innerHTML = "";
 
-  applyStyles(elementClass, shadowRoot);
+  applyStyles(classChain, shadowRoot);
   renderTemplate(element, shadowRoot);
+}
+
+/**
+ * 解析并声明自定义元素的 observedAttributes
+ * 同时覆盖属性名的连字符与驼峰两种形式
+ * @param customElementClass 自定义元素类
+ * @param options 装饰器选项
+ * @returns 观察的属性名列表
+ */
+function setupObservedAttributes(
+  customElementClass: EaElementConstructor,
+  options: CustomElementOptions
+): string[] {
+  const attributeOptions = ElementAttributesMap.get(customElementClass);
+
+  const superAttributes = customElementClass.observedAttributes || [];
+  const attributeNames = Object.keys(attributeOptions || {});
+
+  const allAttributeNames = attributeNames.flatMap(name => {
+    const kebabName = camelToKebab(name);
+    const camelName = kebabToCamel(name);
+    const names = [name];
+    if (kebabName !== name) names.push(kebabName);
+    if (camelName !== name && camelName !== kebabName) names.push(camelName);
+    return names;
+  });
+
+  const observedAttributes = [
+    ...new Set([
+      ...superAttributes,
+      ...allAttributeNames,
+      ...(options.extraAttr || []),
+    ]),
+  ];
+
+  Object.defineProperty(customElementClass, "observedAttributes", {
+    get: () => observedAttributes,
+    configurable: true,
+    enumerable: true,
+  });
+
+  return observedAttributes;
 }
 
 /**
@@ -403,37 +464,11 @@ function CustomElement(
   ) => {
     (CustomElementClass as any).customElementOptions = options;
 
-    // 获取 attribute 装饰器配置（始终映射到 HTML attribute）
-    const attributeOptions = ElementAttributesMap.get(CustomElementClass);
-
-    const superAttributes = CustomElementClass.observedAttributes || [];
-    const attributeNames = Object.keys(attributeOptions || {});
-
-    // 为每个属性名生成连字符命名和驼峰命名两种形式
-    const allAttributeNames = attributeNames.flatMap(name => {
-      const kebabName = camelToKebab(name);
-      const camelName = kebabToCamel(name);
-      // 如果原始名已经是连字符命名，还需要添加驼峰形式
-      // 如果原始名已经是驼峰命名，还需要添加连字符形式
-      const names = [name];
-      if (kebabName !== name) names.push(kebabName);
-      if (camelName !== name && camelName !== kebabName) names.push(camelName);
-      return names;
-    });
-
-    const observedAttributes = [
-      ...new Set([
-        ...superAttributes,
-        ...allAttributeNames,
-        ...(options.extraAttr || []),
-      ]),
-    ];
-
-    Object.defineProperty(CustomElementClass, "observedAttributes", {
-      get: () => observedAttributes,
-      configurable: true,
-      enumerable: true,
-    });
+    const observedAttributes = setupObservedAttributes(
+      CustomElementClass,
+      options
+    );
+    const classChain = getClassChain(CustomElementClass);
 
     class EaCustomElement extends CustomElementClass {
       static get observedAttributes() {
@@ -443,14 +478,7 @@ function CustomElement(
       constructor() {
         super();
 
-        const chain: any[] = [];
-        let current: any = CustomElementClass;
-        while (current && current !== HTMLElement) {
-          chain.unshift(current);
-          current = Object.getPrototypeOf(current);
-        }
-
-        chain.forEach(cls => {
+        classChain.forEach(cls => {
           const attrs = ElementAttributesMap.get(cls);
           const props = ElementPropertiesMap.get(cls);
 
@@ -471,15 +499,15 @@ function CustomElement(
       }
 
       connectedCallback() {
-        initBooleanDefaults(this, CustomElementClass);
+        initBooleanDefaults(this, classChain);
 
-        mount(this, CustomElementClass);
+        mount(this, classChain);
 
-        initA11yAttributes(this, CustomElementClass);
+        initA11yAttributes(this, classChain);
 
-        const parent = Object.getPrototypeOf(Object.getPrototypeOf(this));
-        if (parent && typeof parent.connectedCallback === "function") {
-          parent.connectedCallback.call(this);
+        const parentProto: any = CustomElementClass.prototype;
+        if (typeof parentProto.connectedCallback === "function") {
+          parentProto.connectedCallback.call(this);
         }
       }
 
@@ -489,81 +517,66 @@ function CustomElement(
         newVal: string | null
       ): Promise<void> {
         try {
-          let currentClass: any = CustomElementClass;
+          const parentProto: any = CustomElementClass.prototype;
           let found = false;
 
-          while (currentClass && currentClass !== HTMLElement) {
-            const clsAttrs = ElementAttributesMap.get(currentClass);
+          for (let i = classChain.length - 1; i >= 0; i--) {
+            const clsAttrs = ElementAttributesMap.get(classChain[i]);
+            if (!clsAttrs) continue;
 
-            if (clsAttrs) {
-              const { option, actualName } = findPropertyOption(clsAttrs, name);
+            const { option, actualName } = findPropertyOption(clsAttrs, name);
+            if (!option) continue;
 
-              if (option) {
-                let newValue: any;
-                let oldValue: any;
+            let newValue: any;
+            let oldValue: any;
 
-                if (option.type === Boolean) {
-                  newValue = newVal !== null && newVal !== "false";
-                  oldValue = oldVal !== null && oldVal !== "false";
-                } else {
-                  newValue = parseAttributeValue(
-                    this,
-                    newVal,
-                    option.type,
-                    option.default
-                  );
-                  oldValue = parseAttributeValue(
-                    this,
-                    oldVal,
-                    option.type,
-                    option.default
-                  );
-                }
-
-                const parentProto = Object.getPrototypeOf(
-                  Object.getPrototypeOf(this)
-                );
-                if (
-                  parentProto &&
-                  typeof parentProto.attributeChangedCallback === "function"
-                ) {
-                  await parentProto.attributeChangedCallback.call(
-                    this,
-                    actualName,
-                    oldValue,
-                    newValue
-                  );
-                }
-
-                option.observer?.call(this, newValue, oldValue);
-
-                if (option.a11y) {
-                  syncA11yAttribute(this, option.a11y, newValue);
-                }
-
-                found = true;
-                break;
-              }
-            }
-
-            currentClass = Object.getPrototypeOf(currentClass);
-          }
-
-          if (!found) {
-            const parentProto = Object.getPrototypeOf(
-              Object.getPrototypeOf(this)
-            );
-            if (
-              parentProto &&
-              typeof parentProto.attributeChangedCallback === "function"
-            ) {
-              await parentProto.attributeChangedCallback.call(
+            if (option.type === Boolean) {
+              newValue = newVal !== null && newVal !== "false";
+              oldValue = oldVal !== null && oldVal !== "false";
+            } else {
+              newValue = parseAttributeValue(
                 this,
-                name,
+                newVal,
+                option.type,
+                option.default
+              );
+              oldValue = parseAttributeValue(
+                this,
                 oldVal,
-                newVal
+                option.type,
+                option.default
               );
             }
+
+            if (typeof parentProto.attributeChangedCallback === "function") {
+              await parentProto.attributeChangedCallback.call(
+                this,
+                actualName,
+                oldValue,
+                newValue
+              );
+            }
+
+            option.observer?.call(this, newValue, oldValue);
+
+            if (option.a11y) {
+              syncA11yAttribute(this, option.a11y, newValue);
+            }
+
+            found = true;
+            break;
+          }
+
+          if (
+            !found &&
+            typeof parentProto.attributeChangedCallback === "function"
+          ) {
+            await parentProto.attributeChangedCallback.call(
+              this,
+              name,
+              oldVal,
+              newVal
+            );
           }
         } catch (e) {
           if (process.env.NODE_ENV === "development") {
