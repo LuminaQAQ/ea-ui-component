@@ -31,12 +31,12 @@
       "import": "./dist/source.js",
       "types": "./dist/types/source.d.ts"
     },
-    "./variables.scss": "./src/variables.scss",
-    "./light.scss": "./src/light.scss",
-    "./dark.scss": "./src/dark.scss",
-    "./source.scss": "./src/source.scss",
-    "./mixins.scss": "./src/mixins.scss",
-    "./namespace.scss": "./src/namespace.scss"
+    "./variables.scss": "./src/styles/variables.scss",
+    "./light.scss": "./src/styles/light.scss",
+    "./dark.scss": "./src/styles/dark.scss",
+    "./source.scss": "./src/styles/source.scss",
+    "./mixins.scss": "./src/styles/mixins.scss",
+    "./namespace.scss": "./src/styles/namespace.scss"
   },
   "scripts": {
     "build": "vite build",

@@ -36,23 +36,27 @@ export default defineConfig({
     },
   },
   resolve: {
-    alias: {
-      "@easy-component-ui/core": coreSrc,
-      "@easy-component-ui/themes": themesSrc,
-      "@core": resolve(coreSrc, "core"),
-      "@decorator": resolve(coreSrc, "decorator"),
-      "@utils": resolve(coreSrc, "utils"),
-      "@stores": resolve(coreSrc, "stores"),
-      "@": resolve(__dirname, "src/"),
-      "@components": resolve(__dirname, "src/components"),
-      "@common": resolve(__dirname, "src/common"),
-      "@constants": resolve(__dirname, "src/constants"),
-    },
+    alias: [
+      {
+        find: /^@easy-component-ui\/themes\/([\w-]+)\.scss(\?.*)?$/,   
+        replacement: `${themesSrc}/styles/$1.scss$2`,
+      },
+      { find: "@easy-component-ui/core", replacement: coreSrc },
+      { find: "@easy-component-ui/themes", replacement: themesSrc },
+      { find: "@core", replacement: resolve(coreSrc, "core") },
+      { find: "@decorator", replacement: resolve(coreSrc, "decorator") },
+      { find: "@utils", replacement: resolve(coreSrc, "utils") },
+      { find: "@stores", replacement: resolve(coreSrc, "stores") },
+      { find: "@", replacement: resolve(__dirname, "src/") },
+      { find: "@components", replacement: resolve(__dirname, "src/components") },
+      { find: "@common", replacement: resolve(__dirname, "src/common") },
+      { find: "@constants", replacement: resolve(__dirname, "src/constants") },
+    ],
   },
   css: {
     preprocessorOptions: {
       scss: {
-        loadPaths: [themesSrc],
+        loadPaths: [resolve(themesSrc, "styles")],
         additionalData: `
           @use "namespace" as *;
           @use "mixins" as *;

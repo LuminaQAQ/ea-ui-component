@@ -33,9 +33,9 @@ readdirSync(commonDir).forEach((file: string) => {
   }
 });
 
-entryConfigs["themes/source"] = resolve(themesDir, "source.entry.ts");
-entryConfigs["themes/light"] = resolve(themesDir, "light.entry.ts");
-entryConfigs["themes/dark"] = resolve(themesDir, "dark.entry.ts");
+entryConfigs["themes/source"] = resolve(themesDir, "entries/source.entry.ts");
+entryConfigs["themes/light"] = resolve(themesDir, "entries/light.entry.ts");
+entryConfigs["themes/dark"] = resolve(themesDir, "entries/dark.entry.ts");
 entryConfigs["theme"] = resolve(themesDir, "controller.ts");
 
 export default entryConfigs;

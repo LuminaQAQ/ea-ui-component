@@ -1,4 +1,4 @@
-import sourceCss from "./source.scss?inline";
+import sourceCss from "../styles/source.scss?inline";
 
 const style = document.createElement("style");
 style.textContent = sourceCss;

@@ -166,9 +166,9 @@ export const handlePackageExport = (): void => {
     }
   });
 
-  entryConfigs["themes/source"] = path.resolve(themesDir, "source.entry.ts");
-  entryConfigs["themes/light"] = path.resolve(themesDir, "light.entry.ts");
-  entryConfigs["themes/dark"] = path.resolve(themesDir, "dark.entry.ts");
+  entryConfigs["themes/source"] = path.resolve(themesDir, "entries/source.entry.ts");
+  entryConfigs["themes/light"] = path.resolve(themesDir, "entries/light.entry.ts");
+  entryConfigs["themes/dark"] = path.resolve(themesDir, "entries/dark.entry.ts");
   entryConfigs["theme"] = path.resolve(themesDir, "controller.ts");
 
   const pkgPath = path.resolve(ROOT, "packages/components/package.json");

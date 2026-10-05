@@ -1,4 +1,4 @@
-import darkCss from "./dark.scss?inline";
+import darkCss from "../styles/dark.scss?inline";
 
 const style = document.createElement("style");
 style.textContent = darkCss;

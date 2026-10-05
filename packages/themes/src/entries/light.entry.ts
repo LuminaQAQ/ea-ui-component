@@ -1,4 +1,4 @@
-import lightCss from "./light.scss?inline";
+import lightCss from "../styles/light.scss?inline";
 
 const style = document.createElement("style");
 style.textContent = lightCss;

@@ -21,9 +21,9 @@ export default defineConfig({
     lib: {
       entry: {
         controller: resolve(srcDir, "controller.ts"),
-        light: resolve(srcDir, "light.entry.ts"),
-        dark: resolve(srcDir, "dark.entry.ts"),
-        source: resolve(srcDir, "source.entry.ts"),
+        light: resolve(srcDir, "entries/light.entry.ts"),
+        dark: resolve(srcDir, "entries/dark.entry.ts"),
+        source: resolve(srcDir, "entries/source.entry.ts"),
       },
       formats: ["es"],
     },
@@ -37,7 +37,7 @@ export default defineConfig({
     preprocessorOptions: {
       scss: {
         api: "modern-compiler",
-        loadPaths: [srcDir],
+        loadPaths: [resolve(srcDir, "styles")],
         additionalData: `
           @use "namespace" as *;
           @use "mixins" as *;

@@ -133,7 +133,7 @@ export default defineConfig({
     preprocessorOptions: {
       scss: {
         api: "modern-compiler",
-        loadPaths: [themesSrcDir],
+        loadPaths: [resolve(themesSrcDir, "styles")],
         additionalData: `
           @use "namespace" as *;
           @use "mixins" as *;
