@@ -373,11 +373,11 @@ this._container.innerHTML = html(newVal);
 
 #### A11yOption 配置
 
-| 字段 | 类型 | 必填 | 说明 |
-|------|------|------|------|
-| `ariaAttr` | `string` | 是 | 同步到的 ARIA 属性名（如 `"aria-disabled"`、`"aria-expanded"`、`"inert"`） |
-| `target` | `string` | 否 | 目标元素 CSS 选择器，默认 `":host"` 表示组件宿主元素 |
-| `map` | `(val: any) => string \| null` | 否 | 值映射函数，返回 `null` 时移除属性；省略时用 `String(value)` |
+| 字段       | 类型                           | 必填 | 说明                                                                       |
+| ---------- | ------------------------------ | ---- | -------------------------------------------------------------------------- |
+| `ariaAttr` | `string`                       | 是   | 同步到的 ARIA 属性名（如 `"aria-disabled"`、`"aria-expanded"`、`"inert"`） |
+| `target`   | `string`                       | 否   | 目标元素 CSS 选择器，默认 `":host"` 表示组件宿主元素                       |
+| `map`      | `(val: any) => string \| null` | 否   | 值映射函数，返回 `null` 时移除属性；省略时用 `String(value)`               |
 
 #### 使用示例
 
@@ -423,26 +423,26 @@ active: boolean = false;
 
 **必须使用 `a11y` 选项的场景**（属性值直接决定 ARIA 属性值，目标为宿主或 Shadow DOM 内固定元素）：
 
-| 场景 | ariaAttr | map | 示例组件 |
-|------|----------|-----|---------|
-| `disabled` → `aria-disabled` | `"aria-disabled"` | `v => String(v)` | ea-button, ea-input, ea-switch |
-| `checked` → `aria-checked` | `"aria-checked"` | `v => String(!!v)` | ea-checkbox, ea-radio |
-| `open` → `aria-expanded` | `"aria-expanded"` | 无需 map | ea-sub-menu, ea-collapse-item |
-| `active` → `inert`（关闭时阻止焦点） | `"inert"` | `v => v ? null : ""` | ea-tab-panel |
-| `filterable` → `aria-autocomplete` | `"aria-autocomplete"` | `v => v ? "both" : null` | ea-select |
-| `value` → `aria-valuenow` | `"aria-valuenow"` | `v => String(v)` | ea-slider, ea-rate |
-| `min` → `aria-valuemin` | `"aria-valuemin"` | `v => String(v)` | ea-slider |
-| `max` → `aria-valuemax` | `"aria-valuemax"` | `v => String(v)` | ea-slider, ea-rate |
+| 场景                                 | ariaAttr              | map                      | 示例组件                       |
+| ------------------------------------ | --------------------- | ------------------------ | ------------------------------ |
+| `disabled` → `aria-disabled`         | `"aria-disabled"`     | `v => String(v)`         | ea-button, ea-input, ea-switch |
+| `checked` → `aria-checked`           | `"aria-checked"`      | `v => String(!!v)`       | ea-checkbox, ea-radio          |
+| `open` → `aria-expanded`             | `"aria-expanded"`     | 无需 map                 | ea-sub-menu, ea-collapse-item  |
+| `active` → `inert`（关闭时阻止焦点） | `"inert"`             | `v => v ? null : ""`     | ea-tab-panel                   |
+| `filterable` → `aria-autocomplete`   | `"aria-autocomplete"` | `v => v ? "both" : null` | ea-select                      |
+| `value` → `aria-valuenow`            | `"aria-valuenow"`     | `v => String(v)`         | ea-slider, ea-rate             |
+| `min` → `aria-valuemin`              | `"aria-valuemin"`     | `v => String(v)`         | ea-slider                      |
+| `max` → `aria-valuemax`              | `"aria-valuemax"`     | `v => String(v)`         | ea-slider, ea-rate             |
 
 **禁止使用 `a11y` 选项的场景**（仍需手动管理）：
 
-| 场景 | 原因 | 示例 |
-|------|------|------|
-| 动态 ID 引用 | 值由运行时生成的唯一 ID 决定 | `aria-labelledby`, `aria-controls`, `aria-describedby`, `aria-activedescendant` |
-| 多元素批量操作 | 循环中对多个动态元素设置 ARIA 属性 | ea-tree 节点、ea-carousel 项、ea-pagination 按钮 |
-| Light DOM 目标 | `target` 只支持 Shadow DOM 内部元素 | ea-tooltip 触发器、ea-dropdown 触发器 |
-| 复杂条件逻辑 | 多个属性共同决定一个 ARIA 属性的值 | `disabled || limitDisabled` |
-| 一次性静态设置 | 不随属性变化的固定值 | `aria-modal="true"`, `aria-haspopup="listbox"` |
+| 场景           | 原因                                | 示例                                                                            |
+| -------------- | ----------------------------------- | ------------------------------------------------------------------------------- |
+| 动态 ID 引用   | 值由运行时生成的唯一 ID 决定        | `aria-labelledby`, `aria-controls`, `aria-describedby`, `aria-activedescendant` |
+| 多元素批量操作 | 循环中对多个动态元素设置 ARIA 属性  | ea-tree 节点、ea-carousel 项、ea-pagination 按钮                                |
+| Light DOM 目标 | `target` 只支持 Shadow DOM 内部元素 | ea-tooltip 触发器、ea-dropdown 触发器                                           |
+| 复杂条件逻辑   | 多个属性共同决定一个 ARIA 属性的值  | `disabled                                                                       |     | limitDisabled` |
+| 一次性静态设置 | 不随属性变化的固定值                | `aria-modal="true"`, `aria-haspopup="listbox"`                                  |
 
 ## CSS 开发规范
 
@@ -598,10 +598,12 @@ API 部分的标题使用 **PascalCase 组件名**，不使用 `ea-` 前缀的 k
 ```javascript
 import { waitForRender } from "./utils/waitForRender";
 
-await waitForRender(); // 默认 100ms
-await waitForRender(200); // 自定义
-await waitForRender(0); // 微任务等待
+await waitForRender(); // 等待渲染完成（默认 100ms）
+await waitForRender(0); // 只等一帧（单 rAF）
+await waitForRender(200); // 等真实 200ms
 ```
+
+`$mount()` 与属性 `observer` 都挂在 `requestAnimationFrame` 上，部分组件 `$mount` 还会 `await import()` 懒加载子组件，故渲染/observer 更新需要等待；Shadow DOM 结构与属性值读取是同步的，无需等待。
 
 ### DOMPurify 属性丢失问题
 
