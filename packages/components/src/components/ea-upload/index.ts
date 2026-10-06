@@ -310,7 +310,8 @@ export class EaUpload extends EaFormAssociatedBase {
    * @param li - 文件列表项元素
    */
   private _getProgressEl(li: HTMLLIElement): Element | null {
-    return li.querySelector("ea-progress");
+    const fileItem = li.querySelector("ea-upload-file-item");
+    return fileItem?.shadowRoot?.querySelector("ea-progress") ?? null;
   }
 
   /**
