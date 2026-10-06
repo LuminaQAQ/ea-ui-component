@@ -1,4 +1,4 @@
-﻿import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
+import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
 import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
 import { html } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
@@ -223,6 +223,7 @@ export class EaCalendar extends EaBase {
 
     this._dateChangeAbortController?.abort();
     this._dateChangeAbortController = new AbortController();
+    const signal = this._dateChangeAbortController.signal;
 
     if (controllerType === "select") {
       await importSelectComponent();
@@ -231,29 +232,38 @@ export class EaCalendar extends EaBase {
       await importButtonComponent();
     }
 
+    if (signal.aborted) return;
+
     this._controllerWrapper.innerHTML = html(
       controllerTypeStrategies[controllerType]()
     );
 
     if (controllerType === "select") {
-      await this._initSelectControllerEvent();
+      await this._initSelectControllerEvent(signal);
     } else {
-      await this._initButtonControllerEvent();
+      await this._initButtonControllerEvent(signal);
     }
+
+    if (signal.aborted) return;
 
     const todayBtn = this.shadowRoot?.querySelector(bem.ce("controller-today"));
     if (todayBtn) {
       todayBtn.addEventListener("click", this._handleTodayClick, {
-        signal: this._dateChangeAbortController.signal,
+        signal,
       });
     }
   };
 
-  private _initButtonControllerEvent = async (): Promise<void> => {
+  /** @param signal - 控制器渲染的 AbortSignal，用于在渲染被取代时丢弃监听 */
+  private _initButtonControllerEvent = async (
+    signal: AbortSignal
+  ): Promise<void> => {
     if (!this._isEaButtonImported) {
       await customElements.whenDefined("ea-button");
       this._isEaButtonImported = true;
     }
+
+    if (signal.aborted) return;
 
     const prevBtn = this.shadowRoot?.querySelector(bem.ce("controller-prev"));
     const nextBtn = this.shadowRoot?.querySelector(bem.ce("controller-next"));
@@ -267,23 +277,24 @@ export class EaCalendar extends EaBase {
     };
 
     if (prevBtn) {
-      prevBtn.addEventListener("click", onPrevMonthClick, {
-        signal: this._dateChangeAbortController?.signal,
-      });
+      prevBtn.addEventListener("click", onPrevMonthClick, { signal });
     }
 
     if (nextBtn) {
-      nextBtn.addEventListener("click", onNextMonthClick, {
-        signal: this._dateChangeAbortController?.signal,
-      });
+      nextBtn.addEventListener("click", onNextMonthClick, { signal });
     }
   };
 
-  private _initSelectControllerEvent = async (): Promise<void> => {
+  /** @param signal - 控制器渲染的 AbortSignal，用于在渲染被取代时丢弃监听 */
+  private _initSelectControllerEvent = async (
+    signal: AbortSignal
+  ): Promise<void> => {
     if (!this._isEaSelectImported) {
       await customElements.whenDefined("ea-select");
       this._isEaSelectImported = true;
     }
+
+    if (signal.aborted) return;
 
     const currentYear = this._displayDate.get("year");
     const currentMonth = this._displayDate.get("month") + 1;
@@ -316,13 +327,10 @@ export class EaCalendar extends EaBase {
 
     await new Promise(resolve => setTimeout(resolve, 0));
 
-    yearEl?.addEventListener("change", onYearChange, {
-      signal: this._dateChangeAbortController?.signal,
-    });
+    if (signal.aborted) return;
 
-    monthEl?.addEventListener("change", onMonthChange, {
-      signal: this._dateChangeAbortController?.signal,
-    });
+    yearEl?.addEventListener("change", onYearChange, { signal });
+    monthEl?.addEventListener("change", onMonthChange, { signal });
   };
 
   /** @param weekList - 星期名称列表 @param weekFullList - 完整星期名称列表 @returns 星期行 HTML 字符串 */
