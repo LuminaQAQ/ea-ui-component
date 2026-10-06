@@ -126,31 +126,25 @@ describe("EaLoading", () => {
   });
 
   describe("Loading Attribute", () => {
-    it("默认 loading 应该是 false", async () => {
+    it("默认 loading 应该是 false", () => {
       const loading = document.createElement("ea-loading");
       container.appendChild(loading);
-
-      await waitForRender();
 
       expect(loading.loading).toBe(false);
     });
 
-    it("设置 loading 后应该添加 is-loading 状态 class", async () => {
+    it("设置 loading 后应该添加 is-loading 状态 class", () => {
       const loading = document.createElement("ea-loading");
       loading.setAttribute("loading", "");
       container.appendChild(loading);
-
-      await waitForRender();
 
       const containerEl = loading.shadowRoot.querySelector(".ea-loading");
       expect(containerEl.classList.contains("is-loading")).toBe(true);
     });
 
-    it("loading 为 false 时不应有 is-loading 状态 class", async () => {
+    it("loading 为 false 时不应有 is-loading 状态 class", () => {
       const loading = document.createElement("ea-loading");
       container.appendChild(loading);
-
-      await waitForRender();
 
       const containerEl = loading.shadowRoot.querySelector(".ea-loading");
       expect(containerEl.classList.contains("is-loading")).toBe(false);
@@ -159,8 +153,6 @@ describe("EaLoading", () => {
     it("loading 变化时应该正确更新 class", async () => {
       const loading = document.createElement("ea-loading");
       container.appendChild(loading);
-
-      await waitForRender();
 
       const containerEl = loading.shadowRoot.querySelector(".ea-loading");
       expect(containerEl.classList.contains("is-loading")).toBe(false);
@@ -176,8 +168,6 @@ describe("EaLoading", () => {
       loading.setAttribute("loading", "");
       container.appendChild(loading);
 
-      await waitForRender();
-
       const containerEl = loading.shadowRoot.querySelector(".ea-loading");
       expect(containerEl.classList.contains("is-loading")).toBe(true);
 
@@ -189,31 +179,25 @@ describe("EaLoading", () => {
   });
 
   describe("Spinner Attribute", () => {
-    it("默认 spinner 应该是 spinner", async () => {
+    it("默认 spinner 应该是 spinner", () => {
       const loading = document.createElement("ea-loading");
       container.appendChild(loading);
-
-      await waitForRender();
 
       expect(loading.spinner).toBe("spinner");
     });
 
-    it("应该正确设置 spinner 属性", async () => {
+    it("应该正确设置 spinner 属性", () => {
       const loading = document.createElement("ea-loading");
       loading.setAttribute("spinner", "circle-notch");
       container.appendChild(loading);
-
-      await waitForRender();
 
       expect(loading.spinner).toBe("circle-notch");
     });
 
-    it("spinner 属性应该传递给 ea-icon 的 name 属性", async () => {
+    it("spinner 属性应该传递给 ea-icon 的 name 属性", () => {
       const loading = document.createElement("ea-loading");
       loading.setAttribute("spinner", "circle-notch");
       container.appendChild(loading);
-
-      await waitForRender();
 
       const spinner = loading.shadowRoot.querySelector(".ea-loading__spinner");
       expect(spinner.getAttribute("name")).toBe("circle-notch");
@@ -222,8 +206,6 @@ describe("EaLoading", () => {
     it("spinner 变化时应该更新 ea-icon 的 name 属性", async () => {
       const loading = document.createElement("ea-loading");
       container.appendChild(loading);
-
-      await waitForRender();
 
       const spinner = loading.shadowRoot.querySelector(".ea-loading__spinner");
       expect(spinner.getAttribute("name")).toBe("spinner");
@@ -236,11 +218,9 @@ describe("EaLoading", () => {
   });
 
   describe("Spinner-Size Attribute", () => {
-    it("默认 spinnerSize 应该是 0", async () => {
+    it("默认 spinnerSize 应该是 0", () => {
       const loading = document.createElement("ea-loading");
       container.appendChild(loading);
-
-      await waitForRender();
 
       expect(loading.spinnerSize).toBe(0);
     });
@@ -308,11 +288,9 @@ describe("EaLoading", () => {
   });
 
   describe("Background Attribute", () => {
-    it("默认 background 应该是 hsla(0, 0%, 100%, 0.9)", async () => {
+    it("默认 background 应该是 hsla(0, 0%, 100%, 0.9)", () => {
       const loading = document.createElement("ea-loading");
       container.appendChild(loading);
-
-      await waitForRender();
 
       expect(loading.background).toBe("hsla(0, 0%, 100%, 0.9)");
     });
@@ -333,8 +311,6 @@ describe("EaLoading", () => {
       const loading = document.createElement("ea-loading");
       container.appendChild(loading);
 
-      await waitForRender();
-
       loading.setAttribute("background", "rgba(0, 0, 0, 0.8)");
       await waitForRender();
 
@@ -345,21 +321,17 @@ describe("EaLoading", () => {
   });
 
   describe("Text Attribute", () => {
-    it("默认 text 应该是空字符串", async () => {
+    it("默认 text 应该是空字符串", () => {
       const loading = document.createElement("ea-loading");
       container.appendChild(loading);
-
-      await waitForRender();
 
       expect(loading.text).toBe("");
     });
 
-    it("设置 text 后应该显示加载文本", async () => {
+    it("设置 text 后应该显示加载文本", () => {
       const loading = document.createElement("ea-loading");
       loading.setAttribute("text", "正在加载中...");
       container.appendChild(loading);
-
-      await waitForRender();
 
       const textEl = loading.shadowRoot.querySelector(".ea-loading__text");
       expect(textEl.textContent).toBe("正在加载中...");
@@ -369,8 +341,6 @@ describe("EaLoading", () => {
       const loading = document.createElement("ea-loading");
       loading.setAttribute("text", "加载中");
       container.appendChild(loading);
-
-      await waitForRender();
 
       const textEl = loading.shadowRoot.querySelector(".ea-loading__text");
       expect(textEl.textContent).toBe("加载中");
@@ -435,21 +405,17 @@ describe("EaLoading", () => {
   });
 
   describe("Fullscreen Attribute", () => {
-    it("默认 fullscreen 应该是 false", async () => {
+    it("默认 fullscreen 应该是 false", () => {
       const loading = document.createElement("ea-loading");
       container.appendChild(loading);
-
-      await waitForRender();
 
       expect(loading.fullscreen).toBe(false);
     });
 
-    it("fullscreen 为 true 但 loading 为 false 时不应有 ea-loading--fullscreen 修饰符", async () => {
+    it("fullscreen 为 true 但 loading 为 false 时不应有 ea-loading--fullscreen 修饰符", () => {
       const loading = document.createElement("ea-loading");
       loading.setAttribute("fullscreen", "");
       container.appendChild(loading);
-
-      await waitForRender();
 
       const containerEl = loading.shadowRoot.querySelector(".ea-loading");
       expect(containerEl.classList.contains("ea-loading--fullscreen")).toBe(
@@ -457,13 +423,11 @@ describe("EaLoading", () => {
       );
     });
 
-    it("fullscreen 和 loading 同时为 true 时应该有 ea-loading--fullscreen 修饰符", async () => {
+    it("fullscreen 和 loading 同时为 true 时应该有 ea-loading--fullscreen 修饰符", () => {
       const loading = document.createElement("ea-loading");
       loading.setAttribute("fullscreen", "");
       loading.setAttribute("loading", "");
       container.appendChild(loading);
-
-      await waitForRender();
 
       const containerEl = loading.shadowRoot.querySelector(".ea-loading");
       expect(containerEl.classList.contains("ea-loading--fullscreen")).toBe(
@@ -476,8 +440,6 @@ describe("EaLoading", () => {
       loading.setAttribute("fullscreen", "");
       loading.setAttribute("loading", "");
       container.appendChild(loading);
-
-      await waitForRender();
 
       const containerEl = loading.shadowRoot.querySelector(".ea-loading");
       expect(containerEl.classList.contains("ea-loading--fullscreen")).toBe(
@@ -497,8 +459,6 @@ describe("EaLoading", () => {
       loading.setAttribute("fullscreen", "");
       container.appendChild(loading);
 
-      await waitForRender();
-
       const containerEl = loading.shadowRoot.querySelector(".ea-loading");
       expect(containerEl.classList.contains("ea-loading--fullscreen")).toBe(
         false
@@ -514,11 +474,9 @@ describe("EaLoading", () => {
   });
 
   describe("Lock Attribute", () => {
-    it("默认 lock 应该是 false", async () => {
+    it("默认 lock 应该是 false", () => {
       const loading = document.createElement("ea-loading");
       container.appendChild(loading);
-
-      await waitForRender();
 
       expect(loading.lock).toBe(false);
     });
@@ -620,7 +578,6 @@ describe("EaLoading", () => {
       expect(loading.loading).toBe(true);
 
       loading.close();
-      await waitForRender();
 
       expect(loading.loading).toBe(false);
     });
@@ -676,33 +633,27 @@ describe("EaLoading", () => {
   });
 
   describe("BEM Class Names", () => {
-    it("默认应该有 ea-loading class", async () => {
+    it("默认应该有 ea-loading class", () => {
       const loading = document.createElement("ea-loading");
       container.appendChild(loading);
-
-      await waitForRender();
 
       const containerEl = loading.shadowRoot.querySelector(".ea-loading");
       expect(containerEl.classList.contains("ea-loading")).toBe(true);
     });
 
-    it("loading 为 true 时应该有 is-loading 状态 class", async () => {
+    it("loading 为 true 时应该有 is-loading 状态 class", () => {
       const loading = document.createElement("ea-loading");
       loading.setAttribute("loading", "");
       container.appendChild(loading);
-
-      await waitForRender();
 
       const containerEl = loading.shadowRoot.querySelector(".ea-loading");
       expect(containerEl.classList.contains("is-loading")).toBe(true);
     });
 
-    it("fullscreen 为 true 但 loading 为 false 时不应有 ea-loading--fullscreen 修饰符", async () => {
+    it("fullscreen 为 true 但 loading 为 false 时不应有 ea-loading--fullscreen 修饰符", () => {
       const loading = document.createElement("ea-loading");
       loading.setAttribute("fullscreen", "");
       container.appendChild(loading);
-
-      await waitForRender();
 
       const containerEl = loading.shadowRoot.querySelector(".ea-loading");
       expect(containerEl.classList.contains("ea-loading--fullscreen")).toBe(
@@ -710,13 +661,11 @@ describe("EaLoading", () => {
       );
     });
 
-    it("fullscreen 和 loading 同时为 true 时应该同时有 is-loading 和 ea-loading--fullscreen class", async () => {
+    it("fullscreen 和 loading 同时为 true 时应该同时有 is-loading 和 ea-loading--fullscreen class", () => {
       const loading = document.createElement("ea-loading");
       loading.setAttribute("loading", "");
       loading.setAttribute("fullscreen", "");
       container.appendChild(loading);
-
-      await waitForRender();
 
       const containerEl = loading.shadowRoot.querySelector(".ea-loading");
       expect(containerEl.classList.contains("is-loading")).toBe(true);
@@ -731,9 +680,8 @@ describe("EaLoading", () => {
       const loading = document.createElement("ea-loading");
       container.appendChild(loading);
 
-      const containerEl = loading.shadowRoot.querySelector(
-        '[part="container"]'
-      );
+      const containerEl =
+        loading.shadowRoot.querySelector('[part="container"]');
       expect(containerEl).not.toBeNull();
     });
 
@@ -773,13 +721,11 @@ describe("EaLoading", () => {
   });
 
   describe("updateContainerClasslist Method", () => {
-    it("应该返回正确的 BEM 类名字符串", async () => {
+    it("应该返回正确的 BEM 类名字符串", () => {
       const loading = document.createElement("ea-loading");
       loading.setAttribute("loading", "");
       loading.setAttribute("fullscreen", "");
       container.appendChild(loading);
-
-      await waitForRender();
 
       const className = loading.updateContainerClasslist();
       expect(className).toContain("ea-loading");
@@ -787,45 +733,37 @@ describe("EaLoading", () => {
       expect(className).toContain("is-loading");
     });
 
-    it("无修饰符时应该只返回基础类名", async () => {
+    it("无修饰符时应该只返回基础类名", () => {
       const loading = document.createElement("ea-loading");
       container.appendChild(loading);
-
-      await waitForRender();
 
       const className = loading.updateContainerClasslist();
       expect(className).toBe("ea-loading");
     });
 
-    it("loading 为 true 时返回的类名应包含 is-loading", async () => {
+    it("loading 为 true 时返回的类名应包含 is-loading", () => {
       const loading = document.createElement("ea-loading");
       loading.setAttribute("loading", "");
       container.appendChild(loading);
-
-      await waitForRender();
 
       const className = loading.updateContainerClasslist();
       expect(className).toContain("is-loading");
     });
 
-    it("fullscreen 为 true 但 loading 为 false 时不应包含 ea-loading--fullscreen", async () => {
+    it("fullscreen 为 true 但 loading 为 false 时不应包含 ea-loading--fullscreen", () => {
       const loading = document.createElement("ea-loading");
       loading.setAttribute("fullscreen", "");
       container.appendChild(loading);
-
-      await waitForRender();
 
       const className = loading.updateContainerClasslist();
       expect(className).not.toContain("ea-loading--fullscreen");
     });
 
-    it("fullscreen 和 loading 同时为 true 时应包含 ea-loading--fullscreen", async () => {
+    it("fullscreen 和 loading 同时为 true 时应包含 ea-loading--fullscreen", () => {
       const loading = document.createElement("ea-loading");
       loading.setAttribute("fullscreen", "");
       loading.setAttribute("loading", "");
       container.appendChild(loading);
-
-      await waitForRender();
 
       const className = loading.updateContainerClasslist();
       expect(className).toContain("ea-loading--fullscreen");
@@ -837,10 +775,8 @@ describe("EaLoading", () => {
       expect(typeof window.$loading).toBe("function");
     });
 
-    it("$loading() 应该返回包含 close 方法的实例", async () => {
+    it("$loading() 应该返回包含 close 方法的实例", () => {
       const loadingInstance = window.$loading({});
-
-      await waitForRender();
 
       expect(loadingInstance).toBeDefined();
       expect(typeof loadingInstance.close).toBe("function");
@@ -849,10 +785,8 @@ describe("EaLoading", () => {
       loadingInstance.close();
     });
 
-    it("$loading() 应该创建全屏加载元素并添加到 body", async () => {
+    it("$loading() 应该创建全屏加载元素并添加到 body", () => {
       const loadingInstance = window.$loading({});
-
-      await waitForRender();
 
       const el = document.querySelector("body > ea-loading");
       expect(el).not.toBeNull();
@@ -862,10 +796,8 @@ describe("EaLoading", () => {
       loadingInstance.close();
     });
 
-    it("$loading() close() 应该移除 DOM 元素", async () => {
+    it("$loading() close() 应该移除 DOM 元素", () => {
       const loadingInstance = window.$loading({});
-
-      await waitForRender();
 
       const el = document.querySelector("body > ea-loading");
       expect(el).not.toBeNull();
@@ -876,32 +808,26 @@ describe("EaLoading", () => {
       expect(elAfterClose).toBeNull();
     });
 
-    it("$loading() 应该支持 text 选项", async () => {
+    it("$loading() 应该支持 text 选项", () => {
       const loadingInstance = window.$loading({ text: "加载中" });
-
-      await waitForRender();
 
       expect(loadingInstance.instance.text).toBe("加载中");
 
       loadingInstance.close();
     });
 
-    it("$loading() 应该支持 spinner 选项", async () => {
+    it("$loading() 应该支持 spinner 选项", () => {
       const loadingInstance = window.$loading({ spinner: "circle-notch" });
-
-      await waitForRender();
 
       expect(loadingInstance.instance.spinner).toBe("circle-notch");
 
       loadingInstance.close();
     });
 
-    it("$loading() 应该支持 background 选项", async () => {
+    it("$loading() 应该支持 background 选项", () => {
       const loadingInstance = window.$loading({
         background: "rgba(0, 0, 0, 0.7)",
       });
-
-      await waitForRender();
 
       expect(loadingInstance.instance.background).toBe("rgba(0, 0, 0, 0.7)");
 
@@ -921,20 +847,16 @@ describe("EaLoading", () => {
       expect(document.body.style.overflow).toBe("");
     });
 
-    it("$loading() 应该支持 spinnerSize 选项", async () => {
+    it("$loading() 应该支持 spinnerSize 选项", () => {
       const loadingInstance = window.$loading({ spinnerSize: 32 });
-
-      await waitForRender();
 
       expect(loadingInstance.instance.spinnerSize).toBe(32);
 
       loadingInstance.close();
     });
 
-    it("$loading() close() 应该将 loading 设为 false", async () => {
+    it("$loading() close() 应该将 loading 设为 false", () => {
       const loadingInstance = window.$loading({});
-
-      await waitForRender();
 
       expect(loadingInstance.instance.loading).toBe(true);
 
@@ -943,14 +865,12 @@ describe("EaLoading", () => {
       expect(loadingInstance.instance.loading).toBe(false);
     });
 
-    it("$loading() 支持 target 为 HTMLElement", async () => {
+    it("$loading() 支持 target 为 HTMLElement", () => {
       const target = document.createElement("div");
       target.id = "loading-target";
       document.body.appendChild(target);
 
       const loadingInstance = window.$loading({ target });
-
-      await waitForRender();
 
       const el = target.querySelector("ea-loading");
       expect(el).not.toBeNull();
@@ -964,14 +884,14 @@ describe("EaLoading", () => {
       target.remove();
     });
 
-    it("$loading() 支持 target 为 CSS 选择器", async () => {
+    it("$loading() 支持 target 为 CSS 选择器", () => {
       const target = document.createElement("div");
       target.id = "loading-target-css";
       document.body.appendChild(target);
 
-      const loadingInstance = window.$loading({ target: "#loading-target-css" });
-
-      await waitForRender();
+      const loadingInstance = window.$loading({
+        target: "#loading-target-css",
+      });
 
       const el = target.querySelector("ea-loading");
       expect(el).not.toBeNull();
@@ -980,10 +900,8 @@ describe("EaLoading", () => {
       target.remove();
     });
 
-    it("$loading() 无效 target 时应该回退到 body", async () => {
+    it("$loading() 无效 target 时应该回退到 body", () => {
       const loadingInstance = window.$loading({ target: "#non-existent" });
-
-      await waitForRender();
 
       const el = document.querySelector("body > ea-loading");
       expect(el).not.toBeNull();
@@ -991,11 +909,9 @@ describe("EaLoading", () => {
       loadingInstance.close();
     });
 
-    it("多个 $loading 实例应该独立工作", async () => {
+    it("多个 $loading 实例应该独立工作", () => {
       const loading1 = window.$loading({ text: "加载1" });
       const loading2 = window.$loading({ text: "加载2" });
-
-      await waitForRender();
 
       expect(loading1.instance.text).toBe("加载1");
       expect(loading2.instance.text).toBe("加载2");
@@ -1044,8 +960,6 @@ describe("EaLoading", () => {
       const loading = document.createElement("ea-loading");
       container.appendChild(loading);
 
-      await waitForRender();
-
       const containerEl = loading.shadowRoot.querySelector(".ea-loading");
       expect(containerEl.classList.contains("is-loading")).toBe(false);
 
@@ -1059,7 +973,7 @@ describe("EaLoading", () => {
       );
     });
 
-    it("应该支持多个 Loading 实例", async () => {
+    it("应该支持多个 Loading 实例", () => {
       const loading1 = document.createElement("ea-loading");
       loading1.setAttribute("loading", "");
       loading1.setAttribute("text", "加载1");
@@ -1070,8 +984,6 @@ describe("EaLoading", () => {
 
       container.appendChild(loading1);
       container.appendChild(loading2);
-
-      await waitForRender();
 
       expect(loading1.text).toBe("加载1");
       expect(loading2.text).toBe("加载2");
@@ -1085,12 +997,10 @@ describe("EaLoading", () => {
   });
 
   describe("Lifecycle", () => {
-    it("组件连接时应该正确初始化", async () => {
+    it("组件连接时应该正确初始化", () => {
       const loading = document.createElement("ea-loading");
       loading.setAttribute("loading", "");
       container.appendChild(loading);
-
-      await waitForRender();
 
       const containerEl = loading.shadowRoot.querySelector(".ea-loading");
       expect(containerEl.classList.contains("is-loading")).toBe(true);
@@ -1124,7 +1034,6 @@ describe("EaLoading", () => {
       await waitForRender();
 
       container.appendChild(loading);
-      await waitForRender();
 
       expect(loading.shadowRoot).toBeDefined();
     });
@@ -1146,8 +1055,6 @@ describe("EaLoading", () => {
       const loading = document.createElement("ea-loading");
       container.appendChild(loading);
 
-      await waitForRender();
-
       loading.setAttribute("loading", "");
       loading.loading = false;
       loading.setAttribute("loading", "");
@@ -1160,8 +1067,6 @@ describe("EaLoading", () => {
     it("快速连续修改 spinner 应该正确反映最终状态", async () => {
       const loading = document.createElement("ea-loading");
       container.appendChild(loading);
-
-      await waitForRender();
 
       loading.setAttribute("spinner", "circle-notch");
       loading.setAttribute("spinner", "gear");
@@ -1207,12 +1112,10 @@ describe("EaLoading", () => {
       );
     });
 
-    it("fullscreen 为 true 但 loading 为 false 时不应阻挡页面交互", async () => {
+    it("fullscreen 为 true 但 loading 为 false 时不应阻挡页面交互", () => {
       const loading = document.createElement("ea-loading");
       loading.setAttribute("fullscreen", "");
       container.appendChild(loading);
-
-      await waitForRender();
 
       const containerEl = loading.shadowRoot.querySelector(".ea-loading");
       expect(containerEl.classList.contains("ea-loading--fullscreen")).toBe(
@@ -1223,11 +1126,9 @@ describe("EaLoading", () => {
   });
 
   describe("DOM Structure", () => {
-    it("容器应该包含 mask 和 content 两个直接子元素", async () => {
+    it("容器应该包含 mask 和 content 两个直接子元素", () => {
       const loading = document.createElement("ea-loading");
       container.appendChild(loading);
-
-      await waitForRender();
 
       const containerEl = loading.shadowRoot.querySelector(".ea-loading");
       const directChildren = Array.from(containerEl.children);
@@ -1243,11 +1144,9 @@ describe("EaLoading", () => {
       expect(hasContent).toBe(true);
     });
 
-    it("mask 元素应该包含 spinner slot 和 text 元素", async () => {
+    it("mask 元素应该包含 spinner slot 和 text 元素", () => {
       const loading = document.createElement("ea-loading");
       container.appendChild(loading);
-
-      await waitForRender();
 
       const mask = loading.shadowRoot.querySelector(".ea-loading__mask");
       const spinnerSlot = mask.querySelector('slot[name="spinner"]');
@@ -1257,11 +1156,9 @@ describe("EaLoading", () => {
       expect(textEl).not.toBeNull();
     });
 
-    it("content 元素应该包含默认 slot", async () => {
+    it("content 元素应该包含默认 slot", () => {
       const loading = document.createElement("ea-loading");
       container.appendChild(loading);
-
-      await waitForRender();
 
       const content = loading.shadowRoot.querySelector(".ea-loading__content");
       const defaultSlot = content.querySelector("slot:not([name])");

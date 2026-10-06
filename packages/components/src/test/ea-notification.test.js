@@ -22,98 +22,80 @@ describe("EaNotification Component", () => {
   // ==================== 基础渲染测试 ====================
 
   describe("Basic Rendering", () => {
-    it("应该正确渲染 ea-notification 组件", async () => {
+    it("应该正确渲染 ea-notification 组件", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
-
-      await waitForRender();
 
       expect(notification).toBeDefined();
       expect(notification.shadowRoot).toBeDefined();
     });
 
-    it("应该包含 container CSS Part", async () => {
+    it("应该包含 container CSS Part", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
-
-      await waitForRender();
 
       expect(
         notification.shadowRoot.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
-    it("应该包含 icon CSS Part", async () => {
+    it("应该包含 icon CSS Part", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
-
-      await waitForRender();
 
       expect(
         notification.shadowRoot.querySelector('[part="icon"]')
       ).toBeTruthy();
     });
 
-    it("应该包含 content CSS Part", async () => {
+    it("应该包含 content CSS Part", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
-
-      await waitForRender();
 
       expect(
         notification.shadowRoot.querySelector('[part="content"]')
       ).toBeTruthy();
     });
 
-    it("应该包含 header CSS Part", async () => {
+    it("应该包含 header CSS Part", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
-
-      await waitForRender();
 
       expect(
         notification.shadowRoot.querySelector('[part="header"]')
       ).toBeTruthy();
     });
 
-    it("应该包含 title CSS Part", async () => {
+    it("应该包含 title CSS Part", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
-
-      await waitForRender();
 
       expect(
         notification.shadowRoot.querySelector('[part="title"]')
       ).toBeTruthy();
     });
 
-    it("应该包含 close-icon CSS Part", async () => {
+    it("应该包含 close-icon CSS Part", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
-
-      await waitForRender();
 
       expect(
         notification.shadowRoot.querySelector('[part="close-icon"]')
       ).toBeTruthy();
     });
 
-    it("应该包含 main CSS Part", async () => {
+    it("应该包含 main CSS Part", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
-
-      await waitForRender();
 
       expect(
         notification.shadowRoot.querySelector('[part="main"]')
       ).toBeTruthy();
     });
 
-    it("应该渲染 ea-icon 作为类型图标", async () => {
+    it("应该渲染 ea-icon 作为类型图标", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
-
-      await waitForRender();
 
       const icon = notification.shadowRoot.querySelector(
         ".ea-notification__icon"
@@ -122,11 +104,9 @@ describe("EaNotification Component", () => {
       expect(icon.tagName.toLowerCase()).toBe("ea-icon");
     });
 
-    it("应该渲染 ea-icon 作为关闭按钮", async () => {
+    it("应该渲染 ea-icon 作为关闭按钮", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
-
-      await waitForRender();
 
       const closeIcon = notification.shadowRoot.querySelector(
         ".ea-notification__close-icon"
@@ -135,11 +115,9 @@ describe("EaNotification Component", () => {
       expect(closeIcon.tagName.toLowerCase()).toBe("ea-icon");
     });
 
-    it("应该渲染标题元素", async () => {
+    it("应该渲染标题元素", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
-
-      await waitForRender();
 
       const title = notification.shadowRoot.querySelector(
         ".ea-notification__title"
@@ -148,11 +126,9 @@ describe("EaNotification Component", () => {
       expect(title.tagName.toLowerCase()).toBe("h2");
     });
 
-    it("应该渲染正文内容区域", async () => {
+    it("应该渲染正文内容区域", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
-
-      await waitForRender();
 
       const main = notification.shadowRoot.querySelector(
         ".ea-notification__main"
@@ -165,51 +141,41 @@ describe("EaNotification Component", () => {
   // ==================== Variant 属性测试 ====================
 
   describe("Variant Attribute", () => {
-    it("默认 variant 应该是 info", async () => {
+    it("默认 variant 应该是 info", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
-
-      await waitForRender();
 
       expect(notification.variant).toBe("info");
     });
 
-    it("应该支持 success 类型", async () => {
+    it("应该支持 success 类型", () => {
       const notification = document.createElement("ea-notification");
       notification.variant = "success";
       container.appendChild(notification);
 
-      await waitForRender();
-
       expect(notification.variant).toBe("success");
     });
 
-    it("应该支持 warning 类型", async () => {
+    it("应该支持 warning 类型", () => {
       const notification = document.createElement("ea-notification");
       notification.variant = "warning";
       container.appendChild(notification);
 
-      await waitForRender();
-
       expect(notification.variant).toBe("warning");
     });
 
-    it("应该支持 error 类型", async () => {
+    it("应该支持 error 类型", () => {
       const notification = document.createElement("ea-notification");
       notification.variant = "error";
       container.appendChild(notification);
 
-      await waitForRender();
-
       expect(notification.variant).toBe("error");
     });
 
-    it("应该支持 primary 类型", async () => {
+    it("应该支持 primary 类型", () => {
       const notification = document.createElement("ea-notification");
       notification.variant = "primary";
       container.appendChild(notification);
-
-      await waitForRender();
 
       expect(notification.variant).toBe("primary");
     });
@@ -297,8 +263,6 @@ describe("EaNotification Component", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
-      await waitForRender();
-
       notification.variant = "warning";
 
       await waitForRender();
@@ -313,12 +277,10 @@ describe("EaNotification Component", () => {
       );
     });
 
-    it("通过 setAttribute 设置 variant 应该生效", async () => {
+    it("通过 setAttribute 设置 variant 应该生效", () => {
       const notification = document.createElement("ea-notification");
       notification.setAttribute("variant", "error");
       container.appendChild(notification);
-
-      await waitForRender();
 
       expect(notification.variant).toBe("error");
     });
@@ -327,21 +289,17 @@ describe("EaNotification Component", () => {
   // ==================== Heading 属性测试 ====================
 
   describe("Heading Attribute", () => {
-    it("默认 heading 应该是空字符串", async () => {
+    it("默认 heading 应该是空字符串", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
-
-      await waitForRender();
 
       expect(notification.heading).toBe("");
     });
 
-    it("应该支持设置 heading", async () => {
+    it("应该支持设置 heading", () => {
       const notification = document.createElement("ea-notification");
       notification.heading = "Test Title";
       container.appendChild(notification);
-
-      await waitForRender();
 
       expect(notification.heading).toBe("Test Title");
     });
@@ -359,12 +317,10 @@ describe("EaNotification Component", () => {
       expect(title.textContent).toBe("Test Heading");
     });
 
-    it("通过 setAttribute 设置 heading 应该生效", async () => {
+    it("通过 setAttribute 设置 heading 应该生效", () => {
       const notification = document.createElement("ea-notification");
       notification.setAttribute("heading", "Attribute Title");
       container.appendChild(notification);
-
-      await waitForRender();
 
       expect(notification.heading).toBe("Attribute Title");
     });
@@ -372,8 +328,6 @@ describe("EaNotification Component", () => {
     it("动态修改 heading 应该更新 title 元素内容", async () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
-
-      await waitForRender();
 
       notification.heading = "Updated Title";
 
@@ -389,21 +343,17 @@ describe("EaNotification Component", () => {
   // ==================== Message 属性测试 ====================
 
   describe("Message Attribute", () => {
-    it("默认 message 应该是空字符串", async () => {
+    it("默认 message 应该是空字符串", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
-
-      await waitForRender();
 
       expect(notification.message).toBe("");
     });
 
-    it("应该支持设置 message", async () => {
+    it("应该支持设置 message", () => {
       const notification = document.createElement("ea-notification");
       notification.message = "Test Message";
       container.appendChild(notification);
-
-      await waitForRender();
 
       expect(notification.message).toBe("Test Message");
     });
@@ -450,11 +400,9 @@ describe("EaNotification Component", () => {
       expect(main.querySelector("strong").textContent).toBe("Bold");
     });
 
-    it("dangerouslyUseHTMLString 默认应该是 false", async () => {
+    it("dangerouslyUseHTMLString 默认应该是 false", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
-
-      await waitForRender();
 
       expect(notification.dangerouslyUseHTMLString).toBe(false);
     });
@@ -462,8 +410,6 @@ describe("EaNotification Component", () => {
     it("动态修改 message 应该更新 main 元素内容", async () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
-
-      await waitForRender();
 
       notification.message = "Updated Message";
 
@@ -479,11 +425,9 @@ describe("EaNotification Component", () => {
   // ==================== Visible 属性测试 ====================
 
   describe("Visible Attribute", () => {
-    it("默认 visible 应该是 false", async () => {
+    it("默认 visible 应该是 false", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
-
-      await waitForRender();
 
       expect(notification.visible).toBe(false);
     });
@@ -495,8 +439,6 @@ describe("EaNotification Component", () => {
       await waitForRender();
 
       notification.visible = true;
-
-      await waitForRender();
 
       expect(notification.visible).toBe(true);
     });
@@ -563,21 +505,17 @@ describe("EaNotification Component", () => {
   // ==================== ShowClose 属性测试 ====================
 
   describe("ShowClose Attribute", () => {
-    it("默认 showClose 应该是 false", async () => {
+    it("默认 showClose 应该是 false", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
-
-      await waitForRender();
 
       expect(notification.showClose).toBe(false);
     });
 
-    it("应该支持设置 showClose 为 true", async () => {
+    it("应该支持设置 showClose 为 true", () => {
       const notification = document.createElement("ea-notification");
       notification.showClose = true;
       container.appendChild(notification);
-
-      await waitForRender();
 
       expect(notification.showClose).toBe(true);
     });
@@ -605,12 +543,10 @@ describe("EaNotification Component", () => {
       expect(containerEl.classList.contains("is-show-close")).toBe(false);
     });
 
-    it("showClose 为 true 时关闭图标应该可见", async () => {
+    it("showClose 为 true 时关闭图标应该可见", () => {
       const notification = document.createElement("ea-notification");
       notification.showClose = true;
       container.appendChild(notification);
-
-      await waitForRender();
 
       const closeIcon = notification.shadowRoot.querySelector(
         ".ea-notification__close-icon"
@@ -635,8 +571,6 @@ describe("EaNotification Component", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
-      await waitForRender();
-
       notification.showClose = true;
       await waitForRender();
 
@@ -654,22 +588,18 @@ describe("EaNotification Component", () => {
   // ==================== CloseIcon 属性测试 ====================
 
   describe("CloseIcon Attribute", () => {
-    it("默认 closeIcon 应该是 xmark", async () => {
+    it("默认 closeIcon 应该是 xmark", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
-
-      await waitForRender();
 
       expect(notification.closeIcon).toBe("xmark");
     });
 
-    it("应该支持自定义 closeIcon", async () => {
+    it("应该支持自定义 closeIcon", () => {
       const notification = document.createElement("ea-notification");
       notification.showClose = true;
       notification.closeIcon = "cancel";
       container.appendChild(notification);
-
-      await waitForRender();
 
       expect(notification.closeIcon).toBe("cancel");
     });
@@ -688,13 +618,11 @@ describe("EaNotification Component", () => {
       expect(closeIcon.getAttribute("name")).toBe("times");
     });
 
-    it("通过 setAttribute 设置 close-icon 应该生效", async () => {
+    it("通过 setAttribute 设置 close-icon 应该生效", () => {
       const notification = document.createElement("ea-notification");
       notification.showClose = true;
       notification.setAttribute("close-icon", "circle-xmark");
       container.appendChild(notification);
-
-      await waitForRender();
 
       expect(notification.closeIcon).toBe("circle-xmark");
     });
@@ -703,41 +631,33 @@ describe("EaNotification Component", () => {
   // ==================== Placement 属性测试 ====================
 
   describe("Placement Attribute", () => {
-    it("默认 placement 应该是 top-right", async () => {
+    it("默认 placement 应该是 top-right", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
-
-      await waitForRender();
 
       expect(notification.placement).toBe("top-right");
     });
 
-    it("应该支持 top-left 位置", async () => {
+    it("应该支持 top-left 位置", () => {
       const notification = document.createElement("ea-notification");
       notification.placement = "top-left";
       container.appendChild(notification);
 
-      await waitForRender();
-
       expect(notification.placement).toBe("top-left");
     });
 
-    it("应该支持 bottom-right 位置", async () => {
+    it("应该支持 bottom-right 位置", () => {
       const notification = document.createElement("ea-notification");
       notification.placement = "bottom-right";
       container.appendChild(notification);
 
-      await waitForRender();
-
       expect(notification.placement).toBe("bottom-right");
     });
 
-    it("应该支持 bottom-left 位置", async () => {
+    it("应该支持 bottom-left 位置", () => {
       const notification = document.createElement("ea-notification");
       notification.placement = "bottom-left";
       container.appendChild(notification);
-
-      await waitForRender();
 
       expect(notification.placement).toBe("bottom-left");
     });
@@ -798,12 +718,10 @@ describe("EaNotification Component", () => {
       ).toBe(true);
     });
 
-    it("通过 setAttribute 设置 placement 应该生效", async () => {
+    it("通过 setAttribute 设置 placement 应该生效", () => {
       const notification = document.createElement("ea-notification");
       notification.setAttribute("placement", "bottom-left");
       container.appendChild(notification);
-
-      await waitForRender();
 
       expect(notification.placement).toBe("bottom-left");
     });
@@ -811,8 +729,6 @@ describe("EaNotification Component", () => {
     it("动态修改 placement 应该更新容器类名", async () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
-
-      await waitForRender();
 
       notification.placement = "bottom-left";
 
@@ -832,21 +748,17 @@ describe("EaNotification Component", () => {
   // ==================== zIndex 属性测试 ====================
 
   describe("zIndex Attribute", () => {
-    it("默认 zIndex 应该是 0", async () => {
+    it("默认 zIndex 应该是 0", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
-
-      await waitForRender();
 
       expect(notification.zIndex).toBe(0);
     });
 
-    it("应该支持设置 zIndex", async () => {
+    it("应该支持设置 zIndex", () => {
       const notification = document.createElement("ea-notification");
       notification.zIndex = 1000;
       container.appendChild(notification);
-
-      await waitForRender();
 
       expect(notification.zIndex).toBe(1000);
     });
@@ -863,12 +775,10 @@ describe("EaNotification Component", () => {
       expect(containerEl.style.getPropertyValue("--z-index")).toBe("2000");
     });
 
-    it("通过 setAttribute 设置 z-index 应该生效", async () => {
+    it("通过 setAttribute 设置 z-index 应该生效", () => {
       const notification = document.createElement("ea-notification");
       notification.setAttribute("z-index", "500");
       container.appendChild(notification);
-
-      await waitForRender();
 
       expect(notification.zIndex).toBe(500);
     });
@@ -877,21 +787,17 @@ describe("EaNotification Component", () => {
   // ==================== Icon 属性测试 ====================
 
   describe("Icon Attribute", () => {
-    it("默认 icon 应该是空字符串", async () => {
+    it("默认 icon 应该是空字符串", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
-
-      await waitForRender();
 
       expect(notification.icon).toBe("");
     });
 
-    it("应该支持自定义 icon", async () => {
+    it("应该支持自定义 icon", () => {
       const notification = document.createElement("ea-notification");
       notification.icon = "custom-icon";
       container.appendChild(notification);
-
-      await waitForRender();
 
       expect(notification.icon).toBe("custom-icon");
     });
@@ -927,8 +833,6 @@ describe("EaNotification Component", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
-      await waitForRender();
-
       notification.icon = "star";
 
       await waitForRender();
@@ -944,8 +848,6 @@ describe("EaNotification Component", () => {
       notification.variant = "warning";
       notification.icon = "custom-icon";
       container.appendChild(notification);
-
-      await waitForRender();
 
       notification.icon = "";
 
@@ -1139,13 +1041,11 @@ describe("EaNotification Component", () => {
       expect(closeHandler).toHaveBeenCalledTimes(1);
     });
 
-    it("updateContainerClasslist() 应该返回正确的类名", async () => {
+    it("updateContainerClasslist() 应该返回正确的类名", () => {
       const notification = document.createElement("ea-notification");
       notification.variant = "success";
       notification.placement = "top-left";
       container.appendChild(notification);
-
-      await waitForRender();
 
       const className = notification.updateContainerClasslist();
 
@@ -1572,8 +1472,6 @@ describe("EaNotification Component", () => {
 
       el.dispatchEvent(new Event("ea-hidden", { bubbles: true }));
 
-      await waitForRender();
-
       expect(el.isConnected).toBe(false);
     });
 
@@ -1813,11 +1711,9 @@ describe("EaNotification Component", () => {
   // ==================== 边界条件测试 ====================
 
   describe("Edge Cases", () => {
-    it("应该处理空组件", async () => {
+    it("应该处理空组件", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
-
-      await waitForRender();
 
       expect(notification.shadowRoot).toBeTruthy();
       expect(notification.variant).toBe("info");
@@ -1840,21 +1736,16 @@ describe("EaNotification Component", () => {
       expect(notification.visible).toBe(false);
 
       notification.visible = true;
-      await waitForRender();
       expect(notification.visible).toBe(true);
     });
 
-    it("应该处理属性动态更新", async () => {
+    it("应该处理属性动态更新", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
-
-      await waitForRender();
 
       notification.variant = "warning";
       notification.heading = "Updated Title";
       notification.message = "Updated Message";
-
-      await waitForRender();
 
       expect(notification.variant).toBe("warning");
       expect(notification.heading).toBe("Updated Title");
@@ -1871,16 +1762,12 @@ describe("EaNotification Component", () => {
       notification.visible = false;
       notification.visible = true;
 
-      await waitForRender();
-
       expect(notification.visible).toBe(true);
     });
 
-    it("组件断开连接后应该正常移除", async () => {
+    it("组件断开连接后应该正常移除", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
-
-      await waitForRender();
 
       notification.remove();
 
@@ -1891,13 +1778,11 @@ describe("EaNotification Component", () => {
   // ==================== 生命周期测试 ====================
 
   describe("Lifecycle", () => {
-    it("组件连接后应该正确初始化", async () => {
+    it("组件连接后应该正确初始化", () => {
       const notification = document.createElement("ea-notification");
       notification.variant = "success";
       notification.heading = "Test Title";
       container.appendChild(notification);
-
-      await waitForRender();
 
       expect(notification.shadowRoot).toBeTruthy();
       expect(notification.variant).toBe("success");

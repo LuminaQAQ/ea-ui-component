@@ -31,32 +31,26 @@ describe("EaRate", () => {
   // ==================== 基础渲染 ====================
 
   describe("Basic Rendering", () => {
-    it("应该正确渲染组件并拥有 shadowRoot", async () => {
+    it("应该正确渲染组件并拥有 shadowRoot", () => {
       const rate = createRate();
       container.appendChild(rate);
-
-      await waitForRender();
 
       expect(rate.shadowRoot).toBeTruthy();
       expect(rate.tagName.toLowerCase()).toBe("ea-rate");
     });
 
-    it("应该渲染容器元素 .ea-rate", async () => {
+    it("应该渲染容器元素 .ea-rate", () => {
       const rate = createRate();
       container.appendChild(rate);
-
-      await waitForRender();
 
       const containerEl = rate.shadowRoot.querySelector(".ea-rate");
       expect(containerEl).toBeTruthy();
       expect(containerEl.getAttribute("part")).toBe("container");
     });
 
-    it("应该渲染 label 元素", async () => {
+    it("应该渲染 label 元素", () => {
       const rate = createRate();
       container.appendChild(rate);
-
-      await waitForRender();
 
       const label = rate.shadowRoot.querySelector(".ea-rate__label");
       expect(label).toBeTruthy();
@@ -109,20 +103,16 @@ describe("EaRate", () => {
   // ==================== value 属性 ====================
 
   describe("Value Attribute", () => {
-    it("默认 value 应该是 0", async () => {
+    it("默认 value 应该是 0", () => {
       const rate = createRate();
       container.appendChild(rate);
-
-      await waitForRender();
 
       expect(rate.value).toBe(0);
     });
 
-    it("应该支持通过 attribute 设置 value", async () => {
+    it("应该支持通过 attribute 设置 value", () => {
       const rate = createRate({ value: 3 });
       container.appendChild(rate);
-
-      await waitForRender();
 
       expect(rate.value).toBe(3);
       expect(rate.getAttribute("value")).toBe("3");
@@ -135,8 +125,6 @@ describe("EaRate", () => {
       await waitForRender();
 
       rate.value = 4;
-
-      await waitForRender();
 
       expect(rate.value).toBe(4);
     });
@@ -186,8 +174,6 @@ describe("EaRate", () => {
       const rate = createRate({ value: 2 });
       container.appendChild(rate);
 
-      await waitForRender();
-
       expect(rate.value).toBe(2);
 
       rate.setAttribute("value", "4");
@@ -206,8 +192,6 @@ describe("EaRate", () => {
       const rate = createRate({ value: 3 });
       container.appendChild(rate);
 
-      await waitForRender();
-
       rate.setAttribute("value", "0");
 
       await waitForRender();
@@ -222,11 +206,9 @@ describe("EaRate", () => {
   // ==================== max 属性 ====================
 
   describe("Max Attribute", () => {
-    it("默认 max 应该是 5", async () => {
+    it("默认 max 应该是 5", () => {
       const rate = createRate();
       container.appendChild(rate);
-
-      await waitForRender();
 
       expect(rate.max).toBe(5);
     });
@@ -288,8 +270,6 @@ describe("EaRate", () => {
       const rate = createRate({ max: 3 });
       container.appendChild(rate);
 
-      await waitForRender();
-
       rate.setAttribute("max", "7");
 
       await waitForRender();
@@ -302,8 +282,6 @@ describe("EaRate", () => {
     it("max 变化后应保留原有选中状态", async () => {
       const rate = createRate({ max: 5, value: 3 });
       container.appendChild(rate);
-
-      await waitForRender();
 
       rate.setAttribute("max", "4");
 
@@ -318,11 +296,9 @@ describe("EaRate", () => {
   // ==================== size 属性 ====================
 
   describe("Size Attribute", () => {
-    it("默认 size 应该是空字符串", async () => {
+    it("默认 size 应该是空字符串", () => {
       const rate = createRate();
       container.appendChild(rate);
-
-      await waitForRender();
 
       expect(rate.size === "" || rate.size === null).toBe(true);
     });
@@ -381,8 +357,6 @@ describe("EaRate", () => {
       const rate = createRate({ size: "large" });
       container.appendChild(rate);
 
-      await waitForRender();
-
       rate.removeAttribute("size");
 
       await waitForRender();
@@ -395,11 +369,9 @@ describe("EaRate", () => {
   // ==================== label 属性 ====================
 
   describe("Label Attribute", () => {
-    it("默认 label 应该是空字符串", async () => {
+    it("默认 label 应该是空字符串", () => {
       const rate = createRate();
       container.appendChild(rate);
-
-      await waitForRender();
 
       expect(rate.label).toBe("");
     });
@@ -419,8 +391,6 @@ describe("EaRate", () => {
       const rate = createRate({ label: "初始" });
       container.appendChild(rate);
 
-      await waitForRender();
-
       rate.setAttribute("label", "更新后");
 
       await waitForRender();
@@ -433,20 +403,16 @@ describe("EaRate", () => {
   // ==================== readonly 属性 ====================
 
   describe("Readonly Attribute", () => {
-    it("默认 readonly 应该是 false", async () => {
+    it("默认 readonly 应该是 false", () => {
       const rate = createRate();
       container.appendChild(rate);
-
-      await waitForRender();
 
       expect(rate.readonly === false || rate.readonly === null).toBe(true);
     });
 
-    it("设置 readonly 应该为 true", async () => {
+    it("设置 readonly 应该为 true", () => {
       const rate = createRate({ readonly: true });
       container.appendChild(rate);
-
-      await waitForRender();
 
       expect(rate.readonly).toBe(true);
     });
@@ -459,8 +425,6 @@ describe("EaRate", () => {
 
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       symbols[3].dispatchEvent(new Event("click", { bubbles: true }));
-
-      await waitForRender();
 
       expect(rate.value).toBe(2);
     });
@@ -482,23 +446,17 @@ describe("EaRate", () => {
       expect(symbols[2].classList.contains("is-selected")).toBe(false);
     });
 
-    it("readonly 可以动态切换", async () => {
+    it("readonly 可以动态切换", () => {
       const rate = createRate();
       container.appendChild(rate);
-
-      await waitForRender();
 
       expect(rate.readonly === false || rate.readonly === null).toBe(true);
 
       rate.setAttribute("readonly", "");
 
-      await waitForRender();
-
       expect(rate.readonly).toBe(true);
 
       rate.removeAttribute("readonly");
-
-      await waitForRender();
 
       expect(rate.readonly === false || rate.readonly === null).toBe(true);
     });
@@ -507,20 +465,16 @@ describe("EaRate", () => {
   // ==================== disabled 属性 ====================
 
   describe("Disabled Attribute", () => {
-    it("默认 disabled 应该是 false", async () => {
+    it("默认 disabled 应该是 false", () => {
       const rate = createRate();
       container.appendChild(rate);
-
-      await waitForRender();
 
       expect(rate.disabled === false || rate.disabled === null).toBe(true);
     });
 
-    it("设置 disabled 应该为 true", async () => {
+    it("设置 disabled 应该为 true", () => {
       const rate = createRate({ disabled: true });
       container.appendChild(rate);
-
-      await waitForRender();
 
       expect(rate.disabled).toBe(true);
     });
@@ -543,8 +497,6 @@ describe("EaRate", () => {
 
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       symbols[3].dispatchEvent(new Event("click", { bubbles: true }));
-
-      await waitForRender();
 
       expect(rate.value).toBe(2);
     });
@@ -570,8 +522,6 @@ describe("EaRate", () => {
       const rate = createRate();
       container.appendChild(rate);
 
-      await waitForRender();
-
       rate.setAttribute("disabled", "");
 
       await waitForRender();
@@ -593,11 +543,9 @@ describe("EaRate", () => {
   // ==================== getSymbol 属性 ====================
 
   describe("getSymbol Property", () => {
-    it("默认 getSymbol 应该是一个函数", async () => {
+    it("默认 getSymbol 应该是一个函数", () => {
       const rate = createRate();
       container.appendChild(rate);
-
-      await waitForRender();
 
       expect(typeof rate.getSymbol).toBe("function");
     });
@@ -686,8 +634,6 @@ describe("EaRate", () => {
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       symbols[3].dispatchEvent(new Event("click", { bubbles: true }));
 
-      await waitForRender();
-
       expect(rate.value).toBe(4);
     });
 
@@ -702,8 +648,6 @@ describe("EaRate", () => {
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       symbols[2].dispatchEvent(new Event("click", { bubbles: true }));
 
-      await waitForRender();
-
       expect(rate.value).toBe(0);
     });
 
@@ -716,8 +660,6 @@ describe("EaRate", () => {
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       symbols[4].dispatchEvent(new Event("click", { bubbles: true }));
 
-      await waitForRender();
-
       expect(rate.value).toBe(5);
     });
 
@@ -729,8 +671,6 @@ describe("EaRate", () => {
 
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       symbols[0].dispatchEvent(new Event("click", { bubbles: true }));
-
-      await waitForRender();
 
       expect(rate.value).toBe(1);
     });
@@ -834,8 +774,6 @@ describe("EaRate", () => {
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       symbols[2].dispatchEvent(new Event("click", { bubbles: true }));
 
-      await waitForRender();
-
       expect(caughtEvent).toBeTruthy();
       expect(caughtEvent.type).toBe("change");
       expect(caughtEvent.detail).toBeTruthy();
@@ -855,8 +793,6 @@ describe("EaRate", () => {
 
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       symbols[2].dispatchEvent(new Event("click", { bubbles: true }));
-
-      await waitForRender();
 
       expect(eventDetail.value).toBe(3);
       expect(rate.value).toBe(0);
@@ -937,8 +873,6 @@ describe("EaRate", () => {
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       symbols[2].dispatchEvent(new Event("mousemove", { bubbles: true }));
 
-      await waitForRender();
-
       expect(caughtEvent).toBeTruthy();
       expect(caughtEvent.type).toBe("ea-hover");
       expect(caughtEvent.detail).toBeTruthy();
@@ -962,8 +896,6 @@ describe("EaRate", () => {
 
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       symbols[0].dispatchEvent(new Event("mousemove", { bubbles: true }));
-
-      await waitForRender();
 
       expect(eventDetail.value).toBe(0);
     });
@@ -1011,8 +943,6 @@ describe("EaRate", () => {
 
       containerEl.dispatchEvent(new Event("mouseout", { bubbles: true }));
 
-      await waitForRender();
-
       expect(eventDetail.value).toBe(1);
       expect(eventDetail.target).toBeTruthy();
     });
@@ -1037,8 +967,6 @@ describe("EaRate", () => {
       await waitForRender();
 
       containerEl.dispatchEvent(new Event("mouseout", { bubbles: true }));
-
-      await waitForRender();
 
       expect(eventDetail.value).toBe(null);
       expect(eventDetail.target).toBe(null);
@@ -1117,43 +1045,33 @@ describe("EaRate", () => {
   // ==================== 表单关联 ====================
 
   describe("Form Association", () => {
-    it("应该拥有 internals", async () => {
+    it("应该拥有 internals", () => {
       const rate = createRate();
       container.appendChild(rate);
-
-      await waitForRender();
 
       expect(rate.internals).toBeTruthy();
     });
 
-    it("validationTarget 应该返回组件自身", async () => {
+    it("validationTarget 应该返回组件自身", () => {
       const rate = createRate();
       container.appendChild(rate);
-
-      await waitForRender();
 
       expect(rate.validationTarget).toBe(rate);
     });
 
-    it("应该支持 name 属性", async () => {
+    it("应该支持 name 属性", () => {
       const rate = createRate({ name: "rating" });
       container.appendChild(rate);
-
-      await waitForRender();
 
       expect(rate.name).toBe("rating");
       expect(rate.getAttribute("name")).toBe("rating");
     });
 
-    it("setValue 应该更新表单值", async () => {
+    it("setValue 应该更新表单值", () => {
       const rate = createRate({ value: 3 });
       container.appendChild(rate);
 
-      await waitForRender();
-
       rate.setValue("3");
-
-      await waitForRender();
 
       expect(rate.value).toBe(3);
     });
@@ -1263,17 +1181,13 @@ describe("EaRate", () => {
       });
     });
 
-    it("value 被移除后应恢复为默认值 0", async () => {
+    it("value 被移除后应恢复为默认值 0", () => {
       const rate = createRate({ value: 3 });
       container.appendChild(rate);
-
-      await waitForRender();
 
       expect(rate.value).toBe(3);
 
       rate.removeAttribute("value");
-
-      await waitForRender();
 
       expect(rate.value).toBe(0);
     });
@@ -1281,8 +1195,6 @@ describe("EaRate", () => {
     it("连续快速切换 value 不应出现状态错乱", async () => {
       const rate = createRate();
       container.appendChild(rate);
-
-      await waitForRender();
 
       rate.setAttribute("value", "1");
       rate.setAttribute("value", "3");
@@ -1415,7 +1327,6 @@ describe("EaRate", () => {
         await waitForRender();
         const symbols = el.shadowRoot.querySelectorAll(".ea-rate__symbol");
         symbols[1].dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
-        await waitForRender();
         expect(el.value).toBe(3);
       });
 
@@ -1426,7 +1337,6 @@ describe("EaRate", () => {
         await waitForRender();
         const symbols = el.shadowRoot.querySelectorAll(".ea-rate__symbol");
         symbols[2].dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true }));
-        await waitForRender();
         expect(el.value).toBe(2);
       });
 
@@ -1437,7 +1347,6 @@ describe("EaRate", () => {
         await waitForRender();
         const symbols = el.shadowRoot.querySelectorAll(".ea-rate__symbol");
         symbols[2].dispatchEvent(new KeyboardEvent("keydown", { key: " ", bubbles: true }));
-        await waitForRender();
         expect(el.value).toBe(3);
       });
 
@@ -1449,7 +1358,6 @@ describe("EaRate", () => {
         await waitForRender();
         const symbols = el.shadowRoot.querySelectorAll(".ea-rate__symbol");
         symbols[1].dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
-        await waitForRender();
         expect(el.value).toBe(2);
       });
 
@@ -1461,7 +1369,6 @@ describe("EaRate", () => {
         await waitForRender();
         const symbols = el.shadowRoot.querySelectorAll(".ea-rate__symbol");
         symbols[1].dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
-        await waitForRender();
         expect(el.value).toBe(2);
       });
     });

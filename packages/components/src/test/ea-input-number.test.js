@@ -17,83 +17,73 @@ describe("EaInputNumber", () => {
   });
 
   describe("Basic Rendering", () => {
-    it("应该正确渲染组件并拥有 shadowRoot", async () => {
+    it("应该正确渲染组件并拥有 shadowRoot", () => {
       const el = document.createElement("ea-input-number");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el).toBeDefined();
       expect(el.shadowRoot).toBeDefined();
     });
 
-    it("应该包含 container CSS Part", async () => {
+    it("应该包含 container CSS Part", () => {
       const el = document.createElement("ea-input-number");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
 
-    it("应该包含 input CSS Part", async () => {
+    it("应该包含 input CSS Part", () => {
       const el = document.createElement("ea-input-number");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.shadowRoot.querySelector('[part="input"]')).toBeTruthy();
     });
 
-    it("应该包含 decrease CSS Part", async () => {
+    it("应该包含 decrease CSS Part", () => {
       const el = document.createElement("ea-input-number");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.shadowRoot.querySelector('[part="decrease"]')).toBeTruthy();
     });
 
-    it("应该包含 increase CSS Part", async () => {
+    it("应该包含 increase CSS Part", () => {
       const el = document.createElement("ea-input-number");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.shadowRoot.querySelector('[part="increase"]')).toBeTruthy();
     });
 
-    it("应该包含 region CSS Part", async () => {
+    it("应该包含 region CSS Part", () => {
       const el = document.createElement("ea-input-number");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.shadowRoot.querySelector('[part="region"]')).toBeTruthy();
     });
 
-    it("应该包含 label CSS Part", async () => {
+    it("应该包含 label CSS Part", () => {
       const el = document.createElement("ea-input-number");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.shadowRoot.querySelector('[part="label"]')).toBeTruthy();
     });
 
-    it("应该包含 prefix CSS Part", async () => {
+    it("应该包含 prefix CSS Part", () => {
       const el = document.createElement("ea-input-number");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.shadowRoot.querySelector('[part="prefix"]')).toBeTruthy();
     });
 
-    it("应该包含 suffix CSS Part", async () => {
+    it("应该包含 suffix CSS Part", () => {
       const el = document.createElement("ea-input-number");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.shadowRoot.querySelector('[part="suffix"]')).toBeTruthy();
     });
 
-    it("应该包含原生 input 元素且 type 为 number", async () => {
+    it("应该包含原生 input 元素且 type 为 number", () => {
       const el = document.createElement("ea-input-number");
       container.appendChild(el);
-      await waitForRender();
 
       const inputElement = el.shadowRoot.querySelector(
         "input.ea-input-number__inner"
@@ -102,10 +92,9 @@ describe("EaInputNumber", () => {
       expect(inputElement.type).toBe("text");
     });
 
-    it("应该包含 decrease 和 increase 操作按钮", async () => {
+    it("应该包含 decrease 和 increase 操作按钮", () => {
       const el = document.createElement("ea-input-number");
       container.appendChild(el);
-      await waitForRender();
 
       const decrease = el.shadowRoot.querySelector(
         ".ea-input-number__decrease"
@@ -117,10 +106,9 @@ describe("EaInputNumber", () => {
       expect(increase).toBeTruthy();
     });
 
-    it("应该包含 prefix 和 suffix slot", async () => {
+    it("应该包含 prefix 和 suffix slot", () => {
       const el = document.createElement("ea-input-number");
       container.appendChild(el);
-      await waitForRender();
 
       const prefixSlot = el.shadowRoot.querySelector('slot[name="prefix"]');
       const suffixSlot = el.shadowRoot.querySelector('slot[name="suffix"]');
@@ -130,19 +118,17 @@ describe("EaInputNumber", () => {
   });
 
   describe("Value Attribute", () => {
-    it("默认 value 应该是 0", async () => {
+    it("默认 value 应该是 0", () => {
       const el = document.createElement("ea-input-number");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.value).toBe(0);
     });
 
-    it("通过 HTML attribute 设置 value 应该正确反映", async () => {
+    it("通过 HTML attribute 设置 value 应该正确反映", () => {
       const el = document.createElement("ea-input-number");
       el.setAttribute("value", "5");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.value).toBe(5);
     });
@@ -267,19 +253,17 @@ describe("EaInputNumber", () => {
   });
 
   describe("Label Attribute", () => {
-    it("默认 label 应该是空字符串", async () => {
+    it("默认 label 应该是空字符串", () => {
       const el = document.createElement("ea-input-number");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.label).toBe("");
     });
 
-    it("设置 label 属性应该正确反映", async () => {
+    it("设置 label 属性应该正确反映", () => {
       const el = document.createElement("ea-input-number");
       el.setAttribute("label", "数量");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.label).toBe("数量");
     });
@@ -312,18 +296,16 @@ describe("EaInputNumber", () => {
   });
 
   describe("Min/Max Attributes", () => {
-    it("min 默认值应该是 Number.MIN_SAFE_INTEGER", async () => {
+    it("min 默认值应该是 Number.MIN_SAFE_INTEGER", () => {
       const el = document.createElement("ea-input-number");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.min).toBe(Number.MIN_SAFE_INTEGER);
     });
 
-    it("max 默认值应该是 Number.MAX_SAFE_INTEGER", async () => {
+    it("max 默认值应该是 Number.MAX_SAFE_INTEGER", () => {
       const el = document.createElement("ea-input-number");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.max).toBe(Number.MAX_SAFE_INTEGER);
     });
@@ -394,39 +376,35 @@ describe("EaInputNumber", () => {
       expect(inputElement.max).toBe("50");
     });
 
-    it("支持负数 min", async () => {
+    it("支持负数 min", () => {
       const el = document.createElement("ea-input-number");
       el.setAttribute("min", "-10");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.min).toBe(-10);
     });
   });
 
   describe("Step Attribute", () => {
-    it("默认 step 应该是 1", async () => {
+    it("默认 step 应该是 1", () => {
       const el = document.createElement("ea-input-number");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.step).toBe(1);
     });
 
-    it("设置 step 属性应该正确反映", async () => {
+    it("设置 step 属性应该正确反映", () => {
       const el = document.createElement("ea-input-number");
       el.setAttribute("step", "5");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.step).toBe(5);
     });
 
-    it("应该支持小数 step", async () => {
+    it("应该支持小数 step", () => {
       const el = document.createElement("ea-input-number");
       el.setAttribute("step", "0.1");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.step).toBe(0.1);
     });
@@ -471,27 +449,24 @@ describe("EaInputNumber", () => {
   });
 
   describe("Step Strictly Attribute", () => {
-    it("默认 stepStrictly 应该是 false", async () => {
+    it("默认 stepStrictly 应该是 false", () => {
       const el = document.createElement("ea-input-number");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.stepStrictly).toBe(false);
     });
 
-    it("设置 step-strictly 属性应该启用严格步进", async () => {
+    it("设置 step-strictly 属性应该启用严格步进", () => {
       const el = document.createElement("ea-input-number");
       el.setAttribute("step-strictly", "");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.stepStrictly).toBe(true);
     });
 
-    it("通过 JS 属性设置 stepStrictly", async () => {
+    it("通过 JS 属性设置 stepStrictly", () => {
       const el = document.createElement("ea-input-number");
       container.appendChild(el);
-      await waitForRender();
 
       el.stepStrictly = true;
       expect(el.stepStrictly).toBe(true);
@@ -499,19 +474,17 @@ describe("EaInputNumber", () => {
   });
 
   describe("Precision Attribute", () => {
-    it("默认 precision 应该是 0", async () => {
+    it("默认 precision 应该是 0", () => {
       const el = document.createElement("ea-input-number");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.precision).toBe(0);
     });
 
-    it("设置 precision 属性应该正确反映", async () => {
+    it("设置 precision 属性应该正确反映", () => {
       const el = document.createElement("ea-input-number");
       el.setAttribute("precision", "2");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.precision).toBe(2);
     });
@@ -557,37 +530,33 @@ describe("EaInputNumber", () => {
   });
 
   describe("Size Attribute", () => {
-    it("默认 size 应该是 default", async () => {
+    it("默认 size 应该是 default", () => {
       const el = document.createElement("ea-input-number");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.size).toBe("default");
     });
 
-    it("应该支持 size='large'", async () => {
+    it("应该支持 size='large'", () => {
       const el = document.createElement("ea-input-number");
       el.setAttribute("size", "large");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.size).toBe("large");
     });
 
-    it("应该支持 size='default'", async () => {
+    it("应该支持 size='default'", () => {
       const el = document.createElement("ea-input-number");
       el.setAttribute("size", "default");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.size).toBe("default");
     });
 
-    it("应该支持 size='small'", async () => {
+    it("应该支持 size='small'", () => {
       const el = document.createElement("ea-input-number");
       el.setAttribute("size", "small");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.size).toBe("small");
     });
@@ -636,19 +605,17 @@ describe("EaInputNumber", () => {
   });
 
   describe("Disabled Attribute", () => {
-    it("默认 disabled 应该是 false", async () => {
+    it("默认 disabled 应该是 false", () => {
       const el = document.createElement("ea-input-number");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.disabled).toBe(false);
     });
 
-    it("设置 disabled 属性应该禁用组件", async () => {
+    it("设置 disabled 属性应该禁用组件", () => {
       const el = document.createElement("ea-input-number");
       el.setAttribute("disabled", "");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.disabled).toBe(true);
     });
@@ -764,10 +731,9 @@ describe("EaInputNumber", () => {
   });
 
   describe("Controls Attribute", () => {
-    it("默认 controls 应该是 true", async () => {
+    it("默认 controls 应该是 true", () => {
       const el = document.createElement("ea-input-number");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.controls).toBe(true);
     });
@@ -845,28 +811,25 @@ describe("EaInputNumber", () => {
   });
 
   describe("Align Attribute", () => {
-    it("默认 align 应该是 center", async () => {
+    it("默认 align 应该是 center", () => {
       const el = document.createElement("ea-input-number");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.align).toBe("center");
     });
 
-    it("应该支持 align='left'", async () => {
+    it("应该支持 align='left'", () => {
       const el = document.createElement("ea-input-number");
       el.setAttribute("align", "left");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.align).toBe("left");
     });
 
-    it("应该支持 align='right'", async () => {
+    it("应该支持 align='right'", () => {
       const el = document.createElement("ea-input-number");
       el.setAttribute("align", "right");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.align).toBe("right");
     });
@@ -887,10 +850,9 @@ describe("EaInputNumber", () => {
   });
 
   describe("Placeholder Attribute", () => {
-    it("默认 placeholder 应该是空字符串", async () => {
+    it("默认 placeholder 应该是空字符串", () => {
       const el = document.createElement("ea-input-number");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.placeholder).toBe("");
     });
@@ -951,10 +913,9 @@ describe("EaInputNumber", () => {
   });
 
   describe("Required Attribute", () => {
-    it("默认 required 应该是 false", async () => {
+    it("默认 required 应该是 false", () => {
       const el = document.createElement("ea-input-number");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.required).toBe(false);
     });
@@ -992,29 +953,26 @@ describe("EaInputNumber", () => {
   });
 
   describe("ValueOnClear Attribute", () => {
-    it("默认 valueOnClear 应该是 null", async () => {
+    it("默认 valueOnClear 应该是 null", () => {
       const el = document.createElement("ea-input-number");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.valueOnClear).toBeNull();
     });
 
-    it("设置 value-on-clear 属性应该正确反映", async () => {
+    it("设置 value-on-clear 属性应该正确反映", () => {
       const el = document.createElement("ea-input-number");
       el.setAttribute("value-on-clear", "0");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.valueOnClear).toBe(0);
     });
   });
 
   describe("Inputmode Attribute", () => {
-    it("默认 inputmode 应该是空字符串", async () => {
+    it("默认 inputmode 应该是空字符串", () => {
       const el = document.createElement("ea-input-number");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.inputmode).toBe("");
     });
@@ -1047,18 +1005,16 @@ describe("EaInputNumber", () => {
   });
 
   describe("DefaultValue Property", () => {
-    it("默认 defaultValue 应该是 0", async () => {
+    it("默认 defaultValue 应该是 0", () => {
       const el = document.createElement("ea-input-number");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.defaultValue).toBe(0);
     });
 
-    it("设置 defaultValue 应该正确反映", async () => {
+    it("设置 defaultValue 应该正确反映", () => {
       const el = document.createElement("ea-input-number");
       container.appendChild(el);
-      await waitForRender();
 
       el.defaultValue = 10;
       expect(el.defaultValue).toBe(10);
@@ -1333,18 +1289,16 @@ describe("EaInputNumber", () => {
       expect(blurSpy).toHaveBeenCalled();
     });
 
-    it("focus 方法应该能聚焦 input 元素", async () => {
+    it("focus 方法应该能聚焦 input 元素", () => {
       const el = document.createElement("ea-input-number");
       container.appendChild(el);
-      await waitForRender();
 
       expect(typeof el.focus).toBe("function");
     });
 
-    it("blur 方法应该能失焦 input 元素", async () => {
+    it("blur 方法应该能失焦 input 元素", () => {
       const el = document.createElement("ea-input-number");
       container.appendChild(el);
-      await waitForRender();
 
       expect(typeof el.blur).toBe("function");
     });
@@ -1452,19 +1406,17 @@ describe("EaInputNumber", () => {
   });
 
   describe("Lifecycle", () => {
-    it("$mount 时没有 value attribute 应该设置 value 为 0", async () => {
+    it("$mount 时没有 value attribute 应该设置 value 为 0", () => {
       const el = document.createElement("ea-input-number");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.value).toBe(0);
     });
 
-    it("$mount 时有 value attribute 应该保留设置的值", async () => {
+    it("$mount 时有 value attribute 应该保留设置的值", () => {
       const el = document.createElement("ea-input-number");
       el.setAttribute("value", "42");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.value).toBe(42);
     });
@@ -1564,13 +1516,12 @@ describe("EaInputNumber", () => {
       expect(el.value).toBe(50);
     });
 
-    it("负数 min 和 max 范围应该正确工作", async () => {
+    it("负数 min 和 max 范围应该正确工作", () => {
       const el = document.createElement("ea-input-number");
       el.min = -10;
       el.max = -1;
       el.value = -5;
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.value).toBe(-5);
     });
@@ -1595,159 +1546,141 @@ describe("EaInputNumber", () => {
       expect(el.value).toBe(0.1);
     });
 
-    it("大数 value 应该正确处理", async () => {
+    it("大数 value 应该正确处理", () => {
       const el = document.createElement("ea-input-number");
       el.value = 999999;
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.value).toBe(999999);
     });
   });
 
   describe("HTML Attribute Mapping", () => {
-    it("value 属性应该正确映射", async () => {
+    it("value 属性应该正确映射", () => {
       const el = document.createElement("ea-input-number");
       el.setAttribute("value", "42");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.value).toBe(42);
     });
 
-    it("min 属性应该正确映射", async () => {
+    it("min 属性应该正确映射", () => {
       const el = document.createElement("ea-input-number");
       el.setAttribute("min", "0");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.min).toBe(0);
     });
 
-    it("max 属性应该正确映射", async () => {
+    it("max 属性应该正确映射", () => {
       const el = document.createElement("ea-input-number");
       el.setAttribute("max", "100");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.max).toBe(100);
     });
 
-    it("step 属性应该正确映射", async () => {
+    it("step 属性应该正确映射", () => {
       const el = document.createElement("ea-input-number");
       el.setAttribute("step", "5");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.step).toBe(5);
     });
 
-    it("disabled 属性应该正确映射", async () => {
+    it("disabled 属性应该正确映射", () => {
       const el = document.createElement("ea-input-number");
       el.setAttribute("disabled", "");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.disabled).toBe(true);
     });
 
-    it("readonly 属性应该正确映射", async () => {
+    it("readonly 属性应该正确映射", () => {
       const el = document.createElement("ea-input-number");
       el.setAttribute("readonly", "");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.readonly).toBe(true);
     });
 
-    it("controls 属性通过 JS 动态设置应该正确映射", async () => {
+    it("controls 属性通过 JS 动态设置应该正确映射", () => {
       const el = document.createElement("ea-input-number");
       container.appendChild(el);
-      await waitForRender();
 
       el.controls = false;
-      await waitForRender();
 
       expect(el.controls).toBe(false);
     });
 
-    it("size 属性应该正确映射", async () => {
+    it("size 属性应该正确映射", () => {
       const el = document.createElement("ea-input-number");
       el.setAttribute("size", "large");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.size).toBe("large");
     });
 
-    it("align 属性应该正确映射", async () => {
+    it("align 属性应该正确映射", () => {
       const el = document.createElement("ea-input-number");
       el.setAttribute("align", "left");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.align).toBe("left");
     });
 
-    it("precision 属性应该正确映射", async () => {
+    it("precision 属性应该正确映射", () => {
       const el = document.createElement("ea-input-number");
       el.setAttribute("precision", "2");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.precision).toBe(2);
     });
 
-    it("step-strictly 属性应该正确映射", async () => {
+    it("step-strictly 属性应该正确映射", () => {
       const el = document.createElement("ea-input-number");
       el.setAttribute("step-strictly", "");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.stepStrictly).toBe(true);
     });
 
-    it("label 属性应该正确映射", async () => {
+    it("label 属性应该正确映射", () => {
       const el = document.createElement("ea-input-number");
       el.setAttribute("label", "数量");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.label).toBe("数量");
     });
 
-    it("placeholder 属性应该正确映射", async () => {
+    it("placeholder 属性应该正确映射", () => {
       const el = document.createElement("ea-input-number");
       el.setAttribute("placeholder", "请输入");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.placeholder).toBe("请输入");
     });
 
-    it("name 属性应该正确映射", async () => {
+    it("name 属性应该正确映射", () => {
       const el = document.createElement("ea-input-number");
       el.setAttribute("name", "qty");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.name).toBe("qty");
     });
 
-    it("required 属性应该正确映射", async () => {
+    it("required 属性应该正确映射", () => {
       const el = document.createElement("ea-input-number");
       el.setAttribute("required", "");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.required).toBe(true);
     });
 
-    it("inputmode 属性应该正确映射", async () => {
+    it("inputmode 属性应该正确映射", () => {
       const el = document.createElement("ea-input-number");
       el.setAttribute("inputmode", "numeric");
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.inputmode).toBe("numeric");
     });
@@ -1787,13 +1720,12 @@ describe("EaInputNumber", () => {
       expect(el.value).toBe(-5);
     });
 
-    it("负数 value 应该正确设置", async () => {
+    it("负数 value 应该正确设置", () => {
       const el = document.createElement("ea-input-number");
       el.min = -100;
       el.max = 100;
       el.value = -10;
       container.appendChild(el);
-      await waitForRender();
 
       expect(el.value).toBe(-10);
     });
@@ -1945,10 +1877,9 @@ describe("EaInputNumber", () => {
     });
 
     describe("ARIA Attributes", () => {
-      it("input 元素应该有 role=spinbutton", async () => {
+      it("input 元素应该有 role=spinbutton", () => {
         const el = document.createElement("ea-input-number");
         container.appendChild(el);
-        await waitForRender();
         const inputEl = el.shadowRoot.querySelector("input.ea-input-number__inner");
         expect(inputEl.getAttribute("role")).toBe("spinbutton");
       });

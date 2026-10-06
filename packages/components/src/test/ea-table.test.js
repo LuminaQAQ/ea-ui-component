@@ -286,21 +286,17 @@ describe("EaTable Component", () => {
   });
 
   describe("EaTable Stripe Attribute", () => {
-    it("默认 stripe 应该是 false", async () => {
+    it("默认 stripe 应该是 false", () => {
       const table = document.createElement("ea-table");
       container.appendChild(table);
-
-      await waitForRender();
 
       expect(table.stripe).toBe(false);
     });
 
-    it("设置 stripe 属性应该启用斑马纹", async () => {
+    it("设置 stripe 属性应该启用斑马纹", () => {
       const table = document.createElement("ea-table");
       table.stripe = true;
       container.appendChild(table);
-
-      await waitForRender();
 
       expect(table.stripe).toBe(true);
     });
@@ -333,21 +329,17 @@ describe("EaTable Component", () => {
   });
 
   describe("EaTable Border Attribute", () => {
-    it("默认 border 应该是 false", async () => {
+    it("默认 border 应该是 false", () => {
       const table = document.createElement("ea-table");
       container.appendChild(table);
-
-      await waitForRender();
 
       expect(table.border).toBe(false);
     });
 
-    it("设置 border 属性应该启用边框", async () => {
+    it("设置 border 属性应该启用边框", () => {
       const table = document.createElement("ea-table");
       table.border = true;
       container.appendChild(table);
-
-      await waitForRender();
 
       expect(table.border).toBe(true);
     });
@@ -380,21 +372,17 @@ describe("EaTable Component", () => {
   });
 
   describe("EaTable Height Attribute", () => {
-    it("默认 height 应该是空字符串", async () => {
+    it("默认 height 应该是空字符串", () => {
       const table = document.createElement("ea-table");
       container.appendChild(table);
-
-      await waitForRender();
 
       expect(table.height).toBe("");
     });
 
-    it("应该支持 height 属性", async () => {
+    it("应该支持 height 属性", () => {
       const table = document.createElement("ea-table");
       table.height = "200px";
       container.appendChild(table);
-
-      await waitForRender();
 
       expect(table.height).toBe("200px");
     });
@@ -424,21 +412,17 @@ describe("EaTable Component", () => {
   });
 
   describe("EaTable Max-height Attribute", () => {
-    it("默认 maxHeight 应该是空字符串", async () => {
+    it("默认 maxHeight 应该是空字符串", () => {
       const table = document.createElement("ea-table");
       container.appendChild(table);
-
-      await waitForRender();
 
       expect(table.maxHeight).toBe("");
     });
 
-    it("应该支持 max-height 属性", async () => {
+    it("应该支持 max-height 属性", () => {
       const table = document.createElement("ea-table");
       table.maxHeight = "400px";
       container.appendChild(table);
-
-      await waitForRender();
 
       expect(table.maxHeight).toBe("400px");
     });
@@ -457,63 +441,51 @@ describe("EaTable Component", () => {
   });
 
   describe("EaTable Highlight-current-row Attribute", () => {
-    it("默认 highlightCurrentRow 应该是 false", async () => {
+    it("默认 highlightCurrentRow 应该是 false", () => {
       const table = document.createElement("ea-table");
       container.appendChild(table);
-
-      await waitForRender();
 
       expect(table.highlightCurrentRow).toBe(false);
     });
 
-    it("设置 highlight-current-row 应该启用高亮", async () => {
+    it("设置 highlight-current-row 应该启用高亮", () => {
       const table = document.createElement("ea-table");
       table.highlightCurrentRow = true;
       container.appendChild(table);
-
-      await waitForRender();
 
       expect(table.highlightCurrentRow).toBe(true);
     });
   });
 
   describe("EaTable Show-summary Attribute", () => {
-    it("默认 showSummary 应该是 false", async () => {
+    it("默认 showSummary 应该是 false", () => {
       const table = document.createElement("ea-table");
       container.appendChild(table);
-
-      await waitForRender();
 
       expect(table.showSummary).toBe(false);
     });
 
-    it("设置 show-summary 应该显示合计行", async () => {
+    it("设置 show-summary 应该显示合计行", () => {
       const table = document.createElement("ea-table");
       table.showSummary = true;
       container.appendChild(table);
-
-      await waitForRender();
 
       expect(table.showSummary).toBe(true);
     });
   });
 
   describe("EaTableColumn Label Attribute", () => {
-    it("默认 label 应该是空字符串", async () => {
+    it("默认 label 应该是空字符串", () => {
       const column = document.createElement("ea-table-column");
       container.appendChild(column);
-
-      await waitForRender();
 
       expect(column.label).toBe("");
     });
 
-    it("应该支持 label 属性", async () => {
+    it("应该支持 label 属性", () => {
       const column = document.createElement("ea-table-column");
       column.label = "Date";
       container.appendChild(column);
-
-      await waitForRender();
 
       expect(column.label).toBe("Date");
     });
@@ -539,105 +511,85 @@ describe("EaTable Component", () => {
   });
 
   describe("EaTableColumn Prop Attribute", () => {
-    it("默认 prop 应该是空字符串", async () => {
+    it("默认 prop 应该是空字符串", () => {
       const column = document.createElement("ea-table-column");
       container.appendChild(column);
-
-      await waitForRender();
 
       expect(column.prop).toBe("");
     });
 
-    it("应该支持 prop 属性", async () => {
+    it("应该支持 prop 属性", () => {
       const column = document.createElement("ea-table-column");
       column.prop = "date";
       container.appendChild(column);
-
-      await waitForRender();
 
       expect(column.prop).toBe("date");
     });
   });
 
   describe("EaTableColumn Width Attribute", () => {
-    it("默认 width 应该是空字符串", async () => {
+    it("默认 width 应该是空字符串", () => {
       const column = document.createElement("ea-table-column");
       container.appendChild(column);
-
-      await waitForRender();
 
       expect(column.width).toBe("");
     });
 
-    it("应该支持 width 属性", async () => {
+    it("应该支持 width 属性", () => {
       const column = document.createElement("ea-table-column");
       column.width = "180px";
       container.appendChild(column);
-
-      await waitForRender();
 
       expect(column.width).toBe("180px");
     });
   });
 
   describe("EaTableColumn Align Attribute", () => {
-    it("默认 align 应该是 left", async () => {
+    it("默认 align 应该是 left", () => {
       const column = document.createElement("ea-table-column");
       container.appendChild(column);
-
-      await waitForRender();
 
       expect(column.align).toBe("left");
     });
 
-    it("应该支持 align='center'", async () => {
+    it("应该支持 align='center'", () => {
       const column = document.createElement("ea-table-column");
       column.align = "center";
       container.appendChild(column);
 
-      await waitForRender();
-
       expect(column.align).toBe("center");
     });
 
-    it("应该支持 align='right'", async () => {
+    it("应该支持 align='right'", () => {
       const column = document.createElement("ea-table-column");
       column.align = "right";
       container.appendChild(column);
-
-      await waitForRender();
 
       expect(column.align).toBe("right");
     });
   });
 
   describe("EaTableColumn Sortable Attribute", () => {
-    it("默认 sortable 应该是 false", async () => {
+    it("默认 sortable 应该是 false", () => {
       const column = document.createElement("ea-table-column");
       container.appendChild(column);
-
-      await waitForRender();
 
       expect(column.sortable).toBe(false);
     });
 
-    it("设置 sortable 应该启用排序", async () => {
+    it("设置 sortable 应该启用排序", () => {
       const column = document.createElement("ea-table-column");
       column.sortable = true;
       container.appendChild(column);
-
-      await waitForRender();
 
       expect(column.sortable).toBe(true);
     });
   });
 
   describe("EaTableColumn Fixed Attribute", () => {
-    it("默认 fixed 应该是 false", async () => {
+    it("默认 fixed 应该是 false", () => {
       const column = document.createElement("ea-table-column");
       container.appendChild(column);
-
-      await waitForRender();
 
       expect(column.fixed).toBe("false");
     });
@@ -664,73 +616,59 @@ describe("EaTable Component", () => {
   });
 
   describe("EaTableColumn Type Attribute", () => {
-    it("默认 type 应该是空字符串", async () => {
+    it("默认 type 应该是空字符串", () => {
       const column = document.createElement("ea-table-column");
       container.appendChild(column);
-
-      await waitForRender();
 
       expect(column.type).toBe("");
     });
 
-    it("应该支持 type='selection'", async () => {
+    it("应该支持 type='selection'", () => {
       const column = document.createElement("ea-table-column");
       column.type = "selection";
       container.appendChild(column);
 
-      await waitForRender();
-
       expect(column.type).toBe("selection");
     });
 
-    it("应该支持 type='index'", async () => {
+    it("应该支持 type='index'", () => {
       const column = document.createElement("ea-table-column");
       column.type = "index";
       container.appendChild(column);
-
-      await waitForRender();
 
       expect(column.type).toBe("index");
     });
   });
 
   describe("EaTableColumn Colspan Attribute", () => {
-    it("默认 colspan 应该是 falsy", async () => {
+    it("默认 colspan 应该是 falsy", () => {
       const column = document.createElement("ea-table-column");
       container.appendChild(column);
-
-      await waitForRender();
 
       expect(column.colspan).toBeFalsy();
     });
 
-    it("应该支持 colspan 属性", async () => {
+    it("应该支持 colspan 属性", () => {
       const column = document.createElement("ea-table-column");
       column.colspan = 2;
       container.appendChild(column);
-
-      await waitForRender();
 
       expect(column.colspan).toBe(2);
     });
   });
 
   describe("EaTableColumn Option Property", () => {
-    it("默认 option 应该是空对象", async () => {
+    it("默认 option 应该是空对象", () => {
       const column = document.createElement("ea-table-column");
       container.appendChild(column);
-
-      await waitForRender();
 
       expect(column.option).toEqual({});
     });
 
-    it("应该支持设置 option", async () => {
+    it("应该支持设置 option", () => {
       const column = document.createElement("ea-table-column");
       column.option = { customKey: "customValue" };
       container.appendChild(column);
-
-      await waitForRender();
 
       expect(column.option).toEqual({ customKey: "customValue" });
     });
@@ -1960,23 +1898,19 @@ describe("EaTable Component", () => {
   });
 
   describe("Lifecycle", () => {
-    it("table 组件连接后应该正确初始化", async () => {
+    it("table 组件连接后应该正确初始化", () => {
       const table = document.createElement("ea-table");
       container.appendChild(table);
-
-      await waitForRender();
 
       expect(table.shadowRoot).toBeDefined();
       expect(table.shadowRoot.querySelector("table.ea-table")).toBeTruthy();
     });
 
-    it("column 组件连接后应该正确初始化", async () => {
+    it("column 组件连接后应该正确初始化", () => {
       const column = document.createElement("ea-table-column");
       column.label = "Test";
       column.prop = "test";
       container.appendChild(column);
-
-      await waitForRender();
 
       expect(column.label).toBe("Test");
       expect(column.prop).toBe("test");
@@ -2030,7 +1964,6 @@ describe("EaTable Component", () => {
       await waitForRender();
 
       table.height = "300px";
-      await waitForRender();
 
       expect(table.height).toBe("300px");
     });

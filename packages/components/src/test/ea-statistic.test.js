@@ -17,30 +17,24 @@ describe("EaStatistic Component", () => {
   });
 
   describe("Basic Functionality", () => {
-    it("应该正确渲染组件并挂载 Shadow DOM", async () => {
+    it("应该正确渲染组件并挂载 Shadow DOM", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
-
-      await waitForRender();
 
       expect(statistic.shadowRoot).toBeTruthy();
     });
 
-    it("应该包含 ea-statistic 根容器", async () => {
+    it("应该包含 ea-statistic 根容器", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
-
-      await waitForRender();
 
       const root = statistic.shadowRoot.querySelector(".ea-statistic");
       expect(root).toBeTruthy();
     });
 
-    it("根容器应该有 container part", async () => {
+    it("根容器应该有 container part", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
-
-      await waitForRender();
 
       const containerEl =
         statistic.shadowRoot.querySelector('[part="container"]');
@@ -48,11 +42,9 @@ describe("EaStatistic Component", () => {
       expect(containerEl.classList.contains("ea-statistic")).toBe(true);
     });
 
-    it("应该渲染 header 元素", async () => {
+    it("应该渲染 header 元素", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
-
-      await waitForRender();
 
       const header = statistic.shadowRoot.querySelector(
         ".ea-statistic__header"
@@ -61,11 +53,9 @@ describe("EaStatistic Component", () => {
       expect(header.tagName.toLowerCase()).toBe("header");
     });
 
-    it("应该渲染 content 元素", async () => {
+    it("应该渲染 content 元素", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
-
-      await waitForRender();
 
       const content = statistic.shadowRoot.querySelector(
         ".ea-statistic__content"
@@ -74,11 +64,9 @@ describe("EaStatistic Component", () => {
       expect(content.tagName.toLowerCase()).toBe("main");
     });
 
-    it("应该渲染 number 元素", async () => {
+    it("应该渲染 number 元素", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
-
-      await waitForRender();
 
       const number = statistic.shadowRoot.querySelector(
         ".ea-statistic__number"
@@ -86,11 +74,9 @@ describe("EaStatistic Component", () => {
       expect(number).toBeTruthy();
     });
 
-    it("应该渲染 prefix 元素", async () => {
+    it("应该渲染 prefix 元素", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
-
-      await waitForRender();
 
       const prefix = statistic.shadowRoot.querySelector(
         ".ea-statistic__prefix"
@@ -98,11 +84,9 @@ describe("EaStatistic Component", () => {
       expect(prefix).toBeTruthy();
     });
 
-    it("应该渲染 suffix 元素", async () => {
+    it("应该渲染 suffix 元素", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
-
-      await waitForRender();
 
       const suffix = statistic.shadowRoot.querySelector(
         ".ea-statistic__suffix"
@@ -112,64 +96,52 @@ describe("EaStatistic Component", () => {
   });
 
   describe("CSS Parts", () => {
-    it("应该支持 container part", async () => {
+    it("应该支持 container part", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
-
-      await waitForRender();
 
       expect(
         statistic.shadowRoot.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
-    it("应该支持 title part", async () => {
+    it("应该支持 title part", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
-
-      await waitForRender();
 
       expect(statistic.shadowRoot.querySelector('[part="title"]')).toBeTruthy();
     });
 
-    it("应该支持 content part", async () => {
+    it("应该支持 content part", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
-
-      await waitForRender();
 
       expect(
         statistic.shadowRoot.querySelector('[part="content"]')
       ).toBeTruthy();
     });
 
-    it("应该支持 prefix part", async () => {
+    it("应该支持 prefix part", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
-
-      await waitForRender();
 
       expect(
         statistic.shadowRoot.querySelector('[part="prefix"]')
       ).toBeTruthy();
     });
 
-    it("应该支持 number part", async () => {
+    it("应该支持 number part", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
-
-      await waitForRender();
 
       expect(
         statistic.shadowRoot.querySelector('[part="number"]')
       ).toBeTruthy();
     });
 
-    it("应该支持 suffix part", async () => {
+    it("应该支持 suffix part", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
-
-      await waitForRender();
 
       expect(
         statistic.shadowRoot.querySelector('[part="suffix"]')
@@ -178,21 +150,17 @@ describe("EaStatistic Component", () => {
   });
 
   describe("Heading Attribute", () => {
-    it("默认 heading 应该是空字符串", async () => {
+    it("默认 heading 应该是空字符串", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
-
-      await waitForRender();
 
       expect(statistic.heading).toBe("");
     });
 
-    it("应该支持 heading 属性", async () => {
+    it("应该支持 heading 属性", () => {
       const statistic = document.createElement("ea-statistic");
       statistic.setAttribute("heading", "Test Title");
       container.appendChild(statistic);
-
-      await waitForRender();
 
       expect(statistic.heading).toBe("Test Title");
     });
@@ -241,31 +209,25 @@ describe("EaStatistic Component", () => {
   });
 
   describe("Value Attribute", () => {
-    it("默认 value 应该是 0", async () => {
+    it("默认 value 应该是 0", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
-
-      await waitForRender();
 
       expect(statistic.value).toBe(0);
     });
 
-    it("应该支持 value 属性（整数）", async () => {
+    it("应该支持 value 属性（整数）", () => {
       const statistic = document.createElement("ea-statistic");
       statistic.setAttribute("value", "1000");
       container.appendChild(statistic);
 
-      await waitForRender();
-
       expect(statistic.value).toBe(1000);
     });
 
-    it("应该支持 value 属性（小数）", async () => {
+    it("应该支持 value 属性（小数）", () => {
       const statistic = document.createElement("ea-statistic");
       statistic.setAttribute("value", "1234.56");
       container.appendChild(statistic);
-
-      await waitForRender();
 
       expect(statistic.value).toBe(1234.56);
     });
@@ -342,24 +304,20 @@ describe("EaStatistic Component", () => {
   });
 
   describe("Slots", () => {
-    it("应该支持 title 插槽", async () => {
+    it("应该支持 title 插槽", () => {
       const statistic = document.createElement("ea-statistic");
       statistic.innerHTML = `<div slot="title">Custom Title</div>`;
       container.appendChild(statistic);
-
-      await waitForRender();
 
       const titleSlot =
         statistic.shadowRoot.querySelector('slot[name="title"]');
       expect(titleSlot).toBeTruthy();
     });
 
-    it("应该支持 prefix 插槽", async () => {
+    it("应该支持 prefix 插槽", () => {
       const statistic = document.createElement("ea-statistic");
       statistic.innerHTML = `<div slot="prefix">$</div>`;
       container.appendChild(statistic);
-
-      await waitForRender();
 
       const prefixSlot = statistic.shadowRoot.querySelector(
         'slot[name="prefix"]'
@@ -367,12 +325,10 @@ describe("EaStatistic Component", () => {
       expect(prefixSlot).toBeTruthy();
     });
 
-    it("应该支持 suffix 插槽", async () => {
+    it("应该支持 suffix 插槽", () => {
       const statistic = document.createElement("ea-statistic");
       statistic.innerHTML = `<div slot="suffix">%</div>`;
       container.appendChild(statistic);
-
-      await waitForRender();
 
       const suffixSlot = statistic.shadowRoot.querySelector(
         'slot[name="suffix"]'
@@ -380,24 +336,20 @@ describe("EaStatistic Component", () => {
       expect(suffixSlot).toBeTruthy();
     });
 
-    it("应该支持默认插槽", async () => {
+    it("应该支持默认插槽", () => {
       const statistic = document.createElement("ea-statistic");
       statistic.innerHTML = `<span>Custom Content</span>`;
       container.appendChild(statistic);
-
-      await waitForRender();
 
       const defaultSlot =
         statistic.shadowRoot.querySelector("slot:not([name])");
       expect(defaultSlot).toBeTruthy();
     });
 
-    it("title 插槽应该位于 header 元素内", async () => {
+    it("title 插槽应该位于 header 元素内", () => {
       const statistic = document.createElement("ea-statistic");
       statistic.innerHTML = `<div slot="title">Slotted Title</div>`;
       container.appendChild(statistic);
-
-      await waitForRender();
 
       const header = statistic.shadowRoot.querySelector(
         ".ea-statistic__header"
@@ -406,12 +358,10 @@ describe("EaStatistic Component", () => {
       expect(titleSlot).toBeTruthy();
     });
 
-    it("prefix 插槽应该位于 prefix 元素内", async () => {
+    it("prefix 插槽应该位于 prefix 元素内", () => {
       const statistic = document.createElement("ea-statistic");
       statistic.innerHTML = `<div slot="prefix">$</div>`;
       container.appendChild(statistic);
-
-      await waitForRender();
 
       const prefix = statistic.shadowRoot.querySelector(
         ".ea-statistic__prefix"
@@ -420,12 +370,10 @@ describe("EaStatistic Component", () => {
       expect(prefixSlot).toBeTruthy();
     });
 
-    it("suffix 插槽应该位于 suffix 元素内", async () => {
+    it("suffix 插槽应该位于 suffix 元素内", () => {
       const statistic = document.createElement("ea-statistic");
       statistic.innerHTML = `<div slot="suffix">%</div>`;
       container.appendChild(statistic);
-
-      await waitForRender();
 
       const suffix = statistic.shadowRoot.querySelector(
         ".ea-statistic__suffix"
@@ -434,12 +382,10 @@ describe("EaStatistic Component", () => {
       expect(suffixSlot).toBeTruthy();
     });
 
-    it("默认插槽应该位于 number 元素内", async () => {
+    it("默认插槽应该位于 number 元素内", () => {
       const statistic = document.createElement("ea-statistic");
       statistic.innerHTML = `<span>Custom Number</span>`;
       container.appendChild(statistic);
-
-      await waitForRender();
 
       const number = statistic.shadowRoot.querySelector(
         ".ea-statistic__number"
@@ -450,21 +396,17 @@ describe("EaStatistic Component", () => {
   });
 
   describe("BEM Class Names", () => {
-    it("根容器应该有 ea-statistic 类名", async () => {
+    it("根容器应该有 ea-statistic 类名", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
-
-      await waitForRender();
 
       const root = statistic.shadowRoot.querySelector(".ea-statistic");
       expect(root).toBeTruthy();
     });
 
-    it("header 应该有 ea-statistic__header 类名", async () => {
+    it("header 应该有 ea-statistic__header 类名", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
-
-      await waitForRender();
 
       const header = statistic.shadowRoot.querySelector(
         ".ea-statistic__header"
@@ -472,11 +414,9 @@ describe("EaStatistic Component", () => {
       expect(header).toBeTruthy();
     });
 
-    it("content 应该有 ea-statistic__content 类名", async () => {
+    it("content 应该有 ea-statistic__content 类名", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
-
-      await waitForRender();
 
       const content = statistic.shadowRoot.querySelector(
         ".ea-statistic__content"
@@ -484,11 +424,9 @@ describe("EaStatistic Component", () => {
       expect(content).toBeTruthy();
     });
 
-    it("prefix 应该有 ea-statistic__prefix 类名", async () => {
+    it("prefix 应该有 ea-statistic__prefix 类名", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
-
-      await waitForRender();
 
       const prefix = statistic.shadowRoot.querySelector(
         ".ea-statistic__prefix"
@@ -496,11 +434,9 @@ describe("EaStatistic Component", () => {
       expect(prefix).toBeTruthy();
     });
 
-    it("number 应该有 ea-statistic__number 类名", async () => {
+    it("number 应该有 ea-statistic__number 类名", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
-
-      await waitForRender();
 
       const number = statistic.shadowRoot.querySelector(
         ".ea-statistic__number"
@@ -508,11 +444,9 @@ describe("EaStatistic Component", () => {
       expect(number).toBeTruthy();
     });
 
-    it("suffix 应该有 ea-statistic__suffix 类名", async () => {
+    it("suffix 应该有 ea-statistic__suffix 类名", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
-
-      await waitForRender();
 
       const suffix = statistic.shadowRoot.querySelector(
         ".ea-statistic__suffix"
@@ -522,11 +456,9 @@ describe("EaStatistic Component", () => {
   });
 
   describe("DOM Structure", () => {
-    it("content 内部应该包含 prefix、number、suffix 按顺序排列", async () => {
+    it("content 内部应该包含 prefix、number、suffix 按顺序排列", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
-
-      await waitForRender();
 
       const content = statistic.shadowRoot.querySelector(
         ".ea-statistic__content"
@@ -537,11 +469,9 @@ describe("EaStatistic Component", () => {
       expect(children).toEqual(["span", "span", "span"]);
     });
 
-    it("header 应该在 content 之前", async () => {
+    it("header 应该在 content 之前", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
-
-      await waitForRender();
 
       const root = statistic.shadowRoot.querySelector(".ea-statistic");
       const children = Array.from(root.children).map(el =>
@@ -574,73 +504,57 @@ describe("EaStatistic Component", () => {
       expect(number.textContent).toBe("268,500");
     });
 
-    it("移除 heading 属性应该恢复默认值", async () => {
+    it("移除 heading 属性应该恢复默认值", () => {
       const statistic = document.createElement("ea-statistic");
       statistic.setAttribute("heading", "Test");
       container.appendChild(statistic);
 
-      await waitForRender();
-
       statistic.removeAttribute("heading");
-      await waitForRender();
 
       expect(statistic.heading).toBe("");
     });
 
-    it("移除 value 属性应该恢复默认值", async () => {
+    it("移除 value 属性应该恢复默认值", () => {
       const statistic = document.createElement("ea-statistic");
       statistic.setAttribute("value", "1000");
       container.appendChild(statistic);
 
-      await waitForRender();
-
       statistic.removeAttribute("value");
-      await waitForRender();
 
       expect(statistic.value).toBe(0);
     });
   });
 
   describe("Lifecycle", () => {
-    it("组件连接后应该正确初始化", async () => {
+    it("组件连接后应该正确初始化", () => {
       const statistic = document.createElement("ea-statistic");
       statistic.setAttribute("heading", "Test");
       statistic.setAttribute("value", "100");
       container.appendChild(statistic);
-
-      await waitForRender();
 
       expect(statistic.shadowRoot).toBeTruthy();
       expect(statistic.heading).toBe("Test");
       expect(statistic.value).toBe(100);
     });
 
-    it("组件断开连接后应该正常移除", async () => {
+    it("组件断开连接后应该正常移除", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
 
-      await waitForRender();
-
       statistic.remove();
-
-      await waitForRender();
 
       expect(statistic.isConnected).toBe(false);
     });
 
-    it("组件重新连接后应该正常工作", async () => {
+    it("组件重新连接后应该正常工作", () => {
       const statistic = document.createElement("ea-statistic");
       statistic.setAttribute("heading", "Reconnect Test");
       statistic.setAttribute("value", "42");
       container.appendChild(statistic);
 
-      await waitForRender();
-
       statistic.remove();
-      await waitForRender();
 
       container.appendChild(statistic);
-      await waitForRender();
 
       expect(statistic.isConnected).toBe(true);
       expect(statistic.heading).toBe("Reconnect Test");
@@ -662,12 +576,10 @@ describe("EaStatistic Component", () => {
       expect(numberEl.textContent).toBe("9,999,999,999");
     });
 
-    it("value 为非数字字符串时应该回退到 null", async () => {
+    it("value 为非数字字符串时应该回退到 null", () => {
       const statistic = document.createElement("ea-statistic");
       statistic.setAttribute("value", "abc");
       container.appendChild(statistic);
-
-      await waitForRender();
 
       expect(statistic.value).toBe(0);
     });

@@ -1,12 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender";
 
-global.ResizeObserver = class ResizeObserver {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
-};
-
 import "../components/ea-affix/index";
 
 describe("EaAffix", () => {
@@ -41,40 +35,32 @@ describe("EaAffix", () => {
   });
 
   describe("Basic Functionality", () => {
-    it("应该正确渲染 ea-affix 组件", async () => {
+    it("应该正确渲染 ea-affix 组件", () => {
       const el = document.createElement("ea-affix");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el).toBeDefined();
       expect(el.shadowRoot).toBeDefined();
     });
 
-    it("应该包含 .ea-affix 容器元素", async () => {
+    it("应该包含 .ea-affix 容器元素", () => {
       const el = document.createElement("ea-affix");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.shadowRoot.querySelector(".ea-affix")).toBeTruthy();
     });
 
-    it("应该包含 container CSS Part", async () => {
+    it("应该包含 container CSS Part", () => {
       const el = document.createElement("ea-affix");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
 
-    it("应该包含 slot 元素且透传内容", async () => {
+    it("应该包含 slot 元素且透传内容", () => {
       const el = document.createElement("ea-affix");
       el.innerHTML = '<button class="demo-btn">Affix</button>';
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.shadowRoot.querySelector("slot")).toBeTruthy();
       expect(el.textContent).toContain("Affix");
@@ -82,37 +68,31 @@ describe("EaAffix", () => {
   });
 
   describe("Offset Attribute", () => {
-    it("默认 offset 应该是 0", async () => {
+    it("默认 offset 应该是 0", () => {
       const el = document.createElement("ea-affix");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.offset).toBe(0);
     });
 
-    it("应该正确设置 offset 属性", async () => {
+    it("应该正确设置 offset 属性", () => {
       const el = document.createElement("ea-affix");
       el.setAttribute("offset", "120");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.offset).toBe(120);
     });
   });
 
   describe("Target Attribute", () => {
-    it("默认 target 应该是空字符串", async () => {
+    it("默认 target 应该是空字符串", () => {
       const el = document.createElement("ea-affix");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.target).toBe("");
     });
 
-    it("应该正确设置 target 属性", async () => {
+    it("应该正确设置 target 属性", () => {
       const target = document.createElement("div");
       target.className = "affix-target";
       document.body.appendChild(target);
@@ -121,8 +101,6 @@ describe("EaAffix", () => {
       el.setAttribute("target", ".affix-target");
       container.appendChild(el);
 
-      await waitForRender();
-
       expect(el.target).toBe(".affix-target");
 
       target.remove();
@@ -130,21 +108,17 @@ describe("EaAffix", () => {
   });
 
   describe("Position Attribute", () => {
-    it("默认 position 应该是 top", async () => {
+    it("默认 position 应该是 top", () => {
       const el = document.createElement("ea-affix");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.position).toBe("top");
     });
 
-    it("应该正确设置 position 属性", async () => {
+    it("应该正确设置 position 属性", () => {
       const el = document.createElement("ea-affix");
       el.setAttribute("position", "bottom");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.position).toBe("bottom");
     });
@@ -310,11 +284,9 @@ describe("EaAffix", () => {
   });
 
   describe("Lifecycle", () => {
-    it("组件连接后应该正确初始化", async () => {
+    it("组件连接后应该正确初始化", () => {
       const el = document.createElement("ea-affix");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });

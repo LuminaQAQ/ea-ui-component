@@ -64,42 +64,34 @@ describe("EaWatermark", () => {
   });
 
   describe("Basic Functionality", () => {
-    it("应该正确渲染 ea-watermark 组件", async () => {
+    it("应该正确渲染 ea-watermark 组件", () => {
       const el = document.createElement("ea-watermark");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el).toBeDefined();
       expect(el.shadowRoot).toBeDefined();
     });
 
-    it("应该包含 .ea-watermark 容器元素", async () => {
+    it("应该包含 .ea-watermark 容器元素", () => {
       const el = document.createElement("ea-watermark");
       container.appendChild(el);
-
-      await waitForRender();
 
       const containerEl = el.shadowRoot.querySelector(".ea-watermark");
       expect(containerEl).toBeDefined();
     });
 
-    it("应该包含 container 和 content CSS Part", async () => {
+    it("应该包含 container 和 content CSS Part", () => {
       const el = document.createElement("ea-watermark");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
       expect(el.shadowRoot.querySelector('[part="content"]')).toBeTruthy();
     });
 
-    it("应该包含 slot 元素", async () => {
+    it("应该包含 slot 元素", () => {
       const el = document.createElement("ea-watermark");
       el.innerHTML = '<div class="test-content">Content</div>';
       container.appendChild(el);
-
-      await waitForRender();
 
       const slot = el.shadowRoot.querySelector("slot");
       expect(slot).toBeDefined();
@@ -118,20 +110,16 @@ describe("EaWatermark", () => {
   });
 
   describe("Width / Height Attributes", () => {
-    it("默认 width 应该是 120", async () => {
+    it("默认 width 应该是 120", () => {
       const el = document.createElement("ea-watermark");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.width).toBe(120);
     });
 
-    it("默认 height 应该是 64", async () => {
+    it("默认 height 应该是 64", () => {
       const el = document.createElement("ea-watermark");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.height).toBe(64);
     });
@@ -166,32 +154,26 @@ describe("EaWatermark", () => {
   });
 
   describe("Rotate Attribute", () => {
-    it("默认 rotate 应该是 -22", async () => {
+    it("默认 rotate 应该是 -22", () => {
       const el = document.createElement("ea-watermark");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.rotate).toBe(-22);
     });
 
-    it("应该正确设置 rotate 属性", async () => {
+    it("应该正确设置 rotate 属性", () => {
       const el = document.createElement("ea-watermark");
       el.setAttribute("rotate", "-30");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.rotate).toBe(-30);
     });
   });
 
   describe("ZIndex Attribute", () => {
-    it("默认 zIndex 应该是 9", async () => {
+    it("默认 zIndex 应该是 9", () => {
       const el = document.createElement("ea-watermark");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.zIndex).toBe(9);
     });
@@ -221,21 +203,17 @@ describe("EaWatermark", () => {
   });
 
   describe("Content Attribute", () => {
-    it("默认 content 应该是 watermark", async () => {
+    it("默认 content 应该是 watermark", () => {
       const el = document.createElement("ea-watermark");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.content).toBe("watermark");
     });
 
-    it("应该正确设置 content 属性", async () => {
+    it("应该正确设置 content 属性", () => {
       const el = document.createElement("ea-watermark");
       el.setAttribute("content", "Confidential");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.content).toBe("Confidential");
     });
@@ -257,11 +235,9 @@ describe("EaWatermark", () => {
   });
 
   describe("Image Attribute", () => {
-    it("默认 image 应该是空字符串", async () => {
+    it("默认 image 应该是空字符串", () => {
       const el = document.createElement("ea-watermark");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.image).toBe("");
     });
@@ -315,11 +291,9 @@ describe("EaWatermark", () => {
   });
 
   describe("Font Property", () => {
-    it("默认 font 应该合并完整默认值", async () => {
+    it("默认 font 应该合并完整默认值", () => {
       const el = document.createElement("ea-watermark");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.font).toEqual({
         color: "rgba(0, 0, 0, 0.15)",
@@ -348,20 +322,16 @@ describe("EaWatermark", () => {
   });
 
   describe("Gap / Offset Properties", () => {
-    it("默认 gap 应该是 [100, 100]", async () => {
+    it("默认 gap 应该是 [100, 100]", () => {
       const el = document.createElement("ea-watermark");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.gap).toEqual([100, 100]);
     });
 
-    it("默认 offset 应该是 null", async () => {
+    it("默认 offset 应该是 null", () => {
       const el = document.createElement("ea-watermark");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.offset).toBeNull();
     });
@@ -390,11 +360,9 @@ describe("EaWatermark", () => {
   });
 
   describe("Lifecycle", () => {
-    it("组件连接后应该正确初始化", async () => {
+    it("组件连接后应该正确初始化", () => {
       const el = document.createElement("ea-watermark");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
       expect(el.shadowRoot.querySelector('[part="content"]')).toBeTruthy();

@@ -17,42 +17,34 @@ describe("EaCollapse Component", () => {
   });
 
   describe("Basic Rendering", () => {
-    it("应该正确渲染 ea-collapse 组件", async () => {
+    it("应该正确渲染 ea-collapse 组件", () => {
       const collapse = document.createElement("ea-collapse");
       container.appendChild(collapse);
-
-      await waitForRender();
 
       expect(collapse).toBeDefined();
       expect(collapse.shadowRoot).toBeDefined();
     });
 
-    it("应该包含正确的 CSS 类", async () => {
+    it("应该包含正确的 CSS 类", () => {
       const collapse = document.createElement("ea-collapse");
       container.appendChild(collapse);
-
-      await waitForRender();
 
       const containerEl = collapse.shadowRoot.querySelector(".ea-collapse");
       expect(containerEl).toBeTruthy();
     });
 
-    it("应该包含所有 CSS Parts", async () => {
+    it("应该包含所有 CSS Parts", () => {
       const collapse = document.createElement("ea-collapse");
       container.appendChild(collapse);
-
-      await waitForRender();
 
       expect(
         collapse.shadowRoot.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
-    it("应该包含默认插槽", async () => {
+    it("应该包含默认插槽", () => {
       const collapse = document.createElement("ea-collapse");
       container.appendChild(collapse);
-
-      await waitForRender();
 
       const slot = collapse.shadowRoot.querySelector("slot");
       expect(slot).toBeTruthy();
@@ -60,32 +52,26 @@ describe("EaCollapse Component", () => {
   });
 
   describe("Accordion Property", () => {
-    it("默认情况下 accordion 应该为 false", async () => {
+    it("默认情况下 accordion 应该为 false", () => {
       const collapse = document.createElement("ea-collapse");
       container.appendChild(collapse);
-
-      await waitForRender();
 
       expect(collapse.accordion).toBe(false);
     });
 
-    it("设置 accordion 属性应该为 true", async () => {
+    it("设置 accordion 属性应该为 true", () => {
       const collapse = document.createElement("ea-collapse");
       collapse.setAttribute("accordion", "");
       container.appendChild(collapse);
-
-      await waitForRender();
 
       expect(collapse.accordion).toBe(true);
     });
   });
 
   describe("Active Property", () => {
-    it("默认情况下 active 应该为空数组", async () => {
+    it("默认情况下 active 应该为空数组", () => {
       const collapse = document.createElement("ea-collapse");
       container.appendChild(collapse);
-
-      await waitForRender();
 
       expect(collapse.active).toEqual([]);
     });
@@ -120,33 +106,27 @@ describe("EaCollapse Component", () => {
   });
 
   describe("Expand Icon Position Property", () => {
-    it("默认情况下 expandIconPosition 应该为 right", async () => {
+    it("默认情况下 expandIconPosition 应该为 right", () => {
       const collapse = document.createElement("ea-collapse");
       container.appendChild(collapse);
-
-      await waitForRender();
 
       expect(collapse.expandIconPosition).toBe("right");
     });
 
-    it("设置 expand-icon-position 为 left 应该生效", async () => {
+    it("设置 expand-icon-position 为 left 应该生效", () => {
       const collapse = document.createElement("ea-collapse");
       collapse.setAttribute("expand-icon-position", "left");
       container.appendChild(collapse);
 
-      await waitForRender();
-
       expect(collapse.expandIconPosition).toBe("left");
     });
 
-    it("设置 expand-icon-position 应该应用到子项", async () => {
+    it("设置 expand-icon-position 应该应用到子项", () => {
       const collapse = document.createElement("ea-collapse");
       collapse.innerHTML = `
         <ea-collapse-item header="Item 1" name="1">Content 1</ea-collapse-item>
       `;
       container.appendChild(collapse);
-
-      await waitForRender();
 
       const item = collapse.querySelector("ea-collapse-item");
       expect(item.expandIconPosition).toBe("right");
@@ -624,33 +604,27 @@ describe("EaCollapseItem Component", () => {
   });
 
   describe("Basic Rendering", () => {
-    it("应该正确渲染 ea-collapse-item 组件", async () => {
+    it("应该正确渲染 ea-collapse-item 组件", () => {
       const item = document.createElement("ea-collapse-item");
       item.setAttribute("header", "Test Header");
       item.setAttribute("name", "1");
       container.appendChild(item);
 
-      await waitForRender();
-
       expect(item).toBeDefined();
       expect(item.shadowRoot).toBeDefined();
     });
 
-    it("应该包含正确的 CSS 类", async () => {
+    it("应该包含正确的 CSS 类", () => {
       const item = document.createElement("ea-collapse-item");
       container.appendChild(item);
-
-      await waitForRender();
 
       const containerEl = item.shadowRoot.querySelector(".ea-collapse-item");
       expect(containerEl).toBeTruthy();
     });
 
-    it("应该包含所有 CSS Parts", async () => {
+    it("应该包含所有 CSS Parts", () => {
       const item = document.createElement("ea-collapse-item");
       container.appendChild(item);
-
-      await waitForRender();
 
       expect(item.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
       expect(
@@ -666,18 +640,16 @@ describe("EaCollapseItem Component", () => {
   });
 
   describe("Slots", () => {
-    it("应该支持默认插槽", async () => {
+    it("应该支持默认插槽", () => {
       const item = document.createElement("ea-collapse-item");
       item.innerHTML = "Content";
       container.appendChild(item);
-
-      await waitForRender();
 
       const slot = item.shadowRoot.querySelector("slot:not([name])");
       expect(slot).toBeTruthy();
     });
 
-    it("应该支持 header 插槽", async () => {
+    it("应该支持 header 插槽", () => {
       const item = document.createElement("ea-collapse-item");
       item.innerHTML = `
         <div slot="header">Custom Header</div>
@@ -685,18 +657,14 @@ describe("EaCollapseItem Component", () => {
       `;
       container.appendChild(item);
 
-      await waitForRender();
-
       const headerSlot = item.shadowRoot.querySelector('slot[name="header"]');
       expect(headerSlot).toBeTruthy();
     });
 
-    it("应该支持 icon 插槽", async () => {
+    it("应该支持 icon 插槽", () => {
       const item = document.createElement("ea-collapse-item");
       item.innerHTML = '<ea-icon slot="icon" name="custom"></ea-icon>';
       container.appendChild(item);
-
-      await waitForRender();
 
       const iconSlot = item.shadowRoot.querySelector('slot[name="icon"]');
       expect(iconSlot).toBeTruthy();
@@ -704,17 +672,15 @@ describe("EaCollapseItem Component", () => {
   });
 
   describe("Header Attribute", () => {
-    it("应该通过 header 属性设置标题", async () => {
+    it("应该通过 header 属性设置标题", () => {
       const item = document.createElement("ea-collapse-item");
       item.setAttribute("header", "Test Header");
       container.appendChild(item);
 
-      await waitForRender();
-
       expect(item.header).toBe("Test Header");
     });
 
-    it("应该通过 header 插槽自定义标题", async () => {
+    it("应该通过 header 插槽自定义标题", () => {
       const item = document.createElement("ea-collapse-item");
       item.innerHTML = `
         <div slot="header">Custom Header</div>
@@ -722,51 +688,41 @@ describe("EaCollapseItem Component", () => {
       `;
       container.appendChild(item);
 
-      await waitForRender();
-
       const headerSlot = item.shadowRoot.querySelector('slot[name="header"]');
       expect(headerSlot).toBeTruthy();
     });
   });
 
   describe("Name Attribute", () => {
-    it("应该设置 name 属性", async () => {
+    it("应该设置 name 属性", () => {
       const item = document.createElement("ea-collapse-item");
       item.setAttribute("name", "item1");
       container.appendChild(item);
-
-      await waitForRender();
 
       expect(item.getAttribute("name")).toBe("item1");
     });
   });
 
   describe("Expand Icon Position Property", () => {
-    it("默认情况下 expandIconPosition 应该为 right", async () => {
+    it("默认情况下 expandIconPosition 应该为 right", () => {
       const item = document.createElement("ea-collapse-item");
       container.appendChild(item);
-
-      await waitForRender();
 
       expect(item.expandIconPosition).toBe("right");
     });
 
-    it("设置 expand-icon-position 为 left 应该生效", async () => {
+    it("设置 expand-icon-position 为 left 应该生效", () => {
       const item = document.createElement("ea-collapse-item");
       item.setAttribute("expand-icon-position", "left");
       container.appendChild(item);
-
-      await waitForRender();
 
       expect(item.expandIconPosition).toBe("left");
     });
 
-    it("设置 expand-icon-position 为 left 应该添加 indicator-left 修饰符类", async () => {
+    it("设置 expand-icon-position 为 left 应该添加 indicator-left 修饰符类", () => {
       const item = document.createElement("ea-collapse-item");
       item.setAttribute("expand-icon-position", "left");
       container.appendChild(item);
-
-      await waitForRender();
 
       const containerEl = item.shadowRoot.querySelector(".ea-collapse-item");
       expect(containerEl.classList.contains("ea-collapse-item--indicator-left")).toBe(true);
@@ -774,11 +730,9 @@ describe("EaCollapseItem Component", () => {
   });
 
   describe("Disabled Property", () => {
-    it("默认情况下 disabled 应该为 false", async () => {
+    it("默认情况下 disabled 应该为 false", () => {
       const item = document.createElement("ea-collapse-item");
       container.appendChild(item);
-
-      await waitForRender();
 
       expect(item.disabled).toBe(false);
     });
@@ -803,12 +757,10 @@ describe("EaCollapseItem Component", () => {
       expect(clickHandler).not.toHaveBeenCalled();
     });
 
-    it("设置 disabled 属性应该添加 is-disabled 状态类", async () => {
+    it("设置 disabled 属性应该添加 is-disabled 状态类", () => {
       const item = document.createElement("ea-collapse-item");
       item.setAttribute("disabled", "");
       container.appendChild(item);
-
-      await waitForRender();
 
       const containerEl = item.shadowRoot.querySelector(".ea-collapse-item");
       expect(containerEl.classList.contains("is-disabled")).toBe(true);
@@ -816,21 +768,17 @@ describe("EaCollapseItem Component", () => {
   });
 
   describe("Active Property", () => {
-    it("默认情况下 active 应该为 false", async () => {
+    it("默认情况下 active 应该为 false", () => {
       const item = document.createElement("ea-collapse-item");
       container.appendChild(item);
-
-      await waitForRender();
 
       expect(item.active).toBe(false);
     });
 
-    it("设置 active 属性应该展开面板", async () => {
+    it("设置 active 属性应该展开面板", () => {
       const item = document.createElement("ea-collapse-item");
       item.setAttribute("active", "");
       container.appendChild(item);
-
-      await waitForRender();
 
       expect(item.active).toBe(true);
       expect(item.hasAttribute("active")).toBe(true);
@@ -881,21 +829,17 @@ describe("EaCollapseItem Component", () => {
   });
 
   describe("Default Expand Icon", () => {
-    it("应该包含默认展开图标", async () => {
+    it("应该包含默认展开图标", () => {
       const item = document.createElement("ea-collapse-item");
       container.appendChild(item);
-
-      await waitForRender();
 
       const icon = item.shadowRoot.querySelector("ea-icon[name='angle-down']");
       expect(icon).toBeTruthy();
     });
 
-    it("默认展开图标应该具有 expand-icon 类名", async () => {
+    it("默认展开图标应该具有 expand-icon 类名", () => {
       const item = document.createElement("ea-collapse-item");
       container.appendChild(item);
-
-      await waitForRender();
 
       const icon = item.shadowRoot.querySelector(".ea-collapse-item__expand-icon");
       expect(icon).toBeTruthy();
@@ -917,7 +861,6 @@ describe("EaCollapseItem Component", () => {
         item.setAttribute("header", "Test");
         item.setAttribute("name", "1");
         container.appendChild(item);
-        await waitForRender();
         const headerWrap = item.shadowRoot.querySelector(".ea-collapse-item__header-wrap");
         expect(headerWrap.getAttribute("role")).toBe("button");
       });
@@ -926,7 +869,6 @@ describe("EaCollapseItem Component", () => {
         const item = document.createElement("ea-collapse-item");
         item.setAttribute("header", "Test");
         container.appendChild(item);
-        await waitForRender();
         const headerWrap = item.shadowRoot.querySelector(".ea-collapse-item__header-wrap");
         expect(headerWrap.getAttribute("tabindex")).toBe("0");
       });

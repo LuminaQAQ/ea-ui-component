@@ -35,11 +35,9 @@ describe("EaPageHeader Component", () => {
       expect(pageHeader.shadowRoot.mode).toBe("open");
     });
 
-    it("应该渲染容器元素并带有正确的 BEM 类名", async () => {
+    it("应该渲染容器元素并带有正确的 BEM 类名", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const containerEl =
         pageHeader.shadowRoot.querySelector(".ea-page-header");
@@ -47,11 +45,9 @@ describe("EaPageHeader Component", () => {
       expect(containerEl.tagName.toLowerCase()).toBe("div");
     });
 
-    it("应该渲染 breadcrumb 区域", async () => {
+    it("应该渲染 breadcrumb 区域", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const breadcrumb = pageHeader.shadowRoot.querySelector(
         ".ea-page-header__breadcrumb"
@@ -59,11 +55,9 @@ describe("EaPageHeader Component", () => {
       expect(breadcrumb).toBeDefined();
     });
 
-    it("应该渲染 wrapper 区域", async () => {
+    it("应该渲染 wrapper 区域", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const wrapper = pageHeader.shadowRoot.querySelector(
         ".ea-page-header__wrapper"
@@ -71,31 +65,25 @@ describe("EaPageHeader Component", () => {
       expect(wrapper).toBeDefined();
     });
 
-    it("应该渲染 back 区域", async () => {
+    it("应该渲染 back 区域", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const back = pageHeader.shadowRoot.querySelector(".ea-page-header__back");
       expect(back).toBeDefined();
     });
 
-    it("应该渲染 icon 区域", async () => {
+    it("应该渲染 icon 区域", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const icon = pageHeader.shadowRoot.querySelector(".ea-page-header__icon");
       expect(icon).toBeDefined();
     });
 
-    it("应该渲染 heading 区域", async () => {
+    it("应该渲染 heading 区域", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const heading = pageHeader.shadowRoot.querySelector(
         ".ea-page-header__heading"
@@ -103,11 +91,9 @@ describe("EaPageHeader Component", () => {
       expect(heading).toBeDefined();
     });
 
-    it("应该渲染 divider", async () => {
+    it("应该渲染 divider", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const divider = pageHeader.shadowRoot.querySelector(
         ".ea-page-header__divider"
@@ -115,11 +101,9 @@ describe("EaPageHeader Component", () => {
       expect(divider).toBeDefined();
     });
 
-    it("应该渲染 content 区域", async () => {
+    it("应该渲染 content 区域", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const content = pageHeader.shadowRoot.querySelector(
         ".ea-page-header__content"
@@ -127,11 +111,9 @@ describe("EaPageHeader Component", () => {
       expect(content).toBeDefined();
     });
 
-    it("应该渲染 extra 区域", async () => {
+    it("应该渲染 extra 区域", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const extra = pageHeader.shadowRoot.querySelector(
         ".ea-page-header__extra"
@@ -143,11 +125,9 @@ describe("EaPageHeader Component", () => {
   // ==================== DOM 结构测试 ====================
 
   describe("DOM Structure", () => {
-    it("容器应该是所有部分的父级", async () => {
+    it("容器应该是所有部分的父级", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const containerEl =
         pageHeader.shadowRoot.querySelector(".ea-page-header");
@@ -160,11 +140,9 @@ describe("EaPageHeader Component", () => {
       expect(wrapper).toBeDefined();
     });
 
-    it("wrapper 应该包含 back、divider、content、extra", async () => {
+    it("wrapper 应该包含 back、divider、content、extra", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const wrapper = pageHeader.shadowRoot.querySelector(
         ".ea-page-header__wrapper"
@@ -180,11 +158,9 @@ describe("EaPageHeader Component", () => {
       expect(extra).toBeDefined();
     });
 
-    it("back 区域应该包含 icon 和 heading", async () => {
+    it("back 区域应该包含 icon 和 heading", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const back = pageHeader.shadowRoot.querySelector(".ea-page-header__back");
       const icon = back.querySelector(".ea-page-header__icon");
@@ -194,11 +170,9 @@ describe("EaPageHeader Component", () => {
       expect(heading).toBeDefined();
     });
 
-    it("容器直接子元素应该是 breadcrumb section、wrapper section 和默认 slot", async () => {
+    it("容器直接子元素应该是 breadcrumb section、wrapper section 和默认 slot", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const containerEl =
         pageHeader.shadowRoot.querySelector(".ea-page-header");
@@ -214,11 +188,9 @@ describe("EaPageHeader Component", () => {
       expect(breadcrumbIndex).toBeLessThan(wrapperIndex);
     });
 
-    it("wrapper 内子元素应该按 back、divider、content、extra 顺序排列", async () => {
+    it("wrapper 内子元素应该按 back、divider、content、extra 顺序排列", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const wrapper = pageHeader.shadowRoot.querySelector(
         ".ea-page-header__wrapper"
@@ -247,109 +219,89 @@ describe("EaPageHeader Component", () => {
   // ==================== CSS Part 测试 ====================
 
   describe("CSS Parts", () => {
-    it("应该暴露 container part", async () => {
+    it("应该暴露 container part", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const el = pageHeader.shadowRoot.querySelector('[part="container"]');
       expect(el).toBeDefined();
       expect(el.classList.contains("ea-page-header")).toBe(true);
     });
 
-    it("应该暴露 breadcrumb part", async () => {
+    it("应该暴露 breadcrumb part", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const el = pageHeader.shadowRoot.querySelector('[part="breadcrumb"]');
       expect(el).toBeDefined();
       expect(el.classList.contains("ea-page-header__breadcrumb")).toBe(true);
     });
 
-    it("应该暴露 header-wrapper part", async () => {
+    it("应该暴露 header-wrapper part", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const el = pageHeader.shadowRoot.querySelector('[part="header-wrapper"]');
       expect(el).toBeDefined();
       expect(el.classList.contains("ea-page-header__wrapper")).toBe(true);
     });
 
-    it("应该暴露 back part", async () => {
+    it("应该暴露 back part", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const el = pageHeader.shadowRoot.querySelector('[part="back"]');
       expect(el).toBeDefined();
       expect(el.classList.contains("ea-page-header__back")).toBe(true);
     });
 
-    it("应该暴露 icon part", async () => {
+    it("应该暴露 icon part", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const el = pageHeader.shadowRoot.querySelector('[part="icon"]');
       expect(el).toBeDefined();
       expect(el.classList.contains("ea-page-header__icon")).toBe(true);
     });
 
-    it("应该暴露 back-icon part", async () => {
+    it("应该暴露 back-icon part", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const el = pageHeader.shadowRoot.querySelector('[part="back-icon"]');
       expect(el).toBeDefined();
     });
 
-    it("应该暴露 title part（heading 元素）", async () => {
+    it("应该暴露 title part（heading 元素）", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const el = pageHeader.shadowRoot.querySelector('[part="title"]');
       expect(el).toBeDefined();
       expect(el.classList.contains("ea-page-header__heading")).toBe(true);
     });
 
-    it("应该暴露 divider part", async () => {
+    it("应该暴露 divider part", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const el = pageHeader.shadowRoot.querySelector('[part="divider"]');
       expect(el).toBeDefined();
       expect(el.classList.contains("ea-page-header__divider")).toBe(true);
     });
 
-    it("应该暴露 content part", async () => {
+    it("应该暴露 content part", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const el = pageHeader.shadowRoot.querySelector('[part="content"]');
       expect(el).toBeDefined();
       expect(el.classList.contains("ea-page-header__content")).toBe(true);
     });
 
-    it("应该暴露 extra part", async () => {
+    it("应该暴露 extra part", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const el = pageHeader.shadowRoot.querySelector('[part="extra"]');
       expect(el).toBeDefined();
@@ -360,11 +312,9 @@ describe("EaPageHeader Component", () => {
   // ==================== 插槽测试 ====================
 
   describe("Slots", () => {
-    it("应该包含 breadcrumb 命名插槽", async () => {
+    it("应该包含 breadcrumb 命名插槽", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const slot = pageHeader.shadowRoot.querySelector(
         'slot[name="breadcrumb"]'
@@ -372,21 +322,17 @@ describe("EaPageHeader Component", () => {
       expect(slot).toBeDefined();
     });
 
-    it("应该包含 icon 命名插槽", async () => {
+    it("应该包含 icon 命名插槽", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const slot = pageHeader.shadowRoot.querySelector('slot[name="icon"]');
       expect(slot).toBeDefined();
     });
 
-    it("icon 插槽应有默认 ea-icon 作为 fallback", async () => {
+    it("icon 插槽应有默认 ea-icon 作为 fallback", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const iconSlot = pageHeader.shadowRoot.querySelector('slot[name="icon"]');
       const defaultIcon = iconSlot.querySelector("ea-icon");
@@ -394,62 +340,50 @@ describe("EaPageHeader Component", () => {
       expect(defaultIcon.getAttribute("name")).toBe("angle-left");
     });
 
-    it("应该包含 title 命名插槽", async () => {
+    it("应该包含 title 命名插槽", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const slot = pageHeader.shadowRoot.querySelector('slot[name="title"]');
       expect(slot).toBeDefined();
     });
 
-    it("title 插槽默认内容应为 Back", async () => {
+    it("title 插槽默认内容应为 Back", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const titleSlot =
         pageHeader.shadowRoot.querySelector('slot[name="title"]');
       expect(titleSlot.textContent.trim()).toBe("Back");
     });
 
-    it("应该包含 content 命名插槽", async () => {
+    it("应该包含 content 命名插槽", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const slot = pageHeader.shadowRoot.querySelector('slot[name="content"]');
       expect(slot).toBeDefined();
     });
 
-    it("应该包含 extra 命名插槽", async () => {
+    it("应该包含 extra 命名插槽", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const slot = pageHeader.shadowRoot.querySelector('slot[name="extra"]');
       expect(slot).toBeDefined();
     });
 
-    it("应该包含默认插槽", async () => {
+    it("应该包含默认插槽", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const slot = pageHeader.shadowRoot.querySelector("slot:not([name])");
       expect(slot).toBeDefined();
     });
 
-    it("默认插槽应该在容器内而非 wrapper 内", async () => {
+    it("默认插槽应该在容器内而非 wrapper 内", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const containerEl =
         pageHeader.shadowRoot.querySelector(".ea-page-header");
@@ -457,12 +391,10 @@ describe("EaPageHeader Component", () => {
       expect(defaultSlot).toBeDefined();
     });
 
-    it("应该支持通过 breadcrumb slot 自定义面包屑", async () => {
+    it("应该支持通过 breadcrumb slot 自定义面包屑", () => {
       const pageHeader = document.createElement("ea-page-header");
       pageHeader.innerHTML = `<nav slot="breadcrumb">Home / Page</nav>`;
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const slot = pageHeader.shadowRoot.querySelector(
         'slot[name="breadcrumb"]'
@@ -470,51 +402,43 @@ describe("EaPageHeader Component", () => {
       expect(slot).toBeDefined();
     });
 
-    it("应该支持通过 icon slot 自定义图标", async () => {
+    it("应该支持通过 icon slot 自定义图标", () => {
       const pageHeader = document.createElement("ea-page-header");
       pageHeader.innerHTML = `<span slot="icon">Custom Icon</span>`;
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const slot = pageHeader.shadowRoot.querySelector('slot[name="icon"]');
       expect(slot).toBeDefined();
     });
 
-    it("应该支持通过 title slot 自定义标题", async () => {
+    it("应该支持通过 title slot 自定义标题", () => {
       const pageHeader = document.createElement("ea-page-header");
       pageHeader.innerHTML = `<span slot="title">Custom Title</span>`;
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const slot = pageHeader.shadowRoot.querySelector('slot[name="title"]');
       expect(slot).toBeDefined();
     });
 
-    it("应该支持通过 content slot 自定义内容", async () => {
+    it("应该支持通过 content slot 自定义内容", () => {
       const pageHeader = document.createElement("ea-page-header");
       pageHeader.innerHTML = `<span slot="content">Main Content</span>`;
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const slot = pageHeader.shadowRoot.querySelector('slot[name="content"]');
       expect(slot).toBeDefined();
     });
 
-    it("应该支持通过 extra slot 添加额外操作", async () => {
+    it("应该支持通过 extra slot 添加额外操作", () => {
       const pageHeader = document.createElement("ea-page-header");
       pageHeader.innerHTML = `<div slot="extra"><button>Action</button></div>`;
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const slot = pageHeader.shadowRoot.querySelector('slot[name="extra"]');
       expect(slot).toBeDefined();
     });
 
-    it("应该同时支持所有插槽", async () => {
+    it("应该同时支持所有插槽", () => {
       const pageHeader = document.createElement("ea-page-header");
       pageHeader.innerHTML = `
         <nav slot="breadcrumb">Breadcrumb</nav>
@@ -525,8 +449,6 @@ describe("EaPageHeader Component", () => {
         <div>Default</div>
       `;
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       expect(
         pageHeader.shadowRoot.querySelector('slot[name="breadcrumb"]')
@@ -552,32 +474,26 @@ describe("EaPageHeader Component", () => {
   // ==================== Icon 属性测试 ====================
 
   describe("Icon Attribute", () => {
-    it("默认 icon 应该是 angle-left", async () => {
+    it("默认 icon 应该是 angle-left", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       expect(pageHeader.icon).toBe("angle-left");
     });
 
-    it("默认应该渲染 angle-left 图标", async () => {
+    it("默认应该渲染 angle-left 图标", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const iconEl = pageHeader.shadowRoot.querySelector("ea-icon");
       expect(iconEl).toBeDefined();
       expect(iconEl.getAttribute("name")).toBe("angle-left");
     });
 
-    it("应该通过 HTML attribute 设置 icon", async () => {
+    it("应该通过 HTML attribute 设置 icon", () => {
       const pageHeader = document.createElement("ea-page-header");
       pageHeader.setAttribute("icon", "rotate-left");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       expect(pageHeader.icon).toBe("rotate-left");
     });
@@ -631,7 +547,9 @@ describe("EaPageHeader Component", () => {
       await waitForRender();
 
       expect(pageHeader.icon).toBe("");
-      const iconEl = pageHeader.shadowRoot.querySelector(".ea-page-header__icon");
+      const iconEl = pageHeader.shadowRoot.querySelector(
+        ".ea-page-header__icon"
+      );
       expect(iconEl.classList.contains("is-hidden")).toBe(true);
     });
 
@@ -653,7 +571,9 @@ describe("EaPageHeader Component", () => {
 
       await waitForRender();
 
-      const iconContainer = pageHeader.shadowRoot.querySelector(".ea-page-header__icon");
+      const iconContainer = pageHeader.shadowRoot.querySelector(
+        ".ea-page-header__icon"
+      );
       expect(iconContainer.classList.contains("is-hidden")).toBe(true);
 
       pageHeader.setAttribute("icon", "arrow-left");
@@ -668,32 +588,26 @@ describe("EaPageHeader Component", () => {
   // ==================== Heading 属性测试 ====================
 
   describe("Heading Attribute", () => {
-    it("默认 heading 应该是空字符串", async () => {
+    it("默认 heading 应该是空字符串", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       expect(pageHeader.heading).toBe("");
     });
 
-    it("title slot 默认文本应为 Back", async () => {
+    it("title slot 默认文本应为 Back", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const titleSlot =
         pageHeader.shadowRoot.querySelector('slot[name="title"]');
       expect(titleSlot.textContent.trim()).toBe("Back");
     });
 
-    it("应该通过 HTML attribute 设置 heading", async () => {
+    it("应该通过 HTML attribute 设置 heading", () => {
       const pageHeader = document.createElement("ea-page-header");
       pageHeader.setAttribute("heading", "返回");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       expect(pageHeader.heading).toBe("返回");
     });
@@ -765,12 +679,10 @@ describe("EaPageHeader Component", () => {
       expect(titleSlot.textContent.trim()).toBe("Back");
     });
 
-    it("heading 属性应映射到 HTML attribute heading（非 title）", async () => {
+    it("heading 属性应映射到 HTML attribute heading（非 title）", () => {
       const pageHeader = document.createElement("ea-page-header");
       pageHeader.setAttribute("heading", "Test Heading");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       expect(pageHeader.hasAttribute("heading")).toBe(true);
       expect(pageHeader.getAttribute("heading")).toBe("Test Heading");
@@ -780,20 +692,16 @@ describe("EaPageHeader Component", () => {
   // ==================== Content 属性测试 ====================
 
   describe("Content Attribute", () => {
-    it("默认 content 应该是空字符串", async () => {
+    it("默认 content 应该是空字符串", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       expect(pageHeader.content).toBe("");
     });
 
-    it("默认 content slot 内容应为空", async () => {
+    it("默认 content slot 内容应为空", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const contentSlot = pageHeader.shadowRoot.querySelector(
         'slot[name="content"]'
@@ -801,12 +709,10 @@ describe("EaPageHeader Component", () => {
       expect(contentSlot.textContent).toBe("");
     });
 
-    it("应该通过 HTML attribute 设置 content", async () => {
+    it("应该通过 HTML attribute 设置 content", () => {
       const pageHeader = document.createElement("ea-page-header");
       pageHeader.setAttribute("content", "Page Title");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       expect(pageHeader.content).toBe("Page Title");
     });
@@ -1034,14 +940,12 @@ describe("EaPageHeader Component", () => {
   // ==================== 属性组合测试 ====================
 
   describe("Attribute Combinations", () => {
-    it("应该同时支持 icon、heading、content 属性", async () => {
+    it("应该同时支持 icon、heading、content 属性", () => {
       const pageHeader = document.createElement("ea-page-header");
       pageHeader.setAttribute("icon", "arrow-left");
       pageHeader.setAttribute("heading", "返回");
       pageHeader.setAttribute("content", "页面标题");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       expect(pageHeader.icon).toBe("arrow-left");
       expect(pageHeader.heading).toBe("返回");
@@ -1111,35 +1015,29 @@ describe("EaPageHeader Component", () => {
   // ==================== 属性与插槽交互测试 ====================
 
   describe("Attribute and Slot Interaction", () => {
-    it("使用自定义 title slot 时仍应保留 heading 属性值", async () => {
+    it("使用自定义 title slot 时仍应保留 heading 属性值", () => {
       const pageHeader = document.createElement("ea-page-header");
       pageHeader.setAttribute("heading", "Heading Title");
       pageHeader.innerHTML = `<span slot="title">Custom Title</span>`;
       container.appendChild(pageHeader);
 
-      await waitForRender();
-
       expect(pageHeader.heading).toBe("Heading Title");
     });
 
-    it("使用自定义 content slot 时仍应保留 content 属性值", async () => {
+    it("使用自定义 content slot 时仍应保留 content 属性值", () => {
       const pageHeader = document.createElement("ea-page-header");
       pageHeader.setAttribute("content", "Attribute Content");
       pageHeader.innerHTML = `<span slot="content">Custom Content</span>`;
       container.appendChild(pageHeader);
 
-      await waitForRender();
-
       expect(pageHeader.content).toBe("Attribute Content");
     });
 
-    it("使用自定义 icon slot 时仍应保留 icon 属性值", async () => {
+    it("使用自定义 icon slot 时仍应保留 icon 属性值", () => {
       const pageHeader = document.createElement("ea-page-header");
       pageHeader.setAttribute("icon", "arrow-left");
       pageHeader.innerHTML = `<span slot="icon">Custom Icon</span>`;
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       expect(pageHeader.icon).toBe("arrow-left");
     });
@@ -1148,22 +1046,18 @@ describe("EaPageHeader Component", () => {
   // ==================== 生命周期测试 ====================
 
   describe("Lifecycle", () => {
-    it("组件连接后应该正确初始化", async () => {
+    it("组件连接后应该正确初始化", () => {
       const pageHeader = document.createElement("ea-page-header");
       pageHeader.setAttribute("heading", "Custom Title");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       expect(pageHeader.shadowRoot).toBeDefined();
       expect(pageHeader.heading).toBe("Custom Title");
     });
 
-    it("组件断开连接后应该正常移除", async () => {
+    it("组件断开连接后应该正常移除", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       pageHeader.remove();
 
@@ -1251,11 +1145,9 @@ describe("EaPageHeader Component", () => {
   // ==================== 边界情况测试 ====================
 
   describe("Edge Cases", () => {
-    it("应该处理空组件", async () => {
+    it("应该处理空组件", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       expect(pageHeader.shadowRoot).toBeDefined();
       expect(pageHeader.icon).toBe("angle-left");
@@ -1309,13 +1201,11 @@ describe("EaPageHeader Component", () => {
       expect(headingEl.querySelector("script")).toBeNull();
     });
 
-    it("应该处理 Unicode 字符", async () => {
+    it("应该处理 Unicode 字符", () => {
       const pageHeader = document.createElement("ea-page-header");
       pageHeader.setAttribute("heading", "返回🏠");
       pageHeader.setAttribute("content", "ページタイトル🎉");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       expect(pageHeader.heading).toBe("返回🏠");
       expect(pageHeader.content).toBe("ページタイトル🎉");
@@ -1336,7 +1226,7 @@ describe("EaPageHeader Component", () => {
       expect(pageHeader.heading).toBe("标题3");
     });
 
-    it("创建多个组件实例应该互不干扰", async () => {
+    it("创建多个组件实例应该互不干扰", () => {
       const pageHeader1 = document.createElement("ea-page-header");
       pageHeader1.setAttribute("heading", "标题一");
       pageHeader1.setAttribute("content", "内容一");
@@ -1348,8 +1238,6 @@ describe("EaPageHeader Component", () => {
       container.appendChild(pageHeader1);
       container.appendChild(pageHeader2);
 
-      await waitForRender();
-
       expect(pageHeader1.heading).toBe("标题一");
       expect(pageHeader1.content).toBe("内容一");
       expect(pageHeader2.heading).toBe("标题二");
@@ -1360,11 +1248,9 @@ describe("EaPageHeader Component", () => {
   // ==================== BEM 类名测试 ====================
 
   describe("BEM Class Names", () => {
-    it("容器应该有 ea-page-header 类名", async () => {
+    it("容器应该有 ea-page-header 类名", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const containerEl =
         pageHeader.shadowRoot.querySelector(".ea-page-header");
@@ -1372,11 +1258,9 @@ describe("EaPageHeader Component", () => {
       expect(containerEl.classList.contains("ea-page-header")).toBe(true);
     });
 
-    it("breadcrumb 应该有 ea-page-header__breadcrumb 类名", async () => {
+    it("breadcrumb 应该有 ea-page-header__breadcrumb 类名", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const el = pageHeader.shadowRoot.querySelector(
         ".ea-page-header__breadcrumb"
@@ -1385,11 +1269,9 @@ describe("EaPageHeader Component", () => {
       expect(el.classList.contains("ea-page-header__breadcrumb")).toBe(true);
     });
 
-    it("wrapper 应该有 ea-page-header__wrapper 类名", async () => {
+    it("wrapper 应该有 ea-page-header__wrapper 类名", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const el = pageHeader.shadowRoot.querySelector(
         ".ea-page-header__wrapper"
@@ -1398,33 +1280,27 @@ describe("EaPageHeader Component", () => {
       expect(el.classList.contains("ea-page-header__wrapper")).toBe(true);
     });
 
-    it("back 应该有 ea-page-header__back 类名", async () => {
+    it("back 应该有 ea-page-header__back 类名", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const el = pageHeader.shadowRoot.querySelector(".ea-page-header__back");
       expect(el).toBeDefined();
       expect(el.classList.contains("ea-page-header__back")).toBe(true);
     });
 
-    it("icon 应该有 ea-page-header__icon 类名", async () => {
+    it("icon 应该有 ea-page-header__icon 类名", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const el = pageHeader.shadowRoot.querySelector(".ea-page-header__icon");
       expect(el).toBeDefined();
       expect(el.classList.contains("ea-page-header__icon")).toBe(true);
     });
 
-    it("heading 应该有 ea-page-header__heading 类名（非 ea-page-header__title）", async () => {
+    it("heading 应该有 ea-page-header__heading 类名（非 ea-page-header__title）", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const headingEl = pageHeader.shadowRoot.querySelector(
         ".ea-page-header__heading"
@@ -1436,11 +1312,9 @@ describe("EaPageHeader Component", () => {
       expect(titleEl).toBeNull();
     });
 
-    it("divider 应该有 ea-page-header__divider 类名", async () => {
+    it("divider 应该有 ea-page-header__divider 类名", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const el = pageHeader.shadowRoot.querySelector(
         ".ea-page-header__divider"
@@ -1449,11 +1323,9 @@ describe("EaPageHeader Component", () => {
       expect(el.classList.contains("ea-page-header__divider")).toBe(true);
     });
 
-    it("content 应该有 ea-page-header__content 类名", async () => {
+    it("content 应该有 ea-page-header__content 类名", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const el = pageHeader.shadowRoot.querySelector(
         ".ea-page-header__content"
@@ -1462,11 +1334,9 @@ describe("EaPageHeader Component", () => {
       expect(el.classList.contains("ea-page-header__content")).toBe(true);
     });
 
-    it("extra 应该有 ea-page-header__extra 类名", async () => {
+    it("extra 应该有 ea-page-header__extra 类名", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const el = pageHeader.shadowRoot.querySelector(".ea-page-header__extra");
       expect(el).toBeDefined();
@@ -1477,11 +1347,9 @@ describe("EaPageHeader Component", () => {
   // ==================== 分隔符测试 ====================
 
   describe("Divider", () => {
-    it("divider 应该是 span 元素", async () => {
+    it("divider 应该是 span 元素", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const divider = pageHeader.shadowRoot.querySelector(
         ".ea-page-header__divider"
@@ -1489,11 +1357,9 @@ describe("EaPageHeader Component", () => {
       expect(divider.tagName.toLowerCase()).toBe("span");
     });
 
-    it("divider 内容应该是 |", async () => {
+    it("divider 内容应该是 |", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
-
-      await waitForRender();
 
       const divider = pageHeader.shadowRoot.querySelector(
         ".ea-page-header__divider"
@@ -1504,10 +1370,9 @@ describe("EaPageHeader Component", () => {
 
   describe("Accessibility", () => {
     describe("ARIA Attributes", () => {
-      it("作为展示组件不需要特定 ARIA 属性", async () => {
+      it("作为展示组件不需要特定 ARIA 属性", () => {
         const el = document.createElement("ea-page-header");
         container.appendChild(el);
-        await waitForRender();
         expect(el.getAttribute("role")).toBeNull();
       });
     });

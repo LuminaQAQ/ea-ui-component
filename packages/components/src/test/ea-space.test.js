@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { waitForRender } from "./utils/waitForRender.js";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
@@ -6,7 +6,7 @@ if (!window.CSS) {
   window.CSS = {};
 }
 if (!window.CSS.supports) {
-  window.CSS.supports = vi.fn((prop, value) => {
+  window.CSS.supports = (prop, value) => {
     const validAlignItems = [
       "center",
       "flex-start",
@@ -30,7 +30,7 @@ if (!window.CSS.supports) {
       return true;
     }
     return false;
-  });
+  };
 }
 
 import "../components/ea-space/index.ts";
@@ -49,7 +49,7 @@ describe("EaSpace", () => {
   });
 
   describe("基本功能", () => {
-    it("应该正确渲染组件", async () => {
+    it("应该正确渲染组件", () => {
       const space = document.createElement("ea-space");
       space.innerHTML = `
         <div>Item 1</div>
@@ -57,30 +57,24 @@ describe("EaSpace", () => {
       `;
       container.appendChild(space);
 
-      await waitForRender();
-
       expect(space.shadowRoot).toBeTruthy();
       expect(space.shadowRoot.querySelector(".ea-space")).toBeTruthy();
     });
 
-    it("应该支持 CSS Parts", async () => {
+    it("应该支持 CSS Parts", () => {
       const space = document.createElement("ea-space");
       container.appendChild(space);
-
-      await waitForRender();
 
       expect(space.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
 
-    it("应该渲染默认插槽内容", async () => {
+    it("应该渲染默认插槽内容", () => {
       const space = document.createElement("ea-space");
       space.innerHTML = `
         <div class="item-1">Item 1</div>
         <div class="item-2">Item 2</div>
       `;
       container.appendChild(space);
-
-      await waitForRender();
 
       const slot = space.shadowRoot.querySelector("slot");
       expect(slot).toBeTruthy();
@@ -90,21 +84,17 @@ describe("EaSpace", () => {
   });
 
   describe("Direction 属性", () => {
-    it("默认 direction 应该是 horizontal", async () => {
+    it("默认 direction 应该是 horizontal", () => {
       const space = document.createElement("ea-space");
       container.appendChild(space);
-
-      await waitForRender();
 
       expect(space.direction).toBe("horizontal");
     });
 
-    it("应该支持 direction 属性设置为 vertical", async () => {
+    it("应该支持 direction 属性设置为 vertical", () => {
       const space = document.createElement("ea-space");
       space.setAttribute("direction", "vertical");
       container.appendChild(space);
-
-      await waitForRender();
 
       expect(space.direction).toBe("vertical");
     });
@@ -131,43 +121,35 @@ describe("EaSpace", () => {
       expect(containerEl.classList.contains("ea-space--vertical")).toBe(false);
     });
 
-    it("无效 direction 值应该被 Enum 拦截", async () => {
+    it("无效 direction 值应该被 Enum 拦截", () => {
       const space = document.createElement("ea-space");
       space.setAttribute("direction", "diagonal");
       container.appendChild(space);
-
-      await waitForRender();
 
       expect(space.direction).toBe("horizontal");
     });
   });
 
   describe("Size 属性", () => {
-    it("默认 size 应该是 default", async () => {
+    it("默认 size 应该是 default", () => {
       const space = document.createElement("ea-space");
       container.appendChild(space);
-
-      await waitForRender();
 
       expect(space.size).toBe("default");
     });
 
-    it("应该支持 size 属性设置为 small", async () => {
+    it("应该支持 size 属性设置为 small", () => {
       const space = document.createElement("ea-space");
       space.setAttribute("size", "small");
       container.appendChild(space);
 
-      await waitForRender();
-
       expect(space.size).toBe("small");
     });
 
-    it("应该支持 size 属性设置为 large", async () => {
+    it("应该支持 size 属性设置为 large", () => {
       const space = document.createElement("ea-space");
       space.setAttribute("size", "large");
       container.appendChild(space);
-
-      await waitForRender();
 
       expect(space.size).toBe("large");
     });
@@ -218,22 +200,18 @@ describe("EaSpace", () => {
       expect(containerEl.classList.contains("ea-space--large")).toBe(false);
     });
 
-    it("应该支持自定义 size 值（像素）", async () => {
+    it("应该支持自定义 size 值（像素）", () => {
       const space = document.createElement("ea-space");
       space.setAttribute("size", "30px");
       container.appendChild(space);
 
-      await waitForRender();
-
       expect(space.size).toBe("30px");
     });
 
-    it("应该支持自定义 size 值（rem）", async () => {
+    it("应该支持自定义 size 值（rem）", () => {
       const space = document.createElement("ea-space");
       space.setAttribute("size", "2rem");
       container.appendChild(space);
-
-      await waitForRender();
 
       expect(space.size).toBe("2rem");
     });
@@ -250,21 +228,17 @@ describe("EaSpace", () => {
   });
 
   describe("Wrap 属性", () => {
-    it("默认 wrap 应该是 false", async () => {
+    it("默认 wrap 应该是 false", () => {
       const space = document.createElement("ea-space");
       container.appendChild(space);
-
-      await waitForRender();
 
       expect(space.wrap).toBe(false);
     });
 
-    it("应该支持 wrap 属性设置为 true", async () => {
+    it("应该支持 wrap 属性设置为 true", () => {
       const space = document.createElement("ea-space");
       space.setAttribute("wrap", "");
       container.appendChild(space);
-
-      await waitForRender();
 
       expect(space.wrap).toBe(true);
     });
@@ -292,71 +266,57 @@ describe("EaSpace", () => {
   });
 
   describe("Alignment 属性", () => {
-    it("默认 alignment 应该是空字符串", async () => {
+    it("默认 alignment 应该是空字符串", () => {
       const space = document.createElement("ea-space");
       container.appendChild(space);
-
-      await waitForRender();
 
       expect(space.alignment).toBe("");
     });
 
-    it("应该支持 alignment 属性设置为 center", async () => {
+    it("应该支持 alignment 属性设置为 center", () => {
       const space = document.createElement("ea-space");
       space.setAttribute("alignment", "center");
       container.appendChild(space);
 
-      await waitForRender();
-
       expect(space.alignment).toBe("center");
     });
 
-    it("应该支持 alignment 属性设置为 flex-start", async () => {
+    it("应该支持 alignment 属性设置为 flex-start", () => {
       const space = document.createElement("ea-space");
       space.setAttribute("alignment", "flex-start");
       container.appendChild(space);
 
-      await waitForRender();
-
       expect(space.alignment).toBe("flex-start");
     });
 
-    it("应该支持 alignment 属性设置为 flex-end", async () => {
+    it("应该支持 alignment 属性设置为 flex-end", () => {
       const space = document.createElement("ea-space");
       space.setAttribute("alignment", "flex-end");
       container.appendChild(space);
 
-      await waitForRender();
-
       expect(space.alignment).toBe("flex-end");
     });
 
-    it("应该支持 alignment 属性设置为 baseline", async () => {
+    it("应该支持 alignment 属性设置为 baseline", () => {
       const space = document.createElement("ea-space");
       space.setAttribute("alignment", "baseline");
       container.appendChild(space);
 
-      await waitForRender();
-
       expect(space.alignment).toBe("baseline");
     });
 
-    it("应该支持 alignment 属性设置为 stretch", async () => {
+    it("应该支持 alignment 属性设置为 stretch", () => {
       const space = document.createElement("ea-space");
       space.setAttribute("alignment", "stretch");
       container.appendChild(space);
 
-      await waitForRender();
-
       expect(space.alignment).toBe("stretch");
     });
 
-    it("无效 alignment 值会被 Enum 拦截，返回默认值", async () => {
+    it("无效 alignment 值会被 Enum 拦截，返回默认值", () => {
       const space = document.createElement("ea-space");
       space.setAttribute("alignment", "invalid-value");
       container.appendChild(space);
-
-      await waitForRender();
 
       expect(space.alignment).toBe("");
     });
@@ -368,30 +328,28 @@ describe("EaSpace", () => {
 
       await waitForRender();
 
-      expect(space.style.getPropertyValue("--ea-space-alignment")).toBe("flex-start");
+      expect(space.style.getPropertyValue("--ea-space-alignment")).toBe(
+        "flex-start"
+      );
     });
 
-    it("alignment 为空时使用 CSS 默认值 center", async () => {
+    it("alignment 为空时使用 CSS 默认值 center", () => {
       const space = document.createElement("ea-space");
       container.appendChild(space);
-
-      await waitForRender();
 
       expect(space.alignment).toBe("");
     });
   });
 
   describe("Spacer 属性", () => {
-    it("默认 spacer 应该是空字符串", async () => {
+    it("默认 spacer 应该是空字符串", () => {
       const space = document.createElement("ea-space");
       container.appendChild(space);
-
-      await waitForRender();
 
       expect(space.spacer).toBe("");
     });
 
-    it("应该支持 spacer 属性设置分隔符", async () => {
+    it("应该支持 spacer 属性设置分隔符", () => {
       const space = document.createElement("ea-space");
       space.innerHTML = `
         <div>Item 1</div>
@@ -400,8 +358,6 @@ describe("EaSpace", () => {
       `;
       space.setAttribute("spacer", "|");
       container.appendChild(space);
-
-      await waitForRender();
 
       expect(space.spacer).toBe("|");
     });
@@ -510,21 +466,17 @@ describe("EaSpace", () => {
   });
 
   describe("Fill-ratio 属性", () => {
-    it("默认 fillRatio 应该是 100", async () => {
+    it("默认 fillRatio 应该是 100", () => {
       const space = document.createElement("ea-space");
       container.appendChild(space);
-
-      await waitForRender();
 
       expect(space.fillRatio).toBe(100);
     });
 
-    it("应该支持 fillRatio 属性设置自定义比例", async () => {
+    it("应该支持 fillRatio 属性设置自定义比例", () => {
       const space = document.createElement("ea-space");
       space.setAttribute("fill-ratio", "49");
       container.appendChild(space);
-
-      await waitForRender();
 
       expect(space.fillRatio).toBe(49);
     });
@@ -587,11 +539,9 @@ describe("EaSpace", () => {
   });
 
   describe("边界条件", () => {
-    it("应该处理空内容", async () => {
+    it("应该处理空内容", () => {
       const space = document.createElement("ea-space");
       container.appendChild(space);
-
-      await waitForRender();
 
       expect(space.shadowRoot.querySelector(".ea-space")).toBeTruthy();
     });
@@ -606,7 +556,7 @@ describe("EaSpace", () => {
       expect(space.querySelector("div").textContent).toBe("Only Item");
     });
 
-    it("应该处理多个子元素", async () => {
+    it("应该处理多个子元素", () => {
       const space = document.createElement("ea-space");
       space.innerHTML = `
         <div>Item 1</div>
@@ -616,8 +566,6 @@ describe("EaSpace", () => {
         <div>Item 5</div>
       `;
       container.appendChild(space);
-
-      await waitForRender();
 
       expect(space.querySelectorAll("div").length).toBe(5);
     });
@@ -638,14 +586,12 @@ describe("EaSpace", () => {
   });
 
   describe("生命周期", () => {
-    it("组件连接后应该正确初始化", async () => {
+    it("组件连接后应该正确初始化", () => {
       const space = document.createElement("ea-space");
       space.setAttribute("direction", "vertical");
       space.setAttribute("size", "large");
       space.setAttribute("wrap", "");
       container.appendChild(space);
-
-      await waitForRender();
 
       expect(space.shadowRoot).toBeTruthy();
       expect(space.direction).toBe("vertical");
@@ -653,30 +599,24 @@ describe("EaSpace", () => {
       expect(space.wrap).toBe(true);
     });
 
-    it("组件断开连接后应该正常移除", async () => {
+    it("组件断开连接后应该正常移除", () => {
       const space = document.createElement("ea-space");
       space.innerHTML = `<div>Item</div>`;
       container.appendChild(space);
-
-      await waitForRender();
 
       space.remove();
 
       expect(space.isConnected).toBe(false);
     });
 
-    it("应该支持属性动态更新", async () => {
+    it("应该支持属性动态更新", () => {
       const space = document.createElement("ea-space");
       space.setAttribute("size", "small");
       container.appendChild(space);
 
-      await waitForRender();
-
       expect(space.size).toBe("small");
 
       space.setAttribute("size", "large");
-
-      await waitForRender();
 
       expect(space.size).toBe("large");
     });

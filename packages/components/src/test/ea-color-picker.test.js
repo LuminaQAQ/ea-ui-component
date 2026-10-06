@@ -3,6 +3,7 @@ import { waitForRender } from "./utils/waitForRender.js";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 import "../components/ea-color-picker/index.ts";
+import { Color } from "../components/ea-color-picker/utils/Color.ts";
 
 describe("EaColorPicker Component", () => {
   let container;
@@ -17,21 +18,17 @@ describe("EaColorPicker Component", () => {
   });
 
   describe("Basic Rendering", () => {
-    it("应该正确渲染 ea-color-picker 组件", async () => {
+    it("应该正确渲染 ea-color-picker 组件", () => {
       const picker = document.createElement("ea-color-picker");
       container.appendChild(picker);
-
-      await waitForRender();
 
       expect(picker).toBeDefined();
       expect(picker.shadowRoot).toBeDefined();
     });
 
-    it("应该包含所有 CSS Parts", async () => {
+    it("应该包含所有 CSS Parts", () => {
       const picker = document.createElement("ea-color-picker");
       container.appendChild(picker);
-
-      await waitForRender();
 
       const parts = [
         "form-label",
@@ -55,31 +52,25 @@ describe("EaColorPicker Component", () => {
       });
     });
 
-    it("应该包含 ea-popper 组件", async () => {
+    it("应该包含 ea-popper 组件", () => {
       const picker = document.createElement("ea-color-picker");
       container.appendChild(picker);
-
-      await waitForRender();
 
       const popper = picker.shadowRoot.querySelector("ea-popper");
       expect(popper).toBeTruthy();
     });
 
-    it("应该包含 ea-color-picker-panel 组件", async () => {
+    it("应该包含 ea-color-picker-panel 组件", () => {
       const picker = document.createElement("ea-color-picker");
       container.appendChild(picker);
-
-      await waitForRender();
 
       const panel = picker.shadowRoot.querySelector("ea-color-picker-panel");
       expect(panel).toBeTruthy();
     });
 
-    it("应该包含 clear 和 confirm 按钮", async () => {
+    it("应该包含 clear 和 confirm 按钮", () => {
       const picker = document.createElement("ea-color-picker");
       container.appendChild(picker);
-
-      await waitForRender();
 
       const clearBtn = picker.shadowRoot.querySelector(
         'ea-button[part="clear-btn"]'
@@ -93,21 +84,17 @@ describe("EaColorPicker Component", () => {
   });
 
   describe("Label Attribute", () => {
-    it("默认 label 应该是空字符串", async () => {
+    it("默认 label 应该是空字符串", () => {
       const picker = document.createElement("ea-color-picker");
       container.appendChild(picker);
-
-      await waitForRender();
 
       expect(picker.label).toBe("");
     });
 
-    it("应该正确设置 label 属性", async () => {
+    it("应该正确设置 label 属性", () => {
       const picker = document.createElement("ea-color-picker");
       picker.setAttribute("label", "颜色选择");
       container.appendChild(picker);
-
-      await waitForRender();
 
       expect(picker.label).toBe("颜色选择");
     });
@@ -144,21 +131,17 @@ describe("EaColorPicker Component", () => {
   });
 
   describe("Value Attribute", () => {
-    it("默认 value 应该是空字符串", async () => {
+    it("默认 value 应该是空字符串", () => {
       const picker = document.createElement("ea-color-picker");
       container.appendChild(picker);
-
-      await waitForRender();
 
       expect(picker.value).toBe("");
     });
 
-    it("应该正确设置 value 属性", async () => {
+    it("应该正确设置 value 属性", () => {
       const picker = document.createElement("ea-color-picker");
       picker.setAttribute("value", "#409eff");
       container.appendChild(picker);
-
-      await waitForRender();
 
       expect(picker.value).toBe("#409eff");
     });
@@ -171,8 +154,6 @@ describe("EaColorPicker Component", () => {
       await waitForRender();
 
       picker.setAttribute("value", "#67c23a");
-      await waitForRender();
-
       expect(picker.value).toBe("#67c23a");
     });
 
@@ -238,21 +219,17 @@ describe("EaColorPicker Component", () => {
   });
 
   describe("Disabled Attribute", () => {
-    it("默认 disabled 应该是 false", async () => {
+    it("默认 disabled 应该是 false", () => {
       const picker = document.createElement("ea-color-picker");
       container.appendChild(picker);
-
-      await waitForRender();
 
       expect(picker.disabled).toBe(false);
     });
 
-    it("应该正确设置 disabled 属性", async () => {
+    it("应该正确设置 disabled 属性", () => {
       const picker = document.createElement("ea-color-picker");
       picker.setAttribute("disabled", "");
       container.appendChild(picker);
-
-      await waitForRender();
 
       expect(picker.disabled).toBe(true);
     });
@@ -308,11 +285,9 @@ describe("EaColorPicker Component", () => {
       });
     });
 
-    it("默认 size 应该是空字符串", async () => {
+    it("默认 size 应该是空字符串", () => {
       const picker = document.createElement("ea-color-picker");
       container.appendChild(picker);
-
-      await waitForRender();
 
       expect(picker.size).toBe("");
     });
@@ -342,21 +317,17 @@ describe("EaColorPicker Component", () => {
   });
 
   describe("Clearable Attribute", () => {
-    it("默认 clearable 应该是 false", async () => {
+    it("默认 clearable 应该是 false", () => {
       const picker = document.createElement("ea-color-picker");
       container.appendChild(picker);
-
-      await waitForRender();
 
       expect(picker.clearable).toBe(false);
     });
 
-    it("应该正确设置 clearable 属性", async () => {
+    it("应该正确设置 clearable 属性", () => {
       const picker = document.createElement("ea-color-picker");
       picker.setAttribute("clearable", "");
       container.appendChild(picker);
-
-      await waitForRender();
 
       expect(picker.clearable).toBe(true);
     });
@@ -377,22 +348,18 @@ describe("EaColorPicker Component", () => {
     const formats = ["hex", "rgb", "hsl", "hsv", "rgba"];
 
     formats.forEach(format => {
-      it(`应该支持 color-format="${format}"`, async () => {
+      it(`应该支持 color-format="${format}"`, () => {
         const picker = document.createElement("ea-color-picker");
         picker.setAttribute("color-format", format);
         container.appendChild(picker);
-
-        await waitForRender();
 
         expect(picker.colorFormat).toBe(format);
       });
     });
 
-    it("默认 color-format 应该是 hex", async () => {
+    it("默认 color-format 应该是 hex", () => {
       const picker = document.createElement("ea-color-picker");
       container.appendChild(picker);
-
-      await waitForRender();
 
       expect(picker.colorFormat).toBe("hex");
     });
@@ -410,21 +377,17 @@ describe("EaColorPicker Component", () => {
   });
 
   describe("Show Alpha Attribute", () => {
-    it("默认 showAlpha 应该是 false", async () => {
+    it("默认 showAlpha 应该是 false", () => {
       const picker = document.createElement("ea-color-picker");
       container.appendChild(picker);
-
-      await waitForRender();
 
       expect(picker.showAlpha).toBe(false);
     });
 
-    it("应该正确设置 show-alpha 属性", async () => {
+    it("应该正确设置 show-alpha 属性", () => {
       const picker = document.createElement("ea-color-picker");
       picker.setAttribute("show-alpha", "");
       container.appendChild(picker);
-
-      await waitForRender();
 
       expect(picker.showAlpha).toBe(true);
     });
@@ -458,22 +421,18 @@ describe("EaColorPicker Component", () => {
     ];
 
     placements.forEach(placement => {
-      it(`应该支持 placement="${placement}"`, async () => {
+      it(`应该支持 placement="${placement}"`, () => {
         const picker = document.createElement("ea-color-picker");
         picker.setAttribute("placement", placement);
         container.appendChild(picker);
-
-        await waitForRender();
 
         expect(picker.placement).toBe(placement);
       });
     });
 
-    it("默认 placement 应该是 bottom", async () => {
+    it("默认 placement 应该是 bottom", () => {
       const picker = document.createElement("ea-color-picker");
       container.appendChild(picker);
-
-      await waitForRender();
 
       expect(picker.placement).toBe("bottom");
     });
@@ -491,81 +450,65 @@ describe("EaColorPicker Component", () => {
   });
 
   describe("Tabindex Attribute", () => {
-    it("默认 tabindex 应该是 0", async () => {
+    it("默认 tabindex 应该是 0", () => {
       const picker = document.createElement("ea-color-picker");
       container.appendChild(picker);
-
-      await waitForRender();
 
       expect(picker.tabindex).toBe(0);
     });
 
-    it("应该支持自定义 tabindex", async () => {
+    it("应该支持自定义 tabindex", () => {
       const picker = document.createElement("ea-color-picker");
       picker.setAttribute("tabindex", "3");
       container.appendChild(picker);
-
-      await waitForRender();
 
       expect(picker.tabindex).toBe(3);
     });
   });
 
   describe("Required & Form Validation", () => {
-    it("默认 required 应该是 false", async () => {
+    it("默认 required 应该是 false", () => {
       const picker = document.createElement("ea-color-picker");
       container.appendChild(picker);
-
-      await waitForRender();
 
       expect(picker.required).toBe(false);
     });
 
-    it("应该支持 required 属性", async () => {
+    it("应该支持 required 属性", () => {
       const picker = document.createElement("ea-color-picker");
       picker.setAttribute("required", "");
       container.appendChild(picker);
-
-      await waitForRender();
 
       expect(picker.required).toBe(true);
     });
 
-    it("应该有 checkValidity 方法", async () => {
+    it("应该有 checkValidity 方法", () => {
       const picker = document.createElement("ea-color-picker");
       container.appendChild(picker);
-
-      await waitForRender();
 
       expect(typeof picker.checkValidity).toBe("function");
     });
 
-    it("应该有 reportValidity 方法", async () => {
+    it("应该有 reportValidity 方法", () => {
       const picker = document.createElement("ea-color-picker");
       container.appendChild(picker);
-
-      await waitForRender();
 
       expect(typeof picker.reportValidity).toBe("function");
     });
 
-    it("required 且无 value 时 checkValidity 应该返回 false", async () => {
+    it("required 且无 value 时 checkValidity 应该返回 false", () => {
       const picker = document.createElement("ea-color-picker");
       picker.setAttribute("required", "");
       container.appendChild(picker);
-
-      await waitForRender();
 
       expect(picker.checkValidity()).toBe(false);
     });
 
-    it("required 且有 value 时 checkValidity 应该返回 true", async () => {
+    it("required 且有 value 时 checkValidity 应该返回 true", () => {
       const picker = document.createElement("ea-color-picker");
       picker.setAttribute("required", "");
       picker.setAttribute("value", "#409eff");
       container.appendChild(picker);
-
-      await waitForRender();
 
       expect(picker.checkValidity()).toBe(true);
     });
@@ -628,8 +571,6 @@ describe("EaColorPicker Component", () => {
         })
       );
 
-      await waitForRender();
-
       expect(picker.value).toBe("#67c23a");
     });
 
@@ -663,8 +604,6 @@ describe("EaColorPicker Component", () => {
       const clearBtn = picker.shadowRoot.querySelector('[part="clear-btn"]');
       clearBtn.click();
 
-      await waitForRender();
-
       expect(picker.value).toBe("");
     });
 
@@ -689,56 +628,44 @@ describe("EaColorPicker Component", () => {
   });
 
   describe("Public Methods", () => {
-    it("应该有 show 方法", async () => {
+    it("应该有 show 方法", () => {
       const picker = document.createElement("ea-color-picker");
       container.appendChild(picker);
-
-      await waitForRender();
 
       expect(typeof picker.show).toBe("function");
     });
 
-    it("应该有 hide 方法", async () => {
+    it("应该有 hide 方法", () => {
       const picker = document.createElement("ea-color-picker");
       container.appendChild(picker);
-
-      await waitForRender();
 
       expect(typeof picker.hide).toBe("function");
     });
 
-    it("应该有 focus 方法", async () => {
+    it("应该有 focus 方法", () => {
       const picker = document.createElement("ea-color-picker");
       container.appendChild(picker);
-
-      await waitForRender();
 
       expect(typeof picker.focus).toBe("function");
     });
 
-    it("应该有 blur 方法", async () => {
+    it("应该有 blur 方法", () => {
       const picker = document.createElement("ea-color-picker");
       container.appendChild(picker);
-
-      await waitForRender();
 
       expect(typeof picker.blur).toBe("function");
     });
 
-    it("应该有 checkValidity 方法", async () => {
+    it("应该有 checkValidity 方法", () => {
       const picker = document.createElement("ea-color-picker");
       container.appendChild(picker);
-
-      await waitForRender();
 
       expect(typeof picker.checkValidity).toBe("function");
     });
 
-    it("应该有 reportValidity 方法", async () => {
+    it("应该有 reportValidity 方法", () => {
       const picker = document.createElement("ea-color-picker");
       container.appendChild(picker);
-
-      await waitForRender();
 
       expect(typeof picker.reportValidity).toBe("function");
     });
@@ -810,11 +737,9 @@ describe("EaColorPickerPanel Component", () => {
   });
 
   describe("Basic Rendering", () => {
-    it("应该正确渲染 ea-color-picker-panel 组件", async () => {
+    it("应该正确渲染 ea-color-picker-panel 组件", () => {
       const panel = document.createElement("ea-color-picker-panel");
       container.appendChild(panel);
-
-      await waitForRender();
 
       expect(panel).toBeDefined();
       expect(panel.shadowRoot).toBeDefined();
@@ -848,11 +773,9 @@ describe("EaColorPickerPanel Component", () => {
       });
     });
 
-    it("应该包含 svpanel、hue-slider 和 alpha-slider", async () => {
+    it("应该包含 svpanel、hue-slider 和 alpha-slider", () => {
       const panel = document.createElement("ea-color-picker-panel");
       container.appendChild(panel);
-
-      await waitForRender();
 
       const svpanel = panel.shadowRoot.querySelector(
         ".ea-color-picker-panel__svpanel"
@@ -869,11 +792,9 @@ describe("EaColorPickerPanel Component", () => {
       expect(alphaSlider).toBeTruthy();
     });
 
-    it("应该包含 ea-input 颜色输入框", async () => {
+    it("应该包含 ea-input 颜色输入框", () => {
       const panel = document.createElement("ea-color-picker-panel");
       container.appendChild(panel);
-
-      await waitForRender();
 
       const colorInput = panel.shadowRoot.querySelector("ea-input");
       expect(colorInput).toBeTruthy();
@@ -881,21 +802,17 @@ describe("EaColorPickerPanel Component", () => {
   });
 
   describe("Value Attribute", () => {
-    it("默认 value 应该是空字符串", async () => {
+    it("默认 value 应该是空字符串", () => {
       const panel = document.createElement("ea-color-picker-panel");
       container.appendChild(panel);
-
-      await waitForRender();
 
       expect(panel.value).toBe("");
     });
 
-    it("应该正确设置 hex 格式的 value", async () => {
+    it("应该正确设置 hex 格式的 value", () => {
       const panel = document.createElement("ea-color-picker-panel");
       panel.setAttribute("value", "#409eff");
       container.appendChild(panel);
-
-      await waitForRender();
 
       expect(panel.value).toBe("#409eff");
     });
@@ -911,23 +828,19 @@ describe("EaColorPickerPanel Component", () => {
       expect(panel.value).toMatch(/^rgb\(/);
     });
 
-    it("应该支持 rgba 格式的值", async () => {
+    it("应该支持 rgba 格式的值", () => {
       const panel = document.createElement("ea-color-picker-panel");
       panel.setAttribute("value", "rgba(64, 158, 255, 0.5)");
       panel.setAttribute("show-alpha", "");
       container.appendChild(panel);
 
-      await waitForRender();
-
       expect(panel.value).toBe("rgba(64, 158, 255, 0.5)");
     });
 
-    it("应该支持 hsl 格式的值", async () => {
+    it("应该支持 hsl 格式的值", () => {
       const panel = document.createElement("ea-color-picker-panel");
       panel.setAttribute("value", "hsl(217, 100%, 62.7%)");
       container.appendChild(panel);
-
-      await waitForRender();
 
       expect(panel.value).toBeTruthy();
     });
@@ -940,8 +853,6 @@ describe("EaColorPickerPanel Component", () => {
       await waitForRender();
 
       panel.setAttribute("value", "#67c23a");
-      await waitForRender();
-
       expect(panel.value).toBe("#67c23a");
     });
   });
@@ -950,22 +861,18 @@ describe("EaColorPickerPanel Component", () => {
     const formats = ["hex", "rgb", "hsl", "hsv", "rgba"];
 
     formats.forEach(format => {
-      it(`应该支持 color-format="${format}"`, async () => {
+      it(`应该支持 color-format="${format}"`, () => {
         const panel = document.createElement("ea-color-picker-panel");
         panel.setAttribute("color-format", format);
         container.appendChild(panel);
-
-        await waitForRender();
 
         expect(panel.colorFormat).toBe(format);
       });
     });
 
-    it("默认 color-format 应该是 hex", async () => {
+    it("默认 color-format 应该是 hex", () => {
       const panel = document.createElement("ea-color-picker-panel");
       container.appendChild(panel);
-
-      await waitForRender();
 
       expect(panel.colorFormat).toBe("hex");
     });
@@ -1009,21 +916,17 @@ describe("EaColorPickerPanel Component", () => {
   });
 
   describe("Show Alpha & Effective Format", () => {
-    it("默认 showAlpha 应该是 false", async () => {
+    it("默认 showAlpha 应该是 false", () => {
       const panel = document.createElement("ea-color-picker-panel");
       container.appendChild(panel);
-
-      await waitForRender();
 
       expect(panel.showAlpha).toBe(false);
     });
 
-    it("应该正确设置 show-alpha 属性", async () => {
+    it("应该正确设置 show-alpha 属性", () => {
       const panel = document.createElement("ea-color-picker-panel");
       panel.setAttribute("show-alpha", "");
       container.appendChild(panel);
-
-      await waitForRender();
 
       expect(panel.showAlpha).toBe(true);
     });
@@ -1063,12 +966,10 @@ describe("EaColorPickerPanel Component", () => {
       expect(panel.value).toMatch(/^hsl/);
     });
 
-    it("showAlpha=false 时 value 应该保持原格式不带 alpha", async () => {
+    it("showAlpha=false 时 value 应该保持原格式不带 alpha", () => {
       const panel = document.createElement("ea-color-picker-panel");
       panel.setAttribute("value", "#409eff");
       container.appendChild(panel);
-
-      await waitForRender();
 
       expect(panel.value).toBe("#409eff");
       expect(panel.value).not.toMatch(/^rgba/);
@@ -1085,17 +986,14 @@ describe("EaColorPickerPanel Component", () => {
 
       panel.setAttribute("show-alpha", "");
       await waitForRender();
-
       expect(panel.value).toMatch(/^rgb/);
     });
 
-    it("传入 rgba 值时透明度应该正确解析", async () => {
+    it("传入 rgba 值时透明度应该正确解析", () => {
       const panel = document.createElement("ea-color-picker-panel");
       panel.setAttribute("value", "rgba(64, 158, 255, 0.5)");
       panel.setAttribute("show-alpha", "");
       container.appendChild(panel);
-
-      await waitForRender();
 
       expect(panel.value).toBe("rgba(64, 158, 255, 0.5)");
     });
@@ -1113,21 +1011,17 @@ describe("EaColorPickerPanel Component", () => {
   });
 
   describe("Disabled Attribute", () => {
-    it("默认 disabled 应该是 false", async () => {
+    it("默认 disabled 应该是 false", () => {
       const panel = document.createElement("ea-color-picker-panel");
       container.appendChild(panel);
-
-      await waitForRender();
 
       expect(panel.disabled).toBe(false);
     });
 
-    it("应该正确设置 disabled 属性", async () => {
+    it("应该正确设置 disabled 属性", () => {
       const panel = document.createElement("ea-color-picker-panel");
       panel.setAttribute("disabled", "");
       container.appendChild(panel);
-
-      await waitForRender();
 
       expect(panel.disabled).toBe(true);
     });
@@ -1145,21 +1039,17 @@ describe("EaColorPickerPanel Component", () => {
   });
 
   describe("Border Attribute", () => {
-    it("默认 border 应该是 false", async () => {
+    it("默认 border 应该是 false", () => {
       const panel = document.createElement("ea-color-picker-panel");
       container.appendChild(panel);
-
-      await waitForRender();
 
       expect(panel.border).toBe(false);
     });
 
-    it("应该正确设置 border 属性", async () => {
+    it("应该正确设置 border 属性", () => {
       const panel = document.createElement("ea-color-picker-panel");
       panel.setAttribute("border", "");
       container.appendChild(panel);
-
-      await waitForRender();
 
       expect(panel.border).toBe(true);
     });
@@ -1177,24 +1067,18 @@ describe("EaColorPickerPanel Component", () => {
   });
 
   describe("Clearable Attribute", () => {
-    it("默认 clearable 应该是 true", async () => {
+    it("默认 clearable 应该是 true", () => {
       const panel = document.createElement("ea-color-picker-panel");
       container.appendChild(panel);
-
-      await waitForRender();
 
       expect(panel.clearable).toBe(true);
     });
 
-    it("设置 clearable=false 应该正确生效", async () => {
+    it("设置 clearable=false 应该正确生效", () => {
       const panel = document.createElement("ea-color-picker-panel");
       container.appendChild(panel);
 
-      await waitForRender();
-
       panel.clearable = false;
-
-      await waitForRender();
 
       expect(panel.clearable).toBe(false);
     });
@@ -1212,8 +1096,6 @@ describe("EaColorPickerPanel Component", () => {
     it("clearable=false 时 container 不应该有 is-clearable class", async () => {
       const panel = document.createElement("ea-color-picker-panel");
       container.appendChild(panel);
-
-      await waitForRender();
 
       panel.clearable = false;
 
@@ -1348,11 +1230,9 @@ describe("EaColorPickerPanel Component", () => {
   });
 
   describe("resetCursorPosition Method", () => {
-    it("应该有 resetCursorPosition 方法", async () => {
+    it("应该有 resetCursorPosition 方法", () => {
       const panel = document.createElement("ea-color-picker-panel");
       container.appendChild(panel);
-
-      await waitForRender();
 
       expect(typeof panel.resetCursorPosition).toBe("function");
     });
@@ -1377,22 +1257,18 @@ describe("EaColorPickerPanel Component", () => {
   });
 
   describe("Color Input Interaction", () => {
-    it("clearable=true 时应该显示 ea-input", async () => {
+    it("clearable=true 时应该显示 ea-input", () => {
       const panel = document.createElement("ea-color-picker-panel");
       container.appendChild(panel);
-
-      await waitForRender();
 
       const colorInput = panel.shadowRoot.querySelector("ea-input");
       expect(colorInput).toBeTruthy();
     });
 
-    it("clearable=false 时应该显示 text-display 元素", async () => {
+    it("clearable=false 时应该显示 text-display 元素", () => {
       const panel = document.createElement("ea-color-picker-panel");
       panel.setAttribute("clearable", "false");
       container.appendChild(panel);
-
-      await waitForRender();
 
       const textDisplay = panel.shadowRoot.querySelector(
         ".ea-color-picker-panel__text-display"
@@ -1433,7 +1309,12 @@ describe("EaColorPickerPanel Component", () => {
       el.setAttribute("label", "Color");
       container.appendChild(el);
       await waitForRender();
-      const results = await runAxe(el, { rules: { "aria-command-name": { enabled: false }, label: { enabled: false } } });
+      const results = await runAxe(el, {
+        rules: {
+          "aria-command-name": { enabled: false },
+          label: { enabled: false },
+        },
+      });
       assertNoA11yViolations(results);
     });
 
@@ -1443,7 +1324,12 @@ describe("EaColorPickerPanel Component", () => {
       el.setAttribute("disabled", "");
       container.appendChild(el);
       await waitForRender();
-      const results = await runAxe(el, { rules: { "aria-command-name": { enabled: false }, label: { enabled: false } } });
+      const results = await runAxe(el, {
+        rules: {
+          "aria-command-name": { enabled: false },
+          label: { enabled: false },
+        },
+      });
       assertNoA11yViolations(results);
     });
 
@@ -1485,7 +1371,9 @@ describe("EaColorPickerPanel Component", () => {
         container.appendChild(panel);
         await waitForRender();
         const svpanel = panel.shadowRoot.querySelector('[part="svpanel"]');
-        expect(svpanel.getAttribute("aria-label")).toBe("Saturation and brightness");
+        expect(svpanel.getAttribute("aria-label")).toBe(
+          "Saturation and brightness"
+        );
       });
 
       it("svpanel 应该有 aria-valuemin='0' 和 aria-valuemax='100'", async () => {
@@ -1526,7 +1414,9 @@ describe("EaColorPickerPanel Component", () => {
         const panel = document.createElement("ea-color-picker-panel");
         container.appendChild(panel);
         await waitForRender();
-        const alphaSlider = panel.shadowRoot.querySelector('[part="alpha-slider"]');
+        const alphaSlider = panel.shadowRoot.querySelector(
+          '[part="alpha-slider"]'
+        );
         expect(alphaSlider.getAttribute("role")).toBe("slider");
       });
 
@@ -1534,7 +1424,9 @@ describe("EaColorPickerPanel Component", () => {
         const panel = document.createElement("ea-color-picker-panel");
         container.appendChild(panel);
         await waitForRender();
-        const alphaSlider = panel.shadowRoot.querySelector('[part="alpha-slider"]');
+        const alphaSlider = panel.shadowRoot.querySelector(
+          '[part="alpha-slider"]'
+        );
         expect(alphaSlider.getAttribute("aria-label")).toBe("Opacity");
       });
 
@@ -1542,10 +1434,417 @@ describe("EaColorPickerPanel Component", () => {
         const panel = document.createElement("ea-color-picker-panel");
         container.appendChild(panel);
         await waitForRender();
-        const alphaSlider = panel.shadowRoot.querySelector('[part="alpha-slider"]');
+        const alphaSlider = panel.shadowRoot.querySelector(
+          '[part="alpha-slider"]'
+        );
         expect(alphaSlider.getAttribute("aria-valuemin")).toBe("0");
         expect(alphaSlider.getAttribute("aria-valuemax")).toBe("100");
       });
+    });
+  });
+});
+
+describe("Color Utils", () => {
+  const HSV_RGB_CASES = [
+    [0, { r: 255, g: 0, b: 0 }],
+    [60, { r: 255, g: 255, b: 0 }],
+    [120, { r: 0, g: 255, b: 0 }],
+    [180, { r: 0, g: 255, b: 255 }],
+    [240, { r: 0, g: 0, b: 255 }],
+    [300, { r: 255, g: 0, b: 255 }],
+  ];
+
+  const HSL_RGB_CASES = [
+    ["hsl(0, 100%, 50%)", { r: 255, g: 0, b: 0 }],
+    ["hsl(60, 100%, 50%)", { r: 255, g: 255, b: 0 }],
+    ["hsl(120, 100%, 50%)", { r: 0, g: 255, b: 0 }],
+    ["hsl(240, 100%, 50%)", { r: 0, g: 0, b: 255 }],
+    ["hsl(300, 100%, 50%)", { r: 255, g: 0, b: 255 }],
+    ["hsl(0, 0%, 50%)", { r: 128, g: 128, b: 128 }],
+  ];
+
+  describe("兜底值", () => {
+    it("无参数返回默认黑色", () => {
+      expect(new Color().getValue()).toEqual({ r: 0, g: 0, b: 0, a: 1 });
+    });
+
+    it("空字符串返回默认黑色", () => {
+      expect(new Color("").getValue()).toEqual({ r: 0, g: 0, b: 0, a: 1 });
+    });
+
+    it("无法识别的字符串返回默认黑色", () => {
+      expect(new Color("not-a-color").getValue()).toEqual({
+        r: 0,
+        g: 0,
+        b: 0,
+        a: 1,
+      });
+    });
+
+    it("非字符串非对象输入返回默认黑色", () => {
+      expect(new Color(5).getValue()).toEqual({ r: 0, g: 0, b: 0, a: 1 });
+    });
+
+    it("空对象返回默认黑色", () => {
+      expect(new Color({}).getValue()).toEqual({ r: 0, g: 0, b: 0, a: 1 });
+    });
+  });
+
+  describe("十六进制解析", () => {
+    it("三位十六进制展开为六位", () => {
+      expect(new Color("#abc").getValue()).toEqual({
+        r: 170,
+        g: 187,
+        b: 204,
+        a: 1,
+      });
+    });
+
+    it("六位十六进制", () => {
+      expect(new Color("#aabbcc").getValue()).toEqual({
+        r: 170,
+        g: 187,
+        b: 204,
+        a: 1,
+      });
+    });
+
+    it("八位十六进制包含透明度", () => {
+      const value = new Color("#aabbcc80").getValue();
+      expect(value.r).toBe(170);
+      expect(value.g).toBe(187);
+      expect(value.b).toBe(204);
+      expect(value.a).toBeCloseTo(128 / 255, 6);
+    });
+
+    it("长度非法的十六进制回落到默认黑色", () => {
+      expect(new Color("#12").getValue()).toEqual({ r: 0, g: 0, b: 0, a: 1 });
+    });
+
+    it("大小写与首尾空白应被忽略", () => {
+      expect(new Color("  #ABC  ").getValue()).toEqual({
+        r: 170,
+        g: 187,
+        b: 204,
+        a: 1,
+      });
+    });
+
+    it("静态解析十六进制", () => {
+      expect(Color.parseStringStrict("#abc")).toEqual({
+        r: 170,
+        g: 187,
+        b: 204,
+        a: 1,
+      });
+      const hexa = Color.parseStringStrict("#aabbcc80");
+      expect(hexa.r).toBe(170);
+      expect(hexa.a).toBeCloseTo(128 / 255, 6);
+      expect(Color.parseStringStrict("#12")).toBeNull();
+    });
+  });
+
+  describe("rgb 解析", () => {
+    it("rgb 字符串", () => {
+      expect(new Color("rgb(255, 0, 0)").getValue()).toEqual({
+        r: 255,
+        g: 0,
+        b: 0,
+        a: 1,
+      });
+    });
+
+    it("rgba 字符串", () => {
+      expect(new Color("rgba(255, 0, 0, 0.5)").getValue()).toEqual({
+        r: 255,
+        g: 0,
+        b: 0,
+        a: 0.5,
+      });
+    });
+
+    it("通道越界回落到默认黑色", () => {
+      expect(new Color("rgb(256, 0, 0)").getValue()).toEqual({
+        r: 0,
+        g: 0,
+        b: 0,
+        a: 1,
+      });
+    });
+
+    it("透明度越界回落到默认黑色", () => {
+      expect(new Color("rgba(1, 2, 3, 2)").getValue()).toEqual({
+        r: 0,
+        g: 0,
+        b: 0,
+        a: 1,
+      });
+    });
+
+    it("格式不匹配回落到默认黑色", () => {
+      expect(new Color("rgb(1, 2)").getValue()).toEqual({
+        r: 0,
+        g: 0,
+        b: 0,
+        a: 1,
+      });
+    });
+
+    it("静态解析 rgb 并校验边界", () => {
+      expect(Color.parseStringStrict("rgb(1, 2, 3)")).toEqual({
+        r: 1,
+        g: 2,
+        b: 3,
+        a: 1,
+      });
+      expect(Color.parseStringStrict("rgba(1, 2, 3, 0.25)")).toEqual({
+        r: 1,
+        g: 2,
+        b: 3,
+        a: 0.25,
+      });
+      expect(Color.parseStringStrict("rgb(300, 0, 0)")).toBeNull();
+      expect(Color.parseStringStrict("rgba(1, 2, 3, 4)")).toBeNull();
+      expect(Color.parseStringStrict("rgb(1, 2)")).toBeNull();
+    });
+  });
+
+  describe("hsl 解析", () => {
+    it.each(HSL_RGB_CASES)("实例解析 %s", (input, expected) => {
+      expect(new Color(input).getValue()).toEqual({ ...expected, a: 1 });
+    });
+
+    it.each(HSL_RGB_CASES)("静态解析 %s", (input, expected) => {
+      expect(Color.parseStringStrict(input)).toEqual({ ...expected, a: 1 });
+    });
+
+    it("hsla 保留透明度", () => {
+      expect(new Color("hsla(120, 100%, 50%, 0.5)").getValue()).toEqual({
+        r: 0,
+        g: 255,
+        b: 0,
+        a: 0.5,
+      });
+    });
+
+    it("色相越界回落到默认黑色", () => {
+      expect(new Color("hsl(400, 50%, 50%)").getValue()).toEqual({
+        r: 0,
+        g: 0,
+        b: 0,
+        a: 1,
+      });
+    });
+
+    it("静态解析越界与格式不匹配返回 null", () => {
+      expect(Color.parseStringStrict("hsl(999, 0%, 0%)")).toBeNull();
+      expect(Color.parseStringStrict("hsl(1, 2)")).toBeNull();
+    });
+  });
+
+  describe("hsv 解析", () => {
+    const hsvText = h => `hsv(${h}, 100%, 100%)`;
+
+    it.each(HSV_RGB_CASES)("实例解析色相 %i 度", (h, expected) => {
+      expect(new Color(hsvText(h)).getValue()).toEqual({ ...expected, a: 1 });
+    });
+
+    it.each(HSV_RGB_CASES)("静态解析色相 %i 度", (h, expected) => {
+      expect(Color.parseStringStrict(hsvText(h))).toEqual({
+        ...expected,
+        a: 1,
+      });
+    });
+
+    it("带透明度的 hsv", () => {
+      expect(new Color("hsv(240, 100%, 100%, 0.5)").getValue()).toEqual({
+        r: 0,
+        g: 0,
+        b: 255,
+        a: 0.5,
+      });
+    });
+
+    it("饱和度或亮度越界回落到默认黑色", () => {
+      expect(new Color("hsv(0, 200%, 100%)").getValue()).toEqual({
+        r: 0,
+        g: 0,
+        b: 0,
+        a: 1,
+      });
+      expect(new Color("hsv(0, 100%, 200%)").getValue()).toEqual({
+        r: 0,
+        g: 0,
+        b: 0,
+        a: 1,
+      });
+    });
+
+    it("静态解析越界与格式不匹配返回 null", () => {
+      expect(Color.parseStringStrict("hsv(0, 100%, 200%)")).toBeNull();
+      expect(Color.parseStringStrict("hsv(0, 200%, 100%)")).toBeNull();
+      expect(Color.parseStringStrict("hsv(1, 2)")).toBeNull();
+    });
+
+    it("hsvStrToHsvObject 解析合法输入", () => {
+      const target = new Color();
+      expect(target.hsvStrToHsvObject("hsv(120, 50%, 100%, 0.5)")).toEqual({
+        h: 120,
+        s: 0.5,
+        v: 1,
+        a: 0.5,
+      });
+      expect(target.hsvStrToHsvObject("hsv(120, 50%, 100%)")).toEqual({
+        h: 120,
+        s: 0.5,
+        v: 1,
+        a: 1,
+      });
+    });
+
+    it("hsvStrToHsvObject 非法输入返回 null", () => {
+      expect(new Color().hsvStrToHsvObject("nope")).toBeNull();
+    });
+  });
+
+  describe("对象输入", () => {
+    it("rgb 对象做范围裁剪", () => {
+      expect(new Color({ r: 300, g: -5, b: 10, a: 2 }).getValue()).toEqual({
+        r: 255,
+        g: 0,
+        b: 10,
+        a: 1,
+      });
+    });
+
+    it("hsl 对象", () => {
+      expect(new Color({ h: 120, s: 1, l: 0.5 }).getValue()).toEqual({
+        r: 0,
+        g: 255,
+        b: 0,
+        a: 1,
+      });
+    });
+
+    it("hsv 对象", () => {
+      expect(new Color({ h: 240, s: 1, v: 1 }).getValue()).toEqual({
+        r: 0,
+        g: 0,
+        b: 255,
+        a: 1,
+      });
+    });
+  });
+
+  describe("静态解析兜底", () => {
+    it("空值与非字符串返回 null", () => {
+      expect(Color.parseStringStrict("")).toBeNull();
+      expect(Color.parseStringStrict(123)).toBeNull();
+    });
+
+    it("未知格式返回 null", () => {
+      expect(Color.parseStringStrict("xyz(1,2,3)")).toBeNull();
+    });
+
+    it("isValidColor 判断合法性", () => {
+      expect(Color.isValidColor("#fff")).toBe(true);
+      expect(Color.isValidColor("rgb(1, 2, 3)")).toBe(true);
+      expect(Color.isValidColor("")).toBe(false);
+      expect(Color.isValidColor("nope")).toBe(false);
+      expect(Color.isValidColor(42)).toBe(false);
+    });
+  });
+
+  describe("格式化输出", () => {
+    it("toHex 与透明度", () => {
+      expect(new Color("rgb(255, 0, 0)").toHex()).toBe("#ff0000");
+      expect(new Color("rgba(255, 0, 0, 0.5)").toHex(true)).toBe("#ff000080");
+      expect(new Color("#ff0000").toHex(true)).toBe("#ff0000");
+    });
+
+    it("toRgb 与透明度", () => {
+      expect(new Color("#ff0000").toRgb()).toBe("rgb(255, 0, 0)");
+      expect(new Color("rgba(255, 0, 0, 0.5)").toRgb(true)).toBe(
+        "rgba(255, 0, 0, 0.5)"
+      );
+      expect(new Color("#ff0000").toRgb(true)).toBe("rgb(255, 0, 0)");
+    });
+
+    it("toHsl 覆盖各主色分支", () => {
+      expect(new Color("#ff0000").toHsl()).toBe("hsl(0, 100%, 50%)");
+      expect(new Color("#00ff00").toHsl()).toBe("hsl(120, 100%, 50%)");
+      expect(new Color("#0000ff").toHsl()).toBe("hsl(240, 100%, 50%)");
+      expect(new Color("#808080").toHsl()).toBe("hsl(0, 0%, 50%)");
+      expect(new Color("rgba(255, 0, 0, 0.5)").toHsl(true)).toBe(
+        "hsla(0, 100%, 50%, 0.5)"
+      );
+    });
+
+    it("toHsv 覆盖各主色分支", () => {
+      expect(new Color("#ff0000").toHsv()).toBe("hsv(0, 100%, 100%)");
+      expect(new Color("#00ff00").toHsv()).toBe("hsv(120, 100%, 100%)");
+      expect(new Color("#0000ff").toHsv()).toBe("hsv(240, 100%, 100%)");
+      expect(new Color("#808080").toHsv()).toBe("hsv(0, 0%, 50%)");
+      expect(new Color("rgba(255, 0, 0, 0.5)").toHsv(true)).toBe(
+        "hsv(0, 100%, 100%, 0.5)"
+      );
+    });
+
+    it("toString 覆盖全部格式", () => {
+      const color = new Color("rgba(255, 0, 0, 0.5)");
+      expect(color.toString()).toBe("#ff0000");
+      expect(color.toString("hex")).toBe("#ff0000");
+      expect(color.toString("hexa")).toBe("#ff000080");
+      expect(color.toString("rgb")).toBe("rgb(255, 0, 0)");
+      expect(color.toString("rgba")).toBe("rgba(255, 0, 0, 0.5)");
+      expect(color.toString("hsl")).toBe("hsl(0, 100%, 50%)");
+      expect(color.toString("hsla")).toBe("hsla(0, 100%, 50%, 0.5)");
+      expect(color.toString("hsv")).toBe("hsv(0, 100%, 100%)");
+    });
+
+    it("toString 大小写不敏感且未知格式回落 hex", () => {
+      expect(new Color("#ff0000").toString("HEX")).toBe("#ff0000");
+      expect(new Color("#ff0000").toString("cmyk")).toBe("#ff0000");
+    });
+  });
+
+  describe("取值与亮度", () => {
+    it("setValue 更新颜色", () => {
+      const color = new Color("#000000");
+      color.setValue("#0000ff");
+      expect(color.getValue()).toEqual({ r: 0, g: 0, b: 255, a: 1 });
+    });
+
+    it("setValue 传非法值回落为默认黑色", () => {
+      const color = new Color("#ff0000");
+      color.setValue("bad");
+      expect(color.getValue()).toEqual({ r: 0, g: 0, b: 0, a: 1 });
+    });
+
+    it("getValue 返回副本", () => {
+      const color = new Color("#ff0000");
+      const value = color.getValue();
+      value.r = 0;
+      expect(color.getValue().r).toBe(255);
+    });
+
+    it("白色亮度与明暗判断", () => {
+      const color = new Color("#ffffff");
+      expect(color.getBrightness()).toBeCloseTo(1, 5);
+      expect(color.isLight()).toBe(true);
+      expect(color.isDark()).toBe(false);
+    });
+
+    it("黑色亮度与明暗判断", () => {
+      const color = new Color("#000000");
+      expect(color.getBrightness()).toBe(0);
+      expect(color.isLight()).toBe(false);
+      expect(color.isDark()).toBe(true);
+    });
+
+    it("灰阶以 0.5 为明暗分界", () => {
+      expect(new Color("#7f7f7f").isDark()).toBe(true);
+      expect(new Color("#808080").isLight()).toBe(true);
     });
   });
 });

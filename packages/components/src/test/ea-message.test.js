@@ -19,52 +19,42 @@ describe("EaMessage Component", () => {
   });
 
   describe("Basic Rendering", () => {
-    it("应该正确渲染 ea-message 组件", async () => {
+    it("应该正确渲染 ea-message 组件", () => {
       const message = document.createElement("ea-message");
       container.appendChild(message);
-
-      await waitForRender();
 
       expect(message).toBeDefined();
       expect(message.shadowRoot).toBeDefined();
     });
 
-    it("应该包含 container CSS Part", async () => {
+    it("应该包含 container CSS Part", () => {
       const message = document.createElement("ea-message");
       container.appendChild(message);
-
-      await waitForRender();
 
       expect(
         message.shadowRoot.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
-    it("应该包含 icon CSS Part", async () => {
+    it("应该包含 icon CSS Part", () => {
       const message = document.createElement("ea-message");
       container.appendChild(message);
-
-      await waitForRender();
 
       expect(message.shadowRoot.querySelector('[part="icon"]')).toBeTruthy();
     });
 
-    it("应该包含 content-wrap CSS Part", async () => {
+    it("应该包含 content-wrap CSS Part", () => {
       const message = document.createElement("ea-message");
       container.appendChild(message);
-
-      await waitForRender();
 
       expect(
         message.shadowRoot.querySelector('[part="content-wrap"]')
       ).toBeTruthy();
     });
 
-    it("应该包含 close-icon CSS Part", async () => {
+    it("应该包含 close-icon CSS Part", () => {
       const message = document.createElement("ea-message");
       container.appendChild(message);
-
-      await waitForRender();
 
       expect(
         message.shadowRoot.querySelector('[part="close-icon"]')
@@ -81,12 +71,10 @@ describe("EaMessage Component", () => {
       expect(icon).toBeTruthy();
     });
 
-    it("应该渲染关闭图标 ea-icon", async () => {
+    it("应该渲染关闭图标 ea-icon", () => {
       const message = document.createElement("ea-message");
       message.showClose = true;
       container.appendChild(message);
-
-      await waitForRender();
 
       const closeIcon = message.shadowRoot.querySelector(
         ".ea-message__close-icon"
@@ -96,51 +84,41 @@ describe("EaMessage Component", () => {
   });
 
   describe("Variant Attribute", () => {
-    it("默认 variant 应该是 info", async () => {
+    it("默认 variant 应该是 info", () => {
       const message = document.createElement("ea-message");
       container.appendChild(message);
-
-      await waitForRender();
 
       expect(message.variant).toBe("info");
     });
 
-    it("应该支持 variant='primary'", async () => {
+    it("应该支持 variant='primary'", () => {
       const message = document.createElement("ea-message");
       message.variant = "primary";
       container.appendChild(message);
 
-      await waitForRender();
-
       expect(message.variant).toBe("primary");
     });
 
-    it("应该支持 variant='success'", async () => {
+    it("应该支持 variant='success'", () => {
       const message = document.createElement("ea-message");
       message.variant = "success";
       container.appendChild(message);
 
-      await waitForRender();
-
       expect(message.variant).toBe("success");
     });
 
-    it("应该支持 variant='warning'", async () => {
+    it("应该支持 variant='warning'", () => {
       const message = document.createElement("ea-message");
       message.variant = "warning";
       container.appendChild(message);
 
-      await waitForRender();
-
       expect(message.variant).toBe("warning");
     });
 
-    it("应该支持 variant='danger'", async () => {
+    it("应该支持 variant='danger'", () => {
       const message = document.createElement("ea-message");
       message.variant = "danger";
       container.appendChild(message);
-
-      await waitForRender();
 
       expect(message.variant).toBe("danger");
     });
@@ -240,21 +218,17 @@ describe("EaMessage Component", () => {
   });
 
   describe("Visible Attribute", () => {
-    it("默认 visible 应该是 false", async () => {
+    it("默认 visible 应该是 false", () => {
       const message = document.createElement("ea-message");
       container.appendChild(message);
-
-      await waitForRender();
 
       expect(message.visible).toBe(false);
     });
 
-    it("设置 visible 为 true 应该显示消息", async () => {
+    it("设置 visible 为 true 应该显示消息", () => {
       const message = document.createElement("ea-message");
       message.visible = true;
       container.appendChild(message);
-
-      await waitForRender();
 
       expect(message.visible).toBe(true);
     });
@@ -314,21 +288,17 @@ describe("EaMessage Component", () => {
   });
 
   describe("Message Attribute", () => {
-    it("默认 message 应该是空字符串", async () => {
+    it("默认 message 应该是空字符串", () => {
       const message = document.createElement("ea-message");
       container.appendChild(message);
-
-      await waitForRender();
 
       expect(message.message).toBe("");
     });
 
-    it("应该支持 message 属性", async () => {
+    it("应该支持 message 属性", () => {
       const message = document.createElement("ea-message");
       message.message = "This is a test message";
       container.appendChild(message);
-
-      await waitForRender();
 
       expect(message.message).toBe("This is a test message");
     });
@@ -360,21 +330,17 @@ describe("EaMessage Component", () => {
   });
 
   describe("ShowClose Attribute", () => {
-    it("默认 showClose 应该是 false", async () => {
+    it("默认 showClose 应该是 false", () => {
       const message = document.createElement("ea-message");
       container.appendChild(message);
-
-      await waitForRender();
 
       expect(message.showClose).toBe(false);
     });
 
-    it("设置 showClose 为 true 应该显示关闭按钮", async () => {
+    it("设置 showClose 为 true 应该显示关闭按钮", () => {
       const message = document.createElement("ea-message");
       message.showClose = true;
       container.appendChild(message);
-
-      await waitForRender();
 
       expect(message.showClose).toBe(true);
     });
@@ -417,11 +383,9 @@ describe("EaMessage Component", () => {
   });
 
   describe("Placement Attribute", () => {
-    it("默认 placement 应该是 top", async () => {
+    it("默认 placement 应该是 top", () => {
       const message = document.createElement("ea-message");
       container.appendChild(message);
-
-      await waitForRender();
 
       expect(message.placement).toBe("top");
     });
@@ -485,21 +449,17 @@ describe("EaMessage Component", () => {
   });
 
   describe("Icon Attribute", () => {
-    it("默认 icon 应该是空字符串", async () => {
+    it("默认 icon 应该是空字符串", () => {
       const message = document.createElement("ea-message");
       container.appendChild(message);
-
-      await waitForRender();
 
       expect(message.icon).toBe("");
     });
 
-    it("应该支持 icon 属性", async () => {
+    it("应该支持 icon 属性", () => {
       const message = document.createElement("ea-message");
       message.icon = "circle-info";
       container.appendChild(message);
-
-      await waitForRender();
 
       expect(message.icon).toBe("circle-info");
     });
@@ -547,11 +507,9 @@ describe("EaMessage Component", () => {
   });
 
   describe("Offset Attribute", () => {
-    it("默认 offset 应该是 0", async () => {
+    it("默认 offset 应该是 0", () => {
       const message = document.createElement("ea-message");
       container.appendChild(message);
-
-      await waitForRender();
 
       expect(message.offset).toBe(0);
     });
@@ -583,11 +541,9 @@ describe("EaMessage Component", () => {
   });
 
   describe("dangerouslyUseHTMLString Attribute", () => {
-    it("默认 dangerouslyUseHTMLString 应该是 false", async () => {
+    it("默认 dangerouslyUseHTMLString 应该是 false", () => {
       const message = document.createElement("ea-message");
       container.appendChild(message);
-
-      await waitForRender();
 
       expect(message.dangerouslyUseHTMLString).toBe(false);
     });
@@ -609,7 +565,6 @@ describe("EaMessage Component", () => {
       message.dangerouslyUseHTMLString = true;
       message.message = "<strong>Bold</strong> text";
       container.appendChild(message);
-
       await waitForRender();
 
       const content = message.shadowRoot.querySelector(".ea-message__content");
@@ -618,11 +573,9 @@ describe("EaMessage Component", () => {
   });
 
   describe("Methods", () => {
-    it("应该存在 close 方法", async () => {
+    it("应该存在 close 方法", () => {
       const message = document.createElement("ea-message");
       container.appendChild(message);
-
-      await waitForRender();
 
       expect(typeof message.close).toBe("function");
     });
@@ -635,8 +588,6 @@ describe("EaMessage Component", () => {
       await waitForRender();
 
       message.close();
-      await waitForRender();
-
       expect(message.visible).toBe(false);
     });
 
@@ -655,24 +606,20 @@ describe("EaMessage Component", () => {
       expect(closeHandler).toHaveBeenCalled();
     });
 
-    it("应该存在 updateContainerClasslist 方法", async () => {
+    it("应该存在 updateContainerClasslist 方法", () => {
       const message = document.createElement("ea-message");
       container.appendChild(message);
-
-      await waitForRender();
 
       expect(typeof message.updateContainerClasslist).toBe("function");
     });
 
-    it("updateContainerClasslist 应该返回正确的类名字符串", async () => {
+    it("updateContainerClasslist 应该返回正确的类名字符串", () => {
       const message = document.createElement("ea-message");
       message.variant = "success";
       message.placement = "top-right";
       message.visible = true;
       message.showClose = true;
       container.appendChild(message);
-
-      await waitForRender();
 
       const className = message.updateContainerClasslist();
       expect(className).toContain("ea-message--success");
@@ -788,8 +735,6 @@ describe("EaMessage Component", () => {
       });
 
       message.close();
-      await waitForRender();
-
       expect(eventType).toBe("ea-close");
     });
   });
@@ -839,31 +784,27 @@ describe("EaMessage Component", () => {
   });
 
   describe("Combined Attributes", () => {
-    it("应该同时支持 variant 和 message", async () => {
+    it("应该同时支持 variant 和 message", () => {
       const message = document.createElement("ea-message");
       message.variant = "success";
       message.message = "Operation successful";
       container.appendChild(message);
 
-      await waitForRender();
-
       expect(message.variant).toBe("success");
       expect(message.message).toBe("Operation successful");
     });
 
-    it("应该同时支持 showClose 和 placement", async () => {
+    it("应该同时支持 showClose 和 placement", () => {
       const message = document.createElement("ea-message");
       message.showClose = true;
       message.placement = "top-right";
       container.appendChild(message);
 
-      await waitForRender();
-
       expect(message.showClose).toBe(true);
       expect(message.placement).toBe("top-right");
     });
 
-    it("应该同时设置多个属性", async () => {
+    it("应该同时设置多个属性", () => {
       const message = document.createElement("ea-message");
       message.variant = "warning";
       message.message = "Warning message";
@@ -872,8 +813,6 @@ describe("EaMessage Component", () => {
       message.icon = "custom-icon";
       message.visible = true;
       container.appendChild(message);
-
-      await waitForRender();
 
       expect(message.variant).toBe("warning");
       expect(message.message).toBe("Warning message");
@@ -906,12 +845,10 @@ describe("EaMessage Component", () => {
   });
 
   describe("Edge Cases", () => {
-    it("空 message 应该正确处理", async () => {
+    it("空 message 应该正确处理", () => {
       const message = document.createElement("ea-message");
       message.message = "";
       container.appendChild(message);
-
-      await waitForRender();
 
       expect(message.message).toBe("");
     });
@@ -927,12 +864,10 @@ describe("EaMessage Component", () => {
       expect(content.textContent).toBe("");
     });
 
-    it("HTML 特殊字符应该被正确转义", async () => {
+    it("HTML 特殊字符应该被正确转义", () => {
       const message = document.createElement("ea-message");
       message.message = "<div>test</div>";
       container.appendChild(message);
-
-      await waitForRender();
 
       const content = message.shadowRoot.querySelector(".ea-message__content");
       expect(content.querySelector("div")).toBeFalsy();
@@ -956,15 +891,13 @@ describe("EaMessage Component", () => {
       message2.remove();
     });
 
-    it("重复设置相同属性不应该出错", async () => {
+    it("重复设置相同属性不应该出错", () => {
       const message = document.createElement("ea-message");
       message.variant = "success";
       message.variant = "success";
       message.message = "test";
       message.message = "test";
       container.appendChild(message);
-
-      await waitForRender();
 
       expect(message.variant).toBe("success");
       expect(message.message).toBe("test");
@@ -980,8 +913,6 @@ describe("EaMessage Component", () => {
       message.visible = false;
       message.visible = true;
       message.visible = false;
-
-      await waitForRender();
 
       expect(message.visible).toBe(false);
     });
@@ -1002,13 +933,11 @@ describe("EaMessage Component", () => {
   });
 
   describe("Lifecycle", () => {
-    it("组件连接后应该正确初始化", async () => {
+    it("组件连接后应该正确初始化", () => {
       const message = document.createElement("ea-message");
       message.variant = "success";
       message.message = "Test";
       container.appendChild(message);
-
-      await waitForRender();
 
       expect(
         message.shadowRoot.querySelector('[part="container"]')
@@ -1033,8 +962,6 @@ describe("EaMessage Component", () => {
 
       message.variant = "danger";
 
-      await waitForRender();
-
       expect(message.variant).toBe("danger");
     });
 
@@ -1047,23 +974,17 @@ describe("EaMessage Component", () => {
 
       message.message = "Updated";
 
-      await waitForRender();
-
       expect(message.message).toBe("Updated");
     });
 
-    it("动态修改 visible 应该生效", async () => {
+    it("动态修改 visible 应该生效", () => {
       const message = document.createElement("ea-message");
       message.visible = false;
       container.appendChild(message);
 
-      await waitForRender();
-
       expect(message.visible).toBe(false);
 
       message.visible = true;
-
-      await waitForRender();
 
       expect(message.visible).toBe(true);
     });
@@ -1077,8 +998,6 @@ describe("EaMessage Component", () => {
 
       message.remove();
       container.appendChild(message);
-
-      await waitForRender();
 
       expect(message.message).toBe("Test");
     });
@@ -1427,8 +1346,6 @@ describe("EaMessage Component", () => {
       const lastMessage = messages[messages.length - 1];
 
       vi.advanceTimersByTime(5000);
-      await waitForRender();
-
       expect(lastMessage.visible).toBe(true);
 
       messages.forEach(el => el.remove());

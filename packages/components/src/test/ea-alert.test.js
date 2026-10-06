@@ -171,46 +171,41 @@ describe("EaAlert", () => {
   });
 
   describe("Heading Attribute", () => {
-    it("默认 heading 应该是空字符串", async () => {
+    it("默认 heading 应该是空字符串", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       expect(alert.heading).toBe("");
     });
 
-    it("应该正确设置 heading 属性", async () => {
+    it("应该正确设置 heading 属性", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("heading", "Test Heading");
       container.appendChild(alert);
 
-      await waitForRender();
 
       expect(alert.heading).toBe("Test Heading");
     });
 
-    it("heading 属性变化时应该正确更新", async () => {
+    it("heading 属性变化时应该正确更新", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("heading", "Initial Heading");
       container.appendChild(alert);
 
-      await waitForRender();
 
       expect(alert.heading).toBe("Initial Heading");
 
       alert.setAttribute("heading", "Updated Heading");
-      await waitForRender();
 
       expect(alert.heading).toBe("Updated Heading");
     });
 
-    it("heading 应该渲染到 heading 元素中", async () => {
+    it("heading 应该渲染到 heading 元素中", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("heading", "My Heading");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const headingEl = alert.shadowRoot.querySelector(".ea-alert__heading");
       expect(headingEl.textContent).toContain("My Heading");
@@ -221,7 +216,6 @@ describe("EaAlert", () => {
       alert.setAttribute("heading", "Old Heading");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const headingEl = alert.shadowRoot.querySelector(".ea-alert__heading");
       expect(headingEl.textContent).toContain("Old Heading");
@@ -232,11 +226,10 @@ describe("EaAlert", () => {
       expect(headingEl.textContent).toContain("New Heading");
     });
 
-    it("heading 为空时 heading 元素应该包含 slot", async () => {
+    it("heading 为空时 heading 元素应该包含 slot", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const headingEl = alert.shadowRoot.querySelector(".ea-alert__heading");
       const slot = headingEl.querySelector('slot[name="heading"]');
@@ -248,7 +241,6 @@ describe("EaAlert", () => {
       alert.setAttribute("heading", "Has Value");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const headingEl = alert.shadowRoot.querySelector(".ea-alert__heading");
       expect(headingEl.textContent).toContain("Has Value");
@@ -262,43 +254,38 @@ describe("EaAlert", () => {
   });
 
   describe("Description Attribute", () => {
-    it("默认 description 应该是空字符串", async () => {
+    it("默认 description 应该是空字符串", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       expect(alert.description).toBe("");
     });
 
-    it("应该正确设置 description 属性", async () => {
+    it("应该正确设置 description 属性", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("description", "Test Description");
       container.appendChild(alert);
 
-      await waitForRender();
 
       expect(alert.description).toBe("Test Description");
     });
 
-    it("description 属性变化时应该正确更新", async () => {
+    it("description 属性变化时应该正确更新", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("description", "Initial Description");
       container.appendChild(alert);
 
-      await waitForRender();
 
       alert.setAttribute("description", "Updated Description");
-      await waitForRender();
 
       expect(alert.description).toBe("Updated Description");
     });
 
-    it("description 为空时应该显示默认 slot", async () => {
+    it("description 为空时应该显示默认 slot", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const descriptionEl = alert.shadowRoot.querySelector(
         ".ea-alert__description"
@@ -307,12 +294,11 @@ describe("EaAlert", () => {
       expect(slot).not.toBeNull();
     });
 
-    it("description 有值时应该覆盖默认 slot", async () => {
+    it("description 有值时应该覆盖默认 slot", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("description", "My Description");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const descriptionEl = alert.shadowRoot.querySelector(
         ".ea-alert__description"
@@ -325,7 +311,6 @@ describe("EaAlert", () => {
       alert.setAttribute("description", "Has Value");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const descriptionEl = alert.shadowRoot.querySelector(
         ".ea-alert__description"
@@ -380,7 +365,6 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("is-has-description")).toBe(false);
@@ -393,26 +377,24 @@ describe("EaAlert", () => {
   });
 
   describe("Variant Attribute", () => {
-    it("默认 variant 应该是 info", async () => {
+    it("默认 variant 应该是 info", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       expect(alert.variant).toBe("info");
     });
 
-    it("应该正确设置 variant 属性", async () => {
+    it("应该正确设置 variant 属性", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("variant", "primary");
       container.appendChild(alert);
 
-      await waitForRender();
 
       expect(alert.variant).toBe("primary");
     });
 
-    it("应该支持所有 variant 类型", async () => {
+    it("应该支持所有 variant 类型", () => {
       const variants = ["primary", "success", "info", "warning", "danger"];
 
       for (const variant of variants) {
@@ -420,7 +402,6 @@ describe("EaAlert", () => {
         alert.setAttribute("variant", variant);
         container.appendChild(alert);
 
-        await waitForRender();
 
         expect(alert.variant).toBe(variant);
 
@@ -438,7 +419,6 @@ describe("EaAlert", () => {
       alert.setAttribute("variant", "info");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("ea-alert--info")).toBe(true);
@@ -456,7 +436,6 @@ describe("EaAlert", () => {
       alert.setAttribute("variant", "info");
       container.appendChild(alert);
 
-      await waitForRender();
 
       let iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
       expect(iconEl.getAttribute("name")).toBe("circle-info");
@@ -473,7 +452,6 @@ describe("EaAlert", () => {
       alert.setAttribute("variant", "info");
       container.appendChild(alert);
 
-      await waitForRender();
 
       let iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
       expect(iconEl).toBeNull();
@@ -487,32 +465,29 @@ describe("EaAlert", () => {
   });
 
   describe("Effect Attribute", () => {
-    it("默认 effect 应该是 light", async () => {
+    it("默认 effect 应该是 light", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       expect(alert.effect).toBe("light");
     });
 
-    it("应该正确应用 effect=light 样式", async () => {
+    it("应该正确应用 effect=light 样式", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("effect", "light");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("ea-alert--light")).toBe(true);
     });
 
-    it("应该正确应用 effect=dark 样式", async () => {
+    it("应该正确应用 effect=dark 样式", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("effect", "dark");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("ea-alert--dark")).toBe(true);
@@ -523,7 +498,6 @@ describe("EaAlert", () => {
       alert.setAttribute("effect", "light");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("ea-alert--light")).toBe(true);
@@ -537,20 +511,18 @@ describe("EaAlert", () => {
   });
 
   describe("Closable Attribute", () => {
-    it("默认 closable 应该是 true", async () => {
+    it("默认 closable 应该是 true", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       expect(alert.closable).toBe(true);
     });
 
-    it("closable 为 true 时应该显示关闭图标", async () => {
+    it("closable 为 true 时应该显示关闭图标", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
       const closeIcon = closeBtn.querySelector(".ea-alert__close-icon");
@@ -561,7 +533,6 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       alert.closable = false;
       await waitForRender();
@@ -574,7 +545,6 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       alert.closable = false;
       await waitForRender();
@@ -588,12 +558,11 @@ describe("EaAlert", () => {
       expect(closeBtn.querySelector(".ea-alert__close-icon")).not.toBeNull();
     });
 
-    it("closable 为 true 且 closeText 有值时应该显示 closeText", async () => {
+    it("closable 为 true 且 closeText 有值时应该显示 closeText", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("close-text", "关闭");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
       expect(closeBtn.textContent).toBe("关闭");
@@ -604,7 +573,6 @@ describe("EaAlert", () => {
       alert.setAttribute("close-text", "关闭");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
       expect(closeBtn.textContent).toBe("关闭");
@@ -620,7 +588,6 @@ describe("EaAlert", () => {
       alert.setAttribute("close-text", "知道了");
       container.appendChild(alert);
 
-      await waitForRender();
 
       alert.closable = false;
       await waitForRender();
@@ -636,21 +603,19 @@ describe("EaAlert", () => {
   });
 
   describe("Close-Text Attribute", () => {
-    it("默认 closeText 应该是空字符串", async () => {
+    it("默认 closeText 应该是空字符串", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       expect(alert.closeText).toBe("");
     });
 
-    it("设置 closeText 后应该显示自定义文本", async () => {
+    it("设置 closeText 后应该显示自定义文本", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("close-text", "关闭");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
       expect(closeBtn.textContent).toBe("关闭");
@@ -661,7 +626,6 @@ describe("EaAlert", () => {
       alert.setAttribute("close-text", "关闭");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
       expect(closeBtn.textContent).toBe("关闭");
@@ -672,12 +636,11 @@ describe("EaAlert", () => {
       expect(closeBtn.textContent).toBe("Close");
     });
 
-    it("closeText 有值时应该替代关闭图标", async () => {
+    it("closeText 有值时应该替代关闭图标", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("close-text", "知道了");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
       expect(closeBtn.textContent).toBe("知道了");
@@ -689,7 +652,6 @@ describe("EaAlert", () => {
       alert.setAttribute("close-text", "关闭");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
       expect(closeBtn.textContent).toBe("关闭");
@@ -706,7 +668,6 @@ describe("EaAlert", () => {
       alert.setAttribute("close-text", "关闭");
       container.appendChild(alert);
 
-      await waitForRender();
 
       alert.closable = false;
       await waitForRender();
@@ -722,21 +683,19 @@ describe("EaAlert", () => {
   });
 
   describe("Show-Icon Attribute", () => {
-    it("默认 showIcon 应该是 false", async () => {
+    it("默认 showIcon 应该是 false", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       expect(alert.showIcon).toBe(false);
     });
 
-    it("设置 showIcon 后应该显示图标", async () => {
+    it("设置 showIcon 后应该显示图标", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("show-icon", "");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
       expect(iconEl).not.toBeNull();
@@ -746,7 +705,6 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       let iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
       expect(iconEl).toBeNull();
@@ -758,12 +716,11 @@ describe("EaAlert", () => {
       expect(iconEl).not.toBeNull();
     });
 
-    it("showIcon 为 true 时图标应该有 part=icon", async () => {
+    it("showIcon 为 true 时图标应该有 part=icon", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("show-icon", "");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
       expect(iconEl.getAttribute("part")).toBe("icon");
@@ -774,7 +731,6 @@ describe("EaAlert", () => {
       alert.setAttribute("show-icon", "");
       container.appendChild(alert);
 
-      await waitForRender();
 
       let iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
       expect(iconEl).not.toBeNull();
@@ -797,13 +753,12 @@ describe("EaAlert", () => {
     };
 
     Object.entries(iconMap).forEach(([variant, iconName]) => {
-      it(`variant="${variant}" 应该显示 "${iconName}" 图标`, async () => {
+      it(`variant="${variant}" 应该显示 "${iconName}" 图标`, () => {
         const alert = document.createElement("ea-alert");
         alert.setAttribute("variant", variant);
         alert.setAttribute("show-icon", "");
         container.appendChild(alert);
 
-        await waitForRender();
 
         const iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
         expect(iconEl).not.toBeNull();
@@ -817,7 +772,6 @@ describe("EaAlert", () => {
       alert.setAttribute("variant", "info");
       container.appendChild(alert);
 
-      await waitForRender();
 
       let iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
       expect(iconEl.getAttribute("name")).toBe("circle-info");
@@ -831,31 +785,28 @@ describe("EaAlert", () => {
   });
 
   describe("Center Attribute", () => {
-    it("默认 center 应该是 false", async () => {
+    it("默认 center 应该是 false", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       expect(alert.center).toBe(false);
     });
 
-    it("设置 center 后应该添加 is-center 状态 class", async () => {
+    it("设置 center 后应该添加 is-center 状态 class", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("center", "");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("is-center")).toBe(true);
     });
 
-    it("未设置 center 时不应有 is-center 状态 class", async () => {
+    it("未设置 center 时不应有 is-center 状态 class", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("is-center")).toBe(false);
@@ -865,7 +816,6 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("is-center")).toBe(false);
@@ -881,7 +831,6 @@ describe("EaAlert", () => {
       alert.setAttribute("center", "");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("is-center")).toBe(true);
@@ -894,11 +843,10 @@ describe("EaAlert", () => {
   });
 
   describe("BEM Class Names", () => {
-    it("默认应该有 ea-alert、ea-alert--info、ea-alert--light class", async () => {
+    it("默认应该有 ea-alert、ea-alert--info、ea-alert--light class", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("ea-alert")).toBe(true);
@@ -906,34 +854,31 @@ describe("EaAlert", () => {
       expect(containerEl.classList.contains("ea-alert--light")).toBe(true);
     });
 
-    it("variant=primary 应该添加 ea-alert--primary class", async () => {
+    it("variant=primary 应该添加 ea-alert--primary class", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("variant", "primary");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("ea-alert--primary")).toBe(true);
     });
 
-    it("effect=dark 应该添加 ea-alert--dark class", async () => {
+    it("effect=dark 应该添加 ea-alert--dark class", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("effect", "dark");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("ea-alert--dark")).toBe(true);
     });
 
-    it("center 应该添加 is-center 状态 class", async () => {
+    it("center 应该添加 is-center 状态 class", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("center", "");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("is-center")).toBe(true);
@@ -945,7 +890,6 @@ describe("EaAlert", () => {
       alert.setAttribute("effect", "light");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("ea-alert--primary")).toBe(true);
@@ -1036,32 +980,29 @@ describe("EaAlert", () => {
       expect(closeBtn).not.toBeNull();
     });
 
-    it("showIcon 为 true 时应该设置 icon part", async () => {
+    it("showIcon 为 true 时应该设置 icon part", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("show-icon", "");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const icon = alert.shadowRoot.querySelector('[part="icon"]');
       expect(icon).not.toBeNull();
     });
 
-    it("showIcon 为 false 时不应有 icon part", async () => {
+    it("showIcon 为 false 时不应有 icon part", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const icon = alert.shadowRoot.querySelector('[part="icon"]');
       expect(icon).toBeNull();
     });
 
-    it("closable 为 true 时应该设置 close-icon part", async () => {
+    it("closable 为 true 时应该设置 close-icon part", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const closeIcon = alert.shadowRoot.querySelector('[part="close-icon"]');
       expect(closeIcon).not.toBeNull();
@@ -1071,7 +1012,6 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       alert.closable = false;
       await waitForRender();
@@ -1080,12 +1020,11 @@ describe("EaAlert", () => {
       expect(closeIcon).toBeNull();
     });
 
-    it("closeText 有值时不应有 close-icon part", async () => {
+    it("closeText 有值时不应有 close-icon part", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("close-text", "关闭");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const closeIcon = alert.shadowRoot.querySelector('[part="close-icon"]');
       expect(closeIcon).toBeNull();
@@ -1093,11 +1032,10 @@ describe("EaAlert", () => {
   });
 
   describe("Close Event (ea-close)", () => {
-    it("点击关闭按钮应该添加 is-before-close 状态 class", async () => {
+    it("点击关闭按钮应该添加 is-before-close 状态 class", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
       closeBtn.click();
@@ -1110,7 +1048,6 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const closeHandler = vi.fn();
       alert.addEventListener("ea-close", closeHandler);
@@ -1135,7 +1072,6 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       let eventDetail = null;
       alert.addEventListener("ea-close", e => {
@@ -1162,7 +1098,6 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
       closeBtn.click();
@@ -1184,7 +1119,6 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
       closeBtn.click();
@@ -1211,7 +1145,6 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       alert.closable = false;
       await waitForRender();
@@ -1223,12 +1156,11 @@ describe("EaAlert", () => {
       expect(containerEl.classList.contains("is-before-close")).toBe(false);
     });
 
-    it("closable 为 false 且 autoClose 为 0 时不应触发关闭", async () => {
+    it("closable 为 false 且 autoClose 为 0 时不应触发关闭", () => {
       const alert = document.createElement("ea-alert");
       alert.closable = false;
       container.appendChild(alert);
 
-      await waitForRender();
 
       const closeHandler = vi.fn();
       alert.addEventListener("ea-close", closeHandler);
@@ -1243,7 +1175,6 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       let caughtEvent = null;
       alert.addEventListener("ea-close", e => {
@@ -1308,20 +1239,18 @@ describe("EaAlert", () => {
   });
 
   describe("Show-After Attribute", () => {
-    it("默认 showAfter 应该是 0", async () => {
+    it("默认 showAfter 应该是 0", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       expect(alert.showAfter).toBe(0);
     });
 
-    it("showAfter 为 0 时不应添加 is-hide 状态 class", async () => {
+    it("showAfter 为 0 时不应添加 is-hide 状态 class", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("is-hide")).toBe(false);
@@ -1390,7 +1319,6 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const openHandler = vi.fn();
       alert.addEventListener("ea-open", openHandler);
@@ -1461,11 +1389,10 @@ describe("EaAlert", () => {
   });
 
   describe("Auto-Close Attribute", () => {
-    it("默认 autoClose 应该是 0", async () => {
+    it("默认 autoClose 应该是 0", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       expect(alert.autoClose).toBe(0);
     });
@@ -1576,21 +1503,19 @@ describe("EaAlert", () => {
   });
 
   describe("Hide-After Attribute", () => {
-    it("默认 hideAfter 应该是 0", async () => {
+    it("默认 hideAfter 应该是 0", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       expect(alert.hideAfter).toBe(0);
     });
 
-    it("应该正确设置 hideAfter 属性", async () => {
+    it("应该正确设置 hideAfter 属性", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("hide-after", "200");
       container.appendChild(alert);
 
-      await waitForRender();
 
       expect(alert.hideAfter).toBe(200);
     });
@@ -1615,11 +1540,10 @@ describe("EaAlert", () => {
       expect(containerEl.classList.contains("is-before-close")).toBe(true);
     });
 
-    it("hideAfter 为 0 时应该立即开始关闭动画", async () => {
+    it("hideAfter 为 0 时应该立即开始关闭动画", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
       closeBtn.click();
@@ -1650,13 +1574,12 @@ describe("EaAlert", () => {
   });
 
   describe("updateContainerClasslist Method", () => {
-    it("应该返回正确的 BEM 类名字符串", async () => {
+    it("应该返回正确的 BEM 类名字符串", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("variant", "primary");
       alert.setAttribute("effect", "dark");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const className = alert.updateContainerClasslist();
       expect(className).toContain("ea-alert");
@@ -1664,22 +1587,20 @@ describe("EaAlert", () => {
       expect(className).toContain("ea-alert--dark");
     });
 
-    it("center 为 true 时返回的类名应包含 is-center", async () => {
+    it("center 为 true 时返回的类名应包含 is-center", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("center", "");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const className = alert.updateContainerClasslist();
       expect(className).toContain("is-center");
     });
 
-    it("center 为 false 时返回的类名不应包含 is-center", async () => {
+    it("center 为 false 时返回的类名不应包含 is-center", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const className = alert.updateContainerClasslist();
       expect(className).not.toContain("is-center");
@@ -1696,13 +1617,12 @@ describe("EaAlert", () => {
       expect(className).toContain("is-hide");
     });
 
-    it("应该同时包含 variant 和 effect 修饰符", async () => {
+    it("应该同时包含 variant 和 effect 修饰符", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("variant", "warning");
       alert.setAttribute("effect", "dark");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const className = alert.updateContainerClasslist();
       expect(className).toContain("ea-alert--warning");
@@ -1732,7 +1652,7 @@ describe("EaAlert", () => {
   });
 
   describe("Complex Scenarios", () => {
-    it("应该支持组合使用多个属性", async () => {
+    it("应该支持组合使用多个属性", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("variant", "success");
       alert.setAttribute("effect", "dark");
@@ -1742,7 +1662,6 @@ describe("EaAlert", () => {
       alert.setAttribute("description", "This is a success alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("ea-alert--success")).toBe(true);
@@ -1759,7 +1678,6 @@ describe("EaAlert", () => {
       alert.setAttribute("variant", "info");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("ea-alert--info")).toBe(true);
@@ -1774,7 +1692,7 @@ describe("EaAlert", () => {
       expect(containerEl.classList.contains("is-center")).toBe(true);
     });
 
-    it("应该支持 variant + effect + showIcon 组合", async () => {
+    it("应该支持 variant + effect + showIcon 组合", () => {
       const variants = ["primary", "success", "info", "warning", "danger"];
 
       for (const variant of variants) {
@@ -1784,7 +1702,6 @@ describe("EaAlert", () => {
         alert.setAttribute("show-icon", "");
         container.appendChild(alert);
 
-        await waitForRender();
 
         const containerEl = alert.shadowRoot.querySelector(".ea-alert");
         expect(containerEl.classList.contains(`ea-alert--${variant}`)).toBe(
@@ -1796,24 +1713,22 @@ describe("EaAlert", () => {
       }
     });
 
-    it("应该支持 closeText 替代关闭图标", async () => {
+    it("应该支持 closeText 替代关闭图标", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("close-text", "知道了");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
       expect(closeBtn.textContent).toBe("知道了");
       expect(closeBtn.querySelector(".ea-alert__close-icon")).toBeNull();
     });
 
-    it("应该支持 heading slot 自定义内容", async () => {
+    it("应该支持 heading slot 自定义内容", () => {
       const alert = document.createElement("ea-alert");
       alert.innerHTML = '<span slot="heading">Custom Heading</span>';
       container.appendChild(alert);
 
-      await waitForRender();
 
       const headingSlot = alert.shadowRoot.querySelector(
         'slot[name="heading"]'
@@ -1821,23 +1736,21 @@ describe("EaAlert", () => {
       expect(headingSlot).not.toBeNull();
     });
 
-    it("应该支持 icon slot 自定义内容", async () => {
+    it("应该支持 icon slot 自定义内容", () => {
       const alert = document.createElement("ea-alert");
       alert.innerHTML = '<span slot="icon">Custom Icon</span>';
       container.appendChild(alert);
 
-      await waitForRender();
 
       const iconSlot = alert.shadowRoot.querySelector('slot[name="icon"]');
       expect(iconSlot).not.toBeNull();
     });
 
-    it("应该支持默认 slot 自定义描述内容", async () => {
+    it("应该支持默认 slot 自定义描述内容", () => {
       const alert = document.createElement("ea-alert");
       alert.innerHTML = "<span>Custom Description</span>";
       container.appendChild(alert);
 
-      await waitForRender();
 
       const defaultSlot = alert.shadowRoot.querySelector(
         ".ea-alert__description slot"
@@ -1845,7 +1758,7 @@ describe("EaAlert", () => {
       expect(defaultSlot).not.toBeNull();
     });
 
-    it("应该正确处理多个 Alert 实例", async () => {
+    it("应该正确处理多个 Alert 实例", () => {
       const alert1 = document.createElement("ea-alert");
       alert1.setAttribute("variant", "primary");
       alert1.setAttribute("heading", "Alert 1");
@@ -1857,7 +1770,6 @@ describe("EaAlert", () => {
       container.appendChild(alert1);
       container.appendChild(alert2);
 
-      await waitForRender();
 
       const container1 = alert1.shadowRoot.querySelector(".ea-alert");
       const container2 = alert2.shadowRoot.querySelector(".ea-alert");
@@ -1869,7 +1781,7 @@ describe("EaAlert", () => {
       expect(alert2.heading).toBe("Alert 2");
     });
 
-    it("应该支持所有属性同时设置", async () => {
+    it("应该支持所有属性同时设置", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("variant", "warning");
       alert.setAttribute("effect", "dark");
@@ -1880,7 +1792,6 @@ describe("EaAlert", () => {
       alert.setAttribute("close-text", "OK");
       container.appendChild(alert);
 
-      await waitForRender();
 
       expect(alert.variant).toBe("warning");
       expect(alert.effect).toBe("dark");
@@ -1904,42 +1815,38 @@ describe("EaAlert", () => {
   });
 
   describe("Accessibility", () => {
-    it("关闭按钮应该是 button 元素", async () => {
+    it("关闭按钮应该是 button 元素", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
       expect(closeBtn.tagName).toBe("BUTTON");
     });
 
-    it("关闭按钮应该有 type=button 属性", async () => {
+    it("关闭按钮应该有 type=button 属性", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
       expect(closeBtn.getAttribute("type")).toBe("button");
     });
 
-    it("关闭按钮应该可以通过键盘聚焦", async () => {
+    it("关闭按钮应该可以通过键盘聚焦", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
       closeBtn.focus();
       expect(closeBtn).toBe(alert.shadowRoot.activeElement);
     });
 
-    it("关闭按钮应该可以通过 Enter 键触发关闭", async () => {
+    it("关闭按钮应该可以通过 Enter 键触发关闭", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
       const enterEvent = new KeyboardEvent("keydown", { key: "Enter" });
@@ -1953,22 +1860,20 @@ describe("EaAlert", () => {
   });
 
   describe("Lifecycle", () => {
-    it("组件连接时应该正确初始化", async () => {
+    it("组件连接时应该正确初始化", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("variant", "primary");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("ea-alert--primary")).toBe(true);
     });
 
-    it("组件断开连接时应该清理 AbortController", async () => {
+    it("组件断开连接时应该清理 AbortController", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
       closeBtn.click();
@@ -1978,18 +1883,15 @@ describe("EaAlert", () => {
       expect(container.contains(alert)).toBe(false);
     });
 
-    it("组件重新连接时应该正确渲染", async () => {
+    it("组件重新连接时应该正确渲染", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("variant", "success");
       container.appendChild(alert);
 
-      await waitForRender();
 
       alert.remove();
-      await waitForRender();
 
       container.appendChild(alert);
-      await waitForRender();
 
       expect(alert.shadowRoot).toBeDefined();
     });
@@ -2032,23 +1934,21 @@ describe("EaAlert", () => {
   });
 
   describe("Edge Cases", () => {
-    it("heading 设置为 HTML 字符串时应该被安全处理", async () => {
+    it("heading 设置为 HTML 字符串时应该被安全处理", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("heading", "<script>alert('xss')</script>");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const headingEl = alert.shadowRoot.querySelector(".ea-alert__heading");
       expect(headingEl.querySelector("script")).toBeNull();
     });
 
-    it("description 设置为 HTML 字符串时应该被安全处理", async () => {
+    it("description 设置为 HTML 字符串时应该被安全处理", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("description", "<script>alert('xss')</script>");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const descriptionEl = alert.shadowRoot.querySelector(
         ".ea-alert__description"
@@ -2060,7 +1960,6 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       alert.setAttribute("variant", "primary");
       alert.setAttribute("variant", "success");
@@ -2073,11 +1972,10 @@ describe("EaAlert", () => {
       expect(containerEl.classList.contains("ea-alert--success")).toBe(false);
     });
 
-    it("closeText 为空字符串且 closable 为 true 时应该显示关闭图标", async () => {
+    it("closeText 为空字符串且 closable 为 true 时应该显示关闭图标", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
       expect(closeBtn.querySelector(".ea-alert__close-icon")).not.toBeNull();
@@ -2088,7 +1986,6 @@ describe("EaAlert", () => {
       alert.setAttribute("variant", "danger");
       container.appendChild(alert);
 
-      await waitForRender();
 
       let iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
       expect(iconEl).toBeNull();
@@ -2106,7 +2003,6 @@ describe("EaAlert", () => {
       alert.setAttribute("show-icon", "");
       container.appendChild(alert);
 
-      await waitForRender();
 
       let iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
       expect(iconEl).not.toBeNull();
@@ -2122,7 +2018,6 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       alert.closable = false;
       await waitForRender();
@@ -2135,7 +2030,6 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       alert.closable = false;
       await waitForRender();
@@ -2144,35 +2038,32 @@ describe("EaAlert", () => {
       expect(closeIcon).toBeNull();
     });
 
-    it("closeText 设置为 HTML 字符串时应该被安全处理", async () => {
+    it("closeText 设置为 HTML 字符串时应该被安全处理", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("close-text", "<script>alert('xss')</script>");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
       expect(closeBtn.querySelector("script")).toBeNull();
     });
 
-    it("heading 设置为安全 HTML 标签时应该保留", async () => {
+    it("heading 设置为安全 HTML 标签时应该保留", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("heading", "<b>Bold Heading</b>");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const headingEl = alert.shadowRoot.querySelector(".ea-alert__heading");
       expect(headingEl.querySelector("b")).not.toBeNull();
       expect(headingEl.textContent).toContain("Bold Heading");
     });
 
-    it("description 设置为安全 HTML 标签时应该保留", async () => {
+    it("description 设置为安全 HTML 标签时应该保留", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("description", "<em>Italic Description</em>");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const descriptionEl = alert.shadowRoot.querySelector(
         ".ea-alert__description"
@@ -2181,11 +2072,10 @@ describe("EaAlert", () => {
       expect(descriptionEl.textContent).toContain("Italic Description");
     });
 
-    it("关闭过程中 AbortController 应该正确管理 transitionend 监听", async () => {
+    it("关闭过程中 AbortController 应该正确管理 transitionend 监听", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
       closeBtn.click();
@@ -2202,7 +2092,6 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const closeHandler = vi.fn();
       alert.addEventListener("ea-close", closeHandler);
@@ -2224,12 +2113,11 @@ describe("EaAlert", () => {
       expect(closeHandler).toHaveBeenCalledTimes(1);
     });
 
-    it("showAfter=0 设置后不应该添加 is-hide class", async () => {
+    it("showAfter=0 设置后不应该添加 is-hide class", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("show-after", "0");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("is-hide")).toBe(false);
@@ -2279,11 +2167,10 @@ describe("EaAlert", () => {
   });
 
   describe("DOM Structure", () => {
-    it("容器应该包含 icon-wrap、content、close-btn 三个直接子元素", async () => {
+    it("容器应该包含 icon-wrap、content、close-btn 三个直接子元素", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       const directChildren = Array.from(containerEl.children);
@@ -2303,11 +2190,10 @@ describe("EaAlert", () => {
       expect(hasCloseBtn).toBe(true);
     });
 
-    it("content 元素应该包含 heading 和 description", async () => {
+    it("content 元素应该包含 heading 和 description", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const content = alert.shadowRoot.querySelector(".ea-alert__content");
       const heading = content.querySelector(".ea-alert__heading");
@@ -2317,43 +2203,39 @@ describe("EaAlert", () => {
       expect(description).not.toBeNull();
     });
 
-    it("content 元素应该有 flex: 1 样式", async () => {
+    it("content 元素应该有 flex: 1 样式", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const content = alert.shadowRoot.querySelector(".ea-alert__content");
       expect(content).not.toBeNull();
     });
 
-    it("icon-wrap 元素应该包含对应 slot", async () => {
+    it("icon-wrap 元素应该包含对应 slot", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const iconWrap = alert.shadowRoot.querySelector(".ea-alert__icon-wrap");
       const slot = iconWrap.querySelector('slot[name="icon"]');
       expect(slot).not.toBeNull();
     });
 
-    it("heading 元素应该包含对应 slot", async () => {
+    it("heading 元素应该包含对应 slot", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const headingEl = alert.shadowRoot.querySelector(".ea-alert__heading");
       const slot = headingEl.querySelector('slot[name="heading"]');
       expect(slot).not.toBeNull();
     });
 
-    it("description 元素应该包含对应 slot", async () => {
+    it("description 元素应该包含对应 slot", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
 
       const descriptionEl = alert.shadowRoot.querySelector(
         ".ea-alert__description"

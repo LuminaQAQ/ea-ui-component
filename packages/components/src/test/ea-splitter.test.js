@@ -19,7 +19,7 @@ describe("EaSplitter", () => {
   });
 
   describe("基础功能", () => {
-    it("应该正确渲染组件", async () => {
+    it("应该正确渲染组件", () => {
       const splitter = document.createElement("ea-splitter");
       splitter.innerHTML = `
         <ea-splitter-panel>Panel 1</ea-splitter-panel>
@@ -27,19 +27,17 @@ describe("EaSplitter", () => {
       `;
       container.appendChild(splitter);
 
-      await waitForRender();
-
       expect(splitter.shadowRoot).toBeTruthy();
       expect(splitter.shadowRoot.querySelector(".ea-splitter")).toBeTruthy();
     });
 
-    it("应该支持 CSS Parts", async () => {
+    it("应该支持 CSS Parts", () => {
       const splitter = document.createElement("ea-splitter");
       container.appendChild(splitter);
 
-      await waitForRender();
-
-      expect(splitter.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(
+        splitter.shadowRoot.querySelector('[part="container"]')
+      ).toBeTruthy();
     });
 
     it("应该自动创建 splitter-bar", async () => {
@@ -88,31 +86,25 @@ describe("EaSplitter", () => {
   });
 
   describe("Layout 属性", () => {
-    it("默认 layout 应该是 horizontal", async () => {
+    it("默认 layout 应该是 horizontal", () => {
       const splitter = document.createElement("ea-splitter");
       container.appendChild(splitter);
-
-      await waitForRender();
 
       expect(splitter.layout).toBe("horizontal");
     });
 
-    it("应该支持 layout 属性设置为 vertical", async () => {
+    it("应该支持 layout 属性设置为 vertical", () => {
       const splitter = document.createElement("ea-splitter");
       splitter.setAttribute("layout", "vertical");
       container.appendChild(splitter);
 
-      await waitForRender();
-
       expect(splitter.layout).toBe("vertical");
     });
 
-    it("应该支持 layout 属性设置为 horizontal", async () => {
+    it("应该支持 layout 属性设置为 horizontal", () => {
       const splitter = document.createElement("ea-splitter");
       splitter.setAttribute("layout", "horizontal");
       container.appendChild(splitter);
-
-      await waitForRender();
 
       expect(splitter.layout).toBe("horizontal");
     });
@@ -121,15 +113,17 @@ describe("EaSplitter", () => {
       const splitter = document.createElement("ea-splitter");
       container.appendChild(splitter);
 
-      await waitForRender();
-
       const containerEl = splitter.shadowRoot.querySelector(".ea-splitter");
-      expect(containerEl.classList.contains("ea-splitter--horizontal")).toBe(true);
+      expect(containerEl.classList.contains("ea-splitter--horizontal")).toBe(
+        true
+      );
 
       splitter.setAttribute("layout", "vertical");
       await waitForRender();
 
-      expect(containerEl.classList.contains("ea-splitter--vertical")).toBe(true);
+      expect(containerEl.classList.contains("ea-splitter--vertical")).toBe(
+        true
+      );
     });
 
     it("layout 变化时应该同步子面板的 layout", async () => {
@@ -242,21 +236,19 @@ describe("EaSplitter", () => {
   });
 
   describe("生命周期", () => {
-    it("组件连接后应该正确初始化", async () => {
+    it("组件连接后应该正确初始化", () => {
       const splitter = document.createElement("ea-splitter");
       splitter.innerHTML = `
         <ea-splitter-panel>Panel 1</ea-splitter-panel>
         <ea-splitter-panel>Panel 2</ea-splitter-panel>
       `;
       container.appendChild(splitter);
-
-      await waitForRender();
 
       expect(splitter.shadowRoot).toBeTruthy();
       expect(splitter.querySelectorAll("ea-splitter-panel").length).toBe(2);
     });
 
-    it("组件断开连接后应该正常移除", async () => {
+    it("组件断开连接后应该正常移除", () => {
       const splitter = document.createElement("ea-splitter");
       splitter.innerHTML = `
         <ea-splitter-panel>Panel 1</ea-splitter-panel>
@@ -264,11 +256,7 @@ describe("EaSplitter", () => {
       `;
       container.appendChild(splitter);
 
-      await waitForRender();
-
       splitter.remove();
-
-      await waitForRender(50);
 
       expect(splitter.isConnected).toBe(false);
     });

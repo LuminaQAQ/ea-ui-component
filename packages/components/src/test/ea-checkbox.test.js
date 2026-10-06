@@ -28,11 +28,9 @@ describe("EaCheckbox Component", () => {
       expect(checkbox.shadowRoot.innerHTML).toBeTruthy();
     });
 
-    it("应该包含所有必要的 CSS Parts", async () => {
+    it("应该包含所有必要的 CSS Parts", () => {
       const checkbox = document.createElement("ea-checkbox");
       container.appendChild(checkbox);
-
-      await waitForRender();
 
       const parts = ["container", "original", "input", "label"];
 
@@ -43,11 +41,9 @@ describe("EaCheckbox Component", () => {
       });
     });
 
-    it("应该包含原生 input 元素", async () => {
+    it("应该包含原生 input 元素", () => {
       const checkbox = document.createElement("ea-checkbox");
       container.appendChild(checkbox);
-
-      await waitForRender();
 
       const inputElement = checkbox.shadowRoot.querySelector(
         ".ea-checkbox__original"
@@ -65,11 +61,9 @@ describe("EaCheckbox Component", () => {
       expect(slot).toBeTruthy();
     });
 
-    it("应该包含 inner 和 label 元素", async () => {
+    it("应该包含 inner 和 label 元素", () => {
       const checkbox = document.createElement("ea-checkbox");
       container.appendChild(checkbox);
-
-      await waitForRender();
 
       expect(checkbox.shadowRoot.querySelector(".ea-checkbox__inner")).toBeTruthy();
       expect(checkbox.shadowRoot.querySelector(".ea-checkbox__label")).toBeTruthy();
@@ -77,36 +71,28 @@ describe("EaCheckbox Component", () => {
   });
 
   describe("Label Attribute", () => {
-    it("默认 label 应该是空字符串", async () => {
+    it("默认 label 应该是空字符串", () => {
       const checkbox = document.createElement("ea-checkbox");
       container.appendChild(checkbox);
-
-      await waitForRender();
 
       expect(checkbox.label).toBe("");
     });
 
-    it("应该支持 label 属性设置", async () => {
+    it("应该支持 label 属性设置", () => {
       const checkbox = document.createElement("ea-checkbox");
       checkbox.setAttribute("label", "Option 1");
       container.appendChild(checkbox);
-
-      await waitForRender();
 
       expect(checkbox.label).toBe("Option 1");
       expect(checkbox.getAttribute("label")).toBe("Option 1");
     });
 
-    it("动态修改 label 应该生效", async () => {
+    it("动态修改 label 应该生效", () => {
       const checkbox = document.createElement("ea-checkbox");
       checkbox.setAttribute("label", "Old Label");
       container.appendChild(checkbox);
 
-      await waitForRender();
-
       checkbox.setAttribute("label", "New Label");
-      await waitForRender();
-
       expect(checkbox.label).toBe("New Label");
     });
 
@@ -123,45 +109,35 @@ describe("EaCheckbox Component", () => {
   });
 
   describe("Value Attribute", () => {
-    it("默认 value 应该是空字符串", async () => {
+    it("默认 value 应该是空字符串", () => {
       const checkbox = document.createElement("ea-checkbox");
       container.appendChild(checkbox);
-
-      await waitForRender();
 
       expect(checkbox.value).toBe("");
     });
 
-    it("应该支持 value 属性设置", async () => {
+    it("应该支持 value 属性设置", () => {
       const checkbox = document.createElement("ea-checkbox");
       checkbox.setAttribute("value", "option1");
       container.appendChild(checkbox);
-
-      await waitForRender();
 
       expect(checkbox.value).toBe("option1");
       expect(checkbox.getAttribute("value")).toBe("option1");
     });
 
-    it("动态修改 value 应该生效", async () => {
+    it("动态修改 value 应该生效", () => {
       const checkbox = document.createElement("ea-checkbox");
       checkbox.setAttribute("value", "old-value");
       container.appendChild(checkbox);
 
-      await waitForRender();
-
       checkbox.setAttribute("value", "new-value");
-      await waitForRender();
-
       expect(checkbox.value).toBe("new-value");
     });
 
-    it("value 应该正确传递到原生 input", async () => {
+    it("value 应该正确传递到原生 input", () => {
       const checkbox = document.createElement("ea-checkbox");
       checkbox.setAttribute("value", "test-value");
       container.appendChild(checkbox);
-
-      await waitForRender();
 
       const input = checkbox.shadowRoot.querySelector(".ea-checkbox__original");
       expect(input.value).toBe("test-value");
@@ -169,22 +145,18 @@ describe("EaCheckbox Component", () => {
   });
 
   describe("Checked Attribute", () => {
-    it("默认应该未选中", async () => {
+    it("默认应该未选中", () => {
       const checkbox = document.createElement("ea-checkbox");
       container.appendChild(checkbox);
-
-      await waitForRender();
 
       expect(checkbox.checked).toBe(false);
       expect(checkbox.hasAttribute("checked")).toBe(false);
     });
 
-    it("设置 checked 属性应该选中", async () => {
+    it("设置 checked 属性应该选中", () => {
       const checkbox = document.createElement("ea-checkbox");
       checkbox.setAttribute("checked", "");
       container.appendChild(checkbox);
-
-      await waitForRender();
 
       expect(checkbox.checked).toBe(true);
       expect(checkbox.hasAttribute("checked")).toBe(true);
@@ -202,17 +174,13 @@ describe("EaCheckbox Component", () => {
       expect(checkbox.checked).toBe(true);
 
       checkbox.checked = false;
-      await waitForRender();
-
       expect(checkbox.checked).toBe(false);
     });
 
-    it("checked 状态应该同步到原生 input", async () => {
+    it("checked 状态应该同步到原生 input", () => {
       const checkbox = document.createElement("ea-checkbox");
       checkbox.setAttribute("checked", "");
       container.appendChild(checkbox);
-
-      await waitForRender();
 
       const input = checkbox.shadowRoot.querySelector(".ea-checkbox__original");
       expect(input.checked).toBe(true);
@@ -231,33 +199,27 @@ describe("EaCheckbox Component", () => {
   });
 
   describe("Disabled Attribute", () => {
-    it("默认应该是启用状态", async () => {
+    it("默认应该是启用状态", () => {
       const checkbox = document.createElement("ea-checkbox");
       container.appendChild(checkbox);
-
-      await waitForRender();
 
       expect(checkbox.disabled).toBe(false);
       expect(checkbox.hasAttribute("disabled")).toBe(false);
     });
 
-    it("设置 disabled 属性应该禁用", async () => {
+    it("设置 disabled 属性应该禁用", () => {
       const checkbox = document.createElement("ea-checkbox");
       checkbox.setAttribute("disabled", "");
       container.appendChild(checkbox);
-
-      await waitForRender();
 
       expect(checkbox.disabled).toBe(true);
       expect(checkbox.hasAttribute("disabled")).toBe(true);
     });
 
-    it("disabled 状态应该同步到原生 input", async () => {
+    it("disabled 状态应该同步到原生 input", () => {
       const checkbox = document.createElement("ea-checkbox");
       checkbox.setAttribute("disabled", "");
       container.appendChild(checkbox);
-
-      await waitForRender();
 
       const input = checkbox.shadowRoot.querySelector(".ea-checkbox__original");
       expect(input.disabled).toBe(true);
@@ -275,8 +237,6 @@ describe("EaCheckbox Component", () => {
       expect(checkbox.disabled).toBe(true);
 
       checkbox.disabled = false;
-      await waitForRender();
-
       expect(checkbox.disabled).toBe(false);
     });
 
@@ -293,22 +253,18 @@ describe("EaCheckbox Component", () => {
   });
 
   describe("Indeterminate Attribute", () => {
-    it("默认不应该处于半选状态", async () => {
+    it("默认不应该处于半选状态", () => {
       const checkbox = document.createElement("ea-checkbox");
       container.appendChild(checkbox);
-
-      await waitForRender();
 
       expect(checkbox.indeterminate).toBe(false);
       expect(checkbox.hasAttribute("indeterminate")).toBe(false);
     });
 
-    it("设置 indeterminate 属性应该应用半选状态", async () => {
+    it("设置 indeterminate 属性应该应用半选状态", () => {
       const checkbox = document.createElement("ea-checkbox");
       checkbox.setAttribute("indeterminate", "");
       container.appendChild(checkbox);
-
-      await waitForRender();
 
       expect(checkbox.indeterminate).toBe(true);
       expect(checkbox.hasAttribute("indeterminate")).toBe(true);
@@ -326,8 +282,6 @@ describe("EaCheckbox Component", () => {
       expect(checkbox.indeterminate).toBe(true);
 
       checkbox.indeterminate = false;
-      await waitForRender();
-
       expect(checkbox.indeterminate).toBe(false);
     });
 
@@ -344,62 +298,48 @@ describe("EaCheckbox Component", () => {
   });
 
   describe("Size Attribute", () => {
-    it("默认尺寸应该是 default", async () => {
+    it("默认尺寸应该是 default", () => {
       const checkbox = document.createElement("ea-checkbox");
       container.appendChild(checkbox);
-
-      await waitForRender();
 
       expect(checkbox.size).toBe("default");
     });
 
-    it("应该支持 size='large'", async () => {
+    it("应该支持 size='large'", () => {
       const checkbox = document.createElement("ea-checkbox");
       checkbox.setAttribute("size", "large");
       container.appendChild(checkbox);
-
-      await waitForRender();
 
       expect(checkbox.size).toBe("large");
       expect(checkbox.getAttribute("size")).toBe("large");
     });
 
-    it("应该支持 size='small'", async () => {
+    it("应该支持 size='small'", () => {
       const checkbox = document.createElement("ea-checkbox");
       checkbox.setAttribute("size", "small");
       container.appendChild(checkbox);
-
-      await waitForRender();
 
       expect(checkbox.size).toBe("small");
       expect(checkbox.getAttribute("size")).toBe("small");
     });
 
-    it("应该支持 size='default'", async () => {
+    it("应该支持 size='default'", () => {
       const checkbox = document.createElement("ea-checkbox");
       checkbox.setAttribute("size", "default");
       container.appendChild(checkbox);
-
-      await waitForRender();
 
       expect(checkbox.size).toBe("default");
     });
 
-    it("动态修改 size 应该生效", async () => {
+    it("动态修改 size 应该生效", () => {
       const checkbox = document.createElement("ea-checkbox");
       checkbox.setAttribute("size", "default");
       container.appendChild(checkbox);
 
-      await waitForRender();
-
       checkbox.setAttribute("size", "large");
-      await waitForRender();
-
       expect(checkbox.size).toBe("large");
 
       checkbox.setAttribute("size", "small");
-      await waitForRender();
-
       expect(checkbox.size).toBe("small");
     });
 
@@ -416,22 +356,18 @@ describe("EaCheckbox Component", () => {
   });
 
   describe("Border Attribute", () => {
-    it("默认不应该有边框样式", async () => {
+    it("默认不应该有边框样式", () => {
       const checkbox = document.createElement("ea-checkbox");
       container.appendChild(checkbox);
-
-      await waitForRender();
 
       expect(checkbox.border).toBe(false);
       expect(checkbox.hasAttribute("border")).toBe(false);
     });
 
-    it("设置 border 属性应该应用边框样式", async () => {
+    it("设置 border 属性应该应用边框样式", () => {
       const checkbox = document.createElement("ea-checkbox");
       checkbox.setAttribute("border", "");
       container.appendChild(checkbox);
-
-      await waitForRender();
 
       expect(checkbox.border).toBe(true);
       expect(checkbox.hasAttribute("border")).toBe(true);
@@ -449,8 +385,6 @@ describe("EaCheckbox Component", () => {
       expect(checkbox.border).toBe(true);
 
       checkbox.border = false;
-      await waitForRender();
-
       expect(checkbox.border).toBe(false);
     });
 
@@ -467,22 +401,18 @@ describe("EaCheckbox Component", () => {
   });
 
   describe("Limit-Disabled Attribute", () => {
-    it("默认不应该被限制禁用", async () => {
+    it("默认不应该被限制禁用", () => {
       const checkbox = document.createElement("ea-checkbox");
       container.appendChild(checkbox);
-
-      await waitForRender();
 
       expect(checkbox.limitDisabled).toBe(false);
       expect(checkbox.hasAttribute("limit-disabled")).toBe(false);
     });
 
-    it("设置 limit-disabled 属性应该应用限制禁用状态", async () => {
+    it("设置 limit-disabled 属性应该应用限制禁用状态", () => {
       const checkbox = document.createElement("ea-checkbox");
       checkbox.setAttribute("limit-disabled", "");
       container.appendChild(checkbox);
-
-      await waitForRender();
 
       expect(checkbox.limitDisabled).toBe(true);
       expect(checkbox.hasAttribute("limit-disabled")).toBe(true);
@@ -512,33 +442,27 @@ describe("EaCheckbox Component", () => {
   });
 
   describe("Required Attribute", () => {
-    it("默认不应该必填", async () => {
+    it("默认不应该必填", () => {
       const checkbox = document.createElement("ea-checkbox");
       container.appendChild(checkbox);
-
-      await waitForRender();
 
       expect(checkbox.required).toBe(false);
       expect(checkbox.hasAttribute("required")).toBe(false);
     });
 
-    it("设置 required 属性应该标记为必填", async () => {
+    it("设置 required 属性应该标记为必填", () => {
       const checkbox = document.createElement("ea-checkbox");
       checkbox.setAttribute("required", "");
       container.appendChild(checkbox);
-
-      await waitForRender();
 
       expect(checkbox.required).toBe(true);
       expect(checkbox.hasAttribute("required")).toBe(true);
     });
 
-    it("required 应该添加到原生 input", async () => {
+    it("required 应该添加到原生 input", () => {
       const checkbox = document.createElement("ea-checkbox");
       checkbox.setAttribute("required", "");
       container.appendChild(checkbox);
-
-      await waitForRender();
 
       const input = checkbox.shadowRoot.querySelector(".ea-checkbox__original");
       expect(input.hasAttribute("required")).toBe(true);
@@ -673,12 +597,10 @@ describe("EaCheckbox Component", () => {
   });
 
   describe("Name Attribute", () => {
-    it("应该支持 name 属性", async () => {
+    it("应该支持 name 属性", () => {
       const checkbox = document.createElement("ea-checkbox");
       checkbox.setAttribute("name", "test-checkbox");
       container.appendChild(checkbox);
-
-      await waitForRender();
 
       expect(checkbox.getAttribute("name")).toBe("test-checkbox");
     });
@@ -692,8 +614,6 @@ describe("EaCheckbox Component", () => {
       await waitForRender();
 
       checkbox.focus();
-      await waitForRender();
-
       const innerEl = checkbox.shadowRoot.querySelector(".ea-checkbox__inner");
       expect(innerEl).toBeTruthy();
     });
@@ -708,7 +628,6 @@ describe("EaCheckbox Component", () => {
       await waitForRender();
 
       checkbox.blur();
-      await waitForRender();
     });
 
     it("获得焦点时应该触发 focus 事件", async () => {
@@ -797,8 +716,6 @@ describe("EaCheckbox Component", () => {
       expect(checkbox.checked).toBe(true);
 
       checkbox.toggle();
-      await waitForRender();
-
       expect(checkbox.checked).toBe(false);
     });
 
@@ -837,7 +754,6 @@ describe("EaCheckbox Component", () => {
       expect(checkbox.checked).toBe(false);
 
       checkbox.toggle();
-      await waitForRender();
       expect(checkbox.checked).toBe(true);
     });
   });
@@ -1007,11 +923,9 @@ describe("EaCheckboxGroup Component", () => {
       expect(group.shadowRoot.innerHTML).toBeTruthy();
     });
 
-    it("应该包含所有必要的 CSS Parts", async () => {
+    it("应该包含所有必要的 CSS Parts", () => {
       const group = document.createElement("ea-checkbox-group");
       container.appendChild(group);
-
-      await waitForRender();
 
       const parts = ["container", "form-label"];
 
@@ -1030,11 +944,9 @@ describe("EaCheckboxGroup Component", () => {
   });
 
   describe("Label Attribute", () => {
-    it("默认 label 应该是空字符串", async () => {
+    it("默认 label 应该是空字符串", () => {
       const group = document.createElement("ea-checkbox-group");
       container.appendChild(group);
-
-      await waitForRender();
 
       expect(group.label).toBe("");
     });
@@ -1042,8 +954,6 @@ describe("EaCheckboxGroup Component", () => {
     it("应该支持 label 属性设置", async () => {
       const group = document.createElement("ea-checkbox-group");
       container.appendChild(group);
-
-      await waitForRender();
 
       group.setAttribute("label", "Group Label");
       await waitForRender();
@@ -1056,18 +966,12 @@ describe("EaCheckboxGroup Component", () => {
       expect(labelEl.textContent).toBe("Group Label");
     });
 
-    it("动态修改 label 应该生效", async () => {
+    it("动态修改 label 应该生效", () => {
       const group = document.createElement("ea-checkbox-group");
       container.appendChild(group);
 
-      await waitForRender();
-
       group.setAttribute("label", "Old Label");
-      await waitForRender();
-
       group.setAttribute("label", "New Label");
-      await waitForRender();
-
       expect(group.label).toBe("New Label");
     });
   });
@@ -1101,8 +1005,6 @@ describe("EaCheckboxGroup Component", () => {
         <ea-checkbox label="B" value="b"></ea-checkbox>
       `;
       container.appendChild(group);
-
-      await waitForRender();
       await waitForRender();
 
       const checkboxes = group.querySelectorAll("ea-checkbox");
@@ -1123,12 +1025,10 @@ describe("EaCheckboxGroup Component", () => {
       expect(group.value.length).toBe(0);
     });
 
-    it("应该支持设置初始值", async () => {
+    it("应该支持设置初始值", () => {
       const group = document.createElement("ea-checkbox-group");
       group.value = ["Value A", "Value B"];
       container.appendChild(group);
-
-      await waitForRender();
 
       expect(group.value).toEqual(["Value A", "Value B"]);
     });
@@ -1140,8 +1040,6 @@ describe("EaCheckboxGroup Component", () => {
         <ea-checkbox label="B" value="b"></ea-checkbox>
       `;
       container.appendChild(group);
-
-      await waitForRender();
       await waitForRender();
 
       const checkboxA = group.querySelector('ea-checkbox[value="a"]');
@@ -1151,17 +1049,13 @@ describe("EaCheckboxGroup Component", () => {
       const input = checkboxA.shadowRoot.querySelector(".ea-checkbox__original");
       input.checked = true;
       input.dispatchEvent(new Event("change", { bubbles: true }));
-
-      await waitForRender();
     });
   });
 
   describe("Disabled Attribute", () => {
-    it("默认应该启用", async () => {
+    it("默认应该启用", () => {
       const group = document.createElement("ea-checkbox-group");
       container.appendChild(group);
-
-      await waitForRender();
 
       expect(group.disabled).toBe(false);
     });
@@ -1209,11 +1103,9 @@ describe("EaCheckboxGroup Component", () => {
   });
 
   describe("Size Attribute", () => {
-    it("默认尺寸应该是空字符串", async () => {
+    it("默认尺寸应该是空字符串", () => {
       const group = document.createElement("ea-checkbox-group");
       container.appendChild(group);
-
-      await waitForRender();
 
       expect(group.size).toBe("");
     });
@@ -1226,8 +1118,6 @@ describe("EaCheckboxGroup Component", () => {
       `;
       container.appendChild(group);
 
-      await waitForRender();
-
       group.setAttribute("size", "large");
       await waitForRender();
 
@@ -1237,40 +1127,30 @@ describe("EaCheckboxGroup Component", () => {
       });
     });
 
-    it("动态修改 size 应该生效", async () => {
+    it("动态修改 size 应该生效", () => {
       const group = document.createElement("ea-checkbox-group");
       group.innerHTML = `
         <ea-checkbox label="A" value="a"></ea-checkbox>
       `;
       container.appendChild(group);
 
-      await waitForRender();
-
       group.setAttribute("size", "default");
-      await waitForRender();
-
       group.setAttribute("size", "small");
-      await waitForRender();
-
       expect(group.size).toBe("small");
     });
   });
 
   describe("Min/Max Attributes", () => {
-    it("默认 min 应该是 0", async () => {
+    it("默认 min 应该是 0", () => {
       const group = document.createElement("ea-checkbox-group");
       container.appendChild(group);
-
-      await waitForRender();
 
       expect(group.min).toBe(0);
     });
 
-    it("默认 max 应该是 Infinity", async () => {
+    it("默认 max 应该是 Infinity", () => {
       const group = document.createElement("ea-checkbox-group");
       container.appendChild(group);
-
-      await waitForRender();
 
       expect(group.max).toBe(Infinity);
     });
@@ -1310,42 +1190,28 @@ describe("EaCheckboxGroup Component", () => {
         <ea-checkbox label="A" value="a" checked></ea-checkbox>
         <ea-checkbox label="B" value="b"></ea-checkbox>
       `;
-
-      await waitForRender();
-      await waitForRender();
-
       expect(group.max).toBe(1);
     });
 
-    it("动态修改 min/max 应该更新限制状态", async () => {
+    it("动态修改 min/max 应该更新限制状态", () => {
       const group = document.createElement("ea-checkbox-group");
       group.innerHTML = `
         <ea-checkbox label="A" value="a" checked></ea-checkbox>
         <ea-checkbox label="B" value="b"></ea-checkbox>
       `;
       container.appendChild(group);
-
-      await waitForRender();
-      await waitForRender();
-
       group.setAttribute("min", "2");
-      await waitForRender();
-
       expect(group.min).toBe(2);
 
       group.setAttribute("max", "1");
-      await waitForRender();
-
       expect(group.max).toBe(1);
     });
   });
 
   describe("Required Attribute", () => {
-    it("默认不应该必填", async () => {
+    it("默认不应该必填", () => {
       const group = document.createElement("ea-checkbox-group");
       container.appendChild(group);
-
-      await waitForRender();
 
       expect(group.required).toBe(false);
     });
@@ -1358,8 +1224,6 @@ describe("EaCheckboxGroup Component", () => {
         <ea-checkbox label="B" value="b"></ea-checkbox>
       `;
       container.appendChild(group);
-
-      await waitForRender();
       await waitForRender();
 
       try {
@@ -1407,8 +1271,6 @@ describe("EaCheckboxGroup Component", () => {
       group.setAttribute("size", "large");
       group.disabled = true;
 
-      await waitForRender();
-
       expect(group.label).toBe("Test Group");
       expect(group.size).toBe("large");
       expect(group.disabled).toBe(true);
@@ -1423,8 +1285,6 @@ describe("EaCheckboxGroup Component", () => {
         <ea-checkbox label="B" value="b"></ea-checkbox>
       `;
       container.appendChild(group);
-
-      await waitForRender();
       await waitForRender();
 
       group.formResetCallback();

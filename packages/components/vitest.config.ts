@@ -11,6 +11,11 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     include: ["src/**/*.test.{js,ts}"],
+    setupFiles: ["./src/test/setup.ts"],
+    clearMocks: true,
+    restoreMocks: true,
+    unstubGlobals: true,
+    unstubEnvs: true,
     coverage: {
       provider: "v8",
       reporter: ["text", "json", "html"],
@@ -18,6 +23,7 @@ export default defineConfig({
       exclude: ["node_modules/", "src/**/*.test.js"],
     },
     pool: "forks",
+    maxWorkers: 4,
     deps: {
       optimizer: {
         ssr: {
@@ -38,7 +44,7 @@ export default defineConfig({
   resolve: {
     alias: [
       {
-        find: /^@easy-component-ui\/themes\/([\w-]+)\.scss(\?.*)?$/,   
+        find: /^@easy-component-ui\/themes\/([\w-]+)\.scss(\?.*)?$/,
         replacement: `${themesSrc}/styles/$1.scss$2`,
       },
       { find: "@easy-component-ui/core", replacement: coreSrc },
@@ -48,7 +54,10 @@ export default defineConfig({
       { find: "@utils", replacement: resolve(coreSrc, "utils") },
       { find: "@stores", replacement: resolve(coreSrc, "stores") },
       { find: "@", replacement: resolve(__dirname, "src/") },
-      { find: "@components", replacement: resolve(__dirname, "src/components") },
+      {
+        find: "@components",
+        replacement: resolve(__dirname, "src/components"),
+      },
       { find: "@common", replacement: resolve(__dirname, "src/common") },
       { find: "@constants", replacement: resolve(__dirname, "src/constants") },
     ],

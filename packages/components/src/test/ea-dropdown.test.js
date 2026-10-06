@@ -62,36 +62,32 @@ describe("EaDropdown Component", () => {
   // ==================== 基础渲染 ====================
 
   describe("Basic Rendering", () => {
-    it("应该正确渲染组件并包含 shadowRoot", async () => {
+    it("应该正确渲染组件并包含 shadowRoot", () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
 
       expect(dropdown.shadowRoot).toBeTruthy();
     });
 
-    it("应该渲染 .ea-popper 容器", async () => {
+    it("应该渲染 .ea-popper 容器", () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
 
       expect(dropdown.shadowRoot.querySelector(".ea-popper")).toBeTruthy();
     });
 
-    it("应该渲染 .ea-popper__reference 元素", async () => {
+    it("应该渲染 .ea-popper__reference 元素", () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
 
       expect(
         dropdown.shadowRoot.querySelector(".ea-popper__reference")
       ).toBeTruthy();
     });
 
-    it("应该渲染 .ea-popper__original 元素", async () => {
+    it("应该渲染 .ea-popper__original 元素", () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
 
       expect(
         dropdown.shadowRoot.querySelector(".ea-popper__original")
@@ -133,30 +129,27 @@ describe("EaDropdown Component", () => {
   // ==================== CSS Parts ====================
 
   describe("CSS Parts", () => {
-    it("应该支持 container part", async () => {
+    it("应该支持 container part", () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
 
       expect(
         dropdown.shadowRoot.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
-    it("应该支持 reference part", async () => {
+    it("应该支持 reference part", () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
 
       expect(
         dropdown.shadowRoot.querySelector('[part="reference"]')
       ).toBeTruthy();
     });
 
-    it("应该支持 original part", async () => {
+    it("应该支持 original part", () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
 
       expect(
         dropdown.shadowRoot.querySelector('[part="original"]')
@@ -178,10 +171,9 @@ describe("EaDropdown Component", () => {
       expect(referenceSlot).toBeTruthy();
     });
 
-    it("应该渲染默认 slot", async () => {
+    it("应该渲染默认 slot", () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
 
       const defaultSlot = dropdown.shadowRoot.querySelector("slot:not([name])");
       expect(defaultSlot).toBeTruthy();
@@ -208,29 +200,26 @@ describe("EaDropdown Component", () => {
   // ==================== trigger 属性 ====================
 
   describe("Trigger Attribute", () => {
-    it("默认 trigger 应该是 hover", async () => {
+    it("默认 trigger 应该是 hover", () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
 
       expect(dropdown.trigger).toBe("hover");
     });
 
-    it("设置 trigger='click' 应该生效", async () => {
+    it("设置 trigger='click' 应该生效", () => {
       const dropdown = createDropdown({ trigger: "click" }, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
 
       expect(dropdown.trigger).toBe("click");
     });
 
-    it("设置 trigger='contextmenu' 应该生效", async () => {
+    it("设置 trigger='contextmenu' 应该生效", () => {
       const dropdown = createDropdown(
         { trigger: "contextmenu" },
         withReference()
       );
       container.appendChild(dropdown);
-      await waitForRender();
 
       expect(dropdown.trigger).toBe("contextmenu");
     });
@@ -243,7 +232,6 @@ describe("EaDropdown Component", () => {
       expect(dropdown.trigger).toBe("hover");
 
       dropdown.trigger = "click";
-      await waitForRender(0);
 
       expect(dropdown.trigger).toBe("click");
     });
@@ -254,7 +242,6 @@ describe("EaDropdown Component", () => {
       await waitForRender();
 
       dropdown.setAttribute("trigger", "invalid");
-      await waitForRender(0);
 
       expect(dropdown.trigger).toBe("hover");
     });
@@ -355,10 +342,9 @@ describe("EaDropdown Component", () => {
   // ==================== hideOnClick 属性 ====================
 
   describe("Hide On Click Attribute", () => {
-    it("默认 hideOnClick 应该是 true", async () => {
+    it("默认 hideOnClick 应该是 true", () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
 
       expect(dropdown.hideOnClick).toBe(true);
     });
@@ -368,7 +354,6 @@ describe("EaDropdown Component", () => {
       container.appendChild(dropdown);
       await waitForRender();
       dropdown.hideOnClick = false;
-      await waitForRender();
 
       expect(dropdown.hideOnClick).toBe(false);
     });
@@ -381,7 +366,6 @@ describe("EaDropdown Component", () => {
       expect(dropdown.hideOnClick).toBe(true);
 
       dropdown.hideOnClick = false;
-      await waitForRender(0);
 
       expect(dropdown.hideOnClick).toBe(false);
     });
@@ -390,34 +374,30 @@ describe("EaDropdown Component", () => {
   // ==================== size 属性 ====================
 
   describe("Size Attribute", () => {
-    it("默认 size 应该为空字符串", async () => {
+    it("默认 size 应该为空字符串", () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
 
       expect(dropdown.size).toBe("");
     });
 
-    it("设置 size='small' 应该生效", async () => {
+    it("设置 size='small' 应该生效", () => {
       const dropdown = createDropdown({ size: "small" }, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
 
       expect(dropdown.size).toBe("small");
     });
 
-    it("设置 size='default' 应该生效", async () => {
+    it("设置 size='default' 应该生效", () => {
       const dropdown = createDropdown({ size: "default" }, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
 
       expect(dropdown.size).toBe("default");
     });
 
-    it("设置 size='large' 应该生效", async () => {
+    it("设置 size='large' 应该生效", () => {
       const dropdown = createDropdown({ size: "large" }, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
 
       expect(dropdown.size).toBe("large");
     });
@@ -426,26 +406,23 @@ describe("EaDropdown Component", () => {
   // ==================== 继承自 EaPopper 的属性 ====================
 
   describe("Inherited EaPopper Attributes", () => {
-    it("默认 width 应该是 150", async () => {
+    it("默认 width 应该是 150", () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
 
       expect(dropdown.width).toBe(150);
     });
 
-    it("设置 width 属性应该生效", async () => {
+    it("设置 width 属性应该生效", () => {
       const dropdown = createDropdown({ width: "200" }, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
 
       expect(dropdown.width).toBe(200);
     });
 
-    it("默认 showArrow 应该是 true", async () => {
+    it("默认 showArrow 应该是 true", () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
 
       expect(dropdown.showArrow).toBe(true);
     });
@@ -455,7 +432,6 @@ describe("EaDropdown Component", () => {
       container.appendChild(dropdown);
       await waitForRender();
       dropdown.showArrow = false;
-      await waitForRender();
 
       expect(dropdown.showArrow).toBe(false);
     });
@@ -468,18 +444,16 @@ describe("EaDropdown Component", () => {
       expect(dropdown.visible).toBe(false);
     });
 
-    it("默认 offset 应该是 '0 0'", async () => {
+    it("默认 offset 应该是 '0 0'", () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
 
       expect(dropdown.offset).toBe("0 0");
     });
 
-    it("默认 flip 应该是 true", async () => {
+    it("默认 flip 应该是 true", () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
 
       expect(dropdown.flip).toBe(true);
     });
@@ -488,26 +462,23 @@ describe("EaDropdown Component", () => {
   // ==================== 方法 ====================
 
   describe("Methods", () => {
-    it("应该提供 show 方法", async () => {
+    it("应该提供 show 方法", () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
 
       expect(typeof dropdown.show).toBe("function");
     });
 
-    it("应该提供 hide 方法", async () => {
+    it("应该提供 hide 方法", () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
 
       expect(typeof dropdown.hide).toBe("function");
     });
 
-    it("应该提供 toggle 方法", async () => {
+    it("应该提供 toggle 方法", () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
 
       expect(typeof dropdown.toggle).toBe("function");
     });
@@ -947,15 +918,14 @@ describe("EaDropdown Component", () => {
   // ==================== 边界条件 ====================
 
   describe("Edge Cases", () => {
-    it("空内容时应该正确处理", async () => {
+    it("空内容时应该正确处理", () => {
       const dropdown = createDropdown();
       container.appendChild(dropdown);
-      await waitForRender();
 
       expect(dropdown.shadowRoot).toBeTruthy();
     });
 
-    it("没有 reference 时应该正确处理", async () => {
+    it("没有 reference 时应该正确处理", () => {
       const dropdown = createDropdown(
         {},
         `<ea-dropdown-menu>
@@ -963,18 +933,16 @@ describe("EaDropdown Component", () => {
          </ea-dropdown-menu>`
       );
       container.appendChild(dropdown);
-      await waitForRender();
 
       expect(dropdown.shadowRoot).toBeTruthy();
     });
 
-    it("没有 dropdown-menu 时应该正确处理", async () => {
+    it("没有 dropdown-menu 时应该正确处理", () => {
       const dropdown = createDropdown(
         {},
         `<span slot="reference">Trigger</span>`
       );
       container.appendChild(dropdown);
-      await waitForRender();
 
       expect(dropdown.shadowRoot).toBeTruthy();
     });
@@ -1022,10 +990,9 @@ describe("EaDropdown Component", () => {
   // ==================== 生命周期 ====================
 
   describe("Lifecycle", () => {
-    it("组件连接后应该正确初始化", async () => {
+    it("组件连接后应该正确初始化", () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
 
       expect(
         dropdown.shadowRoot.querySelector('slot[name="reference"]')
@@ -1035,20 +1002,18 @@ describe("EaDropdown Component", () => {
       ).toBeTruthy();
     });
 
-    it("组件断开连接后应该清理资源", async () => {
+    it("组件断开连接后应该清理资源", () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
 
       expect(() => {
         dropdown.remove();
       }).not.toThrow();
     });
 
-    it("应该继承 EaPopper 的功能", async () => {
+    it("应该继承 EaPopper 的功能", () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
 
       expect(typeof dropdown.show).toBe("function");
       expect(typeof dropdown.hide).toBe("function");
@@ -1068,7 +1033,6 @@ describe("EaDropdown Component", () => {
 
       dropdown.remove();
       container.appendChild(dropdown);
-      await waitForRender();
 
       expect(dropdown.trigger).toBe("click");
     });
@@ -1092,46 +1056,41 @@ describe("EaDropdownItem Component", () => {
   // ==================== 基础渲染 ====================
 
   describe("Basic Rendering", () => {
-    it("应该正确渲染组件并包含 shadowRoot", async () => {
+    it("应该正确渲染组件并包含 shadowRoot", () => {
       const item = createDropdownItem();
       container.appendChild(item);
-      await waitForRender();
 
       expect(item.shadowRoot).toBeTruthy();
     });
 
-    it("应该渲染 .ea-dropdown-item 容器", async () => {
+    it("应该渲染 .ea-dropdown-item 容器", () => {
       const item = createDropdownItem();
       container.appendChild(item);
-      await waitForRender();
 
       expect(item.shadowRoot.querySelector(".ea-dropdown-item")).toBeTruthy();
     });
 
-    it("应该渲染 .ea-dropdown-item__divider 元素", async () => {
+    it("应该渲染 .ea-dropdown-item__divider 元素", () => {
       const item = createDropdownItem();
       container.appendChild(item);
-      await waitForRender();
 
       expect(
         item.shadowRoot.querySelector(".ea-dropdown-item__divider")
       ).toBeTruthy();
     });
 
-    it("应该渲染 .ea-dropdown-item__content 元素", async () => {
+    it("应该渲染 .ea-dropdown-item__content 元素", () => {
       const item = createDropdownItem();
       container.appendChild(item);
-      await waitForRender();
 
       expect(
         item.shadowRoot.querySelector(".ea-dropdown-item__content")
       ).toBeTruthy();
     });
 
-    it("应该渲染默认 slot", async () => {
+    it("应该渲染默认 slot", () => {
       const item = createDropdownItem();
       container.appendChild(item);
-      await waitForRender();
 
       const slot = item.shadowRoot.querySelector("slot");
       expect(slot).toBeTruthy();
@@ -1141,26 +1100,23 @@ describe("EaDropdownItem Component", () => {
   // ==================== CSS Parts ====================
 
   describe("CSS Parts", () => {
-    it("应该支持 container part", async () => {
+    it("应该支持 container part", () => {
       const item = createDropdownItem();
       container.appendChild(item);
-      await waitForRender();
 
       expect(item.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
 
-    it("应该支持 divider part", async () => {
+    it("应该支持 divider part", () => {
       const item = createDropdownItem();
       container.appendChild(item);
-      await waitForRender();
 
       expect(item.shadowRoot.querySelector('[part="divider"]')).toBeTruthy();
     });
 
-    it("应该支持 content part", async () => {
+    it("应该支持 content part", () => {
       const item = createDropdownItem();
       container.appendChild(item);
-      await waitForRender();
 
       expect(item.shadowRoot.querySelector('[part="content"]')).toBeTruthy();
     });
@@ -1169,18 +1125,16 @@ describe("EaDropdownItem Component", () => {
   // ==================== disabled 属性 ====================
 
   describe("Disabled Attribute", () => {
-    it("默认 disabled 应该是 false", async () => {
+    it("默认 disabled 应该是 false", () => {
       const item = createDropdownItem();
       container.appendChild(item);
-      await waitForRender();
 
       expect(item.disabled).toBe(false);
     });
 
-    it("设置 disabled 属性应该生效", async () => {
+    it("设置 disabled 属性应该生效", () => {
       const item = createDropdownItem({ disabled: "" });
       container.appendChild(item);
-      await waitForRender();
 
       expect(item.disabled).toBe(true);
     });
@@ -1229,18 +1183,16 @@ describe("EaDropdownItem Component", () => {
   // ==================== divided 属性 ====================
 
   describe("Divided Attribute", () => {
-    it("默认 divided 应该是 false", async () => {
+    it("默认 divided 应该是 false", () => {
       const item = createDropdownItem();
       container.appendChild(item);
-      await waitForRender();
 
       expect(item.divided).toBe(false);
     });
 
-    it("设置 divided 属性应该生效", async () => {
+    it("设置 divided 属性应该生效", () => {
       const item = createDropdownItem({ divided: "" });
       container.appendChild(item);
-      await waitForRender();
 
       expect(item.divided).toBe(true);
     });
@@ -1284,18 +1236,16 @@ describe("EaDropdownItem Component", () => {
   // ==================== command 属性 ====================
 
   describe("Command Attribute", () => {
-    it("默认 command 应该为空字符串", async () => {
+    it("默认 command 应该为空字符串", () => {
       const item = createDropdownItem();
       container.appendChild(item);
-      await waitForRender();
 
       expect(item.command).toBe("");
     });
 
-    it("设置 command 属性应该生效", async () => {
+    it("设置 command 属性应该生效", () => {
       const item = createDropdownItem({ command: "test-cmd" });
       container.appendChild(item);
-      await waitForRender();
 
       expect(item.command).toBe("test-cmd");
     });
@@ -1306,7 +1256,6 @@ describe("EaDropdownItem Component", () => {
       await waitForRender();
 
       item.command = "new-cmd";
-      await waitForRender(0);
 
       expect(item.command).toBe("new-cmd");
     });
@@ -1495,26 +1444,23 @@ describe("EaDropdownMenu Component", () => {
   // ==================== 基础渲染 ====================
 
   describe("Basic Rendering", () => {
-    it("应该正确渲染组件并包含 shadowRoot", async () => {
+    it("应该正确渲染组件并包含 shadowRoot", () => {
       const menu = createDropdownMenu();
       container.appendChild(menu);
-      await waitForRender();
 
       expect(menu.shadowRoot).toBeTruthy();
     });
 
-    it("应该渲染 .ea-dropdown-menu 容器", async () => {
+    it("应该渲染 .ea-dropdown-menu 容器", () => {
       const menu = createDropdownMenu();
       container.appendChild(menu);
-      await waitForRender();
 
       expect(menu.shadowRoot.querySelector(".ea-dropdown-menu")).toBeTruthy();
     });
 
-    it("应该渲染默认 slot", async () => {
+    it("应该渲染默认 slot", () => {
       const menu = createDropdownMenu();
       container.appendChild(menu);
-      await waitForRender();
 
       const slot = menu.shadowRoot.querySelector("slot");
       expect(slot).toBeTruthy();
@@ -1524,10 +1470,9 @@ describe("EaDropdownMenu Component", () => {
   // ==================== CSS Parts ====================
 
   describe("CSS Parts", () => {
-    it("应该支持 container part", async () => {
+    it("应该支持 container part", () => {
       const menu = createDropdownMenu();
       container.appendChild(menu);
-      await waitForRender();
 
       expect(menu.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
@@ -1549,10 +1494,9 @@ describe("EaDropdownMenu Component", () => {
       expect(items.length).toBe(3);
     });
 
-    it("空内容时应该正确处理", async () => {
+    it("空内容时应该正确处理", () => {
       const menu = createDropdownMenu();
       container.appendChild(menu);
-      await waitForRender();
 
       expect(menu.shadowRoot).toBeTruthy();
       expect(menu.shadowRoot.querySelector(".ea-dropdown-menu")).toBeTruthy();

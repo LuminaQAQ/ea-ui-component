@@ -42,60 +42,55 @@ describe("EaMessageBox Component", () => {
   function submitForm(el) {
     const form = el.shadowRoot.querySelector(".ea-message-box-main__form");
     if (form) {
-      form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+      form.dispatchEvent(
+        new Event("submit", { bubbles: true, cancelable: true })
+      );
     }
   }
 
   // ==================== 基本渲染测试 ====================
 
   describe("Basic Rendering", () => {
-    it("should render component with shadowRoot", async () => {
+    it("should render component with shadowRoot", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(messageBox.shadowRoot).toBeTruthy();
     });
 
-    it("should render overlay container", async () => {
+    it("should render overlay container", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(messageBox.shadowRoot.querySelector(".ea-overlay")).toBeTruthy();
     });
 
-    it("should render mask layer", async () => {
+    it("should render mask layer", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(
         messageBox.shadowRoot.querySelector(".ea-overlay__mask")
       ).toBeTruthy();
     });
 
-    it("should render overlay content container", async () => {
+    it("should render overlay content container", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(
         messageBox.shadowRoot.querySelector(".ea-overlay__content")
       ).toBeTruthy();
     });
 
-    it("should render message-box-main body", async () => {
+    it("should render message-box-main body", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(
         messageBox.shadowRoot.querySelector(".ea-message-box-main")
       ).toBeTruthy();
     });
 
-    it("should render header area", async () => {
+    it("should render header area", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(
         messageBox.shadowRoot.querySelector(".ea-message-box-main__header")
       ).toBeTruthy();
     });
 
-    it("should render title-container area", async () => {
+    it("should render title-container area", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(
         messageBox.shadowRoot.querySelector(
           ".ea-message-box-main__title-container"
@@ -103,9 +98,8 @@ describe("EaMessageBox Component", () => {
       ).toBeTruthy();
     });
 
-    it("should render type-icon as ea-icon element", async () => {
+    it("should render type-icon as ea-icon element", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       const typeIcon = messageBox.shadowRoot.querySelector(
         ".ea-message-box-main__type-icon"
       );
@@ -113,17 +107,15 @@ describe("EaMessageBox Component", () => {
       expect(typeIcon.tagName.toLowerCase()).toBe("ea-icon");
     });
 
-    it("should render title element", async () => {
+    it("should render title element", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(
         messageBox.shadowRoot.querySelector(".ea-message-box-main__title")
       ).toBeTruthy();
     });
 
-    it("should render close-icon as ea-icon with default name xmark", async () => {
+    it("should render close-icon as ea-icon with default name xmark", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       const closeIcon = messageBox.shadowRoot.querySelector(
         ".ea-message-box-main__icon-close"
       );
@@ -132,25 +124,22 @@ describe("EaMessageBox Component", () => {
       expect(closeIcon.getAttribute("name")).toBe("xmark");
     });
 
-    it("should render form area", async () => {
+    it("should render form area", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(
         messageBox.shadowRoot.querySelector(".ea-message-box-main__form")
       ).toBeTruthy();
     });
 
-    it("should render footer area", async () => {
+    it("should render footer area", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(
         messageBox.shadowRoot.querySelector(".ea-message-box-main__footer")
       ).toBeTruthy();
     });
 
-    it("should render cancel-button as ea-button element", async () => {
+    it("should render cancel-button as ea-button element", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       const cancelBtn = messageBox.shadowRoot.querySelector(
         ".ea-message-box-main__cancel-button"
       );
@@ -158,9 +147,8 @@ describe("EaMessageBox Component", () => {
       expect(cancelBtn.tagName.toLowerCase()).toBe("ea-button");
     });
 
-    it("should render confirm-button as ea-button with variant primary", async () => {
+    it("should render confirm-button as ea-button with variant primary", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       const confirmBtn = messageBox.shadowRoot.querySelector(
         ".ea-message-box-main__confirm-button"
       );
@@ -169,18 +157,16 @@ describe("EaMessageBox Component", () => {
       expect(confirmBtn.getAttribute("variant")).toBe("primary");
     });
 
-    it("confirm button default text should be OK", async () => {
+    it("confirm button default text should be OK", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       const confirmBtn = messageBox.shadowRoot.querySelector(
         ".ea-message-box-main__confirm-button"
       );
       expect(confirmBtn.textContent).toBe("OK");
     });
 
-    it("cancel button default text should be Cancel", async () => {
+    it("cancel button default text should be Cancel", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       const cancelBtn = messageBox.shadowRoot.querySelector(
         ".ea-message-box-main__cancel-button"
       );
@@ -206,9 +192,8 @@ describe("EaMessageBox Component", () => {
     ];
 
     parts.forEach(part => {
-      it(`should expose ${part} CSS Part`, async () => {
+      it(`should expose ${part} CSS Part`, () => {
         const messageBox = createMessageBox();
-        await waitForRender();
         expect(
           messageBox.shadowRoot.querySelector(`[part="${part}"]`)
         ).toBeTruthy();
@@ -219,16 +204,14 @@ describe("EaMessageBox Component", () => {
   // ==================== BoxType 属性测试 ====================
 
   describe("BoxType Attribute", () => {
-    it("default boxType should be personalized", async () => {
+    it("default boxType should be personalized", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(messageBox.boxType).toBe("personalized");
     });
 
     ["alert", "confirm", "prompt", "personalized"].forEach(boxType => {
-      it(`should support boxType='${boxType}'`, async () => {
+      it(`should support boxType='${boxType}'`, () => {
         const messageBox = createMessageBox({ "box-type": boxType });
-        await waitForRender();
         expect(messageBox.boxType).toBe(boxType);
       });
     });
@@ -258,9 +241,8 @@ describe("EaMessageBox Component", () => {
   // ==================== Heading 属性测试 ====================
 
   describe("Heading Attribute", () => {
-    it("default heading should be empty string", async () => {
+    it("default heading should be empty string", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(messageBox.heading).toBe("");
     });
 
@@ -301,9 +283,8 @@ describe("EaMessageBox Component", () => {
   // ==================== Message 属性测试 ====================
 
   describe("Message Attribute", () => {
-    it("default message should be empty string", async () => {
+    it("default message should be empty string", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(messageBox.message).toBe("");
     });
 
@@ -350,9 +331,8 @@ describe("EaMessageBox Component", () => {
       expect(descEl.innerHTML).not.toContain("<b>");
     });
 
-    it("default dangerouslyUseHTMLString should be false", async () => {
+    it("default dangerouslyUseHTMLString should be false", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(messageBox.dangerouslyUseHTMLString).toBe(false);
     });
   });
@@ -360,16 +340,14 @@ describe("EaMessageBox Component", () => {
   // ==================== Variant 属性测试 ====================
 
   describe("Variant Attribute", () => {
-    it("default variant should be empty string", async () => {
+    it("default variant should be empty string", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(messageBox.variant).toBe("");
     });
 
     ["primary", "success", "warning", "error", "info"].forEach(variant => {
-      it(`should support variant='${variant}'`, async () => {
+      it(`should support variant='${variant}'`, () => {
         const messageBox = createMessageBox({ variant });
-        await waitForRender();
         expect(messageBox.variant).toBe(variant);
       });
     });
@@ -431,9 +409,8 @@ describe("EaMessageBox Component", () => {
   // ==================== Icon 属性测试 ====================
 
   describe("Icon Attribute", () => {
-    it("default icon should be empty string", async () => {
+    it("default icon should be empty string", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(messageBox.icon).toBe("");
     });
 
@@ -473,9 +450,8 @@ describe("EaMessageBox Component", () => {
   // ==================== CloseIcon 属性测试 ====================
 
   describe("CloseIcon Attribute", () => {
-    it("default closeIcon should be xmark", async () => {
+    it("default closeIcon should be xmark", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(messageBox.closeIcon).toBe("xmark");
     });
 
@@ -504,15 +480,13 @@ describe("EaMessageBox Component", () => {
   // ==================== Visible 属性测试 ====================
 
   describe("Visible Attribute", () => {
-    it("default visible should be false", async () => {
+    it("default visible should be false", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(messageBox.visible).toBe(false);
     });
 
-    it("setting visible to true should show message box", async () => {
+    it("setting visible to true should show message box", () => {
       const messageBox = createMessageBox({ visible: true });
-      await waitForRender();
       expect(messageBox.visible).toBe(true);
     });
 
@@ -534,7 +508,6 @@ describe("EaMessageBox Component", () => {
       const messageBox = createMessageBox();
       await waitForRender();
       messageBox.show();
-      await waitForRender();
       expect(messageBox.visible).toBe(true);
     });
 
@@ -542,7 +515,6 @@ describe("EaMessageBox Component", () => {
       const messageBox = createMessageBox({ visible: true });
       await waitForRender();
       messageBox.hide();
-      await waitForRender();
       expect(messageBox.visible).toBe(false);
     });
   });
@@ -550,9 +522,8 @@ describe("EaMessageBox Component", () => {
   // ==================== ShowClose 属性测试 ====================
 
   describe("ShowClose Attribute", () => {
-    it("default showClose should be true", async () => {
+    it("default showClose should be true", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(messageBox.showClose).toBe(true);
     });
 
@@ -586,9 +557,8 @@ describe("EaMessageBox Component", () => {
   // ==================== ShowCancelButton 属性测试 ====================
 
   describe("ShowCancelButton Attribute", () => {
-    it("default showCancelButton should be false", async () => {
+    it("default showCancelButton should be false", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(messageBox.showCancelButton).toBe(false);
     });
 
@@ -620,9 +590,8 @@ describe("EaMessageBox Component", () => {
   // ==================== ShowConfirmButton 属性测试 ====================
 
   describe("ShowConfirmButton Attribute", () => {
-    it("default showConfirmButton should be true", async () => {
+    it("default showConfirmButton should be true", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(messageBox.showConfirmButton).toBe(true);
     });
 
@@ -656,9 +625,8 @@ describe("EaMessageBox Component", () => {
   // ==================== ConfirmButtonText 属性测试 ====================
 
   describe("ConfirmButtonText Attribute", () => {
-    it("default confirmButtonText should be OK", async () => {
+    it("default confirmButtonText should be OK", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(messageBox.confirmButtonText).toBe("OK");
     });
 
@@ -686,9 +654,8 @@ describe("EaMessageBox Component", () => {
   // ==================== CancelButtonText 属性测试 ====================
 
   describe("CancelButtonText Attribute", () => {
-    it("default cancelButtonText should be Cancel", async () => {
+    it("default cancelButtonText should be Cancel", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(messageBox.cancelButtonText).toBe("Cancel");
     });
 
@@ -716,9 +683,8 @@ describe("EaMessageBox Component", () => {
   // ==================== Center 属性测试 ====================
 
   describe("Center Attribute", () => {
-    it("default center should be false", async () => {
+    it("default center should be false", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(messageBox.center).toBe(false);
     });
 
@@ -754,9 +720,8 @@ describe("EaMessageBox Component", () => {
   // ==================== RoundButton 属性测试 ====================
 
   describe("RoundButton Attribute", () => {
-    it("default roundButton should be false", async () => {
+    it("default roundButton should be false", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(messageBox.roundButton).toBe(false);
     });
 
@@ -788,16 +753,14 @@ describe("EaMessageBox Component", () => {
   // ==================== ButtonSize 属性测试 ====================
 
   describe("ButtonSize Attribute", () => {
-    it("default buttonSize should be medium", async () => {
+    it("default buttonSize should be medium", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(messageBox.buttonSize).toBe("medium");
     });
 
     ["small", "medium", "large"].forEach(size => {
-      it(`should support buttonSize='${size}'`, async () => {
+      it(`should support buttonSize='${size}'`, () => {
         const messageBox = createMessageBox({ "button-size": size });
-        await waitForRender();
         expect(messageBox.buttonSize).toBe(size);
       });
     });
@@ -830,9 +793,8 @@ describe("EaMessageBox Component", () => {
   // ==================== ShowInput 属性测试 ====================
 
   describe("ShowInput Attribute", () => {
-    it("default showInput should be false", async () => {
+    it("default showInput should be false", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(messageBox.showInput).toBe(false);
     });
 
@@ -864,9 +826,8 @@ describe("EaMessageBox Component", () => {
   // ==================== InputPlaceholder 属性测试 ====================
 
   describe("InputPlaceholder Attribute", () => {
-    it("default inputPlaceholder should be empty string", async () => {
+    it("default inputPlaceholder should be empty string", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(messageBox.inputPlaceholder).toBe("");
     });
 
@@ -894,9 +855,8 @@ describe("EaMessageBox Component", () => {
   // ==================== InputType 属性测试 ====================
 
   describe("InputType Attribute", () => {
-    it("default inputType should be text", async () => {
+    it("default inputType should be text", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(messageBox.inputType).toBe("text");
     });
 
@@ -924,9 +884,8 @@ describe("EaMessageBox Component", () => {
   // ==================== InputValue 属性测试 ====================
 
   describe("InputValue Attribute", () => {
-    it("default inputValue should be empty string", async () => {
+    it("default inputValue should be empty string", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(messageBox.inputValue).toBe("");
     });
 
@@ -954,9 +913,8 @@ describe("EaMessageBox Component", () => {
   // ==================== InputErrorMessage 属性测试 ====================
 
   describe("InputErrorMessage Attribute", () => {
-    it("default inputErrorMessage should be empty string", async () => {
+    it("default inputErrorMessage should be empty string", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(messageBox.inputErrorMessage).toBe("");
     });
 
@@ -975,22 +933,19 @@ describe("EaMessageBox Component", () => {
   // ==================== InputPattern 属性测试 ====================
 
   describe("InputPattern Attribute", () => {
-    it("default inputPattern should be empty string", async () => {
+    it("default inputPattern should be empty string", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(messageBox.inputPattern).toBe("");
     });
 
-    it("should support setting inputPattern as string", async () => {
+    it("should support setting inputPattern as string", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       messageBox.setAttribute("input-pattern", "^[a-z]+$");
       expect(messageBox.inputPattern).toBe("^[a-z]+$");
     });
 
-    it("should not set pattern attribute on ea-input element", async () => {
+    it("should not set pattern attribute on ea-input element", () => {
       const messageBox = createMessageBox({ "input-pattern": "^[a-z]+$" });
-      await waitForRender();
       const input = messageBox.shadowRoot.querySelector(
         ".ea-message-box-main__input"
       );
@@ -1001,9 +956,8 @@ describe("EaMessageBox Component", () => {
   // ==================== Movable 属性测试 ====================
 
   describe("Movable Attribute", () => {
-    it("default movable should be false", async () => {
+    it("default movable should be false", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(messageBox.movable).toBe(false);
     });
 
@@ -1043,9 +997,8 @@ describe("EaMessageBox Component", () => {
   // ==================== 继承自 EaOverlay 的属性测试 ====================
 
   describe("Modal Attribute (inherited)", () => {
-    it("default modal should be true", async () => {
+    it("default modal should be true", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(messageBox.modal).toBe(true);
     });
 
@@ -1067,39 +1020,33 @@ describe("EaMessageBox Component", () => {
   });
 
   describe("CloseOnClickModal Attribute (inherited)", () => {
-    it("default closeOnClickModal should be true", async () => {
+    it("default closeOnClickModal should be true", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(messageBox.closeOnClickModal).toBe(true);
     });
 
-    it("should support setting closeOnClickModal to false", async () => {
+    it("should support setting closeOnClickModal to false", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       messageBox.closeOnClickModal = false;
-      await waitForRender();
       expect(messageBox.closeOnClickModal).toBe(false);
     });
   });
 
   describe("CloseOnPressEscape Attribute", () => {
-    it("default closeOnPressEscape should be true", async () => {
+    it("default closeOnPressEscape should be true", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(messageBox.closeOnPressEscape).toBe(true);
     });
 
-    it("should support setting closeOnPressEscape to true", async () => {
+    it("should support setting closeOnPressEscape to true", () => {
       const messageBox = createMessageBox({ "close-on-press-escape": true });
-      await waitForRender();
       expect(messageBox.closeOnPressEscape).toBe(true);
     });
   });
 
   describe("ZIndex Attribute (inherited)", () => {
-    it("default zIndex should be empty string", async () => {
+    it("default zIndex should be empty string", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(messageBox.zIndex).toBe("");
     });
 
@@ -1114,9 +1061,8 @@ describe("EaMessageBox Component", () => {
   });
 
   describe("BackgroundColor Attribute (inherited)", () => {
-    it("default backgroundColor should be empty string", async () => {
+    it("default backgroundColor should be empty string", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(messageBox.backgroundColor).toBe("");
     });
 
@@ -1135,9 +1081,8 @@ describe("EaMessageBox Component", () => {
   // ==================== BeforeClose 属性测试 ====================
 
   describe("BeforeClose Property", () => {
-    it("default beforeClose should be null", async () => {
+    it("default beforeClose should be null", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(messageBox.beforeClose).toBeNull();
     });
 
@@ -1167,9 +1112,8 @@ describe("EaMessageBox Component", () => {
   // ==================== ConfirmButtonLoading 属性测试 ====================
 
   describe("ConfirmButtonLoading Property", () => {
-    it("default confirmButtonLoading should be false", async () => {
+    it("default confirmButtonLoading should be false", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(messageBox.confirmButtonLoading).toBe(false);
     });
 
@@ -1199,15 +1143,13 @@ describe("EaMessageBox Component", () => {
   // ==================== DistinguishCancelAndClose 属性测试 ====================
 
   describe("DistinguishCancelAndClose Property", () => {
-    it("default distinguishCancelAndClose should be false", async () => {
+    it("default distinguishCancelAndClose should be false", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       expect(messageBox.distinguishCancelAndClose).toBe(false);
     });
 
-    it("should support setting distinguishCancelAndClose", async () => {
+    it("should support setting distinguishCancelAndClose", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       messageBox.distinguishCancelAndClose = true;
       expect(messageBox.distinguishCancelAndClose).toBe(true);
     });
@@ -1388,7 +1330,9 @@ describe("EaMessageBox Component", () => {
       const form = messageBox.shadowRoot.querySelector(
         ".ea-message-box-main__form"
       );
-      form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+      form.dispatchEvent(
+        new Event("submit", { bubbles: true, cancelable: true })
+      );
       await waitForRender();
       expect(handler).toHaveBeenCalled();
     });
@@ -1410,7 +1354,9 @@ describe("EaMessageBox Component", () => {
       const form = messageBox.shadowRoot.querySelector(
         ".ea-message-box-main__form"
       );
-      form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+      form.dispatchEvent(
+        new Event("submit", { bubbles: true, cancelable: true })
+      );
       await waitForRender();
       expect(handler).not.toHaveBeenCalled();
     });
@@ -1426,7 +1372,9 @@ describe("EaMessageBox Component", () => {
       const form = messageBox.shadowRoot.querySelector(
         ".ea-message-box-main__form"
       );
-      form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+      form.dispatchEvent(
+        new Event("submit", { bubbles: true, cancelable: true })
+      );
       await waitForRender();
       expect(handler).toHaveBeenCalled();
     });
@@ -1448,7 +1396,9 @@ describe("EaMessageBox Component", () => {
       const form = messageBox.shadowRoot.querySelector(
         ".ea-message-box-main__form"
       );
-      form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+      form.dispatchEvent(
+        new Event("submit", { bubbles: true, cancelable: true })
+      );
       await waitForRender();
       expect(setCustomValiditySpy).toHaveBeenCalledWith("Only letters allowed");
     });
@@ -1472,7 +1422,9 @@ describe("EaMessageBox Component", () => {
       const form = messageBox.shadowRoot.querySelector(
         ".ea-message-box-main__form"
       );
-      form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+      form.dispatchEvent(
+        new Event("submit", { bubbles: true, cancelable: true })
+      );
       await waitForRender();
       expect(handler).toHaveBeenCalled();
       expect(setCustomValiditySpy).toHaveBeenCalledWith("");
@@ -1494,7 +1446,9 @@ describe("EaMessageBox Component", () => {
       const form = messageBox.shadowRoot.querySelector(
         ".ea-message-box-main__form"
       );
-      form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+      form.dispatchEvent(
+        new Event("submit", { bubbles: true, cancelable: true })
+      );
       await waitForRender();
       expect(setCustomValiditySpy).toHaveBeenCalledWith("Invalid input");
     });
@@ -2275,7 +2229,9 @@ describe("EaMessageBox Component", () => {
       const form = messageBox.shadowRoot.querySelector(
         ".ea-message-box-main__form"
       );
-      form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+      form.dispatchEvent(
+        new Event("submit", { bubbles: true, cancelable: true })
+      );
       await waitForRender();
       expect(handler).toHaveBeenCalled();
     });
@@ -2289,7 +2245,9 @@ describe("EaMessageBox Component", () => {
       const form = messageBox.shadowRoot.querySelector(
         ".ea-message-box-main__form"
       );
-      form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+      form.dispatchEvent(
+        new Event("submit", { bubbles: true, cancelable: true })
+      );
       await waitForRender();
       expect(handler).toHaveBeenCalled();
     });
@@ -2311,7 +2269,9 @@ describe("EaMessageBox Component", () => {
       const form = messageBox.shadowRoot.querySelector(
         ".ea-message-box-main__form"
       );
-      form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+      form.dispatchEvent(
+        new Event("submit", { bubbles: true, cancelable: true })
+      );
       await waitForRender();
       expect(handler).not.toHaveBeenCalled();
     });
@@ -2334,7 +2294,9 @@ describe("EaMessageBox Component", () => {
       const form = messageBox.shadowRoot.querySelector(
         ".ea-message-box-main__form"
       );
-      form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+      form.dispatchEvent(
+        new Event("submit", { bubbles: true, cancelable: true })
+      );
       await waitForRender();
 
       const handler = vi.fn();
@@ -2342,7 +2304,9 @@ describe("EaMessageBox Component", () => {
 
       messageBox.setAttribute("input-value", "abc");
       await waitForRender();
-      form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+      form.dispatchEvent(
+        new Event("submit", { bubbles: true, cancelable: true })
+      );
       await waitForRender();
 
       expect(handler).toHaveBeenCalled();
@@ -2364,14 +2328,16 @@ describe("EaMessageBox Component", () => {
         "show-input": true,
         "input-value": "abc",
       });
-      messageBox.inputValidator = (value) => value.length > 0;
+      messageBox.inputValidator = value => value.length > 0;
       await waitForRender();
       const handler = vi.fn();
       messageBox.addEventListener("ea-confirm", handler);
       const form = messageBox.shadowRoot.querySelector(
         ".ea-message-box-main__form"
       );
-      form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+      form.dispatchEvent(
+        new Event("submit", { bubbles: true, cancelable: true })
+      );
       await waitForRender();
       expect(handler).toHaveBeenCalled();
     });
@@ -2389,7 +2355,9 @@ describe("EaMessageBox Component", () => {
       const form = messageBox.shadowRoot.querySelector(
         ".ea-message-box-main__form"
       );
-      form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+      form.dispatchEvent(
+        new Event("submit", { bubbles: true, cancelable: true })
+      );
       await waitForRender();
       expect(handler).not.toHaveBeenCalled();
     });
@@ -2411,7 +2379,9 @@ describe("EaMessageBox Component", () => {
       const form = messageBox.shadowRoot.querySelector(
         ".ea-message-box-main__form"
       );
-      form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+      form.dispatchEvent(
+        new Event("submit", { bubbles: true, cancelable: true })
+      );
       await waitForRender();
       expect(handler).not.toHaveBeenCalled();
       expect(setCustomValiditySpy).toHaveBeenCalledWith("Custom error");
@@ -2435,7 +2405,9 @@ describe("EaMessageBox Component", () => {
       const form = messageBox.shadowRoot.querySelector(
         ".ea-message-box-main__form"
       );
-      form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+      form.dispatchEvent(
+        new Event("submit", { bubbles: true, cancelable: true })
+      );
       await waitForRender();
       expect(handler).not.toHaveBeenCalled();
       expect(setCustomValiditySpy).toHaveBeenCalledWith("Fallback error");
@@ -2447,14 +2419,16 @@ describe("EaMessageBox Component", () => {
         "show-input": true,
         "input-value": "abc",
       });
-      messageBox.inputValidator = (value) => Promise.resolve(value.length > 0);
+      messageBox.inputValidator = value => Promise.resolve(value.length > 0);
       await waitForRender();
       const handler = vi.fn();
       messageBox.addEventListener("ea-confirm", handler);
       const form = messageBox.shadowRoot.querySelector(
         ".ea-message-box-main__form"
       );
-      form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+      form.dispatchEvent(
+        new Event("submit", { bubbles: true, cancelable: true })
+      );
       await waitForRender();
       expect(handler).toHaveBeenCalled();
     });
@@ -2472,7 +2446,9 @@ describe("EaMessageBox Component", () => {
       const form = messageBox.shadowRoot.querySelector(
         ".ea-message-box-main__form"
       );
-      form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+      form.dispatchEvent(
+        new Event("submit", { bubbles: true, cancelable: true })
+      );
       await waitForRender();
       expect(handler).not.toHaveBeenCalled();
     });
@@ -2489,7 +2465,9 @@ describe("EaMessageBox Component", () => {
       const form = messageBox.shadowRoot.querySelector(
         ".ea-message-box-main__form"
       );
-      form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+      form.dispatchEvent(
+        new Event("submit", { bubbles: true, cancelable: true })
+      );
       await waitForRender();
       expect(validatorFn).toHaveBeenCalledWith("test-value");
     });
@@ -2508,7 +2486,9 @@ describe("EaMessageBox Component", () => {
       const form = messageBox.shadowRoot.querySelector(
         ".ea-message-box-main__form"
       );
-      form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+      form.dispatchEvent(
+        new Event("submit", { bubbles: true, cancelable: true })
+      );
       await waitForRender();
       expect(handler).toHaveBeenCalled();
     });
@@ -3033,7 +3013,9 @@ describe("EaMessageBox Component", () => {
       await waitForRender();
       expect(order).toContain("ea-close");
       expect(order).toContain("ea-closed");
-      expect(order.indexOf("ea-close")).toBeLessThan(order.indexOf("ea-closed"));
+      expect(order.indexOf("ea-close")).toBeLessThan(
+        order.indexOf("ea-closed")
+      );
     });
 
     it("message-close event should bubble and be composed", async () => {
@@ -3332,9 +3314,8 @@ describe("EaMessageBox Component", () => {
       expect(confirmBtn.getAttribute("loading")).toBe("true");
     });
 
-    it("confirmButtonLoading=false should not set loading attribute on confirm button", async () => {
+    it("confirmButtonLoading=false should not set loading attribute on confirm button", () => {
       const messageBox = createMessageBox();
-      await waitForRender();
       const confirmBtn = messageBox.shadowRoot.querySelector(
         ".ea-message-box-main__confirm-button"
       );

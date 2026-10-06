@@ -189,12 +189,10 @@ describe("EaBadge", () => {
       }
     });
 
-    it("默认 variant 应该是 danger", async () => {
+    it("默认 variant 应该是 danger", () => {
       const badge = document.createElement("ea-badge");
       badge.setAttribute("value", "5");
       container.appendChild(badge);
-
-      await waitForRender();
 
       expect(badge.variant).toBe("danger");
     });
@@ -273,11 +271,9 @@ describe("EaBadge", () => {
       expect(badgeContainer.classList.contains("is-dot")).toBe(true);
     });
 
-    it("默认 is-dot 应该是 false", async () => {
+    it("默认 is-dot 应该是 false", () => {
       const badge = document.createElement("ea-badge");
       container.appendChild(badge);
-
-      await waitForRender();
 
       expect(badge.isDot).toBe(false);
     });
@@ -313,11 +309,9 @@ describe("EaBadge", () => {
       expect(badgeContainer.classList.contains("is-hidden")).toBe(true);
     });
 
-    it("默认 data-hidden 应该是 false", async () => {
+    it("默认 data-hidden 应该是 false", () => {
       const badge = document.createElement("ea-badge");
       container.appendChild(badge);
-
-      await waitForRender(0);
 
       expect(badge.dataHidden).toBe(false);
     });
@@ -361,69 +355,56 @@ describe("EaBadge", () => {
       expect(badgeContainer.classList.contains("is-hidden")).toBe(true);
     });
 
-    it("默认 show-zero 应该是 true", async () => {
+    it("默认 show-zero 应该是 true", () => {
       const badge = document.createElement("ea-badge");
       container.appendChild(badge);
-
-      await waitForRender();
 
       expect(badge.showZero).toBe(true);
     });
   });
 
   describe("Color Attribute", () => {
-    it("应该正确设置 color 属性", async () => {
+    it("应该正确设置 color 属性", () => {
       const badge = document.createElement("ea-badge");
       badge.setAttribute("color", "green");
       badge.setAttribute("value", "5");
       container.appendChild(badge);
 
-      await waitForRender(0);
-
       expect(badge.color).toBe("green");
     });
 
-    it("color 属性变化时应该正确更新 CSS 变量", async () => {
+    it("color 属性变化时应该正确更新 CSS 变量", () => {
       const badge = document.createElement("ea-badge");
       badge.setAttribute("color", "red");
       container.appendChild(badge);
 
-      await waitForRender(0);
       expect(badge.color).toBe("red");
 
       badge.setAttribute("color", "blue");
-      await waitForRender(0);
-
       expect(badge.color).toBe("blue");
     });
   });
 
   describe("Offset Attributes", () => {
-    it("应该正确设置 offset-x 属性", async () => {
+    it("应该正确设置 offset-x 属性", () => {
       const badge = document.createElement("ea-badge");
       badge.setAttribute("offset-x", "10");
       container.appendChild(badge);
 
-      await waitForRender(0);
-
       expect(badge.offsetX).toBe(10);
     });
 
-    it("应该正确设置 offset-y 属性", async () => {
+    it("应该正确设置 offset-y 属性", () => {
       const badge = document.createElement("ea-badge");
       badge.setAttribute("offset-y", "5");
       container.appendChild(badge);
 
-      await waitForRender(0);
-
       expect(badge.offsetY).toBe(5);
     });
 
-    it("默认 offset 应该是 0", async () => {
+    it("默认 offset 应该是 0", () => {
       const badge = document.createElement("ea-badge");
       container.appendChild(badge);
-
-      await waitForRender(0);
 
       expect(badge.offsetX).toBe(0);
       expect(badge.offsetY).toBe(0);
@@ -458,7 +439,7 @@ describe("EaBadge", () => {
       expect(slot).toBeDefined();
     });
 
-    it("应该支持 content slot", async () => {
+    it("应该支持 content slot", () => {
       const badge = document.createElement("ea-badge");
       badge.setAttribute("value", "99");
       badge.innerHTML = `
@@ -468,8 +449,6 @@ describe("EaBadge", () => {
         </div>
       `;
       container.appendChild(badge);
-
-      await waitForRender(0);
 
       const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
       expect(contentEl).toBeDefined();

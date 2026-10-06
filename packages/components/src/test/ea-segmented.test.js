@@ -2,12 +2,6 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
-global.ResizeObserver = class ResizeObserver {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
-};
-
 import "../components/ea-segmented/index";
 
 describe("EaSegmented Component", () => {
@@ -37,20 +31,16 @@ describe("EaSegmented Component", () => {
   }
 
   describe("基础渲染", () => {
-    it("应该正确创建 Shadow DOM", async () => {
+    it("应该正确创建 Shadow DOM", () => {
       const segmented = createSegmented({ name: "test" }, ["Mon", "Tue"]);
       container.appendChild(segmented);
-      await waitForRender();
-
       expect(segmented.shadowRoot).toBeDefined();
       expect(segmented.shadowRoot.nodeType).toBe(11);
     });
 
-    it("应该包含 .ea-segmented 容器元素", async () => {
+    it("应该包含 .ea-segmented 容器元素", () => {
       const segmented = createSegmented({ name: "test" }, ["Mon", "Tue"]);
       container.appendChild(segmented);
-      await waitForRender();
-
       const el = segmented.shadowRoot.querySelector(".ea-segmented");
       expect(el).toBeTruthy();
       expect(el.getAttribute("part")).toBe("container");
@@ -220,11 +210,9 @@ describe("EaSegmented Component", () => {
       warnSpy.mockRestore();
     });
 
-    it("设置 options 时如果已有 name 不应覆盖", async () => {
+    it("设置 options 时如果已有 name 不应覆盖", () => {
       const segmented = createSegmented({ name: "myName" }, ["A", "B"]);
       container.appendChild(segmented);
-      await waitForRender();
-
       expect(segmented.name).toBe("myName");
     });
 
@@ -331,27 +319,23 @@ describe("EaSegmented Component", () => {
   });
 
   describe("Value 属性", () => {
-    it("默认 value 应该是空字符串", async () => {
+    it("默认 value 应该是空字符串", () => {
       const segmented = createSegmented({ name: "week" }, [
         "Mon",
         "Tue",
         "Wed",
       ]);
       container.appendChild(segmented);
-      await waitForRender();
-
       expect(segmented.value).toBe("");
     });
 
-    it("应该支持 value 属性设置默认值", async () => {
+    it("应该支持 value 属性设置默认值", () => {
       const segmented = createSegmented({ name: "week", value: "Tue" }, [
         "Mon",
         "Tue",
         "Wed",
       ]);
       container.appendChild(segmented);
-      await waitForRender();
-
       expect(segmented.value).toBe("Tue");
     });
 
@@ -400,8 +384,6 @@ describe("EaSegmented Component", () => {
       expect(segmented.value).toBe("Mon");
 
       segmented.value = "Wed";
-      await waitForRender();
-
       expect(segmented.value).toBe("Wed");
     });
 
@@ -456,19 +438,17 @@ describe("EaSegmented Component", () => {
   });
 
   describe("Size 属性", () => {
-    it("默认 size 应该是空字符串", async () => {
+    it("默认 size 应该是空字符串", () => {
       const segmented = createSegmented({ name: "week" }, [
         "Mon",
         "Tue",
         "Wed",
       ]);
       container.appendChild(segmented);
-      await waitForRender();
-
       expect(segmented.size).toBe("");
     });
 
-    it("应该支持所有 size 类型", async () => {
+    it("应该支持所有 size 类型", () => {
       const sizes = ["large", "default", "small"];
 
       for (const size of sizes) {
@@ -477,8 +457,6 @@ describe("EaSegmented Component", () => {
           "Tue",
         ]);
         container.appendChild(segmented);
-        await waitForRender();
-
         expect(segmented.size).toBe(size);
         container.removeChild(segmented);
       }
@@ -487,8 +465,6 @@ describe("EaSegmented Component", () => {
     it("size 变化时应该正确更新容器 class", async () => {
       const segmented = createSegmented({ name: "week" }, ["Mon", "Tue"]);
       container.appendChild(segmented);
-      await waitForRender();
-
       const containerEl = segmented.shadowRoot.querySelector(".ea-segmented");
 
       segmented.setAttribute("size", "large");
@@ -503,37 +479,31 @@ describe("EaSegmented Component", () => {
       expect(containerEl.classList.contains("ea-segmented--large")).toBe(false);
     });
 
-    it("size 属性变化时应该正确更新", async () => {
+    it("size 属性变化时应该正确更新", () => {
       const segmented = createSegmented({ name: "week", size: "large" }, [
         "Mon",
         "Tue",
       ]);
       container.appendChild(segmented);
-      await waitForRender();
-
       expect(segmented.size).toBe("large");
 
       segmented.setAttribute("size", "small");
-      await waitForRender();
-
       expect(segmented.size).toBe("small");
     });
   });
 
   describe("Direction 属性", () => {
-    it("默认 direction 应该是空字符串", async () => {
+    it("默认 direction 应该是空字符串", () => {
       const segmented = createSegmented({ name: "week" }, [
         "Mon",
         "Tue",
         "Wed",
       ]);
       container.appendChild(segmented);
-      await waitForRender();
-
       expect(segmented.direction).toBe("");
     });
 
-    it("应该支持所有 direction 类型", async () => {
+    it("应该支持所有 direction 类型", () => {
       const directions = ["horizontal", "vertical"];
 
       for (const direction of directions) {
@@ -542,8 +512,6 @@ describe("EaSegmented Component", () => {
           "Tue",
         ]);
         container.appendChild(segmented);
-        await waitForRender();
-
         expect(segmented.direction).toBe(direction);
         container.removeChild(segmented);
       }
@@ -552,8 +520,6 @@ describe("EaSegmented Component", () => {
     it("direction 变化时应该正确更新容器 class", async () => {
       const segmented = createSegmented({ name: "week" }, ["Mon", "Tue"]);
       container.appendChild(segmented);
-      await waitForRender();
-
       const containerEl = segmented.shadowRoot.querySelector(".ea-segmented");
 
       segmented.setAttribute("direction", "horizontal");
@@ -570,44 +536,36 @@ describe("EaSegmented Component", () => {
   });
 
   describe("Disabled 属性", () => {
-    it("默认 disabled 应该是 false", async () => {
+    it("默认 disabled 应该是 false", () => {
       const segmented = createSegmented({ name: "week" }, [
         "Mon",
         "Tue",
         "Wed",
       ]);
       container.appendChild(segmented);
-      await waitForRender();
-
       expect(segmented.disabled).toBe(false);
     });
 
-    it("应该支持 disabled 属性设置为 true", async () => {
+    it("应该支持 disabled 属性设置为 true", () => {
       const segmented = createSegmented({ name: "week", disabled: true }, [
         "Mon",
         "Tue",
         "Wed",
       ]);
       container.appendChild(segmented);
-      await waitForRender();
-
       expect(segmented.disabled).toBe(true);
     });
 
-    it("disabled 属性应该可以动态移除", async () => {
+    it("disabled 属性应该可以动态移除", () => {
       const segmented = createSegmented({ name: "week", disabled: true }, [
         "Mon",
         "Tue",
         "Wed",
       ]);
       container.appendChild(segmented);
-      await waitForRender();
-
       expect(segmented.disabled).toBe(true);
 
       segmented.removeAttribute("disabled");
-      await waitForRender();
-
       expect(segmented.disabled).toBe(false);
     });
 
@@ -709,27 +667,23 @@ describe("EaSegmented Component", () => {
   });
 
   describe("Block 属性", () => {
-    it("默认 block 应该是 false", async () => {
+    it("默认 block 应该是 false", () => {
       const segmented = createSegmented({ name: "week" }, [
         "Mon",
         "Tue",
         "Wed",
       ]);
       container.appendChild(segmented);
-      await waitForRender();
-
       expect(segmented.block).toBe(false);
     });
 
-    it("应该支持 block 属性设置为 true", async () => {
+    it("应该支持 block 属性设置为 true", () => {
       const segmented = createSegmented({ name: "week", block: true }, [
         "Mon",
         "Tue",
         "Wed",
       ]);
       container.appendChild(segmented);
-      await waitForRender();
-
       expect(segmented.block).toBe(true);
     });
 
@@ -747,37 +701,29 @@ describe("EaSegmented Component", () => {
       expect(containerEl.classList.contains("is-block")).toBe(true);
     });
 
-    it("block 属性应该可以动态移除", async () => {
+    it("block 属性应该可以动态移除", () => {
       const segmented = createSegmented({ name: "week", block: true }, [
         "Mon",
         "Tue",
       ]);
       container.appendChild(segmented);
-      await waitForRender();
-
       expect(segmented.block).toBe(true);
 
       segmented.removeAttribute("block");
-      await waitForRender();
-
       expect(segmented.block).toBe(false);
     });
   });
 
   describe("Name 属性", () => {
-    it("默认 name 应该是空字符串", async () => {
+    it("默认 name 应该是空字符串", () => {
       const segmented = document.createElement("ea-segmented");
       container.appendChild(segmented);
-      await waitForRender();
-
       expect(segmented.name).toBe("");
     });
 
-    it("应该支持 name 属性设置", async () => {
+    it("应该支持 name 属性设置", () => {
       const segmented = createSegmented({ name: "myGroup" }, ["A", "B"]);
       container.appendChild(segmented);
-      await waitForRender();
-
       expect(segmented.name).toBe("myGroup");
     });
 
@@ -796,11 +742,9 @@ describe("EaSegmented Component", () => {
   });
 
   describe("PropsConfiguration 属性", () => {
-    it("默认 propsConfiguration 应该包含 label, value, disabled", async () => {
+    it("默认 propsConfiguration 应该包含 label, value, disabled", () => {
       const segmented = createSegmented({ name: "week" });
       container.appendChild(segmented);
-      await waitForRender();
-
       expect(segmented.propsConfiguration).toEqual({
         label: "label",
         value: "value",
@@ -1040,8 +984,6 @@ describe("EaSegmented Component", () => {
 
       const input = segmented.shadowRoot.querySelector('input[value="Wed"]');
       input.click();
-      await waitForRender();
-
       expect(eventDetail).toBeTruthy();
       expect(eventDetail.value).toBe("Wed");
     });
@@ -1057,8 +999,6 @@ describe("EaSegmented Component", () => {
 
       const input = segmented.shadowRoot.querySelector('input[value="Tue"]');
       input.click();
-      await waitForRender();
-
       expect(segmented.value).toBe("Tue");
     });
 
@@ -1098,8 +1038,6 @@ describe("EaSegmented Component", () => {
 
       const input = segmented.shadowRoot.querySelector('input[value="Tue"]');
       input.click();
-      await waitForRender();
-
       expect(receivedEvent).toBeTruthy();
       expect(receivedEvent.type).toBe("change");
       expect(receivedEvent.bubbles).toBe(true);
@@ -1190,15 +1128,13 @@ describe("EaSegmented Component", () => {
   });
 
   describe("生命周期", () => {
-    it("组件连接后应该正确初始化", async () => {
+    it("组件连接后应该正确初始化", () => {
       const segmented = createSegmented({ name: "week", value: "Tue" }, [
         "Mon",
         "Tue",
         "Wed",
       ]);
       container.appendChild(segmented);
-      await waitForRender();
-
       expect(segmented.shadowRoot).toBeTruthy();
       expect(segmented.value).toBe("Tue");
     });
@@ -1230,14 +1166,12 @@ describe("EaSegmented Component", () => {
       expect(items.length).toBe(3);
     });
 
-    it("value 在组件挂载前设置应该在挂载后生效", async () => {
+    it("value 在组件挂载前设置应该在挂载后生效", () => {
       const segmented = document.createElement("ea-segmented");
       segmented.setAttribute("name", "week");
       segmented.setAttribute("value", "Tue");
       segmented.options = ["Mon", "Tue", "Wed"];
       container.appendChild(segmented);
-      await waitForRender();
-
       expect(segmented.value).toBe("Tue");
     });
 
@@ -1400,7 +1334,6 @@ describe("EaSegmented Component", () => {
         await waitForRender();
         el.focus();
         el.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight" }));
-        await waitForRender();
         expect(el.value).toBe("Tue");
       });
 
@@ -1414,7 +1347,6 @@ describe("EaSegmented Component", () => {
         await waitForRender();
         el.focus();
         el.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowLeft" }));
-        await waitForRender();
         expect(el.value).toBe("Mon");
       });
 
@@ -1428,7 +1360,6 @@ describe("EaSegmented Component", () => {
         await waitForRender();
         el.focus();
         el.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight" }));
-        await waitForRender();
         expect(el.value).toBe("Mon");
       });
 
@@ -1442,7 +1373,6 @@ describe("EaSegmented Component", () => {
         await waitForRender();
         el.focus();
         el.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowLeft" }));
-        await waitForRender();
         expect(el.value).toBe("Wed");
       });
     });

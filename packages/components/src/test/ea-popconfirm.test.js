@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender.js";
+import { fireKeydown } from "./utils/keyboard.js";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 import "../components/ea-popconfirm/index";
@@ -34,37 +35,29 @@ describe("EaPopconfirm", () => {
   // ==================== 基础渲染 ====================
 
   describe("Basic Rendering", () => {
-    it("应该正确渲染组件并包含 shadowRoot", async () => {
+    it("应该正确渲染组件并包含 shadowRoot", () => {
       const popconfirm = createPopconfirm({}, withReference());
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(popconfirm.shadowRoot).toBeTruthy();
     });
 
-    it("应该渲染 .ea-popper 容器", async () => {
+    it("应该渲染 .ea-popper 容器", () => {
       const popconfirm = createPopconfirm({}, withReference());
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(popconfirm.shadowRoot.querySelector(".ea-popper")).toBeTruthy();
     });
 
-    it("应该渲染 .ea-popper__reference 元素", async () => {
+    it("应该渲染 .ea-popper__reference 元素", () => {
       const popconfirm = createPopconfirm({}, withReference());
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(
         popconfirm.shadowRoot.querySelector(".ea-popper__reference")
       ).toBeTruthy();
     });
 
-    it("应该渲染 .ea-popper__original 元素", async () => {
+    it("应该渲染 .ea-popper__original 元素", () => {
       const popconfirm = createPopconfirm({}, withReference());
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(
         popconfirm.shadowRoot.querySelector(".ea-popper__original")
       ).toBeTruthy();
@@ -105,89 +98,71 @@ describe("EaPopconfirm", () => {
   // ==================== CSS Parts ====================
 
   describe("CSS Parts", () => {
-    it("应该支持 container part", async () => {
+    it("应该支持 container part", () => {
       const popconfirm = createPopconfirm({}, withReference());
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(
         popconfirm.shadowRoot.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
-    it("应该支持 reference part", async () => {
+    it("应该支持 reference part", () => {
       const popconfirm = createPopconfirm({}, withReference());
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(
         popconfirm.shadowRoot.querySelector('[part="reference"]')
       ).toBeTruthy();
     });
 
-    it("应该支持 original part", async () => {
+    it("应该支持 original part", () => {
       const popconfirm = createPopconfirm({}, withReference());
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(
         popconfirm.shadowRoot.querySelector('[part="original"]')
       ).toBeTruthy();
     });
 
-    it("应该支持 title part", async () => {
+    it("应该支持 title part", () => {
       const popconfirm = createPopconfirm({}, withReference());
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(
         popconfirm.shadowRoot.querySelector('[part="title"]')
       ).toBeTruthy();
     });
 
-    it("应该支持 icon part", async () => {
+    it("应该支持 icon part", () => {
       const popconfirm = createPopconfirm({}, withReference());
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(popconfirm.shadowRoot.querySelector('[part="icon"]')).toBeTruthy();
     });
 
-    it("应该支持 title-content part", async () => {
+    it("应该支持 title-content part", () => {
       const popconfirm = createPopconfirm({}, withReference());
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(
         popconfirm.shadowRoot.querySelector('[part="title-content"]')
       ).toBeTruthy();
     });
 
-    it("应该支持 footer part", async () => {
+    it("应该支持 footer part", () => {
       const popconfirm = createPopconfirm({}, withReference());
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(
         popconfirm.shadowRoot.querySelector('[part="footer"]')
       ).toBeTruthy();
     });
 
-    it("应该支持 cancel-button part", async () => {
+    it("应该支持 cancel-button part", () => {
       const popconfirm = createPopconfirm({}, withReference());
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(
         popconfirm.shadowRoot.querySelector('[part="cancel-button"]')
       ).toBeTruthy();
     });
 
-    it("应该支持 confirm-button part", async () => {
+    it("应该支持 confirm-button part", () => {
       const popconfirm = createPopconfirm({}, withReference());
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(
         popconfirm.shadowRoot.querySelector('[part="confirm-button"]')
       ).toBeTruthy();
@@ -197,33 +172,27 @@ describe("EaPopconfirm", () => {
   // ==================== Slots ====================
 
   describe("Slots", () => {
-    it("应该渲染 reference slot", async () => {
+    it("应该渲染 reference slot", () => {
       const popconfirm = createPopconfirm({}, withReference());
       container.appendChild(popconfirm);
-      await waitForRender();
-
       const referenceSlot = popconfirm.shadowRoot.querySelector(
         'slot[name="reference"]'
       );
       expect(referenceSlot).toBeTruthy();
     });
 
-    it("应该渲染 actions slot", async () => {
+    it("应该渲染 actions slot", () => {
       const popconfirm = createPopconfirm({}, withReference());
       container.appendChild(popconfirm);
-      await waitForRender();
-
       const actionsSlot = popconfirm.shadowRoot.querySelector(
         'slot[name="actions"]'
       );
       expect(actionsSlot).toBeTruthy();
     });
 
-    it("actions slot 默认内容应该包含取消和确认按钮", async () => {
+    it("actions slot 默认内容应该包含取消和确认按钮", () => {
       const popconfirm = createPopconfirm({}, withReference());
       container.appendChild(popconfirm);
-      await waitForRender();
-
       const cancelBtn = popconfirm.shadowRoot.querySelector(
         ".ea-popconfirm__cancel"
       );
@@ -234,7 +203,7 @@ describe("EaPopconfirm", () => {
       expect(confirmBtn).toBeTruthy();
     });
 
-    it("应该支持自定义 actions slot 内容", async () => {
+    it("应该支持自定义 actions slot 内容", () => {
       const popconfirm = createPopconfirm(
         {},
         `
@@ -246,8 +215,6 @@ describe("EaPopconfirm", () => {
       `
       );
       container.appendChild(popconfirm);
-      await waitForRender();
-
       const actionsSlot = popconfirm.shadowRoot.querySelector(
         'slot[name="actions"]'
       );
@@ -261,22 +228,18 @@ describe("EaPopconfirm", () => {
   // ==================== heading 属性 ====================
 
   describe("Heading Attribute", () => {
-    it("默认 heading 应该是空字符串", async () => {
+    it("默认 heading 应该是空字符串", () => {
       const popconfirm = createPopconfirm({}, withReference());
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(popconfirm.heading).toBe("");
     });
 
-    it("应该支持通过 HTML 属性设置 heading", async () => {
+    it("应该支持通过 HTML 属性设置 heading", () => {
       const popconfirm = createPopconfirm(
         { heading: "Are you sure?" },
         withReference()
       );
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(popconfirm.heading).toBe("Are you sure?");
     });
 
@@ -314,8 +277,6 @@ describe("EaPopconfirm", () => {
       await waitForRender();
 
       popconfirm.setAttribute("heading", "");
-      await waitForRender();
-
       expect(popconfirm.heading).toBe("");
     });
   });
@@ -323,22 +284,18 @@ describe("EaPopconfirm", () => {
   // ==================== icon 属性 ====================
 
   describe("Icon Attribute", () => {
-    it("默认 icon 应该是 circle-question", async () => {
+    it("默认 icon 应该是 circle-question", () => {
       const popconfirm = createPopconfirm({}, withReference());
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(popconfirm.icon).toBe("circle-question");
     });
 
-    it("应该支持自定义 icon", async () => {
+    it("应该支持自定义 icon", () => {
       const popconfirm = createPopconfirm(
         { icon: "circle-info" },
         withReference()
       );
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(popconfirm.icon).toBe("circle-info");
     });
 
@@ -400,22 +357,18 @@ describe("EaPopconfirm", () => {
       }
     });
 
-    it("默认 iconColor 应该是 rgb(255, 153, 0)", async () => {
+    it("默认 iconColor 应该是 rgb(255, 153, 0)", () => {
       const popconfirm = createPopconfirm({}, withReference());
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(popconfirm.iconColor).toBe("rgb(255, 153, 0)");
     });
 
-    it("应该支持自定义 iconColor", async () => {
+    it("应该支持自定义 iconColor", () => {
       const popconfirm = createPopconfirm(
         { "icon-color": "#626AEF" },
         withReference()
       );
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(popconfirm.iconColor).toBe("#626AEF");
     });
 
@@ -464,19 +417,15 @@ describe("EaPopconfirm", () => {
   // ==================== hideIcon 属性 ====================
 
   describe("HideIcon Attribute", () => {
-    it("默认 hideIcon 应该是 false", async () => {
+    it("默认 hideIcon 应该是 false", () => {
       const popconfirm = createPopconfirm({}, withReference());
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(popconfirm.hideIcon).toBe(false);
     });
 
-    it("应该支持通过 HTML 属性设置 hideIcon 为 true", async () => {
+    it("应该支持通过 HTML 属性设置 hideIcon 为 true", () => {
       const popconfirm = createPopconfirm({ "hide-icon": "" }, withReference());
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(popconfirm.hideIcon).toBe(true);
     });
 
@@ -518,22 +467,18 @@ describe("EaPopconfirm", () => {
   // ==================== confirmButtonText 属性 ====================
 
   describe("ConfirmButtonText Attribute", () => {
-    it("默认 confirmButtonText 应该是 '确定'", async () => {
+    it("默认 confirmButtonText 应该是 '确定'", () => {
       const popconfirm = createPopconfirm({}, withReference());
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(popconfirm.confirmButtonText).toBe("确定");
     });
 
-    it("应该支持自定义 confirmButtonText", async () => {
+    it("应该支持自定义 confirmButtonText", () => {
       const popconfirm = createPopconfirm(
         { "confirm-button-text": "Yes" },
         withReference()
       );
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(popconfirm.confirmButtonText).toBe("Yes");
     });
 
@@ -569,22 +514,18 @@ describe("EaPopconfirm", () => {
   // ==================== cancelButtonText 属性 ====================
 
   describe("CancelButtonText Attribute", () => {
-    it("默认 cancelButtonText 应该是 '取消'", async () => {
+    it("默认 cancelButtonText 应该是 '取消'", () => {
       const popconfirm = createPopconfirm({}, withReference());
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(popconfirm.cancelButtonText).toBe("取消");
     });
 
-    it("应该支持自定义 cancelButtonText", async () => {
+    it("应该支持自定义 cancelButtonText", () => {
       const popconfirm = createPopconfirm(
         { "cancel-button-text": "No" },
         withReference()
       );
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(popconfirm.cancelButtonText).toBe("No");
     });
 
@@ -620,11 +561,9 @@ describe("EaPopconfirm", () => {
   // ==================== confirmButtonType 属性 ====================
 
   describe("ConfirmButtonType Attribute", () => {
-    it("默认 confirmButtonType 应该是 primary", async () => {
+    it("默认 confirmButtonType 应该是 primary", () => {
       const popconfirm = createPopconfirm({}, withReference());
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(popconfirm.confirmButtonType).toBe("primary");
     });
 
@@ -664,14 +603,12 @@ describe("EaPopconfirm", () => {
       expect(confirmBtn.getAttribute("variant")).toBe("danger");
     });
 
-    it("无效的 confirmButtonType 值应该回退到默认值", async () => {
+    it("无效的 confirmButtonType 值应该回退到默认值", () => {
       const popconfirm = createPopconfirm(
         { "confirm-button-type": "invalid" },
         withReference()
       );
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(popconfirm.confirmButtonType).toBe("primary");
     });
   });
@@ -679,11 +616,9 @@ describe("EaPopconfirm", () => {
   // ==================== cancelButtonType 属性 ====================
 
   describe("CancelButtonType Attribute", () => {
-    it("默认 cancelButtonType 应该是 normal", async () => {
+    it("默认 cancelButtonType 应该是 normal", () => {
       const popconfirm = createPopconfirm({}, withReference());
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(popconfirm.cancelButtonType).toBe("normal");
     });
 
@@ -723,14 +658,12 @@ describe("EaPopconfirm", () => {
       expect(cancelBtn.getAttribute("variant")).toBe("warning");
     });
 
-    it("无效的 cancelButtonType 值应该回退到默认值", async () => {
+    it("无效的 cancelButtonType 值应该回退到默认值", () => {
       const popconfirm = createPopconfirm(
         { "cancel-button-type": "invalid" },
         withReference()
       );
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(popconfirm.cancelButtonType).toBe("normal");
     });
   });
@@ -738,35 +671,27 @@ describe("EaPopconfirm", () => {
   // ==================== visible 属性 ====================
 
   describe("Visible Attribute", () => {
-    it("默认 visible 应该是 false", async () => {
+    it("默认 visible 应该是 false", () => {
       const popconfirm = createPopconfirm({}, withReference());
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(popconfirm.visible).toBe(false);
     });
 
-    it("应该支持 visible 属性设置为 true", async () => {
+    it("应该支持 visible 属性设置为 true", () => {
       const popconfirm = createPopconfirm({ visible: "" }, withReference());
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(popconfirm.visible).toBe(true);
     });
 
-    it("visible 为 true 时应该同步设置 visible 为 true", async () => {
+    it("visible 为 true 时应该同步设置 visible 为 true", () => {
       const popconfirm = createPopconfirm({ visible: "" }, withReference());
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(popconfirm.visible).toBe(true);
     });
 
-    it("visible 为 false 时 visible 应该为 false", async () => {
+    it("visible 为 false 时 visible 应该为 false", () => {
       const popconfirm = createPopconfirm({}, withReference());
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(popconfirm.visible).toBe(false);
     });
 
@@ -780,7 +705,6 @@ describe("EaPopconfirm", () => {
       expect(popconfirm.visible).toBe(true);
 
       popconfirm.removeAttribute("visible");
-      await waitForRender();
       expect(popconfirm.visible).toBe(false);
     });
   });
@@ -789,19 +713,15 @@ describe("EaPopconfirm", () => {
 
   describe("Inherited Properties (from EaPopper)", () => {
     describe("Width", () => {
-      it("默认 width 应该是 150", async () => {
+      it("默认 width 应该是 150", () => {
         const popconfirm = createPopconfirm({}, withReference());
         container.appendChild(popconfirm);
-        await waitForRender();
-
         expect(popconfirm.width).toBe(150);
       });
 
-      it("应该支持自定义 width", async () => {
+      it("应该支持自定义 width", () => {
         const popconfirm = createPopconfirm({ width: "220" }, withReference());
         container.appendChild(popconfirm);
-        await waitForRender();
-
         expect(popconfirm.width).toBe(220);
       });
 
@@ -817,15 +737,13 @@ describe("EaPopconfirm", () => {
     });
 
     describe("Placement", () => {
-      it("默认 placement 应该是 top", async () => {
+      it("默认 placement 应该是 top", () => {
         const popconfirm = createPopconfirm({}, withReference());
         container.appendChild(popconfirm);
-        await waitForRender();
-
         expect(popconfirm.placement).toBe("top");
       });
 
-      it("应该支持所有 12 个 placement 值", async () => {
+      it("应该支持所有 12 个 placement 值", () => {
         const placements = [
           "top",
           "top-start",
@@ -844,8 +762,6 @@ describe("EaPopconfirm", () => {
         for (const placement of placements) {
           const popconfirm = createPopconfirm({ placement }, withReference());
           container.appendChild(popconfirm);
-          await waitForRender();
-
           expect(popconfirm.placement).toBe(placement);
           container.removeChild(popconfirm);
         }
@@ -867,11 +783,9 @@ describe("EaPopconfirm", () => {
     });
 
     describe("ShowArrow", () => {
-      it("默认 showArrow 应该是 true", async () => {
+      it("默认 showArrow 应该是 true", () => {
         const popconfirm = createPopconfirm({}, withReference());
         container.appendChild(popconfirm);
-        await waitForRender();
-
         expect(popconfirm.showArrow).toBe(true);
       });
 
@@ -887,7 +801,6 @@ describe("EaPopconfirm", () => {
       it("showArrow 为 false 时不应该有 is-show-arrow 类", async () => {
         const popconfirm = createPopconfirm({}, withReference());
         container.appendChild(popconfirm);
-        await waitForRender();
         popconfirm.showArrow = false;
         await waitForRender();
 
@@ -897,11 +810,9 @@ describe("EaPopconfirm", () => {
     });
 
     describe("Visible", () => {
-      it("默认 visible 应该是 false", async () => {
+      it("默认 visible 应该是 false", () => {
         const popconfirm = createPopconfirm({}, withReference());
         container.appendChild(popconfirm);
-        await waitForRender();
-
         expect(popconfirm.visible).toBe(false);
       });
 
@@ -919,22 +830,18 @@ describe("EaPopconfirm", () => {
     });
 
     describe("Offset", () => {
-      it("默认 offset 应该是 '0 0'", async () => {
+      it("默认 offset 应该是 '0 0'", () => {
         const popconfirm = createPopconfirm({}, withReference());
         container.appendChild(popconfirm);
-        await waitForRender();
-
         expect(popconfirm.offset).toBe("0 0");
       });
 
-      it("应该支持自定义 offset", async () => {
+      it("应该支持自定义 offset", () => {
         const popconfirm = createPopconfirm(
           { offset: "10 20" },
           withReference()
         );
         container.appendChild(popconfirm);
-        await waitForRender();
-
         expect(popconfirm.offset).toBe("10 20");
       });
 
@@ -956,21 +863,16 @@ describe("EaPopconfirm", () => {
     });
 
     describe("Flip", () => {
-      it("默认 flip 应该是 true", async () => {
+      it("默认 flip 应该是 true", () => {
         const popconfirm = createPopconfirm({}, withReference());
         container.appendChild(popconfirm);
-        await waitForRender();
-
         expect(popconfirm.flip).toBe(true);
       });
 
-      it("应该支持 flip 设置为 false", async () => {
+      it("应该支持 flip 设置为 false", () => {
         const popconfirm = createPopconfirm({}, withReference());
         container.appendChild(popconfirm);
-        await waitForRender();
         popconfirm.flip = false;
-        await waitForRender();
-
         expect(popconfirm.flip).toBe(false);
       });
     });
@@ -1041,8 +943,6 @@ describe("EaPopconfirm", () => {
         expect(popconfirm.visible).toBe(true);
 
         document.body.click();
-        await waitForRender();
-
         expect(popconfirm.visible).toBe(false);
       });
 
@@ -1058,8 +958,6 @@ describe("EaPopconfirm", () => {
           ".ea-popper__original"
         );
         innerEl.click();
-        await waitForRender();
-
         expect(popconfirm.visible).toBe(true);
       });
 
@@ -1098,8 +996,6 @@ describe("EaPopconfirm", () => {
         popconfirm.close();
 
         document.body.click();
-        await waitForRender();
-
         expect(popconfirm.visible).toBe(false);
       });
 
@@ -1266,9 +1162,9 @@ describe("EaPopconfirm", () => {
       const referenceSlot = popconfirm.shadowRoot.querySelector(
         'slot[name="reference"]'
       );
-      referenceSlot.dispatchEvent(new MouseEvent("click", { detail: 1, bubbles: true }));
-      await waitForRender();
-
+      referenceSlot.dispatchEvent(
+        new MouseEvent("click", { detail: 1, bubbles: true })
+      );
       expect(popconfirm.visible).toBe(true);
     });
 
@@ -1318,24 +1214,20 @@ describe("EaPopconfirm", () => {
   // ==================== 生命周期 ====================
 
   describe("Lifecycle", () => {
-    it("组件连接后应该正确初始化", async () => {
+    it("组件连接后应该正确初始化", () => {
       const popconfirm = createPopconfirm(
         { placement: "bottom", heading: "Test" },
         withReference()
       );
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(popconfirm.shadowRoot).toBeTruthy();
       expect(popconfirm.placement).toBe("bottom");
       expect(popconfirm.heading).toBe("Test");
     });
 
-    it("组件断开连接后 isConnected 应该为 false", async () => {
+    it("组件断开连接后 isConnected 应该为 false", () => {
       const popconfirm = createPopconfirm({}, withReference());
       container.appendChild(popconfirm);
-      await waitForRender();
-
       popconfirm.remove();
       expect(popconfirm.isConnected).toBe(false);
     });
@@ -1351,7 +1243,6 @@ describe("EaPopconfirm", () => {
       popconfirm.remove();
 
       document.body.click();
-      await waitForRender();
     });
 
     it("应该支持属性动态更新", async () => {
@@ -1362,8 +1253,6 @@ describe("EaPopconfirm", () => {
       expect(popconfirm.heading).toBe("");
 
       popconfirm.setAttribute("heading", "Updated Title");
-      await waitForRender();
-
       expect(popconfirm.heading).toBe("Updated Title");
     });
 
@@ -1376,8 +1265,6 @@ describe("EaPopconfirm", () => {
       popconfirm.setAttribute("icon", "circle-info");
       popconfirm.setAttribute("icon-color", "#0000FF");
       popconfirm.setAttribute("confirm-button-text", "OK");
-      await waitForRender();
-
       expect(popconfirm.heading).toBe("New");
       expect(popconfirm.icon).toBe("circle-info");
       expect(popconfirm.iconColor).toBe("#0000FF");
@@ -1388,19 +1275,15 @@ describe("EaPopconfirm", () => {
   // ==================== 边界情况 ====================
 
   describe("Edge Cases", () => {
-    it("没有 reference slot 时应该正常渲染", async () => {
+    it("没有 reference slot 时应该正常渲染", () => {
       const popconfirm = createPopconfirm();
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(popconfirm.shadowRoot).toBeTruthy();
     });
 
-    it("空 heading 应该正常渲染", async () => {
+    it("空 heading 应该正常渲染", () => {
       const popconfirm = createPopconfirm({ heading: "" }, withReference());
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(popconfirm.heading).toBe("");
     });
 
@@ -1433,11 +1316,9 @@ describe("EaPopconfirm", () => {
       expect(popconfirm.visible).toBe(false);
     });
 
-    it("width 设置为 0 应该正常工作", async () => {
+    it("width 设置为 0 应该正常工作", () => {
       const popconfirm = createPopconfirm({ width: "0" }, withReference());
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(popconfirm.width).toBe(0);
     });
 
@@ -1457,22 +1338,18 @@ describe("EaPopconfirm", () => {
       );
     });
 
-    it("单个值的 offset 应该正常工作", async () => {
+    it("单个值的 offset 应该正常工作", () => {
       const popconfirm = createPopconfirm({ offset: "15" }, withReference());
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(popconfirm.offset).toBe("15");
     });
 
-    it("无效的 placement 值应该回退到默认值", async () => {
+    it("无效的 placement 值应该回退到默认值", () => {
       const popconfirm = createPopconfirm(
         { placement: "invalid" },
         withReference()
       );
       container.appendChild(popconfirm);
-      await waitForRender();
-
       expect(popconfirm.placement).toBe("top");
     });
 
@@ -1494,8 +1371,6 @@ describe("EaPopconfirm", () => {
     it("showArrow 从 true 切换到 false 再切回 true", async () => {
       const popconfirm = createPopconfirm({}, withReference());
       container.appendChild(popconfirm);
-      await waitForRender();
-
       const containerEl = popconfirm.shadowRoot.querySelector(".ea-popper");
 
       popconfirm.showArrow = false;
@@ -1525,8 +1400,6 @@ describe("EaPopconfirm", () => {
     it("width 动态变化应该更新 CSS 变量", async () => {
       const popconfirm = createPopconfirm({}, withReference());
       container.appendChild(popconfirm);
-      await waitForRender();
-
       popconfirm.width = 300;
       await waitForRender();
 
@@ -1610,6 +1483,355 @@ describe("EaPopconfirm", () => {
         const trigger = el.querySelector('[slot="reference"]');
         expect(trigger.hasAttribute("aria-expanded")).toBe(true);
       });
+    });
+  });
+});
+
+describe("EaPopconfirm Keyboard And Focus", () => {
+  let container;
+
+  function createPopconfirm(innerHTML) {
+    const el = document.createElement("ea-popconfirm");
+    el.innerHTML = innerHTML;
+    container.appendChild(el);
+    return el;
+  }
+
+  const withReference = (extra = "") =>
+    `<button slot="reference">Delete</button>${extra}`;
+
+  beforeEach(() => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+  });
+
+  afterEach(() => {
+    container.remove();
+  });
+
+  describe("Trigger Keyboard Activation", () => {
+    it("触发元素按 Enter 应该打开", async () => {
+      const popconfirm = createPopconfirm(withReference());
+      await waitForRender();
+
+      const trigger = popconfirm.querySelector('[slot="reference"]');
+      const event = fireKeydown(trigger, "Enter");
+
+      expect(event.defaultPrevented).toBe(true);
+      expect(popconfirm.visible).toBe(true);
+    });
+
+    it("触发元素按空格应该打开", async () => {
+      const popconfirm = createPopconfirm(withReference());
+      await waitForRender();
+
+      const trigger = popconfirm.querySelector('[slot="reference"]');
+      fireKeydown(trigger, " ");
+
+      expect(popconfirm.visible).toBe(true);
+    });
+
+    it("已打开时按 Enter 应该关闭", async () => {
+      const popconfirm = createPopconfirm(withReference());
+      await waitForRender();
+
+      const trigger = popconfirm.querySelector('[slot="reference"]');
+      fireKeydown(trigger, "Enter");
+      expect(popconfirm.visible).toBe(true);
+
+      fireKeydown(trigger, "Enter");
+      expect(popconfirm.visible).toBe(false);
+    });
+
+    it("触发元素上的其他按键不应该有影响", async () => {
+      const popconfirm = createPopconfirm(withReference());
+      await waitForRender();
+
+      const trigger = popconfirm.querySelector('[slot="reference"]');
+      const event = fireKeydown(trigger, "a");
+
+      expect(popconfirm.visible).toBe(false);
+      expect(event.defaultPrevented).toBe(false);
+    });
+  });
+
+  describe("Content Keyboard Interaction", () => {
+    it("内容区按 Escape 应该关闭并聚焦触发元素", async () => {
+      const popconfirm = createPopconfirm(
+        withReference(`<button slot="actions" class="a">A</button>`)
+      );
+      await waitForRender();
+
+      popconfirm.open();
+      await waitForRender();
+
+      const trigger = popconfirm.querySelector('[slot="reference"]');
+      const event = fireKeydown(popconfirm.querySelector(".a"), "Escape");
+
+      expect(event.defaultPrevented).toBe(true);
+      expect(popconfirm.visible).toBe(false);
+      expect(document.activeElement).toBe(trigger);
+    });
+
+    it("内容区最后一个元素按 Tab 应该循环到第一个元素", async () => {
+      const popconfirm = createPopconfirm(
+        withReference(
+          `<button slot="actions" class="a">A</button><button slot="actions" class="b">B</button>`
+        )
+      );
+      await waitForRender();
+
+      popconfirm.open();
+      await waitForRender();
+
+      const event = fireKeydown(popconfirm.querySelector(".b"), "Tab");
+
+      expect(event.defaultPrevented).toBe(true);
+      expect(document.activeElement).toBe(popconfirm.querySelector(".a"));
+    });
+
+    it("内容区第一个元素按 Shift+Tab 应该循环到最后一个元素", async () => {
+      const popconfirm = createPopconfirm(
+        withReference(
+          `<button slot="actions" class="a">A</button><button slot="actions" class="b">B</button>`
+        )
+      );
+      await waitForRender();
+
+      popconfirm.open();
+      await waitForRender();
+
+      const event = fireKeydown(popconfirm.querySelector(".a"), "Tab", {
+        shiftKey: true,
+      });
+
+      expect(event.defaultPrevented).toBe(true);
+      expect(document.activeElement).toBe(popconfirm.querySelector(".b"));
+    });
+
+    it("内容区中间元素按 Tab 不应该被拦截", async () => {
+      const popconfirm = createPopconfirm(
+        withReference(
+          `<button slot="actions" class="a">A</button><button slot="actions" class="b">B</button><button slot="actions" class="c">C</button>`
+        )
+      );
+      await waitForRender();
+
+      popconfirm.open();
+      await waitForRender();
+
+      const event = fireKeydown(popconfirm.querySelector(".b"), "Tab");
+
+      expect(event.defaultPrevented).toBe(false);
+    });
+
+    it("内容区没有可聚焦元素时 Tab 不做处理", async () => {
+      const popconfirm = createPopconfirm(withReference());
+      await waitForRender();
+
+      popconfirm.open();
+      await waitForRender();
+
+      const event = fireKeydown(popconfirm, "Tab");
+
+      expect(event.defaultPrevented).toBe(false);
+    });
+
+    it("被禁用的内容元素不应该参与焦点循环", async () => {
+      const popconfirm = createPopconfirm(
+        withReference(`<button slot="actions" class="d" disabled>D</button>`)
+      );
+      await waitForRender();
+
+      popconfirm.open();
+      await waitForRender();
+
+      const event = fireKeydown(popconfirm.querySelector(".d"), "Tab");
+
+      expect(event.defaultPrevented).toBe(false);
+    });
+  });
+
+  describe("Keyboard Activation Focus Management", () => {
+    it("键盘激活后应该聚焦内容区第一个可聚焦元素", async () => {
+      const popconfirm = createPopconfirm(
+        withReference(`<button slot="actions" class="first">F</button>`)
+      );
+      await waitForRender();
+
+      const trigger = popconfirm.querySelector('[slot="reference"]');
+      fireKeydown(trigger, "Enter");
+      await waitForRender();
+
+      expect(document.activeElement).toBe(popconfirm.querySelector(".first"));
+    });
+
+    it("内容区没有可聚焦元素时应该聚焦原始内容容器", async () => {
+      const popconfirm = createPopconfirm(withReference());
+      await waitForRender();
+
+      const trigger = popconfirm.querySelector('[slot="reference"]');
+      fireKeydown(trigger, "Enter");
+      await waitForRender();
+
+      const original = popconfirm.shadowRoot.querySelector('[part="original"]');
+      const focused =
+        popconfirm.shadowRoot.activeElement ?? document.activeElement;
+
+      expect(original.tabIndex).toBe(0);
+      expect([popconfirm, original]).toContain(focused);
+    });
+
+    it("自定义元素内容应该聚焦其 Shadow DOM 内的可聚焦元素", async () => {
+      const popconfirm = createPopconfirm(
+        withReference(`<ea-button slot="actions" class="btn">OK</ea-button>`)
+      );
+      await waitForRender();
+
+      const trigger = popconfirm.querySelector('[slot="reference"]');
+      fireKeydown(trigger, "Enter");
+      await waitForRender();
+
+      const btn = popconfirm.querySelector(".btn");
+      const inner = btn.shadowRoot.querySelector("button");
+      const focused = btn.shadowRoot.activeElement ?? document.activeElement;
+
+      expect(inner).toBeTruthy();
+      expect([btn, inner]).toContain(focused);
+    });
+
+    it("鼠标打开不应该自动移动焦点", async () => {
+      const popconfirm = createPopconfirm(
+        withReference(`<button slot="actions" class="first">F</button>`)
+      );
+      await waitForRender();
+
+      popconfirm.open();
+      await waitForRender();
+
+      expect(document.activeElement).not.toBe(
+        popconfirm.querySelector(".first")
+      );
+    });
+  });
+
+  describe("Focusout Handling", () => {
+    it("焦点移出组件时应该关闭", async () => {
+      const popconfirm = createPopconfirm(
+        withReference(`<button slot="actions" class="a">A</button>`)
+      );
+      await waitForRender();
+
+      popconfirm.open();
+      await waitForRender();
+
+      popconfirm.dispatchEvent(
+        new FocusEvent("focusout", { bubbles: true, composed: true })
+      );
+      await waitForRender();
+
+      expect(popconfirm.visible).toBe(false);
+    });
+
+    it("焦点仍在组件内部时不应该关闭", async () => {
+      const popconfirm = createPopconfirm(
+        withReference(`<button slot="actions" class="a">A</button>`)
+      );
+      await waitForRender();
+
+      popconfirm.open();
+      await waitForRender();
+
+      popconfirm.querySelector(".a").focus();
+      popconfirm.dispatchEvent(
+        new FocusEvent("focusout", { bubbles: true, composed: true })
+      );
+      await waitForRender();
+
+      expect(popconfirm.visible).toBe(true);
+    });
+
+    it("隐藏状态下焦点移出不应该有副作用", async () => {
+      const popconfirm = createPopconfirm(withReference());
+      await waitForRender();
+
+      popconfirm.dispatchEvent(
+        new FocusEvent("focusout", { bubbles: true, composed: true })
+      );
+      await waitForRender();
+
+      expect(popconfirm.visible).toBe(false);
+    });
+  });
+
+  describe("Reference Interactions", () => {
+    it("detail 为 0 的点击不应该打开", async () => {
+      const popconfirm = createPopconfirm(withReference());
+      await waitForRender();
+
+      const referenceSlot = popconfirm.shadowRoot.querySelector(
+        'slot[name="reference"]'
+      );
+      referenceSlot.dispatchEvent(
+        new MouseEvent("click", { detail: 0, bubbles: true })
+      );
+
+      expect(popconfirm.visible).toBe(false);
+    });
+
+    it("点击外部应该关闭", async () => {
+      const popconfirm = createPopconfirm(withReference());
+      await waitForRender();
+
+      popconfirm.open();
+      await waitForRender();
+      expect(popconfirm.visible).toBe(true);
+
+      const outside = document.createElement("button");
+      container.appendChild(outside);
+      outside.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      await waitForRender();
+
+      expect(popconfirm.visible).toBe(false);
+    });
+
+    it("关闭后全局点击监听应该被清理", async () => {
+      const popconfirm = createPopconfirm(withReference());
+      await waitForRender();
+
+      popconfirm.open();
+      await waitForRender();
+      popconfirm.close();
+
+      const outside = document.createElement("button");
+      container.appendChild(outside);
+      outside.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      await waitForRender();
+
+      expect(popconfirm.visible).toBe(false);
+    });
+  });
+
+  describe("Trigger Accessibility Setup", () => {
+    it("非原生可聚焦触发元素应该补充 tabindex 和 role", async () => {
+      const popconfirm = createPopconfirm(
+        `<span slot="reference">Delete</span>`
+      );
+      await waitForRender();
+
+      const trigger = popconfirm.querySelector('[slot="reference"]');
+      expect(trigger.getAttribute("tabindex")).toBe("0");
+      expect(trigger.getAttribute("role")).toBe("button");
+    });
+
+    it("自带 tabindex 的触发元素不应该补充 role", async () => {
+      const popconfirm = createPopconfirm(
+        `<div slot="reference" tabindex="0">Delete</div>`
+      );
+      await waitForRender();
+
+      const trigger = popconfirm.querySelector('[slot="reference"]');
+      expect(trigger.hasAttribute("role")).toBe(false);
     });
   });
 });

@@ -17,51 +17,41 @@ describe("EaContainer", () => {
   });
 
   describe("基础渲染", () => {
-    it("应该正确渲染 ea-container 组件", async () => {
+    it("应该正确渲染 ea-container 组件", () => {
       const el = document.createElement("ea-container");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.shadowRoot).toBeTruthy();
       expect(el.shadowRoot.querySelector(".ea-container")).toBeTruthy();
     });
 
-    it("应该正确渲染 ea-header 组件", async () => {
+    it("应该正确渲染 ea-header 组件", () => {
       const el = document.createElement("ea-header");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.shadowRoot).toBeTruthy();
       expect(el.shadowRoot.querySelector(".ea-header")).toBeTruthy();
     });
 
-    it("应该正确渲染 ea-main 组件", async () => {
+    it("应该正确渲染 ea-main 组件", () => {
       const el = document.createElement("ea-main");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.shadowRoot).toBeTruthy();
       expect(el.shadowRoot.querySelector(".ea-main")).toBeTruthy();
     });
 
-    it("应该正确渲染 ea-footer 组件", async () => {
+    it("应该正确渲染 ea-footer 组件", () => {
       const el = document.createElement("ea-footer");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.shadowRoot).toBeTruthy();
       expect(el.shadowRoot.querySelector(".ea-footer")).toBeTruthy();
     });
 
-    it("应该正确渲染 ea-aside 组件", async () => {
+    it("应该正确渲染 ea-aside 组件", () => {
       const el = document.createElement("ea-aside");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.shadowRoot).toBeTruthy();
       expect(el.shadowRoot.querySelector(".ea-aside")).toBeTruthy();
@@ -69,78 +59,62 @@ describe("EaContainer", () => {
   });
 
   describe("CSS Part", () => {
-    it("ea-container 应该支持 container part", async () => {
+    it("ea-container 应该支持 container part", () => {
       const el = document.createElement("ea-container");
       container.appendChild(el);
 
-      await waitForRender();
-
       expect(el.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
 
-    it("ea-header 应该支持 container part", async () => {
+    it("ea-header 应该支持 container part", () => {
       const el = document.createElement("ea-header");
       container.appendChild(el);
 
-      await waitForRender();
-
       expect(el.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
 
-    it("ea-main 应该支持 container part", async () => {
+    it("ea-main 应该支持 container part", () => {
       const el = document.createElement("ea-main");
       container.appendChild(el);
 
-      await waitForRender();
-
       expect(el.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
 
-    it("ea-footer 应该支持 container part", async () => {
+    it("ea-footer 应该支持 container part", () => {
       const el = document.createElement("ea-footer");
       container.appendChild(el);
 
-      await waitForRender();
-
       expect(el.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
 
-    it("ea-aside 应该支持 container part", async () => {
+    it("ea-aside 应该支持 container part", () => {
       const el = document.createElement("ea-aside");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
   });
 
   describe("direction 属性", () => {
-    it("默认 direction 应该是 horizontal", async () => {
+    it("默认 direction 应该是 horizontal", () => {
       const el = document.createElement("ea-container");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.direction).toBe("horizontal");
     });
 
-    it("应该支持设置 direction 为 vertical", async () => {
+    it("应该支持设置 direction 为 vertical", () => {
       const el = document.createElement("ea-container");
       el.setAttribute("direction", "vertical");
       container.appendChild(el);
 
-      await waitForRender();
-
       expect(el.direction).toBe("vertical");
     });
 
-    it("应该支持设置 direction 为 horizontal", async () => {
+    it("应该支持设置 direction 为 horizontal", () => {
       const el = document.createElement("ea-container");
       el.setAttribute("direction", "horizontal");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.direction).toBe("horizontal");
     });
@@ -198,15 +172,13 @@ describe("EaContainer", () => {
       expect(el.direction).toBe("vertical");
     });
 
-    it("不包含 ea-header 或 ea-footer 时应该保持 horizontal 方向", async () => {
+    it("不包含 ea-header 或 ea-footer 时应该保持 horizontal 方向", () => {
       const el = document.createElement("ea-container");
       const aside = document.createElement("ea-aside");
       const main = document.createElement("ea-main");
       el.appendChild(aside);
       el.appendChild(main);
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.direction).toBe("horizontal");
     });
@@ -258,41 +230,33 @@ describe("EaContainer", () => {
   });
 
   describe("header height 属性", () => {
-    it("默认 header height 应该是 60px", async () => {
+    it("默认 header height 应该是 60px", () => {
       const el = document.createElement("ea-header");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.height).toBe("60px");
     });
 
-    it("应该支持自定义 header height", async () => {
+    it("应该支持自定义 header height", () => {
       const el = document.createElement("ea-header");
       el.setAttribute("height", "100px");
       container.appendChild(el);
 
-      await waitForRender();
-
       expect(el.height).toBe("100px");
     });
 
-    it("应该支持 header height 为 auto", async () => {
+    it("应该支持 header height 为 auto", () => {
       const el = document.createElement("ea-header");
       el.setAttribute("height", "auto");
       container.appendChild(el);
 
-      await waitForRender();
-
       expect(el.height).toBe("auto");
     });
 
-    it("无效的 height 值时应该通过 CSS.supports 校验回退", async () => {
+    it("无效的 height 值时应该通过 CSS.supports 校验回退", () => {
       const el = document.createElement("ea-header");
       el.setAttribute("height", "invalid");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.height).toBe("invalid");
     });
@@ -307,45 +271,36 @@ describe("EaContainer", () => {
       expect(el.style.getPropertyValue("--ea-header-height")).toBe("auto");
     });
 
-    it("应该支持 height 动态更新", async () => {
+    it("应该支持 height 动态更新", () => {
       const el = document.createElement("ea-header");
       container.appendChild(el);
 
-      await waitForRender();
-
       el.setAttribute("height", "100px");
-      await waitForRender();
 
       expect(el.height).toBe("100px");
     });
   });
 
   describe("footer height 属性", () => {
-    it("默认 footer height 应该是 60px", async () => {
+    it("默认 footer height 应该是 60px", () => {
       const el = document.createElement("ea-footer");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.height).toBe("60px");
     });
 
-    it("应该支持自定义 footer height", async () => {
+    it("应该支持自定义 footer height", () => {
       const el = document.createElement("ea-footer");
       el.setAttribute("height", "80px");
       container.appendChild(el);
 
-      await waitForRender();
-
       expect(el.height).toBe("80px");
     });
 
-    it("无效的 height 值时应该通过 CSS.supports 校验回退", async () => {
+    it("无效的 height 值时应该通过 CSS.supports 校验回退", () => {
       const el = document.createElement("ea-footer");
       el.setAttribute("height", "invalid");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.height).toBe("invalid");
     });
@@ -360,57 +315,45 @@ describe("EaContainer", () => {
       expect(el.style.getPropertyValue("--ea-footer-height")).toBe("auto");
     });
 
-    it("应该支持 height 动态更新", async () => {
+    it("应该支持 height 动态更新", () => {
       const el = document.createElement("ea-footer");
       container.appendChild(el);
 
-      await waitForRender();
-
       el.setAttribute("height", "100px");
-      await waitForRender();
 
       expect(el.height).toBe("100px");
     });
   });
 
   describe("aside width 属性", () => {
-    it("默认 aside width 应该是 300px", async () => {
+    it("默认 aside width 应该是 300px", () => {
       const el = document.createElement("ea-aside");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.width).toBe("300px");
     });
 
-    it("应该支持自定义 aside width", async () => {
+    it("应该支持自定义 aside width", () => {
       const el = document.createElement("ea-aside");
       el.setAttribute("width", "200px");
       container.appendChild(el);
 
-      await waitForRender();
-
       expect(el.width).toBe("200px");
     });
 
-    it("应该支持 aside width 为百分比", async () => {
+    it("应该支持 aside width 为百分比", () => {
       const el = document.createElement("ea-aside");
       el.setAttribute("width", "20%");
       container.appendChild(el);
 
-      await waitForRender();
-
       expect(el.width).toBe("20%");
     });
 
-    it("应该支持 width 动态更新", async () => {
+    it("应该支持 width 动态更新", () => {
       const el = document.createElement("ea-aside");
       container.appendChild(el);
 
-      await waitForRender();
-
       el.setAttribute("width", "250px");
-      await waitForRender();
 
       expect(el.width).toBe("250px");
     });
@@ -454,7 +397,7 @@ describe("EaContainer", () => {
       expect(el.querySelector("ea-footer")).toBeTruthy();
     });
 
-    it("应该支持 Aside + Main 水平布局", async () => {
+    it("应该支持 Aside + Main 水平布局", () => {
       const el = document.createElement("ea-container");
       el.setAttribute("direction", "horizontal");
       const aside = document.createElement("ea-aside");
@@ -463,8 +406,6 @@ describe("EaContainer", () => {
       el.appendChild(aside);
       el.appendChild(main);
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.direction).toBe("horizontal");
       expect(el.querySelector("ea-aside")).toBeTruthy();
@@ -491,7 +432,7 @@ describe("EaContainer", () => {
       expect(inner.direction).toBe("horizontal");
     });
 
-    it("应该支持多个 Aside 的水平布局", async () => {
+    it("应该支持多个 Aside 的水平布局", () => {
       const el = document.createElement("ea-container");
       el.setAttribute("direction", "horizontal");
       const aside1 = document.createElement("ea-aside");
@@ -503,65 +444,53 @@ describe("EaContainer", () => {
       el.appendChild(aside2);
       container.appendChild(el);
 
-      await waitForRender();
-
       expect(el.direction).toBe("horizontal");
       expect(el.querySelectorAll("ea-aside").length).toBe(2);
     });
   });
 
   describe("Slot 内容", () => {
-    it("ea-header 应该支持 slot 内容", async () => {
+    it("ea-header 应该支持 slot 内容", () => {
       const el = document.createElement("ea-header");
       el.innerHTML = "<span>Header Content</span>";
       container.appendChild(el);
 
-      await waitForRender();
-
       const slot = el.shadowRoot.querySelector("slot");
       expect(slot).toBeTruthy();
     });
 
-    it("ea-main 应该支持 slot 内容", async () => {
+    it("ea-main 应该支持 slot 内容", () => {
       const el = document.createElement("ea-main");
       el.innerHTML = "<div>Main Content</div>";
       container.appendChild(el);
 
-      await waitForRender();
-
       const slot = el.shadowRoot.querySelector("slot");
       expect(slot).toBeTruthy();
     });
 
-    it("ea-aside 应该支持 slot 内容", async () => {
+    it("ea-aside 应该支持 slot 内容", () => {
       const el = document.createElement("ea-aside");
       el.innerHTML = "<nav>Aside Content</nav>";
       container.appendChild(el);
 
-      await waitForRender();
-
       const slot = el.shadowRoot.querySelector("slot");
       expect(slot).toBeTruthy();
     });
 
-    it("ea-footer 应该支持 slot 内容", async () => {
+    it("ea-footer 应该支持 slot 内容", () => {
       const el = document.createElement("ea-footer");
       el.innerHTML = "<span>Footer Content</span>";
       container.appendChild(el);
 
-      await waitForRender();
-
       const slot = el.shadowRoot.querySelector("slot");
       expect(slot).toBeTruthy();
     });
 
-    it("ea-container 应该支持 slot 内容", async () => {
+    it("ea-container 应该支持 slot 内容", () => {
       const el = document.createElement("ea-container");
       const main = document.createElement("ea-main");
       el.appendChild(main);
       container.appendChild(el);
-
-      await waitForRender();
 
       const slot = el.shadowRoot.querySelector("slot");
       expect(slot).toBeTruthy();
@@ -591,49 +520,39 @@ describe("EaContainer", () => {
       expect(containerEl.classList.contains("ea-container--vertical")).toBe(true);
     });
 
-    it("ea-header 应该有 ea-header 块类名", async () => {
+    it("ea-header 应该有 ea-header 块类名", () => {
       const el = document.createElement("ea-header");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.shadowRoot.querySelector(".ea-header")).toBeTruthy();
     });
 
-    it("ea-main 应该有 ea-main 块类名", async () => {
+    it("ea-main 应该有 ea-main 块类名", () => {
       const el = document.createElement("ea-main");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.shadowRoot.querySelector(".ea-main")).toBeTruthy();
     });
 
-    it("ea-footer 应该有 ea-footer 块类名", async () => {
+    it("ea-footer 应该有 ea-footer 块类名", () => {
       const el = document.createElement("ea-footer");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.shadowRoot.querySelector(".ea-footer")).toBeTruthy();
     });
 
-    it("ea-aside 应该有 ea-aside 块类名", async () => {
+    it("ea-aside 应该有 ea-aside 块类名", () => {
       const el = document.createElement("ea-aside");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.shadowRoot.querySelector(".ea-aside")).toBeTruthy();
     });
   });
 
   describe("边界条件", () => {
-    it("应该处理空 container", async () => {
+    it("应该处理空 container", () => {
       const el = document.createElement("ea-container");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.shadowRoot).toBeTruthy();
       expect(el.direction).toBe("horizontal");
@@ -651,61 +570,50 @@ describe("EaContainer", () => {
   });
 
   describe("生命周期", () => {
-    it("组件连接后应该正确初始化", async () => {
+    it("组件连接后应该正确初始化", () => {
       const el = document.createElement("ea-container");
       el.setAttribute("direction", "vertical");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.shadowRoot).toBeTruthy();
       expect(el.direction).toBe("vertical");
     });
 
-    it("组件断开连接后应该正常移除", async () => {
+    it("组件断开连接后应该正常移除", () => {
       const el = document.createElement("ea-container");
       container.appendChild(el);
-
-      await waitForRender();
 
       el.remove();
 
       expect(el.isConnected).toBe(false);
     });
 
-    it("应该支持 direction 动态更新", async () => {
+    it("应该支持 direction 动态更新", () => {
       const el = document.createElement("ea-container");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.direction).toBe("horizontal");
 
       el.setAttribute("direction", "vertical");
-      await waitForRender();
 
       expect(el.direction).toBe("vertical");
     });
   });
 
   describe("updateContainerClasslist 方法", () => {
-    it("应该返回正确的 BEM 类名字符串", async () => {
+    it("应该返回正确的 BEM 类名字符串", () => {
       const el = document.createElement("ea-container");
       container.appendChild(el);
-
-      await waitForRender();
 
       const className = el.updateContainerClasslist();
       expect(className).toContain("ea-container");
       expect(className).toContain("ea-container--horizontal");
     });
 
-    it("direction 为 vertical 时应该返回 vertical 修饰符", async () => {
+    it("direction 为 vertical 时应该返回 vertical 修饰符", () => {
       const el = document.createElement("ea-container");
       el.setAttribute("direction", "vertical");
       container.appendChild(el);
-
-      await waitForRender();
 
       const className = el.updateContainerClasslist();
       expect(className).toContain("ea-container--vertical");

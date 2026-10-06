@@ -18,50 +18,40 @@ describe("EaOverlay", () => {
   });
 
   describe("Basic Rendering", () => {
-    it("should render with shadow DOM", async () => {
+    it("should render with shadow DOM", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
-
-      await waitForRender();
 
       expect(overlay.shadowRoot).toBeTruthy();
     });
 
-    it("should render container element", async () => {
+    it("should render container element", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
-
-      await waitForRender();
 
       const containerEl = overlay.shadowRoot.querySelector(".ea-overlay");
       expect(containerEl).toBeTruthy();
     });
 
-    it("should render mask element", async () => {
+    it("should render mask element", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
-
-      await waitForRender();
 
       const mask = overlay.shadowRoot.querySelector(".ea-overlay__mask");
       expect(mask).toBeTruthy();
     });
 
-    it("should render content element", async () => {
+    it("should render content element", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
-
-      await waitForRender();
 
       const content = overlay.shadowRoot.querySelector(".ea-overlay__content");
       expect(content).toBeTruthy();
     });
 
-    it("should render slot in content area", async () => {
+    it("should render slot in content area", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
-
-      await waitForRender();
 
       const slot = overlay.shadowRoot.querySelector(".ea-overlay__content slot");
       expect(slot).toBeTruthy();
@@ -69,29 +59,23 @@ describe("EaOverlay", () => {
   });
 
   describe("CSS Parts", () => {
-    it("should have container part", async () => {
+    it("should have container part", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
-
-      await waitForRender();
 
       expect(overlay.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
 
-    it("should have mask part", async () => {
+    it("should have mask part", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
-
-      await waitForRender();
 
       expect(overlay.shadowRoot.querySelector('[part="mask"]')).toBeTruthy();
     });
 
-    it("should have content part", async () => {
+    it("should have content part", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
-
-      await waitForRender();
 
       expect(overlay.shadowRoot.querySelector('[part="content"]')).toBeTruthy();
     });
@@ -134,8 +118,6 @@ describe("EaOverlay", () => {
     it("should remove is-modal state class when modal is false", async () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
-
-      await waitForRender();
 
       overlay.modal = false;
       await waitForRender();
@@ -240,23 +222,18 @@ describe("EaOverlay", () => {
   });
 
   describe("Modal Attribute", () => {
-    it("should default modal to true", async () => {
+    it("should default modal to true", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
-
-      await waitForRender();
 
       expect(overlay.modal).toBe(true);
     });
 
-    it("should support non-modal mode via property", async () => {
+    it("should support non-modal mode via property", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await waitForRender();
-
       overlay.modal = false;
-      await waitForRender();
 
       expect(overlay.modal).toBe(false);
     });
@@ -278,11 +255,9 @@ describe("EaOverlay", () => {
   });
 
   describe("Close On Click Modal Attribute", () => {
-    it("should default closeOnClickModal to true", async () => {
+    it("should default closeOnClickModal to true", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
-
-      await waitForRender();
 
       expect(overlay.closeOnClickModal).toBe(true);
     });
@@ -326,11 +301,9 @@ describe("EaOverlay", () => {
   });
 
   describe("Close On Press Escape Attribute", () => {
-    it("should default closeOnPressEscape to true", async () => {
+    it("should default closeOnPressEscape to true", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
-
-      await waitForRender();
 
       expect(overlay.closeOnPressEscape).toBe(true);
     });
@@ -521,11 +494,9 @@ describe("EaOverlay", () => {
       expect(overlay.style.getPropertyValue("--ea-overlay-content-height")).toBe("60%");
     });
 
-    it("should default CSS variable attributes to empty string", async () => {
+    it("should default CSS variable attributes to empty string", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
-
-      await waitForRender();
 
       expect(overlay.zIndex).toBe("");
       expect(overlay.backgroundColor).toBe("");
@@ -725,12 +696,10 @@ describe("EaOverlay", () => {
   });
 
   describe("Slots", () => {
-    it("should support default slot", async () => {
+    it("should support default slot", () => {
       const overlay = document.createElement("ea-overlay");
       overlay.innerHTML = `<div class="content">Overlay Content</div>`;
       container.appendChild(overlay);
-
-      await waitForRender();
 
       const slot = overlay.shadowRoot.querySelector("slot");
       expect(slot).toBeTruthy();
@@ -738,11 +707,9 @@ describe("EaOverlay", () => {
   });
 
   describe("updateContainerClasslist Method", () => {
-    it("should return correct BEM class string when hidden", async () => {
+    it("should return correct BEM class string when hidden", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
-
-      await waitForRender();
 
       const result = overlay.updateContainerClasslist();
       expect(result).toContain("ea-overlay");
@@ -761,11 +728,9 @@ describe("EaOverlay", () => {
       expect(result).toContain("ea-overlay--open");
     });
 
-    it("should not include is-modal when modal is false", async () => {
+    it("should not include is-modal when modal is false", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
-
-      await waitForRender();
 
       overlay.modal = false;
       const result = overlay.updateContainerClasslist();
@@ -774,11 +739,9 @@ describe("EaOverlay", () => {
   });
 
   describe("Edge Cases", () => {
-    it("should handle empty component", async () => {
+    it("should handle empty component", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
-
-      await waitForRender();
 
       expect(overlay.shadowRoot).toBeTruthy();
     });
@@ -817,46 +780,37 @@ describe("EaOverlay", () => {
       expect(overlay.visible).toBe(true);
     });
 
-    it("should handle component removal", async () => {
+    it("should handle component removal", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
-
-      await waitForRender();
 
       overlay.remove();
 
       expect(overlay.isConnected).toBe(false);
     });
 
-    it("should handle attribute dynamic updates", async () => {
+    it("should handle attribute dynamic updates", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
-
-      await waitForRender();
 
       expect(overlay.modal).toBe(true);
 
       overlay.modal = false;
-      await waitForRender();
 
       expect(overlay.modal).toBe(false);
 
       overlay.modal = true;
-      await waitForRender();
 
       expect(overlay.modal).toBe(true);
     });
   });
 
   describe("Lifecycle", () => {
-    it("should initialize correctly on connect", async () => {
+    it("should initialize correctly on connect", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await waitForRender();
-
       overlay.modal = false;
-      await waitForRender();
 
       expect(overlay.shadowRoot).toBeTruthy();
       expect(overlay.modal).toBe(false);
@@ -875,17 +829,14 @@ describe("EaOverlay", () => {
       expect(overlay.isConnected).toBe(false);
     });
 
-    it("should support reconnection", async () => {
+    it("should support reconnection", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
-
-      await waitForRender();
 
       overlay.remove();
       expect(overlay.isConnected).toBe(false);
 
       container.appendChild(overlay);
-      await waitForRender();
 
       expect(overlay.isConnected).toBe(true);
       expect(overlay.shadowRoot).toBeTruthy();

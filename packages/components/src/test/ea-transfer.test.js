@@ -112,10 +112,9 @@ describe("EaTransfer", () => {
   };
 
   describe("Basic Structure", () => {
-    it("should render ea-transfer component", async () => {
+    it("should render ea-transfer component", () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
-      await waitForRender();
 
       expect(transfer).toBeDefined();
       expect(transfer.shadowRoot).toBeDefined();
@@ -161,10 +160,9 @@ describe("EaTransfer", () => {
       expect(leftBtn).toBeTruthy();
     });
 
-    it("should create two panels (source / target)", async () => {
+    it("should create two panels (source / target)", () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
-      await waitForRender();
 
       const sourcePanel = transfer.shadowRoot.querySelector(
         'ea-transfer-panel[type="source"]'
@@ -193,11 +191,10 @@ describe("EaTransfer", () => {
       expect(leftBtn.hasAttribute("disabled")).toBe(true);
     });
 
-    it("should contain left and right ea-transfer-panel elements", async () => {
+    it("should contain left and right ea-transfer-panel elements", () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       container.appendChild(transfer);
-      await waitForRender();
 
       const sourcePanel = transfer.shadowRoot.querySelector(
         'ea-transfer-panel[type="source"]'
@@ -391,7 +388,6 @@ describe("EaTransfer", () => {
     it("setting titles should update panel titles", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
-      await waitForRender();
 
       transfer.titles = ["Source List", "Target List"];
       await waitForRender();
@@ -407,21 +403,19 @@ describe("EaTransfer", () => {
       expect(targetPanel.getAttribute("data-title")).toBe("Target List");
     });
 
-    it("setting buttonTexts should update button text", async () => {
+    it("setting buttonTexts should update button text", () => {
       const transfer = document.createElement("ea-transfer");
       transfer.buttonTexts = ["To right", "To left"];
       container.appendChild(transfer);
-      await waitForRender();
 
       expect(transfer.buttonTexts).toEqual(["To right", "To left"]);
     });
 
-    it("should support setting leftDefaultChecked and rightDefaultChecked", async () => {
+    it("should support setting leftDefaultChecked and rightDefaultChecked", () => {
       const transfer = document.createElement("ea-transfer");
       transfer.leftDefaultChecked = [1, 2];
       transfer.rightDefaultChecked = [3, 4];
       container.appendChild(transfer);
-      await waitForRender();
 
       expect(transfer.leftDefaultChecked).toEqual([1, 2]);
       expect(transfer.rightDefaultChecked).toEqual([3, 4]);
@@ -440,21 +434,19 @@ describe("EaTransfer", () => {
   });
 
   describe("Slots", () => {
-    it("should support left-empty slot", async () => {
+    it("should support left-empty slot", () => {
       const transfer = document.createElement("ea-transfer");
       transfer.innerHTML = '<div slot="left-empty">No data</div>';
       container.appendChild(transfer);
-      await waitForRender();
 
       const slot = transfer.shadowRoot.querySelector('slot[name="left-empty"]');
       expect(slot).toBeTruthy();
     });
 
-    it("should support right-empty slot", async () => {
+    it("should support right-empty slot", () => {
       const transfer = document.createElement("ea-transfer");
       transfer.innerHTML = '<div slot="right-empty">No data</div>';
       container.appendChild(transfer);
-      await waitForRender();
 
       const slot = transfer.shadowRoot.querySelector(
         'slot[name="right-empty"]'
@@ -462,11 +454,10 @@ describe("EaTransfer", () => {
       expect(slot).toBeTruthy();
     });
 
-    it("should support left-footer slot", async () => {
+    it("should support left-footer slot", () => {
       const transfer = document.createElement("ea-transfer");
       transfer.innerHTML = '<div slot="left-footer">Footer</div>';
       container.appendChild(transfer);
-      await waitForRender();
 
       const slot = transfer.shadowRoot.querySelector(
         'slot[name="left-footer"]'
@@ -474,11 +465,10 @@ describe("EaTransfer", () => {
       expect(slot).toBeTruthy();
     });
 
-    it("should support right-footer slot", async () => {
+    it("should support right-footer slot", () => {
       const transfer = document.createElement("ea-transfer");
       transfer.innerHTML = '<div slot="right-footer">Footer</div>';
       container.appendChild(transfer);
-      await waitForRender();
 
       const slot = transfer.shadowRoot.querySelector(
         'slot[name="right-footer"]'
@@ -925,12 +915,11 @@ describe("EaTransfer", () => {
       expect(typeof transfer.reportValidity).toBe("function");
     });
 
-    it("clearQuery method should exist", async () => {
+    it("clearQuery method should exist", () => {
       const transfer = document.createElement("ea-transfer");
       transfer.filterable = true;
       transfer.data = generateTestData();
       container.appendChild(transfer);
-      await waitForRender();
 
       expect(typeof transfer.clearQuery).toBe("function");
     });
@@ -1037,7 +1026,6 @@ describe("EaTransfer", () => {
     it("dynamically modifying titles should update panel titles", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
-      await waitForRender();
 
       transfer.titles = ["Old Src", "Old Tgt"];
       await waitForRender();
@@ -1097,13 +1085,11 @@ describe("EaTransfer", () => {
       expect(sourcePanel.filterable).toBe(true);
     });
 
-    it("dynamically modifying buttonTexts should update button text", async () => {
+    it("dynamically modifying buttonTexts should update button text", () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
-      await waitForRender();
 
       transfer.buttonTexts = ["Right", "Left"];
-      await waitForRender();
 
       expect(transfer.buttonTexts).toEqual(["Right", "Left"]);
     });

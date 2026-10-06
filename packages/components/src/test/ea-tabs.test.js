@@ -2,12 +2,6 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 
 Element.prototype.scrollTo = Element.prototype.scrollTo || function () {};
 
-global.ResizeObserver = class ResizeObserver {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
-};
-
 import { waitForRender } from "./utils/waitForRender.js";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
@@ -51,10 +45,9 @@ describe("EaTabs", () => {
   }
 
   describe("基础渲染", () => {
-    it("应该正确创建 Shadow DOM", async () => {
+    it("应该正确创建 Shadow DOM", () => {
       const tabs = createTabs();
       container.appendChild(tabs);
-      await waitForRender();
 
       expect(tabs.shadowRoot).toBeDefined();
       expect(tabs.shadowRoot.nodeType).toBe(11);
@@ -88,10 +81,9 @@ describe("EaTabs", () => {
       expect(navSlot).toBeTruthy();
     });
 
-    it("应该包含默认 slot", async () => {
+    it("应该包含默认 slot", () => {
       const tabs = createTabs();
       container.appendChild(tabs);
-      await waitForRender();
 
       const defaultSlot = tabs.shadowRoot.querySelector(
         ".ea-tabs__content > slot"
@@ -115,10 +107,9 @@ describe("EaTabs", () => {
   });
 
   describe("Type 属性", () => {
-    it("默认 type 应该是空字符串", async () => {
+    it("默认 type 应该是空字符串", () => {
       const tabs = createTabs();
       container.appendChild(tabs);
-      await waitForRender();
 
       expect(tabs.type).toBe("");
     });
@@ -287,10 +278,9 @@ describe("EaTabs", () => {
   });
 
   describe("TabPosition 属性", () => {
-    it("默认 tabPosition 应该是 top", async () => {
+    it("默认 tabPosition 应该是 top", () => {
       const tabs = createTabs();
       container.appendChild(tabs);
-      await waitForRender();
 
       expect(tabs.tabPosition).toBe("top");
     });
@@ -393,10 +383,9 @@ describe("EaTabs", () => {
   });
 
   describe("Editable 属性", () => {
-    it("默认 editable 应该是 false", async () => {
+    it("默认 editable 应该是 false", () => {
       const tabs = createTabs();
       container.appendChild(tabs);
-      await waitForRender();
 
       expect(tabs.editable).toBe(false);
     });
@@ -909,7 +898,6 @@ describe("EaTabs", () => {
       await waitForRender();
 
       tabs.remove();
-      await waitForRender();
 
       expect(true).toBe(true);
     });
@@ -926,20 +914,18 @@ describe("EaTabs", () => {
 
   describe("EaTab 组件", () => {
     describe("基础渲染", () => {
-      it("应该正确渲染 Shadow DOM", async () => {
+      it("应该正确渲染 Shadow DOM", () => {
         const tab = document.createElement("ea-tab");
         tab.setAttribute("panel", "test");
         tab.textContent = "Test Tab";
         container.appendChild(tab);
-        await waitForRender();
 
         expect(tab.shadowRoot).toBeDefined();
       });
 
-      it("应该包含 container 和 close-icon CSS Part", async () => {
+      it("应该包含 container 和 close-icon CSS Part", () => {
         const tab = document.createElement("ea-tab");
         container.appendChild(tab);
-        await waitForRender();
 
         expect(tab.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
         expect(
@@ -1115,20 +1101,18 @@ describe("EaTabs", () => {
 
   describe("EaTabPanel 组件", () => {
     describe("基础渲染", () => {
-      it("应该正确渲染 Shadow DOM", async () => {
+      it("应该正确渲染 Shadow DOM", () => {
         const panel = document.createElement("ea-tab-panel");
         panel.setAttribute("name", "test");
         panel.textContent = "Test Content";
         container.appendChild(panel);
-        await waitForRender();
 
         expect(panel.shadowRoot).toBeDefined();
       });
 
-      it("应该包含 container CSS Part", async () => {
+      it("应该包含 container CSS Part", () => {
         const panel = document.createElement("ea-tab-panel");
         container.appendChild(panel);
-        await waitForRender();
 
         expect(
           panel.shadowRoot.querySelector('[part="container"]')
@@ -1252,10 +1236,9 @@ describe("EaTabs", () => {
       expect(tabs.querySelectorAll("ea-tab-panel").length).toBe(1);
     });
 
-    it("完全空的组件不应该报错", async () => {
+    it("完全空的组件不应该报错", () => {
       const tabs = document.createElement("ea-tabs");
       container.appendChild(tabs);
-      await waitForRender();
 
       expect(tabs.shadowRoot).toBeDefined();
       expect(tabs.children.length).toBe(0);
@@ -1338,7 +1321,7 @@ describe("EaTabs", () => {
   });
 
   describe("属性同步", () => {
-    it("通过 HTML 属性设置 type 应该反映到 JavaScript 属性", async () => {
+    it("通过 HTML 属性设置 type 应该反映到 JavaScript 属性", () => {
       const tabs = document.createElement("ea-tabs");
       tabs.setAttribute("type", "card");
       tabs.innerHTML = `
@@ -1346,7 +1329,6 @@ describe("EaTabs", () => {
         <ea-tab-panel name="test">Content</ea-tab-panel>
       `;
       container.appendChild(tabs);
-      await waitForRender();
 
       expect(tabs.type).toBe("card");
     });
@@ -1374,7 +1356,7 @@ describe("EaTabs", () => {
       expect(tabs.active).toBe("custom-active");
     });
 
-    it("通过 HTML 属性设置 editable 应该反映到 JavaScript 属性", async () => {
+    it("通过 HTML 属性设置 editable 应该反映到 JavaScript 属性", () => {
       const tabs = document.createElement("ea-tabs");
       tabs.setAttribute("editable", "");
       tabs.innerHTML = `
@@ -1382,7 +1364,6 @@ describe("EaTabs", () => {
         <ea-tab-panel name="test">Content</ea-tab-panel>
       `;
       container.appendChild(tabs);
-      await waitForRender();
 
       expect(tabs.editable).toBe(true);
     });
@@ -1399,18 +1380,16 @@ describe("EaTabs", () => {
   });
 
   describe("CSS 变量（指示器位置）", () => {
-    it("激活非 card 类型 tab 时应该设置指示器 CSS 变量", async () => {
+    it("激活非 card 类型 tab 时应该设置指示器 CSS 变量", () => {
       const tabs = createTabs({ type: "", active: "panel1" });
       container.appendChild(tabs);
-      await waitForRender();
 
       expect(tabs).toBeDefined();
     });
 
-    it("card 类型不应该更新指示器位置", async () => {
+    it("card 类型不应该更新指示器位置", () => {
       const tabs = createTabs({ type: "card", active: "panel1" });
       container.appendChild(tabs);
-      await waitForRender();
 
       expect(tabs.type).toBe("card");
     });

@@ -28,11 +28,9 @@ describe("EaSwitch Component", () => {
       expect(switchEl.shadowRoot.innerHTML).toBeTruthy();
     });
 
-    it("应该包含所有必要的 CSS Parts", async () => {
+    it("应该包含所有必要的 CSS Parts", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
-
-      await waitForRender();
 
       const parts = [
         "wrapper",
@@ -67,11 +65,9 @@ describe("EaSwitch Component", () => {
       expect(inputElement.type).toBe("checkbox");
     });
 
-    it("应该包含 active 和 inactive 插槽", async () => {
+    it("应该包含 active 和 inactive 插槽", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
-
-      await waitForRender();
 
       const activeSlot = switchEl.shadowRoot.querySelector(
         'slot[name="active"]'
@@ -170,15 +166,11 @@ describe("EaSwitch Component", () => {
       expect(labelElement.textContent).toBe("New Label");
     });
 
-    it("通过 setter 设置 label 应该生效", async () => {
+    it("通过 setter 设置 label 应该生效", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
 
-      await waitForRender();
-
       switchEl.label = "Setter Label";
-
-      await waitForRender();
 
       expect(switchEl.label).toBe("Setter Label");
     });
@@ -335,20 +327,16 @@ describe("EaSwitch Component", () => {
   });
 
   describe("Active-value/Inactive-value Attributes", () => {
-    it("默认 active-value 应该是 true", async () => {
+    it("默认 active-value 应该是 true", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
-
-      await waitForRender();
 
       expect(switchEl.activeValue).toBe("true");
     });
 
-    it("默认 inactive-value 应该是 false", async () => {
+    it("默认 inactive-value 应该是 false", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
-
-      await waitForRender();
 
       expect(switchEl.inactiveValue).toBe("false");
     });
@@ -465,11 +453,9 @@ describe("EaSwitch Component", () => {
   });
 
   describe("Size Attribute", () => {
-    it("默认 size 应该是 default", async () => {
+    it("默认 size 应该是 default", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
-
-      await waitForRender();
 
       expect(switchEl.size).toBe("default");
     });
@@ -485,12 +471,10 @@ describe("EaSwitch Component", () => {
       expect(switchEl.getAttribute("size")).toBe("large");
     });
 
-    it("应该支持 size='default'", async () => {
+    it("应该支持 size='default'", () => {
       const switchEl = document.createElement("ea-switch");
       switchEl.setAttribute("size", "default");
       container.appendChild(switchEl);
-
-      await waitForRender();
 
       expect(switchEl.size).toBe("default");
     });
@@ -533,34 +517,27 @@ describe("EaSwitch Component", () => {
       expect(containerEl.classList.contains("ea-switch--default")).toBe(false);
     });
 
-    it("通过 setter 设置 size 应该生效", async () => {
+    it("通过 setter 设置 size 应该生效", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
 
-      await waitForRender();
-
       switchEl.size = "small";
-      await waitForRender();
 
       expect(switchEl.size).toBe("small");
     });
   });
 
   describe("Active-text/Inactive-text Attributes", () => {
-    it("默认 activeText 应该是空字符串", async () => {
+    it("默认 activeText 应该是空字符串", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
-
-      await waitForRender();
 
       expect(switchEl.activeText).toBe("");
     });
 
-    it("默认 inactiveText 应该是空字符串", async () => {
+    it("默认 inactiveText 应该是空字符串", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
-
-      await waitForRender();
 
       expect(switchEl.inactiveText).toBe("");
     });
@@ -609,13 +586,11 @@ describe("EaSwitch Component", () => {
       expect(switchEl.getAttribute("inactive-text")).toBe("Pay by year");
     });
 
-    it("应该支持同时设置 active-text 和 inactive-text", async () => {
+    it("应该支持同时设置 active-text 和 inactive-text", () => {
       const switchEl = document.createElement("ea-switch");
       switchEl.setAttribute("active-text", "Pay by month");
       switchEl.setAttribute("inactive-text", "Pay by year");
       container.appendChild(switchEl);
-
-      await waitForRender();
 
       expect(switchEl.activeText).toBe("Pay by month");
       expect(switchEl.inactiveText).toBe("Pay by year");
@@ -649,66 +624,52 @@ describe("EaSwitch Component", () => {
       expect(switchEl.getAttribute("inactive-text")).toBe("New");
     });
 
-    it("通过 setter 设置 activeText 应该生效", async () => {
+    it("通过 setter 设置 activeText 应该生效", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
 
-      await waitForRender();
-
       switchEl.activeText = "Setter Active";
-      await waitForRender();
 
       expect(switchEl.activeText).toBe("Setter Active");
     });
 
-    it("通过 setter 设置 inactiveText 应该生效", async () => {
+    it("通过 setter 设置 inactiveText 应该生效", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
 
-      await waitForRender();
-
       switchEl.inactiveText = "Setter Inactive";
-      await waitForRender();
 
       expect(switchEl.inactiveText).toBe("Setter Inactive");
     });
   });
 
   describe("Active-color/Inactive-color Attributes", () => {
-    it("默认 activeColor 应该是空字符串", async () => {
+    it("默认 activeColor 应该是空字符串", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
-
-      await waitForRender();
 
       expect(switchEl.activeColor).toBe("");
     });
 
-    it("默认 inactiveColor 应该是空字符串", async () => {
+    it("默认 inactiveColor 应该是空字符串", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
-
-      await waitForRender();
 
       expect(switchEl.inactiveColor).toBe("");
     });
 
-    it("应该支持 active-color 属性", async () => {
+    it("应该支持 active-color 属性", () => {
       const switchEl = document.createElement("ea-switch");
       switchEl.setAttribute("active-color", "#13ce66");
       container.appendChild(switchEl);
 
-      await waitForRender();
-
       expect(switchEl.activeColor).toBe("#13ce66");
     });
 
-    it("应该支持 inactive-color 属性", async () => {
+    it("应该支持 inactive-color 属性", () => {
       const switchEl = document.createElement("ea-switch");
       switchEl.setAttribute("inactive-color", "#ff4949");
       container.appendChild(switchEl);
-
-      await waitForRender();
 
       expect(switchEl.inactiveColor).toBe("#ff4949");
     });
@@ -769,26 +730,20 @@ describe("EaSwitch Component", () => {
       expect(switchEl.inactiveColor).toBe("#c0c4cc");
     });
 
-    it("通过 setter 设置 activeColor 应该生效", async () => {
+    it("通过 setter 设置 activeColor 应该生效", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
 
-      await waitForRender();
-
       switchEl.activeColor = "#13ce66";
-      await waitForRender();
 
       expect(switchEl.activeColor).toBe("#13ce66");
     });
 
-    it("通过 setter 设置 inactiveColor 应该生效", async () => {
+    it("通过 setter 设置 inactiveColor 应该生效", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
 
-      await waitForRender();
-
       switchEl.inactiveColor = "#ff4949";
-      await waitForRender();
 
       expect(switchEl.inactiveColor).toBe("#ff4949");
     });
@@ -1051,20 +1006,16 @@ describe("EaSwitch Component", () => {
   });
 
   describe("beforeChange", () => {
-    it("beforeChange 默认为 null", async () => {
+    it("beforeChange 默认为 null", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
-
-      await waitForRender();
 
       expect(switchEl.beforeChange).toBeNull();
     });
 
-    it("应该支持设置 beforeChange 回调", async () => {
+    it("应该支持设置 beforeChange 回调", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
-
-      await waitForRender();
 
       const callback = () => Promise.resolve(true);
       switchEl.beforeChange = callback;
@@ -1108,37 +1059,31 @@ describe("EaSwitch Component", () => {
   });
 
   describe("Slots", () => {
-    it("应该支持 active slot", async () => {
+    it("应该支持 active slot", () => {
       const switchEl = document.createElement("ea-switch");
       switchEl.innerHTML = `<ea-icon name="check" slot="active"></ea-icon>`;
       container.appendChild(switchEl);
-
-      await waitForRender();
 
       const slot = switchEl.shadowRoot.querySelector('slot[name="active"]');
       expect(slot).toBeTruthy();
     });
 
-    it("应该支持 inactive slot", async () => {
+    it("应该支持 inactive slot", () => {
       const switchEl = document.createElement("ea-switch");
       switchEl.innerHTML = `<ea-icon name="ban" slot="inactive"></ea-icon>`;
       container.appendChild(switchEl);
-
-      await waitForRender();
 
       const slot = switchEl.shadowRoot.querySelector('slot[name="inactive"]');
       expect(slot).toBeTruthy();
     });
 
-    it("应该同时支持 active 和 inactive slots", async () => {
+    it("应该同时支持 active 和 inactive slots", () => {
       const switchEl = document.createElement("ea-switch");
       switchEl.innerHTML = `
         <ea-icon name="check" slot="active"></ea-icon>
         <ea-icon name="ban" slot="inactive"></ea-icon>
       `;
       container.appendChild(switchEl);
-
-      await waitForRender();
 
       const activeSlot = switchEl.shadowRoot.querySelector(
         'slot[name="active"]'
@@ -1218,11 +1163,9 @@ describe("EaSwitch Component", () => {
   });
 
   describe("Lifecycle", () => {
-    it("组件连接后应该正确初始化", async () => {
+    it("组件连接后应该正确初始化", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
-
-      await waitForRender();
 
       expect(
         switchEl.shadowRoot.querySelector('[part="container"]')
@@ -1536,55 +1479,45 @@ describe("EaSwitch Component", () => {
   });
 
   describe("updateContainerClasslist", () => {
-    it("应该返回包含 block 和 modifier 的类名字符串", async () => {
+    it("应该返回包含 block 和 modifier 的类名字符串", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
-
-      await waitForRender();
 
       const className = switchEl.updateContainerClasslist();
       expect(className).toContain("ea-switch");
       expect(className).toContain("ea-switch--default");
     });
 
-    it("checked 状态应该包含 is-checked 类", async () => {
+    it("checked 状态应该包含 is-checked 类", () => {
       const switchEl = document.createElement("ea-switch");
       switchEl.setAttribute("value", "true");
       container.appendChild(switchEl);
-
-      await waitForRender();
 
       const className = switchEl.updateContainerClasslist();
       expect(className).toContain("is-checked");
     });
 
-    it("disabled 状态应该包含 is-disabled 类", async () => {
+    it("disabled 状态应该包含 is-disabled 类", () => {
       const switchEl = document.createElement("ea-switch");
       switchEl.setAttribute("disabled", "");
       container.appendChild(switchEl);
-
-      await waitForRender();
 
       const className = switchEl.updateContainerClasslist();
       expect(className).toContain("is-disabled");
     });
 
-    it("size 应该反映在返回的类名中", async () => {
+    it("size 应该反映在返回的类名中", () => {
       const switchEl = document.createElement("ea-switch");
       switchEl.setAttribute("size", "large");
       container.appendChild(switchEl);
-
-      await waitForRender();
 
       const className = switchEl.updateContainerClasslist();
       expect(className).toContain("ea-switch--large");
     });
 
-    it("应该同步更新容器的 className", async () => {
+    it("应该同步更新容器的 className", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
-
-      await waitForRender();
 
       const wrapperEl = switchEl.shadowRoot.querySelector("label.ea-switch");
       const className = switchEl.updateContainerClasslist();
@@ -1671,11 +1604,9 @@ describe("EaSwitch Component", () => {
       expect(formLabel.textContent).toBe("Test Label");
     });
 
-    it("content 元素应该包含 original、label-left、inner、label-right", async () => {
+    it("content 元素应该包含 original、label-left、inner、label-right", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
-
-      await waitForRender();
 
       const content = switchEl.shadowRoot.querySelector(".ea-switch__content");
       expect(content.querySelector(".ea-switch__original")).toBeTruthy();

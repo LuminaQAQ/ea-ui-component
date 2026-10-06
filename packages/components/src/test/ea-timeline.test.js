@@ -36,36 +36,32 @@ describe("EaTimeline", () => {
   });
 
   describe("Shadow DOM", () => {
-    it("应该创建 open 模式的 Shadow DOM", async () => {
+    it("应该创建 open 模式的 Shadow DOM", () => {
       const timeline = document.createElement("ea-timeline");
       container.appendChild(timeline);
-      await waitForRender();
       expect(timeline.shadowRoot).toBeDefined();
       expect(timeline.shadowRoot.mode).toBe("open");
     });
   });
 
   describe("CSS Parts", () => {
-    it("应该包含 container CSS Part", async () => {
+    it("应该包含 container CSS Part", () => {
       const timeline = document.createElement("ea-timeline");
       container.appendChild(timeline);
-      await waitForRender();
       const el = timeline.shadowRoot.querySelector('[part="container"]');
       expect(el).toBeTruthy();
     });
 
-    it("container CSS Part 应该在 div 元素上", async () => {
+    it("container CSS Part 应该在 div 元素上", () => {
       const timeline = document.createElement("ea-timeline");
       container.appendChild(timeline);
-      await waitForRender();
       const el = timeline.shadowRoot.querySelector('[part="container"]');
       expect(el.tagName.toLowerCase()).toBe("div");
     });
 
-    it("不应包含其他额外的 CSS Parts", async () => {
+    it("不应包含其他额外的 CSS Parts", () => {
       const timeline = document.createElement("ea-timeline");
       container.appendChild(timeline);
-      await waitForRender();
       const parts = timeline.shadowRoot.querySelectorAll("[part]");
       expect(parts.length).toBe(1);
     });
@@ -82,10 +78,9 @@ describe("EaTimeline", () => {
   });
 
   describe("DOM 结构", () => {
-    it("container 应该包含一个 slot 元素", async () => {
+    it("container 应该包含一个 slot 元素", () => {
       const timeline = document.createElement("ea-timeline");
       container.appendChild(timeline);
-      await waitForRender();
       const containerEl =
         timeline.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.querySelector("slot")).toBeTruthy();
@@ -99,24 +94,22 @@ describe("EaTimeline", () => {
       expect(slot.hasAttribute("name")).toBe(false);
     });
 
-    it("Shadow DOM 中应该只有一个 slot", async () => {
+    it("Shadow DOM 中应该只有一个 slot", () => {
       const timeline = document.createElement("ea-timeline");
       container.appendChild(timeline);
-      await waitForRender();
       expect(timeline.shadowRoot.querySelectorAll("slot").length).toBe(1);
     });
   });
 
   describe("子元素渲染", () => {
-    it("应该正确渲染单个 ea-timeline-item 子元素", async () => {
+    it("应该正确渲染单个 ea-timeline-item 子元素", () => {
       const timeline = document.createElement("ea-timeline");
       timeline.innerHTML = `<ea-timeline-item timestamp="2024-7-1">Item 1</ea-timeline-item>`;
       container.appendChild(timeline);
-      await waitForRender();
       expect(timeline.querySelectorAll("ea-timeline-item").length).toBe(1);
     });
 
-    it("应该正确渲染多个 ea-timeline-item 子元素", async () => {
+    it("应该正确渲染多个 ea-timeline-item 子元素", () => {
       const timeline = document.createElement("ea-timeline");
       timeline.innerHTML = `
         <ea-timeline-item timestamp="2024-7-1">Item 1</ea-timeline-item>
@@ -124,14 +117,12 @@ describe("EaTimeline", () => {
         <ea-timeline-item timestamp="2024-7-3">Item 3</ea-timeline-item>
       `;
       container.appendChild(timeline);
-      await waitForRender();
       expect(timeline.querySelectorAll("ea-timeline-item").length).toBe(3);
     });
 
-    it("空时间线应该正常渲染", async () => {
+    it("空时间线应该正常渲染", () => {
       const timeline = document.createElement("ea-timeline");
       container.appendChild(timeline);
-      await waitForRender();
       expect(
         timeline.shadowRoot.querySelector('[part="container"]')
       ).toBeTruthy();
@@ -139,20 +130,18 @@ describe("EaTimeline", () => {
   });
 
   describe("生命周期", () => {
-    it("组件连接后应该正确初始化 Shadow DOM", async () => {
+    it("组件连接后应该正确初始化 Shadow DOM", () => {
       const timeline = document.createElement("ea-timeline");
       container.appendChild(timeline);
-      await waitForRender();
       expect(timeline.shadowRoot).toBeDefined();
       expect(
         timeline.shadowRoot.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
-    it("组件断开连接后应该正常移除", async () => {
+    it("组件断开连接后应该正常移除", () => {
       const timeline = document.createElement("ea-timeline");
       container.appendChild(timeline);
-      await waitForRender();
       timeline.remove();
       expect(container.contains(timeline)).toBe(false);
     });
@@ -163,7 +152,6 @@ describe("EaTimeline", () => {
       await waitForRender();
       timeline.remove();
       container.appendChild(timeline);
-      await waitForRender();
       expect(timeline.shadowRoot).toBeDefined();
     });
 
@@ -176,27 +164,23 @@ describe("EaTimeline", () => {
       const newItem = document.createElement("ea-timeline-item");
       newItem.textContent = "Item 2";
       timeline.appendChild(newItem);
-      await waitForRender();
       expect(timeline.querySelectorAll("ea-timeline-item").length).toBe(2);
     });
 
-    it("动态移除 timeline-item 应该生效", async () => {
+    it("动态移除 timeline-item 应该生效", () => {
       const timeline = document.createElement("ea-timeline");
       timeline.innerHTML = `
         <ea-timeline-item>Item 1</ea-timeline-item>
         <ea-timeline-item>Item 2</ea-timeline-item>
       `;
       container.appendChild(timeline);
-      await waitForRender();
-
       timeline.querySelectorAll("ea-timeline-item")[1].remove();
-      await waitForRender();
       expect(timeline.querySelectorAll("ea-timeline-item").length).toBe(1);
     });
   });
 
   describe("多实例独立性", () => {
-    it("多个时间线应该独立工作", async () => {
+    it("多个时间线应该独立工作", () => {
       const timeline1 = document.createElement("ea-timeline");
       timeline1.innerHTML = `<ea-timeline-item variant="primary">Item 1</ea-timeline-item>`;
       const timeline2 = document.createElement("ea-timeline");
@@ -204,8 +188,6 @@ describe("EaTimeline", () => {
 
       container.appendChild(timeline1);
       container.appendChild(timeline2);
-      await waitForRender();
-
       expect(timeline1.querySelector("ea-timeline-item").variant).toBe(
         "primary"
       );
@@ -240,10 +222,9 @@ describe("EaTimelineItem", () => {
   });
 
   describe("Shadow DOM", () => {
-    it("应该创建 open 模式的 Shadow DOM", async () => {
+    it("应该创建 open 模式的 Shadow DOM", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
-      await waitForRender();
       expect(item.shadowRoot).toBeDefined();
       expect(item.shadowRoot.mode).toBe("open");
     });
@@ -261,20 +242,18 @@ describe("EaTimelineItem", () => {
     ];
 
     expectedParts.forEach(({ name, tag }) => {
-      it(`应该包含 ${name} CSS Part 且在 ${tag} 元素上`, async () => {
+      it(`应该包含 ${name} CSS Part 且在 ${tag} 元素上`, () => {
         const item = document.createElement("ea-timeline-item");
         container.appendChild(item);
-        await waitForRender();
         const el = item.shadowRoot.querySelector(`[part="${name}"]`);
         expect(el).toBeTruthy();
         expect(el.tagName.toLowerCase()).toBe(tag);
       });
     });
 
-    it("默认状态下不应包含 icon-dot CSS Part", async () => {
+    it("默认状态下不应包含 icon-dot CSS Part", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
-      await waitForRender();
       expect(item.shadowRoot.querySelector('[part="icon-dot"]')).toBeFalsy();
     });
 
@@ -334,19 +313,17 @@ describe("EaTimelineItem", () => {
   });
 
   describe("DOM 结构", () => {
-    it("container 应该包含 left-wrapper 和 right-wrapper", async () => {
+    it("container 应该包含 left-wrapper 和 right-wrapper", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
-      await waitForRender();
       const containerEl = item.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.querySelector('[part="left-wrapper"]')).toBeTruthy();
       expect(containerEl.querySelector('[part="right-wrapper"]')).toBeTruthy();
     });
 
-    it("left-wrapper 和 right-wrapper 应该是 container 的直接子元素", async () => {
+    it("left-wrapper 和 right-wrapper 应该是 container 的直接子元素", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
-      await waitForRender();
       const containerEl = item.shadowRoot.querySelector('[part="container"]');
       const directChildren = Array.from(containerEl.children);
       expect(directChildren).toContain(
@@ -357,10 +334,9 @@ describe("EaTimelineItem", () => {
       );
     });
 
-    it("left-wrapper 应该包含 dot slot 和 tail", async () => {
+    it("left-wrapper 应该包含 dot slot 和 tail", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
-      await waitForRender();
       const leftWrapper = item.shadowRoot.querySelector(
         '[part="left-wrapper"]'
       );
@@ -369,18 +345,16 @@ describe("EaTimelineItem", () => {
       expect(leftWrapper.querySelector('[part="tail"]')).toBeTruthy();
     });
 
-    it("dot 应该在 slot[name='dot'] 内部作为默认内容", async () => {
+    it("dot 应该在 slot[name='dot'] 内部作为默认内容", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
-      await waitForRender();
       const dotSlot = item.shadowRoot.querySelector('slot[name="dot"]');
       expect(dotSlot.querySelector('[part="dot"]')).toBeTruthy();
     });
 
-    it("right-wrapper 应该包含 content 和 timestamp", async () => {
+    it("right-wrapper 应该包含 content 和 timestamp", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
-      await waitForRender();
       const rightWrapper = item.shadowRoot.querySelector(
         '[part="right-wrapper"]'
       );
@@ -388,18 +362,16 @@ describe("EaTimelineItem", () => {
       expect(rightWrapper.querySelector('[part="timestamp"]')).toBeTruthy();
     });
 
-    it("content 应该包含默认 slot", async () => {
+    it("content 应该包含默认 slot", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
-      await waitForRender();
       const contentEl = item.shadowRoot.querySelector('[part="content"]');
       expect(contentEl.querySelector("slot:not([name])")).toBeTruthy();
     });
 
-    it("timestamp 应该包含 timestamp slot", async () => {
+    it("timestamp 应该包含 timestamp slot", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
-      await waitForRender();
       const timestampEl = item.shadowRoot.querySelector('[part="timestamp"]');
       expect(timestampEl.querySelector('slot[name="timestamp"]')).toBeTruthy();
     });
@@ -408,19 +380,17 @@ describe("EaTimelineItem", () => {
   describe("variant 属性", () => {
     const variants = ["primary", "success", "warning", "danger", "info"];
 
-    it("默认 variant 应该是空字符串", async () => {
+    it("默认 variant 应该是空字符串", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
-      await waitForRender();
       expect(item.variant).toBe("");
     });
 
     variants.forEach(v => {
-      it(`应该支持 variant='${v}'`, async () => {
+      it(`应该支持 variant='${v}'`, () => {
         const item = document.createElement("ea-timeline-item");
         item.variant = v;
         container.appendChild(item);
-        await waitForRender();
         expect(item.variant).toBe(v);
       });
 
@@ -436,11 +406,10 @@ describe("EaTimelineItem", () => {
       });
     });
 
-    it("variant 应该通过 setAttribute 设置", async () => {
+    it("variant 应该通过 setAttribute 设置", () => {
       const item = document.createElement("ea-timeline-item");
       item.setAttribute("variant", "primary");
       container.appendChild(item);
-      await waitForRender();
       expect(item.variant).toBe("primary");
     });
 
@@ -498,8 +467,6 @@ describe("EaTimelineItem", () => {
     it("variant 循环切换应该正确更新类名", async () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
-      await waitForRender();
-
       const containerEl = item.shadowRoot.querySelector('[part="container"]');
       for (const variant of variants) {
         item.variant = variant;
@@ -535,26 +502,23 @@ describe("EaTimelineItem", () => {
   });
 
   describe("timestamp 属性", () => {
-    it("默认 timestamp 应该是空字符串", async () => {
+    it("默认 timestamp 应该是空字符串", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
-      await waitForRender();
       expect(item.timestamp).toBe("");
     });
 
-    it("应该支持 timestamp 属性", async () => {
+    it("应该支持 timestamp 属性", () => {
       const item = document.createElement("ea-timeline-item");
       item.timestamp = "2024-7-1";
       container.appendChild(item);
-      await waitForRender();
       expect(item.timestamp).toBe("2024-7-1");
     });
 
-    it("timestamp 应该通过 setAttribute 设置", async () => {
+    it("timestamp 应该通过 setAttribute 设置", () => {
       const item = document.createElement("ea-timeline-item");
       item.setAttribute("timestamp", "2024-7-1");
       container.appendChild(item);
-      await waitForRender();
       expect(item.timestamp).toBe("2024-7-1");
     });
 
@@ -629,10 +593,9 @@ describe("EaTimelineItem", () => {
   });
 
   describe("hideTimestamp 属性", () => {
-    it("默认 hideTimestamp 应该是 false", async () => {
+    it("默认 hideTimestamp 应该是 false", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
-      await waitForRender();
       expect(item.hideTimestamp).toBe(false);
     });
 
@@ -654,11 +617,10 @@ describe("EaTimelineItem", () => {
       expect(containerEl.classList.contains("is-hide-timestamp")).toBe(false);
     });
 
-    it("hideTimestamp 应该通过 setAttribute 设置", async () => {
+    it("hideTimestamp 应该通过 setAttribute 设置", () => {
       const item = document.createElement("ea-timeline-item");
       item.setAttribute("hide-timestamp", "");
       container.appendChild(item);
-      await waitForRender();
       expect(item.hideTimestamp).toBe(true);
     });
 
@@ -691,10 +653,9 @@ describe("EaTimelineItem", () => {
   });
 
   describe("color 属性", () => {
-    it("默认 color 应该是空字符串", async () => {
+    it("默认 color 应该是空字符串", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
-      await waitForRender();
       expect(item.color).toBe("");
     });
 
@@ -717,11 +678,10 @@ describe("EaTimelineItem", () => {
       ).toBeTruthy();
     });
 
-    it("color 应该通过 setAttribute 设置", async () => {
+    it("color 应该通过 setAttribute 设置", () => {
       const item = document.createElement("ea-timeline-item");
       item.setAttribute("color", "#ff0000");
       container.appendChild(item);
-      await waitForRender();
       expect(item.color).toBe("#ff0000");
     });
 
@@ -760,10 +720,9 @@ describe("EaTimelineItem", () => {
   });
 
   describe("hollow 属性", () => {
-    it("默认 hollow 应该是 false", async () => {
+    it("默认 hollow 应该是 false", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
-      await waitForRender();
       expect(item.hollow).toBe(false);
     });
 
@@ -784,11 +743,10 @@ describe("EaTimelineItem", () => {
       expect(containerEl.classList.contains("is-hollow-dot")).toBe(false);
     });
 
-    it("hollow 应该通过 setAttribute 设置", async () => {
+    it("hollow 应该通过 setAttribute 设置", () => {
       const item = document.createElement("ea-timeline-item");
       item.setAttribute("hollow", "");
       container.appendChild(item);
-      await waitForRender();
       expect(item.hollow).toBe(true);
     });
 
@@ -821,10 +779,9 @@ describe("EaTimelineItem", () => {
   });
 
   describe("icon 属性", () => {
-    it("默认 icon 应该是空字符串", async () => {
+    it("默认 icon 应该是空字符串", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
-      await waitForRender();
       expect(item.icon).toBe("");
     });
 
@@ -849,11 +806,10 @@ describe("EaTimelineItem", () => {
       expect(iconEl.getAttribute("name")).toBe("mug-hot");
     });
 
-    it("icon 应该通过 setAttribute 设置", async () => {
+    it("icon 应该通过 setAttribute 设置", () => {
       const item = document.createElement("ea-timeline-item");
       item.setAttribute("icon", "star");
       container.appendChild(item);
-      await waitForRender();
       expect(item.icon).toBe("star");
     });
 
@@ -861,8 +817,6 @@ describe("EaTimelineItem", () => {
       const item = document.createElement("ea-timeline-item");
       item.icon = "mug-hot";
       container.appendChild(item);
-      await waitForRender();
-
       item.icon = "star";
       await waitForRender();
       const iconEl = item.shadowRoot
@@ -898,26 +852,23 @@ describe("EaTimelineItem", () => {
   });
 
   describe("size 属性", () => {
-    it("默认 size 应该是空字符串", async () => {
+    it("默认 size 应该是空字符串", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
-      await waitForRender();
       expect(item.size).toBe("");
     });
 
-    it("应该支持 size='normal'", async () => {
+    it("应该支持 size='normal'", () => {
       const item = document.createElement("ea-timeline-item");
       item.size = "normal";
       container.appendChild(item);
-      await waitForRender();
       expect(item.size).toBe("normal");
     });
 
-    it("应该支持 size='large'", async () => {
+    it("应该支持 size='large'", () => {
       const item = document.createElement("ea-timeline-item");
       item.size = "large";
       container.appendChild(item);
-      await waitForRender();
       expect(item.size).toBe("large");
     });
 
@@ -943,11 +894,10 @@ describe("EaTimelineItem", () => {
       );
     });
 
-    it("size 应该通过 setAttribute 设置", async () => {
+    it("size 应该通过 setAttribute 设置", () => {
       const item = document.createElement("ea-timeline-item");
       item.setAttribute("size", "large");
       container.appendChild(item);
-      await waitForRender();
       expect(item.size).toBe("large");
     });
 
@@ -992,26 +942,23 @@ describe("EaTimelineItem", () => {
   });
 
   describe("placement 属性", () => {
-    it("默认 placement 应该是空字符串", async () => {
+    it("默认 placement 应该是空字符串", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
-      await waitForRender();
       expect(item.placement).toBe("");
     });
 
-    it("应该支持 placement='top'", async () => {
+    it("应该支持 placement='top'", () => {
       const item = document.createElement("ea-timeline-item");
       item.placement = "top";
       container.appendChild(item);
-      await waitForRender();
       expect(item.placement).toBe("top");
     });
 
-    it("应该支持 placement='bottom'", async () => {
+    it("应该支持 placement='bottom'", () => {
       const item = document.createElement("ea-timeline-item");
       item.placement = "bottom";
       container.appendChild(item);
-      await waitForRender();
       expect(item.placement).toBe("bottom");
     });
 
@@ -1037,11 +984,10 @@ describe("EaTimelineItem", () => {
       );
     });
 
-    it("placement 应该通过 setAttribute 设置", async () => {
+    it("placement 应该通过 setAttribute 设置", () => {
       const item = document.createElement("ea-timeline-item");
       item.setAttribute("placement", "top");
       container.appendChild(item);
-      await waitForRender();
       expect(item.placement).toBe("top");
     });
 
@@ -1086,10 +1032,9 @@ describe("EaTimelineItem", () => {
   });
 
   describe("center 属性", () => {
-    it("默认 center 应该是 false", async () => {
+    it("默认 center 应该是 false", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
-      await waitForRender();
       expect(item.center).toBe(false);
     });
 
@@ -1114,11 +1059,10 @@ describe("EaTimelineItem", () => {
       );
     });
 
-    it("center 应该通过 setAttribute 设置", async () => {
+    it("center 应该通过 setAttribute 设置", () => {
       const item = document.createElement("ea-timeline-item");
       item.setAttribute("center", "");
       container.appendChild(item);
-      await waitForRender();
       expect(item.center).toBe(true);
     });
 
@@ -1159,28 +1103,25 @@ describe("EaTimelineItem", () => {
   });
 
   describe("Slots", () => {
-    it("默认 slot 应该在 content 元素内", async () => {
+    it("默认 slot 应该在 content 元素内", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
-      await waitForRender();
       const contentEl = item.shadowRoot.querySelector('[part="content"]');
       expect(contentEl.querySelector("slot:not([name])")).toBeTruthy();
     });
 
-    it("dot slot 应该在 left-wrapper 内", async () => {
+    it("dot slot 应该在 left-wrapper 内", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
-      await waitForRender();
       const leftWrapper = item.shadowRoot.querySelector(
         '[part="left-wrapper"]'
       );
       expect(leftWrapper.querySelector('slot[name="dot"]')).toBeTruthy();
     });
 
-    it("timestamp slot 应该在 timestamp 元素内", async () => {
+    it("timestamp slot 应该在 timestamp 元素内", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
-      await waitForRender();
       const timestampEl = item.shadowRoot.querySelector('[part="timestamp"]');
       expect(timestampEl.querySelector('slot[name="timestamp"]')).toBeTruthy();
     });
@@ -1418,10 +1359,9 @@ describe("EaTimelineItem", () => {
       );
     });
 
-    it("组件断开连接后应该正常移除", async () => {
+    it("组件断开连接后应该正常移除", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
-      await waitForRender();
       item.remove();
       expect(container.contains(item)).toBe(false);
     });
@@ -1432,7 +1372,6 @@ describe("EaTimelineItem", () => {
       await waitForRender();
       item.remove();
       container.appendChild(item);
-      await waitForRender();
       expect(item.shadowRoot).toBeDefined();
     });
   });
@@ -1702,8 +1641,6 @@ describe("EaTimelineItem", () => {
 
       container.appendChild(item1);
       container.appendChild(item2);
-      await waitForRender();
-
       item1.variant = "warning";
       await waitForRender();
 
@@ -1719,7 +1656,7 @@ describe("EaTimelineItem", () => {
   });
 
   describe("在 ea-timeline 中的集成", () => {
-    it("在 timeline 中渲染多个 item 应该正常工作", async () => {
+    it("在 timeline 中渲染多个 item 应该正常工作", () => {
       const timeline = document.createElement("ea-timeline");
       timeline.innerHTML = `
         <ea-timeline-item variant="primary" timestamp="Step 1">创建项目</ea-timeline-item>
@@ -1727,8 +1664,6 @@ describe("EaTimelineItem", () => {
         <ea-timeline-item variant="danger" timestamp="Step 3">项目上线</ea-timeline-item>
       `;
       container.appendChild(timeline);
-      await waitForRender();
-
       const items = timeline.querySelectorAll("ea-timeline-item");
       expect(items.length).toBe(3);
       expect(items[0].variant).toBe("primary");
@@ -1736,15 +1671,13 @@ describe("EaTimelineItem", () => {
       expect(items[2].variant).toBe("danger");
     });
 
-    it("在 timeline 中 item 的属性应该独立设置", async () => {
+    it("在 timeline 中 item 的属性应该独立设置", () => {
       const timeline = document.createElement("ea-timeline");
       timeline.innerHTML = `
         <ea-timeline-item variant="primary" size="large">Large Primary</ea-timeline-item>
         <ea-timeline-item variant="success" hollow>Hollow Success</ea-timeline-item>
       `;
       container.appendChild(timeline);
-      await waitForRender();
-
       const items = timeline.querySelectorAll("ea-timeline-item");
       expect(items[0].variant).toBe("primary");
       expect(items[0].size).toBe("large");
@@ -1765,8 +1698,6 @@ describe("EaTimelineItem", () => {
       newItem.timestamp = "2024-7-1";
       newItem.textContent = "Item 2";
       timeline.appendChild(newItem);
-      await waitForRender();
-
       expect(timeline.querySelectorAll("ea-timeline-item").length).toBe(2);
       expect(newItem.variant).toBe("primary");
       expect(newItem.timestamp).toBe("2024-7-1");
@@ -1789,7 +1720,8 @@ describe("EaTimelineItem", () => {
         const timeline = document.createElement("ea-timeline");
         container.appendChild(timeline);
         await waitForRender();
-        const containerEl = timeline.shadowRoot.querySelector('[part="container"]');
+        const containerEl =
+          timeline.shadowRoot.querySelector('[part="container"]');
         expect(containerEl.getAttribute("role")).toBe("list");
       });
 

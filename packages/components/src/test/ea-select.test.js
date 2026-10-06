@@ -7,54 +7,6 @@ global.cancelAnimationFrame = id => {
   clearTimeout(id);
 };
 
-Element.prototype.scrollIntoView =
-  Element.prototype.scrollIntoView || function () {};
-
-const originalAttachInternals = HTMLElement.prototype.attachInternals;
-HTMLElement.prototype.attachInternals = function () {
-  const internals = originalAttachInternals?.call(this) || {};
-  if (
-    !internals.setValidity ||
-    internals.setValidity.toString().includes("[native code]")
-  ) {
-    const state = { valid: true, message: "" };
-    internals.setValidity = function (flags, message) {
-      if (
-        flags &&
-        Object.keys(flags).length > 0 &&
-        Object.values(flags).some(v => v)
-      ) {
-        state.valid = false;
-        state.message = message || "";
-      } else {
-        state.valid = true;
-        state.message = "";
-      }
-    };
-    Object.defineProperty(internals, "validity", {
-      get: function () {
-        return { valid: state.valid, valueMissing: !state.valid };
-      },
-      configurable: true,
-    });
-    Object.defineProperty(internals, "validationMessage", {
-      get: function () {
-        return state.message;
-      },
-      configurable: true,
-    });
-    internals.willValidate = true;
-    internals.checkValidity = function () {
-      return state.valid;
-    };
-    internals.reportValidity = function () {
-      return state.valid;
-    };
-    Object.defineProperty(internals, "form", { value: null, writable: true });
-  }
-  return internals;
-};
-
 import "../components/ea-select/index.js";
 import { waitForRender } from "./utils/waitForRender.js";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
@@ -72,61 +24,49 @@ describe("EaSelect Component", () => {
   });
 
   describe("EaSelect Basic Functionality", () => {
-    it("应该正确渲染 ea-select 组件", async () => {
+    it("应该正确渲染 ea-select 组件", () => {
       const select = document.createElement("ea-select");
       container.appendChild(select);
-
-      await waitForRender();
 
       expect(select).toBeDefined();
       expect(select.shadowRoot).toBeDefined();
     });
 
-    it("应该包含 container CSS Part", async () => {
+    it("应该包含 container CSS Part", () => {
       const select = document.createElement("ea-select");
       container.appendChild(select);
-
-      await waitForRender();
 
       expect(
         select.shadowRoot.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
-    it("应该包含 input CSS Part", async () => {
+    it("应该包含 input CSS Part", () => {
       const select = document.createElement("ea-select");
       container.appendChild(select);
-
-      await waitForRender();
 
       expect(select.shadowRoot.querySelector('[part="input"]')).toBeTruthy();
     });
 
-    it("应该包含 dropdown CSS Part", async () => {
+    it("应该包含 dropdown CSS Part", () => {
       const select = document.createElement("ea-select");
       container.appendChild(select);
-
-      await waitForRender();
 
       expect(select.shadowRoot.querySelector('[part="dropdown"]')).toBeTruthy();
     });
 
-    it("应该渲染 slot 内容", async () => {
+    it("应该渲染 slot 内容", () => {
       const select = document.createElement("ea-select");
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-
-      await waitForRender();
 
       const slot = select.shadowRoot.querySelector("slot");
       expect(slot).toBeTruthy();
     });
 
-    it("应该使用正确的 BEM 类名", async () => {
+    it("应该使用正确的 BEM 类名", () => {
       const select = document.createElement("ea-select");
       container.appendChild(select);
-
-      await waitForRender();
 
       const containerEl = select.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("ea-select")).toBe(true);
@@ -134,17 +74,15 @@ describe("EaSelect Component", () => {
   });
 
   describe("Placeholder Attribute", () => {
-    it("应该支持 placeholder 属性", async () => {
+    it("应该支持 placeholder 属性", () => {
       const select = document.createElement("ea-select");
       select.setAttribute("placeholder", "Please select");
       container.appendChild(select);
 
-      await waitForRender();
-
       expect(select.getAttribute("placeholder")).toBe("Please select");
     });
 
-    it("应该支持不同的 placeholder 值", async () => {
+    it("应该支持不同的 placeholder 值", () => {
       const placeholders = ["Select", "Choose an option", "Pick one", ""];
 
       for (const placeholder of placeholders) {
@@ -156,190 +94,154 @@ describe("EaSelect Component", () => {
   });
 
   describe("Disabled Attribute", () => {
-    it("默认 disabled 应该是 false", async () => {
+    it("默认 disabled 应该是 false", () => {
       const select = document.createElement("ea-select");
       container.appendChild(select);
-
-      await waitForRender();
 
       expect(select.disabled).toBe(false);
     });
 
-    it("设置 disabled 属性应该禁用选择器", async () => {
+    it("设置 disabled 属性应该禁用选择器", () => {
       const select = document.createElement("ea-select");
       select.disabled = true;
       container.appendChild(select);
-
-      await waitForRender();
 
       expect(select.disabled).toBe(true);
     });
   });
 
   describe("Clearable Attribute", () => {
-    it("默认 clearable 应该是 false", async () => {
+    it("默认 clearable 应该是 false", () => {
       const select = document.createElement("ea-select");
       container.appendChild(select);
-
-      await waitForRender();
 
       expect(select.clearable).toBe(false);
     });
 
-    it("设置 clearable 属性应该启用清除功能", async () => {
+    it("设置 clearable 属性应该启用清除功能", () => {
       const select = document.createElement("ea-select");
       select.clearable = true;
       container.appendChild(select);
-
-      await waitForRender();
 
       expect(select.clearable).toBe(true);
     });
   });
 
   describe("Size Attribute", () => {
-    it("应该支持 size='large'", async () => {
+    it("应该支持 size='large'", () => {
       const select = document.createElement("ea-select");
       select.setAttribute("size", "large");
       container.appendChild(select);
 
-      await waitForRender();
-
       expect(select.getAttribute("size")).toBe("large");
     });
 
-    it("应该支持 size='small'", async () => {
+    it("应该支持 size='small'", () => {
       const select = document.createElement("ea-select");
       select.setAttribute("size", "small");
       container.appendChild(select);
 
-      await waitForRender();
-
       expect(select.getAttribute("size")).toBe("small");
     });
 
-    it("默认 size 应该是 default", async () => {
+    it("默认 size 应该是 default", () => {
       const select = document.createElement("ea-select");
       container.appendChild(select);
-
-      await waitForRender();
 
       expect(select.size).toBe("default");
     });
   });
 
   describe("Multiple Attribute", () => {
-    it("默认 multiple 应该是 false", async () => {
+    it("默认 multiple 应该是 false", () => {
       const select = document.createElement("ea-select");
       container.appendChild(select);
-
-      await waitForRender();
 
       expect(select.multiple).toBe(false);
     });
 
-    it("设置 multiple 属性应该启用多选", async () => {
+    it("设置 multiple 属性应该启用多选", () => {
       const select = document.createElement("ea-select");
       select.multiple = true;
       container.appendChild(select);
-
-      await waitForRender();
 
       expect(select.multiple).toBe(true);
     });
   });
 
   describe("Collapse-tags Attribute", () => {
-    it("默认 collapseTags 应该是 false", async () => {
+    it("默认 collapseTags 应该是 false", () => {
       const select = document.createElement("ea-select");
       container.appendChild(select);
-
-      await waitForRender();
 
       expect(select.collapseTags).toBe(false);
     });
 
-    it("设置 collapse-tags 属性应该启用标签折叠", async () => {
+    it("设置 collapse-tags 属性应该启用标签折叠", () => {
       const select = document.createElement("ea-select");
       select.setAttribute("collapse-tags", "");
       container.appendChild(select);
-
-      await waitForRender();
 
       expect(select.hasAttribute("collapse-tags")).toBe(true);
     });
   });
 
   describe("Max-collapse-tags Attribute", () => {
-    it("默认 maxCollapseTags 应该是 1", async () => {
+    it("默认 maxCollapseTags 应该是 1", () => {
       const select = document.createElement("ea-select");
       container.appendChild(select);
-
-      await waitForRender();
 
       expect(select.maxCollapseTags).toBe(1);
     });
 
-    it("应该支持 max-collapse-tags 属性", async () => {
+    it("应该支持 max-collapse-tags 属性", () => {
       const select = document.createElement("ea-select");
       select.setAttribute("max-collapse-tags", "3");
       container.appendChild(select);
-
-      await waitForRender();
 
       expect(select.getAttribute("max-collapse-tags")).toBe("3");
     });
   });
 
   describe("Filterable Attribute", () => {
-    it("默认 filterable 应该是 false", async () => {
+    it("默认 filterable 应该是 false", () => {
       const select = document.createElement("ea-select");
       container.appendChild(select);
-
-      await waitForRender();
 
       expect(select.filterable).toBe(false);
     });
 
-    it("设置 filterable 属性应该启用搜索功能", async () => {
+    it("设置 filterable 属性应该启用搜索功能", () => {
       const select = document.createElement("ea-select");
       select.filterable = true;
       container.appendChild(select);
-
-      await waitForRender();
 
       expect(select.filterable).toBe(true);
     });
   });
 
   describe("Required Attribute", () => {
-    it("默认 required 应该是 false", async () => {
+    it("默认 required 应该是 false", () => {
       const select = document.createElement("ea-select");
       container.appendChild(select);
-
-      await waitForRender();
 
       expect(select.required).toBe(false);
     });
 
-    it("设置 required 属性应该启用必填验证", async () => {
+    it("设置 required 属性应该启用必填验证", () => {
       const select = document.createElement("ea-select");
       select.required = true;
       container.appendChild(select);
-
-      await waitForRender();
 
       expect(select.required).toBe(true);
     });
   });
 
   describe("Value Attribute", () => {
-    it("应该支持 value 属性", async () => {
+    it("应该支持 value 属性", () => {
       const select = document.createElement("ea-select");
       select.value = "option1";
       container.appendChild(select);
-
-      await waitForRender();
 
       expect(select.value).toBe("option1");
     });
@@ -472,23 +374,19 @@ describe("EaSelect Component", () => {
       expect(customElements.get("ea-option-group")).toBeDefined();
     });
 
-    it("应该正确渲染 ea-option-group 组件", async () => {
+    it("应该正确渲染 ea-option-group 组件", () => {
       const group = document.createElement("ea-option-group");
       group.setAttribute("label", "Group 1");
       container.appendChild(group);
-
-      await waitForRender();
 
       expect(group).toBeDefined();
       expect(group.shadowRoot).toBeDefined();
     });
 
-    it("应该包含完整的 DOM 结构", async () => {
+    it("应该包含完整的 DOM 结构", () => {
       const group = document.createElement("ea-option-group");
       group.label = "Test Group";
       container.appendChild(group);
-
-      await waitForRender();
 
       const containerEl = group.shadowRoot.querySelector('[part="container"]');
       expect(containerEl).toBeTruthy();
@@ -500,11 +398,9 @@ describe("EaSelect Component", () => {
       expect(content).toBeTruthy();
     });
 
-    it("应该使用正确的 BEM 类名", async () => {
+    it("应该使用正确的 BEM 类名", () => {
       const group = document.createElement("ea-option-group");
       container.appendChild(group);
-
-      await waitForRender();
 
       const containerEl = group.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("ea-option-group")).toBe(true);
@@ -518,21 +414,17 @@ describe("EaSelect Component", () => {
   });
 
   describe("EaOptionGroup Label Attribute", () => {
-    it("默认 label 应该是空字符串", async () => {
+    it("默认 label 应该是空字符串", () => {
       const group = document.createElement("ea-option-group");
       container.appendChild(group);
-
-      await waitForRender();
 
       expect(group.label).toBe("");
     });
 
-    it("应该支持通过 attribute 设置 label", async () => {
+    it("应该支持通过 attribute 设置 label", () => {
       const group = document.createElement("ea-option-group");
       group.setAttribute("label", "Group A");
       container.appendChild(group);
-
-      await waitForRender();
 
       expect(group.getAttribute("label")).toBe("Group A");
       expect(group.label).toBe("Group A");
@@ -554,7 +446,7 @@ describe("EaSelect Component", () => {
   });
 
   describe("EaOptionGroup Slots", () => {
-    it("应该支持默认 slot", async () => {
+    it("应该支持默认 slot", () => {
       const group = document.createElement("ea-option-group");
       group.label = "Options";
 
@@ -565,18 +457,14 @@ describe("EaSelect Component", () => {
       group.appendChild(option1);
       container.appendChild(group);
 
-      await waitForRender();
-
       const defaultSlot = group.shadowRoot.querySelector("slot:not([name])");
       expect(defaultSlot).toBeTruthy();
     });
 
-    it("应该支持 header slot", async () => {
+    it("应该支持 header slot", () => {
       const group = document.createElement("ea-option-group");
       group.label = "Default Header";
       container.appendChild(group);
-
-      await waitForRender();
 
       const headerSlot = group.shadowRoot.querySelector('slot[name="header"]');
       expect(headerSlot).toBeTruthy();
@@ -1455,49 +1343,39 @@ describe("EaSelect Component", () => {
   });
 
   describe("Methods", () => {
-    it("应该存在 show 方法", async () => {
+    it("应该存在 show 方法", () => {
       const select = document.createElement("ea-select");
       container.appendChild(select);
-
-      await waitForRender();
 
       expect(typeof select.show).toBe("function");
     });
 
-    it("应该存在 hide 方法", async () => {
+    it("应该存在 hide 方法", () => {
       const select = document.createElement("ea-select");
       container.appendChild(select);
-
-      await waitForRender();
 
       expect(typeof select.hide).toBe("function");
     });
 
-    it("应该存在 checkValidity 方法", async () => {
+    it("应该存在 checkValidity 方法", () => {
       const select = document.createElement("ea-select");
       container.appendChild(select);
-
-      await waitForRender();
 
       expect(typeof select.checkValidity).toBe("function");
     });
 
-    it("应该存在 reportValidity 方法", async () => {
+    it("应该存在 reportValidity 方法", () => {
       const select = document.createElement("ea-select");
       container.appendChild(select);
-
-      await waitForRender();
 
       expect(typeof select.reportValidity).toBe("function");
     });
   });
 
   describe("Edge Cases", () => {
-    it("空 select 应该正常渲染", async () => {
+    it("空 select 应该正常渲染", () => {
       const select = document.createElement("ea-select");
       container.appendChild(select);
-
-      await waitForRender();
 
       expect(
         select.shadowRoot.querySelector('[part="container"]')
@@ -1685,7 +1563,7 @@ describe("EaSelect Component", () => {
   });
 
   describe("EaOptionGroup Integration", () => {
-    it("应该在 ea-select 中正常工作", async () => {
+    it("应该在 ea-select 中正常工作", () => {
       const select = document.createElement("ea-select");
       const group = document.createElement("ea-option-group");
       group.label = "Group 1";
@@ -1703,14 +1581,12 @@ describe("EaSelect Component", () => {
       select.appendChild(group);
       container.appendChild(select);
 
-      await waitForRender();
-
       expect(select.querySelector("ea-option-group")).toBeTruthy();
       expect(group.querySelectorAll("ea-option").length).toBe(2);
       expect(group.label).toBe("Group 1");
     });
 
-    it("应该支持多个 option-group 并存", async () => {
+    it("应该支持多个 option-group 并存", () => {
       const select = document.createElement("ea-select");
 
       const group1 = document.createElement("ea-option-group");
@@ -1729,8 +1605,6 @@ describe("EaSelect Component", () => {
       select.appendChild(group2);
       container.appendChild(select);
 
-      await waitForRender();
-
       const groups = select.querySelectorAll("ea-option-group");
       expect(groups.length).toBe(2);
       expect(groups[0].label).toBe("Group 1");
@@ -1739,12 +1613,10 @@ describe("EaSelect Component", () => {
   });
 
   describe("EaOptionGroup CSS Parts", () => {
-    it("应该暴露所有 CSS Part", async () => {
+    it("应该暴露所有 CSS Part", () => {
       const group = document.createElement("ea-option-group");
       group.label = "Styled Group";
       container.appendChild(group);
-
-      await waitForRender();
 
       const parts = ["container", "header", "content"];
       parts.forEach(partName => {

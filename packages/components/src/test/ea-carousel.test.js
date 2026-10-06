@@ -54,38 +54,30 @@ describe("EaCarousel", () => {
   });
 
   describe("Basic Rendering", () => {
-    it("should render ea-carousel with shadow DOM", async () => {
+    it("should render ea-carousel with shadow DOM", () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
-
       expect(carousel.shadowRoot).toBeDefined();
       expect(carousel.shadowRoot.querySelector(".ea-carousel")).toBeTruthy();
     });
 
-    it("should render ea-carousel-item with shadow DOM", async () => {
+    it("should render ea-carousel-item with shadow DOM", () => {
       const item = document.createElement("ea-carousel-item");
       container.appendChild(item);
-      await waitForRender();
-
       expect(item.shadowRoot).toBeDefined();
       expect(item.shadowRoot.querySelector(".ea-carousel-item")).toBeTruthy();
     });
 
-    it("should contain a default slot in ea-carousel-item", async () => {
+    it("should contain a default slot in ea-carousel-item", () => {
       const item = document.createElement("ea-carousel-item");
       container.appendChild(item);
-      await waitForRender();
-
       const slot = item.shadowRoot.querySelector("slot");
       expect(slot).toBeTruthy();
     });
 
-    it("should contain required CSS parts", async () => {
+    it("should contain required CSS parts", () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
-
       expect(
         carousel.shadowRoot.querySelector('[part="container"]')
       ).toBeTruthy();
@@ -103,20 +95,16 @@ describe("EaCarousel", () => {
       ).toBeTruthy();
     });
 
-    it("should contain left and right arrow buttons", async () => {
+    it("should contain left and right arrow buttons", () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
-
       expect(carousel.shadowRoot.querySelector(".arrow-left")).toBeTruthy();
       expect(carousel.shadowRoot.querySelector(".arrow-right")).toBeTruthy();
     });
 
-    it("should contain indicator wrap element", async () => {
+    it("should contain indicator wrap element", () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
-
       expect(
         carousel.shadowRoot.querySelector(".ea-carousel__indicator-wrap")
       ).toBeTruthy();
@@ -135,11 +123,9 @@ describe("EaCarousel", () => {
   });
 
   describe("Height Attribute", () => {
-    it("should default to '100%'", async () => {
+    it("should default to '100%'", () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
-
       expect(carousel.height).toBe("100%");
       expect(carousel.getAttribute("height") || "100%").toBe("100%");
     });
@@ -157,8 +143,6 @@ describe("EaCarousel", () => {
     it("should update --ea-carousel-height when height changes", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
-
       carousel.setAttribute("height", "500px");
       await waitForRender();
 
@@ -189,11 +173,9 @@ describe("EaCarousel", () => {
   });
 
   describe("Direction Attribute", () => {
-    it("should default to 'horizontal'", async () => {
+    it("should default to 'horizontal'", () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
-
       expect(carousel.direction).toBe("horizontal");
       expect(carousel.getAttribute("direction") || "horizontal").toBe(
         "horizontal"
@@ -228,8 +210,6 @@ describe("EaCarousel", () => {
     it("should switch class when direction changes dynamically", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
-
       carousel.setAttribute("direction", "vertical");
       await waitForRender();
 
@@ -253,20 +233,16 @@ describe("EaCarousel", () => {
   });
 
   describe("Index Attribute", () => {
-    it("should default to 0", async () => {
+    it("should default to 0", () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
-
       expect(carousel.index).toBe(0);
       expect(carousel.getAttribute("index") || "0").toBe("0");
     });
 
-    it("should set index via attribute", async () => {
+    it("should set index via attribute", () => {
       const carousel = createCarousel(3, { index: "1" });
       container.appendChild(carousel);
-      await waitForRender();
-
       expect(carousel.index).toBe(1);
       expect(carousel.getAttribute("index")).toBe("1");
     });
@@ -274,8 +250,6 @@ describe("EaCarousel", () => {
     it("should update position when index changes", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
-
       carousel.setAttribute("index", "2");
       await waitForRender();
 
@@ -289,8 +263,6 @@ describe("EaCarousel", () => {
     it("should emit 'ea-change' event when index changes", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
-
       const changeHandler = vi.fn();
       carousel.addEventListener("ea-change", changeHandler);
 
@@ -360,71 +332,53 @@ describe("EaCarousel", () => {
   });
 
   describe("Trigger Attribute", () => {
-    it("should default to 'hover'", async () => {
+    it("should default to 'hover'", () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
-
       expect(carousel.trigger).toBe("hover");
       expect(carousel.getAttribute("trigger") || "hover").toBe("hover");
     });
 
-    it("should accept 'click' value", async () => {
+    it("should accept 'click' value", () => {
       const carousel = createCarousel(3, { trigger: "click" });
       container.appendChild(carousel);
-      await waitForRender();
-
       expect(carousel.trigger).toBe("click");
       expect(carousel.getAttribute("trigger")).toBe("click");
     });
 
-    it("should switch trigger dynamically", async () => {
+    it("should switch trigger dynamically", () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
-
       carousel.setAttribute("trigger", "click");
-      await waitForRender();
-
       expect(carousel.trigger).toBe("click");
     });
   });
 
   describe("Interval Attribute", () => {
-    it("should default to 3000", async () => {
+    it("should default to 3000", () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
-
       expect(carousel.interval).toBe(3000);
     });
 
-    it("should accept custom interval", async () => {
+    it("should accept custom interval", () => {
       const carousel = createCarousel(3, { interval: "5000" });
       container.appendChild(carousel);
-      await waitForRender();
-
       expect(carousel.interval).toBe(5000);
     });
 
-    it("should update interval dynamically", async () => {
+    it("should update interval dynamically", () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
-
       carousel.setAttribute("interval", "2000");
-      await waitForRender();
-
       expect(carousel.interval).toBe(2000);
     });
   });
 
   describe("Arrow Attribute", () => {
-    it("should default to 'hover'", async () => {
+    it("should default to 'hover'", () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
-
       expect(carousel.arrow).toBe("hover");
       expect(carousel.getAttribute("arrow") || "hover").toBe("hover");
     });
@@ -483,8 +437,6 @@ describe("EaCarousel", () => {
     it("should switch arrow class dynamically", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
-
       carousel.setAttribute("arrow", "always");
       await waitForRender();
 
@@ -494,11 +446,9 @@ describe("EaCarousel", () => {
   });
 
   describe("Autoplay Attribute", () => {
-    it("should default to true", async () => {
+    it("should default to true", () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
-
       expect(carousel.autoplay).toBe(true);
     });
 
@@ -508,8 +458,6 @@ describe("EaCarousel", () => {
       await waitForRender();
 
       carousel.autoplay = false;
-      await waitForRender();
-
       expect(carousel.autoplay).toBe(false);
     });
 
@@ -519,18 +467,14 @@ describe("EaCarousel", () => {
       await waitForRender();
 
       carousel.autoplay = false;
-      await waitForRender();
-
       expect(carousel.autoplay).toBe(false);
     });
   });
 
   describe("Loop Attribute", () => {
-    it("should default to true", async () => {
+    it("should default to true", () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
-
       expect(carousel.loop).toBe(true);
     });
 
@@ -540,8 +484,6 @@ describe("EaCarousel", () => {
       await waitForRender();
 
       carousel.loop = false;
-      await waitForRender();
-
       expect(carousel.loop).toBe(false);
     });
 
@@ -551,18 +493,14 @@ describe("EaCarousel", () => {
       await waitForRender();
 
       carousel.loop = false;
-      await waitForRender();
-
       expect(carousel.loop).toBe(false);
     });
   });
 
   describe("PauseOnHover Attribute", () => {
-    it("should default to true", async () => {
+    it("should default to true", () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
-
       expect(carousel.pauseOnHover).toBe(true);
     });
 
@@ -572,8 +510,6 @@ describe("EaCarousel", () => {
       await waitForRender();
 
       carousel.pauseOnHover = false;
-      await waitForRender();
-
       expect(carousel.pauseOnHover).toBe(false);
     });
   });
@@ -613,8 +549,6 @@ describe("EaCarousel", () => {
     it("should switch indicator position dynamically", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
-
       carousel.setAttribute("indicator-position", "outside");
       await waitForRender();
 
@@ -818,8 +752,6 @@ describe("EaCarousel", () => {
     it("should update active indicator when index changes", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
-
       carousel.setAttribute("index", "1");
       await waitForRender();
 
@@ -835,8 +767,6 @@ describe("EaCarousel", () => {
 
       const indicators = getIndicators(carousel);
       indicators[2].dispatchEvent(new Event("click", { bubbles: true }));
-      await waitForRender();
-
       expect(carousel.getAttribute("index")).toBe("2");
     });
 
@@ -849,16 +779,12 @@ describe("EaCarousel", () => {
       indicators[1].dispatchEvent(
         new MouseEvent("mouseover", { bubbles: true })
       );
-      await waitForRender();
-
       expect(carousel.getAttribute("index")).toBe("1");
     });
 
-    it("should have correct data-index attributes", async () => {
+    it("should have correct data-index attributes", () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
-
       const indicators = getIndicators(carousel);
       indicators.forEach((indicator, i) => {
         expect(indicator.getAttribute("data-index")).toBe(String(i));
@@ -1134,8 +1060,6 @@ describe("EaCarousel", () => {
     it("should emit 'ea-change' event with bubbles and composed", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
-
       const changeHandler = vi.fn();
       container.addEventListener("ea-change", changeHandler);
 
@@ -1182,8 +1106,6 @@ describe("EaCarousel", () => {
       const carousel = createCarousel(3);
       carousel.addEventListener("ea-change", changeHandler);
       container.appendChild(carousel);
-      await waitForRender();
-
       changeHandler.mockClear();
 
       carousel.setAttribute("index", "0");
@@ -1309,8 +1231,6 @@ describe("EaCarousel", () => {
 
       const slot = getContent(carousel).querySelector("slot:not([name])");
       slot.dispatchEvent(new Event("slotchange"));
-      await waitForRender();
-
       expect(carousel.getAttribute("index")).toBe("0");
     });
   });
@@ -1326,11 +1246,9 @@ describe("EaCarousel", () => {
       expect(getIndicators(carousel).length).toBe(3);
     });
 
-    it("should clean up on unmount", async () => {
+    it("should clean up on unmount", () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
-
       expect(() => {
         carousel.$beforeUnmount();
       }).not.toThrow();
@@ -1356,8 +1274,6 @@ describe("EaCarousel", () => {
       await waitForRender();
 
       container.appendChild(carousel);
-      await waitForRender();
-
       expect(carousel.shadowRoot.querySelector(".ea-carousel")).toBeTruthy();
     });
   });
@@ -1411,14 +1327,10 @@ describe("EaCarousel", () => {
       expect(carousel.getAttribute("index")).toBe("1");
     });
 
-    it("should handle setting index to same value", async () => {
+    it("should handle setting index to same value", () => {
       const carousel = createCarousel(3, { index: "1" });
       container.appendChild(carousel);
-      await waitForRender();
-
       carousel.setAttribute("index", "1");
-      await waitForRender();
-
       expect(carousel.getAttribute("index")).toBe("1");
     });
 
@@ -1468,8 +1380,6 @@ describe("EaCarousel", () => {
       await waitForRender();
 
       carousel.index = 2;
-      await waitForRender();
-
       expect(carousel.getAttribute("index")).toBe("2");
     });
 
@@ -1497,11 +1407,9 @@ describe("EaCarousel", () => {
         el.innerHTML = `<ea-carousel-item>1</ea-carousel-item><ea-carousel-item>2</ea-carousel-item><ea-carousel-item>3</ea-carousel-item>`;
         container.appendChild(el);
         await waitForRender();
-        await waitForRender();
         const indicatorWrap = el.shadowRoot.querySelector(".ea-carousel__indicator-wrap");
         if (indicatorWrap) {
           indicatorWrap.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
-          await waitForRender();
         }
       });
 
@@ -1511,11 +1419,9 @@ describe("EaCarousel", () => {
         el.innerHTML = `<ea-carousel-item>1</ea-carousel-item><ea-carousel-item>2</ea-carousel-item><ea-carousel-item>3</ea-carousel-item>`;
         container.appendChild(el);
         await waitForRender();
-        await waitForRender();
         const indicatorWrap = el.shadowRoot.querySelector(".ea-carousel__indicator-wrap");
         if (indicatorWrap) {
           indicatorWrap.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true }));
-          await waitForRender();
         }
       });
 
@@ -1525,11 +1431,9 @@ describe("EaCarousel", () => {
         el.innerHTML = `<ea-carousel-item>1</ea-carousel-item><ea-carousel-item>2</ea-carousel-item><ea-carousel-item>3</ea-carousel-item>`;
         container.appendChild(el);
         await waitForRender();
-        await waitForRender();
         const indicatorWrap = el.shadowRoot.querySelector(".ea-carousel__indicator-wrap");
         if (indicatorWrap) {
           indicatorWrap.dispatchEvent(new KeyboardEvent("keydown", { key: "Home", bubbles: true }));
-          await waitForRender();
         }
       });
 
@@ -1539,11 +1443,9 @@ describe("EaCarousel", () => {
         el.innerHTML = `<ea-carousel-item>1</ea-carousel-item><ea-carousel-item>2</ea-carousel-item><ea-carousel-item>3</ea-carousel-item>`;
         container.appendChild(el);
         await waitForRender();
-        await waitForRender();
         const indicatorWrap = el.shadowRoot.querySelector(".ea-carousel__indicator-wrap");
         if (indicatorWrap) {
           indicatorWrap.dispatchEvent(new KeyboardEvent("keydown", { key: "End", bubbles: true }));
-          await waitForRender();
         }
       });
     });

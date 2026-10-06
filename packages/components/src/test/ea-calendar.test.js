@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender";
+import { fireKeydown } from "./utils/keyboard";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-calendar/index";
@@ -17,63 +18,51 @@ describe("EaCalendar", () => {
   });
 
   describe("基本功能", () => {
-    it("应该正确渲染组件", async () => {
+    it("应该正确渲染组件", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
-
-      await waitForRender();
 
       expect(calendar).toBeDefined();
       expect(calendar.shadowRoot).toBeDefined();
     });
 
-    it("应该包含 calendar 容器元素", async () => {
+    it("应该包含 calendar 容器元素", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
-
-      await waitForRender();
 
       const calendarContainer =
         calendar.shadowRoot.querySelector(".ea-calendar");
       expect(calendarContainer).toBeDefined();
     });
 
-    it("应该包含 header 元素", async () => {
+    it("应该包含 header 元素", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
-
-      await waitForRender();
 
       const header = calendar.shadowRoot.querySelector(".ea-calendar__header");
       expect(header).toBeDefined();
     });
 
-    it("应该包含 title 元素", async () => {
+    it("应该包含 title 元素", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
-
-      await waitForRender();
 
       const title = calendar.shadowRoot.querySelector(".ea-calendar__title");
       expect(title).toBeDefined();
     });
 
-    it("应该包含 body 表格元素", async () => {
+    it("应该包含 body 表格元素", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
-
-      await waitForRender();
 
       const body = calendar.shadowRoot.querySelector(".ea-calendar__body");
       expect(body).toBeDefined();
       expect(body.tagName.toLowerCase()).toBe("table");
     });
 
-    it("应该包含 thead 和 tbody", async () => {
+    it("应该包含 thead 和 tbody", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
-
-      await waitForRender();
 
       const thead = calendar.shadowRoot.querySelector(".ea-calendar__thead");
       const tbody = calendar.shadowRoot.querySelector(".ea-calendar__tbody");
@@ -83,12 +72,10 @@ describe("EaCalendar", () => {
   });
 
   describe("Value 属性", () => {
-    it("应该正确设置 value 属性", async () => {
+    it("应该正确设置 value 属性", () => {
       const calendar = document.createElement("ea-calendar");
       calendar.setAttribute("value", "2024-05-01");
       container.appendChild(calendar);
-
-      await waitForRender();
 
       expect(calendar.getAttribute("value")).toBe("2024-05-01");
     });
@@ -195,83 +182,67 @@ describe("EaCalendar", () => {
   });
 
   describe("Locale 属性", () => {
-    it("应该支持 locale 属性", async () => {
+    it("应该支持 locale 属性", () => {
       const calendar = document.createElement("ea-calendar");
       calendar.setAttribute("locale", "zh-CN");
       container.appendChild(calendar);
 
-      await waitForRender();
-
       expect(calendar.getAttribute("locale")).toBe("zh-CN");
     });
 
-    it("默认 locale 应该是 en-US", async () => {
+    it("默认 locale 应该是 en-US", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
-
-      await waitForRender();
 
       expect(calendar.locale).toBe("en-US");
     });
   });
 
   describe("CSS Parts", () => {
-    it("应该正确设置 container part", async () => {
+    it("应该正确设置 container part", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
-
-      await waitForRender();
 
       const containerEl =
         calendar.shadowRoot.querySelector('[part="container"]');
       expect(containerEl).toBeDefined();
     });
 
-    it("应该正确设置 header part", async () => {
+    it("应该正确设置 header part", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
-
-      await waitForRender();
 
       const headerEl = calendar.shadowRoot.querySelector('[part="header"]');
       expect(headerEl).toBeDefined();
     });
 
-    it("应该正确设置 title part", async () => {
+    it("应该正确设置 title part", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
-
-      await waitForRender();
 
       const titleEl = calendar.shadowRoot.querySelector('[part="title"]');
       expect(titleEl).toBeDefined();
     });
 
-    it("应该正确设置 body part", async () => {
+    it("应该正确设置 body part", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
-
-      await waitForRender();
 
       const bodyEl = calendar.shadowRoot.querySelector('[part="body"]');
       expect(bodyEl).toBeDefined();
     });
 
-    it("应该正确设置 thead part", async () => {
+    it("应该正确设置 thead part", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
-
-      await waitForRender();
 
       const theadEl = calendar.shadowRoot.querySelector('[part="thead"]');
       expect(theadEl).toBeDefined();
     });
 
-    it("应该正确设置 tbody part", async () => {
+    it("应该正确设置 tbody part", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
-
-      await waitForRender();
 
       const tbodyEl = calendar.shadowRoot.querySelector('[part="tbody"]');
       expect(tbodyEl).toBeDefined();
@@ -291,32 +262,26 @@ describe("EaCalendar", () => {
   });
 
   describe("日期渲染", () => {
-    it("应该渲染星期标题", async () => {
+    it("应该渲染星期标题", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
-
-      await waitForRender();
 
       const ths = calendar.shadowRoot.querySelectorAll(".ea-calendar__th");
       expect(ths.length).toBe(7);
     });
 
-    it("应该渲染日期单元格", async () => {
+    it("应该渲染日期单元格", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
-
-      await waitForRender();
 
       const days = calendar.shadowRoot.querySelectorAll(".ea-calendar__day");
       expect(days.length).toBeGreaterThan(28);
     });
 
-    it("日期单元格应该有正确的 data 属性", async () => {
+    it("日期单元格应该有正确的 data 属性", () => {
       const calendar = document.createElement("ea-calendar");
       calendar.setAttribute("value", "2024-05-01");
       container.appendChild(calendar);
-
-      await waitForRender();
 
       const days = calendar.shadowRoot.querySelectorAll(".ea-calendar__day");
       const firstDay = days[0];
@@ -340,30 +305,28 @@ describe("EaCalendar", () => {
       expect(dayCells.length).toBeGreaterThan(0);
       expect(currentMonthDays.length).toBeGreaterThan(0);
 
-      const prevMonthDays = calendar.shadowRoot.querySelectorAll(".is-prev-month");
-      const nextMonthDays = calendar.shadowRoot.querySelectorAll(".is-next-month");
+      const prevMonthDays =
+        calendar.shadowRoot.querySelectorAll(".is-prev-month");
+      const nextMonthDays =
+        calendar.shadowRoot.querySelectorAll(".is-next-month");
 
       const totalDays =
         prevMonthDays.length + currentMonthDays.length + nextMonthDays.length;
       expect(totalDays).toBe(dayCells.length);
     });
 
-    it("应该渲染完整的日历网格", async () => {
+    it("应该渲染完整的日历网格", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
-
-      await waitForRender();
 
       const rows = calendar.shadowRoot.querySelectorAll(".ea-calendar__row");
       expect(rows.length).toBeGreaterThanOrEqual(4);
       expect(rows.length).toBeLessThanOrEqual(6);
     });
 
-    it("当月日期应该有 current-month part", async () => {
+    it("当月日期应该有 current-month part", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
-
-      await waitForRender();
 
       const currentMonthCells = calendar.shadowRoot.querySelectorAll(
         '[part~="current-month"]'
@@ -371,11 +334,9 @@ describe("EaCalendar", () => {
       expect(currentMonthCells.length).toBeGreaterThan(0);
     });
 
-    it("上月日期应该有 prev-month part", async () => {
+    it("上月日期应该有 prev-month part", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
-
-      await waitForRender();
 
       const prevMonthCells = calendar.shadowRoot.querySelectorAll(
         '[part~="prev-month"]'
@@ -383,11 +344,9 @@ describe("EaCalendar", () => {
       expect(prevMonthCells.length).toBeGreaterThanOrEqual(0);
     });
 
-    it("下月日期应该有 next-month part", async () => {
+    it("下月日期应该有 next-month part", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
-
-      await waitForRender();
 
       const nextMonthCells = calendar.shadowRoot.querySelectorAll(
         '[part~="next-month"]'
@@ -486,9 +445,8 @@ describe("EaCalendar", () => {
         eventDetail = e.detail;
       });
 
-      const currentMonthCell = calendar.shadowRoot.querySelector(
-        ".is-current-month"
-      );
+      const currentMonthCell =
+        calendar.shadowRoot.querySelector(".is-current-month");
       if (currentMonthCell) {
         currentMonthCell.click();
         expect(eventDetail.fullDate).toMatch(/^\d+-\d+-\d+$/);
@@ -512,14 +470,12 @@ describe("EaCalendar", () => {
   });
 
   describe("Slots", () => {
-    it("应该支持 header slot", async () => {
+    it("应该支持 header slot", () => {
       const calendar = document.createElement("ea-calendar");
       calendar.innerHTML = `
         <div slot="header">Custom Header</div>
       `;
       container.appendChild(calendar);
-
-      await waitForRender();
 
       const slot = calendar.shadowRoot.querySelector('slot[name="header"]');
       expect(slot).toBeDefined();
@@ -527,21 +483,17 @@ describe("EaCalendar", () => {
   });
 
   describe("displayDate", () => {
-    it("displayDate getter 应该返回 Dayjs 对象", async () => {
+    it("displayDate getter 应该返回 Dayjs 对象", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
-
-      await waitForRender();
 
       expect(calendar.displayDate).toBeDefined();
       expect(typeof calendar.displayDate.format).toBe("function");
     });
 
-    it("设置 displayDate 应该更新 value 属性", async () => {
+    it("设置 displayDate 应该更新 value 属性", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
-
-      await waitForRender();
 
       calendar.displayDate = "2024-06-15";
       expect(calendar.value).toBe("2024-06-15");
@@ -563,11 +515,9 @@ describe("EaCalendar", () => {
       expect(calendar.getAttribute("locale")).toBe("zh-CN");
     });
 
-    it("日历网格总天数应该是 7 的倍数", async () => {
+    it("日历网格总天数应该是 7 的倍数", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
-
-      await waitForRender();
 
       const days = calendar.shadowRoot.querySelectorAll(".ea-calendar__day");
       expect(days.length % 7).toBe(0);
@@ -596,13 +546,10 @@ describe("EaCalendar", () => {
     });
 
     describe("ARIA Attributes", () => {
-      it("table 应该有 role=grid", async () => {
+      it("table 应该有 role=grid", () => {
         const calendar = document.createElement("ea-calendar");
         container.appendChild(calendar);
-        await waitForRender();
-        const table = calendar.shadowRoot.querySelector(
-          ".ea-calendar__body"
-        );
+        const table = calendar.shadowRoot.querySelector(".ea-calendar__body");
         expect(table.getAttribute("role")).toBe("grid");
       });
 
@@ -610,12 +557,8 @@ describe("EaCalendar", () => {
         const calendar = document.createElement("ea-calendar");
         container.appendChild(calendar);
         await waitForRender();
-        const table = calendar.shadowRoot.querySelector(
-          ".ea-calendar__body"
-        );
-        const title = calendar.shadowRoot.querySelector(
-          ".ea-calendar__title"
-        );
+        const table = calendar.shadowRoot.querySelector(".ea-calendar__body");
+        const title = calendar.shadowRoot.querySelector(".ea-calendar__title");
         expect(table.getAttribute("aria-labelledby")).toBe(title.id);
       });
 
@@ -623,9 +566,7 @@ describe("EaCalendar", () => {
         const calendar = document.createElement("ea-calendar");
         container.appendChild(calendar);
         await waitForRender();
-        const table = calendar.shadowRoot.querySelector(
-          ".ea-calendar__body"
-        );
+        const table = calendar.shadowRoot.querySelector(".ea-calendar__body");
         expect(table.getAttribute("aria-colcount")).toBe("7");
       });
 
@@ -633,17 +574,15 @@ describe("EaCalendar", () => {
         const calendar = document.createElement("ea-calendar");
         container.appendChild(calendar);
         await waitForRender();
-        const theadRow = calendar.shadowRoot.querySelector(
-          ".ea-calendar__week"
-        );
+        const theadRow =
+          calendar.shadowRoot.querySelector(".ea-calendar__week");
         expect(theadRow.getAttribute("role")).toBe("row");
         expect(theadRow.getAttribute("aria-rowindex")).toBe("1");
       });
 
-      it("表头单元格应该有 role=columnheader", async () => {
+      it("表头单元格应该有 role=columnheader", () => {
         const calendar = document.createElement("ea-calendar");
         container.appendChild(calendar);
-        await waitForRender();
         const ths = calendar.shadowRoot.querySelectorAll(".ea-calendar__th");
         expect(ths.length).toBe(7);
         ths.forEach(th => {
@@ -661,13 +600,10 @@ describe("EaCalendar", () => {
         });
       });
 
-      it("日期行应该有 role=row", async () => {
+      it("日期行应该有 role=row", () => {
         const calendar = document.createElement("ea-calendar");
         container.appendChild(calendar);
-        await waitForRender();
-        const rows = calendar.shadowRoot.querySelectorAll(
-          ".ea-calendar__row"
-        );
+        const rows = calendar.shadowRoot.querySelectorAll(".ea-calendar__row");
         rows.forEach(row => {
           expect(row.getAttribute("role")).toBe("row");
         });
@@ -677,18 +613,15 @@ describe("EaCalendar", () => {
         const calendar = document.createElement("ea-calendar");
         container.appendChild(calendar);
         await waitForRender();
-        const rows = calendar.shadowRoot.querySelectorAll(
-          ".ea-calendar__row"
-        );
+        const rows = calendar.shadowRoot.querySelectorAll(".ea-calendar__row");
         rows.forEach(row => {
           expect(row.hasAttribute("aria-rowindex")).toBe(true);
         });
       });
 
-      it("日期单元格应该有 role=gridcell", async () => {
+      it("日期单元格应该有 role=gridcell", () => {
         const calendar = document.createElement("ea-calendar");
         container.appendChild(calendar);
-        await waitForRender();
         const cells = calendar.shadowRoot.querySelectorAll(
           "td[role='gridcell']"
         );
@@ -720,16 +653,11 @@ describe("EaCalendar", () => {
         const calendar = document.createElement("ea-calendar");
         container.appendChild(calendar);
         await waitForRender();
-        const prevMonthCells = calendar.shadowRoot.querySelectorAll(
-          ".is-prev-month"
-        );
-        const nextMonthCells = calendar.shadowRoot.querySelectorAll(
-          ".is-next-month"
-        );
-        const outOfRangeCells = [
-          ...prevMonthCells,
-          ...nextMonthCells,
-        ];
+        const prevMonthCells =
+          calendar.shadowRoot.querySelectorAll(".is-prev-month");
+        const nextMonthCells =
+          calendar.shadowRoot.querySelectorAll(".is-next-month");
+        const outOfRangeCells = [...prevMonthCells, ...nextMonthCells];
         expect(outOfRangeCells.length).toBeGreaterThan(0);
         outOfRangeCells.forEach(cell => {
           expect(cell.getAttribute("aria-disabled")).toBe("true");
@@ -740,9 +668,8 @@ describe("EaCalendar", () => {
         const calendar = document.createElement("ea-calendar");
         container.appendChild(calendar);
         await waitForRender();
-        const currentMonthCells = calendar.shadowRoot.querySelectorAll(
-          ".is-current-month"
-        );
+        const currentMonthCells =
+          calendar.shadowRoot.querySelectorAll(".is-current-month");
         expect(currentMonthCells.length).toBeGreaterThan(0);
         currentMonthCells.forEach(cell => {
           expect(cell.getAttribute("aria-disabled")).toBeFalsy();
@@ -760,6 +687,362 @@ describe("EaCalendar", () => {
           expect(cell.hasAttribute("aria-colindex")).toBe(true);
         });
       });
+    });
+  });
+});
+
+describe("EaCalendar Controllers And Keyboard", () => {
+  let container;
+
+  beforeEach(() => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+  });
+
+  afterEach(() => {
+    container.remove();
+  });
+
+  async function createCalendar(attrs = {}) {
+    const calendar = document.createElement("ea-calendar");
+    for (const [key, value] of Object.entries(attrs)) {
+      calendar.setAttribute(key, value);
+    }
+    container.appendChild(calendar);
+    await waitForRender(150);
+    return calendar;
+  }
+
+  const getGridCells = calendar => [
+    ...calendar.shadowRoot.querySelectorAll("td[role='gridcell']"),
+  ];
+
+  const getActiveCell = calendar =>
+    calendar.shadowRoot.querySelector("td[role='gridcell'][tabindex='0']");
+
+  describe("updateContainerClasslist", () => {
+    it("应返回块类名并应用到容器元素", async () => {
+      const calendar = await createCalendar();
+
+      const className = calendar.updateContainerClasslist();
+
+      expect(className).toBe("ea-calendar");
+      expect(calendar.shadowRoot.querySelector(".ea-calendar").className).toBe(
+        "ea-calendar"
+      );
+    });
+  });
+
+  async function waitForElement(calendar, selector, tries = 40) {
+    for (let i = 0; i < tries; i++) {
+      const el = calendar.shadowRoot?.querySelector(selector);
+      if (el) return el;
+      await waitForRender(50);
+    }
+    return null;
+  }
+
+  describe("Button Controller", () => {
+    it("点击上一月按钮应切换到上个月第一天", async () => {
+      const calendar = await createCalendar({
+        "controller-type": "button",
+        value: "2024-05-15",
+      });
+
+      const prevBtn = await waitForElement(
+        calendar,
+        ".ea-calendar__controller-prev"
+      );
+      prevBtn.click();
+
+      expect(calendar.displayDate.get("month")).toBe(3);
+      expect(calendar.displayDate.get("date")).toBe(1);
+    });
+
+    it("点击下一月按钮应切换到下个月第一天", async () => {
+      const calendar = await createCalendar({
+        "controller-type": "button",
+        value: "2024-05-15",
+      });
+
+      const nextBtn = await waitForElement(
+        calendar,
+        ".ea-calendar__controller-next"
+      );
+      nextBtn.click();
+
+      expect(calendar.displayDate.get("month")).toBe(5);
+      expect(calendar.displayDate.get("date")).toBe(1);
+    });
+
+    it("点击今天按钮应回到今天并更新 value 与标题", async () => {
+      const calendar = await createCalendar({
+        "controller-type": "button",
+        value: "2020-01-15",
+      });
+
+      const todayBtn = await waitForElement(
+        calendar,
+        ".ea-calendar__controller-today"
+      );
+      todayBtn.click();
+
+      const now = new Date();
+      expect(calendar.value).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      expect(calendar.value.startsWith(String(now.getFullYear()))).toBe(true);
+      expect(
+        calendar.shadowRoot.querySelector(".ea-calendar__title").textContent
+      ).toContain(String(now.getFullYear()));
+    });
+  });
+
+  describe("Select Controller", () => {
+    it("应渲染年/月下拉并同步当前显示日期", async () => {
+      const calendar = await createCalendar({
+        "controller-type": "select",
+        value: "2024-05-15",
+      });
+
+      const yearEl = await waitForElement(
+        calendar,
+        ".ea-calendar__controller-year"
+      );
+      const monthEl = await waitForElement(
+        calendar,
+        ".ea-calendar__controller-month"
+      );
+
+      expect(yearEl).toBeTruthy();
+      expect(monthEl).toBeTruthy();
+      expect(yearEl.value).toBe("2024");
+      expect(monthEl.value).toBe("5");
+    });
+
+    it("切换年份应更新显示日期（保留月份）", async () => {
+      const calendar = await createCalendar({
+        "controller-type": "select",
+        value: "2024-05-15",
+      });
+
+      const yearEl = await waitForElement(
+        calendar,
+        ".ea-calendar__controller-year"
+      );
+      yearEl.value = "2023";
+      yearEl.dispatchEvent(new Event("change"));
+
+      expect(calendar.displayDate.get("year")).toBe(2023);
+      expect(calendar.displayDate.get("month")).toBe(4);
+    });
+
+    it("切换月份应更新显示日期（保留年份）", async () => {
+      const calendar = await createCalendar({
+        "controller-type": "select",
+        value: "2024-05-15",
+      });
+
+      const monthEl = await waitForElement(
+        calendar,
+        ".ea-calendar__controller-month"
+      );
+      monthEl.value = "8";
+      monthEl.dispatchEvent(new Event("change"));
+
+      expect(calendar.displayDate.get("year")).toBe(2024);
+      expect(calendar.displayDate.get("month") + 1).toBe(8);
+    });
+  });
+
+  describe("Grid Keyboard Navigation", () => {
+    function indices(calendar) {
+      const cells = getGridCells(calendar);
+      return {
+        cells,
+        active: getActiveCell(calendar),
+        index: cells.indexOf(getActiveCell(calendar)),
+      };
+    }
+
+    it("ArrowRight 应移动到右侧单元格", async () => {
+      const calendar = await createCalendar({ value: "2024-05-15" });
+      const { cells, active, index } = indices(calendar);
+
+      const event = fireKeydown(active, "ArrowRight");
+
+      expect(event.defaultPrevented).toBe(true);
+      expect(active.getAttribute("tabindex")).toBe("-1");
+      expect(cells[index + 1].getAttribute("tabindex")).toBe("0");
+    });
+
+    it("ArrowLeft 应移动到左侧单元格", async () => {
+      const calendar = await createCalendar({ value: "2024-05-15" });
+      const { cells, active, index } = indices(calendar);
+
+      const event = fireKeydown(active, "ArrowLeft");
+
+      expect(event.defaultPrevented).toBe(true);
+      expect(cells[index - 1].getAttribute("tabindex")).toBe("0");
+    });
+
+    it("ArrowDown 应移动到下一行相同列", async () => {
+      const calendar = await createCalendar({ value: "2024-05-15" });
+      const { cells, active, index } = indices(calendar);
+
+      fireKeydown(active, "ArrowDown");
+
+      expect(cells[index + 7].getAttribute("tabindex")).toBe("0");
+    });
+
+    it("ArrowUp 应移动到上一行相同列", async () => {
+      const calendar = await createCalendar({ value: "2024-05-15" });
+      const { cells, active, index } = indices(calendar);
+
+      fireKeydown(active, "ArrowUp");
+
+      expect(cells[index - 7].getAttribute("tabindex")).toBe("0");
+    });
+
+    it("Home 应移动到当前行第一个单元格", async () => {
+      const calendar = await createCalendar({ value: "2024-05-15" });
+      const { cells, active, index } = indices(calendar);
+      const rowStart = Math.floor(index / 7) * 7;
+
+      fireKeydown(active, "Home");
+
+      expect(cells[rowStart].getAttribute("tabindex")).toBe("0");
+    });
+
+    it("End 应移动到当前行最后一个单元格", async () => {
+      const calendar = await createCalendar({ value: "2024-05-15" });
+      const { cells, active, index } = indices(calendar);
+      const rowEnd = Math.floor(index / 7) * 7 + 6;
+
+      fireKeydown(active, "End");
+
+      expect(cells[rowEnd].getAttribute("tabindex")).toBe("0");
+    });
+
+    it("第一列按 ArrowLeft 不移动", async () => {
+      const calendar = await createCalendar({ value: "2024-05-15" });
+      const cells = getGridCells(calendar);
+      const before = cells[0].getAttribute("tabindex");
+
+      const event = fireKeydown(cells[0], "ArrowLeft");
+
+      expect(event.defaultPrevented).toBe(false);
+      expect(cells[0].getAttribute("tabindex")).toBe(before);
+    });
+
+    it("最后一列按 ArrowRight 不移动", async () => {
+      const calendar = await createCalendar({ value: "2024-05-15" });
+      const cells = getGridCells(calendar);
+
+      const event = fireKeydown(cells[6], "ArrowRight");
+
+      expect(event.defaultPrevented).toBe(false);
+    });
+
+    it("第一行按 ArrowUp 不移动", async () => {
+      const calendar = await createCalendar({ value: "2024-05-15" });
+      const cells = getGridCells(calendar);
+
+      const event = fireKeydown(cells[0], "ArrowUp");
+
+      expect(event.defaultPrevented).toBe(false);
+    });
+
+    it("最后一行按 ArrowDown 不移动", async () => {
+      const calendar = await createCalendar({ value: "2024-05-15" });
+      const cells = getGridCells(calendar);
+
+      const event = fireKeydown(cells[cells.length - 1], "ArrowDown");
+
+      expect(event.defaultPrevented).toBe(false);
+    });
+
+    it("Enter 应触发单元格选择", async () => {
+      const calendar = await createCalendar({ value: "2024-05-15" });
+      const selectHandler = vi.fn();
+      calendar.addEventListener("ea-select", selectHandler);
+      const cells = getGridCells(calendar);
+
+      const event = fireKeydown(cells[15], "Enter");
+
+      expect(event.defaultPrevented).toBe(true);
+      expect(selectHandler).toHaveBeenCalled();
+    });
+
+    it("空格应触发单元格选择", async () => {
+      const calendar = await createCalendar({ value: "2024-05-15" });
+      const selectHandler = vi.fn();
+      calendar.addEventListener("ea-select", selectHandler);
+      const cells = getGridCells(calendar);
+
+      const event = fireKeydown(cells[15], " ");
+
+      expect(event.defaultPrevented).toBe(true);
+      expect(selectHandler).toHaveBeenCalled();
+    });
+
+    it("其他按键不应阻止默认行为", async () => {
+      const calendar = await createCalendar({ value: "2024-05-15" });
+      const active = getActiveCell(calendar);
+
+      const event = fireKeydown(active, "a");
+
+      expect(event.defaultPrevented).toBe(false);
+    });
+
+    it("非网格单元格目标不应处理", async () => {
+      const calendar = await createCalendar({ value: "2024-05-15" });
+      const tbody = calendar.shadowRoot.querySelector(".ea-calendar__tbody");
+
+      const event = fireKeydown(tbody, "ArrowRight");
+
+      expect(event.defaultPrevented).toBe(false);
+    });
+
+    it("网格内聚焦时切换月份应恢复焦点到活动单元格", async () => {
+      const calendar = await createCalendar({ value: "2024-05-15" });
+      const active = getActiveCell(calendar);
+      active.focus();
+
+      calendar.displayDate = calendar.displayDate.add(1, "month");
+      await waitForRender();
+
+      expect(getActiveCell(calendar)).toBeTruthy();
+    });
+  });
+
+  describe("Localization Update", () => {
+    it("button 控制器切换语言应更新按钮文案", async () => {
+      const calendar = await createCalendar({ "controller-type": "button" });
+
+      calendar.setAttribute("locale", "zh-CN");
+
+      const prevBtn = calendar.shadowRoot.querySelector(
+        ".ea-calendar__controller-prev"
+      );
+      const nextBtn = calendar.shadowRoot.querySelector(
+        ".ea-calendar__controller-next"
+      );
+      expect(prevBtn.textContent.trim().length).toBeGreaterThan(0);
+      expect(nextBtn.textContent.trim().length).toBeGreaterThan(0);
+    });
+
+    it("select 控制器切换语言应更新下拉占位符", async () => {
+      const calendar = await createCalendar({ "controller-type": "select" });
+
+      calendar.setAttribute("locale", "zh-CN");
+
+      const yearEl = calendar.shadowRoot.querySelector(
+        ".ea-calendar__controller-year"
+      );
+      const monthEl = calendar.shadowRoot.querySelector(
+        ".ea-calendar__controller-month"
+      );
+      expect(yearEl.placeholder).toBeTruthy();
+      expect(monthEl.placeholder).toBeTruthy();
     });
   });
 });

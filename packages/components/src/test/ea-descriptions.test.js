@@ -17,21 +17,17 @@ describe("EaDescriptions", () => {
   });
 
   describe("Basic Rendering", () => {
-    it("应该正确渲染 ea-descriptions 组件", async () => {
+    it("应该正确渲染 ea-descriptions 组件", () => {
       const descriptions = document.createElement("ea-descriptions");
       container.appendChild(descriptions);
-
-      await waitForRender();
 
       expect(descriptions).toBeDefined();
       expect(descriptions.shadowRoot).toBeDefined();
     });
 
-    it("应该包含必要的 CSS Part", async () => {
+    it("应该包含必要的 CSS Part", () => {
       const descriptions = document.createElement("ea-descriptions");
       container.appendChild(descriptions);
-
-      await waitForRender();
 
       const containerEl = descriptions.shadowRoot.querySelector("[part='container']");
       const bodyEl = descriptions.shadowRoot.querySelector("[part='body']");
@@ -42,15 +38,13 @@ describe("EaDescriptions", () => {
       expect(captionEl).not.toBeNull();
     });
 
-    it("应该包含 header 和 extra 插槽", async () => {
+    it("应该包含 header 和 extra 插槽", () => {
       const descriptions = document.createElement("ea-descriptions");
       descriptions.innerHTML = `
         <span slot="header">Title</span>
         <span slot="extra">Extra</span>
       `;
       container.appendChild(descriptions);
-
-      await waitForRender();
 
       const headerSlot = descriptions.shadowRoot.querySelector("slot[name='header']");
       const extraSlot = descriptions.shadowRoot.querySelector("slot[name='extra']");
@@ -59,11 +53,9 @@ describe("EaDescriptions", () => {
       expect(extraSlot).not.toBeNull();
     });
 
-    it("应该渲染 table 结构", async () => {
+    it("应该渲染 table 结构", () => {
       const descriptions = document.createElement("ea-descriptions");
       container.appendChild(descriptions);
-
-      await waitForRender();
 
       const table = descriptions.shadowRoot.querySelector("table");
       const tbody = descriptions.shadowRoot.querySelector("tbody");
@@ -74,26 +66,22 @@ describe("EaDescriptions", () => {
   });
 
   describe("Column Attribute", () => {
-    it("默认 column 应该是 3", async () => {
+    it("默认 column 应该是 3", () => {
       const descriptions = document.createElement("ea-descriptions");
       container.appendChild(descriptions);
-
-      await waitForRender();
 
       expect(descriptions.column).toBe(3);
     });
 
-    it("设置 column 应该改变列数", async () => {
+    it("设置 column 应该改变列数", () => {
       const descriptions = document.createElement("ea-descriptions");
       descriptions.setAttribute("column", "2");
       container.appendChild(descriptions);
 
-      await waitForRender();
-
       expect(descriptions.column).toBe(2);
     });
 
-    it("column 变化时应该重新渲染", async () => {
+    it("column 变化时应该重新渲染", () => {
       const descriptions = document.createElement("ea-descriptions");
       descriptions.innerHTML = `
         <ea-descriptions-item label="A">1</ea-descriptions-item>
@@ -103,31 +91,24 @@ describe("EaDescriptions", () => {
       `;
       container.appendChild(descriptions);
 
-      await waitForRender();
-
       descriptions.setAttribute("column", "2");
-      await waitForRender();
 
       expect(descriptions.column).toBe(2);
     });
   });
 
   describe("Border Attribute", () => {
-    it("默认应该没有边框", async () => {
+    it("默认应该没有边框", () => {
       const descriptions = document.createElement("ea-descriptions");
       container.appendChild(descriptions);
-
-      await waitForRender();
 
       expect(descriptions.border).toBe(false);
     });
 
-    it("设置 border 属性应该应用边框样式", async () => {
+    it("设置 border 属性应该应用边框样式", () => {
       const descriptions = document.createElement("ea-descriptions");
       descriptions.setAttribute("border", "");
       container.appendChild(descriptions);
-
-      await waitForRender();
 
       expect(descriptions.border).toBe(true);
     });
@@ -145,21 +126,17 @@ describe("EaDescriptions", () => {
   });
 
   describe("Direction Attribute", () => {
-    it("默认 direction 应该是 horizontal", async () => {
+    it("默认 direction 应该是 horizontal", () => {
       const descriptions = document.createElement("ea-descriptions");
       container.appendChild(descriptions);
-
-      await waitForRender();
 
       expect(descriptions.direction).toBe("horizontal");
     });
 
-    it("设置 direction 为 vertical 应该垂直布局", async () => {
+    it("设置 direction 为 vertical 应该垂直布局", () => {
       const descriptions = document.createElement("ea-descriptions");
       descriptions.setAttribute("direction", "vertical");
       container.appendChild(descriptions);
-
-      await waitForRender();
 
       expect(descriptions.direction).toBe("vertical");
     });
@@ -177,11 +154,9 @@ describe("EaDescriptions", () => {
   });
 
   describe("Size Attribute", () => {
-    it("默认 size 应该是 default", async () => {
+    it("默认 size 应该是 default", () => {
       const descriptions = document.createElement("ea-descriptions");
       container.appendChild(descriptions);
-
-      await waitForRender();
 
       expect(descriptions.size).toBe("default");
     });
@@ -212,33 +187,27 @@ describe("EaDescriptions", () => {
   });
 
   describe("Caption Attribute", () => {
-    it("默认 caption 应该为空", async () => {
+    it("默认 caption 应该为空", () => {
       const descriptions = document.createElement("ea-descriptions");
       container.appendChild(descriptions);
-
-      await waitForRender();
 
       expect(descriptions.caption).toBe("");
     });
 
-    it("设置 caption 应该更新标题文本", async () => {
+    it("设置 caption 应该更新标题文本", () => {
       const descriptions = document.createElement("ea-descriptions");
       descriptions.setAttribute("caption", "User Info");
       container.appendChild(descriptions);
-
-      await waitForRender();
 
       expect(descriptions.caption).toBe("User Info");
     });
   });
 
   describe("Label Width Attribute", () => {
-    it("应该设置 label-width 属性", async () => {
+    it("应该设置 label-width 属性", () => {
       const descriptions = document.createElement("ea-descriptions");
       descriptions.setAttribute("label-width", "100px");
       container.appendChild(descriptions);
-
-      await waitForRender();
 
       expect(descriptions.labelWidth).toBe("100px");
     });
@@ -387,25 +356,19 @@ describe("EaDescriptions", () => {
   });
 
   describe("Lifecycle", () => {
-    it("组件连接后应该正确初始化", async () => {
+    it("组件连接后应该正确初始化", () => {
       const descriptions = document.createElement("ea-descriptions");
       container.appendChild(descriptions);
-
-      await waitForRender();
 
       expect(descriptions.shadowRoot).toBeDefined();
       expect(descriptions.isConnected).toBe(true);
     });
 
-    it("组件断开连接后应该清理资源", async () => {
+    it("组件断开连接后应该清理资源", () => {
       const descriptions = document.createElement("ea-descriptions");
       container.appendChild(descriptions);
 
-      await waitForRender();
-
       descriptions.remove();
-
-      await waitForRender();
 
       expect(descriptions.isConnected).toBe(false);
     });
@@ -425,21 +388,17 @@ describe("EaDescriptionsItem", () => {
   });
 
   describe("Basic Rendering", () => {
-    it("应该正确渲染 ea-descriptions-item 组件", async () => {
+    it("应该正确渲染 ea-descriptions-item 组件", () => {
       const item = document.createElement("ea-descriptions-item");
       container.appendChild(item);
-
-      await waitForRender();
 
       expect(item).toBeDefined();
       expect(item.shadowRoot).toBeDefined();
     });
 
-    it("应该包含必要的 CSS Part", async () => {
+    it("应该包含必要的 CSS Part", () => {
       const item = document.createElement("ea-descriptions-item");
       container.appendChild(item);
-
-      await waitForRender();
 
       const containerEl = item.shadowRoot.querySelector("[part='container']");
       const labelEl = item.shadowRoot.querySelector("[part='label']");
@@ -450,12 +409,10 @@ describe("EaDescriptionsItem", () => {
       expect(contentEl).not.toBeNull();
     });
 
-    it("应该包含默认插槽", async () => {
+    it("应该包含默认插槽", () => {
       const item = document.createElement("ea-descriptions-item");
       item.innerHTML = "Content";
       container.appendChild(item);
-
-      await waitForRender();
 
       const slot = item.shadowRoot.querySelector("slot");
       expect(slot).not.toBeNull();
@@ -463,184 +420,149 @@ describe("EaDescriptionsItem", () => {
   });
 
   describe("Label Attribute", () => {
-    it("应该通过 label 属性设置标签", async () => {
+    it("应该通过 label 属性设置标签", () => {
       const item = document.createElement("ea-descriptions-item");
       item.setAttribute("label", "Test Label");
       container.appendChild(item);
 
-      await waitForRender();
-
       expect(item.label).toBe("Test Label");
     });
 
-    it("默认 label 应该为空字符串", async () => {
+    it("默认 label 应该为空字符串", () => {
       const item = document.createElement("ea-descriptions-item");
       container.appendChild(item);
-
-      await waitForRender();
 
       expect(item.label).toBe("");
     });
 
-    it("label 变化时应该更新标签文本", async () => {
+    it("label 变化时应该更新标签文本", () => {
       const item = document.createElement("ea-descriptions-item");
       item.setAttribute("label", "Old");
       container.appendChild(item);
 
-      await waitForRender();
-
       item.setAttribute("label", "New");
-      await waitForRender();
 
       expect(item.label).toBe("New");
     });
   });
 
   describe("Colspan Attribute", () => {
-    it("默认 colspan 应该是 1", async () => {
+    it("默认 colspan 应该是 1", () => {
       const item = document.createElement("ea-descriptions-item");
       container.appendChild(item);
-
-      await waitForRender();
 
       expect(item.colspan).toBe(1);
     });
 
-    it("设置 colspan 应该改变跨列数", async () => {
+    it("设置 colspan 应该改变跨列数", () => {
       const item = document.createElement("ea-descriptions-item");
       item.setAttribute("colspan", "2");
       container.appendChild(item);
-
-      await waitForRender();
 
       expect(item.colspan).toBe(2);
     });
   });
 
   describe("Rowspan Attribute", () => {
-    it("默认 rowspan 应该是 1", async () => {
+    it("默认 rowspan 应该是 1", () => {
       const item = document.createElement("ea-descriptions-item");
       container.appendChild(item);
-
-      await waitForRender();
 
       expect(item.rowspan).toBe(1);
     });
 
-    it("设置 rowspan 应该改变跨行数", async () => {
+    it("设置 rowspan 应该改变跨行数", () => {
       const item = document.createElement("ea-descriptions-item");
       item.setAttribute("rowspan", "2");
       container.appendChild(item);
-
-      await waitForRender();
 
       expect(item.rowspan).toBe(2);
     });
   });
 
   describe("Align Attribute", () => {
-    it("默认 align 应该为空", async () => {
+    it("默认 align 应该为空", () => {
       const item = document.createElement("ea-descriptions-item");
       container.appendChild(item);
-
-      await waitForRender();
 
       expect(item.align).toBe("");
     });
 
-    it("应该设置 align 属性", async () => {
+    it("应该设置 align 属性", () => {
       const item = document.createElement("ea-descriptions-item");
       item.setAttribute("align", "center");
       container.appendChild(item);
-
-      await waitForRender();
 
       expect(item.align).toBe("center");
     });
   });
 
   describe("Label Align Attribute", () => {
-    it("默认 labelAlign 应该为空", async () => {
+    it("默认 labelAlign 应该为空", () => {
       const item = document.createElement("ea-descriptions-item");
       container.appendChild(item);
-
-      await waitForRender();
 
       expect(item.labelAlign).toBe("");
     });
 
-    it("应该设置 label-align 属性", async () => {
+    it("应该设置 label-align 属性", () => {
       const item = document.createElement("ea-descriptions-item");
       item.setAttribute("label-align", "right");
       container.appendChild(item);
-
-      await waitForRender();
 
       expect(item.labelAlign).toBe("right");
     });
   });
 
   describe("Width Attribute", () => {
-    it("默认 width 应该为空", async () => {
+    it("默认 width 应该为空", () => {
       const item = document.createElement("ea-descriptions-item");
       container.appendChild(item);
-
-      await waitForRender();
 
       expect(item.width).toBe("");
     });
 
-    it("应该设置 width 属性", async () => {
+    it("应该设置 width 属性", () => {
       const item = document.createElement("ea-descriptions-item");
       item.setAttribute("width", "100px");
       container.appendChild(item);
-
-      await waitForRender();
 
       expect(item.width).toBe("100px");
     });
   });
 
   describe("Label Width Attribute", () => {
-    it("默认 labelWidth 应该为空", async () => {
+    it("默认 labelWidth 应该为空", () => {
       const item = document.createElement("ea-descriptions-item");
       container.appendChild(item);
-
-      await waitForRender();
 
       expect(item.labelWidth).toBe("");
     });
 
-    it("应该设置 label-width 属性", async () => {
+    it("应该设置 label-width 属性", () => {
       const item = document.createElement("ea-descriptions-item");
       item.setAttribute("label-width", "80px");
       container.appendChild(item);
-
-      await waitForRender();
 
       expect(item.labelWidth).toBe("80px");
     });
   });
 
   describe("Label Part Attribute", () => {
-    it("应该设置 label-part 属性", async () => {
+    it("应该设置 label-part 属性", () => {
       const item = document.createElement("ea-descriptions-item");
       item.setAttribute("label-part", "custom-label");
       container.appendChild(item);
-
-      await waitForRender();
 
       expect(item.labelPart).toBe("custom-label");
     });
   });
 
   describe("Content Part Attribute", () => {
-    it("应该设置 content-part 属性", async () => {
+    it("应该设置 content-part 属性", () => {
       const item = document.createElement("ea-descriptions-item");
       item.setAttribute("content-part", "custom-content");
       container.appendChild(item);
-
-      await waitForRender();
 
       expect(item.contentPart).toBe("custom-content");
     });
@@ -716,46 +638,36 @@ describe("EaDescriptionsItem", () => {
   });
 
   describe("Edge Cases", () => {
-    it("空内容时应该正确处理", async () => {
+    it("空内容时应该正确处理", () => {
       const item = document.createElement("ea-descriptions-item");
       item.setAttribute("label", "Empty");
       container.appendChild(item);
 
-      await waitForRender();
-
       expect(item.label).toBe("Empty");
     });
 
-    it("没有 label 时 label 应该为空字符串", async () => {
+    it("没有 label 时 label 应该为空字符串", () => {
       const item = document.createElement("ea-descriptions-item");
       container.appendChild(item);
-
-      await waitForRender();
 
       expect(item.label).toBe("");
     });
   });
 
   describe("Lifecycle", () => {
-    it("组件连接后应该正确初始化", async () => {
+    it("组件连接后应该正确初始化", () => {
       const item = document.createElement("ea-descriptions-item");
       container.appendChild(item);
-
-      await waitForRender();
 
       expect(item.shadowRoot).toBeDefined();
       expect(item.isConnected).toBe(true);
     });
 
-    it("组件断开连接后应该清理 MutationObserver", async () => {
+    it("组件断开连接后应该清理 MutationObserver", () => {
       const item = document.createElement("ea-descriptions-item");
       container.appendChild(item);
 
-      await waitForRender();
-
       item.remove();
-
-      await waitForRender();
 
       expect(item.isConnected).toBe(false);
     });

@@ -59,18 +59,14 @@ describe("EaImagePreview Component", () => {
   }
 
   describe("Basic Rendering", () => {
-    it("应该正确渲染组件并拥有 shadowRoot", async () => {
+    it("应该正确渲染组件并拥有 shadowRoot", () => {
       const preview = createPreview();
-      await waitForRender();
-
       expect(preview).toBeDefined();
       expect(preview.shadowRoot).toBeDefined();
     });
 
-    it("应该包含所有 CSS Parts", async () => {
+    it("应该包含所有 CSS Parts", () => {
       const preview = createPreview();
-      await waitForRender();
-
       const parts = [
         "container",
         "mask",
@@ -88,19 +84,15 @@ describe("EaImagePreview Component", () => {
       }
     });
 
-    it("应该包含关闭图标", async () => {
+    it("应该包含关闭图标", () => {
       const preview = createPreview();
-      await waitForRender();
-
       expect(
         preview.shadowRoot.querySelector(".ea-image-preview__close-icon")
       ).toBeTruthy();
     });
 
-    it("应该包含上一页、下一页图标", async () => {
+    it("应该包含上一页、下一页图标", () => {
       const preview = createPreview();
-      await waitForRender();
-
       expect(
         preview.shadowRoot.querySelector(".ea-image-preview__prev-icon")
       ).toBeTruthy();
@@ -109,10 +101,8 @@ describe("EaImagePreview Component", () => {
       ).toBeTruthy();
     });
 
-    it("应该包含默认工具栏图标（缩放和旋转）", async () => {
+    it("应该包含默认工具栏图标（缩放和旋转）", () => {
       const preview = createPreview();
-      await waitForRender();
-
       expect(
         preview.shadowRoot.querySelector(".ea-image-preview__zoom-out-icon")
       ).toBeTruthy();
@@ -146,10 +136,8 @@ describe("EaImagePreview Component", () => {
       }
     });
 
-    it("应该包含 progress 和 toolbar 区域", async () => {
+    it("应该包含 progress 和 toolbar 区域", () => {
       const preview = createPreview();
-      await waitForRender();
-
       expect(
         preview.shadowRoot.querySelector(".ea-image-preview__progress")
       ).toBeTruthy();
@@ -158,10 +146,8 @@ describe("EaImagePreview Component", () => {
       ).toBeTruthy();
     });
 
-    it("应该包含 header、main、footer 区域", async () => {
+    it("应该包含 header、main、footer 区域", () => {
       const preview = createPreview();
-      await waitForRender();
-
       expect(
         preview.shadowRoot.querySelector(".ea-image-preview__header")
       ).toBeTruthy();
@@ -173,10 +159,8 @@ describe("EaImagePreview Component", () => {
       ).toBeTruthy();
     });
 
-    it("图标应该使用 ea-icon 组件", async () => {
+    it("图标应该使用 ea-icon 组件", () => {
       const preview = createPreview();
-      await waitForRender();
-
       const icons = preview.shadowRoot.querySelectorAll(
         ".ea-image-preview__icon"
       );
@@ -189,46 +173,34 @@ describe("EaImagePreview Component", () => {
   });
 
   describe("Inherited from EaOverlay", () => {
-    it("应该继承 visible 默认值为 false", async () => {
+    it("应该继承 visible 默认值为 false", () => {
       const preview = createPreview();
-      await waitForRender();
-
       expect(preview.visible).toBe(false);
     });
 
-    it("应该继承 modal 默认值为 true", async () => {
+    it("应该继承 modal 默认值为 true", () => {
       const preview = createPreview();
-      await waitForRender();
-
       expect(preview.modal).toBe(true);
     });
 
-    it("应该继承 closeOnPressEscape 默认值为 true", async () => {
+    it("应该继承 closeOnPressEscape 默认值为 true", () => {
       const preview = createPreview();
-      await waitForRender();
-
       expect(preview.closeOnPressEscape).toBe(true);
     });
 
-    it("应该继承 appendToBody 默认值为 false", async () => {
+    it("应该继承 appendToBody 默认值为 false", () => {
       const preview = createPreview();
-      await waitForRender();
-
       expect(preview.appendToBody).toBe(false);
     });
 
-    it("应该继承 show/hide 方法", async () => {
+    it("应该继承 show/hide 方法", () => {
       const preview = createPreview();
-      await waitForRender();
-
       expect(typeof preview.show).toBe("function");
       expect(typeof preview.hide).toBe("function");
     });
 
-    it("应该包含 overlay 容器结构", async () => {
+    it("应该包含 overlay 容器结构", () => {
       const preview = createPreview();
-      await waitForRender();
-
       expect(preview.shadowRoot.querySelector(".ea-overlay")).toBeTruthy();
       expect(
         preview.shadowRoot.querySelector(".ea-overlay__mask")
@@ -240,19 +212,15 @@ describe("EaImagePreview Component", () => {
   });
 
   describe("initialIndex Attribute", () => {
-    it("默认 initialIndex 应该为 0", async () => {
+    it("默认 initialIndex 应该为 0", () => {
       const preview = createPreview();
-      await waitForRender();
-
       expect(preview.initialIndex).toBe(0);
     });
 
-    it("应该通过 initial-index 属性设置初始索引", async () => {
+    it("应该通过 initial-index 属性设置初始索引", () => {
       const preview = document.createElement("ea-image-preview");
       preview.setAttribute("initial-index", "3");
       container.appendChild(preview);
-      await waitForRender();
-
       expect(preview.initialIndex).toBe(3);
     });
 
@@ -268,10 +236,8 @@ describe("EaImagePreview Component", () => {
   });
 
   describe("index Attribute", () => {
-    it("默认 index 应该为 0", async () => {
+    it("默认 index 应该为 0", () => {
       const preview = createPreview();
-      await waitForRender();
-
       expect(preview.index).toBe(0);
     });
 
@@ -280,8 +246,6 @@ describe("EaImagePreview Component", () => {
       await waitForRender();
 
       preview.index = 1;
-      await waitForRender();
-
       expect(
         preview.shadowRoot.querySelector(".ea-image-preview__img")
       ).toBeTruthy();
@@ -344,18 +308,14 @@ describe("EaImagePreview Component", () => {
       await waitForRender();
 
       preview.index = 1;
-      await waitForRender();
-
       const img = preview.shadowRoot.querySelector(".ea-image-preview__img");
       expect(img).toBeTruthy();
     });
   });
 
   describe("infinite Attribute", () => {
-    it("默认 infinite 应该为 true", async () => {
+    it("默认 infinite 应该为 true", () => {
       const preview = createPreview();
-      await waitForRender();
-
       expect(preview.infinite).toBe(true);
     });
 
@@ -365,35 +325,27 @@ describe("EaImagePreview Component", () => {
       await waitForRender();
 
       preview.infinite = false;
-      await waitForRender();
-
       expect(preview.infinite).toBe(false);
     });
   });
 
   describe("zoomRate Attribute", () => {
-    it("默认 zoomRate 应该为 1.2", async () => {
+    it("默认 zoomRate 应该为 1.2", () => {
       const preview = createPreview();
-      await waitForRender();
-
       expect(preview.zoomRate).toBe(1.2);
     });
 
-    it("应该支持自定义缩放率", async () => {
+    it("应该支持自定义缩放率", () => {
       const preview = document.createElement("ea-image-preview");
       preview.setAttribute("zoom-rate", "1.5");
       container.appendChild(preview);
-      await waitForRender();
-
       expect(preview.zoomRate).toBe(1.5);
     });
   });
 
   describe("zoom Attribute", () => {
-    it("默认 zoom 应该为 1", async () => {
+    it("默认 zoom 应该为 1", () => {
       const preview = createPreview();
-      await waitForRender();
-
       expect(preview.zoom).toBe(1);
     });
 
@@ -402,17 +354,13 @@ describe("EaImagePreview Component", () => {
       await waitForRender();
 
       preview.setAttribute("zoom", "2");
-      await waitForRender();
-
       expect(preview.zoom).toBe(2);
     });
   });
 
   describe("scale Attribute", () => {
-    it("默认 scale 应该为 1", async () => {
+    it("默认 scale 应该为 1", () => {
       const preview = createPreview();
-      await waitForRender();
-
       expect(preview.scale).toBe(1);
     });
 
@@ -434,8 +382,6 @@ describe("EaImagePreview Component", () => {
       await waitForRender();
 
       preview.scale = 2;
-      await waitForRender();
-
       expect(preview.scale).toBe(2);
     });
 
@@ -467,31 +413,25 @@ describe("EaImagePreview Component", () => {
   });
 
   describe("minScale & maxScale Attributes", () => {
-    it("默认 minScale 应该为 0.2，maxScale 应该为 7", async () => {
+    it("默认 minScale 应该为 0.2，maxScale 应该为 7", () => {
       const preview = createPreview();
-      await waitForRender();
-
       expect(preview.minScale).toBe(0.2);
       expect(preview.maxScale).toBe(7);
     });
 
-    it("应该支持自定义 minScale 和 maxScale", async () => {
+    it("应该支持自定义 minScale 和 maxScale", () => {
       const preview = document.createElement("ea-image-preview");
       preview.setAttribute("min-scale", "0.5");
       preview.setAttribute("max-scale", "10");
       container.appendChild(preview);
-      await waitForRender();
-
       expect(preview.minScale).toBe(0.5);
       expect(preview.maxScale).toBe(10);
     });
   });
 
   describe("showProgress Attribute", () => {
-    it("默认 showProgress 应该为 false", async () => {
+    it("默认 showProgress 应该为 false", () => {
       const preview = createPreview();
-      await waitForRender();
-
       expect(preview.showProgress).toBe(false);
     });
 
@@ -519,10 +459,8 @@ describe("EaImagePreview Component", () => {
   });
 
   describe("urlList Property", () => {
-    it("默认 urlList 应该为空数组", async () => {
+    it("默认 urlList 应该为空数组", () => {
       const preview = createPreview();
-      await waitForRender();
-
       expect(preview.urlList).toEqual([]);
     });
 
@@ -543,15 +481,11 @@ describe("EaImagePreview Component", () => {
       await waitForRender();
 
       preview.urlList = ["a.jpg", "b.jpg", "c.jpg"];
-      await waitForRender();
-
       expect(preview.index).toBe(1);
     });
 
-    it("urlList 为空时设置 index 不应该出错", async () => {
+    it("urlList 为空时设置 index 不应该出错", () => {
       const preview = createPreview();
-      await waitForRender();
-
       expect(() => {
         preview.index = 0;
       }).not.toThrow();
@@ -559,10 +493,8 @@ describe("EaImagePreview Component", () => {
   });
 
   describe("status Property", () => {
-    it("默认 status 应该为 loading", async () => {
+    it("默认 status 应该为 loading", () => {
       const preview = createPreview();
-      await waitForRender();
-
       expect(preview.status).toBe("loading");
     });
 
@@ -584,34 +516,26 @@ describe("EaImagePreview Component", () => {
   });
 
   describe("updateContainerClasslist", () => {
-    it("应该包含 overlay 基础类名", async () => {
+    it("应该包含 overlay 基础类名", () => {
       const preview = createPreview();
-      await waitForRender();
-
       const className = preview.updateContainerClasslist();
       expect(className).toContain("ea-overlay");
     });
 
-    it("应该包含 image-preview BEM 类名", async () => {
+    it("应该包含 image-preview BEM 类名", () => {
       const preview = createPreview();
-      await waitForRender();
-
       const className = preview.updateContainerClasslist();
       expect(className).toContain("ea-image-preview");
     });
 
-    it("应该包含状态修饰符", async () => {
+    it("应该包含状态修饰符", () => {
       const preview = createPreview();
-      await waitForRender();
-
       const className = preview.updateContainerClasslist();
       expect(className).toMatch(/ea-image-preview--(loading|error|success)/);
     });
 
-    it("showProgress 时应该包含 is-show-progress 状态类", async () => {
+    it("showProgress 时应该包含 is-show-progress 状态类", () => {
       const preview = createPreview({ showProgress: true });
-      await waitForRender();
-
       const className = preview.updateContainerClasslist();
       expect(className).toContain("is-show-progress");
     });
@@ -629,8 +553,6 @@ describe("EaImagePreview Component", () => {
         ".ea-image-preview__close-icon"
       );
       closeIcon.click();
-      await waitForRender();
-
       expect(preview.visible).toBe(false);
     });
 
@@ -660,8 +582,6 @@ describe("EaImagePreview Component", () => {
       await waitForRender();
 
       preview.shadowRoot.querySelector(".ea-image-preview__prev-icon").click();
-      await waitForRender();
-
       expect(preview.index).toBe(0);
     });
 
@@ -673,8 +593,6 @@ describe("EaImagePreview Component", () => {
       await waitForRender();
 
       preview.shadowRoot.querySelector(".ea-image-preview__next-icon").click();
-      await waitForRender();
-
       expect(preview.index).toBe(1);
     });
 
@@ -686,8 +604,6 @@ describe("EaImagePreview Component", () => {
       await waitForRender();
 
       preview.shadowRoot.querySelector(".ea-image-preview__main").click();
-      await waitForRender();
-
       expect(preview.index).toBe(1);
     });
   });
@@ -703,8 +619,6 @@ describe("EaImagePreview Component", () => {
       preview.shadowRoot
         .querySelector(".ea-image-preview__zoom-out-icon")
         .click();
-      await waitForRender();
-
       expect(preview.scale).toBeLessThan(2);
     });
 
@@ -715,8 +629,6 @@ describe("EaImagePreview Component", () => {
       preview.shadowRoot
         .querySelector(".ea-image-preview__zoom-in-icon")
         .click();
-      await waitForRender();
-
       expect(preview.scale).toBeGreaterThan(1);
     });
 
@@ -756,8 +668,6 @@ describe("EaImagePreview Component", () => {
 
       const scaleBefore = preview.scale;
       preview.shadowRoot.querySelector(".ea-image-preview__toolbar").click();
-      await waitForRender();
-
       expect(preview.scale).toBe(scaleBefore);
     });
   });
@@ -772,8 +682,6 @@ describe("EaImagePreview Component", () => {
       preview.shadowRoot
         .querySelector(".ea-image-preview__zoom-in-icon")
         .click();
-      await waitForRender();
-
       expect(preview.scale).toBeCloseTo(1.2, 2);
     });
 
@@ -786,8 +694,6 @@ describe("EaImagePreview Component", () => {
       preview.shadowRoot
         .querySelector(".ea-image-preview__zoom-out-icon")
         .click();
-      await waitForRender();
-
       expect(preview.scale).toBeCloseTo(1, 2);
     });
 
@@ -805,8 +711,6 @@ describe("EaImagePreview Component", () => {
       await waitForRender();
 
       zoomInIcon.click();
-      await waitForRender();
-
       expect(preview.scale).toBeCloseTo(1.44, 2);
     });
 
@@ -906,8 +810,6 @@ describe("EaImagePreview Component", () => {
       preview.shadowRoot
         .querySelector(".ea-image-preview__rotate-right-icon")
         .click();
-      await waitForRender();
-
       expect(capturedEvent).toBeTruthy();
       expect(capturedEvent.detail).toBeDefined();
       expect(capturedEvent.detail.oldVal).toBeDefined();
@@ -996,8 +898,6 @@ describe("EaImagePreview Component", () => {
       await waitForRender();
 
       preview.querySelector('[data-action="switch-next"]').click();
-      await waitForRender();
-
       expect(preview.index).toBe(1);
     });
 
@@ -1008,8 +908,6 @@ describe("EaImagePreview Component", () => {
 
       const scaleBefore = preview.scale;
       preview.querySelector('[data-action="zoom-in"]').click();
-      await waitForRender();
-
       expect(preview.scale).toBeGreaterThan(scaleBefore);
     });
 
@@ -1050,8 +948,6 @@ describe("EaImagePreview Component", () => {
       await waitForRender();
 
       preview.querySelector('[data-action="zoom-out"]').click();
-      await waitForRender();
-
       expect(preview.scale).toBeLessThan(2);
     });
 
@@ -1064,8 +960,6 @@ describe("EaImagePreview Component", () => {
       await waitForRender();
 
       preview.querySelector('[data-action="switch-prev"]').click();
-      await waitForRender();
-
       expect(preview.index).toBe(0);
     });
   });
@@ -1165,8 +1059,6 @@ describe("EaImagePreview Component", () => {
       });
 
       overlay.dispatchEvent(wheelEvent);
-      await waitForRender();
-
       expect(preview.scale).toBeGreaterThan(1);
     });
 
@@ -1185,8 +1077,6 @@ describe("EaImagePreview Component", () => {
       });
 
       overlay.dispatchEvent(wheelEvent);
-      await waitForRender();
-
       expect(preview.scale).toBeLessThan(2);
     });
   });
@@ -1214,8 +1104,6 @@ describe("EaImagePreview Component", () => {
       await waitForRender();
 
       preview.setActiveItem(2);
-      await waitForRender();
-
       expect(preview.index).toBe(2);
     });
 
@@ -1224,8 +1112,6 @@ describe("EaImagePreview Component", () => {
       await waitForRender();
 
       preview.setActiveItem(1);
-      await waitForRender();
-
       expect(preview.index).toBe(1);
     });
   });
@@ -1239,8 +1125,6 @@ describe("EaImagePreview Component", () => {
       await waitForRender();
 
       preview.reset();
-      await waitForRender();
-
       expect(preview.scale).toBe(1);
     });
 
@@ -1255,8 +1139,6 @@ describe("EaImagePreview Component", () => {
       await waitForRender();
 
       preview.reset();
-      await waitForRender();
-
       expect(preview.index).toBe(1);
     });
 
@@ -1304,8 +1186,6 @@ describe("EaImagePreview Component", () => {
       await waitForRender();
 
       preview.reset();
-      await waitForRender();
-
       expect(preview.scale).toBe(1);
     });
 
@@ -1325,8 +1205,6 @@ describe("EaImagePreview Component", () => {
       });
 
       preview._handleClosed(fakeEvent);
-      await waitForRender();
-
       expect(preview.scale).toBe(3);
     });
 
@@ -1346,8 +1224,6 @@ describe("EaImagePreview Component", () => {
       });
 
       preview._handleClosed(realEvent);
-      await waitForRender();
-
       expect(preview.scale).toBe(1);
     });
   });
@@ -1396,10 +1272,8 @@ describe("EaImagePreview Component", () => {
   });
 
   describe("Lifecycle", () => {
-    it("组件挂载时应该调用 $mount", async () => {
+    it("组件挂载时应该调用 $mount", () => {
       const preview = createPreview();
-      await waitForRender();
-
       const overlayEl = preview.shadowRoot.querySelector(".ea-overlay");
       expect(overlayEl).toBeTruthy();
     });
@@ -1409,8 +1283,6 @@ describe("EaImagePreview Component", () => {
       await waitForRender();
 
       preview.remove();
-      await waitForRender();
-
       expect(preview.isConnected).toBe(false);
     });
   });

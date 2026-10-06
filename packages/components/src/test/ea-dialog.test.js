@@ -24,21 +24,17 @@ describe("EaDialog", () => {
   });
 
   describe("基本功能", () => {
-    it("应该正确渲染组件", async () => {
+    it("应该正确渲染组件", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
-
-      await waitForRender();
 
       expect(dialog).toBeDefined();
       expect(dialog.shadowRoot).toBeTruthy();
     });
 
-    it("应该包含必要的 CSS Part", async () => {
+    it("应该包含必要的 CSS Part", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
-
-      await waitForRender();
 
       expect(dialog.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
       expect(dialog.shadowRoot.querySelector('[part="header"]')).toBeTruthy();
@@ -48,22 +44,18 @@ describe("EaDialog", () => {
       expect(dialog.shadowRoot.querySelector('[part="footer"]')).toBeTruthy();
     });
 
-    it("应该包含遮罩层相关结构", async () => {
+    it("应该包含遮罩层相关结构", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
-
-      await waitForRender();
 
       expect(dialog.shadowRoot.querySelector(".ea-overlay")).toBeTruthy();
       expect(dialog.shadowRoot.querySelector(".ea-overlay__mask")).toBeTruthy();
       expect(dialog.shadowRoot.querySelector(".ea-overlay__content")).toBeTruthy();
     });
 
-    it("应该包含对话框主体结构", async () => {
+    it("应该包含对话框主体结构", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
-
-      await waitForRender();
 
       expect(dialog.shadowRoot.querySelector(".ea-dialog")).toBeTruthy();
       expect(dialog.shadowRoot.querySelector(".ea-dialog__header")).toBeTruthy();
@@ -73,7 +65,7 @@ describe("EaDialog", () => {
       expect(dialog.shadowRoot.querySelector(".ea-dialog__footer")).toBeTruthy();
     });
 
-    it("应该包含 header、footer 和默认插槽", async () => {
+    it("应该包含 header、footer 和默认插槽", () => {
       const dialog = document.createElement("ea-dialog");
       dialog.innerHTML = `
         <span>Content</span>
@@ -81,8 +73,6 @@ describe("EaDialog", () => {
         <div slot="footer">Custom Footer</div>
       `;
       container.appendChild(dialog);
-
-      await waitForRender();
 
       const slots = dialog.shadowRoot.querySelectorAll("slot");
       expect(slots.length).toBeGreaterThanOrEqual(3);
@@ -132,21 +122,17 @@ describe("EaDialog", () => {
   });
 
   describe("width 属性", () => {
-    it("应该通过 width 属性设置宽度", async () => {
+    it("应该通过 width 属性设置宽度", () => {
       const dialog = document.createElement("ea-dialog");
       dialog.setAttribute("width", "500px");
       container.appendChild(dialog);
 
-      await waitForRender();
-
       expect(dialog.width).toBe("500px");
     });
 
-    it("默认 width 应该是 50%", async () => {
+    it("默认 width 应该是 50%", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
-
-      await waitForRender();
 
       expect(dialog.width).toBe("50%");
     });
@@ -166,21 +152,17 @@ describe("EaDialog", () => {
   });
 
   describe("top 属性", () => {
-    it("默认 top 应该是 50%", async () => {
+    it("默认 top 应该是 50%", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
-
-      await waitForRender();
 
       expect(dialog.top).toBe("50%");
     });
 
-    it("应该通过 top 属性设置顶部距离", async () => {
+    it("应该通过 top 属性设置顶部距离", () => {
       const dialog = document.createElement("ea-dialog");
       dialog.setAttribute("top", "20vh");
       container.appendChild(dialog);
-
-      await waitForRender();
 
       expect(dialog.top).toBe("20vh");
     });
@@ -277,21 +259,17 @@ describe("EaDialog", () => {
   });
 
   describe("center 属性", () => {
-    it("默认 center 应该是 false", async () => {
+    it("默认 center 应该是 false", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
-
-      await waitForRender();
 
       expect(dialog.center).toBe(false);
     });
 
-    it("设置 center 属性应该应用居中样式", async () => {
+    it("设置 center 属性应该应用居中样式", () => {
       const dialog = document.createElement("ea-dialog");
       dialog.setAttribute("center", "");
       container.appendChild(dialog);
-
-      await waitForRender();
 
       expect(dialog.center).toBe(true);
     });
@@ -309,21 +287,17 @@ describe("EaDialog", () => {
   });
 
   describe("fullscreen 属性", () => {
-    it("默认 fullscreen 应该是 false", async () => {
+    it("默认 fullscreen 应该是 false", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
-
-      await waitForRender();
 
       expect(dialog.fullscreen).toBe(false);
     });
 
-    it("设置 fullscreen 属性应该应用全屏样式", async () => {
+    it("设置 fullscreen 属性应该应用全屏样式", () => {
       const dialog = document.createElement("ea-dialog");
       dialog.setAttribute("fullscreen", "");
       container.appendChild(dialog);
-
-      await waitForRender();
 
       expect(dialog.fullscreen).toBe(true);
     });
@@ -341,11 +315,9 @@ describe("EaDialog", () => {
   });
 
   describe("modal 属性", () => {
-    it("默认 modal 应该是 true", async () => {
+    it("默认 modal 应该是 true", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
-
-      await waitForRender();
 
       expect(dialog.modal).toBe(true);
     });
@@ -357,7 +329,6 @@ describe("EaDialog", () => {
       await waitForRender();
 
       dialog.removeAttribute("modal");
-      await waitForRender();
 
       expect(dialog.modal).toBe(false);
     });
@@ -387,21 +358,17 @@ describe("EaDialog", () => {
   });
 
   describe("movable 属性", () => {
-    it("默认 movable 应该是 false", async () => {
+    it("默认 movable 应该是 false", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
-
-      await waitForRender();
 
       expect(dialog.movable).toBe(false);
     });
 
-    it("设置 movable 属性应该启用拖拽", async () => {
+    it("设置 movable 属性应该启用拖拽", () => {
       const dialog = document.createElement("ea-dialog");
       dialog.setAttribute("movable", "");
       container.appendChild(dialog);
-
-      await waitForRender();
 
       expect(dialog.movable).toBe(true);
     });
@@ -419,11 +386,9 @@ describe("EaDialog", () => {
   });
 
   describe("showClose 属性", () => {
-    it("默认 showClose 应该是 true", async () => {
+    it("默认 showClose 应该是 true", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
-
-      await waitForRender();
 
       expect(dialog.showClose).toBe(true);
     });
@@ -435,7 +400,6 @@ describe("EaDialog", () => {
       await waitForRender();
 
       dialog.removeAttribute("show-close");
-      await waitForRender();
 
       expect(dialog.showClose).toBe(false);
     });
@@ -465,21 +429,17 @@ describe("EaDialog", () => {
   });
 
   describe("modalPentrable 属性", () => {
-    it("默认 modalPentrable 应该是 false", async () => {
+    it("默认 modalPentrable 应该是 false", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
-
-      await waitForRender();
 
       expect(dialog.modalPentrable).toBe(false);
     });
 
-    it("设置 modal-pentrable 属性应该启用模态穿透", async () => {
+    it("设置 modal-pentrable 属性应该启用模态穿透", () => {
       const dialog = document.createElement("ea-dialog");
       dialog.setAttribute("modal-pentrable", "");
       container.appendChild(dialog);
-
-      await waitForRender();
 
       expect(dialog.modalPentrable).toBe(true);
     });
@@ -497,11 +457,9 @@ describe("EaDialog", () => {
   });
 
   describe("closeOnClickModal 属性", () => {
-    it("默认 closeOnClickModal 应该是 true", async () => {
+    it("默认 closeOnClickModal 应该是 true", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
-
-      await waitForRender();
 
       expect(dialog.closeOnClickModal).toBe(true);
     });
@@ -513,7 +471,6 @@ describe("EaDialog", () => {
       await waitForRender();
 
       dialog.removeAttribute("close-on-click-modal");
-      await waitForRender();
 
       expect(dialog.closeOnClickModal).toBe(false);
     });
@@ -555,11 +512,9 @@ describe("EaDialog", () => {
   });
 
   describe("closeOnPressEscape 属性", () => {
-    it("默认 closeOnPressEscape 应该是 true", async () => {
+    it("默认 closeOnPressEscape 应该是 true", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
-
-      await waitForRender();
 
       expect(dialog.closeOnPressEscape).toBe(true);
     });
@@ -571,7 +526,6 @@ describe("EaDialog", () => {
       await waitForRender();
 
       dialog.removeAttribute("close-on-press-escape");
-      await waitForRender();
 
       expect(dialog.closeOnPressEscape).toBe(false);
     });
@@ -619,32 +573,26 @@ describe("EaDialog", () => {
   });
 
   describe("appendToBody 属性", () => {
-    it("默认 appendToBody 应该是 false", async () => {
+    it("默认 appendToBody 应该是 false", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
-
-      await waitForRender();
 
       expect(dialog.appendToBody).toBe(false);
     });
 
-    it("设置 append-to-body 应该为 true", async () => {
+    it("设置 append-to-body 应该为 true", () => {
       const dialog = document.createElement("ea-dialog");
       dialog.setAttribute("append-to-body", "");
       container.appendChild(dialog);
-
-      await waitForRender();
 
       expect(dialog.appendToBody).toBe(true);
     });
   });
 
   describe("appendTo 属性", () => {
-    it("默认 appendTo 应该是 body", async () => {
+    it("默认 appendTo 应该是 body", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
-
-      await waitForRender();
 
       expect(dialog.appendTo).toBe("body");
     });
@@ -667,11 +615,9 @@ describe("EaDialog", () => {
   });
 
   describe("beforeClose 属性", () => {
-    it("默认 beforeClose 应该是 null", async () => {
+    it("默认 beforeClose 应该是 null", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
-
-      await waitForRender();
 
       expect(dialog.beforeClose).toBeNull();
     });
@@ -727,52 +673,42 @@ describe("EaDialog", () => {
   });
 
   describe("EaOverlay 继承属性", () => {
-    it("应该支持 z-index 属性", async () => {
+    it("应该支持 z-index 属性", () => {
       const dialog = document.createElement("ea-dialog");
       dialog.setAttribute("z-index", "5000");
       container.appendChild(dialog);
 
-      await waitForRender();
-
       expect(dialog.zIndex).toBe("5000");
     });
 
-    it("应该支持 background-color 属性", async () => {
+    it("应该支持 background-color 属性", () => {
       const dialog = document.createElement("ea-dialog");
       dialog.setAttribute("background-color", "rgba(0,0,0,0.8)");
       container.appendChild(dialog);
 
-      await waitForRender();
-
       expect(dialog.backgroundColor).toBe("rgba(0,0,0,0.8)");
     });
 
-    it("应该支持 content-width 属性", async () => {
+    it("应该支持 content-width 属性", () => {
       const dialog = document.createElement("ea-dialog");
       dialog.setAttribute("content-width", "80%");
       container.appendChild(dialog);
 
-      await waitForRender();
-
       expect(dialog.contentWidth).toBe("80%");
     });
 
-    it("应该支持 content-max-width 属性", async () => {
+    it("应该支持 content-max-width 属性", () => {
       const dialog = document.createElement("ea-dialog");
       dialog.setAttribute("content-max-width", "1200px");
       container.appendChild(dialog);
 
-      await waitForRender();
-
       expect(dialog.contentMaxWidth).toBe("1200px");
     });
 
-    it("应该支持 content-height 属性", async () => {
+    it("应该支持 content-height 属性", () => {
       const dialog = document.createElement("ea-dialog");
       dialog.setAttribute("content-height", "60%");
       container.appendChild(dialog);
-
-      await waitForRender();
 
       expect(dialog.contentHeight).toBe("60%");
     });
@@ -816,11 +752,9 @@ describe("EaDialog", () => {
   });
 
   describe("resetPosition 方法", () => {
-    it("应该提供 resetPosition 方法", async () => {
+    it("应该提供 resetPosition 方法", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
-
-      await waitForRender();
 
       expect(typeof dialog.resetPosition).toBe("function");
     });
@@ -1011,7 +945,6 @@ describe("EaDialog", () => {
       await waitForRender();
 
       dialog.removeAttribute("modal");
-      await waitForRender();
 
       expect(dialog.heading).toBe("Multi Props");
       expect(dialog.width).toBe("600px");
@@ -1020,13 +953,11 @@ describe("EaDialog", () => {
       expect(dialog.modal).toBe(false);
     });
 
-    it("fullscreen 和 movable 同时设置时应该正常工作", async () => {
+    it("fullscreen 和 movable 同时设置时应该正常工作", () => {
       const dialog = document.createElement("ea-dialog");
       dialog.setAttribute("fullscreen", "");
       dialog.setAttribute("movable", "");
       container.appendChild(dialog);
-
-      await waitForRender();
 
       expect(dialog.fullscreen).toBe(true);
       expect(dialog.movable).toBe(true);
@@ -1074,11 +1005,9 @@ describe("EaDialog", () => {
       expect(dialog.isConnected).toBe(false);
     });
 
-    it("应该继承 EaOverlay 的功能", async () => {
+    it("应该继承 EaOverlay 的功能", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
-
-      await waitForRender();
 
       expect(typeof dialog.show).toBe("function");
       expect(typeof dialog.hide).toBe("function");

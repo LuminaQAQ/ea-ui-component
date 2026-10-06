@@ -51,91 +51,75 @@ describe("EaBacktop", () => {
   });
 
   describe("target 属性", () => {
-    it("默认 target 应该是 window", async () => {
+    it("默认 target 应该是 window", () => {
       const backtop = document.createElement("ea-backtop");
       container.appendChild(backtop);
-
-      await waitForRender(0);
 
       expect(backtop.target).toBe("window");
     });
 
-    it("应该正确设置 target 属性", async () => {
+    it("应该正确设置 target 属性", () => {
       const backtop = document.createElement("ea-backtop");
       backtop.setAttribute("target", "#test-target");
       container.appendChild(backtop);
 
-      await waitForRender(0);
-
       expect(backtop.target).toBe("#test-target");
     });
 
-    it("target 属性变化时应该正确更新", async () => {
+    it("target 属性变化时应该正确更新", () => {
       const backtop = document.createElement("ea-backtop");
       backtop.setAttribute("target", "#old-target");
       container.appendChild(backtop);
 
-      await waitForRender(0);
       expect(backtop.target).toBe("#old-target");
 
       backtop.setAttribute("target", "#new-target");
-      await waitForRender(0);
 
       expect(backtop.target).toBe("#new-target");
     });
   });
 
   describe("visibilityHeight 属性", () => {
-    it("默认 visibilityHeight 应该是 200", async () => {
+    it("默认 visibilityHeight 应该是 200", () => {
       const backtop = document.createElement("ea-backtop");
       container.appendChild(backtop);
-
-      await waitForRender(0);
 
       expect(backtop.visibilityHeight).toBe(200);
     });
 
-    it("应该正确设置 visibilityHeight 属性", async () => {
+    it("应该正确设置 visibilityHeight 属性", () => {
       const backtop = document.createElement("ea-backtop");
       backtop.setAttribute("visibility-height", "100");
       container.appendChild(backtop);
-
-      await waitForRender(0);
 
       expect(backtop.visibilityHeight).toBe(100);
     });
 
-    it("visibilityHeight 属性变化时应该正确更新", async () => {
+    it("visibilityHeight 属性变化时应该正确更新", () => {
       const backtop = document.createElement("ea-backtop");
       backtop.setAttribute("visibility-height", "100");
       container.appendChild(backtop);
 
-      await waitForRender(0);
       expect(backtop.visibilityHeight).toBe(100);
 
       backtop.setAttribute("visibility-height", "300");
-      await waitForRender(0);
 
       expect(backtop.visibilityHeight).toBe(300);
     });
   });
 
   describe("right 属性", () => {
-    it("默认 right 应该是 40px", async () => {
+    it("默认 right 应该是 40px", () => {
       const backtop = document.createElement("ea-backtop");
       container.appendChild(backtop);
-
-      await waitForRender(0);
 
       expect(backtop.right).toBe("40px");
     });
 
-    it("应该正确设置 right 属性", async () => {
+    it("应该正确设置 right 属性", () => {
       const backtop = document.createElement("ea-backtop");
       backtop.setAttribute("right", "60px");
       container.appendChild(backtop);
-
-      await waitForRender(0);
 
       expect(backtop.right).toBe("60px");
     });
@@ -154,21 +138,17 @@ describe("EaBacktop", () => {
   });
 
   describe("bottom 属性", () => {
-    it("默认 bottom 应该是 40px", async () => {
+    it("默认 bottom 应该是 40px", () => {
       const backtop = document.createElement("ea-backtop");
       container.appendChild(backtop);
-
-      await waitForRender(0);
 
       expect(backtop.bottom).toBe("40px");
     });
 
-    it("应该正确设置 bottom 属性", async () => {
+    it("应该正确设置 bottom 属性", () => {
       const backtop = document.createElement("ea-backtop");
       backtop.setAttribute("bottom", "100px");
       container.appendChild(backtop);
-
-      await waitForRender(0);
 
       expect(backtop.bottom).toBe("100px");
     });
@@ -189,55 +169,45 @@ describe("EaBacktop", () => {
   });
 
   describe("smooth 属性", () => {
-    it("默认 smooth 应该是 true", async () => {
+    it("默认 smooth 应该是 true", () => {
       const backtop = document.createElement("ea-backtop");
       container.appendChild(backtop);
-
-      await waitForRender(0);
 
       expect(backtop.smooth).toBe(true);
     });
 
-    it("设置 smooth 属性后应该为 true", async () => {
+    it("设置 smooth 属性后应该为 true", () => {
       const backtop = document.createElement("ea-backtop");
       backtop.setAttribute("smooth", "");
       container.appendChild(backtop);
 
-      await waitForRender(0);
-
       expect(backtop.smooth).toBe(true);
     });
 
-    it("通过 JS 属性设置 smooth 为 false", async () => {
+    it("通过 JS 属性设置 smooth 为 false", () => {
       const backtop = document.createElement("ea-backtop");
       container.appendChild(backtop);
 
-      await waitForRender();
       expect(backtop.smooth).toBe(true);
 
       backtop.smooth = false;
-      await waitForRender(0);
 
       expect(backtop.smooth).toBe(false);
     });
   });
 
   describe("updateContainerClasslist 方法", () => {
-    it("应该返回 BEM 类名字符串", async () => {
+    it("应该返回 BEM 类名字符串", () => {
       const backtop = document.createElement("ea-backtop");
       container.appendChild(backtop);
-
-      await waitForRender();
 
       const className = backtop.updateContainerClasslist();
       expect(className).toContain("ea-backtop");
     });
 
-    it("滚动位置低于阈值时不应包含 visible 状态类", async () => {
+    it("滚动位置低于阈值时不应包含 visible 状态类", () => {
       const backtop = document.createElement("ea-backtop");
       container.appendChild(backtop);
-
-      await waitForRender();
 
       const className = backtop.updateContainerClasslist();
       expect(className).not.toContain("is-visible");
@@ -291,11 +261,9 @@ describe("EaBacktop", () => {
       expect(containerEl.className).toContain("ea-backtop");
     });
 
-    it("组件移除时应该清理资源", async () => {
+    it("组件移除时应该清理资源", () => {
       const backtop = document.createElement("ea-backtop");
       container.appendChild(backtop);
-
-      await waitForRender();
 
       container.removeChild(backtop);
 
@@ -304,7 +272,7 @@ describe("EaBacktop", () => {
   });
 
   describe("组合场景", () => {
-    it("应该支持组合使用多个属性", async () => {
+    it("应该支持组合使用多个属性", () => {
       const backtop = document.createElement("ea-backtop");
       backtop.setAttribute("target", "#custom-target");
       backtop.setAttribute("visibility-height", "100");
@@ -312,19 +280,16 @@ describe("EaBacktop", () => {
       backtop.setAttribute("bottom", "80px");
       container.appendChild(backtop);
 
-      await waitForRender();
-
       expect(backtop.target).toBe("#custom-target");
       expect(backtop.visibilityHeight).toBe(100);
       expect(backtop.right).toBe("60px");
       expect(backtop.bottom).toBe("80px");
 
       backtop.smooth = false;
-      await waitForRender(0);
       expect(backtop.smooth).toBe(false);
     });
 
-    it("应该正确处理多个 Backtop 实例", async () => {
+    it("应该正确处理多个 Backtop 实例", () => {
       const backtop1 = document.createElement("ea-backtop");
       backtop1.setAttribute("visibility-height", "100");
       backtop1.setAttribute("right", "20px");
@@ -336,24 +301,20 @@ describe("EaBacktop", () => {
       container.appendChild(backtop1);
       container.appendChild(backtop2);
 
-      await waitForRender(0);
-
       expect(backtop1.visibilityHeight).toBe(100);
       expect(backtop1.right).toBe("20px");
       expect(backtop2.visibilityHeight).toBe(300);
       expect(backtop2.right).toBe("80px");
     });
 
-    it("应该正确处理动态属性更新", async () => {
+    it("应该正确处理动态属性更新", () => {
       const backtop = document.createElement("ea-backtop");
       backtop.setAttribute("visibility-height", "100");
       container.appendChild(backtop);
 
-      await waitForRender(0);
       expect(backtop.visibilityHeight).toBe(100);
 
       backtop.setAttribute("visibility-height", "250");
-      await waitForRender(0);
 
       expect(backtop.visibilityHeight).toBe(250);
     });
@@ -369,18 +330,16 @@ describe("EaBacktop", () => {
     });
 
     describe("ARIA Attributes", () => {
-      it("容器应该有 role='button'", async () => {
+      it("容器应该有 role='button'", () => {
         const el = document.createElement("ea-backtop");
         container.appendChild(el);
-        await waitForRender();
         const containerEl = el.shadowRoot.querySelector('[part="container"]');
         expect(containerEl.getAttribute("role")).toBe("button");
       });
 
-      it("容器应该有 aria-label='Back to top'", async () => {
+      it("容器应该有 aria-label='Back to top'", () => {
         const el = document.createElement("ea-backtop");
         container.appendChild(el);
-        await waitForRender();
         const containerEl = el.shadowRoot.querySelector('[part="container"]');
         expect(containerEl.getAttribute("aria-label")).toBe("Back to top");
       });
@@ -392,8 +351,12 @@ describe("EaBacktop", () => {
         container.appendChild(el);
         await waitForRender();
         const containerEl = el.shadowRoot.querySelector('[part="container"]');
-        const scrollSpy = vi.spyOn(el, "_scrollToTop").mockImplementation(() => {});
-        containerEl.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter" }));
+        const scrollSpy = vi
+          .spyOn(el, "_scrollToTop")
+          .mockImplementation(() => {});
+        containerEl.dispatchEvent(
+          new KeyboardEvent("keydown", { key: "Enter" })
+        );
         expect(scrollSpy).toHaveBeenCalled();
         scrollSpy.mockRestore();
       });
@@ -403,7 +366,9 @@ describe("EaBacktop", () => {
         container.appendChild(el);
         await waitForRender();
         const containerEl = el.shadowRoot.querySelector('[part="container"]');
-        const scrollSpy = vi.spyOn(el, "_scrollToTop").mockImplementation(() => {});
+        const scrollSpy = vi
+          .spyOn(el, "_scrollToTop")
+          .mockImplementation(() => {});
         containerEl.dispatchEvent(new KeyboardEvent("keydown", { key: " " }));
         expect(scrollSpy).toHaveBeenCalled();
         scrollSpy.mockRestore();

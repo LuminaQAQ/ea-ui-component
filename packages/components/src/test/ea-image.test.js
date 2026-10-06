@@ -51,20 +51,16 @@ describe("EaImage Component", () => {
   });
 
   describe("Basic Rendering", () => {
-    it("应该正确渲染 ea-image 组件", async () => {
+    it("应该正确渲染 ea-image 组件", () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
-
       expect(image).toBeDefined();
       expect(image.shadowRoot).toBeDefined();
     });
 
-    it("应该包含所有 CSS Parts", async () => {
+    it("应该包含所有 CSS Parts", () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
-
       expect(image.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
       expect(image.shadowRoot.querySelector('[part="image"]')).toBeTruthy();
       expect(image.shadowRoot.querySelector('[part="error"]')).toBeTruthy();
@@ -74,11 +70,9 @@ describe("EaImage Component", () => {
       expect(image.shadowRoot.querySelector('[part="preview"]')).toBeTruthy();
     });
 
-    it("应该包含内部 img 元素", async () => {
+    it("应该包含内部 img 元素", () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
-
       const imgElement = image.shadowRoot.querySelector("img.ea-image__image");
       expect(imgElement).toBeTruthy();
     });
@@ -132,20 +126,16 @@ describe("EaImage Component", () => {
   });
 
   describe("Src Attribute", () => {
-    it("默认 src 应该为空字符串", async () => {
+    it("默认 src 应该为空字符串", () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
-
       expect(image.src).toBe("");
     });
 
-    it("应该通过 src 属性设置图片地址", async () => {
+    it("应该通过 src 属性设置图片地址", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("src", "https://example.com/image.jpg");
       container.appendChild(image);
-      await waitForRender();
-
       expect(image.src).toBe("https://example.com/image.jpg");
     });
 
@@ -179,11 +169,9 @@ describe("EaImage Component", () => {
   });
 
   describe("Width & Height Attributes", () => {
-    it("默认 width 和 height 应该为空", async () => {
+    it("默认 width 和 height 应该为空", () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
-
       expect(image.width).toBe("");
       expect(image.height).toBe("");
     });
@@ -208,13 +196,11 @@ describe("EaImage Component", () => {
       expect(image.style.getPropertyValue("--ea-image-height")).toBe("150px");
     });
 
-    it("应该支持百分比和 auto 值", async () => {
+    it("应该支持百分比和 auto 值", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("width", "50%");
       image.setAttribute("height", "auto");
       container.appendChild(image);
-      await waitForRender();
-
       expect(image.width).toBe("50%");
       expect(image.height).toBe("auto");
     });
@@ -226,8 +212,6 @@ describe("EaImage Component", () => {
 
       image.setAttribute("width", "100px");
       image.setAttribute("height", "100px");
-      await waitForRender();
-
       expect(image.width).toBe("100px");
       expect(image.height).toBe("100px");
     });
@@ -264,23 +248,19 @@ describe("EaImage Component", () => {
   });
 
   describe("Fit Attribute", () => {
-    it("默认 fit 应该为空", async () => {
+    it("默认 fit 应该为空", () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
-
       expect(image.fit).toBe("");
     });
 
-    it("应该支持所有 fit 值", async () => {
+    it("应该支持所有 fit 值", () => {
       const fitValues = ["fill", "contain", "cover", "none", "scale-down"];
 
       for (const fit of fitValues) {
         const image = document.createElement("ea-image");
         image.setAttribute("fit", fit);
         container.appendChild(image);
-        await waitForRender();
-
         expect(image.fit).toBe(fit);
 
         image.remove();
@@ -326,20 +306,16 @@ describe("EaImage Component", () => {
   });
 
   describe("Alt Attribute", () => {
-    it("默认 alt 应该为空", async () => {
+    it("默认 alt 应该为空", () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
-
       expect(image.alt).toBe("");
     });
 
-    it("应该通过 alt 属性设置替代文本", async () => {
+    it("应该通过 alt 属性设置替代文本", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("alt", "Description of image");
       container.appendChild(image);
-      await waitForRender();
-
       expect(image.alt).toBe("Description of image");
     });
 
@@ -355,20 +331,16 @@ describe("EaImage Component", () => {
   });
 
   describe("Loading Attribute", () => {
-    it("默认 loading 应该为 eager", async () => {
+    it("默认 loading 应该为 eager", () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
-
       expect(image.loading).toBe("eager");
     });
 
-    it("应该支持 loading='lazy'", async () => {
+    it("应该支持 loading='lazy'", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("loading", "lazy");
       container.appendChild(image);
-      await waitForRender();
-
       expect(image.loading).toBe("lazy");
     });
 
@@ -384,30 +356,24 @@ describe("EaImage Component", () => {
   });
 
   describe("Lazy Attribute", () => {
-    it("默认 lazy 应该是 false", async () => {
+    it("默认 lazy 应该是 false", () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
-
       expect(image.lazy).toBe(false);
     });
 
-    it("设置 lazy 属性应该启用懒加载", async () => {
+    it("设置 lazy 属性应该启用懒加载", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("lazy", "");
       container.appendChild(image);
-      await waitForRender();
-
       expect(image.lazy).toBe(true);
     });
   });
 
   describe("Referrerpolicy & Crossorigin Attributes", () => {
-    it("默认 referrerpolicy 应该为空", async () => {
+    it("默认 referrerpolicy 应该为空", () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
-
       expect(image.referrerpolicy).toBe("");
     });
 
@@ -422,11 +388,9 @@ describe("EaImage Component", () => {
       expect(imgElement.getAttribute("referrerpolicy")).toBe("no-referrer");
     });
 
-    it("默认 crossorigin 应该为空", async () => {
+    it("默认 crossorigin 应该为空", () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
-
       expect(image.crossorigin).toBe("");
     });
 
@@ -443,178 +407,140 @@ describe("EaImage Component", () => {
   });
 
   describe("Preview Attributes", () => {
-    it("默认 preview 应该是 false", async () => {
+    it("默认 preview 应该是 false", () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
-
       expect(image.preview).toBe(false);
     });
 
-    it("设置 preview 属性应该启用预览功能", async () => {
+    it("设置 preview 属性应该启用预览功能", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("preview", "");
       container.appendChild(image);
-      await waitForRender();
-
       expect(image.preview).toBe(true);
     });
 
-    it("默认 hideOnClickModal 应该是 false", async () => {
+    it("默认 hideOnClickModal 应该是 false", () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
-
       expect(image.hideOnClickModal).toBe(false);
     });
 
-    it("默认 zIndex 应该是 2000", async () => {
+    it("默认 zIndex 应该是 2000", () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
-
       expect(image.zIndex).toBe(2000);
     });
 
-    it("应该支持 initial-index 属性", async () => {
+    it("应该支持 initial-index 属性", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("preview", "");
       image.setAttribute("initial-index", "2");
       container.appendChild(image);
-      await waitForRender();
-
       expect(image.initialIndex).toBe(2);
     });
 
-    it("默认 closeOnPressEscape 应该是 true", async () => {
+    it("默认 closeOnPressEscape 应该是 true", () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
-
       expect(image.closeOnPressEscape).toBe(true);
     });
 
-    it("默认 infinite 应该是 true", async () => {
+    it("默认 infinite 应该是 true", () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
-
       expect(image.infinite).toBe(true);
     });
 
-    it("应该支持 zoom-rate 属性", async () => {
+    it("应该支持 zoom-rate 属性", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("preview", "");
       image.setAttribute("zoom-rate", "1.5");
       container.appendChild(image);
-      await waitForRender();
-
       expect(image.zoomRate).toBe(1.5);
     });
 
-    it("默认 scale 应该是 1", async () => {
+    it("默认 scale 应该是 1", () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
-
       expect(image.scale).toBe(1);
     });
 
-    it("应该支持 min-scale 属性", async () => {
+    it("应该支持 min-scale 属性", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("preview", "");
       image.setAttribute("min-scale", "0.5");
       container.appendChild(image);
-      await waitForRender();
-
       expect(image.minScale).toBe(0.5);
     });
 
-    it("应该支持 max-scale 属性", async () => {
+    it("应该支持 max-scale 属性", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("preview", "");
       image.setAttribute("max-scale", "10");
       container.appendChild(image);
-      await waitForRender();
-
       expect(image.maxScale).toBe(10);
     });
 
-    it("默认 showProgress 应该是 false", async () => {
+    it("默认 showProgress 应该是 false", () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
-
       expect(image.showProgress).toBe(false);
     });
 
-    it("应该支持 show-progress 属性", async () => {
+    it("应该支持 show-progress 属性", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("preview", "");
       image.setAttribute("show-progress", "");
       container.appendChild(image);
-      await waitForRender();
-
       expect(image.showProgress).toBe(true);
     });
 
-    it("应该支持 scale 属性", async () => {
+    it("应该支持 scale 属性", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("preview", "");
       image.setAttribute("scale", "2");
       container.appendChild(image);
-      await waitForRender();
-
       expect(image.scale).toBe(2);
     });
 
-    it("应该支持 hide-on-click-modal 属性", async () => {
+    it("应该支持 hide-on-click-modal 属性", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("preview", "");
       image.setAttribute("hide-on-click-modal", "");
       container.appendChild(image);
-      await waitForRender();
-
       expect(image.hideOnClickModal).toBe(true);
     });
 
-    it("应该支持 close-on-press-escape 属性", async () => {
+    it("应该支持 close-on-press-escape 属性", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("preview", "");
       image.setAttribute("close-on-press-escape", "");
       container.appendChild(image);
-      await waitForRender();
-
       expect(image.closeOnPressEscape).toBe(true);
     });
 
-    it("应该支持 infinite 属性", async () => {
+    it("应该支持 infinite 属性", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("preview", "");
       image.setAttribute("infinite", "");
       container.appendChild(image);
-      await waitForRender();
-
       expect(image.infinite).toBe(true);
     });
 
-    it("应该支持 z-index 属性", async () => {
+    it("应该支持 z-index 属性", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("preview", "");
       image.setAttribute("z-index", "3000");
       container.appendChild(image);
-      await waitForRender();
-
       expect(image.zIndex).toBe(3000);
     });
   });
 
   describe("previewSrcList Property", () => {
-    it("默认 previewSrcList 应该为空数组", async () => {
+    it("默认 previewSrcList 应该为空数组", () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
-
       expect(image.previewSrcList).toEqual([]);
     });
 
@@ -648,48 +574,40 @@ describe("EaImage Component", () => {
   });
 
   describe("Slots", () => {
-    it("应该支持 error 插槽", async () => {
+    it("应该支持 error 插槽", () => {
       const image = document.createElement("ea-image");
       image.innerHTML = `<div slot="error">Custom Error</div>`;
       container.appendChild(image);
-      await waitForRender();
-
       const errorSlot = image.shadowRoot.querySelector('slot[name="error"]');
       expect(errorSlot).toBeTruthy();
     });
 
-    it("应该支持 placeholder 插槽", async () => {
+    it("应该支持 placeholder 插槽", () => {
       const image = document.createElement("ea-image");
       image.innerHTML = `<div slot="placeholder">Loading...</div>`;
       container.appendChild(image);
-      await waitForRender();
-
       const placeholderSlot = image.shadowRoot.querySelector(
         'slot[name="placeholder"]'
       );
       expect(placeholderSlot).toBeTruthy();
     });
 
-    it("应该支持 progress 插槽", async () => {
+    it("应该支持 progress 插槽", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("preview", "");
       image.innerHTML = `<div slot="progress">Progress</div>`;
       container.appendChild(image);
-      await waitForRender();
-
       const progressSlot = image.shadowRoot.querySelector(
         'slot[name="progress"]'
       );
       expect(progressSlot).toBeTruthy();
     });
 
-    it("应该支持 toolbar 插槽", async () => {
+    it("应该支持 toolbar 插槽", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("preview", "");
       image.innerHTML = `<div slot="toolbar">Toolbar</div>`;
       container.appendChild(image);
-      await waitForRender();
-
       const toolbarSlot = image.shadowRoot.querySelector(
         'slot[name="toolbar"]'
       );
@@ -759,27 +677,21 @@ describe("EaImage Component", () => {
   });
 
   describe("Methods", () => {
-    it("应该存在 showPreview 方法", async () => {
+    it("应该存在 showPreview 方法", () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
-
       expect(typeof image.showPreview).toBe("function");
     });
 
-    it("应该存在 setActiveItem 方法", async () => {
+    it("应该存在 setActiveItem 方法", () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
-
       expect(typeof image.setActiveItem).toBe("function");
     });
 
-    it("应该存在 reset 方法", async () => {
+    it("应该存在 reset 方法", () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
-
       expect(typeof image.reset).toBe("function");
     });
 
@@ -796,19 +708,15 @@ describe("EaImage Component", () => {
       expect(preview.visible).toBe(true);
     });
 
-    it("setActiveItem 在未启用 preview 时应该不执行操作", async () => {
+    it("setActiveItem 在未启用 preview 时应该不执行操作", () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
-
       expect(() => image.setActiveItem(2)).not.toThrow();
     });
 
-    it("reset 在未启用 preview 时应该不执行操作", async () => {
+    it("reset 在未启用 preview 时应该不执行操作", () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
-
       expect(() => image.reset()).not.toThrow();
     });
 
@@ -823,8 +731,6 @@ describe("EaImage Component", () => {
       await waitForRender();
 
       image.setActiveItem(2);
-      await waitForRender();
-
       expect(preview.index).toBe(2);
     });
 
@@ -840,16 +746,12 @@ describe("EaImage Component", () => {
       await waitForRender();
 
       image.reset();
-      await waitForRender();
-
       expect(preview.scale).toBe(1);
     });
 
-    it("updateContainerClasslist 应该返回正确的 BEM 类名", async () => {
+    it("updateContainerClasslist 应该返回正确的 BEM 类名", () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
-
       const className = image.updateContainerClasslist();
       expect(className).toContain("ea-image");
       expect(className).toContain("ea-image--error");
@@ -1116,11 +1018,9 @@ describe("EaImage Component", () => {
   });
 
   describe("Lifecycle", () => {
-    it("组件挂载时应该调用 $mount", async () => {
+    it("组件挂载时应该调用 $mount", () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
-
       const containerEl = image.shadowRoot.querySelector(".ea-image");
       expect(containerEl).toBeTruthy();
     });
@@ -1132,8 +1032,6 @@ describe("EaImage Component", () => {
       await waitForRender();
 
       image.remove();
-      await waitForRender();
-
       expect(image.isConnected).toBe(false);
     });
   });

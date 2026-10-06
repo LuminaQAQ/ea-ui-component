@@ -98,66 +98,53 @@ describe("EaAvatar", () => {
   });
 
   describe("Size Attribute", () => {
-    it('应该正确应用 size="large"', async () => {
+    it('应该正确应用 size="large"', () => {
       const avatar = document.createElement("ea-avatar");
       avatar.setAttribute("size", "large");
       container.appendChild(avatar);
 
-      await waitForRender(0);
-
       expect(avatar.size).toBe("large");
     });
 
-    it('应该正确应用 size="default"', async () => {
+    it('应该正确应用 size="default"', () => {
       const avatar = document.createElement("ea-avatar");
       avatar.setAttribute("size", "default");
       container.appendChild(avatar);
 
-      await waitForRender(0);
-
       expect(avatar.size).toBe("default");
     });
 
-    it('应该正确应用 size="small"', async () => {
+    it('应该正确应用 size="small"', () => {
       const avatar = document.createElement("ea-avatar");
       avatar.setAttribute("size", "small");
       container.appendChild(avatar);
 
-      await waitForRender(0);
-
       expect(avatar.size).toBe("small");
     });
 
-    it("应该正确应用像素值 size", async () => {
+    it("应该正确应用像素值 size", () => {
       const avatar = document.createElement("ea-avatar");
       avatar.setAttribute("size", "50px");
       container.appendChild(avatar);
 
-      await waitForRender(0);
-
       expect(avatar.size).toBe("50px");
     });
 
-    it("默认 size 应该是 default", async () => {
+    it("默认 size 应该是 default", () => {
       const avatar = document.createElement("ea-avatar");
       container.appendChild(avatar);
-
-      await waitForRender(0);
 
       expect(avatar.size).toBe("default");
     });
 
-    it("size 属性变化时应该正确更新", async () => {
+    it("size 属性变化时应该正确更新", () => {
       const avatar = document.createElement("ea-avatar");
       avatar.setAttribute("size", "small");
       container.appendChild(avatar);
 
-      await waitForRender(0);
       expect(avatar.size).toBe("small");
 
       avatar.setAttribute("size", "60px");
-      await waitForRender(0);
-
       expect(avatar.size).toBe("60px");
     });
 
@@ -248,13 +235,11 @@ describe("EaAvatar", () => {
       expect(avatarContainer.innerHTML).toContain("<slot>");
     });
 
-    it("设置 src 时 icon observer 不应覆盖图片", async () => {
+    it("设置 src 时 icon observer 不应覆盖图片", () => {
       const avatar = document.createElement("ea-avatar");
       avatar.setAttribute("src", "https://example.com/avatar.jpg");
       avatar.setAttribute("icon", "coffee");
       container.appendChild(avatar);
-
-      await waitForRender();
 
       expect(avatar.src).toBe("https://example.com/avatar.jpg");
       expect(avatar.icon).toBe("coffee");
@@ -262,36 +247,28 @@ describe("EaAvatar", () => {
   });
 
   describe("Src Attribute", () => {
-    it("应该正确设置 src 属性", async () => {
+    it("应该正确设置 src 属性", () => {
       const avatar = document.createElement("ea-avatar");
       const testSrc = "https://example.com/avatar.jpg";
       avatar.setAttribute("src", testSrc);
       container.appendChild(avatar);
 
-      await waitForRender(0);
-
       expect(avatar.src).toBe(testSrc);
     });
 
-    it("src 变化时应该更新图片", async () => {
+    it("src 变化时应该更新图片", () => {
       const avatar = document.createElement("ea-avatar");
       avatar.setAttribute("src", "https://example.com/old.jpg");
       container.appendChild(avatar);
 
-      await waitForRender(0);
-
       avatar.setAttribute("src", "https://example.com/new.jpg");
-      await waitForRender(0);
-
       expect(avatar.src).toBe("https://example.com/new.jpg");
     });
 
-    it("设置 src 时应该启动预加载", async () => {
+    it("设置 src 时应该启动预加载", () => {
       const avatar = document.createElement("ea-avatar");
       avatar.setAttribute("src", "https://example.com/avatar.jpg");
       container.appendChild(avatar);
-
-      await waitForRender();
 
       expect(avatar.src).toBe("https://example.com/avatar.jpg");
     });
@@ -326,14 +303,12 @@ describe("EaAvatar", () => {
       expect(avatarContainer.innerHTML).toContain("user");
     });
 
-    it("使用 data URI 时应该启动预加载流程", async () => {
+    it("使用 data URI 时应该启动预加载流程", () => {
       const avatar = document.createElement("ea-avatar");
       const dataUri =
         "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
       avatar.setAttribute("src", dataUri);
       container.appendChild(avatar);
-
-      await waitForRender();
 
       expect(avatar.src).toBe(dataUri);
     });
@@ -356,15 +331,13 @@ describe("EaAvatar", () => {
   });
 
   describe("SrcSet Attribute", () => {
-    it("应该正确设置 src-set 属性", async () => {
+    it("应该正确设置 src-set 属性", () => {
       const avatar = document.createElement("ea-avatar");
       const testSrc =
         "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
       avatar.src = testSrc;
       avatar.srcSet = testSrc;
       container.appendChild(avatar);
-
-      await waitForRender();
 
       expect(avatar.srcSet).toBe(testSrc);
     });
@@ -387,26 +360,20 @@ describe("EaAvatar", () => {
   });
 
   describe("Alt Attribute", () => {
-    it("应该正确设置 alt 属性", async () => {
+    it("应该正确设置 alt 属性", () => {
       const avatar = document.createElement("ea-avatar");
       avatar.setAttribute("alt", "User Avatar");
       container.appendChild(avatar);
 
-      await waitForRender(0);
-
       expect(avatar.alt).toBe("User Avatar");
     });
 
-    it("alt 变化时应该更新", async () => {
+    it("alt 变化时应该更新", () => {
       const avatar = document.createElement("ea-avatar");
       avatar.setAttribute("alt", "Old Alt");
       container.appendChild(avatar);
 
-      await waitForRender(0);
-
       avatar.setAttribute("alt", "New Alt");
-      await waitForRender(0);
-
       expect(avatar.alt).toBe("New Alt");
     });
 
@@ -445,11 +412,9 @@ describe("EaAvatar", () => {
       });
     });
 
-    it("默认 fit 应该是 cover", async () => {
+    it("默认 fit 应该是 cover", () => {
       const avatar = document.createElement("ea-avatar");
       container.appendChild(avatar);
-
-      await waitForRender();
 
       expect(avatar.fit).toBe("cover");
     });
@@ -528,12 +493,10 @@ describe("EaAvatar", () => {
       expect(avatarContainer.innerHTML).toContain("ea-icon");
     });
 
-    it("应该支持图片展示类型", async () => {
+    it("应该支持图片展示类型", () => {
       const avatar = document.createElement("ea-avatar");
       avatar.setAttribute("src", "https://example.com/avatar.jpg");
       container.appendChild(avatar);
-
-      await waitForRender(0);
 
       expect(avatar.src).toBe("https://example.com/avatar.jpg");
     });
@@ -547,13 +510,11 @@ describe("EaAvatar", () => {
       expect(slot).toBeDefined();
     });
 
-    it("src 优先级高于 icon（通过属性值验证）", async () => {
+    it("src 优先级高于 icon（通过属性值验证）", () => {
       const avatar = document.createElement("ea-avatar");
       avatar.setAttribute("icon", "user");
       avatar.setAttribute("src", "https://example.com/avatar.jpg");
       container.appendChild(avatar);
-
-      await waitForRender();
 
       expect(avatar.src).toBe("https://example.com/avatar.jpg");
       expect(avatar.icon).toBe("user");
@@ -561,22 +522,18 @@ describe("EaAvatar", () => {
   });
 
   describe("updateContainerClasslist", () => {
-    it("应该返回正确的 BEM 类名", async () => {
+    it("应该返回正确的 BEM 类名", () => {
       const avatar = document.createElement("ea-avatar");
       container.appendChild(avatar);
-
-      await waitForRender();
 
       const className = avatar.updateContainerClasslist();
       expect(className).toContain("ea-avatar");
       expect(className).toContain("ea-avatar--circle");
     });
 
-    it("shape 变化时应该返回更新后的类名", async () => {
+    it("shape 变化时应该返回更新后的类名", () => {
       const avatar = document.createElement("ea-avatar");
       container.appendChild(avatar);
-
-      await waitForRender();
 
       avatar.shape = "square";
       const className = avatar.updateContainerClasslist();
@@ -649,13 +606,11 @@ describe("EaAvatar", () => {
       expect(containerEl2.classList.contains("ea-avatar--square")).toBe(true);
     });
 
-    it("icon 和 src 同时存在时 src 优先", async () => {
+    it("icon 和 src 同时存在时 src 优先", () => {
       const avatar = document.createElement("ea-avatar");
       avatar.setAttribute("icon", "user");
       avatar.setAttribute("src", "https://example.com/avatar.jpg");
       container.appendChild(avatar);
-
-      await waitForRender();
 
       expect(avatar.src).toBe("https://example.com/avatar.jpg");
     });

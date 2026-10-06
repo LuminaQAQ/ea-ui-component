@@ -17,41 +17,33 @@ describe("EaIcon", () => {
   });
 
   describe("基本功能", () => {
-    it("应该正确渲染组件", async () => {
+    it("应该正确渲染组件", () => {
       const icon = document.createElement("ea-icon");
       container.appendChild(icon);
-
-      await waitForRender();
 
       expect(icon).toBeDefined();
       expect(icon.shadowRoot).toBeDefined();
     });
 
-    it("应该包含 container CSS Part", async () => {
+    it("应该包含 container CSS Part", () => {
       const icon = document.createElement("ea-icon");
       container.appendChild(icon);
-
-      await waitForRender();
 
       expect(icon.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
 
-    it("应该包含 i 元素作为图标容器", async () => {
+    it("应该包含 i 元素作为图标容器", () => {
       const icon = document.createElement("ea-icon");
       container.appendChild(icon);
-
-      await waitForRender();
 
       const iElement = icon.shadowRoot.querySelector("i.ea-icon");
       expect(iElement).toBeTruthy();
     });
 
-    it("应该支持默认插槽", async () => {
+    it("应该支持默认插槽", () => {
       const icon = document.createElement("ea-icon");
       icon.innerHTML = "Custom Content";
       container.appendChild(icon);
-
-      await waitForRender();
 
       const slot = icon.shadowRoot.querySelector("slot");
       expect(slot).toBeTruthy();
@@ -59,21 +51,17 @@ describe("EaIcon", () => {
   });
 
   describe("name 属性", () => {
-    it("默认 name 应该为空字符串", async () => {
+    it("默认 name 应该为空字符串", () => {
       const icon = document.createElement("ea-icon");
       container.appendChild(icon);
-
-      await waitForRender();
 
       expect(icon.name).toBe("");
     });
 
-    it("应该通过 name 属性设置图标名称", async () => {
+    it("应该通过 name 属性设置图标名称", () => {
       const icon = document.createElement("ea-icon");
       icon.setAttribute("name", "coffee");
       container.appendChild(icon);
-
-      await waitForRender();
 
       expect(icon.name).toBe("coffee");
     });
@@ -115,11 +103,9 @@ describe("EaIcon", () => {
   });
 
   describe("family 属性", () => {
-    it("默认 family 应该是 classic", async () => {
+    it("默认 family 应该是 classic", () => {
       const icon = document.createElement("ea-icon");
       container.appendChild(icon);
-
-      await waitForRender();
 
       expect(icon.family).toBe("classic");
     });
@@ -166,11 +152,9 @@ describe("EaIcon", () => {
   });
 
   describe("variant 属性", () => {
-    it("默认 variant 应该是 solid", async () => {
+    it("默认 variant 应该是 solid", () => {
       const icon = document.createElement("ea-icon");
       container.appendChild(icon);
-
-      await waitForRender();
 
       expect(icon.variant).toBe("solid");
     });
@@ -226,21 +210,17 @@ describe("EaIcon", () => {
   });
 
   describe("color 属性", () => {
-    it("默认 color 应该为空字符串", async () => {
+    it("默认 color 应该为空字符串", () => {
       const icon = document.createElement("ea-icon");
       container.appendChild(icon);
-
-      await waitForRender();
 
       expect(icon.color).toBe("");
     });
 
-    it("应该通过 color 属性设置颜色", async () => {
+    it("应该通过 color 属性设置颜色", () => {
       const icon = document.createElement("ea-icon");
       icon.setAttribute("color", "#ff4757");
       container.appendChild(icon);
-
-      await waitForRender();
 
       expect(icon.color).toBe("#ff4757");
     });
@@ -255,15 +235,13 @@ describe("EaIcon", () => {
       expect(icon.style.getPropertyValue("--ea-icon-color")).toBe("#ff4757");
     });
 
-    it("应该支持不同的颜色格式", async () => {
+    it("应该支持不同的颜色格式", () => {
       const colors = ["#ff4757", "#ffa502", "red", "rgb(0, 128, 255)"];
 
       for (const color of colors) {
         const icon = document.createElement("ea-icon");
         icon.setAttribute("color", color);
         container.appendChild(icon);
-
-        await waitForRender();
 
         expect(icon.color).toBe(color);
         icon.remove();
@@ -272,11 +250,9 @@ describe("EaIcon", () => {
   });
 
   describe("size 属性", () => {
-    it("默认 size 应该为空字符串", async () => {
+    it("默认 size 应该为空字符串", () => {
       const icon = document.createElement("ea-icon");
       container.appendChild(icon);
-
-      await waitForRender();
 
       expect(icon.size).toBe("");
     });
@@ -324,11 +300,9 @@ describe("EaIcon", () => {
   });
 
   describe("spin 属性", () => {
-    it("默认 spin 应该是 false", async () => {
+    it("默认 spin 应该是 false", () => {
       const icon = document.createElement("ea-icon");
       container.appendChild(icon);
-
-      await waitForRender();
 
       expect(icon.spin).toBe(false);
     });
@@ -359,7 +333,7 @@ describe("EaIcon", () => {
   });
 
   describe("组合属性", () => {
-    it("应该同时支持多个属性", async () => {
+    it("应该同时支持多个属性", () => {
       const icon = document.createElement("ea-icon");
       icon.setAttribute("name", "coffee");
       icon.setAttribute("family", "classic");
@@ -367,8 +341,6 @@ describe("EaIcon", () => {
       icon.setAttribute("color", "#ff4757");
       icon.setAttribute("size", "32");
       container.appendChild(icon);
-
-      await waitForRender();
 
       expect(icon.name).toBe("coffee");
       expect(icon.family).toBe("classic");
@@ -529,14 +501,12 @@ describe("EaIcon", () => {
       expect(iElement.className).toBe("ea-icon");
     });
 
-    it("空字符串属性应该正确处理", async () => {
+    it("空字符串属性应该正确处理", () => {
       const icon = document.createElement("ea-icon");
       icon.setAttribute("name", "");
       icon.setAttribute("color", "");
       icon.setAttribute("size", "");
       container.appendChild(icon);
-
-      await waitForRender();
 
       expect(icon.name).toBe("");
       expect(icon.color).toBe("");

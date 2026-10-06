@@ -17,134 +17,119 @@ describe("EaSlider Component", () => {
   });
 
   describe("Basic Rendering", () => {
-    it("应该正确渲染 ea-slider 组件并拥有 shadowRoot", async () => {
+    it("应该正确渲染 ea-slider 组件并拥有 shadowRoot", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider).toBeDefined();
       expect(slider.shadowRoot).toBeDefined();
     });
 
-    it("应该包含 container CSS Part", async () => {
+    it("应该包含 container CSS Part", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       expect(
         slider.shadowRoot.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
-    it("应该包含 runway CSS Part", async () => {
+    it("应该包含 runway CSS Part", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.shadowRoot.querySelector('[part="runway"]')).toBeTruthy();
     });
 
-    it("应该包含 rail CSS Part", async () => {
+    it("应该包含 rail CSS Part", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.shadowRoot.querySelector('[part="rail"]')).toBeTruthy();
     });
 
-    it("应该包含 bar CSS Part", async () => {
+    it("应该包含 bar CSS Part", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.shadowRoot.querySelector('[part="bar"]')).toBeTruthy();
     });
 
-    it("应该包含 trigger CSS Part（ea-tooltip 元素）", async () => {
+    it("应该包含 trigger CSS Part（ea-tooltip 元素）", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
       expect(trigger).toBeTruthy();
       expect(trigger.tagName.toLowerCase()).toBe("ea-tooltip");
     });
 
-    it("trigger 应该有 trigger=customized 属性", async () => {
+    it("trigger 应该有 trigger=customized 属性", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
       expect(trigger.getAttribute("trigger")).toBe("customized");
     });
 
-    it("trigger 应该有 flip=false 属性", async () => {
+    it("trigger 应该有 flip=false 属性", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
       expect(trigger.hasAttribute("flip")).toBe(true);
     });
 
-    it("trigger 初始 placement 应该与组件 placement 一致", async () => {
+    it("trigger 初始 placement 应该与组件 placement 一致", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
       expect(trigger.getAttribute("placement")).toBe("top");
     });
 
-    it("应该包含 thumb CSS Part", async () => {
+    it("应该包含 thumb CSS Part", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.shadowRoot.querySelector('[part="thumb"]')).toBeTruthy();
     });
 
-    it("应该包含 tooltip CSS Part", async () => {
+    it("应该包含 tooltip CSS Part", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.shadowRoot.querySelector('[part="tooltip"]')).toBeTruthy();
     });
 
-    it("应该包含 marks CSS Part", async () => {
+    it("应该包含 marks CSS Part", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.shadowRoot.querySelector('[part="marks"]')).toBeTruthy();
     });
 
-    it("应该包含 form-label CSS Part", async () => {
+    it("应该包含 form-label CSS Part", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       expect(
         slider.shadowRoot.querySelector('[part="form-label"]')
       ).toBeTruthy();
     });
 
-    it("应该包含 input CSS Part（ea-input-number 元素）", async () => {
+    it("应该包含 input CSS Part（ea-input-number 元素）", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       const input = slider.shadowRoot.querySelector('[part="input"]');
       expect(input).toBeTruthy();
       expect(input.tagName.toLowerCase()).toBe("ea-input-number");
     });
 
-    it("thumb 元素应该有 slot=reference 属性", async () => {
+    it("thumb 元素应该有 slot=reference 属性", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       const thumb = slider.shadowRoot.querySelector('[part="thumb"]');
       expect(thumb.getAttribute("slot")).toBe("reference");
@@ -152,40 +137,35 @@ describe("EaSlider Component", () => {
   });
 
   describe("Value Attribute", () => {
-    it("默认 value 应该是 0", async () => {
+    it("默认 value 应该是 0", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.value).toBe(0);
     });
 
-    it("应该通过 HTML attribute 设置 value", async () => {
+    it("应该通过 HTML attribute 设置 value", () => {
       const slider = document.createElement("ea-slider");
       slider.setAttribute("value", "50");
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.value).toBe(50);
     });
 
-    it("应该通过 JS 属性设置 value", async () => {
+    it("应该通过 JS 属性设置 value", () => {
       const slider = document.createElement("ea-slider");
       slider.value = 50;
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.value).toBe(50);
     });
 
-    it("动态修改 value 应该生效", async () => {
+    it("动态修改 value 应该生效", () => {
       const slider = document.createElement("ea-slider");
       slider.value = 0;
       container.appendChild(slider);
-      await waitForRender();
 
       slider.value = 75;
-      await waitForRender();
 
       expect(slider.value).toBe(75);
     });
@@ -230,24 +210,22 @@ describe("EaSlider Component", () => {
       expect(bar.style.width).toBe("50%");
     });
 
-    it("value 超过 max 时仍可设置（observer 内部 clamp 用于表单提交）", async () => {
+    it("value 超过 max 时仍可设置（observer 内部 clamp 用于表单提交）", () => {
       const slider = document.createElement("ea-slider");
       slider.min = 0;
       slider.max = 100;
       slider.value = 150;
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.value).toBe(150);
     });
 
-    it("value 小于 min 时仍可设置（observer 内部 clamp 用于表单提交）", async () => {
+    it("value 小于 min 时仍可设置（observer 内部 clamp 用于表单提交）", () => {
       const slider = document.createElement("ea-slider");
       slider.min = 10;
       slider.max = 100;
       slider.value = 0;
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.value).toBe(0);
     });
@@ -256,7 +234,6 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       slider.value = 0;
       container.appendChild(slider);
-      await waitForRender();
 
       const handler = vi.fn();
       slider.addEventListener("input", handler);
@@ -282,80 +259,68 @@ describe("EaSlider Component", () => {
       expect(handler).not.toHaveBeenCalled();
     });
 
-    it("连续修改 value 应该正确更新", async () => {
+    it("连续修改 value 应该正确更新", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       slider.value = 25;
-      await waitForRender();
       expect(slider.value).toBe(25);
 
       slider.value = 75;
-      await waitForRender();
       expect(slider.value).toBe(75);
 
       slider.value = 0;
-      await waitForRender();
       expect(slider.value).toBe(0);
     });
   });
 
   describe("Min/Max Attributes", () => {
-    it("默认 min 应该是 0", async () => {
+    it("默认 min 应该是 0", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.min).toBe(0);
     });
 
-    it("默认 max 应该是 100", async () => {
+    it("默认 max 应该是 100", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.max).toBe(100);
     });
 
-    it("应该支持 min 属性", async () => {
+    it("应该支持 min 属性", () => {
       const slider = document.createElement("ea-slider");
       slider.min = 10;
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.min).toBe(10);
     });
 
-    it("应该支持 max 属性", async () => {
+    it("应该支持 max 属性", () => {
       const slider = document.createElement("ea-slider");
       slider.max = 200;
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.max).toBe(200);
     });
 
-    it("动态修改 min 应该生效", async () => {
+    it("动态修改 min 应该生效", () => {
       const slider = document.createElement("ea-slider");
       slider.min = 0;
       container.appendChild(slider);
-      await waitForRender();
 
       slider.min = 10;
-      await waitForRender();
 
       expect(slider.min).toBe(10);
     });
 
-    it("动态修改 max 应该生效", async () => {
+    it("动态修改 max 应该生效", () => {
       const slider = document.createElement("ea-slider");
       slider.max = 100;
       container.appendChild(slider);
-      await waitForRender();
 
       slider.max = 200;
-      await waitForRender();
 
       expect(slider.max).toBe(200);
     });
@@ -394,13 +359,12 @@ describe("EaSlider Component", () => {
       expect(bar.style.width).toBe("25%");
     });
 
-    it("应该支持负数 min", async () => {
+    it("应该支持负数 min", () => {
       const slider = document.createElement("ea-slider");
       slider.min = -100;
       slider.max = 100;
       slider.value = 0;
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.min).toBe(-100);
       expect(slider.value).toBe(0);
@@ -418,13 +382,12 @@ describe("EaSlider Component", () => {
       expect(trigger.style.left).toBe("50%");
     });
 
-    it("min 等于 max 时应该正常处理", async () => {
+    it("min 等于 max 时应该正常处理", () => {
       const slider = document.createElement("ea-slider");
       slider.min = 50;
       slider.max = 50;
       slider.value = 50;
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.min).toBe(50);
       expect(slider.max).toBe(50);
@@ -432,81 +395,71 @@ describe("EaSlider Component", () => {
   });
 
   describe("Step Attribute", () => {
-    it("默认 step 应该是 1", async () => {
+    it("默认 step 应该是 1", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.step).toBe(1);
     });
 
-    it("应该支持 step 属性", async () => {
+    it("应该支持 step 属性", () => {
       const slider = document.createElement("ea-slider");
       slider.step = 10;
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.step).toBe(10);
     });
 
-    it("动态修改 step 应该生效", async () => {
+    it("动态修改 step 应该生效", () => {
       const slider = document.createElement("ea-slider");
       slider.step = 1;
       container.appendChild(slider);
-      await waitForRender();
 
       slider.step = 10;
-      await waitForRender();
 
       expect(slider.step).toBe(10);
     });
 
-    it("应该支持小数 step", async () => {
+    it("应该支持小数 step", () => {
       const slider = document.createElement("ea-slider");
       slider.step = 0.1;
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.step).toBe(0.1);
     });
 
-    it("应该支持 0.01 精度的 step", async () => {
+    it("应该支持 0.01 精度的 step", () => {
       const slider = document.createElement("ea-slider");
       slider.step = 0.01;
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.step).toBe(0.01);
     });
 
-    it("step 变化时应该更新 slider 位置", async () => {
+    it("step 变化时应该更新 slider 位置", () => {
       const slider = document.createElement("ea-slider");
       slider.value = 50;
       slider.step = 1;
       container.appendChild(slider);
-      await waitForRender();
 
       slider.step = 25;
-      await waitForRender();
 
       expect(slider.step).toBe(25);
     });
   });
 
   describe("Disabled Attribute", () => {
-    it("默认 disabled 应该是 false", async () => {
+    it("默认 disabled 应该是 false", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.disabled).toBe(false);
     });
 
-    it("设置 disabled 属性应该禁用滑块", async () => {
+    it("设置 disabled 属性应该禁用滑块", () => {
       const slider = document.createElement("ea-slider");
       slider.disabled = true;
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.disabled).toBe(true);
     });
@@ -525,16 +478,14 @@ describe("EaSlider Component", () => {
       expect(containerEl.classList.contains("is-disabled")).toBe(true);
     });
 
-    it("disabled 属性应该可以动态移除", async () => {
+    it("disabled 属性应该可以动态移除", () => {
       const slider = document.createElement("ea-slider");
       slider.disabled = true;
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.disabled).toBe(true);
 
       slider.disabled = false;
-      await waitForRender();
 
       expect(slider.disabled).toBe(false);
     });
@@ -553,19 +504,17 @@ describe("EaSlider Component", () => {
   });
 
   describe("Vertical Attribute", () => {
-    it("默认 vertical 应该是 false", async () => {
+    it("默认 vertical 应该是 false", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.vertical).toBe(false);
     });
 
-    it("设置 vertical 属性应该启用垂直模式", async () => {
+    it("设置 vertical 属性应该启用垂直模式", () => {
       const slider = document.createElement("ea-slider");
       slider.vertical = true;
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.vertical).toBe(true);
     });
@@ -655,7 +604,6 @@ describe("EaSlider Component", () => {
       slider.vertical = true;
       slider.value = 50;
       container.appendChild(slider);
-      await waitForRender();
 
       slider.vertical = false;
       await waitForRender();
@@ -670,7 +618,6 @@ describe("EaSlider Component", () => {
       slider.vertical = true;
       slider.value = 50;
       container.appendChild(slider);
-      await waitForRender();
 
       slider.vertical = false;
       await waitForRender();
@@ -682,21 +629,18 @@ describe("EaSlider Component", () => {
   });
 
   describe("ShowTooltip Attribute", () => {
-    it("默认 showTooltip 应该是 true", async () => {
+    it("默认 showTooltip 应该是 true", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.showTooltip).toBe(true);
     });
 
-    it("设置 showTooltip 为 false 应该隐藏提示框", async () => {
+    it("设置 showTooltip 为 false 应该隐藏提示框", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       slider.showTooltip = false;
-      await waitForRender();
 
       expect(slider.showTooltip).toBe(false);
     });
@@ -715,7 +659,6 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       slider.value = 50;
       container.appendChild(slider);
-      await waitForRender();
 
       slider.showTooltip = false;
       await waitForRender();
@@ -743,37 +686,33 @@ describe("EaSlider Component", () => {
   });
 
   describe("Placement Attribute", () => {
-    it("默认 placement 应该是 top", async () => {
+    it("默认 placement 应该是 top", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.placement).toBe("top");
     });
 
-    it("应该支持 placement='right'", async () => {
+    it("应该支持 placement='right'", () => {
       const slider = document.createElement("ea-slider");
       slider.placement = "right";
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.placement).toBe("right");
     });
 
-    it("应该支持 placement='left'", async () => {
+    it("应该支持 placement='left'", () => {
       const slider = document.createElement("ea-slider");
       slider.placement = "left";
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.placement).toBe("left");
     });
 
-    it("应该支持 placement='bottom'", async () => {
+    it("应该支持 placement='bottom'", () => {
       const slider = document.createElement("ea-slider");
       slider.placement = "bottom";
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.placement).toBe("bottom");
     });
@@ -781,7 +720,6 @@ describe("EaSlider Component", () => {
     it("placement 变化时应该更新 trigger 的 placement 属性", async () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
       expect(trigger.getAttribute("placement")).toBe("top");
@@ -792,7 +730,7 @@ describe("EaSlider Component", () => {
       expect(trigger.getAttribute("placement")).toBe("right");
     });
 
-    it("应该支持所有 placement 类型", async () => {
+    it("应该支持所有 placement 类型", () => {
       const placements = [
         "top",
         "top-start",
@@ -812,18 +750,16 @@ describe("EaSlider Component", () => {
         const slider = document.createElement("ea-slider");
         slider.placement = placement;
         container.appendChild(slider);
-        await waitForRender();
 
         expect(slider.placement).toBe(placement);
         container.removeChild(slider);
       }
     });
 
-    it("初始 placement 应该在 HTML 模板中正确设置到 trigger", async () => {
+    it("初始 placement 应该在 HTML 模板中正确设置到 trigger", () => {
       const slider = document.createElement("ea-slider");
       slider.placement = "bottom";
       container.appendChild(slider);
-      await waitForRender();
 
       const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
       expect(trigger.getAttribute("placement")).toBe("bottom");
@@ -831,19 +767,17 @@ describe("EaSlider Component", () => {
   });
 
   describe("ShowStops Attribute", () => {
-    it("默认 showStops 应该是 false", async () => {
+    it("默认 showStops 应该是 false", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.showStops).toBe(false);
     });
 
-    it("设置 showStops 为 true 应该显示 stops", async () => {
+    it("设置 showStops 为 true 应该显示 stops", () => {
       const slider = document.createElement("ea-slider");
       slider.showStops = true;
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.showStops).toBe(true);
     });
@@ -873,11 +807,10 @@ describe("EaSlider Component", () => {
       expect(stops.length).toBe(5);
     });
 
-    it("showStops 为 false 时不应渲染 stop 节点", async () => {
+    it("showStops 为 false 时不应渲染 stop 节点", () => {
       const slider = document.createElement("ea-slider");
       slider.showStops = false;
       container.appendChild(slider);
-      await waitForRender();
 
       const stops = slider.shadowRoot.querySelectorAll('[part="stop"]');
       expect(stops.length).toBe(0);
@@ -925,7 +858,6 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       slider.step = 25;
       container.appendChild(slider);
-      await waitForRender();
 
       let stops = slider.shadowRoot.querySelectorAll('[part="stop"]');
       expect(stops.length).toBe(0);
@@ -945,10 +877,9 @@ describe("EaSlider Component", () => {
   });
 
   describe("ShowInput Attribute", () => {
-    it("默认 showInput 应该是 false", async () => {
+    it("默认 showInput 应该是 false", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.showInput).toBe(false);
     });
@@ -1033,37 +964,33 @@ describe("EaSlider Component", () => {
   });
 
   describe("Size Attribute", () => {
-    it("默认 size 应该是空字符串", async () => {
+    it("默认 size 应该是空字符串", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.size).toBe("");
     });
 
-    it("应该支持 size='small'", async () => {
+    it("应该支持 size='small'", () => {
       const slider = document.createElement("ea-slider");
       slider.size = "small";
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.size).toBe("small");
     });
 
-    it("应该支持 size='default'", async () => {
+    it("应该支持 size='default'", () => {
       const slider = document.createElement("ea-slider");
       slider.size = "default";
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.size).toBe("default");
     });
 
-    it("应该支持 size='large'", async () => {
+    it("应该支持 size='large'", () => {
       const slider = document.createElement("ea-slider");
       slider.size = "large";
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.size).toBe("large");
     });
@@ -1122,19 +1049,17 @@ describe("EaSlider Component", () => {
   });
 
   describe("Label Attribute", () => {
-    it("默认 label 应该是空字符串", async () => {
+    it("默认 label 应该是空字符串", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.label).toBe("");
     });
 
-    it("应该支持 label 属性", async () => {
+    it("应该支持 label 属性", () => {
       const slider = document.createElement("ea-slider");
       slider.label = "Slider Label";
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.label).toBe("Slider Label");
     });
@@ -1185,55 +1110,47 @@ describe("EaSlider Component", () => {
   });
 
   describe("Required Attribute", () => {
-    it("默认 required 应该是 false", async () => {
+    it("默认 required 应该是 false", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.required).toBe(false);
     });
 
-    it("设置 required 属性应该生效", async () => {
+    it("设置 required 属性应该生效", () => {
       const slider = document.createElement("ea-slider");
       slider.required = true;
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.required).toBe(true);
     });
 
-    it("动态切换 required 应该生效", async () => {
+    it("动态切换 required 应该生效", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       slider.required = true;
-      await waitForRender();
       expect(slider.required).toBe(true);
 
       slider.required = false;
-      await waitForRender();
       expect(slider.required).toBe(false);
     });
   });
 
   describe("Marks Property", () => {
-    it("默认 marks 应该是 null", async () => {
+    it("默认 marks 应该是 null", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.marks).toBe(null);
     });
 
-    it("应该支持 marks 属性", async () => {
+    it("应该支持 marks 属性", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       const marks = { 0: "0°C", 26: "26°C", 37: "37°C", 100: "100°C" };
       slider.marks = marks;
-      await waitForRender();
 
       expect(slider.marks).toEqual(marks);
     });
@@ -1241,7 +1158,6 @@ describe("EaSlider Component", () => {
     it("marks 设置后应该渲染 mark 标签", async () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       slider.marks = { 0: "0°C", 50: "50°C", 100: "100°C" };
       await waitForRender();
@@ -1255,7 +1171,6 @@ describe("EaSlider Component", () => {
     it("marks 设置后应该渲染 mark-stop 节点", async () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       slider.marks = { 0: "0°C", 50: "50°C", 100: "100°C" };
       await waitForRender();
@@ -1269,7 +1184,6 @@ describe("EaSlider Component", () => {
     it("marks 设为 null 后应该清除 mark 标签和 mark-stop 节点", async () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       slider.marks = { 0: "0°C", 50: "50°C", 100: "100°C" };
       await waitForRender();
@@ -1291,7 +1205,6 @@ describe("EaSlider Component", () => {
       slider.min = 0;
       slider.max = 100;
       container.appendChild(slider);
-      await waitForRender();
 
       slider.marks = { 0: "0°C", 50: "50°C", 150: "150°C" };
       await waitForRender();
@@ -1305,7 +1218,6 @@ describe("EaSlider Component", () => {
     it("marks 中 NaN 的 key 应该被忽略", async () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       slider.marks = { 0: "0°C", abc: "invalid", 100: "100°C" };
       await waitForRender();
@@ -1319,7 +1231,6 @@ describe("EaSlider Component", () => {
     it("marks 标签应该有正确的位置样式", async () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       slider.marks = { 0: "0°C", 50: "50°C", 100: "100°C" };
       await waitForRender();
@@ -1335,7 +1246,6 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       slider.vertical = true;
       container.appendChild(slider);
-      await waitForRender();
 
       slider.marks = { 0: "0°C", 50: "50°C", 100: "100°C" };
       await waitForRender();
@@ -1352,7 +1262,6 @@ describe("EaSlider Component", () => {
       slider.showStops = true;
       slider.step = 25;
       container.appendChild(slider);
-      await waitForRender();
 
       slider.marks = { 0: "0°C", 50: "50°C", 100: "100°C" };
       await waitForRender();
@@ -1368,7 +1277,6 @@ describe("EaSlider Component", () => {
     it("mark 标签文本应该与 marks 对象的值一致", async () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       slider.marks = { 0: "Start", 100: "End" };
       await waitForRender();
@@ -1383,7 +1291,6 @@ describe("EaSlider Component", () => {
     it("marks 设置后 mark-stop 应该有 mark-stop part", async () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       slider.marks = { 0: "0°C", 50: "50°C", 100: "100°C" };
       await waitForRender();
@@ -1397,7 +1304,6 @@ describe("EaSlider Component", () => {
     it("marks 设置后 mark-stop 应该也有 stop part", async () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       slider.marks = { 0: "0°C", 50: "50°C", 100: "100°C" };
       await waitForRender();
@@ -1408,22 +1314,19 @@ describe("EaSlider Component", () => {
   });
 
   describe("FormatTooltip Property", () => {
-    it("默认 formatTooltip 应该返回原始值", async () => {
+    it("默认 formatTooltip 应该返回原始值", () => {
       const slider = document.createElement("ea-slider");
       slider.value = 50;
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.formatTooltip(50)).toBe(50);
     });
 
-    it("应该支持自定义 formatTooltip 函数", async () => {
+    it("应该支持自定义 formatTooltip 函数", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       slider.formatTooltip = value => value + "%";
-      await waitForRender();
 
       expect(typeof slider.formatTooltip).toBe("function");
       expect(slider.formatTooltip(50)).toBe("50%");
@@ -1448,7 +1351,6 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       slider.value = 75;
       container.appendChild(slider);
-      await waitForRender();
 
       slider.formatTooltip = value => `¥${value}.00`;
       await waitForRender();
@@ -1461,10 +1363,8 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       slider.value = 30;
       container.appendChild(slider);
-      await waitForRender();
 
       slider.formatTooltip = value => `${value}km`;
-      await waitForRender();
 
       slider.value = 60;
       await waitForRender();
@@ -1478,7 +1378,6 @@ describe("EaSlider Component", () => {
     it("disabled 状态应该正确反映在容器 class 中", async () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       const containerEl = slider.shadowRoot.querySelector('[part="container"]');
 
@@ -1494,7 +1393,6 @@ describe("EaSlider Component", () => {
     it("vertical 状态应该正确反映在容器 class 中", async () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       const containerEl = slider.shadowRoot.querySelector('[part="container"]');
 
@@ -1523,7 +1421,6 @@ describe("EaSlider Component", () => {
     it("showStops 状态应该正确反映在容器 class 中", async () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       const containerEl = slider.shadowRoot.querySelector('[part="container"]');
 
@@ -1539,7 +1436,6 @@ describe("EaSlider Component", () => {
     it("showInput 状态应该正确反映在容器 class 中", async () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       const containerEl = slider.shadowRoot.querySelector('[part="container"]');
 
@@ -1555,7 +1451,6 @@ describe("EaSlider Component", () => {
     it("size 修饰符应该正确反映在容器 class 中", async () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       const containerEl = slider.shadowRoot.querySelector('[part="container"]');
 
@@ -1583,12 +1478,11 @@ describe("EaSlider Component", () => {
       expect(containerEl.classList.contains("ea-slider--small")).toBe(true);
     });
 
-    it("updateContainerClasslist 应该返回完整的 class 字符串", async () => {
+    it("updateContainerClasslist 应该返回完整的 class 字符串", () => {
       const slider = document.createElement("ea-slider");
       slider.disabled = true;
       slider.size = "small";
       container.appendChild(slider);
-      await waitForRender();
 
       const result = slider.updateContainerClasslist();
       expect(result).toContain("ea-slider");
@@ -2021,81 +1915,73 @@ describe("EaSlider Component", () => {
   });
 
   describe("Form Validation", () => {
-    it("validationTarget 应该返回 input 元素", async () => {
+    it("validationTarget 应该返回 input 元素", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       const target = slider.validationTarget;
       expect(target).toBeTruthy();
     });
 
-    it("required 属性应该可以设置", async () => {
+    it("required 属性应该可以设置", () => {
       const slider = document.createElement("ea-slider");
       slider.required = true;
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.required).toBe(true);
     });
   });
 
   describe("Edge Cases", () => {
-    it("value 大于 max 时仍可设置", async () => {
+    it("value 大于 max 时仍可设置", () => {
       const slider = document.createElement("ea-slider");
       slider.min = 0;
       slider.max = 100;
       slider.value = 150;
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.value).toBe(150);
     });
 
-    it("value 小于 min 时仍可设置", async () => {
+    it("value 小于 min 时仍可设置", () => {
       const slider = document.createElement("ea-slider");
       slider.min = 10;
       slider.max = 100;
       slider.value = 0;
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.value).toBe(0);
     });
 
-    it("min 等于 max 时应该正常处理", async () => {
+    it("min 等于 max 时应该正常处理", () => {
       const slider = document.createElement("ea-slider");
       slider.min = 50;
       slider.max = 50;
       slider.value = 50;
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.min).toBe(50);
       expect(slider.max).toBe(50);
     });
 
-    it("负数 min 应该正常处理", async () => {
+    it("负数 min 应该正常处理", () => {
       const slider = document.createElement("ea-slider");
       slider.min = -100;
       slider.max = 100;
       slider.value = 0;
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.min).toBe(-100);
     });
 
-    it("连续修改多个属性应该正确更新", async () => {
+    it("连续修改多个属性应该正确更新", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       slider.min = 10;
       slider.max = 200;
       slider.step = 10;
       slider.value = 100;
-      await waitForRender();
 
       expect(slider.min).toBe(10);
       expect(slider.max).toBe(200);
@@ -2103,56 +1989,49 @@ describe("EaSlider Component", () => {
       expect(slider.value).toBe(100);
     });
 
-    it("value 为小数时应该正常处理", async () => {
+    it("value 为小数时应该正常处理", () => {
       const slider = document.createElement("ea-slider");
       slider.step = 0.1;
       slider.value = 5.5;
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.value).toBe(5.5);
     });
 
-    it("先设置 value 再设置 min 时 value 不会被自动 clamp", async () => {
+    it("先设置 value 再设置 min 时 value 不会被自动 clamp", () => {
       const slider = document.createElement("ea-slider");
       slider.value = 5;
       container.appendChild(slider);
-      await waitForRender();
 
       slider.min = 10;
-      await waitForRender();
 
       expect(slider.value).toBe(5);
     });
 
-    it("先设置 value 再缩小 max 时 value 不会被自动 clamp", async () => {
+    it("先设置 value 再缩小 max 时 value 不会被自动 clamp", () => {
       const slider = document.createElement("ea-slider");
       slider.value = 80;
       container.appendChild(slider);
-      await waitForRender();
 
       slider.max = 50;
-      await waitForRender();
 
       expect(slider.value).toBe(80);
     });
 
-    it("step=0.5 时 value 应该正确处理", async () => {
+    it("step=0.5 时 value 应该正确处理", () => {
       const slider = document.createElement("ea-slider");
       slider.step = 0.5;
       slider.value = 2.5;
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.value).toBe(2.5);
     });
 
-    it("step=0.01 时 value 应该正确处理精度", async () => {
+    it("step=0.01 时 value 应该正确处理精度", () => {
       const slider = document.createElement("ea-slider");
       slider.step = 0.01;
       slider.value = 1.23;
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.value).toBe(1.23);
     });
@@ -2161,7 +2040,6 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       slider.min = 30;
       container.appendChild(slider);
-      await waitForRender();
 
       slider.marks = { 0: "0", 50: "50", 100: "100" };
       await waitForRender();
@@ -2174,78 +2052,69 @@ describe("EaSlider Component", () => {
   });
 
   describe("HTML Attribute Mapping", () => {
-    it("value 属性应该映射到 JS 属性", async () => {
+    it("value 属性应该映射到 JS 属性", () => {
       const slider = document.createElement("ea-slider");
       slider.setAttribute("value", "50");
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.value).toBe(50);
     });
 
-    it("min 属性应该映射到 JS 属性", async () => {
+    it("min 属性应该映射到 JS 属性", () => {
       const slider = document.createElement("ea-slider");
       slider.setAttribute("min", "10");
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.min).toBe(10);
     });
 
-    it("max 属性应该映射到 JS 属性", async () => {
+    it("max 属性应该映射到 JS 属性", () => {
       const slider = document.createElement("ea-slider");
       slider.setAttribute("max", "200");
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.max).toBe(200);
     });
 
-    it("step 属性应该映射到 JS 属性", async () => {
+    it("step 属性应该映射到 JS 属性", () => {
       const slider = document.createElement("ea-slider");
       slider.setAttribute("step", "10");
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.step).toBe(10);
     });
 
-    it("disabled 属性应该映射到 JS 属性", async () => {
+    it("disabled 属性应该映射到 JS 属性", () => {
       const slider = document.createElement("ea-slider");
       slider.setAttribute("disabled", "");
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.disabled).toBe(true);
     });
 
-    it("vertical 属性应该映射到 JS 属性", async () => {
+    it("vertical 属性应该映射到 JS 属性", () => {
       const slider = document.createElement("ea-slider");
       slider.setAttribute("vertical", "");
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.vertical).toBe(true);
     });
 
-    it("show-tooltip 属性应该映射到 showTooltip JS 属性", async () => {
+    it("show-tooltip 属性应该映射到 showTooltip JS 属性", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.showTooltip).toBe(true);
 
       slider.removeAttribute("show-tooltip");
-      await waitForRender();
 
       expect(slider.showTooltip).toBe(false);
     });
 
-    it("show-stops 属性应该映射到 showStops JS 属性", async () => {
+    it("show-stops 属性应该映射到 showStops JS 属性", () => {
       const slider = document.createElement("ea-slider");
       slider.setAttribute("show-stops", "");
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.showStops).toBe(true);
     });
@@ -2259,63 +2128,56 @@ describe("EaSlider Component", () => {
       expect(slider.showInput).toBe(true);
     });
 
-    it("placement 属性应该映射到 JS 属性", async () => {
+    it("placement 属性应该映射到 JS 属性", () => {
       const slider = document.createElement("ea-slider");
       slider.setAttribute("placement", "right");
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.placement).toBe("right");
     });
 
-    it("size 属性应该映射到 JS 属性", async () => {
+    it("size 属性应该映射到 JS 属性", () => {
       const slider = document.createElement("ea-slider");
       slider.setAttribute("size", "small");
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.size).toBe("small");
     });
 
-    it("label 属性应该映射到 JS 属性", async () => {
+    it("label 属性应该映射到 JS 属性", () => {
       const slider = document.createElement("ea-slider");
       slider.setAttribute("label", "Volume");
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.label).toBe("Volume");
     });
 
-    it("required 属性应该映射到 JS 属性", async () => {
+    it("required 属性应该映射到 JS 属性", () => {
       const slider = document.createElement("ea-slider");
       slider.setAttribute("required", "");
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.required).toBe(true);
     });
 
-    it("移除 disabled 属性应该将 JS 属性设为 false", async () => {
+    it("移除 disabled 属性应该将 JS 属性设为 false", () => {
       const slider = document.createElement("ea-slider");
       slider.setAttribute("disabled", "");
       container.appendChild(slider);
-      await waitForRender();
 
       expect(slider.disabled).toBe(true);
 
       slider.removeAttribute("disabled");
-      await waitForRender();
 
       expect(slider.disabled).toBe(false);
     });
   });
 
   describe("Lifecycle", () => {
-    it("slider 组件连接后应该正确初始化", async () => {
+    it("slider 组件连接后应该正确初始化", () => {
       const slider = document.createElement("ea-slider");
       slider.value = 50;
       container.appendChild(slider);
-      await waitForRender();
 
       expect(
         slider.shadowRoot.querySelector('[part="container"]')
@@ -2332,15 +2194,13 @@ describe("EaSlider Component", () => {
       expect(container.contains(slider)).toBe(false);
     });
 
-    it("组件重新连接后应该正常工作", async () => {
+    it("组件重新连接后应该正常工作", () => {
       const slider = document.createElement("ea-slider");
       slider.value = 50;
       container.appendChild(slider);
-      await waitForRender();
 
       container.removeChild(slider);
       container.appendChild(slider);
-      await waitForRender();
 
       expect(
         slider.shadowRoot.querySelector('[part="container"]')

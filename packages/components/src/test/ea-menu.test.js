@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender";
+import { fireKeydown } from "./utils/keyboard";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-menu/index";
@@ -20,26 +21,23 @@ describe("EaMenu Component", () => {
    * EaMenu 基本渲染
    */
   describe("EaMenu Basic Rendering", () => {
-    it("应该正确渲染 ea-menu 组件", async () => {
+    it("应该正确渲染 ea-menu 组件", () => {
       const menu = document.createElement("ea-menu");
       container.appendChild(menu);
-      await waitForRender();
       expect(menu).toBeDefined();
       expect(menu.shadowRoot).toBeDefined();
     });
 
-    it("应该包含 container CSS Part", async () => {
+    it("应该包含 container CSS Part", () => {
       const menu = document.createElement("ea-menu");
       container.appendChild(menu);
-      await waitForRender();
       expect(menu.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
 
-    it("应该渲染 slot 内容", async () => {
+    it("应该渲染 slot 内容", () => {
       const menu = document.createElement("ea-menu");
       menu.innerHTML = "<ea-menu-item>Item</ea-menu-item>";
       container.appendChild(menu);
-      await waitForRender();
       expect(menu.shadowRoot.querySelector("slot")).toBeTruthy();
     });
 
@@ -65,26 +63,23 @@ describe("EaMenu Component", () => {
    * EaMenu mode 属性
    */
   describe("EaMenu mode Attribute", () => {
-    it("默认 mode 应该是 vertical", async () => {
+    it("默认 mode 应该是 vertical", () => {
       const menu = document.createElement("ea-menu");
       container.appendChild(menu);
-      await waitForRender();
       expect(menu.mode).toBe("vertical");
     });
 
-    it("应该支持 mode='horizontal'", async () => {
+    it("应该支持 mode='horizontal'", () => {
       const menu = document.createElement("ea-menu");
       menu.setAttribute("mode", "horizontal");
       container.appendChild(menu);
-      await waitForRender();
       expect(menu.mode).toBe("horizontal");
     });
 
-    it("应该支持 mode='vertical'", async () => {
+    it("应该支持 mode='vertical'", () => {
       const menu = document.createElement("ea-menu");
       menu.setAttribute("mode", "vertical");
       container.appendChild(menu);
-      await waitForRender();
       expect(menu.mode).toBe("vertical");
     });
 
@@ -194,10 +189,9 @@ describe("EaMenu Component", () => {
       );
     });
 
-    it("默认颜色属性值应该正确", async () => {
+    it("默认颜色属性值应该正确", () => {
       const menu = document.createElement("ea-menu");
       container.appendChild(menu);
-      await waitForRender();
 
       expect(menu.backgroundColor).toBe("#ffffff");
       expect(menu.textColor).toBe("#303133");
@@ -403,18 +397,16 @@ describe("EaMenu Component", () => {
    * EaMenu collapse 属性
    */
   describe("EaMenu collapse Attribute", () => {
-    it("默认 collapse 应该是 false", async () => {
+    it("默认 collapse 应该是 false", () => {
       const menu = document.createElement("ea-menu");
       container.appendChild(menu);
-      await waitForRender();
       expect(menu.collapse).toBe(false);
     });
 
-    it("应该支持 collapse 属性", async () => {
+    it("应该支持 collapse 属性", () => {
       const menu = document.createElement("ea-menu");
       menu.setAttribute("collapse", "");
       container.appendChild(menu);
-      await waitForRender();
       expect(menu.collapse).toBe(true);
     });
   });
@@ -625,11 +617,10 @@ describe("EaMenu Component", () => {
    * EaMenu 生命周期
    */
   describe("EaMenu Lifecycle", () => {
-    it("$mount 应该正确初始化", async () => {
+    it("$mount 应该正确初始化", () => {
       const menu = document.createElement("ea-menu");
       menu.setAttribute("mode", "horizontal");
       container.appendChild(menu);
-      await waitForRender();
       expect(menu.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
 
@@ -668,18 +659,16 @@ describe("EaMenu Component", () => {
    * EaMenuItem 基本渲染
    */
   describe("EaMenuItem Basic Rendering", () => {
-    it("应该正确渲染 ea-menu-item 组件", async () => {
+    it("应该正确渲染 ea-menu-item 组件", () => {
       const menuItem = document.createElement("ea-menu-item");
       container.appendChild(menuItem);
-      await waitForRender();
       expect(menuItem).toBeDefined();
       expect(menuItem.shadowRoot).toBeDefined();
     });
 
-    it("应该包含 container CSS Part", async () => {
+    it("应该包含 container CSS Part", () => {
       const menuItem = document.createElement("ea-menu-item");
       container.appendChild(menuItem);
-      await waitForRender();
       expect(
         menuItem.shadowRoot.querySelector('[part="container"]')
       ).toBeTruthy();
@@ -694,11 +683,10 @@ describe("EaMenu Component", () => {
       expect(menuItem.getAttribute("role")).toBe("menuitem");
     });
 
-    it("应该渲染 slot 内容", async () => {
+    it("应该渲染 slot 内容", () => {
       const menuItem = document.createElement("ea-menu-item");
       menuItem.textContent = "Menu Item";
       container.appendChild(menuItem);
-      await waitForRender();
       expect(menuItem.shadowRoot.querySelector("slot")).toBeTruthy();
     });
 
@@ -723,7 +711,7 @@ describe("EaMenu Component", () => {
       expect(menuItem.getAttribute("index")).toBe("1");
     });
 
-    it("应该支持不同的 index 值", async () => {
+    it("应该支持不同的 index 值", () => {
       const indices = ["1", "2", "2-1", "2-2", "3-1-1"];
       for (const index of indices) {
         const menuItem = document.createElement("ea-menu-item");
@@ -748,18 +736,16 @@ describe("EaMenu Component", () => {
    * EaMenuItem disabled 属性
    */
   describe("EaMenuItem disabled Attribute", () => {
-    it("默认 disabled 应该是 false", async () => {
+    it("默认 disabled 应该是 false", () => {
       const menuItem = document.createElement("ea-menu-item");
       container.appendChild(menuItem);
-      await waitForRender();
       expect(menuItem.disabled).toBe(false);
     });
 
-    it("设置 disabled 属性应该禁用菜单项", async () => {
+    it("设置 disabled 属性应该禁用菜单项", () => {
       const menuItem = document.createElement("ea-menu-item");
       menuItem.setAttribute("disabled", "");
       container.appendChild(menuItem);
-      await waitForRender();
       expect(menuItem.disabled).toBe(true);
     });
 
@@ -863,49 +849,43 @@ describe("EaMenu Component", () => {
    * EaSubMenu 基本渲染
    */
   describe("EaSubMenu Basic Rendering", () => {
-    it("应该正确渲染 ea-sub-menu 组件", async () => {
+    it("应该正确渲染 ea-sub-menu 组件", () => {
       const subMenu = document.createElement("ea-sub-menu");
       container.appendChild(subMenu);
-      await waitForRender();
       expect(subMenu).toBeDefined();
       expect(subMenu.shadowRoot).toBeDefined();
     });
 
-    it("应该包含 container CSS Part", async () => {
+    it("应该包含 container CSS Part", () => {
       const subMenu = document.createElement("ea-sub-menu");
       container.appendChild(subMenu);
-      await waitForRender();
       expect(
         subMenu.shadowRoot.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
-    it("应该包含 title CSS Part", async () => {
+    it("应该包含 title CSS Part", () => {
       const subMenu = document.createElement("ea-sub-menu");
       container.appendChild(subMenu);
-      await waitForRender();
       expect(subMenu.shadowRoot.querySelector('[part="title"]')).toBeTruthy();
     });
 
-    it("应该包含 arrow CSS Part", async () => {
+    it("应该包含 arrow CSS Part", () => {
       const subMenu = document.createElement("ea-sub-menu");
       container.appendChild(subMenu);
-      await waitForRender();
       expect(subMenu.shadowRoot.querySelector('[part="arrow"]')).toBeTruthy();
     });
 
-    it("应该包含 content CSS Part", async () => {
+    it("应该包含 content CSS Part", () => {
       const subMenu = document.createElement("ea-sub-menu");
       container.appendChild(subMenu);
-      await waitForRender();
       expect(subMenu.shadowRoot.querySelector('[part="content"]')).toBeTruthy();
     });
 
-    it("应该渲染 title 插槽", async () => {
+    it("应该渲染 title 插槽", () => {
       const subMenu = document.createElement("ea-sub-menu");
       subMenu.innerHTML = '<span slot="title">Sub Menu</span>';
       container.appendChild(subMenu);
-      await waitForRender();
       expect(
         subMenu.shadowRoot.querySelector('slot[name="title"]')
       ).toBeTruthy();
@@ -959,18 +939,16 @@ describe("EaMenu Component", () => {
    * EaSubMenu mode 属性
    */
   describe("EaSubMenu mode Attribute", () => {
-    it("默认 mode 应该是 vertical", async () => {
+    it("默认 mode 应该是 vertical", () => {
       const subMenu = document.createElement("ea-sub-menu");
       container.appendChild(subMenu);
-      await waitForRender();
       expect(subMenu.mode).toBe("vertical");
     });
 
-    it("应该支持 mode='horizontal'", async () => {
+    it("应该支持 mode='horizontal'", () => {
       const subMenu = document.createElement("ea-sub-menu");
       subMenu.setAttribute("mode", "horizontal");
       container.appendChild(subMenu);
-      await waitForRender();
       expect(subMenu.mode).toBe("horizontal");
     });
 
@@ -1010,18 +988,16 @@ describe("EaMenu Component", () => {
    * EaSubMenu disabled 属性
    */
   describe("EaSubMenu disabled Attribute", () => {
-    it("默认 disabled 应该是 false", async () => {
+    it("默认 disabled 应该是 false", () => {
       const subMenu = document.createElement("ea-sub-menu");
       container.appendChild(subMenu);
-      await waitForRender();
       expect(subMenu.disabled).toBe(false);
     });
 
-    it("设置 disabled 属性应该禁用子菜单", async () => {
+    it("设置 disabled 属性应该禁用子菜单", () => {
       const subMenu = document.createElement("ea-sub-menu");
       subMenu.setAttribute("disabled", "");
       container.appendChild(subMenu);
-      await waitForRender();
       expect(subMenu.disabled).toBe(true);
     });
 
@@ -1397,11 +1373,10 @@ describe("EaMenu Component", () => {
    * EaSubMenu 生命周期
    */
   describe("EaSubMenu Lifecycle", () => {
-    it("$mount 应该正确初始化", async () => {
+    it("$mount 应该正确初始化", () => {
       const subMenu = document.createElement("ea-sub-menu");
       subMenu.setAttribute("mode", "horizontal");
       container.appendChild(subMenu);
-      await waitForRender();
       expect(
         subMenu.shadowRoot.querySelector('[part="container"]')
       ).toBeTruthy();
@@ -1427,34 +1402,30 @@ describe("EaMenu Component", () => {
    * EaMenuItemGroup 基本渲染
    */
   describe("EaMenuItemGroup Basic Rendering", () => {
-    it("应该正确渲染 ea-menu-item-group 组件", async () => {
+    it("应该正确渲染 ea-menu-item-group 组件", () => {
       const menuGroup = document.createElement("ea-menu-item-group");
       container.appendChild(menuGroup);
-      await waitForRender();
       expect(menuGroup).toBeDefined();
       expect(menuGroup.shadowRoot).toBeDefined();
     });
 
-    it("应该包含 container CSS Part", async () => {
+    it("应该包含 container CSS Part", () => {
       const menuGroup = document.createElement("ea-menu-item-group");
       container.appendChild(menuGroup);
-      await waitForRender();
       expect(
         menuGroup.shadowRoot.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
-    it("应该包含 title CSS Part", async () => {
+    it("应该包含 title CSS Part", () => {
       const menuGroup = document.createElement("ea-menu-item-group");
       container.appendChild(menuGroup);
-      await waitForRender();
       expect(menuGroup.shadowRoot.querySelector('[part="title"]')).toBeTruthy();
     });
 
-    it("应该包含 content CSS Part", async () => {
+    it("应该包含 content CSS Part", () => {
       const menuGroup = document.createElement("ea-menu-item-group");
       container.appendChild(menuGroup);
-      await waitForRender();
       expect(
         menuGroup.shadowRoot.querySelector('[part="content"]')
       ).toBeTruthy();
@@ -1507,10 +1478,9 @@ describe("EaMenu Component", () => {
       expect(titleSlot.textContent).toBe("New Title");
     });
 
-    it("默认 group-title 应该为空", async () => {
+    it("默认 group-title 应该为空", () => {
       const menuGroup = document.createElement("ea-menu-item-group");
       container.appendChild(menuGroup);
-      await waitForRender();
       expect(menuGroup.groupTitle).toBe("");
     });
   });
@@ -1666,10 +1636,9 @@ describe("EaMenu Component", () => {
    * 边界条件
    */
   describe("Edge Cases", () => {
-    it("空 menu 应该正常渲染", async () => {
+    it("空 menu 应该正常渲染", () => {
       const menu = document.createElement("ea-menu");
       container.appendChild(menu);
-      await waitForRender();
       expect(menu.shadowRoot).toBeDefined();
     });
 
@@ -1822,7 +1791,9 @@ describe("EaMenu Component", () => {
         await waitForRender();
         await waitForRender();
         const subMenu = menu.querySelector("ea-sub-menu");
-        const content = subMenu.shadowRoot.querySelector(".ea-sub-menu__content");
+        const content = subMenu.shadowRoot.querySelector(
+          ".ea-sub-menu__content"
+        );
         expect(content.getAttribute("role")).toBe("menu");
       });
 
@@ -1865,6 +1836,363 @@ describe("EaMenu Component", () => {
       await waitForRender();
       const results = await runAxe(el);
       assertNoA11yViolations(results);
+    });
+  });
+});
+
+describe("EaSubMenu Keyboard And Focus", () => {
+  let container;
+
+  const ITEMS = `<ea-menu-item index="1">A</ea-menu-item><ea-menu-item index="2">B</ea-menu-item><ea-menu-item index="3">C</ea-menu-item>`;
+
+  function createSubMenu(attrs = {}, innerHTML = ITEMS) {
+    const subMenu = document.createElement("ea-sub-menu");
+    for (const [key, value] of Object.entries(attrs)) {
+      subMenu.setAttribute(key, value);
+    }
+    subMenu.innerHTML = innerHTML;
+    container.appendChild(subMenu);
+    return subMenu;
+  }
+
+  const getTitle = subMenu =>
+    subMenu.shadowRoot.querySelector('[part="title"]');
+
+  beforeEach(() => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+  });
+
+  afterEach(() => {
+    container.remove();
+  });
+
+  describe("Title Keyboard", () => {
+    it("按 Enter 应该展开", async () => {
+      const subMenu = createSubMenu();
+      await waitForRender();
+
+      const event = fireKeydown(getTitle(subMenu), "Enter");
+
+      expect(event.defaultPrevented).toBe(true);
+      expect(subMenu.open).toBe(true);
+    });
+
+    it("按空格应该切换展开状态", async () => {
+      const subMenu = createSubMenu();
+      await waitForRender();
+
+      const title = getTitle(subMenu);
+      fireKeydown(title, " ");
+      expect(subMenu.open).toBe(true);
+
+      fireKeydown(title, " ");
+      expect(subMenu.open).toBe(false);
+    });
+
+    it("disabled 状态下按 Enter 不应该展开", async () => {
+      const subMenu = createSubMenu({ disabled: "" });
+      await waitForRender();
+
+      const event = fireKeydown(getTitle(subMenu), "Enter");
+
+      expect(subMenu.open).toBe(false);
+      expect(event.defaultPrevented).toBe(false);
+    });
+
+    it("按 ArrowDown 应该展开并聚焦第一个菜单项", async () => {
+      const subMenu = createSubMenu();
+      await waitForRender();
+
+      fireKeydown(getTitle(subMenu), "ArrowDown");
+      expect(subMenu.open).toBe(true);
+
+      await waitForRender();
+      expect(document.activeElement).toBe(
+        subMenu.querySelectorAll("ea-menu-item")[0]
+      );
+    });
+
+    it("垂直模式下按 ArrowRight 不应该处理", async () => {
+      const subMenu = createSubMenu();
+      await waitForRender();
+
+      const event = fireKeydown(getTitle(subMenu), "ArrowRight");
+
+      expect(event.defaultPrevented).toBe(false);
+      expect(subMenu.open).toBe(false);
+    });
+
+    it("水平模式下按 ArrowRight 应该展开并聚焦第一个菜单项", async () => {
+      const subMenu = createSubMenu({ mode: "horizontal" });
+      await waitForRender();
+
+      fireKeydown(getTitle(subMenu), "ArrowRight");
+      expect(subMenu.open).toBe(true);
+
+      await waitForRender();
+      expect(document.activeElement).toBe(
+        subMenu.querySelectorAll("ea-menu-item")[0]
+      );
+    });
+
+    it("展开状态下按 Escape 应该收起", async () => {
+      const subMenu = createSubMenu();
+      await waitForRender();
+      subMenu.open = true;
+
+      fireKeydown(getTitle(subMenu), "Escape");
+
+      expect(subMenu.open).toBe(false);
+    });
+
+    it("收起状态下按 Escape 不应该处理", async () => {
+      const subMenu = createSubMenu();
+      await waitForRender();
+
+      const event = fireKeydown(getTitle(subMenu), "Escape");
+
+      expect(event.defaultPrevented).toBe(false);
+    });
+
+    it("没有菜单项时按 ArrowDown 不应该报错", async () => {
+      const subMenu = createSubMenu({}, "");
+      await waitForRender();
+
+      expect(() => fireKeydown(getTitle(subMenu), "ArrowDown")).not.toThrow();
+      expect(subMenu.open).toBe(true);
+    });
+  });
+
+  describe("Content Keyboard", () => {
+    it("按 ArrowDown 应该聚焦下一个菜单项", async () => {
+      const subMenu = createSubMenu();
+      await waitForRender();
+      subMenu.open = true;
+
+      const items = subMenu.querySelectorAll("ea-menu-item");
+      fireKeydown(items[0], "ArrowDown");
+
+      expect(document.activeElement).toBe(items[1]);
+    });
+
+    it("按 ArrowUp 应该聚焦上一个菜单项", async () => {
+      const subMenu = createSubMenu();
+      await waitForRender();
+      subMenu.open = true;
+
+      const items = subMenu.querySelectorAll("ea-menu-item");
+      fireKeydown(items[2], "ArrowUp");
+
+      expect(document.activeElement).toBe(items[1]);
+    });
+
+    it("第一个菜单项按 ArrowUp 应该聚焦标题", async () => {
+      const subMenu = createSubMenu();
+      await waitForRender();
+      subMenu.open = true;
+
+      const items = subMenu.querySelectorAll("ea-menu-item");
+      fireKeydown(items[0], "ArrowUp");
+
+      expect([subMenu, getTitle(subMenu)]).toContain(document.activeElement);
+    });
+
+    it("最后一个菜单项按 ArrowDown 不应该循环", async () => {
+      const subMenu = createSubMenu();
+      await waitForRender();
+      subMenu.open = true;
+
+      const items = subMenu.querySelectorAll("ea-menu-item");
+      items[2].focus();
+      fireKeydown(items[2], "ArrowDown");
+
+      expect(document.activeElement).toBe(items[2]);
+    });
+
+    it("按 Home 应该聚焦第一个菜单项", async () => {
+      const subMenu = createSubMenu();
+      await waitForRender();
+      subMenu.open = true;
+
+      const items = subMenu.querySelectorAll("ea-menu-item");
+      items[2].focus();
+      fireKeydown(items[2], "Home");
+
+      expect(document.activeElement).toBe(items[0]);
+    });
+
+    it("按 End 应该聚焦最后一个菜单项", async () => {
+      const subMenu = createSubMenu();
+      await waitForRender();
+      subMenu.open = true;
+
+      const items = subMenu.querySelectorAll("ea-menu-item");
+      fireKeydown(items[0], "End");
+
+      expect(document.activeElement).toBe(items[2]);
+    });
+
+    it("垂直模式展开时按 ArrowLeft 应该收起并聚焦标题", async () => {
+      const subMenu = createSubMenu();
+      await waitForRender();
+      subMenu.open = true;
+
+      const items = subMenu.querySelectorAll("ea-menu-item");
+      fireKeydown(items[0], "ArrowLeft");
+
+      expect(subMenu.open).toBe(false);
+      expect([subMenu, getTitle(subMenu)]).toContain(document.activeElement);
+    });
+
+    it("按 Escape 应该收起并聚焦标题", async () => {
+      const subMenu = createSubMenu();
+      await waitForRender();
+      subMenu.open = true;
+
+      const items = subMenu.querySelectorAll("ea-menu-item");
+      fireKeydown(items[0], "Escape");
+
+      expect(subMenu.open).toBe(false);
+      expect([subMenu, getTitle(subMenu)]).toContain(document.activeElement);
+    });
+
+    it("水平模式下左右方向键应该在菜单项间移动焦点", async () => {
+      const subMenu = createSubMenu({ mode: "horizontal" });
+      await waitForRender();
+      subMenu.open = true;
+
+      const items = subMenu.querySelectorAll("ea-menu-item");
+      fireKeydown(items[0], "ArrowRight");
+      expect(document.activeElement).toBe(items[1]);
+
+      fireKeydown(items[1], "ArrowLeft");
+      expect(document.activeElement).toBe(items[0]);
+    });
+
+    it("disabled 的菜单项不应该被聚焦", async () => {
+      const subMenu = createSubMenu(
+        {},
+        `<ea-menu-item index="1">A</ea-menu-item><ea-menu-item index="2" disabled>B</ea-menu-item><ea-menu-item index="3">C</ea-menu-item>`
+      );
+      await waitForRender();
+      subMenu.open = true;
+
+      const items = subMenu.querySelectorAll("ea-menu-item");
+      fireKeydown(items[0], "ArrowDown");
+
+      expect(document.activeElement).toBe(items[2]);
+    });
+
+    it("全部菜单项禁用时键盘操作不应该报错", async () => {
+      const subMenu = createSubMenu(
+        {},
+        `<ea-menu-item index="1" disabled>A</ea-menu-item>`
+      );
+      await waitForRender();
+      subMenu.open = true;
+
+      const item = subMenu.querySelector("ea-menu-item");
+
+      expect(() => fireKeydown(item, "ArrowDown")).not.toThrow();
+      expect(() => fireKeydown(item, "ArrowUp")).not.toThrow();
+      expect(() => fireKeydown(item, "Home")).not.toThrow();
+      expect(() => fireKeydown(item, "End")).not.toThrow();
+      expect(document.activeElement).not.toBe(item);
+    });
+  });
+
+  describe("Vertical Collapse Animation", () => {
+    it("点击标题应该展开并在过渡结束后固定高度", async () => {
+      const subMenu = createSubMenu();
+      await waitForRender();
+
+      const content = subMenu.shadowRoot.querySelector('[part="content"]');
+      getTitle(subMenu).click();
+      expect(subMenu.open).toBe(true);
+
+      content.dispatchEvent(new Event("transitionend"));
+      expect(content.style.height).toBe("100%");
+    });
+
+    it("键盘展开后应该在过渡结束时固定高度", async () => {
+      const subMenu = createSubMenu();
+      await waitForRender();
+
+      const content = subMenu.shadowRoot.querySelector('[part="content"]');
+      fireKeydown(getTitle(subMenu), "Enter");
+      expect(subMenu.open).toBe(true);
+
+      content.dispatchEvent(new Event("transitionend"));
+      expect(content.style.height).toBe("100%");
+    });
+  });
+
+  describe("Focus Management", () => {
+    it("焦点离开子菜单时应该自动收起", async () => {
+      const subMenu = createSubMenu();
+      await waitForRender();
+      subMenu.open = true;
+
+      subMenu.dispatchEvent(
+        new FocusEvent("focusout", { bubbles: true, composed: true })
+      );
+      await waitForRender();
+
+      expect(subMenu.open).toBe(false);
+    });
+
+    it("焦点仍在子菜单内时不应该收起", async () => {
+      const subMenu = createSubMenu();
+      await waitForRender();
+      subMenu.open = true;
+      subMenu.querySelector("ea-menu-item").focus();
+
+      subMenu.dispatchEvent(
+        new FocusEvent("focusout", { bubbles: true, composed: true })
+      );
+      await waitForRender();
+
+      expect(subMenu.open).toBe(true);
+    });
+
+    it("收起状态下焦点离开不应该有副作用", async () => {
+      const subMenu = createSubMenu();
+      await waitForRender();
+
+      subMenu.dispatchEvent(
+        new FocusEvent("focusout", { bubbles: true, composed: true })
+      );
+      await waitForRender();
+
+      expect(subMenu.open).toBe(false);
+    });
+
+    it("焦点进入子菜单应该将焦点委托到标题", async () => {
+      const subMenu = createSubMenu();
+      await waitForRender();
+
+      subMenu.dispatchEvent(
+        new FocusEvent("focusin", { bubbles: true, composed: true })
+      );
+
+      expect([subMenu, getTitle(subMenu)]).toContain(document.activeElement);
+    });
+
+    it("焦点进入时应该取消待执行的收起检查", async () => {
+      const subMenu = createSubMenu();
+      await waitForRender();
+      subMenu.open = true;
+
+      subMenu.dispatchEvent(
+        new FocusEvent("focusout", { bubbles: true, composed: true })
+      );
+      subMenu.dispatchEvent(
+        new FocusEvent("focusin", { bubbles: true, composed: true })
+      );
+      await waitForRender();
+
+      expect(subMenu.open).toBe(true);
     });
   });
 });

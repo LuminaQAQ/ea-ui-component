@@ -23,19 +23,17 @@ describe("EaDrawer Component", () => {
   });
 
   describe("Basic Functionality", () => {
-    it("应该正确渲染 ea-drawer 组件", async () => {
+    it("应该正确渲染 ea-drawer 组件", () => {
       const drawer = document.createElement("ea-drawer");
       container.appendChild(drawer);
-      await waitForRender();
 
       expect(drawer).toBeDefined();
       expect(drawer.shadowRoot).toBeTruthy();
     });
 
-    it("应该包含必要的 CSS Part", async () => {
+    it("应该包含必要的 CSS Part", () => {
       const drawer = document.createElement("ea-drawer");
       container.appendChild(drawer);
-      await waitForRender();
 
       expect(drawer.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
       expect(drawer.shadowRoot.querySelector('[part="header"]')).toBeTruthy();
@@ -45,20 +43,18 @@ describe("EaDrawer Component", () => {
       expect(drawer.shadowRoot.querySelector('[part="footer"]')).toBeTruthy();
     });
 
-    it("应该包含遮罩层相关结构", async () => {
+    it("应该包含遮罩层相关结构", () => {
       const drawer = document.createElement("ea-drawer");
       container.appendChild(drawer);
-      await waitForRender();
 
       expect(drawer.shadowRoot.querySelector(".ea-overlay")).toBeTruthy();
       expect(drawer.shadowRoot.querySelector(".ea-overlay__mask")).toBeTruthy();
       expect(drawer.shadowRoot.querySelector(".ea-overlay__content")).toBeTruthy();
     });
 
-    it("应该包含抽屉主体结构", async () => {
+    it("应该包含抽屉主体结构", () => {
       const drawer = document.createElement("ea-drawer");
       container.appendChild(drawer);
-      await waitForRender();
 
       expect(drawer.shadowRoot.querySelector(".ea-drawer-main")).toBeTruthy();
       expect(drawer.shadowRoot.querySelector(".ea-drawer-main__header")).toBeTruthy();
@@ -123,46 +119,41 @@ describe("EaDrawer Component", () => {
   });
 
   describe("Direction Attribute", () => {
-    it("默认 direction 应该是 rtl", async () => {
+    it("默认 direction 应该是 rtl", () => {
       const drawer = document.createElement("ea-drawer");
       container.appendChild(drawer);
-      await waitForRender();
 
       expect(drawer.direction).toBe("rtl");
     });
 
-    it("设置 direction='ltr' 应该从左往右打开", async () => {
+    it("设置 direction='ltr' 应该从左往右打开", () => {
       const drawer = document.createElement("ea-drawer");
       drawer.setAttribute("direction", "ltr");
       container.appendChild(drawer);
-      await waitForRender();
 
       expect(drawer.direction).toBe("ltr");
     });
 
-    it("设置 direction='rtl' 应该从右往左打开", async () => {
+    it("设置 direction='rtl' 应该从右往左打开", () => {
       const drawer = document.createElement("ea-drawer");
       drawer.setAttribute("direction", "rtl");
       container.appendChild(drawer);
-      await waitForRender();
 
       expect(drawer.direction).toBe("rtl");
     });
 
-    it("设置 direction='ttb' 应该从上往下打开", async () => {
+    it("设置 direction='ttb' 应该从上往下打开", () => {
       const drawer = document.createElement("ea-drawer");
       drawer.setAttribute("direction", "ttb");
       container.appendChild(drawer);
-      await waitForRender();
 
       expect(drawer.direction).toBe("ttb");
     });
 
-    it("设置 direction='btt' 应该从下往上打开", async () => {
+    it("设置 direction='btt' 应该从下往上打开", () => {
       const drawer = document.createElement("ea-drawer");
       drawer.setAttribute("direction", "btt");
       container.appendChild(drawer);
-      await waitForRender();
 
       expect(drawer.direction).toBe("btt");
     });
@@ -224,19 +215,17 @@ describe("EaDrawer Component", () => {
   });
 
   describe("Size Attribute", () => {
-    it("应该通过 size 属性设置尺寸", async () => {
+    it("应该通过 size 属性设置尺寸", () => {
       const drawer = document.createElement("ea-drawer");
       drawer.setAttribute("size", "400px");
       container.appendChild(drawer);
-      await waitForRender();
 
       expect(drawer.size).toBe("400px");
     });
 
-    it("默认 size 应该是 30%", async () => {
+    it("默认 size 应该是 30%", () => {
       const drawer = document.createElement("ea-drawer");
       container.appendChild(drawer);
-      await waitForRender();
 
       expect(drawer.size).toBe("30%");
     });
@@ -338,20 +327,17 @@ describe("EaDrawer Component", () => {
   });
 
   describe("With Header Attribute", () => {
-    it("默认 withHeader 应该是 true", async () => {
+    it("默认 withHeader 应该是 true", () => {
       const drawer = document.createElement("ea-drawer");
       container.appendChild(drawer);
-      await waitForRender();
 
       expect(drawer.withHeader).toBe(true);
     });
 
-    it("设置 withHeader 为 false 应该隐藏头部", async () => {
+    it("设置 withHeader 为 false 应该隐藏头部", () => {
       const drawer = document.createElement("ea-drawer");
       container.appendChild(drawer);
-      await waitForRender();
       drawer.withHeader = false;
-      await waitForRender();
 
       expect(drawer.withHeader).toBe(false);
     });
@@ -359,7 +345,6 @@ describe("EaDrawer Component", () => {
     it("withHeader 为 false 时应该添加 is-header-hidden 状态类", async () => {
       const drawer = document.createElement("ea-drawer");
       container.appendChild(drawer);
-      await waitForRender();
       drawer.withHeader = false;
       await waitForRender();
 
@@ -397,20 +382,17 @@ describe("EaDrawer Component", () => {
   });
 
   describe("Show Close Attribute", () => {
-    it("默认 showClose 应该是 true", async () => {
+    it("默认 showClose 应该是 true", () => {
       const drawer = document.createElement("ea-drawer");
       container.appendChild(drawer);
-      await waitForRender();
 
       expect(drawer.showClose).toBe(true);
     });
 
-    it("设置 showClose 为 false 应该隐藏关闭图标", async () => {
+    it("设置 showClose 为 false 应该隐藏关闭图标", () => {
       const drawer = document.createElement("ea-drawer");
       container.appendChild(drawer);
-      await waitForRender();
       drawer.showClose = false;
-      await waitForRender();
 
       expect(drawer.showClose).toBe(false);
     });
@@ -418,7 +400,6 @@ describe("EaDrawer Component", () => {
     it("showClose 为 false 时应该添加 is-close-hidden 状态类", async () => {
       const drawer = document.createElement("ea-drawer");
       container.appendChild(drawer);
-      await waitForRender();
       drawer.showClose = false;
       await waitForRender();
 
@@ -496,20 +477,17 @@ describe("EaDrawer Component", () => {
   });
 
   describe("Modal Attribute", () => {
-    it("默认 modal 应该是 true", async () => {
+    it("默认 modal 应该是 true", () => {
       const drawer = document.createElement("ea-drawer");
       container.appendChild(drawer);
-      await waitForRender();
 
       expect(drawer.modal).toBe(true);
     });
 
-    it("设置 modal 为 false 应该禁用遮罩", async () => {
+    it("设置 modal 为 false 应该禁用遮罩", () => {
       const drawer = document.createElement("ea-drawer");
       container.appendChild(drawer);
-      await waitForRender();
       drawer.modal = false;
-      await waitForRender();
 
       expect(drawer.modal).toBe(false);
     });
@@ -526,7 +504,6 @@ describe("EaDrawer Component", () => {
     it("modal 为 false 时不应该添加 is-modal 状态类", async () => {
       const drawer = document.createElement("ea-drawer");
       container.appendChild(drawer);
-      await waitForRender();
       drawer.modal = false;
       await waitForRender();
 
@@ -536,20 +513,17 @@ describe("EaDrawer Component", () => {
   });
 
   describe("Close On Click Modal Attribute", () => {
-    it("默认 closeOnClickModal 应该是 true", async () => {
+    it("默认 closeOnClickModal 应该是 true", () => {
       const drawer = document.createElement("ea-drawer");
       container.appendChild(drawer);
-      await waitForRender();
 
       expect(drawer.closeOnClickModal).toBe(true);
     });
 
-    it("设置 closeOnClickModal 为 false 应该禁用点击遮罩关闭", async () => {
+    it("设置 closeOnClickModal 为 false 应该禁用点击遮罩关闭", () => {
       const drawer = document.createElement("ea-drawer");
       container.appendChild(drawer);
-      await waitForRender();
       drawer.closeOnClickModal = false;
-      await waitForRender();
 
       expect(drawer.closeOnClickModal).toBe(false);
     });
@@ -594,20 +568,17 @@ describe("EaDrawer Component", () => {
   });
 
   describe("Close On Press Escape Attribute", () => {
-    it("默认 closeOnPressEscape 应该是 true", async () => {
+    it("默认 closeOnPressEscape 应该是 true", () => {
       const drawer = document.createElement("ea-drawer");
       container.appendChild(drawer);
-      await waitForRender();
 
       expect(drawer.closeOnPressEscape).toBe(true);
     });
 
-    it("设置 closeOnPressEscape 为 false 应该禁用 ESC 关闭", async () => {
+    it("设置 closeOnPressEscape 为 false 应该禁用 ESC 关闭", () => {
       const drawer = document.createElement("ea-drawer");
       container.appendChild(drawer);
-      await waitForRender();
       drawer.closeOnPressEscape = false;
-      await waitForRender();
 
       expect(drawer.closeOnPressEscape).toBe(false);
     });
@@ -940,27 +911,25 @@ describe("EaDrawer Component", () => {
       expect(headingEl.textContent).toBe("");
     });
 
-    it("自定义 title slot 应该生效", async () => {
+    it("自定义 title slot 应该生效", () => {
       const drawer = document.createElement("ea-drawer");
       drawer.innerHTML = `
         <div slot="title">Custom Title Content</div>
         <span>Body content</span>
       `;
       container.appendChild(drawer);
-      await waitForRender();
 
       const titleSlot = drawer.shadowRoot.querySelector('slot[name="title"]');
       expect(titleSlot).toBeTruthy();
     });
 
-    it("自定义 footer slot 应该生效", async () => {
+    it("自定义 footer slot 应该生效", () => {
       const drawer = document.createElement("ea-drawer");
       drawer.innerHTML = `
         <span>Body content</span>
         <div slot="footer">Custom Footer Content</div>
       `;
       container.appendChild(drawer);
-      await waitForRender();
 
       const footerSlot = drawer.shadowRoot.querySelector('slot[name="footer"]');
       expect(footerSlot).toBeTruthy();
@@ -1005,7 +974,6 @@ describe("EaDrawer Component", () => {
     it("withHeader 为 false 且 showClose 为 true 时的组合应该正确", async () => {
       const drawer = document.createElement("ea-drawer");
       container.appendChild(drawer);
-      await waitForRender();
       drawer.withHeader = false;
       await waitForRender();
 
@@ -1017,7 +985,6 @@ describe("EaDrawer Component", () => {
     it("withHeader 为 false 且 showClose 为 false 时的组合应该正确", async () => {
       const drawer = document.createElement("ea-drawer");
       container.appendChild(drawer);
-      await waitForRender();
       drawer.withHeader = false;
       drawer.showClose = false;
       await waitForRender();
@@ -1039,20 +1006,18 @@ describe("EaDrawer Component", () => {
       expect(drawer.getAttribute("role")).toBe("dialog");
     });
 
-    it("组件断开连接后应该清理资源", async () => {
+    it("组件断开连接后应该清理资源", () => {
       const drawer = document.createElement("ea-drawer");
       container.appendChild(drawer);
-      await waitForRender();
 
       drawer.remove();
 
       expect(drawer.isConnected).toBe(false);
     });
 
-    it("应该继承 EaOverlay 的功能", async () => {
+    it("应该继承 EaOverlay 的功能", () => {
       const drawer = document.createElement("ea-drawer");
       container.appendChild(drawer);
-      await waitForRender();
 
       expect(typeof drawer.show).toBe("function");
       expect(typeof drawer.hide).toBe("function");
@@ -1071,10 +1036,9 @@ describe("EaDrawer Component", () => {
       expect(drawer.appendTo).toBe("body");
     });
 
-    it("应该继承 EaOverlay 的 CSS 变量属性", async () => {
+    it("应该继承 EaOverlay 的 CSS 变量属性", () => {
       const drawer = document.createElement("ea-drawer");
       container.appendChild(drawer);
-      await waitForRender();
 
       expect(drawer.zIndex).toBe("");
       expect(drawer.backgroundColor).toBe("");

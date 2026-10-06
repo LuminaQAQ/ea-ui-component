@@ -39,11 +39,9 @@ describe("EaTimePicker Component", () => {
   });
 
   describe("Basic Rendering", () => {
-    it("应该正确渲染组件", async () => {
+    it("应该正确渲染组件", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       expect(timePicker.shadowRoot).toBeTruthy();
       expect(
@@ -51,55 +49,45 @@ describe("EaTimePicker Component", () => {
       ).toBeTruthy();
     });
 
-    it("应该包含 container CSS Part", async () => {
+    it("应该包含 container CSS Part", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       expect(
         timePicker.shadowRoot.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
-    it("应该包含 input CSS Part", async () => {
+    it("应该包含 input CSS Part", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       expect(
         timePicker.shadowRoot.querySelector('[part="input"]')
       ).toBeTruthy();
     });
 
-    it("应该包含 dropdown CSS Part", async () => {
+    it("应该包含 dropdown CSS Part", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       expect(
         timePicker.shadowRoot.querySelector('[part="dropdown"]')
       ).toBeTruthy();
     });
 
-    it("应该包含 dropdown-inner-wrap CSS Part", async () => {
+    it("应该包含 dropdown-inner-wrap CSS Part", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       expect(
         timePicker.shadowRoot.querySelector('[part="dropdown-inner-wrap"]')
       ).toBeTruthy();
     });
 
-    it("应该包含三个 dropdown-time CSS Part (时/分/秒)", async () => {
+    it("应该包含三个 dropdown-time CSS Part (时/分/秒)", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       const timeLists = timePicker.shadowRoot.querySelectorAll(
         '[part="dropdown-time"]'
@@ -107,11 +95,9 @@ describe("EaTimePicker Component", () => {
       expect(timeLists.length).toBe(3);
     });
 
-    it("应该包含 dropdown-item CSS Part", async () => {
+    it("应该包含 dropdown-item CSS Part", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       const items = timePicker.shadowRoot.querySelectorAll(
         '[part="dropdown-item"]'
@@ -119,11 +105,9 @@ describe("EaTimePicker Component", () => {
       expect(items.length).toBeGreaterThan(0);
     });
 
-    it("小时列表应该有 24 项 (0-23)", async () => {
+    it("小时列表应该有 24 项 (0-23)", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       const hourWrap = timePicker.shadowRoot.querySelector(
         ".ea-time-picker__dropdown-inner--hour"
@@ -132,11 +116,9 @@ describe("EaTimePicker Component", () => {
       expect(items.length).toBe(24);
     });
 
-    it("分钟列表应该有 60 项 (0-59)", async () => {
+    it("分钟列表应该有 60 项 (0-59)", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       const minuteWrap = timePicker.shadowRoot.querySelector(
         ".ea-time-picker__dropdown-inner--minute"
@@ -145,11 +127,9 @@ describe("EaTimePicker Component", () => {
       expect(items.length).toBe(60);
     });
 
-    it("秒列表应该有 60 项 (0-59)", async () => {
+    it("秒列表应该有 60 项 (0-59)", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       const secondWrap = timePicker.shadowRoot.querySelector(
         ".ea-time-picker__dropdown-inner--second"
@@ -324,11 +304,9 @@ describe("EaTimePicker Component", () => {
       expect(containerEl.classList.contains("is-open")).toBe(false);
     });
 
-    it("dropdown 元素应该有 ea-time-picker__dropdown 类名", async () => {
+    it("dropdown 元素应该有 ea-time-picker__dropdown 类名", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       const dropdown = timePicker.shadowRoot.querySelector(
         ".ea-time-picker__dropdown"
@@ -336,11 +314,9 @@ describe("EaTimePicker Component", () => {
       expect(dropdown).toBeTruthy();
     });
 
-    it("dropdown-item 元素应该有 ea-time-picker__dropdown-item 类名", async () => {
+    it("dropdown-item 元素应该有 ea-time-picker__dropdown-item 类名", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       const firstItem = timePicker.shadowRoot.querySelector(
         ".ea-time-picker__dropdown-item"
@@ -350,11 +326,9 @@ describe("EaTimePicker Component", () => {
   });
 
   describe("Value Attribute", () => {
-    it("默认 value 应该是空字符串", async () => {
+    it("默认 value 应该是空字符串", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       expect(timePicker.value).toBe("");
     });
@@ -366,17 +340,13 @@ describe("EaTimePicker Component", () => {
       await waitForRender();
 
       timePicker.value = "08:30:00";
-      await waitForRender();
-
       expect(timePicker.value).toBe("08:30:00");
     });
 
-    it("应该支持通过 HTML 属性设置 value", async () => {
+    it("应该支持通过 HTML 属性设置 value", () => {
       const timePicker = document.createElement("ea-time-picker");
       timePicker.setAttribute("value", "23:59:59");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       expect(timePicker.value).toBe("23:59:59");
     });
@@ -389,8 +359,6 @@ describe("EaTimePicker Component", () => {
       await waitForRender();
 
       timePicker.value = "16:30:00";
-      await waitForRender();
-
       expect(timePicker.value).toBe("16:30:00");
     });
 
@@ -402,8 +370,6 @@ describe("EaTimePicker Component", () => {
       await waitForRender();
 
       timePicker.value = "";
-      await waitForRender();
-
       expect(timePicker.value).toBe("");
     });
 
@@ -420,21 +386,17 @@ describe("EaTimePicker Component", () => {
   });
 
   describe("Disabled Attribute", () => {
-    it("默认 disabled 应该是 false", async () => {
+    it("默认 disabled 应该是 false", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       expect(timePicker.disabled).toBe(false);
     });
 
-    it("设置 disabled 应该禁用组件", async () => {
+    it("设置 disabled 应该禁用组件", () => {
       const timePicker = document.createElement("ea-time-picker");
       timePicker.setAttribute("disabled", "");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       expect(timePicker.disabled).toBe(true);
     });
@@ -446,8 +408,6 @@ describe("EaTimePicker Component", () => {
       await waitForRender();
 
       timePicker.disabled = true;
-      await waitForRender();
-
       expect(timePicker.disabled).toBe(true);
     });
 
@@ -461,8 +421,6 @@ describe("EaTimePicker Component", () => {
       expect(timePicker.disabled).toBe(true);
 
       timePicker.removeAttribute("disabled");
-      await waitForRender();
-
       expect(timePicker.disabled).toBe(false);
     });
 
@@ -483,54 +441,42 @@ describe("EaTimePicker Component", () => {
   });
 
   describe("Size Attribute", () => {
-    it("默认 size 应该是 default", async () => {
+    it("默认 size 应该是 default", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       expect(timePicker.size).toBe("default");
     });
 
-    it("应该支持 size='small'", async () => {
+    it("应该支持 size='small'", () => {
       const timePicker = document.createElement("ea-time-picker");
       timePicker.setAttribute("size", "small");
       container.appendChild(timePicker);
 
-      await waitForRender();
-
       expect(timePicker.size).toBe("small");
     });
 
-    it("应该支持 size='default'", async () => {
+    it("应该支持 size='default'", () => {
       const timePicker = document.createElement("ea-time-picker");
       timePicker.setAttribute("size", "default");
       container.appendChild(timePicker);
 
-      await waitForRender();
-
       expect(timePicker.size).toBe("default");
     });
 
-    it("应该支持 size='large'", async () => {
+    it("应该支持 size='large'", () => {
       const timePicker = document.createElement("ea-time-picker");
       timePicker.setAttribute("size", "large");
       container.appendChild(timePicker);
 
-      await waitForRender();
-
       expect(timePicker.size).toBe("large");
     });
 
-    it("通过 JS 设置 size 应该生效", async () => {
+    it("通过 JS 设置 size 应该生效", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      await waitForRender();
-
       timePicker.size = "large";
-      await waitForRender();
-
       expect(timePicker.size).toBe("large");
     });
 
@@ -547,44 +493,34 @@ describe("EaTimePicker Component", () => {
   });
 
   describe("Align Attribute", () => {
-    it("默认 align 应该是 left", async () => {
+    it("默认 align 应该是 left", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       expect(timePicker.align).toBe("left");
     });
 
-    it("应该支持 align='center'", async () => {
+    it("应该支持 align='center'", () => {
       const timePicker = document.createElement("ea-time-picker");
       timePicker.setAttribute("align", "center");
       container.appendChild(timePicker);
 
-      await waitForRender();
-
       expect(timePicker.align).toBe("center");
     });
 
-    it("应该支持 align='right'", async () => {
+    it("应该支持 align='right'", () => {
       const timePicker = document.createElement("ea-time-picker");
       timePicker.setAttribute("align", "right");
       container.appendChild(timePicker);
 
-      await waitForRender();
-
       expect(timePicker.align).toBe("right");
     });
 
-    it("通过 JS 设置 align 应该生效", async () => {
+    it("通过 JS 设置 align 应该生效", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      await waitForRender();
-
       timePicker.align = "right";
-      await waitForRender();
-
       expect(timePicker.align).toBe("right");
     });
 
@@ -605,21 +541,17 @@ describe("EaTimePicker Component", () => {
   });
 
   describe("Width Attribute", () => {
-    it("默认 width 应该是空字符串", async () => {
+    it("默认 width 应该是空字符串", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       expect(timePicker.width).toBe("");
     });
 
-    it("应该支持 width 属性", async () => {
+    it("应该支持 width 属性", () => {
       const timePicker = document.createElement("ea-time-picker");
       timePicker.setAttribute("width", "200px");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       expect(timePicker.width).toBe("200px");
     });
@@ -640,21 +572,17 @@ describe("EaTimePicker Component", () => {
   });
 
   describe("Label Attribute", () => {
-    it("默认 label 应该是空字符串", async () => {
+    it("默认 label 应该是空字符串", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       expect(timePicker.label).toBe("");
     });
 
-    it("应该支持 label 属性", async () => {
+    it("应该支持 label 属性", () => {
       const timePicker = document.createElement("ea-time-picker");
       timePicker.setAttribute("label", "Time Label");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       expect(timePicker.label).toBe("Time Label");
     });
@@ -672,34 +600,26 @@ describe("EaTimePicker Component", () => {
   });
 
   describe("Placeholder Attribute", () => {
-    it("默认 placeholder 应该是 Select time", async () => {
+    it("默认 placeholder 应该是 Select time", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       expect(timePicker.placeholder).toBe("Select time");
     });
 
-    it("应该支持通过 HTML 属性设置 placeholder", async () => {
+    it("应该支持通过 HTML 属性设置 placeholder", () => {
       const timePicker = document.createElement("ea-time-picker");
       timePicker.setAttribute("placeholder", "Custom placeholder");
       container.appendChild(timePicker);
 
-      await waitForRender();
-
       expect(timePicker.placeholder).toBe("Custom placeholder");
     });
 
-    it("通过 JS 设置 placeholder 应该生效", async () => {
+    it("通过 JS 设置 placeholder 应该生效", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      await waitForRender();
-
       timePicker.placeholder = "New placeholder";
-      await waitForRender();
-
       expect(timePicker.placeholder).toBe("New placeholder");
     });
 
@@ -716,40 +636,32 @@ describe("EaTimePicker Component", () => {
   });
 
   describe("Limit Range Attributes", () => {
-    it("默认 limit-range-start 应该是 00:00:00", async () => {
+    it("默认 limit-range-start 应该是 00:00:00", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       expect(timePicker.limitRangeStart).toBe("00:00:00");
     });
 
-    it("默认 limit-range-end 应该是 23:59:59", async () => {
+    it("默认 limit-range-end 应该是 23:59:59", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       expect(timePicker.limitRangeEnd).toBe("23:59:59");
     });
 
-    it("应该支持通过 HTML 属性设置 limit-range-start", async () => {
+    it("应该支持通过 HTML 属性设置 limit-range-start", () => {
       const timePicker = document.createElement("ea-time-picker");
       timePicker.setAttribute("limit-range-start", "09:00:00");
       container.appendChild(timePicker);
 
-      await waitForRender();
-
       expect(timePicker.limitRangeStart).toBe("09:00:00");
     });
 
-    it("应该支持通过 HTML 属性设置 limit-range-end", async () => {
+    it("应该支持通过 HTML 属性设置 limit-range-end", () => {
       const timePicker = document.createElement("ea-time-picker");
       timePicker.setAttribute("limit-range-end", "18:00:00");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       expect(timePicker.limitRangeEnd).toBe("18:00:00");
     });
@@ -776,13 +688,11 @@ describe("EaTimePicker Component", () => {
       expect(hour19.classList.contains("is-disabled")).toBe(true);
     });
 
-    it("同时支持 limit-range-start 和 limit-range-end", async () => {
+    it("同时支持 limit-range-start 和 limit-range-end", () => {
       const timePicker = document.createElement("ea-time-picker");
       timePicker.setAttribute("limit-range-start", "09:00:00");
       timePicker.setAttribute("limit-range-end", "18:00:00");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       expect(timePicker.limitRangeStart).toBe("09:00:00");
       expect(timePicker.limitRangeEnd).toBe("18:00:00");
@@ -791,8 +701,6 @@ describe("EaTimePicker Component", () => {
     it("动态修改 limitRangeStart 应该重新应用范围限制", async () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       const hourWrap = timePicker.shadowRoot.querySelector(
         ".ea-time-picker__dropdown-inner--hour"
@@ -811,8 +719,6 @@ describe("EaTimePicker Component", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      await waitForRender();
-
       const hourWrap = timePicker.shadowRoot.querySelector(
         ".ea-time-picker__dropdown-inner--hour"
       );
@@ -829,8 +735,6 @@ describe("EaTimePicker Component", () => {
     it("动态修改 limitRangeStart 和 limitRangeEnd 应该同时生效", async () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       timePicker.limitRangeStart = "09:00:00";
       timePicker.limitRangeEnd = "18:00:00";
@@ -896,34 +800,26 @@ describe("EaTimePicker Component", () => {
   });
 
   describe("Required Attribute", () => {
-    it("默认 required 应该是 false", async () => {
+    it("默认 required 应该是 false", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       expect(timePicker.required).toBe(false);
     });
 
-    it("设置 required 应该启用必填验证", async () => {
+    it("设置 required 应该启用必填验证", () => {
       const timePicker = document.createElement("ea-time-picker");
       timePicker.setAttribute("required", "");
       container.appendChild(timePicker);
 
-      await waitForRender();
-
       expect(timePicker.required).toBe(true);
     });
 
-    it("通过 JS 设置 required=true 应该生效", async () => {
+    it("通过 JS 设置 required=true 应该生效", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      await waitForRender();
-
       timePicker.required = true;
-      await waitForRender();
-
       expect(timePicker.required).toBe(true);
     });
 
@@ -938,51 +834,41 @@ describe("EaTimePicker Component", () => {
       expect(input.hasAttribute("required")).toBe(true);
     });
 
-    it("非必填且无值时 checkValidity 应该返回 true", async () => {
+    it("非必填且无值时 checkValidity 应该返回 true", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       expect(timePicker.checkValidity()).toBe(true);
     });
 
-    it("非必填且有值时 checkValidity 应该返回 true", async () => {
+    it("非必填且有值时 checkValidity 应该返回 true", () => {
       const timePicker = document.createElement("ea-time-picker");
       timePicker.setAttribute("value", "12:00:00");
       container.appendChild(timePicker);
 
-      await waitForRender();
-
       expect(timePicker.checkValidity()).toBe(true);
     });
 
-    it("必填且有值时 checkValidity 应该返回 true", async () => {
+    it("必填且有值时 checkValidity 应该返回 true", () => {
       const timePicker = document.createElement("ea-time-picker");
       timePicker.setAttribute("required", "");
       timePicker.setAttribute("value", "12:00:00");
       container.appendChild(timePicker);
 
-      await waitForRender();
-
       expect(timePicker.checkValidity()).toBe(true);
     });
 
-    it("必填且无值时 checkValidity 应该返回 false", async () => {
+    it("必填且无值时 checkValidity 应该返回 false", () => {
       const timePicker = document.createElement("ea-time-picker");
       timePicker.setAttribute("required", "");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       expect(timePicker.checkValidity()).toBe(false);
     });
 
-    it("reportValidity 不应该抛出异常", async () => {
+    it("reportValidity 不应该抛出异常", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       expect(() => timePicker.reportValidity()).not.toThrow();
     });
@@ -1377,17 +1263,15 @@ describe("EaTimePicker Component", () => {
   });
 
   describe("Form Association", () => {
-    it("validationTarget 应该返回内部 ea-input", async () => {
+    it("validationTarget 应该返回内部 ea-input", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       const input = timePicker.shadowRoot.querySelector("ea-input");
       expect(timePicker.validationTarget).toBe(input);
     });
 
-    it("form.reset() 不应该抛出异常", async () => {
+    it("form.reset() 不应该抛出异常", () => {
       const form = document.createElement("form");
       const timePicker = document.createElement("ea-time-picker");
       timePicker.setAttribute("name", "time");
@@ -1395,55 +1279,45 @@ describe("EaTimePicker Component", () => {
       form.appendChild(timePicker);
       container.appendChild(form);
 
-      await waitForRender();
-
       expect(() => form.reset()).not.toThrow();
     });
 
-    it("name 属性应该正确设置", async () => {
+    it("name 属性应该正确设置", () => {
       const timePicker = document.createElement("ea-time-picker");
       timePicker.setAttribute("name", "timeField");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       expect(timePicker.name).toBe("timeField");
     });
   });
 
   describe("Combined Tests", () => {
-    it("应该同时支持 value 和 label", async () => {
+    it("应该同时支持 value 和 label", () => {
       const timePicker = document.createElement("ea-time-picker");
       timePicker.setAttribute("value", "08:00:00");
       timePicker.setAttribute("label", "Select time");
       container.appendChild(timePicker);
 
-      await waitForRender();
-
       expect(timePicker.value).toBe("08:00:00");
       expect(timePicker.label).toBe("Select time");
     });
 
-    it("应该同时支持 disabled 和 size", async () => {
+    it("应该同时支持 disabled 和 size", () => {
       const timePicker = document.createElement("ea-time-picker");
       timePicker.setAttribute("disabled", "");
       timePicker.setAttribute("size", "large");
       container.appendChild(timePicker);
 
-      await waitForRender();
-
       expect(timePicker.disabled).toBe(true);
       expect(timePicker.size).toBe("large");
     });
 
-    it("应该同时支持 limit-range-start/limit-range-end 和 value", async () => {
+    it("应该同时支持 limit-range-start/limit-range-end 和 value", () => {
       const timePicker = document.createElement("ea-time-picker");
       timePicker.setAttribute("limit-range-start", "09:00:00");
       timePicker.setAttribute("limit-range-end", "18:00:00");
       timePicker.setAttribute("value", "12:30:00");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       expect(timePicker.value).toBe("12:30:00");
       expect(timePicker.limitRangeStart).toBe("09:00:00");
@@ -1466,7 +1340,7 @@ describe("EaTimePicker Component", () => {
   });
 
   describe("Edge Cases", () => {
-    it("多个 time-picker 应该独立工作", async () => {
+    it("多个 time-picker 应该独立工作", () => {
       const picker1 = document.createElement("ea-time-picker");
       picker1.setAttribute("value", "08:00:00");
 
@@ -1475,8 +1349,6 @@ describe("EaTimePicker Component", () => {
 
       container.appendChild(picker1);
       container.appendChild(picker2);
-
-      await waitForRender();
 
       expect(picker1.value).toBe("08:00:00");
       expect(picker2.value).toBe("16:00:00");
@@ -1489,8 +1361,6 @@ describe("EaTimePicker Component", () => {
       await waitForRender(50);
 
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       expect(timePicker.shadowRoot).toBeTruthy();
       expect(timePicker.value).toBe("12:30:00");
@@ -1506,16 +1376,12 @@ describe("EaTimePicker Component", () => {
       timePicker.remove();
       container.appendChild(timePicker);
 
-      await waitForRender();
-
       expect(timePicker.value).toBe("18:30:45");
     });
 
-    it("无效的 limit-range 值不会导致崩溃", async () => {
+    it("无效的 limit-range 值不会导致崩溃", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       expect(() => {
         timePicker.limitRangeStart = "invalid";
@@ -1551,22 +1417,18 @@ describe("EaTimePicker Component", () => {
   });
 
   describe("Lifecycle", () => {
-    it("组件连接后应该正确初始化", async () => {
+    it("组件连接后应该正确初始化", () => {
       const timePicker = document.createElement("ea-time-picker");
       timePicker.setAttribute("value", "12:30:00");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       expect(timePicker.shadowRoot).toBeTruthy();
       expect(timePicker.value).toBe("12:30:00");
     });
 
-    it("组件断开连接后应该正常移除", async () => {
+    it("组件断开连接后应该正常移除", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       timePicker.remove();
 
@@ -1654,11 +1516,9 @@ describe("EaTimePicker Component", () => {
       expect(hour08.classList.contains("is-active")).toBe(true);
     });
 
-    it("未设置 value 时不应该有 is-active 项", async () => {
+    it("未设置 value 时不应该有 is-active 项", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
-
-      await waitForRender();
 
       const items = timePicker.shadowRoot.querySelectorAll(
         ".ea-time-picker__dropdown-item.is-active"
@@ -1676,7 +1536,9 @@ describe("EaTimePicker Component", () => {
         await waitForRender();
         el.handleOpen();
         await waitForRender();
-        el.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+        el.dispatchEvent(
+          new KeyboardEvent("keydown", { key: "Escape", bubbles: true })
+        );
         await waitForRender();
         expect(el._container.classList.contains("is-open")).toBe(false);
       });
@@ -1687,7 +1549,13 @@ describe("EaTimePicker Component", () => {
       el.setAttribute("label", "Time");
       container.appendChild(el);
       await waitForRender();
-      const results = await runAxe(el, { rules: { list: { enabled: false }, "aria-required-children": { enabled: false }, "aria-required-parent": { enabled: false } } });
+      const results = await runAxe(el, {
+        rules: {
+          list: { enabled: false },
+          "aria-required-children": { enabled: false },
+          "aria-required-parent": { enabled: false },
+        },
+      });
       assertNoA11yViolations(results);
     });
 

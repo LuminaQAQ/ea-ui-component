@@ -17,65 +17,53 @@ describe("EaSkeleton Component", () => {
   });
 
   describe("EaSkeleton Basic Functionality", () => {
-    it("应该正确渲染 ea-skeleton 组件", async () => {
+    it("应该正确渲染 ea-skeleton 组件", () => {
       const skeleton = document.createElement("ea-skeleton");
       container.appendChild(skeleton);
-
-      await waitForRender();
 
       expect(skeleton).toBeDefined();
       expect(skeleton.shadowRoot).toBeDefined();
     });
 
-    it("应该包含 container CSS Part", async () => {
+    it("应该包含 container CSS Part", () => {
       const skeleton = document.createElement("ea-skeleton");
       container.appendChild(skeleton);
-
-      await waitForRender();
 
       expect(
         skeleton.shadowRoot.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
-    it("应该包含 default-slot CSS Part", async () => {
+    it("应该包含 default-slot CSS Part", () => {
       const skeleton = document.createElement("ea-skeleton");
       container.appendChild(skeleton);
-
-      await waitForRender();
 
       expect(
         skeleton.shadowRoot.querySelector('[part="default-slot"]')
       ).toBeTruthy();
     });
 
-    it("应该包含 template-slot CSS Part", async () => {
+    it("应该包含 template-slot CSS Part", () => {
       const skeleton = document.createElement("ea-skeleton");
       container.appendChild(skeleton);
-
-      await waitForRender();
 
       expect(
         skeleton.shadowRoot.querySelector('[part="template-slot"]')
       ).toBeTruthy();
     });
 
-    it("应该包含 default 插槽", async () => {
+    it("应该包含 default 插槽", () => {
       const skeleton = document.createElement("ea-skeleton");
       container.appendChild(skeleton);
-
-      await waitForRender();
 
       const slot = skeleton.shadowRoot.querySelector(".ea-skeleton__default");
       expect(slot).toBeTruthy();
       expect(slot.tagName.toLowerCase()).toBe("slot");
     });
 
-    it("应该包含 template 插槽", async () => {
+    it("应该包含 template 插槽", () => {
       const skeleton = document.createElement("ea-skeleton");
       container.appendChild(skeleton);
-
-      await waitForRender();
 
       const slot = skeleton.shadowRoot.querySelector(".ea-skeleton__template");
       expect(slot).toBeTruthy();
@@ -96,21 +84,17 @@ describe("EaSkeleton Component", () => {
   });
 
   describe("Loading Property", () => {
-    it("默认 loading 应该是 true", async () => {
+    it("默认 loading 应该是 true", () => {
       const skeleton = document.createElement("ea-skeleton");
       container.appendChild(skeleton);
-
-      await waitForRender();
 
       expect(skeleton.loading).toBe(true);
     });
 
-    it("设置 loading 为 false 应该生效", async () => {
+    it("设置 loading 为 false 应该生效", () => {
       const skeleton = document.createElement("ea-skeleton");
       skeleton.loading = false;
       container.appendChild(skeleton);
-
-      await waitForRender();
 
       expect(skeleton.loading).toBe(false);
     });
@@ -124,8 +108,6 @@ describe("EaSkeleton Component", () => {
 
       skeleton.loading = false;
 
-      await waitForRender();
-
       expect(skeleton.loading).toBe(false);
     });
 
@@ -137,8 +119,6 @@ describe("EaSkeleton Component", () => {
       await waitForRender();
 
       skeleton.loading = true;
-
-      await waitForRender();
 
       expect(skeleton.loading).toBe(true);
     });
@@ -188,80 +168,62 @@ describe("EaSkeleton Component", () => {
       expect(containerEl.classList.contains("is-loading")).toBe(true);
     });
 
-    it("通过 HTML 属性设置 loading 应该生效", async () => {
+    it("通过 HTML 属性设置 loading 应该生效", () => {
       const skeleton = document.createElement("ea-skeleton");
       skeleton.setAttribute("loading", "false");
       container.appendChild(skeleton);
 
-      await waitForRender();
-
       expect(skeleton.loading).toBe(false);
     });
 
-    it("通过 HTML 属性设置 loading='true' 应该生效", async () => {
+    it("通过 HTML 属性设置 loading='true' 应该生效", () => {
       const skeleton = document.createElement("ea-skeleton");
       skeleton.setAttribute("loading", "true");
       container.appendChild(skeleton);
 
-      await waitForRender();
-
       expect(skeleton.loading).toBe(true);
     });
 
-    it("通过 HTML 属性设置空字符串 loading 应该解析为 true", async () => {
+    it("通过 HTML 属性设置空字符串 loading 应该解析为 true", () => {
       const skeleton = document.createElement("ea-skeleton");
       skeleton.setAttribute("loading", "");
       container.appendChild(skeleton);
 
-      await waitForRender();
-
       expect(skeleton.loading).toBe(true);
     });
 
-    it("动态修改 HTML 属性 loading 应该同步到 property", async () => {
+    it("动态修改 HTML 属性 loading 应该同步到 property", () => {
       const skeleton = document.createElement("ea-skeleton");
       container.appendChild(skeleton);
 
-      await waitForRender();
-
       skeleton.setAttribute("loading", "false");
-      await waitForRender();
-
       expect(skeleton.loading).toBe(false);
 
       skeleton.setAttribute("loading", "true");
-      await waitForRender();
-
       expect(skeleton.loading).toBe(true);
     });
   });
 
   describe("Animated Attribute", () => {
-    it("默认 animated 应该是 false", async () => {
+    it("默认 animated 应该是 false", () => {
       const skeleton = document.createElement("ea-skeleton");
       container.appendChild(skeleton);
-
-      await waitForRender();
 
       expect(skeleton.animated).toBe(false);
     });
 
-    it("设置 animated 为 true 应该生效", async () => {
+    it("设置 animated 为 true 应该生效", () => {
       const skeleton = document.createElement("ea-skeleton");
       skeleton.animated = true;
       container.appendChild(skeleton);
 
-      await waitForRender();
-
       expect(skeleton.animated).toBe(true);
     });
 
-    it("通过 HTML 属性设置 animated 应该生效", async () => {
+    it("通过 HTML 属性设置 animated 应该生效", () => {
       const skeleton = document.createElement("ea-skeleton");
       skeleton.setAttribute("animated", "");
       container.appendChild(skeleton);
-
-      await waitForRender();
 
       expect(skeleton.animated).toBe(true);
     });
@@ -278,8 +240,6 @@ describe("EaSkeleton Component", () => {
       expect(skeleton.animated).toBe(true);
 
       skeleton.animated = false;
-      await waitForRender();
-
       expect(skeleton.animated).toBe(false);
     });
 
@@ -333,31 +293,25 @@ describe("EaSkeleton Component", () => {
   });
 
   describe("Rows Attribute", () => {
-    it("默认 rows 应该是 4", async () => {
+    it("默认 rows 应该是 4", () => {
       const skeleton = document.createElement("ea-skeleton");
       container.appendChild(skeleton);
-
-      await waitForRender();
 
       expect(skeleton.rows).toBe(4);
     });
 
-    it("设置 rows 属性应该生效", async () => {
+    it("设置 rows 属性应该生效", () => {
       const skeleton = document.createElement("ea-skeleton");
       skeleton.rows = 6;
       container.appendChild(skeleton);
 
-      await waitForRender();
-
       expect(skeleton.rows).toBe(6);
     });
 
-    it("通过 HTML 属性设置 rows 应该生效", async () => {
+    it("通过 HTML 属性设置 rows 应该生效", () => {
       const skeleton = document.createElement("ea-skeleton");
       skeleton.setAttribute("rows", "8");
       container.appendChild(skeleton);
-
-      await waitForRender();
 
       expect(skeleton.rows).toBe(8);
     });
@@ -413,7 +367,7 @@ describe("EaSkeleton Component", () => {
       expect(items[0].variant).toBe("circle");
     });
 
-    it("应该支持不同的 rows 值", async () => {
+    it("应该支持不同的 rows 值", () => {
       const rows = [1, 2, 4, 6, 8, 10];
 
       for (const row of rows) {
@@ -425,36 +379,30 @@ describe("EaSkeleton Component", () => {
   });
 
   describe("Count Attribute", () => {
-    it("默认 count 应该是 1", async () => {
+    it("默认 count 应该是 1", () => {
       const skeleton = document.createElement("ea-skeleton");
       container.appendChild(skeleton);
-
-      await waitForRender();
 
       expect(skeleton.count).toBe(1);
     });
 
-    it("设置 count 属性应该生效", async () => {
+    it("设置 count 属性应该生效", () => {
       const skeleton = document.createElement("ea-skeleton");
       skeleton.count = 3;
       container.appendChild(skeleton);
 
-      await waitForRender();
-
       expect(skeleton.count).toBe(3);
     });
 
-    it("通过 HTML 属性设置 count 应该生效", async () => {
+    it("通过 HTML 属性设置 count 应该生效", () => {
       const skeleton = document.createElement("ea-skeleton");
       skeleton.setAttribute("count", "5");
       container.appendChild(skeleton);
 
-      await waitForRender();
-
       expect(skeleton.count).toBe(5);
     });
 
-    it("应该支持不同的 count 值", async () => {
+    it("应该支持不同的 count 值", () => {
       const counts = [1, 2, 3, 5, 10];
 
       for (const count of counts) {
@@ -466,60 +414,48 @@ describe("EaSkeleton Component", () => {
   });
 
   describe("Throttle Attributes", () => {
-    it("默认 throttleLeading 应该是 0", async () => {
+    it("默认 throttleLeading 应该是 0", () => {
       const skeleton = document.createElement("ea-skeleton");
       container.appendChild(skeleton);
-
-      await waitForRender();
 
       expect(skeleton.throttleLeading).toBe(0);
     });
 
-    it("默认 throttleTrailing 应该是 0", async () => {
+    it("默认 throttleTrailing 应该是 0", () => {
       const skeleton = document.createElement("ea-skeleton");
       container.appendChild(skeleton);
-
-      await waitForRender();
 
       expect(skeleton.throttleTrailing).toBe(0);
     });
 
-    it("应该支持 throttleLeading 属性", async () => {
+    it("应该支持 throttleLeading 属性", () => {
       const skeleton = document.createElement("ea-skeleton");
       skeleton.setAttribute("throttle-leading", "500");
       container.appendChild(skeleton);
 
-      await waitForRender();
-
       expect(skeleton.throttleLeading).toBe(500);
     });
 
-    it("应该支持 throttleTrailing 属性", async () => {
+    it("应该支持 throttleTrailing 属性", () => {
       const skeleton = document.createElement("ea-skeleton");
       skeleton.setAttribute("throttle-trailing", "500");
       container.appendChild(skeleton);
 
-      await waitForRender();
-
       expect(skeleton.throttleTrailing).toBe(500);
     });
 
-    it("通过 JS 属性设置 throttleLeading 应该生效", async () => {
+    it("通过 JS 属性设置 throttleLeading 应该生效", () => {
       const skeleton = document.createElement("ea-skeleton");
       skeleton.throttleLeading = 300;
       container.appendChild(skeleton);
 
-      await waitForRender();
-
       expect(skeleton.throttleLeading).toBe(300);
     });
 
-    it("通过 JS 属性设置 throttleTrailing 应该生效", async () => {
+    it("通过 JS 属性设置 throttleTrailing 应该生效", () => {
       const skeleton = document.createElement("ea-skeleton");
       skeleton.throttleTrailing = 300;
       container.appendChild(skeleton);
-
-      await waitForRender();
 
       expect(skeleton.throttleTrailing).toBe(300);
     });
@@ -603,21 +539,17 @@ describe("EaSkeleton Component", () => {
   });
 
   describe("EaSkeletonItem Basic Functionality", () => {
-    it("应该正确渲染 ea-skeleton-item 组件", async () => {
+    it("应该正确渲染 ea-skeleton-item 组件", () => {
       const item = document.createElement("ea-skeleton-item");
       container.appendChild(item);
-
-      await waitForRender();
 
       expect(item).toBeDefined();
       expect(item.shadowRoot).toBeDefined();
     });
 
-    it("应该包含 container CSS Part", async () => {
+    it("应该包含 container CSS Part", () => {
       const item = document.createElement("ea-skeleton-item");
       container.appendChild(item);
-
-      await waitForRender();
 
       expect(item.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
@@ -634,91 +566,73 @@ describe("EaSkeleton Component", () => {
   });
 
   describe("EaSkeletonItem Variant Attribute", () => {
-    it("默认 variant 应该是 p", async () => {
+    it("默认 variant 应该是 p", () => {
       const item = document.createElement("ea-skeleton-item");
       container.appendChild(item);
-
-      await waitForRender();
 
       expect(item.variant).toBe("p");
     });
 
-    it("应该支持 variant='text'", async () => {
+    it("应该支持 variant='text'", () => {
       const item = document.createElement("ea-skeleton-item");
       item.variant = "text";
       container.appendChild(item);
 
-      await waitForRender();
-
       expect(item.variant).toBe("text");
     });
 
-    it("应该支持 variant='h1'", async () => {
+    it("应该支持 variant='h1'", () => {
       const item = document.createElement("ea-skeleton-item");
       item.variant = "h1";
       container.appendChild(item);
 
-      await waitForRender();
-
       expect(item.variant).toBe("h1");
     });
 
-    it("应该支持 variant='h3'", async () => {
+    it("应该支持 variant='h3'", () => {
       const item = document.createElement("ea-skeleton-item");
       item.variant = "h3";
       container.appendChild(item);
 
-      await waitForRender();
-
       expect(item.variant).toBe("h3");
     });
 
-    it("应该支持 variant='caption'", async () => {
+    it("应该支持 variant='caption'", () => {
       const item = document.createElement("ea-skeleton-item");
       item.variant = "caption";
       container.appendChild(item);
 
-      await waitForRender();
-
       expect(item.variant).toBe("caption");
     });
 
-    it("应该支持 variant='button'", async () => {
+    it("应该支持 variant='button'", () => {
       const item = document.createElement("ea-skeleton-item");
       item.variant = "button";
       container.appendChild(item);
 
-      await waitForRender();
-
       expect(item.variant).toBe("button");
     });
 
-    it("应该支持 variant='image'", async () => {
+    it("应该支持 variant='image'", () => {
       const item = document.createElement("ea-skeleton-item");
       item.variant = "image";
       container.appendChild(item);
 
-      await waitForRender();
-
       expect(item.variant).toBe("image");
     });
 
-    it("应该支持 variant='circle'", async () => {
+    it("应该支持 variant='circle'", () => {
       const item = document.createElement("ea-skeleton-item");
       item.variant = "circle";
       container.appendChild(item);
 
-      await waitForRender();
-
       expect(item.variant).toBe("circle");
     });
 
-    it("应该支持 variant='rect'", async () => {
+    it("应该支持 variant='rect'", () => {
       const item = document.createElement("ea-skeleton-item");
       item.variant = "rect";
       container.appendChild(item);
-
-      await waitForRender();
 
       expect(item.variant).toBe("rect");
     });
@@ -816,12 +730,10 @@ describe("EaSkeleton Component", () => {
       expect(containerEl.querySelector("svg")).toBeNull();
     });
 
-    it("通过 HTML 属性设置 variant 应该生效", async () => {
+    it("通过 HTML 属性设置 variant 应该生效", () => {
       const item = document.createElement("ea-skeleton-item");
       item.setAttribute("variant", "circle");
       container.appendChild(item);
-
-      await waitForRender();
 
       expect(item.variant).toBe("circle");
     });
@@ -858,31 +770,25 @@ describe("EaSkeleton Component", () => {
   });
 
   describe("EaSkeletonItem Animated Attribute", () => {
-    it("默认 animated 应该是 false", async () => {
+    it("默认 animated 应该是 false", () => {
       const item = document.createElement("ea-skeleton-item");
       container.appendChild(item);
-
-      await waitForRender();
 
       expect(item.animated).toBe(false);
     });
 
-    it("设置 animated 属性应该启用动画", async () => {
+    it("设置 animated 属性应该启用动画", () => {
       const item = document.createElement("ea-skeleton-item");
       item.animated = true;
       container.appendChild(item);
 
-      await waitForRender();
-
       expect(item.animated).toBe(true);
     });
 
-    it("通过 HTML 属性设置 animated 应该生效", async () => {
+    it("通过 HTML 属性设置 animated 应该生效", () => {
       const item = document.createElement("ea-skeleton-item");
       item.setAttribute("animated", "");
       container.appendChild(item);
-
-      await waitForRender();
 
       expect(item.animated).toBe(true);
     });
@@ -1093,33 +999,27 @@ describe("EaSkeleton Component", () => {
   });
 
   describe("Edge Cases", () => {
-    it("空 skeleton 应该正常渲染", async () => {
+    it("空 skeleton 应该正常渲染", () => {
       const skeleton = document.createElement("ea-skeleton");
       container.appendChild(skeleton);
-
-      await waitForRender();
 
       expect(
         skeleton.shadowRoot.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
-    it("rows=0 应该正确处理", async () => {
+    it("rows=0 应该正确处理", () => {
       const skeleton = document.createElement("ea-skeleton");
       skeleton.rows = 0;
       container.appendChild(skeleton);
 
-      await waitForRender();
-
       expect(skeleton.rows).toBe(0);
     });
 
-    it("count=0 应该正确处理", async () => {
+    it("count=0 应该正确处理", () => {
       const skeleton = document.createElement("ea-skeleton");
       skeleton.count = 0;
       container.appendChild(skeleton);
-
-      await waitForRender();
 
       expect(skeleton.count).toBe(0);
     });
@@ -1135,16 +1035,12 @@ describe("EaSkeleton Component", () => {
       skeleton.loading = false;
       skeleton.loading = true;
 
-      await waitForRender();
-
       expect(skeleton.loading).toBe(true);
     });
 
-    it("skeleton-item 不设置任何属性应该使用默认值", async () => {
+    it("skeleton-item 不设置任何属性应该使用默认值", () => {
       const item = document.createElement("ea-skeleton-item");
       container.appendChild(item);
-
-      await waitForRender();
 
       expect(item.variant).toBe("p");
       expect(item.animated).toBe(false);
@@ -1177,12 +1073,10 @@ describe("EaSkeleton Component", () => {
   });
 
   describe("Lifecycle", () => {
-    it("skeleton 组件连接后应该正确初始化", async () => {
+    it("skeleton 组件连接后应该正确初始化", () => {
       const skeleton = document.createElement("ea-skeleton");
       skeleton.rows = 3;
       container.appendChild(skeleton);
-
-      await waitForRender();
 
       expect(
         skeleton.shadowRoot.querySelector('[part="container"]')
@@ -1208,8 +1102,6 @@ describe("EaSkeleton Component", () => {
 
       skeleton.loading = false;
 
-      await waitForRender();
-
       expect(skeleton.loading).toBe(false);
     });
 
@@ -1220,8 +1112,6 @@ describe("EaSkeleton Component", () => {
       await waitForRender();
 
       skeleton.animated = true;
-
-      await waitForRender();
 
       expect(skeleton.animated).toBe(true);
     });
@@ -1235,8 +1125,6 @@ describe("EaSkeleton Component", () => {
 
       skeleton.rows = 6;
 
-      await waitForRender();
-
       expect(skeleton.rows).toBe(6);
     });
 
@@ -1249,8 +1137,6 @@ describe("EaSkeleton Component", () => {
 
       skeleton.count = 5;
 
-      await waitForRender();
-
       expect(skeleton.count).toBe(5);
     });
 
@@ -1262,8 +1148,6 @@ describe("EaSkeleton Component", () => {
       await waitForRender();
 
       item.variant = "h1";
-
-      await waitForRender();
 
       expect(item.variant).toBe("h1");
     });
@@ -1286,8 +1170,6 @@ describe("EaSkeleton Component", () => {
 
       skeleton.remove();
       container.appendChild(skeleton);
-
-      await waitForRender();
 
       expect(
         skeleton.shadowRoot.querySelector('[part="container"]')

@@ -17,30 +17,24 @@ describe("EaCountdown Component", () => {
   });
 
   describe("Basic Functionality", () => {
-    it("应该正确渲染组件并挂载 Shadow DOM", async () => {
+    it("应该正确渲染组件并挂载 Shadow DOM", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
-
-      await waitForRender();
 
       expect(countdown.shadowRoot).toBeTruthy();
     });
 
-    it("应该包含 ea-countdown 根容器", async () => {
+    it("应该包含 ea-countdown 根容器", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
-
-      await waitForRender();
 
       const root = countdown.shadowRoot.querySelector(".ea-countdown");
       expect(root).toBeTruthy();
     });
 
-    it("根容器应该有 container part", async () => {
+    it("根容器应该有 container part", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
-
-      await waitForRender();
 
       const containerEl =
         countdown.shadowRoot.querySelector('[part="container"]');
@@ -48,11 +42,9 @@ describe("EaCountdown Component", () => {
       expect(containerEl.classList.contains("ea-countdown")).toBe(true);
     });
 
-    it("应该渲染 header 元素", async () => {
+    it("应该渲染 header 元素", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
-
-      await waitForRender();
 
       const header = countdown.shadowRoot.querySelector(
         ".ea-countdown__header"
@@ -61,11 +53,9 @@ describe("EaCountdown Component", () => {
       expect(header.tagName.toLowerCase()).toBe("header");
     });
 
-    it("应该渲染 content 元素", async () => {
+    it("应该渲染 content 元素", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
-
-      await waitForRender();
 
       const content = countdown.shadowRoot.querySelector(
         ".ea-countdown__content"
@@ -74,11 +64,9 @@ describe("EaCountdown Component", () => {
       expect(content.tagName.toLowerCase()).toBe("main");
     });
 
-    it("应该渲染 number 元素", async () => {
+    it("应该渲染 number 元素", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
-
-      await waitForRender();
 
       const number = countdown.shadowRoot.querySelector(
         ".ea-countdown__number"
@@ -86,11 +74,9 @@ describe("EaCountdown Component", () => {
       expect(number).toBeTruthy();
     });
 
-    it("应该渲染 prefix 元素", async () => {
+    it("应该渲染 prefix 元素", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
-
-      await waitForRender();
 
       const prefix = countdown.shadowRoot.querySelector(
         ".ea-countdown__prefix"
@@ -98,11 +84,9 @@ describe("EaCountdown Component", () => {
       expect(prefix).toBeTruthy();
     });
 
-    it("应该渲染 suffix 元素", async () => {
+    it("应该渲染 suffix 元素", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
-
-      await waitForRender();
 
       const suffix = countdown.shadowRoot.querySelector(
         ".ea-countdown__suffix"
@@ -112,64 +96,52 @@ describe("EaCountdown Component", () => {
   });
 
   describe("CSS Parts", () => {
-    it("应该支持 container part", async () => {
+    it("应该支持 container part", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
-
-      await waitForRender();
 
       expect(
         countdown.shadowRoot.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
-    it("应该支持 title part", async () => {
+    it("应该支持 title part", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
-
-      await waitForRender();
 
       expect(countdown.shadowRoot.querySelector('[part="title"]')).toBeTruthy();
     });
 
-    it("应该支持 content part", async () => {
+    it("应该支持 content part", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
-
-      await waitForRender();
 
       expect(
         countdown.shadowRoot.querySelector('[part="content"]')
       ).toBeTruthy();
     });
 
-    it("应该支持 prefix part", async () => {
+    it("应该支持 prefix part", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
-
-      await waitForRender();
 
       expect(
         countdown.shadowRoot.querySelector('[part="prefix"]')
       ).toBeTruthy();
     });
 
-    it("应该支持 number part", async () => {
+    it("应该支持 number part", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
-
-      await waitForRender();
 
       expect(
         countdown.shadowRoot.querySelector('[part="number"]')
       ).toBeTruthy();
     });
 
-    it("应该支持 suffix part", async () => {
+    it("应该支持 suffix part", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
-
-      await waitForRender();
 
       expect(
         countdown.shadowRoot.querySelector('[part="suffix"]')
@@ -178,21 +150,17 @@ describe("EaCountdown Component", () => {
   });
 
   describe("BEM Class Names", () => {
-    it("根容器应该有 ea-countdown 类名", async () => {
+    it("根容器应该有 ea-countdown 类名", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
-
-      await waitForRender();
 
       const root = countdown.shadowRoot.querySelector(".ea-countdown");
       expect(root).toBeTruthy();
     });
 
-    it("header 应该有 ea-countdown__header 类名", async () => {
+    it("header 应该有 ea-countdown__header 类名", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
-
-      await waitForRender();
 
       const header = countdown.shadowRoot.querySelector(
         ".ea-countdown__header"
@@ -200,11 +168,9 @@ describe("EaCountdown Component", () => {
       expect(header).toBeTruthy();
     });
 
-    it("content 应该有 ea-countdown__content 类名", async () => {
+    it("content 应该有 ea-countdown__content 类名", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
-
-      await waitForRender();
 
       const content = countdown.shadowRoot.querySelector(
         ".ea-countdown__content"
@@ -212,11 +178,9 @@ describe("EaCountdown Component", () => {
       expect(content).toBeTruthy();
     });
 
-    it("number 应该有 ea-countdown__number 类名", async () => {
+    it("number 应该有 ea-countdown__number 类名", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
-
-      await waitForRender();
 
       const number = countdown.shadowRoot.querySelector(
         ".ea-countdown__number"
@@ -224,11 +188,9 @@ describe("EaCountdown Component", () => {
       expect(number).toBeTruthy();
     });
 
-    it("prefix 应该有 ea-countdown__prefix 类名", async () => {
+    it("prefix 应该有 ea-countdown__prefix 类名", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
-
-      await waitForRender();
 
       const prefix = countdown.shadowRoot.querySelector(
         ".ea-countdown__prefix"
@@ -236,11 +198,9 @@ describe("EaCountdown Component", () => {
       expect(prefix).toBeTruthy();
     });
 
-    it("suffix 应该有 ea-countdown__suffix 类名", async () => {
+    it("suffix 应该有 ea-countdown__suffix 类名", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
-
-      await waitForRender();
 
       const suffix = countdown.shadowRoot.querySelector(
         ".ea-countdown__suffix"
@@ -250,11 +210,9 @@ describe("EaCountdown Component", () => {
   });
 
   describe("DOM Structure", () => {
-    it("content 内部应该包含 prefix、number、suffix 按顺序排列", async () => {
+    it("content 内部应该包含 prefix、number、suffix 按顺序排列", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
-
-      await waitForRender();
 
       const content = countdown.shadowRoot.querySelector(
         ".ea-countdown__content"
@@ -265,11 +223,9 @@ describe("EaCountdown Component", () => {
       expect(children).toEqual(["span", "span", "span"]);
     });
 
-    it("header 应该在 content 之前", async () => {
+    it("header 应该在 content 之前", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
-
-      await waitForRender();
 
       const root = countdown.shadowRoot.querySelector(".ea-countdown");
       const children = Array.from(root.children).map(el =>
@@ -281,33 +237,27 @@ describe("EaCountdown Component", () => {
   });
 
   describe("Value Attribute", () => {
-    it("默认 value 应该是空字符串", async () => {
+    it("默认 value 应该是空字符串", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
-
-      await waitForRender();
 
       expect(countdown.value).toBe("");
     });
 
-    it("应该支持 value 属性（时间戳）", async () => {
+    it("应该支持 value 属性（时间戳）", () => {
       const countdown = document.createElement("ea-countdown");
       const futureTime = Date.now() + 60000;
       countdown.setAttribute("value", String(futureTime));
       container.appendChild(countdown);
 
-      await waitForRender();
-
       expect(countdown.value).toBe(String(futureTime));
     });
 
-    it("应该支持 value 属性（日期字符串）", async () => {
+    it("应该支持 value 属性（日期字符串）", () => {
       const countdown = document.createElement("ea-countdown");
       const futureDate = new Date(Date.now() + 60000).toISOString();
       countdown.setAttribute("value", futureDate);
       container.appendChild(countdown);
-
-      await waitForRender();
 
       expect(countdown.value).toBe(futureDate);
     });
@@ -322,29 +272,24 @@ describe("EaCountdown Component", () => {
 
       const futureTime2 = Date.now() + 120000;
       countdown.setAttribute("value", String(futureTime2));
-      await waitForRender();
 
       expect(countdown.value).toBe(String(futureTime2));
     });
   });
 
   describe("Format Attribute", () => {
-    it("默认 format 应该是 HH:mm:ss", async () => {
+    it("默认 format 应该是 HH:mm:ss", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
-
-      await waitForRender();
 
       expect(countdown.format).toBe("HH:mm:ss");
     });
 
-    it("应该支持 format 属性", async () => {
+    it("应该支持 format 属性", () => {
       const countdown = document.createElement("ea-countdown");
       countdown.setAttribute("format", "DD [days] HH:mm:ss");
       countdown.setAttribute("value", String(Date.now() + 86400000));
       container.appendChild(countdown);
-
-      await waitForRender();
 
       expect(countdown.format).toBe("DD [days] HH:mm:ss");
     });
@@ -357,28 +302,23 @@ describe("EaCountdown Component", () => {
       await waitForRender();
 
       countdown.setAttribute("format", "mm:ss");
-      await waitForRender();
 
       expect(countdown.format).toBe("mm:ss");
     });
   });
 
   describe("RefreshInterval Attribute", () => {
-    it("默认 refreshInterval 应该是 1000", async () => {
+    it("默认 refreshInterval 应该是 1000", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
-
-      await waitForRender();
 
       expect(countdown.refreshInterval).toBe(1000);
     });
 
-    it("应该支持 refresh-interval 属性", async () => {
+    it("应该支持 refresh-interval 属性", () => {
       const countdown = document.createElement("ea-countdown");
       countdown.setAttribute("refresh-interval", "500");
       container.appendChild(countdown);
-
-      await waitForRender();
 
       expect(countdown.refreshInterval).toBe(500);
     });
@@ -390,28 +330,23 @@ describe("EaCountdown Component", () => {
       await waitForRender();
 
       countdown.setAttribute("refresh-interval", "2000");
-      await waitForRender();
 
       expect(countdown.refreshInterval).toBe(2000);
     });
   });
 
   describe("Heading Attribute", () => {
-    it("默认 heading 应该是空字符串", async () => {
+    it("默认 heading 应该是空字符串", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
-
-      await waitForRender();
 
       expect(countdown.heading).toBe("");
     });
 
-    it("应该支持 heading 属性", async () => {
+    it("应该支持 heading 属性", () => {
       const countdown = document.createElement("ea-countdown");
       countdown.setAttribute("heading", "Countdown Title");
       container.appendChild(countdown);
-
-      await waitForRender();
 
       expect(countdown.heading).toBe("Countdown Title");
     });
@@ -446,11 +381,9 @@ describe("EaCountdown Component", () => {
       expect(countdown.heading).toBe("New Title");
     });
 
-    it("heading 为空时 header 文本应为空", async () => {
+    it("heading 为空时 header 文本应为空", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
-
-      await waitForRender();
 
       const header = countdown.shadowRoot.querySelector(
         ".ea-countdown__header"
@@ -460,11 +393,9 @@ describe("EaCountdown Component", () => {
   });
 
   describe("DisplayValue Property", () => {
-    it("默认 displayValue 应该是空字符串", async () => {
+    it("默认 displayValue 应该是空字符串", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
-
-      await waitForRender();
 
       expect(countdown.displayValue).toBe("");
     });
@@ -493,12 +424,10 @@ describe("EaCountdown Component", () => {
       expect(countdown.displayValue).toBe(numberEl.textContent);
     });
 
-    it("displayValue 是 JS 属性，不应该映射到 HTML attribute", async () => {
+    it("displayValue 是 JS 属性，不应该映射到 HTML attribute", () => {
       const countdown = document.createElement("ea-countdown");
       countdown.setAttribute("value", String(Date.now() + 60000));
       container.appendChild(countdown);
-
-      await waitForRender();
 
       expect(countdown.hasAttribute("displayValue")).toBe(false);
       expect(countdown.hasAttribute("display-value")).toBe(false);
@@ -506,24 +435,20 @@ describe("EaCountdown Component", () => {
   });
 
   describe("Slots", () => {
-    it("应该支持 title 插槽", async () => {
+    it("应该支持 title 插槽", () => {
       const countdown = document.createElement("ea-countdown");
       countdown.innerHTML = `<div slot="title">Custom Title</div>`;
       container.appendChild(countdown);
-
-      await waitForRender();
 
       const titleSlot =
         countdown.shadowRoot.querySelector('slot[name="title"]');
       expect(titleSlot).toBeTruthy();
     });
 
-    it("应该支持 prefix 插槽", async () => {
+    it("应该支持 prefix 插槽", () => {
       const countdown = document.createElement("ea-countdown");
       countdown.innerHTML = `<div slot="prefix">$</div>`;
       container.appendChild(countdown);
-
-      await waitForRender();
 
       const prefixSlot = countdown.shadowRoot.querySelector(
         'slot[name="prefix"]'
@@ -531,12 +456,10 @@ describe("EaCountdown Component", () => {
       expect(prefixSlot).toBeTruthy();
     });
 
-    it("应该支持 suffix 插槽", async () => {
+    it("应该支持 suffix 插槽", () => {
       const countdown = document.createElement("ea-countdown");
       countdown.innerHTML = `<div slot="suffix">%</div>`;
       container.appendChild(countdown);
-
-      await waitForRender();
 
       const suffixSlot = countdown.shadowRoot.querySelector(
         'slot[name="suffix"]'
@@ -544,24 +467,20 @@ describe("EaCountdown Component", () => {
       expect(suffixSlot).toBeTruthy();
     });
 
-    it("应该支持默认插槽", async () => {
+    it("应该支持默认插槽", () => {
       const countdown = document.createElement("ea-countdown");
       countdown.innerHTML = `<span>Custom Content</span>`;
       container.appendChild(countdown);
-
-      await waitForRender();
 
       const defaultSlot =
         countdown.shadowRoot.querySelector("slot:not([name])");
       expect(defaultSlot).toBeTruthy();
     });
 
-    it("title 插槽应该位于 header 元素内", async () => {
+    it("title 插槽应该位于 header 元素内", () => {
       const countdown = document.createElement("ea-countdown");
       countdown.innerHTML = `<div slot="title">Slotted Title</div>`;
       container.appendChild(countdown);
-
-      await waitForRender();
 
       const header = countdown.shadowRoot.querySelector(
         ".ea-countdown__header"
@@ -570,12 +489,10 @@ describe("EaCountdown Component", () => {
       expect(titleSlot).toBeTruthy();
     });
 
-    it("默认插槽应该位于 number 元素内", async () => {
+    it("默认插槽应该位于 number 元素内", () => {
       const countdown = document.createElement("ea-countdown");
       countdown.innerHTML = `<span>Custom Number</span>`;
       container.appendChild(countdown);
-
-      await waitForRender();
 
       const number = countdown.shadowRoot.querySelector(
         ".ea-countdown__number"
@@ -873,13 +790,11 @@ describe("EaCountdown Component", () => {
   });
 
   describe("Lifecycle", () => {
-    it("组件连接后应该正确初始化", async () => {
+    it("组件连接后应该正确初始化", () => {
       const countdown = document.createElement("ea-countdown");
       countdown.setAttribute("heading", "Test");
       countdown.setAttribute("value", String(Date.now() + 60000));
       container.appendChild(countdown);
-
-      await waitForRender();
 
       expect(countdown.shadowRoot).toBeTruthy();
       expect(countdown.heading).toBe("Test");
@@ -993,12 +908,10 @@ describe("EaCountdown Component", () => {
       expect(numberEl.textContent).toBe("00:00:00");
     });
 
-    it("value 为无效字符串时应该正常处理", async () => {
+    it("value 为无效字符串时应该正常处理", () => {
       const countdown = document.createElement("ea-countdown");
       countdown.setAttribute("value", "invalid-date");
       container.appendChild(countdown);
-
-      await waitForRender();
 
       expect(countdown).toBeDefined();
     });
@@ -1025,12 +938,10 @@ describe("EaCountdown Component", () => {
       expect(headerAfter.textContent).toBe("Attribute Title");
     });
 
-    it("refreshInterval 为 0 时应该使用默认值 1000 进行计时", async () => {
+    it("refreshInterval 为 0 时应该使用默认值 1000 进行计时", () => {
       const countdown = document.createElement("ea-countdown");
       countdown.setAttribute("refresh-interval", "0");
       container.appendChild(countdown);
-
-      await waitForRender();
 
       expect(countdown.refreshInterval).toBe(0);
     });
@@ -1046,18 +957,16 @@ describe("EaCountdown Component", () => {
     });
 
     describe("ARIA Attributes", () => {
-      it("number 元素应该有 aria-live='polite'", async () => {
+      it("number 元素应该有 aria-live='polite'", () => {
         const el = document.createElement("ea-countdown");
         container.appendChild(el);
-        await waitForRender();
         const number = el.shadowRoot.querySelector(".ea-countdown__number");
         expect(number.getAttribute("aria-live")).toBe("polite");
       });
 
-      it("number 元素应该有 aria-atomic='true'", async () => {
+      it("number 元素应该有 aria-atomic='true'", () => {
         const el = document.createElement("ea-countdown");
         container.appendChild(el);
-        await waitForRender();
         const number = el.shadowRoot.querySelector(".ea-countdown__number");
         expect(number.getAttribute("aria-atomic")).toBe("true");
       });

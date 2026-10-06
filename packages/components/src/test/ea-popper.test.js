@@ -17,7 +17,7 @@ describe("EaPopper Component", () => {
   });
 
   describe("Basic Functionality", () => {
-    it("应该正确渲染组件并包含 shadowRoot", async () => {
+    it("应该正确渲染组件并包含 shadowRoot", () => {
       const popper = document.createElement("ea-popper");
       popper.innerHTML = `
         <span>Content</span>
@@ -25,51 +25,41 @@ describe("EaPopper Component", () => {
       `;
       container.appendChild(popper);
 
-      await waitForRender();
-
       expect(popper.shadowRoot).toBeTruthy();
     });
 
-    it("应该渲染 .ea-popper 容器", async () => {
+    it("应该渲染 .ea-popper 容器", () => {
       const popper = document.createElement("ea-popper");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
-
-      await waitForRender();
 
       expect(popper.shadowRoot.querySelector(".ea-popper")).toBeTruthy();
     });
 
-    it("应该渲染 .ea-popper__reference 元素", async () => {
+    it("应该渲染 .ea-popper__reference 元素", () => {
       const popper = document.createElement("ea-popper");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
-
-      await waitForRender();
 
       expect(
         popper.shadowRoot.querySelector(".ea-popper__reference")
       ).toBeTruthy();
     });
 
-    it("应该渲染 .ea-popper__original 元素", async () => {
+    it("应该渲染 .ea-popper__original 元素", () => {
       const popper = document.createElement("ea-popper");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
-
-      await waitForRender();
 
       expect(
         popper.shadowRoot.querySelector(".ea-popper__original")
       ).toBeTruthy();
     });
 
-    it("应该支持 CSS Parts（container, reference, original）", async () => {
+    it("应该支持 CSS Parts（container, reference, original）", () => {
       const popper = document.createElement("ea-popper");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
-
-      await waitForRender();
 
       expect(
         popper.shadowRoot.querySelector('[part="container"]')
@@ -80,7 +70,7 @@ describe("EaPopper Component", () => {
       expect(popper.shadowRoot.querySelector('[part="original"]')).toBeTruthy();
     });
 
-    it("应该渲染默认 slot", async () => {
+    it("应该渲染默认 slot", () => {
       const popper = document.createElement("ea-popper");
       popper.innerHTML = `
         <span>Content</span>
@@ -88,18 +78,14 @@ describe("EaPopper Component", () => {
       `;
       container.appendChild(popper);
 
-      await waitForRender();
-
       const defaultSlot = popper.shadowRoot.querySelector("slot:not([name])");
       expect(defaultSlot).toBeTruthy();
     });
 
-    it("应该渲染 reference slot", async () => {
+    it("应该渲染 reference slot", () => {
       const popper = document.createElement("ea-popper");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
-
-      await waitForRender();
 
       const referenceSlot = popper.shadowRoot.querySelector(
         'slot[name="reference"]'
@@ -146,23 +132,19 @@ describe("EaPopper Component", () => {
   });
 
   describe("Width Attribute", () => {
-    it("默认 width 应该是 150", async () => {
+    it("默认 width 应该是 150", () => {
       const popper = document.createElement("ea-popper");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
-
-      await waitForRender();
 
       expect(popper.width).toBe(150);
     });
 
-    it("应该支持通过 HTML 属性设置 width", async () => {
+    it("应该支持通过 HTML 属性设置 width", () => {
       const popper = document.createElement("ea-popper");
       popper.setAttribute("width", "200");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
-
-      await waitForRender();
 
       expect(popper.width).toBe(200);
     });
@@ -191,30 +173,26 @@ describe("EaPopper Component", () => {
       expect(popper.style.getPropertyValue("--ea-popper-width")).toBe("250px");
     });
 
-    it("width 设置为 0 应该正常工作", async () => {
+    it("width 设置为 0 应该正常工作", () => {
       const popper = document.createElement("ea-popper");
       popper.setAttribute("width", "0");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
-
-      await waitForRender();
 
       expect(popper.width).toBe(0);
     });
   });
 
   describe("Placement Attribute", () => {
-    it("默认 placement 应该是 top", async () => {
+    it("默认 placement 应该是 top", () => {
       const popper = document.createElement("ea-popper");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
-
       expect(popper.placement).toBe("top");
     });
 
-    it("应该支持所有 12 个 placement 值", async () => {
+    it("应该支持所有 12 个 placement 值", () => {
       const placements = [
         "top",
         "top-start",
@@ -235,8 +213,6 @@ describe("EaPopper Component", () => {
         popper.setAttribute("placement", placement);
         popper.innerHTML = `<button slot="reference">Trigger</button>`;
         container.appendChild(popper);
-
-        await waitForRender();
 
         expect(popper.placement).toBe(placement);
         container.removeChild(popper);
@@ -274,25 +250,21 @@ describe("EaPopper Component", () => {
       expect(containerEl.classList.contains("ea-popper--bottom")).toBe(true);
     });
 
-    it("无效的 placement 值应该回退到默认值", async () => {
+    it("无效的 placement 值应该回退到默认值", () => {
       const popper = document.createElement("ea-popper");
       popper.setAttribute("placement", "invalid");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
-
-      await waitForRender();
 
       expect(popper.placement).toBe("top");
     });
   });
 
   describe("Show-arrow Attribute", () => {
-    it("默认 showArrow 应该是 true", async () => {
+    it("默认 showArrow 应该是 true", () => {
       const popper = document.createElement("ea-popper");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
-
-      await waitForRender();
 
       expect(popper.showArrow).toBe(true);
     });
@@ -316,8 +288,6 @@ describe("EaPopper Component", () => {
       await waitForRender();
 
       popper.showArrow = false;
-      await waitForRender();
-
       expect(popper.showArrow).toBe(false);
     });
 
@@ -372,23 +342,19 @@ describe("EaPopper Component", () => {
   });
 
   describe("Visible Attribute", () => {
-    it("默认 visible 应该是 false", async () => {
+    it("默认 visible 应该是 false", () => {
       const popper = document.createElement("ea-popper");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
-
-      await waitForRender();
 
       expect(popper.visible).toBe(false);
     });
 
-    it("应该支持通过 HTML 属性设置 visible 为 true", async () => {
+    it("应该支持通过 HTML 属性设置 visible 为 true", () => {
       const popper = document.createElement("ea-popper");
       popper.setAttribute("visible", "");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
-
-      await waitForRender();
 
       expect(popper.visible).toBe(true);
     });
@@ -449,41 +415,33 @@ describe("EaPopper Component", () => {
       await waitForRender();
 
       popper.show();
-      await waitForRender();
-
       expect(popper.visible).toBe(true);
     });
   });
 
   describe("Offset Attribute", () => {
-    it("默认 offset 应该是 '0 0'", async () => {
+    it("默认 offset 应该是 '0 0'", () => {
       const popper = document.createElement("ea-popper");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
-
       expect(popper.offset).toBe("0 0");
     });
 
-    it("应该支持自定义 offset 格式 'x y'", async () => {
+    it("应该支持自定义 offset 格式 'x y'", () => {
       const popper = document.createElement("ea-popper");
       popper.setAttribute("offset", "10 20");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
-
       expect(popper.offset).toBe("10 20");
     });
 
-    it("应该支持单个值的 offset（y 默认等于 x）", async () => {
+    it("应该支持单个值的 offset（y 默认等于 x）", () => {
       const popper = document.createElement("ea-popper");
       popper.setAttribute("offset", "15");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
-
-      await waitForRender();
 
       expect(popper.offset).toBe("15");
     });
@@ -574,12 +532,10 @@ describe("EaPopper Component", () => {
   });
 
   describe("Flip Attribute", () => {
-    it("默认 flip 应该是 true", async () => {
+    it("默认 flip 应该是 true", () => {
       const popper = document.createElement("ea-popper");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
-
-      await waitForRender();
 
       expect(popper.flip).toBe(true);
     });
@@ -592,30 +548,24 @@ describe("EaPopper Component", () => {
       await waitForRender();
 
       popper.flip = false;
-      await waitForRender();
-
       expect(popper.flip).toBe(false);
     });
 
-    it("flip 设置为 true（显式）", async () => {
+    it("flip 设置为 true（显式）", () => {
       const popper = document.createElement("ea-popper");
       popper.setAttribute("flip", "");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
-
-      await waitForRender();
 
       expect(popper.flip).toBe(true);
     });
   });
 
   describe("Methods", () => {
-    it("show() 方法应该设置 visible 为 true", async () => {
+    it("show() 方法应该设置 visible 为 true", () => {
       const popper = document.createElement("ea-popper");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
-
-      await waitForRender();
 
       expect(popper.visible).toBe(false);
 
@@ -624,12 +574,10 @@ describe("EaPopper Component", () => {
       expect(popper.visible).toBe(true);
     });
 
-    it("hide() 方法应该设置 visible 为 false", async () => {
+    it("hide() 方法应该设置 visible 为 false", () => {
       const popper = document.createElement("ea-popper");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
-
-      await waitForRender();
 
       popper.show();
       expect(popper.visible).toBe(true);
@@ -639,12 +587,10 @@ describe("EaPopper Component", () => {
       expect(popper.visible).toBe(false);
     });
 
-    it("toggle() 方法应该切换 visible", async () => {
+    it("toggle() 方法应该切换 visible", () => {
       const popper = document.createElement("ea-popper");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
-
-      await waitForRender();
 
       expect(popper.visible).toBe(false);
 
@@ -683,12 +629,10 @@ describe("EaPopper Component", () => {
   });
 
   describe("updateContainerClasslist", () => {
-    it("应该返回包含基础类名、修饰符和状态的 className", async () => {
+    it("应该返回包含基础类名、修饰符和状态的 className", () => {
       const popper = document.createElement("ea-popper");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
-
-      await waitForRender();
 
       const className = popper.updateContainerClasslist();
       expect(className).toContain("ea-popper");
@@ -721,8 +665,6 @@ describe("EaPopper Component", () => {
       await waitForRender();
 
       popper.show();
-      await waitForRender();
-
       const className = popper.updateContainerClasslist();
       expect(className).toContain("is-show");
     });
@@ -739,13 +681,11 @@ describe("EaPopper Component", () => {
       expect(classList).not.toContain("is-show");
     });
 
-    it("应该正确组合 placement 和 showArrow 状态", async () => {
+    it("应该正确组合 placement 和 showArrow 状态", () => {
       const popper = document.createElement("ea-popper");
       popper.setAttribute("placement", "left-end");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
-
-      await waitForRender();
 
       const className = popper.updateContainerClasslist();
       expect(className).toContain("ea-popper--left-end");
@@ -1036,8 +976,6 @@ describe("EaPopper Component", () => {
       popper.show();
       popper.hide();
 
-      await waitForRender();
-
       expect(popper.visible).toBe(false);
     });
 
@@ -1051,7 +989,6 @@ describe("EaPopper Component", () => {
       popper.show();
       popper.hide();
       popper.show();
-
       await waitForRender();
 
       expect(popper.visible).toBe(true);
@@ -1133,21 +1070,17 @@ describe("EaPopper Component", () => {
   });
 
   describe("Edge Cases", () => {
-    it("应该处理没有 reference slot 的情况", async () => {
+    it("应该处理没有 reference slot 的情况", () => {
       const popper = document.createElement("ea-popper");
       container.appendChild(popper);
-
-      await waitForRender();
 
       expect(popper.shadowRoot).toBeTruthy();
     });
 
-    it("应该处理空 content（只有 reference slot）", async () => {
+    it("应该处理空 content（只有 reference slot）", () => {
       const popper = document.createElement("ea-popper");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
-
-      await waitForRender();
 
       expect(popper.shadowRoot).toBeTruthy();
     });
@@ -1164,8 +1097,6 @@ describe("EaPopper Component", () => {
 
       popper.showArrow = false;
       popper.flip = false;
-      await waitForRender();
-
       expect(popper.width).toBe(200);
       expect(popper.placement).toBe("bottom");
       expect(popper.showArrow).toBe(false);
@@ -1183,11 +1114,10 @@ describe("EaPopper Component", () => {
       popper.width = 300;
       popper.placement = "left";
       popper.showArrow = false;
-      await waitForRender();
-
       expect(popper.width).toBe(300);
       expect(popper.placement).toBe("left");
       expect(popper.showArrow).toBe(false);
+      await waitForRender();
 
       const containerEl = popper.shadowRoot.querySelector(".ea-popper");
       expect(containerEl.classList.contains("ea-popper--left")).toBe(true);
@@ -1208,13 +1138,11 @@ describe("EaPopper Component", () => {
       expect(containerEl.classList.contains("ea-popper--bottom")).toBe(true);
     });
 
-    it("组件连接后应该初始化 _originPlacement", async () => {
+    it("组件连接后应该初始化 _originPlacement", () => {
       const popper = document.createElement("ea-popper");
       popper.setAttribute("placement", "right-start");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
-
-      await waitForRender();
 
       expect(popper.placement).toBe("right-start");
     });
@@ -1245,24 +1173,18 @@ describe("EaPopper Component", () => {
       await waitForRender();
 
       container.appendChild(popper);
-      await waitForRender();
-
       expect(popper.shadowRoot).toBeTruthy();
       expect(popper.placement).toBe("top");
     });
 
-    it("应该支持属性动态更新", async () => {
+    it("应该支持属性动态更新", () => {
       const popper = document.createElement("ea-popper");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
-
       expect(popper.placement).toBe("top");
 
       popper.setAttribute("placement", "bottom");
-      await waitForRender();
-
       expect(popper.placement).toBe("bottom");
     });
   });
@@ -1331,12 +1253,10 @@ describe("EaPopper Component", () => {
   });
 
   describe("BEM Class Generation", () => {
-    it("默认状态应该生成 'ea-popper ea-popper--top is-show-arrow'", async () => {
+    it("默认状态应该生成 'ea-popper ea-popper--top is-show-arrow'", () => {
       const popper = document.createElement("ea-popper");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
-
-      await waitForRender();
 
       const className = popper.updateContainerClasslist();
       expect(className).toBe("ea-popper ea-popper--top is-show-arrow");
@@ -1351,8 +1271,6 @@ describe("EaPopper Component", () => {
       await waitForRender();
 
       popper.showArrow = false;
-      await waitForRender();
-
       const className = popper.updateContainerClasslist();
       expect(className).toBe("ea-popper ea-popper--bottom");
     });
@@ -1366,8 +1284,6 @@ describe("EaPopper Component", () => {
       await waitForRender();
 
       popper.show();
-      await waitForRender();
-
       const className = popper.updateContainerClasslist();
       expect(className).toContain("ea-popper");
       expect(className).toContain("ea-popper--left-start");
@@ -1408,9 +1324,7 @@ describe("EaPopper Component", () => {
         );
         const trigger = referenceSlot.assignedElements()[0];
         if (trigger) {
-          expect(trigger.getAttribute("aria-controls")).toBe(
-            original.id
-          );
+          expect(trigger.getAttribute("aria-controls")).toBe(original.id);
         }
       });
 

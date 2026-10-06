@@ -17,101 +17,81 @@ describe("EaTag", () => {
   });
 
   describe("Basic Functionality", () => {
-    it("应该正确渲染 ea-tag 组件", async () => {
+    it("应该正确渲染 ea-tag 组件", () => {
       const tag = document.createElement("ea-tag");
       tag.textContent = "Test Tag";
       container.appendChild(tag);
-
-      await waitForRender();
 
       expect(tag).toBeDefined();
       expect(tag.shadowRoot).toBeDefined();
     });
 
-    it("应该包含 container CSS Part", async () => {
+    it("应该包含 container CSS Part", () => {
       const tag = document.createElement("ea-tag");
       container.appendChild(tag);
-
-      await waitForRender();
 
       expect(tag.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
 
-    it("应该包含 close-icon CSS Part", async () => {
+    it("应该包含 close-icon CSS Part", () => {
       const tag = document.createElement("ea-tag");
       container.appendChild(tag);
-
-      await waitForRender();
 
       expect(tag.shadowRoot.querySelector('[part="close-icon"]')).toBeTruthy();
     });
 
-    it("应该正确显示标签内容", async () => {
+    it("应该正确显示标签内容", () => {
       const tag = document.createElement("ea-tag");
       tag.textContent = "Test Tag";
       container.appendChild(tag);
 
-      await waitForRender();
-
       expect(tag.textContent).toBe("Test Tag");
     });
 
-    it("应该包含 content 元素", async () => {
+    it("应该包含 content 元素", () => {
       const tag = document.createElement("ea-tag");
       container.appendChild(tag);
-
-      await waitForRender();
 
       expect(tag.shadowRoot.querySelector(".ea-tag__content")).toBeTruthy();
     });
   });
 
   describe("Variant Attribute", () => {
-    it("默认 variant 应该是 info", async () => {
+    it("默认 variant 应该是 info", () => {
       const tag = document.createElement("ea-tag");
       container.appendChild(tag);
-
-      await waitForRender();
 
       expect(tag.variant).toBe("info");
     });
 
-    it("应该支持 variant='primary'", async () => {
+    it("应该支持 variant='primary'", () => {
       const tag = document.createElement("ea-tag");
       tag.variant = "primary";
       container.appendChild(tag);
 
-      await waitForRender();
-
       expect(tag.variant).toBe("primary");
     });
 
-    it("应该支持 variant='success'", async () => {
+    it("应该支持 variant='success'", () => {
       const tag = document.createElement("ea-tag");
       tag.variant = "success";
       container.appendChild(tag);
 
-      await waitForRender();
-
       expect(tag.variant).toBe("success");
     });
 
-    it("应该支持 variant='warning'", async () => {
+    it("应该支持 variant='warning'", () => {
       const tag = document.createElement("ea-tag");
       tag.variant = "warning";
       container.appendChild(tag);
 
-      await waitForRender();
-
       expect(tag.variant).toBe("warning");
     });
 
-    it("应该支持 variant='danger'", async () => {
+    it("应该支持 variant='danger'", () => {
       const tag = document.createElement("ea-tag");
       tag.variant = "danger";
       container.appendChild(tag);
-
-      await waitForRender();
 
       expect(tag.variant).toBe("danger");
     });
@@ -131,31 +111,25 @@ describe("EaTag", () => {
   });
 
   describe("Size Attribute", () => {
-    it("默认 size 应该是 default", async () => {
+    it("默认 size 应该是 default", () => {
       const tag = document.createElement("ea-tag");
       container.appendChild(tag);
-
-      await waitForRender();
 
       expect(tag.size).toBe("default");
     });
 
-    it("应该支持 size='large'", async () => {
+    it("应该支持 size='large'", () => {
       const tag = document.createElement("ea-tag");
       tag.size = "large";
       container.appendChild(tag);
 
-      await waitForRender();
-
       expect(tag.size).toBe("large");
     });
 
-    it("应该支持 size='small'", async () => {
+    it("应该支持 size='small'", () => {
       const tag = document.createElement("ea-tag");
       tag.size = "small";
       container.appendChild(tag);
-
-      await waitForRender();
 
       expect(tag.size).toBe("small");
     });
@@ -175,31 +149,25 @@ describe("EaTag", () => {
   });
 
   describe("Effect Attribute", () => {
-    it("默认 effect 应该是 light", async () => {
+    it("默认 effect 应该是 light", () => {
       const tag = document.createElement("ea-tag");
       container.appendChild(tag);
-
-      await waitForRender();
 
       expect(tag.effect).toBe("light");
     });
 
-    it("应该支持 effect='dark'", async () => {
+    it("应该支持 effect='dark'", () => {
       const tag = document.createElement("ea-tag");
       tag.effect = "dark";
       container.appendChild(tag);
 
-      await waitForRender();
-
       expect(tag.effect).toBe("dark");
     });
 
-    it("应该支持 effect='plain'", async () => {
+    it("应该支持 effect='plain'", () => {
       const tag = document.createElement("ea-tag");
       tag.effect = "plain";
       container.appendChild(tag);
-
-      await waitForRender();
 
       expect(tag.effect).toBe("plain");
     });
@@ -219,21 +187,17 @@ describe("EaTag", () => {
   });
 
   describe("Closable Attribute", () => {
-    it("默认 closable 应该是 false", async () => {
+    it("默认 closable 应该是 false", () => {
       const tag = document.createElement("ea-tag");
       container.appendChild(tag);
-
-      await waitForRender();
 
       expect(tag.closable).toBe(false);
     });
 
-    it("设置 closable 应该显示关闭图标并添加 is-closable 类", async () => {
+    it("设置 closable 应该显示关闭图标并添加 is-closable 类", () => {
       const tag = document.createElement("ea-tag");
       tag.closable = true;
       container.appendChild(tag);
-
-      await waitForRender();
 
       expect(tag.closable).toBe(true);
       const containerEl = tag.shadowRoot.querySelector('[part="container"]');
@@ -263,11 +227,9 @@ describe("EaTag", () => {
       expect(removeDetail.text).toBe("Test Tag");
     });
 
-    it("closable 为 false 时关闭图标应该隐藏", async () => {
+    it("closable 为 false 时关闭图标应该隐藏", () => {
       const tag = document.createElement("ea-tag");
       container.appendChild(tag);
-
-      await waitForRender();
 
       const containerEl = tag.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-closable")).toBe(false);
@@ -275,21 +237,17 @@ describe("EaTag", () => {
   });
 
   describe("Round Attribute", () => {
-    it("默认 round 应该是 false", async () => {
+    it("默认 round 应该是 false", () => {
       const tag = document.createElement("ea-tag");
       container.appendChild(tag);
-
-      await waitForRender();
 
       expect(tag.round).toBe(false);
     });
 
-    it("设置 round 应该添加 is-round 类", async () => {
+    it("设置 round 应该添加 is-round 类", () => {
       const tag = document.createElement("ea-tag");
       tag.round = true;
       container.appendChild(tag);
-
-      await waitForRender();
 
       expect(tag.round).toBe(true);
       const containerEl = tag.shadowRoot.querySelector('[part="container"]');
@@ -298,21 +256,17 @@ describe("EaTag", () => {
   });
 
   describe("Color Attribute", () => {
-    it("默认 color 应该是空字符串", async () => {
+    it("默认 color 应该是空字符串", () => {
       const tag = document.createElement("ea-tag");
       container.appendChild(tag);
-
-      await waitForRender();
 
       expect(tag.color).toBe("");
     });
 
-    it("应该支持 color 属性", async () => {
+    it("应该支持 color 属性", () => {
       const tag = document.createElement("ea-tag");
       tag.color = "#ff0000";
       container.appendChild(tag);
-
-      await waitForRender();
 
       expect(tag.color).toBe("#ff0000");
     });
@@ -334,35 +288,29 @@ describe("EaTag", () => {
   });
 
   describe("Disable-transitions Attribute", () => {
-    it("默认 disableTransitions 应该是 false", async () => {
+    it("默认 disableTransitions 应该是 false", () => {
       const tag = document.createElement("ea-tag");
       container.appendChild(tag);
-
-      await waitForRender();
 
       expect(tag.disableTransitions).toBe(false);
     });
 
-    it("设置 disableTransitions 应该禁用过渡动画", async () => {
+    it("设置 disableTransitions 应该禁用过渡动画", () => {
       const tag = document.createElement("ea-tag");
       tag.disableTransitions = true;
       container.appendChild(tag);
-
-      await waitForRender();
 
       expect(tag.disableTransitions).toBe(true);
     });
   });
 
   describe("Combined Attributes", () => {
-    it("应该同时支持 variant + effect + size 组合", async () => {
+    it("应该同时支持 variant + effect + size 组合", () => {
       const tag = document.createElement("ea-tag");
       tag.variant = "success";
       tag.effect = "dark";
       tag.size = "large";
       container.appendChild(tag);
-
-      await waitForRender();
 
       const containerEl = tag.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("ea-tag--success")).toBe(true);
@@ -370,14 +318,12 @@ describe("EaTag", () => {
       expect(containerEl.classList.contains("ea-tag--large-size")).toBe(true);
     });
 
-    it("应该同时支持 variant + closable + round 组合", async () => {
+    it("应该同时支持 variant + closable + round 组合", () => {
       const tag = document.createElement("ea-tag");
       tag.variant = "danger";
       tag.closable = true;
       tag.round = true;
       container.appendChild(tag);
-
-      await waitForRender();
 
       const containerEl = tag.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("ea-tag--danger")).toBe(true);
@@ -387,33 +333,27 @@ describe("EaTag", () => {
   });
 
   describe("Edge Cases", () => {
-    it("空 ea-tag 应该正常渲染", async () => {
+    it("空 ea-tag 应该正常渲染", () => {
       const tag = document.createElement("ea-tag");
       container.appendChild(tag);
-
-      await waitForRender();
 
       expect(tag.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
 
-    it("ea-tag 使用无效 variant 应该保留原始值", async () => {
+    it("ea-tag 使用无效 variant 应该保留原始值", () => {
       const tag = document.createElement("ea-tag");
       tag.setAttribute("variant", "invalid");
       container.appendChild(tag);
-
-      await waitForRender();
 
       expect(tag.getAttribute("variant")).toBe("invalid");
     });
   });
 
   describe("Lifecycle", () => {
-    it("ea-tag 组件连接后应该正确初始化", async () => {
+    it("ea-tag 组件连接后应该正确初始化", () => {
       const tag = document.createElement("ea-tag");
       tag.textContent = "Test";
       container.appendChild(tag);
-
-      await waitForRender();
 
       expect(tag.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
@@ -455,55 +395,45 @@ describe("EaCheckTag", () => {
   });
 
   describe("Basic Functionality", () => {
-    it("应该正确渲染 ea-check-tag 组件", async () => {
+    it("应该正确渲染 ea-check-tag 组件", () => {
       const checkTag = document.createElement("ea-check-tag");
       checkTag.textContent = "Check Tag";
       container.appendChild(checkTag);
-
-      await waitForRender();
 
       expect(checkTag).toBeDefined();
       expect(checkTag.shadowRoot).toBeDefined();
     });
 
-    it("应该包含 container CSS Part", async () => {
+    it("应该包含 container CSS Part", () => {
       const checkTag = document.createElement("ea-check-tag");
       container.appendChild(checkTag);
-
-      await waitForRender();
 
       expect(
         checkTag.shadowRoot.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
-    it("应该正确显示标签内容", async () => {
+    it("应该正确显示标签内容", () => {
       const checkTag = document.createElement("ea-check-tag");
       checkTag.textContent = "Check Tag";
       container.appendChild(checkTag);
-
-      await waitForRender();
 
       expect(checkTag.textContent).toBe("Check Tag");
     });
   });
 
   describe("Checked Attribute", () => {
-    it("默认 checked 应该是 false", async () => {
+    it("默认 checked 应该是 false", () => {
       const checkTag = document.createElement("ea-check-tag");
       container.appendChild(checkTag);
-
-      await waitForRender();
 
       expect(checkTag.checked).toBe(false);
     });
 
-    it("设置 checked 应该启用选中状态", async () => {
+    it("设置 checked 应该启用选中状态", () => {
       const checkTag = document.createElement("ea-check-tag");
       checkTag.checked = true;
       container.appendChild(checkTag);
-
-      await waitForRender();
 
       expect(checkTag.checked).toBe(true);
     });
@@ -562,21 +492,17 @@ describe("EaCheckTag", () => {
   });
 
   describe("Disabled Attribute", () => {
-    it("默认 disabled 应该是 false", async () => {
+    it("默认 disabled 应该是 false", () => {
       const checkTag = document.createElement("ea-check-tag");
       container.appendChild(checkTag);
-
-      await waitForRender();
 
       expect(checkTag.disabled).toBe(false);
     });
 
-    it("设置 disabled 应该禁用交互", async () => {
+    it("设置 disabled 应该禁用交互", () => {
       const checkTag = document.createElement("ea-check-tag");
       checkTag.disabled = true;
       container.appendChild(checkTag);
-
-      await waitForRender();
 
       expect(checkTag.disabled).toBe(true);
     });
@@ -618,12 +544,10 @@ describe("EaCheckTag", () => {
       expect(changeFired).toBe(false);
     });
 
-    it("disabled 状态下应该添加 is-disabled 类", async () => {
+    it("disabled 状态下应该添加 is-disabled 类", () => {
       const checkTag = document.createElement("ea-check-tag");
       checkTag.disabled = true;
       container.appendChild(checkTag);
-
-      await waitForRender();
 
       const containerEl =
         checkTag.shadowRoot.querySelector('[part="container"]');
@@ -632,66 +556,54 @@ describe("EaCheckTag", () => {
   });
 
   describe("Variant Attribute", () => {
-    it("默认 variant 应该是 primary", async () => {
+    it("默认 variant 应该是 primary", () => {
       const checkTag = document.createElement("ea-check-tag");
       container.appendChild(checkTag);
-
-      await waitForRender();
 
       expect(checkTag.variant).toBe("primary");
     });
 
-    it("应该支持 variant='primary'", async () => {
+    it("应该支持 variant='primary'", () => {
       const checkTag = document.createElement("ea-check-tag");
       checkTag.variant = "primary";
       checkTag.checked = true;
       container.appendChild(checkTag);
 
-      await waitForRender();
-
       expect(checkTag.variant).toBe("primary");
     });
 
-    it("应该支持 variant='success'", async () => {
+    it("应该支持 variant='success'", () => {
       const checkTag = document.createElement("ea-check-tag");
       checkTag.variant = "success";
       checkTag.checked = true;
       container.appendChild(checkTag);
 
-      await waitForRender();
-
       expect(checkTag.variant).toBe("success");
     });
 
-    it("应该支持 variant='warning'", async () => {
+    it("应该支持 variant='warning'", () => {
       const checkTag = document.createElement("ea-check-tag");
       checkTag.variant = "warning";
       checkTag.checked = true;
       container.appendChild(checkTag);
 
-      await waitForRender();
-
       expect(checkTag.variant).toBe("warning");
     });
 
-    it("应该支持 variant='danger'", async () => {
+    it("应该支持 variant='danger'", () => {
       const checkTag = document.createElement("ea-check-tag");
       checkTag.variant = "danger";
       checkTag.checked = true;
       container.appendChild(checkTag);
 
-      await waitForRender();
-
       expect(checkTag.variant).toBe("danger");
     });
 
-    it("checked 为 true 时 variant 应该添加对应修饰符类", async () => {
+    it("checked 为 true 时 variant 应该添加对应修饰符类", () => {
       const checkTag = document.createElement("ea-check-tag");
       checkTag.variant = "success";
       checkTag.checked = true;
       container.appendChild(checkTag);
-
-      await waitForRender();
 
       const containerEl =
         checkTag.shadowRoot.querySelector('[part="container"]');
@@ -700,12 +612,10 @@ describe("EaCheckTag", () => {
       );
     });
 
-    it("checked 为 false 时不应该添加 variant 修饰符类", async () => {
+    it("checked 为 false 时不应该添加 variant 修饰符类", () => {
       const checkTag = document.createElement("ea-check-tag");
       checkTag.variant = "success";
       container.appendChild(checkTag);
-
-      await waitForRender();
 
       const containerEl =
         checkTag.shadowRoot.querySelector('[part="container"]');
@@ -716,36 +626,30 @@ describe("EaCheckTag", () => {
   });
 
   describe("Edge Cases", () => {
-    it("空 ea-check-tag 应该正常渲染", async () => {
+    it("空 ea-check-tag 应该正常渲染", () => {
       const checkTag = document.createElement("ea-check-tag");
       container.appendChild(checkTag);
-
-      await waitForRender();
 
       expect(
         checkTag.shadowRoot.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
-    it("ea-check-tag 使用无效 variant 应该保留原始值", async () => {
+    it("ea-check-tag 使用无效 variant 应该保留原始值", () => {
       const checkTag = document.createElement("ea-check-tag");
       checkTag.setAttribute("variant", "invalid");
       checkTag.checked = true;
       container.appendChild(checkTag);
-
-      await waitForRender();
 
       expect(checkTag.getAttribute("variant")).toBe("invalid");
     });
   });
 
   describe("Lifecycle", () => {
-    it("ea-check-tag 组件连接后应该正确初始化", async () => {
+    it("ea-check-tag 组件连接后应该正确初始化", () => {
       const checkTag = document.createElement("ea-check-tag");
       checkTag.textContent = "Test";
       container.appendChild(checkTag);
-
-      await waitForRender();
 
       expect(
         checkTag.shadowRoot.querySelector('[part="container"]')
@@ -801,7 +705,7 @@ describe("Combined Tests", () => {
     container.remove();
   });
 
-  it("应该同时渲染多个 ea-tag", async () => {
+  it("应该同时渲染多个 ea-tag", () => {
     const variants = ["primary", "success", "info", "warning", "danger"];
 
     variants.forEach(variant => {
@@ -811,13 +715,11 @@ describe("Combined Tests", () => {
       container.appendChild(tag);
     });
 
-    await waitForRender();
-
     const tags = container.querySelectorAll("ea-tag");
     expect(tags.length).toBe(5);
   });
 
-  it("应该同时渲染多个 ea-check-tag", async () => {
+  it("应该同时渲染多个 ea-check-tag", () => {
     const variants = ["primary", "success", "info", "warning", "danger"];
 
     variants.forEach(variant => {
@@ -827,8 +729,6 @@ describe("Combined Tests", () => {
       checkTag.textContent = variant;
       container.appendChild(checkTag);
     });
-
-    await waitForRender();
 
     const checkTags = container.querySelectorAll("ea-check-tag");
     expect(checkTags.length).toBe(5);
@@ -844,83 +744,68 @@ describe("Combined Tests", () => {
     });
 
     describe("ARIA Attributes", () => {
-      it("ea-tag 关闭图标应该有 role=button", async () => {
+      it("ea-tag 关闭图标应该有 role=button", () => {
         const tag = document.createElement("ea-tag");
         tag.closable = true;
         container.appendChild(tag);
-
-        await waitForRender();
 
         const closeIcon = tag.shadowRoot.querySelector('[part="close-icon"]');
         expect(closeIcon.getAttribute("role")).toBe("button");
       });
 
-      it("ea-tag 关闭图标应该有 aria-label='close'", async () => {
+      it("ea-tag 关闭图标应该有 aria-label='close'", () => {
         const tag = document.createElement("ea-tag");
         tag.closable = true;
         container.appendChild(tag);
-
-        await waitForRender();
 
         const closeIcon = tag.shadowRoot.querySelector('[part="close-icon"]');
         expect(closeIcon.getAttribute("aria-label")).toBe("close");
       });
 
-      it("ea-tag 关闭图标应该有 tabindex='0'", async () => {
+      it("ea-tag 关闭图标应该有 tabindex='0'", () => {
         const tag = document.createElement("ea-tag");
         tag.closable = true;
         container.appendChild(tag);
-
-        await waitForRender();
 
         const closeIcon = tag.shadowRoot.querySelector('[part="close-icon"]');
         expect(closeIcon.getAttribute("tabindex")).toBe("0");
       });
 
-      it("ea-check-tag 容器应该有 role=checkbox", async () => {
+      it("ea-check-tag 容器应该有 role=checkbox", () => {
         const checkTag = document.createElement("ea-check-tag");
         container.appendChild(checkTag);
 
-        await waitForRender();
-
-        const containerEl = checkTag.shadowRoot.querySelector('[part="container"]');
+        const containerEl =
+          checkTag.shadowRoot.querySelector('[part="container"]');
         expect(containerEl.getAttribute("role")).toBe("checkbox");
       });
 
-      it("ea-check-tag checked=true 时宿主元素应该有 aria-checked='true'", async () => {
+      it("ea-check-tag checked=true 时宿主元素应该有 aria-checked='true'", () => {
         const checkTag = document.createElement("ea-check-tag");
         checkTag.checked = true;
         container.appendChild(checkTag);
 
-        await waitForRender();
-
         expect(checkTag.getAttribute("aria-checked")).toBe("true");
       });
 
-      it("ea-check-tag checked=false 时宿主元素应该有 aria-checked='false'", async () => {
+      it("ea-check-tag checked=false 时宿主元素应该有 aria-checked='false'", () => {
         const checkTag = document.createElement("ea-check-tag");
         container.appendChild(checkTag);
-
-        await waitForRender();
 
         expect(checkTag.getAttribute("aria-checked")).toBe("false");
       });
 
-      it("ea-check-tag disabled=true 时宿主元素应该有 aria-disabled='true'", async () => {
+      it("ea-check-tag disabled=true 时宿主元素应该有 aria-disabled='true'", () => {
         const checkTag = document.createElement("ea-check-tag");
         checkTag.disabled = true;
         container.appendChild(checkTag);
 
-        await waitForRender();
-
         expect(checkTag.getAttribute("aria-disabled")).toBe("true");
       });
 
-      it("ea-check-tag disabled=false 时宿主元素应该有 aria-disabled='false'", async () => {
+      it("ea-check-tag disabled=false 时宿主元素应该有 aria-disabled='false'", () => {
         const checkTag = document.createElement("ea-check-tag");
         container.appendChild(checkTag);
-
-        await waitForRender();
 
         expect(checkTag.getAttribute("aria-disabled")).toBe("false");
       });

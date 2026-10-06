@@ -16,63 +16,47 @@ describe("EaDivider", () => {
   });
 
   describe("Basic Functionality", () => {
-    it("应该正确渲染 ea-divider 组件", async () => {
+    it("应该正确渲染 ea-divider 组件", () => {
       const el = document.createElement("ea-divider");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el).toBeDefined();
       expect(el.shadowRoot).toBeDefined();
     });
 
-    it("应该包含 .ea-divider 容器元素", async () => {
+    it("应该包含 .ea-divider 容器元素", () => {
       const el = document.createElement("ea-divider");
       container.appendChild(el);
-
-      await waitForRender();
 
       const containerEl = el.shadowRoot.querySelector(".ea-divider");
       expect(containerEl).toBeDefined();
     });
 
-    it("应该包含 container CSS Part", async () => {
+    it("应该包含 container CSS Part", () => {
       const el = document.createElement("ea-divider");
       container.appendChild(el);
 
-      await waitForRender();
-
-      expect(
-        el.shadowRoot.querySelector('[part="container"]')
-      ).toBeTruthy();
+      expect(el.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
 
-    it("应该包含 line CSS Part", async () => {
+    it("应该包含 line CSS Part", () => {
       const el = document.createElement("ea-divider");
       container.appendChild(el);
 
-      await waitForRender();
-
-      const lines = el.shadowRoot.querySelectorAll('.ea-divider__line');
+      const lines = el.shadowRoot.querySelectorAll(".ea-divider__line");
       expect(lines.length).toBe(2);
     });
 
-    it("应该包含 content CSS Part", async () => {
+    it("应该包含 content CSS Part", () => {
       const el = document.createElement("ea-divider");
       container.appendChild(el);
 
-      await waitForRender();
-
-      expect(
-        el.shadowRoot.querySelector('[part="content"]')
-      ).toBeTruthy();
+      expect(el.shadowRoot.querySelector('[part="content"]')).toBeTruthy();
     });
 
-    it("应该包含 role='separator' 属性", async () => {
+    it("应该包含 role='separator' 属性", () => {
       const el = document.createElement("ea-divider");
       container.appendChild(el);
-
-      await waitForRender();
 
       const containerEl = el.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.getAttribute("role")).toBe("separator");
@@ -80,21 +64,17 @@ describe("EaDivider", () => {
   });
 
   describe("Variant Attribute", () => {
-    it("默认 variant 应该是空字符串", async () => {
+    it("默认 variant 应该是空字符串", () => {
       const el = document.createElement("ea-divider");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.variant).toBe("");
     });
 
-    it("应该正确设置 variant 属性", async () => {
+    it("应该正确设置 variant 属性", () => {
       const el = document.createElement("ea-divider");
       el.setAttribute("variant", "dashed");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.variant).toBe("dashed");
     });
@@ -116,52 +96,42 @@ describe("EaDivider", () => {
   });
 
   describe("ContentPosition Attribute", () => {
-    it("默认 contentPosition 应该是 center", async () => {
+    it("默认 contentPosition 应该是 center", () => {
       const el = document.createElement("ea-divider");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.contentPosition).toBe("center");
     });
 
-    it("应该正确设置 content-position 属性为 start", async () => {
+    it("应该正确设置 content-position 属性为 start", () => {
       const el = document.createElement("ea-divider");
       el.setAttribute("content-position", "start");
       container.appendChild(el);
 
-      await waitForRender();
-
       expect(el.contentPosition).toBe("start");
     });
 
-    it("应该正确设置 content-position 属性为 end", async () => {
+    it("应该正确设置 content-position 属性为 end", () => {
       const el = document.createElement("ea-divider");
       el.setAttribute("content-position", "end");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.contentPosition).toBe("end");
     });
   });
 
   describe("Direction Attribute", () => {
-    it("默认 direction 应该是 horizontal", async () => {
+    it("默认 direction 应该是 horizontal", () => {
       const el = document.createElement("ea-divider");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.direction).toBe("horizontal");
     });
 
-    it("应该正确设置 direction 属性为 vertical", async () => {
+    it("应该正确设置 direction 属性为 vertical", () => {
       const el = document.createElement("ea-divider");
       el.setAttribute("direction", "vertical");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.direction).toBe("vertical");
     });
@@ -207,11 +177,9 @@ describe("EaDivider", () => {
   });
 
   describe("BEM Class Names", () => {
-    it("应该包含 ea-divider class", async () => {
+    it("应该包含 ea-divider class", () => {
       const el = document.createElement("ea-divider");
       container.appendChild(el);
-
-      await waitForRender();
 
       const containerEl = el.shadowRoot.querySelector(".ea-divider");
       expect(containerEl).toBeTruthy();
@@ -241,16 +209,14 @@ describe("EaDivider", () => {
   });
 
   describe("Lifecycle", () => {
-    it("组件连接后应该正确初始化", async () => {
+    it("组件连接后应该正确初始化", () => {
       const el = document.createElement("ea-divider");
       container.appendChild(el);
 
-      await waitForRender();
-
       expect(el.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
-      expect(
-        el.shadowRoot.querySelectorAll('.ea-divider__line').length
-      ).toBe(2);
+      expect(el.shadowRoot.querySelectorAll(".ea-divider__line").length).toBe(
+        2
+      );
       expect(el.shadowRoot.querySelector('[part="content"]')).toBeTruthy();
     });
 

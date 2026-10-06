@@ -17,50 +17,40 @@ describe("EaLink", () => {
   });
 
   describe("基础渲染", () => {
-    it("应该正确渲染 ea-link 组件", async () => {
+    it("应该正确渲染 ea-link 组件", () => {
       const link = document.createElement("ea-link");
       container.appendChild(link);
-
-      await waitForRender();
 
       expect(link).toBeDefined();
       expect(link.shadowRoot).toBeDefined();
     });
 
-    it("应该包含 container CSS Part", async () => {
+    it("应该包含 container CSS Part", () => {
       const link = document.createElement("ea-link");
       container.appendChild(link);
-
-      await waitForRender();
 
       expect(link.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
 
-    it("应该包含 icon CSS Part", async () => {
+    it("应该包含 icon CSS Part", () => {
       const link = document.createElement("ea-link");
       container.appendChild(link);
-
-      await waitForRender();
 
       expect(link.shadowRoot.querySelector('[part="icon"]')).toBeTruthy();
     });
 
-    it("应该包含原生 a 元素", async () => {
+    it("应该包含原生 a 元素", () => {
       const link = document.createElement("ea-link");
       container.appendChild(link);
-
-      await waitForRender();
 
       const anchorElement = link.shadowRoot.querySelector("a.ea-link");
       expect(anchorElement).toBeTruthy();
     });
 
-    it("应该渲染 slot 内容", async () => {
+    it("应该渲染 slot 内容", () => {
       const link = document.createElement("ea-link");
       link.textContent = "点击这里";
       container.appendChild(link);
-
-      await waitForRender();
 
       const slot = link.shadowRoot.querySelector("slot");
       expect(slot).toBeTruthy();
@@ -68,61 +58,49 @@ describe("EaLink", () => {
   });
 
   describe("variant 属性", () => {
-    it("默认 variant 应该是 normal", async () => {
+    it("默认 variant 应该是 normal", () => {
       const link = document.createElement("ea-link");
       container.appendChild(link);
-
-      await waitForRender();
 
       expect(link.variant).toBe("normal");
     });
 
-    it("应该支持 variant='primary'", async () => {
+    it("应该支持 variant='primary'", () => {
       const link = document.createElement("ea-link");
       link.setAttribute("variant", "primary");
       container.appendChild(link);
 
-      await waitForRender();
-
       expect(link.variant).toBe("primary");
     });
 
-    it("应该支持 variant='success'", async () => {
+    it("应该支持 variant='success'", () => {
       const link = document.createElement("ea-link");
       link.setAttribute("variant", "success");
       container.appendChild(link);
 
-      await waitForRender();
-
       expect(link.variant).toBe("success");
     });
 
-    it("应该支持 variant='warning'", async () => {
+    it("应该支持 variant='warning'", () => {
       const link = document.createElement("ea-link");
       link.setAttribute("variant", "warning");
       container.appendChild(link);
 
-      await waitForRender();
-
       expect(link.variant).toBe("warning");
     });
 
-    it("应该支持 variant='danger'", async () => {
+    it("应该支持 variant='danger'", () => {
       const link = document.createElement("ea-link");
       link.setAttribute("variant", "danger");
       container.appendChild(link);
 
-      await waitForRender();
-
       expect(link.variant).toBe("danger");
     });
 
-    it("应该支持 variant='info'", async () => {
+    it("应该支持 variant='info'", () => {
       const link = document.createElement("ea-link");
       link.setAttribute("variant", "info");
       container.appendChild(link);
-
-      await waitForRender();
 
       expect(link.variant).toBe("info");
     });
@@ -142,21 +120,17 @@ describe("EaLink", () => {
   });
 
   describe("href 属性", () => {
-    it("默认 href 应该是空字符串", async () => {
+    it("默认 href 应该是空字符串", () => {
       const link = document.createElement("ea-link");
       container.appendChild(link);
-
-      await waitForRender();
 
       expect(link.href).toBe("");
     });
 
-    it("应该支持 href 属性", async () => {
+    it("应该支持 href 属性", () => {
       const link = document.createElement("ea-link");
       link.setAttribute("href", "https://example.com");
       container.appendChild(link);
-
-      await waitForRender();
 
       expect(link.href).toBe("https://example.com");
     });
@@ -200,11 +174,9 @@ describe("EaLink", () => {
   });
 
   describe("target 属性", () => {
-    it("默认 target 应该是空字符串", async () => {
+    it("默认 target 应该是空字符串", () => {
       const link = document.createElement("ea-link");
       container.appendChild(link);
-
-      await waitForRender();
 
       expect(link.target).toBe("");
     });
@@ -253,11 +225,9 @@ describe("EaLink", () => {
   });
 
   describe("rel 属性", () => {
-    it("默认 rel 应该是空字符串", async () => {
+    it("默认 rel 应该是空字符串", () => {
       const link = document.createElement("ea-link");
       container.appendChild(link);
-
-      await waitForRender();
 
       expect(link.rel).toBe("");
     });
@@ -294,11 +264,9 @@ describe("EaLink", () => {
   });
 
   describe("download 属性", () => {
-    it("默认 download 应该是空字符串", async () => {
+    it("默认 download 应该是空字符串", () => {
       const link = document.createElement("ea-link");
       container.appendChild(link);
-
-      await waitForRender();
 
       expect(link.download).toBe("");
     });
@@ -335,21 +303,17 @@ describe("EaLink", () => {
   });
 
   describe("disabled 属性", () => {
-    it("默认 disabled 应该是 false", async () => {
+    it("默认 disabled 应该是 false", () => {
       const link = document.createElement("ea-link");
       container.appendChild(link);
-
-      await waitForRender();
 
       expect(link.disabled).toBe(false);
     });
 
-    it("设置 disabled 属性应该禁用链接", async () => {
+    it("设置 disabled 属性应该禁用链接", () => {
       const link = document.createElement("ea-link");
       link.setAttribute("disabled", "");
       container.appendChild(link);
-
-      await waitForRender();
 
       expect(link.disabled).toBe(true);
     });
@@ -367,41 +331,33 @@ describe("EaLink", () => {
   });
 
   describe("underline 属性", () => {
-    it("默认 underline 应该是空字符串", async () => {
+    it("默认 underline 应该是空字符串", () => {
       const link = document.createElement("ea-link");
       container.appendChild(link);
-
-      await waitForRender();
 
       expect(link.underline).toBe("");
     });
 
-    it("应该支持 underline='always'", async () => {
+    it("应该支持 underline='always'", () => {
       const link = document.createElement("ea-link");
       link.setAttribute("underline", "always");
       container.appendChild(link);
 
-      await waitForRender();
-
       expect(link.underline).toBe("always");
     });
 
-    it("应该支持 underline='hover'", async () => {
+    it("应该支持 underline='hover'", () => {
       const link = document.createElement("ea-link");
       link.setAttribute("underline", "hover");
       container.appendChild(link);
 
-      await waitForRender();
-
       expect(link.underline).toBe("hover");
     });
 
-    it("应该支持 underline='never'", async () => {
+    it("应该支持 underline='never'", () => {
       const link = document.createElement("ea-link");
       link.setAttribute("underline", "never");
       container.appendChild(link);
-
-      await waitForRender();
 
       expect(link.underline).toBe("never");
     });
@@ -430,11 +386,9 @@ describe("EaLink", () => {
   });
 
   describe("icon 属性", () => {
-    it("默认 icon 应该是空字符串", async () => {
+    it("默认 icon 应该是空字符串", () => {
       const link = document.createElement("ea-link");
       container.appendChild(link);
-
-      await waitForRender();
 
       expect(link.icon).toBe("");
     });
@@ -479,25 +433,21 @@ describe("EaLink", () => {
   });
 
   describe("组合属性", () => {
-    it("应该同时支持 variant 和 href", async () => {
+    it("应该同时支持 variant 和 href", () => {
       const link = document.createElement("ea-link");
       link.setAttribute("variant", "primary");
       link.setAttribute("href", "https://example.com");
       container.appendChild(link);
 
-      await waitForRender();
-
       expect(link.variant).toBe("primary");
       expect(link.href).toBe("https://example.com");
     });
 
-    it("应该同时支持 variant 和 disabled", async () => {
+    it("应该同时支持 variant 和 disabled", () => {
       const link = document.createElement("ea-link");
       link.setAttribute("variant", "primary");
       link.setAttribute("disabled", "");
       container.appendChild(link);
-
-      await waitForRender();
 
       expect(link.variant).toBe("primary");
       expect(link.disabled).toBe(true);
@@ -531,15 +481,13 @@ describe("EaLink", () => {
       expect(anchorElement.getAttribute("rel")).toBe("noopener noreferrer");
     });
 
-    it("应该同时设置多个属性", async () => {
+    it("应该同时设置多个属性", () => {
       const link = document.createElement("ea-link");
       link.setAttribute("variant", "primary");
       link.setAttribute("href", "https://example.com");
       link.setAttribute("underline", "hover");
       link.setAttribute("icon", "share");
       container.appendChild(link);
-
-      await waitForRender();
 
       expect(link.variant).toBe("primary");
       expect(link.underline).toBe("hover");
@@ -548,23 +496,19 @@ describe("EaLink", () => {
   });
 
   describe("插槽", () => {
-    it("应该支持默认插槽", async () => {
+    it("应该支持默认插槽", () => {
       const link = document.createElement("ea-link");
       link.textContent = "链接文本";
       container.appendChild(link);
-
-      await waitForRender();
 
       const slot = link.shadowRoot.querySelector("slot");
       expect(slot).toBeTruthy();
     });
 
-    it("应该支持 HTML 内容", async () => {
+    it("应该支持 HTML 内容", () => {
       const link = document.createElement("ea-link");
       link.innerHTML = "<strong>粗体链接</strong>";
       container.appendChild(link);
-
-      await waitForRender();
 
       const slot = link.shadowRoot.querySelector("slot");
       expect(slot).toBeTruthy();
@@ -632,7 +576,7 @@ describe("EaLink", () => {
       );
     });
 
-    it("同时设置所有属性应该正常工作", async () => {
+    it("同时设置所有属性应该正常工作", () => {
       const link = document.createElement("ea-link");
       link.setAttribute("variant", "primary");
       link.setAttribute("href", "https://example.com");
@@ -644,8 +588,6 @@ describe("EaLink", () => {
       link.textContent = "查看详情";
       container.appendChild(link);
 
-      await waitForRender();
-
       expect(link.variant).toBe("primary");
       expect(link.disabled).toBe(true);
       expect(link.underline).toBe("always");
@@ -656,13 +598,11 @@ describe("EaLink", () => {
   });
 
   describe("生命周期", () => {
-    it("组件连接后应该正确初始化", async () => {
+    it("组件连接后应该正确初始化", () => {
       const link = document.createElement("ea-link");
       link.setAttribute("variant", "primary");
       link.setAttribute("href", "https://example.com");
       container.appendChild(link);
-
-      await waitForRender();
 
       const anchorElement = link.shadowRoot.querySelector("a.ea-link");
       expect(anchorElement).toBeTruthy();

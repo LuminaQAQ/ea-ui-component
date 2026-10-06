@@ -279,11 +279,9 @@ describe("EaEmpty", () => {
   });
 
   describe("Image Attribute", () => {
-    it("默认 image 属性应该为空字符串", async () => {
+    it("默认 image 属性应该为空字符串", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
-
-      await waitForRender();
 
       expect(empty.image).toBe("");
     });
@@ -300,12 +298,10 @@ describe("EaEmpty", () => {
       expect(imgEl).toBeNull();
     });
 
-    it("应该通过 HTML attribute 设置 image", async () => {
+    it("应该通过 HTML attribute 设置 image", () => {
       const empty = document.createElement("ea-empty");
       empty.setAttribute("image", "https://example.com/custom.png");
       container.appendChild(empty);
-
-      await waitForRender();
 
       expect(empty.image).toBe("https://example.com/custom.png");
     });
@@ -425,21 +421,17 @@ describe("EaEmpty", () => {
   });
 
   describe("ImageSize Attribute", () => {
-    it("默认 imageSize 属性应该为空字符串", async () => {
+    it("默认 imageSize 属性应该为空字符串", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
-
-      await waitForRender();
 
       expect(empty.imageSize).toBe("");
     });
 
-    it("应该通过 HTML attribute image-size 设置值", async () => {
+    it("应该通过 HTML attribute image-size 设置值", () => {
       const empty = document.createElement("ea-empty");
       empty.setAttribute("image-size", "200px");
       container.appendChild(empty);
-
-      await waitForRender();
 
       expect(empty.imageSize).toBe("200px");
       expect(empty.getAttribute("image-size")).toBe("200px");
@@ -458,32 +450,26 @@ describe("EaEmpty", () => {
       expect(empty.style.getPropertyValue("--ea-empty-size")).toBe("200px");
     });
 
-    it("应该支持 px 单位", async () => {
+    it("应该支持 px 单位", () => {
       const empty = document.createElement("ea-empty");
       empty.setAttribute("image-size", "150px");
       container.appendChild(empty);
 
-      await waitForRender();
-
       expect(empty.imageSize).toBe("150px");
     });
 
-    it("应该支持 rem 单位", async () => {
+    it("应该支持 rem 单位", () => {
       const empty = document.createElement("ea-empty");
       empty.setAttribute("image-size", "10rem");
       container.appendChild(empty);
 
-      await waitForRender();
-
       expect(empty.imageSize).toBe("10rem");
     });
 
-    it("应该支持百分比单位", async () => {
+    it("应该支持百分比单位", () => {
       const empty = document.createElement("ea-empty");
       empty.setAttribute("image-size", "50%");
       container.appendChild(empty);
-
-      await waitForRender();
 
       expect(empty.imageSize).toBe("50%");
     });
@@ -499,17 +485,14 @@ describe("EaEmpty", () => {
       expect(empty.style.getPropertyValue("--ea-empty-size")).toBe("300px");
     });
 
-    it("应该支持动态修改 imageSize", async () => {
+    it("应该支持动态修改 imageSize", () => {
       const empty = document.createElement("ea-empty");
       empty.setAttribute("image-size", "100px");
       container.appendChild(empty);
 
-      await waitForRender();
-
       expect(empty.imageSize).toBe("100px");
 
       empty.setAttribute("image-size", "250px");
-      await waitForRender();
 
       expect(empty.imageSize).toBe("250px");
     });
@@ -567,11 +550,9 @@ describe("EaEmpty", () => {
   });
 
   describe("Description Attribute", () => {
-    it("默认 description 属性应该为空字符串", async () => {
+    it("默认 description 属性应该为空字符串", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
-
-      await waitForRender();
 
       expect(empty.description).toBe("");
     });
@@ -588,12 +569,10 @@ describe("EaEmpty", () => {
       expect(descSlot.textContent.trim()).toBe("No Data");
     });
 
-    it("应该通过 HTML attribute 设置 description", async () => {
+    it("应该通过 HTML attribute 设置 description", () => {
       const empty = document.createElement("ea-empty");
       empty.setAttribute("description", "暂无数据");
       container.appendChild(empty);
-
-      await waitForRender();
 
       expect(empty.description).toBe("暂无数据");
     });
@@ -664,17 +643,15 @@ describe("EaEmpty", () => {
       expect(descSlot.textContent).toBe("Second Text");
     });
 
-    it("应该支持中文 description", async () => {
+    it("应该支持中文 description", () => {
       const empty = document.createElement("ea-empty");
       empty.setAttribute("description", "这里什么都没有");
       container.appendChild(empty);
 
-      await waitForRender();
-
       expect(empty.description).toBe("这里什么都没有");
     });
 
-    it("应该支持长文本 description", async () => {
+    it("应该支持长文本 description", () => {
       const longText =
         "这是一段非常长的描述文字，用来测试组件是否能够正确处理长文本的显示。".repeat(
           5
@@ -682,8 +659,6 @@ describe("EaEmpty", () => {
       const empty = document.createElement("ea-empty");
       empty.setAttribute("description", longText);
       container.appendChild(empty);
-
-      await waitForRender();
 
       expect(empty.description).toBe(longText);
     });
@@ -800,11 +775,9 @@ describe("EaEmpty", () => {
   });
 
   describe("Lifecycle", () => {
-    it("组件添加到 DOM 后应该正确初始化", async () => {
+    it("组件添加到 DOM 后应该正确初始化", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
-
-      await waitForRender();
 
       expect(empty.shadowRoot.querySelector(".ea-empty")).toBeDefined();
       expect(
@@ -825,42 +798,33 @@ describe("EaEmpty", () => {
       expect(container.contains(empty)).toBe(false);
     });
 
-    it("移除后重新添加应该正常工作", async () => {
+    it("移除后重新添加应该正常工作", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
-
-      await waitForRender();
 
       empty.remove();
       container.appendChild(empty);
 
-      await waitForRender();
-
       expect(empty.shadowRoot.querySelector(".ea-empty")).toBeDefined();
     });
 
-    it("挂载前设置属性应该在挂载后生效", async () => {
+    it("挂载前设置属性应该在挂载后生效", () => {
       const empty = document.createElement("ea-empty");
       empty.setAttribute("description", "Pre-mount Description");
       empty.setAttribute("image", "https://example.com/pre-mount.png");
       empty.setAttribute("image-size", "150px");
       container.appendChild(empty);
 
-      await waitForRender();
-
       expect(empty.description).toBe("Pre-mount Description");
       expect(empty.image).toBe("https://example.com/pre-mount.png");
       expect(empty.imageSize).toBe("150px");
     });
 
-    it("挂载后动态修改属性应该立即生效", async () => {
+    it("挂载后动态修改属性应该立即生效", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
 
-      await waitForRender();
-
       empty.setAttribute("description", "After Mount");
-      await waitForRender();
 
       expect(empty.description).toBe("After Mount");
     });
@@ -895,14 +859,12 @@ describe("EaEmpty", () => {
       expect(imgEl).toBeDefined();
     });
 
-    it("应该正确处理三个属性同时设置", async () => {
+    it("应该正确处理三个属性同时设置", () => {
       const empty = document.createElement("ea-empty");
       empty.setAttribute("image", "https://example.com/all.png");
       empty.setAttribute("image-size", "180px");
       empty.setAttribute("description", "All Set");
       container.appendChild(empty);
-
-      await waitForRender();
 
       expect(empty.image).toBe("https://example.com/all.png");
       expect(empty.imageSize).toBe("180px");
@@ -1064,22 +1026,18 @@ describe("EaEmpty", () => {
       expect(empty.imageSize).toBe("200px");
     });
 
-    it("imageSize 与 image 同时动态切换", async () => {
+    it("imageSize 与 image 同时动态切换", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
 
-      await waitForRender();
-
       empty.setAttribute("image", "https://example.com/a.png");
       empty.setAttribute("image-size", "100px");
-      await waitForRender();
 
       expect(empty.image).toBe("https://example.com/a.png");
       expect(empty.imageSize).toBe("100px");
 
       empty.setAttribute("image", "https://example.com/b.png");
       empty.setAttribute("image-size", "300px");
-      await waitForRender();
 
       expect(empty.image).toBe("https://example.com/b.png");
       expect(empty.imageSize).toBe("300px");
@@ -1096,33 +1054,27 @@ describe("EaEmpty", () => {
     });
 
     describe("ARIA Attributes", () => {
-      it("容器元素应该有 role='status'", async () => {
+      it("容器元素应该有 role='status'", () => {
         const empty = document.createElement("ea-empty");
         container.appendChild(empty);
-
-        await waitForRender();
 
         const containerEl = empty.shadowRoot.querySelector(".ea-empty");
         expect(containerEl.getAttribute("role")).toBe("status");
       });
 
-      it("设置 description 后容器仍然有 role='status'", async () => {
+      it("设置 description 后容器仍然有 role='status'", () => {
         const empty = document.createElement("ea-empty");
         empty.setAttribute("description", "暂无数据");
         container.appendChild(empty);
 
-        await waitForRender();
-
         const containerEl = empty.shadowRoot.querySelector(".ea-empty");
         expect(containerEl.getAttribute("role")).toBe("status");
       });
 
-      it("设置 image 后容器仍然有 role='status'", async () => {
+      it("设置 image 后容器仍然有 role='status'", () => {
         const empty = document.createElement("ea-empty");
         empty.setAttribute("image", "https://example.com/empty.png");
         container.appendChild(empty);
-
-        await waitForRender();
 
         const containerEl = empty.shadowRoot.querySelector(".ea-empty");
         expect(containerEl.getAttribute("role")).toBe("status");

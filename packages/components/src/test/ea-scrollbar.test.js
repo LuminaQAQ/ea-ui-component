@@ -35,25 +35,21 @@ describe("EaScrollbar Component", () => {
   });
 
   describe("Basic Functionality", () => {
-    it("应该正确渲染组件", async () => {
+    it("应该正确渲染组件", () => {
       const scrollbar = document.createElement("ea-scrollbar");
       scrollbar.innerHTML = `
         <div style="height: 500px;">Content</div>
       `;
       container.appendChild(scrollbar);
 
-      await waitForRender();
-
       expect(scrollbar.shadowRoot).toBeTruthy();
       expect(scrollbar.shadowRoot.querySelector(".ea-scrollbar")).toBeTruthy();
     });
 
-    it("应该支持 CSS Parts", async () => {
+    it("应该支持 CSS Parts", () => {
       const scrollbar = document.createElement("ea-scrollbar");
       scrollbar.innerHTML = `<div>Content</div>`;
       container.appendChild(scrollbar);
-
-      await waitForRender();
 
       expect(
         scrollbar.shadowRoot.querySelector('[part="container"]')
@@ -75,7 +71,7 @@ describe("EaScrollbar Component", () => {
       ).toBeTruthy();
     });
 
-    it("应该渲染默认插槽内容", async () => {
+    it("应该渲染默认插槽内容", () => {
       const scrollbar = document.createElement("ea-scrollbar");
       scrollbar.innerHTML = `
         <div class="content-item">Item 1</div>
@@ -83,18 +79,14 @@ describe("EaScrollbar Component", () => {
       `;
       container.appendChild(scrollbar);
 
-      await waitForRender();
-
       const slot = scrollbar.shadowRoot.querySelector("slot");
       expect(slot).toBeTruthy();
     });
 
-    it("应该包含水平和垂直滚动轨道", async () => {
+    it("应该包含水平和垂直滚动轨道", () => {
       const scrollbar = document.createElement("ea-scrollbar");
       scrollbar.innerHTML = `<div style="height: 500px; width: 500px;">Content</div>`;
       container.appendChild(scrollbar);
-
-      await waitForRender();
 
       const horizontalTrack = scrollbar.shadowRoot.querySelector(
         ".ea-scrollbar__track-horizontal"
@@ -106,12 +98,10 @@ describe("EaScrollbar Component", () => {
       expect(verticalTrack).toBeTruthy();
     });
 
-    it("应该包含水平和垂直滚动滑块", async () => {
+    it("应该包含水平和垂直滚动滑块", () => {
       const scrollbar = document.createElement("ea-scrollbar");
       scrollbar.innerHTML = `<div style="height: 500px; width: 500px;">Content</div>`;
       container.appendChild(scrollbar);
-
-      await waitForRender();
 
       const horizontalThumb = scrollbar.shadowRoot.querySelector(
         ".ea-scrollbar__thumb-horizontal"
@@ -125,23 +115,19 @@ describe("EaScrollbar Component", () => {
   });
 
   describe("Height Attribute", () => {
-    it("默认 height 应该是空字符串", async () => {
+    it("默认 height 应该是空字符串", () => {
       const scrollbar = document.createElement("ea-scrollbar");
       scrollbar.innerHTML = `<div>Content</div>`;
       container.appendChild(scrollbar);
-
-      await waitForRender();
 
       expect(scrollbar.height).toBe("");
     });
 
-    it("应该支持 height 属性设置", async () => {
+    it("应该支持 height 属性设置", () => {
       const scrollbar = document.createElement("ea-scrollbar");
       scrollbar.setAttribute("height", "300px");
       scrollbar.innerHTML = `<div>Content</div>`;
       container.appendChild(scrollbar);
-
-      await waitForRender();
 
       expect(scrollbar.height).toBe("300px");
     });
@@ -171,23 +157,19 @@ describe("EaScrollbar Component", () => {
   });
 
   describe("Native Attribute", () => {
-    it("默认 native 应该是 false", async () => {
+    it("默认 native 应该是 false", () => {
       const scrollbar = document.createElement("ea-scrollbar");
       scrollbar.innerHTML = `<div>Content</div>`;
       container.appendChild(scrollbar);
-
-      await waitForRender();
 
       expect(scrollbar.native).toBe(false);
     });
 
-    it("应该支持 native 属性设置为 true", async () => {
+    it("应该支持 native 属性设置为 true", () => {
       const scrollbar = document.createElement("ea-scrollbar");
       scrollbar.setAttribute("native", "");
       scrollbar.innerHTML = `<div>Content</div>`;
       container.appendChild(scrollbar);
-
-      await waitForRender();
 
       expect(scrollbar.native).toBe(true);
     });
@@ -206,23 +188,19 @@ describe("EaScrollbar Component", () => {
   });
 
   describe("Noresize Attribute", () => {
-    it("默认 noresize 应该是 false", async () => {
+    it("默认 noresize 应该是 false", () => {
       const scrollbar = document.createElement("ea-scrollbar");
       scrollbar.innerHTML = `<div>Content</div>`;
       container.appendChild(scrollbar);
-
-      await waitForRender();
 
       expect(scrollbar.noresize).toBe(false);
     });
 
-    it("应该支持 noresize 属性设置为 true", async () => {
+    it("应该支持 noresize 属性设置为 true", () => {
       const scrollbar = document.createElement("ea-scrollbar");
       scrollbar.setAttribute("noresize", "");
       scrollbar.innerHTML = `<div>Content</div>`;
       container.appendChild(scrollbar);
-
-      await waitForRender();
 
       expect(scrollbar.noresize).toBe(true);
     });
@@ -243,23 +221,19 @@ describe("EaScrollbar Component", () => {
   });
 
   describe("Always Attribute", () => {
-    it("默认 always 应该是 false", async () => {
+    it("默认 always 应该是 false", () => {
       const scrollbar = document.createElement("ea-scrollbar");
       scrollbar.innerHTML = `<div>Content</div>`;
       container.appendChild(scrollbar);
-
-      await waitForRender();
 
       expect(scrollbar.always).toBe(false);
     });
 
-    it("应该支持 always 属性设置为 true", async () => {
+    it("应该支持 always 属性设置为 true", () => {
       const scrollbar = document.createElement("ea-scrollbar");
       scrollbar.setAttribute("always", "");
       scrollbar.innerHTML = `<div>Content</div>`;
       container.appendChild(scrollbar);
-
-      await waitForRender();
 
       expect(scrollbar.always).toBe(true);
     });
@@ -384,14 +358,12 @@ describe("EaScrollbar Component", () => {
   });
 
   describe("Scroll Methods", () => {
-    it("应该支持 scrollTo 方法", async () => {
+    it("应该支持 scrollTo 方法", () => {
       const scrollbar = document.createElement("ea-scrollbar");
       scrollbar.innerHTML = `
         <div style="height: 500px;">Content</div>
       `;
       container.appendChild(scrollbar);
-
-      await waitForRender();
 
       expect(typeof scrollbar.scrollTo).toBe("function");
     });
@@ -563,35 +535,29 @@ describe("EaScrollbar Component", () => {
   });
 
   describe("Edge Cases", () => {
-    it("应该处理空内容", async () => {
+    it("应该处理空内容", () => {
       const scrollbar = document.createElement("ea-scrollbar");
       container.appendChild(scrollbar);
-
-      await waitForRender();
 
       expect(scrollbar.shadowRoot.querySelector(".ea-scrollbar")).toBeTruthy();
     });
 
-    it("应该处理少量内容（不需要滚动）", async () => {
+    it("应该处理少量内容（不需要滚动）", () => {
       const scrollbar = document.createElement("ea-scrollbar");
       scrollbar.innerHTML = `<div style="height: 50px;">Small Content</div>`;
       container.appendChild(scrollbar);
-
-      await waitForRender();
 
       expect(
         scrollbar.shadowRoot.querySelector(".ea-scrollbar__view")
       ).toBeTruthy();
     });
 
-    it("应该处理大量内容（需要滚动）", async () => {
+    it("应该处理大量内容（需要滚动）", () => {
       const scrollbar = document.createElement("ea-scrollbar");
       scrollbar.innerHTML = `
         <div style="height: 1000px; width: 1000px;">Large Content</div>
       `;
       container.appendChild(scrollbar);
-
-      await waitForRender();
 
       const view = scrollbar.shadowRoot.querySelector(".ea-scrollbar__view");
       expect(view).toBeTruthy();
@@ -610,19 +576,15 @@ describe("EaScrollbar Component", () => {
       newContent.textContent = "New Content";
       scrollbar.appendChild(newContent);
 
-      await waitForRender();
-
       expect(scrollbar.children.length).toBe(2);
     });
   });
 
   describe("Lifecycle", () => {
-    it("组件连接后应该正确初始化", async () => {
+    it("组件连接后应该正确初始化", () => {
       const scrollbar = document.createElement("ea-scrollbar");
       scrollbar.innerHTML = `<div style="height: 500px;">Content</div>`;
       container.appendChild(scrollbar);
-
-      await waitForRender();
 
       expect(scrollbar.shadowRoot).toBeTruthy();
     });
@@ -639,18 +601,14 @@ describe("EaScrollbar Component", () => {
       expect(scrollbar.isConnected).toBe(false);
     });
 
-    it("应该支持属性动态更新", async () => {
+    it("应该支持属性动态更新", () => {
       const scrollbar = document.createElement("ea-scrollbar");
       scrollbar.innerHTML = `<div>Content</div>`;
       container.appendChild(scrollbar);
 
-      await waitForRender();
-
       expect(scrollbar.native).toBe(false);
 
       scrollbar.setAttribute("native", "");
-
-      await waitForRender();
 
       expect(scrollbar.native).toBe(true);
     });

@@ -19,30 +19,24 @@ describe("EaSteps Component", () => {
   // ==================== EaSteps 基础功能 ====================
 
   describe("EaSteps 基础功能", () => {
-    it("应该正确渲染 ea-steps 组件", async () => {
+    it("应该正确渲染 ea-steps 组件", () => {
       const steps = document.createElement("ea-steps");
       container.appendChild(steps);
-
-      await waitForRender();
 
       expect(steps).toBeDefined();
       expect(steps.shadowRoot).toBeDefined();
     });
 
-    it("应该包含 container CSS Part", async () => {
+    it("应该包含 container CSS Part", () => {
       const steps = document.createElement("ea-steps");
       container.appendChild(steps);
-
-      await waitForRender();
 
       expect(steps.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
 
-    it("应该包含默认 slot", async () => {
+    it("应该包含默认 slot", () => {
       const steps = document.createElement("ea-steps");
       container.appendChild(steps);
-
-      await waitForRender();
 
       expect(steps.shadowRoot.querySelector("slot")).toBeTruthy();
     });
@@ -63,11 +57,9 @@ describe("EaSteps Component", () => {
   // ==================== EaStep 基础功能 ====================
 
   describe("EaStep 基础功能", () => {
-    it("应该正确渲染 ea-step 组件", async () => {
+    it("应该正确渲染 ea-step 组件", () => {
       const step = document.createElement("ea-step");
       container.appendChild(step);
-
-      await waitForRender();
 
       expect(step).toBeDefined();
       expect(step.shadowRoot).toBeDefined();
@@ -125,11 +117,9 @@ describe("EaSteps Component", () => {
   // ==================== EaSteps space 属性 ====================
 
   describe("EaSteps space 属性", () => {
-    it("默认 space 应该是 50%", async () => {
+    it("默认 space 应该是 50%", () => {
       const steps = document.createElement("ea-steps");
       container.appendChild(steps);
-
-      await waitForRender();
 
       expect(steps.space).toBe("50%");
     });
@@ -238,11 +228,9 @@ describe("EaSteps Component", () => {
   // ==================== EaSteps processStatus 属性 ====================
 
   describe("EaSteps processStatus 属性", () => {
-    it("默认 processStatus 应该是 process", async () => {
+    it("默认 processStatus 应该是 process", () => {
       const steps = document.createElement("ea-steps");
       container.appendChild(steps);
-
-      await waitForRender();
 
       expect(steps.processStatus).toBe("process");
     });
@@ -266,11 +254,9 @@ describe("EaSteps Component", () => {
   // ==================== EaSteps finishStatus 属性 ====================
 
   describe("EaSteps finishStatus 属性", () => {
-    it("默认 finishStatus 应该是 finish", async () => {
+    it("默认 finishStatus 应该是 finish", () => {
       const steps = document.createElement("ea-steps");
       container.appendChild(steps);
-
-      await waitForRender();
 
       expect(steps.finishStatus).toBe("finish");
     });
@@ -295,11 +281,9 @@ describe("EaSteps Component", () => {
   // ==================== EaSteps alignCenter 属性 ====================
 
   describe("EaSteps alignCenter 属性", () => {
-    it("默认 alignCenter 应该是 false", async () => {
+    it("默认 alignCenter 应该是 false", () => {
       const steps = document.createElement("ea-steps");
       container.appendChild(steps);
-
-      await waitForRender();
 
       expect(steps.alignCenter).toBe(false);
     });
@@ -369,11 +353,9 @@ describe("EaSteps Component", () => {
   // ==================== EaSteps simple 属性 ====================
 
   describe("EaSteps simple 属性", () => {
-    it("默认 simple 应该是 false", async () => {
+    it("默认 simple 应该是 false", () => {
       const steps = document.createElement("ea-steps");
       container.appendChild(steps);
-
-      await waitForRender();
 
       expect(steps.simple).toBe(false);
     });
@@ -510,11 +492,9 @@ describe("EaSteps Component", () => {
   // ==================== EaSteps direction 属性 ====================
 
   describe("EaSteps direction 属性", () => {
-    it("默认 direction 应该是 horizontal", async () => {
+    it("默认 direction 应该是 horizontal", () => {
       const steps = document.createElement("ea-steps");
       container.appendChild(steps);
-
-      await waitForRender();
 
       expect(steps.direction).toBe("horizontal");
     });
@@ -571,11 +551,9 @@ describe("EaSteps Component", () => {
   // ==================== EaStep heading 属性 ====================
 
   describe("EaStep heading 属性", () => {
-    it("默认 heading 应该是空字符串", async () => {
+    it("默认 heading 应该是空字符串", () => {
       const step = document.createElement("ea-step");
       container.appendChild(step);
-
-      await waitForRender();
 
       expect(step.heading).toBe("");
     });
@@ -609,11 +587,9 @@ describe("EaSteps Component", () => {
   // ==================== EaStep description 属性 ====================
 
   describe("EaStep description 属性", () => {
-    it("默认 description 应该是空字符串", async () => {
+    it("默认 description 应该是空字符串", () => {
       const step = document.createElement("ea-step");
       container.appendChild(step);
-
-      await waitForRender();
 
       expect(step.description).toBe("");
     });
@@ -651,11 +627,9 @@ describe("EaSteps Component", () => {
   // ==================== EaStep icon 属性 ====================
 
   describe("EaStep icon 属性", () => {
-    it("默认 icon 应该是空字符串", async () => {
+    it("默认 icon 应该是空字符串", () => {
       const step = document.createElement("ea-step");
       container.appendChild(step);
-
-      await waitForRender();
 
       expect(step.icon).toBe("");
     });
@@ -700,11 +674,9 @@ describe("EaSteps Component", () => {
   // ==================== EaStep status 属性 ====================
 
   describe("EaStep status 属性", () => {
-    it("默认 status 应该是空字符串", async () => {
+    it("默认 status 应该是空字符串", () => {
       const step = document.createElement("ea-step");
       container.appendChild(step);
-
-      await waitForRender();
 
       expect(step.status).toBe("");
     });
@@ -755,11 +727,9 @@ describe("EaSteps Component", () => {
   // ==================== EaStep index 属性 ====================
 
   describe("EaStep index 属性", () => {
-    it("默认 index 应该是 0", async () => {
+    it("默认 index 应该是 0", () => {
       const step = document.createElement("ea-step");
       container.appendChild(step);
-
-      await waitForRender();
 
       expect(step.index).toBe(0);
     });
@@ -779,11 +749,9 @@ describe("EaSteps Component", () => {
   // ==================== EaStep direction 属性 ====================
 
   describe("EaStep direction 属性", () => {
-    it("默认 direction 应该是 horizontal", async () => {
+    it("默认 direction 应该是 horizontal", () => {
       const step = document.createElement("ea-step");
       container.appendChild(step);
-
-      await waitForRender();
 
       expect(step.direction).toBe("horizontal");
     });
@@ -1019,11 +987,9 @@ describe("EaSteps Component", () => {
   // ==================== 边界情况 ====================
 
   describe("边界情况", () => {
-    it("空 steps 应该正常渲染", async () => {
+    it("空 steps 应该正常渲染", () => {
       const steps = document.createElement("ea-steps");
       container.appendChild(steps);
-
-      await waitForRender();
 
       expect(steps.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
@@ -1136,12 +1102,10 @@ describe("EaSteps Component", () => {
       expect(stepElements[1].getAttribute("status")).toBe("wait");
     });
 
-    it("ea-step 不在 ea-steps 内时应该正常渲染", async () => {
+    it("ea-step 不在 ea-steps 内时应该正常渲染", () => {
       const step = document.createElement("ea-step");
       step.heading = "Standalone Step";
       container.appendChild(step);
-
-      await waitForRender();
 
       expect(step.shadowRoot).toBeDefined();
       expect(step.heading).toBe("Standalone Step");

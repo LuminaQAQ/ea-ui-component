@@ -124,11 +124,9 @@ describe("EaCard", () => {
       expect(containerEl.classList.contains("is-always-shadow")).toBe(false);
     });
 
-    it("shadow 属性默认值应为 always", async () => {
+    it("shadow 属性默认值应为 always", () => {
       const card = document.createElement("ea-card");
       container.appendChild(card);
-      await waitForRender();
-
       expect(card.shadow).toBe("always");
     });
   });
@@ -156,7 +154,7 @@ describe("EaCard", () => {
       expect(containerEl.classList.contains("is-header-empty")).toBe(false);
     });
 
-    it("header 插槽应该正确渲染传入的 DOM 内容", async () => {
+    it("header 插槽应该正确渲染传入的 DOM 内容", () => {
       const card = document.createElement("ea-card");
       card.innerHTML = `
         <div slot="header">
@@ -166,8 +164,6 @@ describe("EaCard", () => {
         <p>Content</p>
       `;
       container.appendChild(card);
-      await waitForRender();
-
       const headerSlot = card.shadowRoot.querySelector('slot[name="header"]');
       const assignedElements = headerSlot.assignedElements();
       expect(assignedElements.length).toBeGreaterThan(0);
@@ -199,7 +195,7 @@ describe("EaCard", () => {
       expect(containerEl.classList.contains("is-footer-empty")).toBe(false);
     });
 
-    it("footer 插槽应该正确渲染传入的 DOM 内容", async () => {
+    it("footer 插槽应该正确渲染传入的 DOM 内容", () => {
       const card = document.createElement("ea-card");
       card.innerHTML = `
         <p>Content</p>
@@ -209,8 +205,6 @@ describe("EaCard", () => {
         </div>
       `;
       container.appendChild(card);
-      await waitForRender();
-
       const footerSlot = card.shadowRoot.querySelector('slot[name="footer"]');
       const assignedElements = footerSlot.assignedElements();
       expect(assignedElements.length).toBeGreaterThan(0);
@@ -315,19 +309,15 @@ describe("EaCard", () => {
       expect(footerSlot.innerText).toBe("New Footer");
     });
 
-    it("header 属性默认值应为空字符串", async () => {
+    it("header 属性默认值应为空字符串", () => {
       const card = document.createElement("ea-card");
       container.appendChild(card);
-      await waitForRender();
-
       expect(card.header).toBe("");
     });
 
-    it("footer 属性默认值应为空字符串", async () => {
+    it("footer 属性默认值应为空字符串", () => {
       const card = document.createElement("ea-card");
       container.appendChild(card);
-      await waitForRender();
-
       expect(card.footer).toBe("");
     });
   });
@@ -383,11 +373,9 @@ describe("EaCard", () => {
   });
 
   describe("边界条件", () => {
-    it("空卡片应该正确渲染", async () => {
+    it("空卡片应该正确渲染", () => {
       const card = document.createElement("ea-card");
       container.appendChild(card);
-      await waitForRender();
-
       const containerEl = card.shadowRoot.querySelector(".ea-card");
       const contentSlot = card.shadowRoot.querySelector("slot:not([name])");
 
@@ -487,32 +475,26 @@ describe("EaCard", () => {
   });
 
   describe("updateContainerClasslist 方法", () => {
-    it("应该返回包含块类名的字符串", async () => {
+    it("应该返回包含块类名的字符串", () => {
       const card = document.createElement("ea-card");
       container.appendChild(card);
-      await waitForRender();
-
       const className = card.updateContainerClasslist();
       expect(className).toContain("ea-card");
     });
 
-    it("应该根据 shadow 属性返回正确的状态类", async () => {
+    it("应该根据 shadow 属性返回正确的状态类", () => {
       const card = document.createElement("ea-card");
       card.setAttribute("shadow", "hover");
       container.appendChild(card);
-      await waitForRender();
-
       const className = card.updateContainerClasslist();
       expect(className).toContain("is-hover-shadow");
     });
   });
 
   describe("生命周期", () => {
-    it("组件连接后应该正确初始化", async () => {
+    it("组件连接后应该正确初始化", () => {
       const card = document.createElement("ea-card");
       container.appendChild(card);
-      await waitForRender();
-
       expect(card.shadowRoot).toBeDefined();
       expect(card.shadowRoot.querySelector(".ea-card")).toBeTruthy();
     });

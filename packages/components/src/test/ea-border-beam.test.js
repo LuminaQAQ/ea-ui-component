@@ -16,53 +16,41 @@ describe("EaBorderBeam", () => {
   });
 
   describe("Basic Functionality", () => {
-    it("应该正确渲染 ea-border-beam 组件", async () => {
+    it("应该正确渲染 ea-border-beam 组件", () => {
       const el = document.createElement("ea-border-beam");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el).toBeDefined();
       expect(el.shadowRoot).toBeDefined();
     });
 
-    it("应该包含 .ea-border-beam 容器元素", async () => {
+    it("应该包含 .ea-border-beam 容器元素", () => {
       const el = document.createElement("ea-border-beam");
       container.appendChild(el);
-
-      await waitForRender();
 
       const containerEl = el.shadowRoot.querySelector(".ea-border-beam");
       expect(containerEl).toBeDefined();
     });
 
-    it("应该包含 container CSS Part", async () => {
+    it("应该包含 container CSS Part", () => {
       const el = document.createElement("ea-border-beam");
       container.appendChild(el);
 
-      await waitForRender();
-
-      expect(
-        el.shadowRoot.querySelector('[part="container"]')
-      ).toBeTruthy();
+      expect(el.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
 
-    it("默认应该有 1 个 indicator CSS Part", async () => {
+    it("默认应该有 1 个 indicator CSS Part", () => {
       const el = document.createElement("ea-border-beam");
       container.appendChild(el);
-
-      await waitForRender();
 
       const indicators = el.shadowRoot.querySelectorAll('[part="indicator"]');
       expect(indicators.length).toBe(1);
     });
 
-    it("应该支持 slot 内容", async () => {
+    it("应该支持 slot 内容", () => {
       const el = document.createElement("ea-border-beam");
       el.innerHTML = '<div class="test-content">Slot Content</div>';
       container.appendChild(el);
-
-      await waitForRender();
 
       const slot = el.shadowRoot.querySelector("slot");
       expect(slot).toBeDefined();
@@ -71,21 +59,17 @@ describe("EaBorderBeam", () => {
   });
 
   describe("Count Attribute", () => {
-    it("默认 count 应该是 1", async () => {
+    it("默认 count 应该是 1", () => {
       const el = document.createElement("ea-border-beam");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.count).toBe(1);
     });
 
-    it("应该正确设置 count 属性", async () => {
+    it("应该正确设置 count 属性", () => {
       const el = document.createElement("ea-border-beam");
       el.setAttribute("count", "3");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.count).toBe(3);
     });
@@ -94,11 +78,9 @@ describe("EaBorderBeam", () => {
       const el = document.createElement("ea-border-beam");
       container.appendChild(el);
 
-      await waitForRender();
-
-      expect(
-        el.shadowRoot.querySelectorAll('[part="indicator"]').length
-      ).toBe(1);
+      expect(el.shadowRoot.querySelectorAll('[part="indicator"]').length).toBe(
+        1
+      );
 
       el.setAttribute("count", "3");
       await waitForRender();
@@ -112,11 +94,9 @@ describe("EaBorderBeam", () => {
       el.setAttribute("count", "3");
       container.appendChild(el);
 
-      await waitForRender();
-
-      expect(
-        el.shadowRoot.querySelectorAll('[part="indicator"]').length
-      ).toBe(3);
+      expect(el.shadowRoot.querySelectorAll('[part="indicator"]').length).toBe(
+        3
+      );
 
       el.setAttribute("count", "1");
       await waitForRender();
@@ -138,21 +118,17 @@ describe("EaBorderBeam", () => {
   });
 
   describe("Trigger Attribute", () => {
-    it("默认 trigger 应该是空字符串", async () => {
+    it("默认 trigger 应该是空字符串", () => {
       const el = document.createElement("ea-border-beam");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.trigger).toBe("");
     });
 
-    it("应该正确设置 trigger 属性", async () => {
+    it("应该正确设置 trigger 属性", () => {
       const el = document.createElement("ea-border-beam");
       el.setAttribute("trigger", "hover");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.trigger).toBe("hover");
     });
@@ -172,21 +148,17 @@ describe("EaBorderBeam", () => {
   });
 
   describe("Size Attribute", () => {
-    it("默认 size 应该是 100", async () => {
+    it("默认 size 应该是 100", () => {
       const el = document.createElement("ea-border-beam");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.size).toBe(100);
     });
 
-    it("应该正确设置 size 属性", async () => {
+    it("应该正确设置 size 属性", () => {
       const el = document.createElement("ea-border-beam");
       el.setAttribute("size", "56");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.size).toBe(56);
     });
@@ -208,21 +180,17 @@ describe("EaBorderBeam", () => {
   });
 
   describe("LineWidth Attribute", () => {
-    it("默认 lineWidth 应该是 1", async () => {
+    it("默认 lineWidth 应该是 1", () => {
       const el = document.createElement("ea-border-beam");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.lineWidth).toBe(1);
     });
 
-    it("应该正确设置 line-width 属性", async () => {
+    it("应该正确设置 line-width 属性", () => {
       const el = document.createElement("ea-border-beam");
       el.setAttribute("line-width", "2");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.lineWidth).toBe(2);
     });
@@ -246,21 +214,17 @@ describe("EaBorderBeam", () => {
   });
 
   describe("Duration Attribute", () => {
-    it("默认 duration 应该是 10", async () => {
+    it("默认 duration 应该是 10", () => {
       const el = document.createElement("ea-border-beam");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.duration).toBe(10);
     });
 
-    it("应该正确设置 duration 属性", async () => {
+    it("应该正确设置 duration 属性", () => {
       const el = document.createElement("ea-border-beam");
       el.setAttribute("duration", "5");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.duration).toBe(5);
     });
@@ -282,21 +246,17 @@ describe("EaBorderBeam", () => {
   });
 
   describe("StartDelay Attribute", () => {
-    it("默认 startDelay 应该是 0", async () => {
+    it("默认 startDelay 应该是 0", () => {
       const el = document.createElement("ea-border-beam");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.startDelay).toBe(0);
     });
 
-    it("应该正确设置 start-delay 属性", async () => {
+    it("应该正确设置 start-delay 属性", () => {
       const el = document.createElement("ea-border-beam");
       el.setAttribute("start-delay", "2");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.startDelay).toBe(2);
     });
@@ -370,17 +330,15 @@ describe("EaBorderBeam", () => {
   });
 
   describe("Lifecycle", () => {
-    it("组件连接后应该正确初始化", async () => {
+    it("组件连接后应该正确初始化", () => {
       const el = document.createElement("ea-border-beam");
       el.innerHTML = "<div>Content</div>";
       container.appendChild(el);
 
-      await waitForRender();
-
       expect(el.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
-      expect(
-        el.shadowRoot.querySelectorAll('[part="indicator"]').length
-      ).toBe(1);
+      expect(el.shadowRoot.querySelectorAll('[part="indicator"]').length).toBe(
+        1
+      );
     });
 
     it("组件断开连接后应该正常移除", () => {

@@ -84,26 +84,22 @@ describe("EaButton Component", () => {
   });
 
   describe("Variant Attribute", () => {
-    it("默认 variant 应该是 normal", async () => {
+    it("默认 variant 应该是 normal", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
-
-      await waitForRender();
 
       expect(button.variant).toBe("normal");
     });
 
-    it("应该正确设置 variant 属性", async () => {
+    it("应该正确设置 variant 属性", () => {
       const button = document.createElement("ea-button");
       button.setAttribute("variant", "primary");
       container.appendChild(button);
 
-      await waitForRender();
-
       expect(button.variant).toBe("primary");
     });
 
-    it("应该支持所有 variant 类型", async () => {
+    it("应该支持所有 variant 类型", () => {
       const variants = [
         "normal",
         "primary",
@@ -117,8 +113,6 @@ describe("EaButton Component", () => {
         const button = document.createElement("ea-button");
         button.setAttribute("variant", variant);
         container.appendChild(button);
-
-        await waitForRender();
 
         expect(button.variant).toBe(variant);
         container.removeChild(button);
@@ -169,34 +163,28 @@ describe("EaButton Component", () => {
   });
 
   describe("Size Attribute", () => {
-    it("默认 size 应该是 medium", async () => {
+    it("默认 size 应该是 medium", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
-
-      await waitForRender();
 
       expect(button.size).toBe("medium");
     });
 
-    it("应该正确设置 size 属性", async () => {
+    it("应该正确设置 size 属性", () => {
       const button = document.createElement("ea-button");
       button.setAttribute("size", "large");
       container.appendChild(button);
 
-      await waitForRender();
-
       expect(button.size).toBe("large");
     });
 
-    it("应该支持所有 size 类型", async () => {
+    it("应该支持所有 size 类型", () => {
       const sizes = ["small", "medium", "large"];
 
       for (const size of sizes) {
         const button = document.createElement("ea-button");
         button.setAttribute("size", size);
         container.appendChild(button);
-
-        await waitForRender();
 
         expect(button.size).toBe(size);
         container.removeChild(button);
@@ -293,21 +281,17 @@ describe("EaButton Component", () => {
   });
 
   describe("Plain Attribute", () => {
-    it("默认 plain 应该是 false", async () => {
+    it("默认 plain 应该是 false", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
-
-      await waitForRender();
 
       expect(button.plain).toBe(false);
     });
 
-    it("应该正确设置 plain 属性", async () => {
+    it("应该正确设置 plain 属性", () => {
       const button = document.createElement("ea-button");
       button.setAttribute("plain", "");
       container.appendChild(button);
-
-      await waitForRender();
 
       expect(button.plain).toBe(true);
     });
@@ -329,21 +313,17 @@ describe("EaButton Component", () => {
   });
 
   describe("Round Attribute", () => {
-    it("默认 round 应该是 false", async () => {
+    it("默认 round 应该是 false", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
-
-      await waitForRender();
 
       expect(button.round).toBe(false);
     });
 
-    it("应该正确设置 round 属性", async () => {
+    it("应该正确设置 round 属性", () => {
       const button = document.createElement("ea-button");
       button.setAttribute("round", "");
       container.appendChild(button);
-
-      await waitForRender();
 
       expect(button.round).toBe(true);
     });
@@ -365,21 +345,17 @@ describe("EaButton Component", () => {
   });
 
   describe("Circle Attribute", () => {
-    it("默认 circle 应该是 false", async () => {
+    it("默认 circle 应该是 false", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
-
-      await waitForRender();
 
       expect(button.circle).toBe(false);
     });
 
-    it("应该正确设置 circle 属性", async () => {
+    it("应该正确设置 circle 属性", () => {
       const button = document.createElement("ea-button");
       button.setAttribute("circle", "");
       container.appendChild(button);
-
-      await waitForRender();
 
       expect(button.circle).toBe(true);
     });
@@ -401,21 +377,17 @@ describe("EaButton Component", () => {
   });
 
   describe("Text Attribute", () => {
-    it("默认 text 应该是 false", async () => {
+    it("默认 text 应该是 false", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
-
-      await waitForRender();
 
       expect(button.text).toBe(false);
     });
 
-    it("应该正确设置 text 属性", async () => {
+    it("应该正确设置 text 属性", () => {
       const button = document.createElement("ea-button");
       button.setAttribute("text", "");
       container.appendChild(button);
-
-      await waitForRender();
 
       expect(button.text).toBe(true);
     });
@@ -437,21 +409,17 @@ describe("EaButton Component", () => {
   });
 
   describe("Loading Attribute", () => {
-    it("默认 loading 应该是 false", async () => {
+    it("默认 loading 应该是 false", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
-
-      await waitForRender();
 
       expect(button.loading).toBe(false);
     });
 
-    it("应该正确设置 loading 属性", async () => {
+    it("应该正确设置 loading 属性", () => {
       const button = document.createElement("ea-button");
       button.setAttribute("loading", "");
       container.appendChild(button);
-
-      await waitForRender();
 
       expect(button.loading).toBe(true);
     });
@@ -540,21 +508,17 @@ describe("EaButton Component", () => {
   });
 
   describe("Icon Attribute", () => {
-    it("默认 icon 应该是空字符串", async () => {
+    it("默认 icon 应该是空字符串", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
-
-      await waitForRender();
 
       expect(button.icon).toBe("");
     });
 
-    it("应该正确设置 icon 属性", async () => {
+    it("应该正确设置 icon 属性", () => {
       const button = document.createElement("ea-button");
       button.setAttribute("icon", "coffee");
       container.appendChild(button);
-
-      await waitForRender();
 
       expect(button.icon).toBe("coffee");
     });
@@ -626,21 +590,17 @@ describe("EaButton Component", () => {
   });
 
   describe("Link and Href Attributes", () => {
-    it("默认 link 应该是 false", async () => {
+    it("默认 link 应该是 false", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
-
-      await waitForRender();
 
       expect(button.link).toBe(false);
     });
 
-    it("应该正确设置 link 属性", async () => {
+    it("应该正确设置 link 属性", () => {
       const button = document.createElement("ea-button");
       button.setAttribute("link", "");
       container.appendChild(button);
-
-      await waitForRender();
 
       expect(button.link).toBe(true);
     });
@@ -688,13 +648,11 @@ describe("EaButton Component", () => {
       expect(containerEl.classList.contains("ea-button--text")).toBe(true);
     });
 
-    it("应该正确设置 href 属性", async () => {
+    it("应该正确设置 href 属性", () => {
       const button = document.createElement("ea-button");
       button.setAttribute("link", "");
       button.setAttribute("href", "https://example.com");
       container.appendChild(button);
-
-      await waitForRender();
 
       expect(button.href).toBe("https://example.com");
     });
@@ -1601,34 +1559,28 @@ describe("EaButtonGroup Component", () => {
   });
 
   describe("Size Attribute", () => {
-    it("默认 size 应该是 medium", async () => {
+    it("默认 size 应该是 medium", () => {
       const group = document.createElement("ea-button-group");
       container.appendChild(group);
-
-      await waitForRender();
 
       expect(group.size).toBe("medium");
     });
 
-    it("应该正确设置 size 属性", async () => {
+    it("应该正确设置 size 属性", () => {
       const group = document.createElement("ea-button-group");
       group.setAttribute("size", "large");
       container.appendChild(group);
 
-      await waitForRender();
-
       expect(group.size).toBe("large");
     });
 
-    it("应该支持所有 size 类型", async () => {
+    it("应该支持所有 size 类型", () => {
       const sizes = ["small", "medium", "large"];
 
       for (const size of sizes) {
         const group = document.createElement("ea-button-group");
         group.setAttribute("size", size);
         container.appendChild(group);
-
-        await waitForRender();
 
         expect(group.size).toBe(size);
         container.removeChild(group);
@@ -1656,26 +1608,22 @@ describe("EaButtonGroup Component", () => {
   });
 
   describe("Variant Attribute", () => {
-    it("默认 variant 应该是 normal", async () => {
+    it("默认 variant 应该是 normal", () => {
       const group = document.createElement("ea-button-group");
       container.appendChild(group);
-
-      await waitForRender();
 
       expect(group.variant).toBe("normal");
     });
 
-    it("应该正确设置 variant 属性", async () => {
+    it("应该正确设置 variant 属性", () => {
       const group = document.createElement("ea-button-group");
       group.setAttribute("variant", "primary");
       container.appendChild(group);
 
-      await waitForRender();
-
       expect(group.variant).toBe("primary");
     });
 
-    it("应该支持所有 variant 类型", async () => {
+    it("应该支持所有 variant 类型", () => {
       const variants = [
         "normal",
         "primary",
@@ -1689,8 +1637,6 @@ describe("EaButtonGroup Component", () => {
         const group = document.createElement("ea-button-group");
         group.setAttribute("variant", variant);
         container.appendChild(group);
-
-        await waitForRender();
 
         expect(group.variant).toBe(variant);
         container.removeChild(group);

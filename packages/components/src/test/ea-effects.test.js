@@ -1,20 +1,5 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { waitForRender } from "./utils/waitForRender";
-
-// Mock window.matchMedia for jsdom
-Object.defineProperty(window, "matchMedia", {
-  writable: true,
-  value: vi.fn().mockImplementation(query => ({
-    matches: false,
-    media: query,
-    onchange: null,
-    addListener: vi.fn(),
-    removeListener: vi.fn(),
-    addEventListener: vi.fn(),
-    removeEventListener: vi.fn(),
-    dispatchEvent: vi.fn(),
-  })),
-});
 
 import "../components/ea-effects/index";
 
@@ -31,41 +16,33 @@ describe("EaEffects", () => {
   });
 
   describe("Basic Functionality", () => {
-    it("应该正确渲染 ea-effects 组件", async () => {
+    it("应该正确渲染 ea-effects 组件", () => {
       const el = document.createElement("ea-effects");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el).toBeDefined();
       expect(el.shadowRoot).toBeDefined();
     });
 
-    it("应该包含 .ea-effects 容器元素", async () => {
+    it("应该包含 .ea-effects 容器元素", () => {
       const el = document.createElement("ea-effects");
       container.appendChild(el);
-
-      await waitForRender();
 
       const containerEl = el.shadowRoot.querySelector(".ea-effects");
       expect(containerEl).toBeDefined();
     });
 
-    it("应该包含 container CSS Part", async () => {
+    it("应该包含 container CSS Part", () => {
       const el = document.createElement("ea-effects");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
 
-    it("应该支持 slot 内容", async () => {
+    it("应该支持 slot 内容", () => {
       const el = document.createElement("ea-effects");
       el.innerHTML = "<div>Content</div>";
       container.appendChild(el);
-
-      await waitForRender();
 
       const slot = el.shadowRoot.querySelector("slot");
       expect(slot).toBeDefined();
@@ -74,21 +51,17 @@ describe("EaEffects", () => {
   });
 
   describe("Effect Attribute", () => {
-    it("默认 effect 应该是空字符串", async () => {
+    it("默认 effect 应该是空字符串", () => {
       const el = document.createElement("ea-effects");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.effect).toBe("");
     });
 
-    it("应该正确设置 effect 属性", async () => {
+    it("应该正确设置 effect 属性", () => {
       const el = document.createElement("ea-effects");
       el.setAttribute("effect", "fade");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.effect).toBe("fade");
     });
@@ -106,12 +79,10 @@ describe("EaEffects", () => {
       expect(containerEl.classList.contains("ea-effects--fade")).toBe(true);
     });
 
-    it("应该支持 zoom-center 效果", async () => {
+    it("应该支持 zoom-center 效果", () => {
       const el = document.createElement("ea-effects");
       el.setAttribute("effect", "zoom-center");
       container.appendChild(el);
-
-      await waitForRender();
 
       const containerEl = el.shadowRoot.querySelector(".ea-effects");
       expect(containerEl.classList.contains("ea-effects--zoom-center")).toBe(
@@ -119,12 +90,10 @@ describe("EaEffects", () => {
       );
     });
 
-    it("应该支持 slide-top 效果", async () => {
+    it("应该支持 slide-top 效果", () => {
       const el = document.createElement("ea-effects");
       el.setAttribute("effect", "slide-top");
       container.appendChild(el);
-
-      await waitForRender();
 
       const containerEl = el.shadowRoot.querySelector(".ea-effects");
       expect(containerEl.classList.contains("ea-effects--slide-top")).toBe(
@@ -132,12 +101,10 @@ describe("EaEffects", () => {
       );
     });
 
-    it("应该支持 flip-x 效果", async () => {
+    it("应该支持 flip-x 效果", () => {
       const el = document.createElement("ea-effects");
       el.setAttribute("effect", "flip-x");
       container.appendChild(el);
-
-      await waitForRender();
 
       const containerEl = el.shadowRoot.querySelector(".ea-effects");
       expect(containerEl.classList.contains("ea-effects--flip-x")).toBe(true);
@@ -145,22 +112,18 @@ describe("EaEffects", () => {
   });
 
   describe("Visible Attribute", () => {
-    it("默认 visible 应该是 true", async () => {
+    it("默认 visible 应该是 true", () => {
       const el = document.createElement("ea-effects");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.visible).toBe(true);
     });
 
-    it("设置 visible=false 应该隐藏内容", async () => {
+    it("设置 visible=false 应该隐藏内容", () => {
       const el = document.createElement("ea-effects");
       el.setAttribute("visible", "false");
       el.innerHTML = "<div>Content</div>";
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.visible).toBe(false);
     });
@@ -193,21 +156,17 @@ describe("EaEffects", () => {
   });
 
   describe("Duration Attribute", () => {
-    it("默认 duration 应该是空字符串", async () => {
+    it("默认 duration 应该是空字符串", () => {
       const el = document.createElement("ea-effects");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.duration).toBe("");
     });
 
-    it("应该正确设置 duration 属性", async () => {
+    it("应该正确设置 duration 属性", () => {
       const el = document.createElement("ea-effects");
       el.setAttribute("duration", "1s");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.duration).toBe("1s");
     });
@@ -229,21 +188,17 @@ describe("EaEffects", () => {
   });
 
   describe("Delay Attribute", () => {
-    it("默认 delay 应该是空字符串", async () => {
+    it("默认 delay 应该是空字符串", () => {
       const el = document.createElement("ea-effects");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.delay).toBe("");
     });
 
-    it("应该正确设置 delay 属性", async () => {
+    it("应该正确设置 delay 属性", () => {
       const el = document.createElement("ea-effects");
       el.setAttribute("delay", "0.5s");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.delay).toBe("0.5s");
     });
@@ -265,21 +220,17 @@ describe("EaEffects", () => {
   });
 
   describe("TimingFunction Attribute", () => {
-    it("默认 timingFunction 应该是空字符串", async () => {
+    it("默认 timingFunction 应该是空字符串", () => {
       const el = document.createElement("ea-effects");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.timingFunction).toBe("");
     });
 
-    it("应该正确设置 timing-function 属性", async () => {
+    it("应该正确设置 timing-function 属性", () => {
       const el = document.createElement("ea-effects");
       el.setAttribute("timing-function", "linear");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.timingFunction).toBe("linear");
     });
@@ -301,21 +252,17 @@ describe("EaEffects", () => {
   });
 
   describe("Iteration Attribute", () => {
-    it("默认 iteration 应该是 1", async () => {
+    it("默认 iteration 应该是 1", () => {
       const el = document.createElement("ea-effects");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.iteration).toBe(1);
     });
 
-    it("应该正确设置 iteration 属性", async () => {
+    it("应该正确设置 iteration 属性", () => {
       const el = document.createElement("ea-effects");
       el.setAttribute("iteration", "3");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.iteration).toBe(3);
     });
@@ -337,21 +284,17 @@ describe("EaEffects", () => {
   });
 
   describe("Trigger Attribute", () => {
-    it("默认 trigger 应该是 manual", async () => {
+    it("默认 trigger 应该是 manual", () => {
       const el = document.createElement("ea-effects");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.trigger).toBe("manual");
     });
 
-    it("应该正确设置 trigger 属性", async () => {
+    it("应该正确设置 trigger 属性", () => {
       const el = document.createElement("ea-effects");
       el.setAttribute("trigger", "click");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.trigger).toBe("click");
     });
@@ -447,42 +390,34 @@ describe("EaEffects", () => {
   });
 
   describe("ScrollOnce Attribute", () => {
-    it("默认 scrollOnce 应该是 true", async () => {
+    it("默认 scrollOnce 应该是 true", () => {
       const el = document.createElement("ea-effects");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.scrollOnce).toBe(true);
     });
 
-    it("应该正确设置 scroll-once 属性", async () => {
+    it("应该正确设置 scroll-once 属性", () => {
       const el = document.createElement("ea-effects");
       el.setAttribute("scroll-once", "false");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.scrollOnce).toBe(false);
     });
   });
 
   describe("ScrollTarget Attribute", () => {
-    it("默认 scrollTarget 应该是空字符串", async () => {
+    it("默认 scrollTarget 应该是空字符串", () => {
       const el = document.createElement("ea-effects");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.scrollTarget).toBe("");
     });
 
-    it("应该正确设置 scroll-target 属性", async () => {
+    it("应该正确设置 scroll-target 属性", () => {
       const el = document.createElement("ea-effects");
       el.setAttribute("scroll-target", "#test");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.scrollTarget).toBe("#test");
     });
@@ -563,22 +498,18 @@ describe("EaEffects", () => {
   });
 
   describe("BEM Class Names", () => {
-    it("默认应该有 ea-effects class", async () => {
+    it("默认应该有 ea-effects class", () => {
       const el = document.createElement("ea-effects");
       container.appendChild(el);
-
-      await waitForRender();
 
       const containerEl = el.shadowRoot.querySelector(".ea-effects");
       expect(containerEl.classList.contains("ea-effects")).toBe(true);
     });
 
-    it("effect=zoom-center 应该添加 ea-effects--zoom-center class", async () => {
+    it("effect=zoom-center 应该添加 ea-effects--zoom-center class", () => {
       const el = document.createElement("ea-effects");
       el.setAttribute("effect", "zoom-center");
       container.appendChild(el);
-
-      await waitForRender();
 
       const containerEl = el.shadowRoot.querySelector(".ea-effects");
       expect(containerEl.classList.contains("ea-effects--zoom-center")).toBe(
@@ -586,12 +517,10 @@ describe("EaEffects", () => {
       );
     });
 
-    it("effect=slide-top 应该添加 ea-effects--slide-top class", async () => {
+    it("effect=slide-top 应该添加 ea-effects--slide-top class", () => {
       const el = document.createElement("ea-effects");
       el.setAttribute("effect", "slide-top");
       container.appendChild(el);
-
-      await waitForRender();
 
       const containerEl = el.shadowRoot.querySelector(".ea-effects");
       expect(containerEl.classList.contains("ea-effects--slide-top")).toBe(
@@ -617,12 +546,10 @@ describe("EaEffects", () => {
   });
 
   describe("Lifecycle", () => {
-    it("组件连接后应该正确初始化", async () => {
+    it("组件连接后应该正确初始化", () => {
       const el = document.createElement("ea-effects");
       el.innerHTML = "<div>Content</div>";
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
@@ -655,20 +582,16 @@ describe("EaEffects", () => {
   });
 
   describe("Edge Cases", () => {
-    it("空 ea-effects 应该正常渲染", async () => {
+    it("空 ea-effects 应该正常渲染", () => {
       const el = document.createElement("ea-effects");
       container.appendChild(el);
-
-      await waitForRender();
 
       expect(el.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
 
-    it("无 effect 属性时不应添加任何效果类名", async () => {
+    it("无 effect 属性时不应添加任何效果类名", () => {
       const el = document.createElement("ea-effects");
       container.appendChild(el);
-
-      await waitForRender();
 
       const containerEl = el.shadowRoot.querySelector(".ea-effects");
       expect(containerEl.className.trim()).toBe("ea-effects");

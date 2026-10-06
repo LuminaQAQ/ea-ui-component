@@ -54,31 +54,25 @@ describe("EaTour Component", () => {
   // ==================== 基础渲染 ====================
 
   describe("Basic Rendering", () => {
-    it("应该正确创建 ea-tour 元素", async () => {
+    it("应该正确创建 ea-tour 元素", () => {
       const tour = createTour();
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       expect(tour).toBeDefined();
       expect(tour.tagName.toLowerCase()).toBe("ea-tour");
     });
 
-    it("应该创建 open 模式的 shadow DOM", async () => {
+    it("应该创建 open 模式的 shadow DOM", () => {
       const tour = createTour();
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       expect(tour.shadowRoot).toBeDefined();
       expect(tour.shadowRoot.mode).toBe("open");
     });
 
-    it("应该渲染 .ea-tour 容器", async () => {
+    it("应该渲染 .ea-tour 容器", () => {
       const tour = createTour();
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       expect(tour.shadowRoot.querySelector(".ea-tour")).toBeTruthy();
     });
@@ -94,11 +88,9 @@ describe("EaTour Component", () => {
       expect(tour.shadowRoot.querySelector(".ea-tour__hollow")).toBeTruthy();
     });
 
-    it("应该渲染四个方向的分割线", async () => {
+    it("应该渲染四个方向的分割线", () => {
       const tour = createTour();
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       expect(
         tour.shadowRoot.querySelector(".ea-tour__divider.top-mask")
@@ -114,24 +106,20 @@ describe("EaTour Component", () => {
       ).toBeTruthy();
     });
 
-    it("应该渲染内容容器和默认插槽", async () => {
+    it("应该渲染内容容器和默认插槽", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       expect(tour.shadowRoot.querySelector(".ea-tour__content")).toBeTruthy();
       const slot = tour.shadowRoot.querySelector(".ea-tour__content slot");
       expect(slot).toBeTruthy();
     });
 
-    it("应该支持 CSS Parts", async () => {
+    it("应该支持 CSS Parts", () => {
       const tour = createTour();
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       expect(tour.shadowRoot.querySelector('[part="hollow"]')).toBeTruthy();
     });
@@ -150,13 +138,11 @@ describe("EaTour Component", () => {
   // ==================== Visible 属性 ====================
 
   describe("Visible Attribute", () => {
-    it("默认 visible 应该是 false", async () => {
+    it("默认 visible 应该是 false", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       expect(tour.visible).toBe(false);
     });
@@ -177,17 +163,13 @@ describe("EaTour Component", () => {
       expect(tourEl.classList.contains("is-visible")).toBe(true);
     });
 
-    it("通过 setAttribute 设置 visible", async () => {
+    it("通过 setAttribute 设置 visible", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
-
       tour.setAttribute("visible", "");
-      await waitForRender();
-
       expect(tour.visible).toBe(true);
     });
 
@@ -244,11 +226,9 @@ describe("EaTour Component", () => {
   // ==================== Mask 属性 ====================
 
   describe("Mask Attribute", () => {
-    it("默认 mask 应该是 true", async () => {
+    it("默认 mask 应该是 true", () => {
       const tour = createTour();
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       expect(tour.mask).toBe(true);
     });
@@ -267,8 +247,6 @@ describe("EaTour Component", () => {
       const tour = createTour();
       document.body.appendChild(tour);
 
-      await waitForRender();
-
       tour.setAttribute("mask", "false");
       await waitForRender();
 
@@ -280,8 +258,6 @@ describe("EaTour Component", () => {
     it("mask 为 false 且 visible 为 true 时不应该隐藏 body 滚动", async () => {
       const tour = createTour();
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       tour.setAttribute("mask", "false");
       await waitForRender();
@@ -296,14 +272,12 @@ describe("EaTour Component", () => {
   // ==================== Current 属性 ====================
 
   describe("Current Attribute", () => {
-    it("默认 current 应该是 0", async () => {
+    it("默认 current 应该是 0", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content 1</div></ea-tour-step>
         <ea-tour-step heading="Step 2"><div>Content 2</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       expect(tour.current).toBe(0);
     });
@@ -318,8 +292,6 @@ describe("EaTour Component", () => {
       await waitForRender();
 
       tour.current = 1;
-      await waitForRender();
-
       expect(tour.current).toBe(1);
     });
 
@@ -374,34 +346,26 @@ describe("EaTour Component", () => {
   // ==================== Gap 属性 ====================
 
   describe("Gap Attribute", () => {
-    it("默认 gap 应该是 6", async () => {
+    it("默认 gap 应该是 6", () => {
       const tour = createTour();
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       expect(tour.gap).toBe(6);
     });
 
-    it("应该支持 gap 属性设置", async () => {
+    it("应该支持 gap 属性设置", () => {
       const tour = createTour();
       tour.gap = 10;
       document.body.appendChild(tour);
 
-      await waitForRender();
-
       expect(tour.gap).toBe(10);
     });
 
-    it("通过 setAttribute 设置 gap", async () => {
+    it("通过 setAttribute 设置 gap", () => {
       const tour = createTour();
       document.body.appendChild(tour);
 
-      await waitForRender();
-
       tour.setAttribute("gap", "20");
-      await waitForRender();
-
       expect(tour.gap).toBe(20);
     });
   });
@@ -409,21 +373,17 @@ describe("EaTour Component", () => {
   // ==================== Variant 属性 ====================
 
   describe("Variant Attribute", () => {
-    it("默认 variant 应该是 default", async () => {
+    it("默认 variant 应该是 default", () => {
       const tour = createTour();
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       expect(tour.variant).toBe("default");
     });
 
-    it("应该支持 variant 属性设置为 primary", async () => {
+    it("应该支持 variant 属性设置为 primary", () => {
       const tour = createTour();
       tour.variant = "primary";
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       expect(tour.variant).toBe("primary");
     });
@@ -461,21 +421,17 @@ describe("EaTour Component", () => {
   // ==================== Placement 属性 ====================
 
   describe("Placement Attribute", () => {
-    it("默认 placement 应该是 bottom", async () => {
+    it("默认 placement 应该是 bottom", () => {
       const tour = createTour();
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       expect(tour.placement).toBe("bottom");
     });
 
-    it("应该支持 placement 属性设置", async () => {
+    it("应该支持 placement 属性设置", () => {
       const tour = createTour();
       tour.placement = "top";
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       expect(tour.placement).toBe("top");
     });
@@ -510,21 +466,17 @@ describe("EaTour Component", () => {
   // ==================== AppendTo 属性 ====================
 
   describe("AppendTo Attribute", () => {
-    it("默认 appendTo 应该是 body", async () => {
+    it("默认 appendTo 应该是 body", () => {
       const tour = createTour();
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       expect(tour.appendTo).toBe("body");
     });
 
-    it("应该支持 appendTo 属性设置", async () => {
+    it("应该支持 appendTo 属性设置", () => {
       const tour = createTour();
       tour.setAttribute("append-to", "#test-container");
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       expect(tour.appendTo).toBe("#test-container");
     });
@@ -584,8 +536,6 @@ describe("EaTour Component", () => {
       await waitForRender();
 
       tour.dispatchEvent(new CustomEvent("ea-close", { bubbles: true }));
-      await waitForRender();
-
       expect(tour.visible).toBe(false);
     });
 
@@ -625,8 +575,6 @@ describe("EaTour Component", () => {
       expect(tour.current).toBe(0);
 
       tour.dispatchEvent(new CustomEvent("ea-tour-step-next", { bubbles: true }));
-      await waitForRender();
-
       expect(tour.current).toBe(1);
     });
 
@@ -645,7 +593,6 @@ describe("EaTour Component", () => {
       expect(tour.current).toBe(1);
 
       tour.dispatchEvent(new CustomEvent("ea-tour-step-previous", { bubbles: true }));
-      await waitForRender();
       expect(tour.current).toBe(0);
     });
 
@@ -659,8 +606,6 @@ describe("EaTour Component", () => {
       await waitForRender();
 
       tour.dispatchEvent(new CustomEvent("ea-tour-step-finish", { bubbles: true }));
-      await waitForRender();
-
       expect(tour.visible).toBe(false);
     });
 
@@ -704,8 +649,6 @@ describe("EaTour Component", () => {
       await waitForRender();
 
       tour.remove();
-      await waitForRender();
-
       expect(tour.isConnected).toBe(false);
     });
 
@@ -803,51 +746,43 @@ describe("EaTourStep Component", () => {
   // ==================== 基础渲染 ====================
 
   describe("Basic Rendering", () => {
-    it("应该正确创建 ea-tour-step 元素", async () => {
+    it("应该正确创建 ea-tour-step 元素", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       const step = tour.querySelector("ea-tour-step");
       expect(step).toBeDefined();
       expect(step.tagName.toLowerCase()).toBe("ea-tour-step");
     });
 
-    it("应该创建 open 模式的 shadow DOM", async () => {
+    it("应该创建 open 模式的 shadow DOM", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       const step = tour.querySelector("ea-tour-step");
       expect(step.shadowRoot).toBeDefined();
       expect(step.shadowRoot.mode).toBe("open");
     });
 
-    it("应该渲染 .ea-tour-step 容器", async () => {
+    it("应该渲染 .ea-tour-step 容器", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       const step = tour.querySelector("ea-tour-step");
       expect(step.shadowRoot.querySelector(".ea-tour-step")).toBeTruthy();
     });
 
-    it("应该渲染完整的结构：header、content、footer", async () => {
+    it("应该渲染完整的结构：header、content、footer", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       const step = tour.querySelector("ea-tour-step");
       expect(
@@ -861,13 +796,11 @@ describe("EaTourStep Component", () => {
       ).toBeTruthy();
     });
 
-    it("应该渲染指示器组和切换按钮组", async () => {
+    it("应该渲染指示器组和切换按钮组", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       const step = tour.querySelector("ea-tour-step");
       expect(
@@ -878,39 +811,33 @@ describe("EaTourStep Component", () => {
       ).toBeTruthy();
     });
 
-    it("应该包含默认插槽", async () => {
+    it("应该包含默认插槽", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div class="step-content">Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       const step = tour.querySelector("ea-tour-step");
       const slot = step.shadowRoot.querySelector(".ea-tour-step__content slot");
       expect(slot).toBeTruthy();
     });
 
-    it("应该包含 header 插槽", async () => {
+    it("应该包含 header 插槽", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       const step = tour.querySelector("ea-tour-step");
       const headerSlot = step.shadowRoot.querySelector("slot[name='header']");
       expect(headerSlot).toBeTruthy();
     });
 
-    it("应该包含 indicator 插槽", async () => {
+    it("应该包含 indicator 插槽", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       const step = tour.querySelector("ea-tour-step");
       const indicatorSlot = step.shadowRoot.querySelector(
@@ -919,13 +846,11 @@ describe("EaTourStep Component", () => {
       expect(indicatorSlot).toBeTruthy();
     });
 
-    it("应该包含 footer 插槽", async () => {
+    it("应该包含 footer 插槽", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       const step = tour.querySelector("ea-tour-step");
       const footerSlot = step.shadowRoot.querySelector("slot[name='footer']");
@@ -936,73 +861,61 @@ describe("EaTourStep Component", () => {
   // ==================== CSS Parts ====================
 
   describe("CSS Parts", () => {
-    it("应该支持 container part", async () => {
+    it("应该支持 container part", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       const step = tour.querySelector("ea-tour-step");
       expect(step.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
 
-    it("应该支持 header part", async () => {
+    it("应该支持 header part", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       const step = tour.querySelector("ea-tour-step");
       expect(step.shadowRoot.querySelector('[part="header"]')).toBeTruthy();
     });
 
-    it("应该支持 close-icon part", async () => {
+    it("应该支持 close-icon part", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       const step = tour.querySelector("ea-tour-step");
       expect(step.shadowRoot.querySelector('[part="close-icon"]')).toBeTruthy();
     });
 
-    it("应该支持 content part", async () => {
+    it("应该支持 content part", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       const step = tour.querySelector("ea-tour-step");
       expect(step.shadowRoot.querySelector('[part="content"]')).toBeTruthy();
     });
 
-    it("应该支持 footer part", async () => {
+    it("应该支持 footer part", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       const step = tour.querySelector("ea-tour-step");
       expect(step.shadowRoot.querySelector('[part="footer"]')).toBeTruthy();
     });
 
-    it("应该支持 indicator-group part", async () => {
+    it("应该支持 indicator-group part", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       const step = tour.querySelector("ea-tour-step");
       expect(
@@ -1010,13 +923,11 @@ describe("EaTourStep Component", () => {
       ).toBeTruthy();
     });
 
-    it("应该支持 switch-group part", async () => {
+    it("应该支持 switch-group part", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       const step = tour.querySelector("ea-tour-step");
       expect(
@@ -1024,13 +935,11 @@ describe("EaTourStep Component", () => {
       ).toBeTruthy();
     });
 
-    it("应该支持 previous、next、finish part", async () => {
+    it("应该支持 previous、next、finish part", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       const step = tour.querySelector("ea-tour-step");
       expect(step.shadowRoot.querySelector('[part="previous"]')).toBeTruthy();
@@ -1042,42 +951,34 @@ describe("EaTourStep Component", () => {
   // ==================== Heading 属性 ====================
 
   describe("Heading Attribute", () => {
-    it("默认 heading 应该是空字符串", async () => {
+    it("默认 heading 应该是空字符串", () => {
       const tour = createTour(`
         <ea-tour-step><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       const step = tour.querySelector("ea-tour-step");
       expect(step.heading).toBe("");
     });
 
-    it("应该支持 heading 属性", async () => {
+    it("应该支持 heading 属性", () => {
       const tour = createTour(`
         <ea-tour-step heading="Test Title"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
-
       const step = tour.querySelector("ea-tour-step");
       expect(step.heading).toBe("Test Title");
     });
 
-    it("通过 setAttribute 设置 heading", async () => {
+    it("通过 setAttribute 设置 heading", () => {
       const tour = createTour(`
         <ea-tour-step><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
-
       const step = tour.querySelector("ea-tour-step");
       step.setAttribute("heading", "New Title");
-      await waitForRender();
-
       expect(step.heading).toBe("New Title");
     });
 
@@ -1086,8 +987,6 @@ describe("EaTourStep Component", () => {
         <ea-tour-step heading="Old Title"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       const step = tour.querySelector("ea-tour-step");
       step.setAttribute("heading", "New Title");
@@ -1103,42 +1002,34 @@ describe("EaTourStep Component", () => {
   // ==================== Target 属性 ====================
 
   describe("Target Attribute", () => {
-    it("默认 target 应该是空字符串", async () => {
+    it("默认 target 应该是空字符串", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       const step = tour.querySelector("ea-tour-step");
       expect(step.target).toBe("");
     });
 
-    it("应该支持 target 属性", async () => {
+    it("应该支持 target 属性", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1" target="#step-target"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
-
       const step = tour.querySelector("ea-tour-step");
       expect(step.target).toBe("#step-target");
     });
 
-    it("通过 setAttribute 设置 target", async () => {
+    it("通过 setAttribute 设置 target", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
-
       const step = tour.querySelector("ea-tour-step");
       step.setAttribute("target", "#step-target");
-      await waitForRender();
-
       expect(step.target).toBe("#step-target");
     });
   });
@@ -1146,25 +1037,21 @@ describe("EaTourStep Component", () => {
   // ==================== Variant 属性 ====================
 
   describe("Variant Attribute", () => {
-    it("默认 variant 应该是 default", async () => {
+    it("默认 variant 应该是 default", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
-
       const step = tour.querySelector("ea-tour-step");
       expect(step.variant).toBe("default");
     });
 
-    it("应该支持 variant 属性设置为 primary", async () => {
+    it("应该支持 variant 属性设置为 primary", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1" variant="primary"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       const step = tour.querySelector("ea-tour-step");
       expect(step.variant).toBe("primary");
@@ -1215,8 +1102,6 @@ describe("EaTourStep Component", () => {
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
-
       const step = tour.querySelector("ea-tour-step");
       step.setAttribute("variant", "default");
       await waitForRender();
@@ -1229,25 +1114,21 @@ describe("EaTourStep Component", () => {
   // ==================== Placement 属性 ====================
 
   describe("Placement Attribute", () => {
-    it("默认 placement 应该是 bottom", async () => {
+    it("默认 placement 应该是 bottom", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
-
       const step = tour.querySelector("ea-tour-step");
       expect(step.placement).toBe("bottom");
     });
 
-    it("应该支持 placement 属性设置", async () => {
+    it("应该支持 placement 属性设置", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1" placement="top"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       const step = tour.querySelector("ea-tour-step");
       expect(step.placement).toBe("top");
@@ -1330,13 +1211,11 @@ describe("EaTourStep Component", () => {
       expect(finishBtn.textContent).toBe("Finish");
     });
 
-    it("应该渲染关闭图标", async () => {
+    it("应该渲染关闭图标", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       const step = tour.querySelector("ea-tour-step");
       const closeIcon = step.shadowRoot.querySelector(
@@ -1345,13 +1224,11 @@ describe("EaTourStep Component", () => {
       expect(closeIcon).toBeTruthy();
     });
 
-    it("关闭图标应该在 header 内", async () => {
+    it("关闭图标应该在 header 内", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       const step = tour.querySelector("ea-tour-step");
       const header = step.shadowRoot.querySelector(".ea-tour-step__header");
@@ -1614,8 +1491,6 @@ describe("EaTourStep Component", () => {
         ".ea-tour-step__close-icon"
       );
       closeIcon.click();
-      await waitForRender();
-
       expect(closeEventDetail).toBeTruthy();
       expect(closeEventDetail.current).toBe(1);
     });
@@ -1654,8 +1529,6 @@ describe("EaTourStep Component", () => {
       const step = tour.querySelector("ea-tour-step");
       const nextBtn = step.shadowRoot.querySelector('[part="next"]');
       nextBtn.click();
-      await waitForRender();
-
       expect(tour.current).toBe(1);
     });
   });
@@ -1676,13 +1549,11 @@ describe("EaTourStep Component", () => {
       expect(containerEl.classList.contains("ea-tour-step")).toBe(true);
     });
 
-    it("header 应该有正确的 BEM 元素类名", async () => {
+    it("header 应该有正确的 BEM 元素类名", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       const step = tour.querySelector("ea-tour-step");
       expect(
@@ -1690,13 +1561,11 @@ describe("EaTourStep Component", () => {
       ).toBeTruthy();
     });
 
-    it("content 应该有正确的 BEM 元素类名", async () => {
+    it("content 应该有正确的 BEM 元素类名", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       const step = tour.querySelector("ea-tour-step");
       expect(
@@ -1704,13 +1573,11 @@ describe("EaTourStep Component", () => {
       ).toBeTruthy();
     });
 
-    it("footer 应该有正确的 BEM 元素类名", async () => {
+    it("footer 应该有正确的 BEM 元素类名", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       const step = tour.querySelector("ea-tour-step");
       expect(
@@ -1718,13 +1585,11 @@ describe("EaTourStep Component", () => {
       ).toBeTruthy();
     });
 
-    it("close-icon 应该有正确的 BEM 元素类名", async () => {
+    it("close-icon 应该有正确的 BEM 元素类名", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       const step = tour.querySelector("ea-tour-step");
       expect(
@@ -1732,13 +1597,11 @@ describe("EaTourStep Component", () => {
       ).toBeTruthy();
     });
 
-    it("indicator-group 应该有正确的 BEM 元素类名", async () => {
+    it("indicator-group 应该有正确的 BEM 元素类名", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       const step = tour.querySelector("ea-tour-step");
       expect(
@@ -1746,13 +1609,11 @@ describe("EaTourStep Component", () => {
       ).toBeTruthy();
     });
 
-    it("switch-group 应该有正确的 BEM 元素类名", async () => {
+    it("switch-group 应该有正确的 BEM 元素类名", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       const step = tour.querySelector("ea-tour-step");
       expect(
@@ -1760,13 +1621,11 @@ describe("EaTourStep Component", () => {
       ).toBeTruthy();
     });
 
-    it("按钮应该有正确的 BEM 元素类名", async () => {
+    it("按钮应该有正确的 BEM 元素类名", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       const step = tour.querySelector("ea-tour-step");
       expect(
@@ -1797,13 +1656,11 @@ describe("EaTourStep Component", () => {
   // ==================== 生命周期 ====================
 
   describe("Lifecycle", () => {
-    it("组件连接后应该正确初始化", async () => {
+    it("组件连接后应该正确初始化", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       const step = tour.querySelector("ea-tour-step");
       expect(step.shadowRoot).toBeTruthy();
@@ -1819,8 +1676,6 @@ describe("EaTourStep Component", () => {
 
       const step = tour.querySelector("ea-tour-step");
       tour.remove();
-      await waitForRender();
-
       expect(step.isConnected).toBe(false);
     });
   });
@@ -1882,18 +1737,14 @@ describe("EaTourStep Component", () => {
   // ==================== 属性动态更新 ====================
 
   describe("Dynamic Attribute Updates", () => {
-    it("动态修改 heading 应该更新标题", async () => {
+    it("动态修改 heading 应该更新标题", () => {
       const tour = createTour(`
         <ea-tour-step heading="Old"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
-
       const step = tour.querySelector("ea-tour-step");
       step.setAttribute("heading", "New");
-      await waitForRender();
-
       expect(step.heading).toBe("New");
     });
 
@@ -1902,8 +1753,6 @@ describe("EaTourStep Component", () => {
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
-
-      await waitForRender();
 
       const step = tour.querySelector("ea-tour-step");
       step.setAttribute("variant", "primary");
@@ -1922,18 +1771,14 @@ describe("EaTourStep Component", () => {
       );
     });
 
-    it("动态修改 placement 应该更新属性值", async () => {
+    it("动态修改 placement 应该更新属性值", () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
-
       const step = tour.querySelector("ea-tour-step");
       step.setAttribute("placement", "top-start");
-      await waitForRender();
-
       expect(step.placement).toBe("top-start");
     });
   });
