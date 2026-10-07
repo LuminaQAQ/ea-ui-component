@@ -4,6 +4,10 @@ docs/.vitepress/public/dist/
 docs/.vitepress/public/index.css
 coverage/
 
+# Vitest browser mode attachments
+.vitest-attachments/
+__screenshots__/
+
 # Vite timestamp cache files
 *.timestamp-*.mjs
 

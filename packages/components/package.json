@@ -13,6 +13,7 @@
   "scripts": {
     "build": "tsx ../../scripts/index.ts && vite build",
     "test:run": "vitest run",
+    "test:browser": "vitest run --config vitest.browser.config.ts",
     "test:coverage": "vitest run --coverage",
     "typecheck": "pnpm --filter @easy-component-ui/core --filter @easy-component-ui/themes run build && tsc --noEmit"
   },
@@ -70,9 +71,11 @@
   },
   "devDependencies": {
     "@types/node": "^24.0.14",
+    "@vitest/browser-playwright": "4.1.11",
     "@vitest/coverage-v8": "^4.1.0",
     "axe-core": "^4.12.0",
     "jsdom": "^29.0.1",
+    "playwright": "1.59.1",
     "rollup-plugin-visualizer": "^6.0.3",
     "sass": "^1.77.2",
     "typescript": "^5.8.3",
