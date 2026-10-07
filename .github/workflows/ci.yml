@@ -1,4 +1,4 @@
-﻿name: CI
+name: CI
 
 on:
   push:
@@ -20,3 +20,5 @@ jobs:
       - run: pnpm run typecheck
       - run: pnpm -r typecheck
       - run: pnpm run test:run
+      - run: pnpm --filter easy-component-ui exec playwright install --with-deps chromium
+      - run: pnpm test:browser
