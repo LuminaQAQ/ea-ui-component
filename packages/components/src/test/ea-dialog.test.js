@@ -1,6 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 
-import { waitForRender } from "./utils/waitForRender";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-icon/index.ts";
@@ -85,7 +84,7 @@ describe("EaDialog", () => {
       dialog.setAttribute("heading", "Test Title");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       const headingEl = dialog.shadowRoot.querySelector('[part="heading"]');
       expect(headingEl).toBeTruthy();
@@ -96,7 +95,7 @@ describe("EaDialog", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       expect(dialog.heading).toBe("");
       const headingEl = dialog.shadowRoot.querySelector('[part="heading"]');
@@ -108,12 +107,12 @@ describe("EaDialog", () => {
       dialog.setAttribute("heading", "Initial Title");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       expect(dialog.heading).toBe("Initial Title");
 
       dialog.setAttribute("heading", "Updated Title");
-      await waitForRender();
+      await dialog.updateComplete;
 
       expect(dialog.heading).toBe("Updated Title");
       const headingEl = dialog.shadowRoot.querySelector('[part="heading"]');
@@ -141,10 +140,10 @@ describe("EaDialog", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       dialog.setAttribute("width", "800px");
-      await waitForRender();
+      await dialog.updateComplete;
 
       expect(dialog.width).toBe("800px");
       expect(dialog.style.getPropertyValue("--ea-overlay-content-width")).toBe("800px");
@@ -171,10 +170,10 @@ describe("EaDialog", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       dialog.setAttribute("top", "10vh");
-      await waitForRender();
+      await dialog.updateComplete;
 
       expect(dialog.style.getPropertyValue("--ea-overlay-content-top")).toBe("10vh");
     });
@@ -185,7 +184,7 @@ describe("EaDialog", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       expect(dialog.visible).toBe(false);
     });
@@ -194,14 +193,14 @@ describe("EaDialog", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       const openHandler = vi.fn();
       dialog.addEventListener("ea-open", openHandler);
 
       dialog.show();
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       expect(dialog.visible).toBe(true);
       expect(openHandler).toHaveBeenCalled();
@@ -211,10 +210,10 @@ describe("EaDialog", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       dialog.show();
-      await waitForRender();
+      await dialog.updateComplete;
 
       expect(dialog.visible).toBe(true);
 
@@ -223,7 +222,7 @@ describe("EaDialog", () => {
 
       dialog.hide();
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       expect(closeHandler).toHaveBeenCalled();
     });
@@ -233,7 +232,7 @@ describe("EaDialog", () => {
       dialog.setAttribute("visible", "");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       expect(dialog.visible).toBe(true);
     });
@@ -242,7 +241,7 @@ describe("EaDialog", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       dialog.show();
       expect(dialog.visible).toBe(true);
@@ -279,7 +278,7 @@ describe("EaDialog", () => {
       dialog.setAttribute("center", "");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       const overlayEl = dialog.shadowRoot.querySelector(".ea-overlay");
       expect(overlayEl.classList.contains("ea-dialog--center")).toBe(true);
@@ -307,7 +306,7 @@ describe("EaDialog", () => {
       dialog.setAttribute("fullscreen", "");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       const overlayEl = dialog.shadowRoot.querySelector(".ea-overlay");
       expect(overlayEl.classList.contains("ea-dialog--fullscreen")).toBe(true);
@@ -326,7 +325,7 @@ describe("EaDialog", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       dialog.removeAttribute("modal");
 
@@ -337,7 +336,7 @@ describe("EaDialog", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       const overlayEl = dialog.shadowRoot.querySelector(".ea-overlay");
       expect(overlayEl.classList.contains("is-modal")).toBe(true);
@@ -347,10 +346,10 @@ describe("EaDialog", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       dialog.removeAttribute("modal");
-      await waitForRender();
+      await dialog.updateComplete;
 
       const overlayEl = dialog.shadowRoot.querySelector(".ea-overlay");
       expect(overlayEl.classList.contains("is-modal")).toBe(false);
@@ -378,7 +377,7 @@ describe("EaDialog", () => {
       dialog.setAttribute("movable", "");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       const overlayEl = dialog.shadowRoot.querySelector(".ea-overlay");
       expect(overlayEl.classList.contains("ea-dialog--draggable")).toBe(true);
@@ -397,7 +396,7 @@ describe("EaDialog", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       dialog.removeAttribute("show-close");
 
@@ -408,10 +407,10 @@ describe("EaDialog", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       dialog.removeAttribute("show-close");
-      await waitForRender();
+      await dialog.updateComplete;
 
       const overlayEl = dialog.shadowRoot.querySelector(".ea-overlay");
       expect(overlayEl.classList.contains("is-close-hidden")).toBe(true);
@@ -421,7 +420,7 @@ describe("EaDialog", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       const overlayEl = dialog.shadowRoot.querySelector(".ea-overlay");
       expect(overlayEl.classList.contains("is-close-hidden")).toBe(false);
@@ -449,7 +448,7 @@ describe("EaDialog", () => {
       dialog.setAttribute("modal-pentrable", "");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       const overlayEl = dialog.shadowRoot.querySelector(".ea-overlay");
       expect(overlayEl.classList.contains("is-modal-penetrable")).toBe(true);
@@ -468,7 +467,7 @@ describe("EaDialog", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       dialog.removeAttribute("close-on-click-modal");
 
@@ -479,7 +478,7 @@ describe("EaDialog", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       dialog.show();
       expect(dialog.visible).toBe(true);
@@ -487,7 +486,7 @@ describe("EaDialog", () => {
       const mask = dialog.shadowRoot.querySelector(".ea-overlay__mask");
       mask.click();
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       expect(dialog.visible).toBe(false);
     });
@@ -496,7 +495,7 @@ describe("EaDialog", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       dialog.removeAttribute("close-on-click-modal");
       dialog.show();
@@ -505,7 +504,7 @@ describe("EaDialog", () => {
       const mask = dialog.shadowRoot.querySelector(".ea-overlay__mask");
       mask.click();
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       expect(dialog.visible).toBe(true);
     });
@@ -523,7 +522,7 @@ describe("EaDialog", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       dialog.removeAttribute("close-on-press-escape");
 
@@ -534,7 +533,7 @@ describe("EaDialog", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       dialog.show();
       expect(dialog.visible).toBe(true);
@@ -545,7 +544,7 @@ describe("EaDialog", () => {
       });
       document.dispatchEvent(escapeEvent);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       expect(dialog.visible).toBe(false);
     });
@@ -554,7 +553,7 @@ describe("EaDialog", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       dialog.removeAttribute("close-on-press-escape");
       dialog.show();
@@ -566,7 +565,7 @@ describe("EaDialog", () => {
       });
       document.dispatchEvent(escapeEvent);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       expect(dialog.visible).toBe(true);
     });
@@ -606,7 +605,7 @@ describe("EaDialog", () => {
       dialog.setAttribute("append-to", "#custom-dialog-container");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       expect(dialog.appendTo).toBe("#custom-dialog-container");
 
@@ -626,7 +625,7 @@ describe("EaDialog", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       const closedHandler = vi.fn();
       dialog.addEventListener("ea-closed", closedHandler);
@@ -637,17 +636,17 @@ describe("EaDialog", () => {
       };
 
       dialog.show();
-      await waitForRender();
+      await dialog.updateComplete;
 
       dialog.hide();
-      await waitForRender();
+      await dialog.updateComplete;
 
       expect(dialog.visible).toBe(true);
       expect(doneFn).toBeTruthy();
       expect(closedHandler).not.toHaveBeenCalled();
 
       doneFn();
-      await waitForRender();
+      await dialog.updateComplete;
 
       expect(dialog.visible).toBe(false);
     });
@@ -656,7 +655,7 @@ describe("EaDialog", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       const beforeCloseHandler = vi.fn(done => done());
       dialog.beforeClose = beforeCloseHandler;
@@ -665,7 +664,7 @@ describe("EaDialog", () => {
       expect(dialog.visible).toBe(true);
 
       dialog.hide();
-      await waitForRender();
+      await dialog.updateComplete;
 
       expect(beforeCloseHandler).toHaveBeenCalled();
       expect(dialog.visible).toBe(false);
@@ -719,7 +718,7 @@ describe("EaDialog", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       dialog.show();
       expect(dialog.visible).toBe(true);
@@ -727,7 +726,7 @@ describe("EaDialog", () => {
       const closeIcon = dialog.shadowRoot.querySelector(".ea-dialog__close-icon");
       closeIcon.click();
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       expect(dialog.visible).toBe(false);
     });
@@ -736,7 +735,7 @@ describe("EaDialog", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       dialog.removeAttribute("show-close");
       dialog.show();
@@ -745,7 +744,7 @@ describe("EaDialog", () => {
       const closeIcon = dialog.shadowRoot.querySelector(".ea-dialog__close-icon");
       closeIcon.click();
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       expect(dialog.visible).toBe(true);
     });
@@ -763,7 +762,7 @@ describe("EaDialog", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       const overlayContent = dialog.shadowRoot.querySelector(".ea-overlay__content");
       overlayContent.style.left = "100px";
@@ -785,13 +784,13 @@ describe("EaDialog", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       const openHandler = vi.fn();
       dialog.addEventListener("ea-open", openHandler);
 
       dialog.show();
-      await waitForRender();
+      await dialog.updateComplete;
 
       expect(openHandler).toHaveBeenCalled();
     });
@@ -800,16 +799,16 @@ describe("EaDialog", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       dialog.show();
-      await waitForRender();
+      await dialog.updateComplete;
 
       const closeHandler = vi.fn();
       dialog.addEventListener("ea-close", closeHandler);
 
       dialog.hide();
-      await waitForRender();
+      await dialog.updateComplete;
 
       expect(closeHandler).toHaveBeenCalled();
     });
@@ -818,7 +817,7 @@ describe("EaDialog", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       const openedHandler = vi.fn();
       dialog.addEventListener("ea-opened", openedHandler);
@@ -826,12 +825,12 @@ describe("EaDialog", () => {
       dialog.show();
 
       await new Promise(resolve => requestAnimationFrame(resolve));
-      await waitForRender();
+      await dialog.updateComplete;
 
       const overlayContainer = dialog.shadowRoot.querySelector(".ea-overlay");
       overlayContainer.dispatchEvent(new Event("transitionend", { bubbles: true }));
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       expect(openedHandler).toHaveBeenCalled();
     });
@@ -840,21 +839,21 @@ describe("EaDialog", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       dialog.show();
-      await waitForRender();
+      await dialog.updateComplete;
 
       const closedHandler = vi.fn();
       dialog.addEventListener("ea-closed", closedHandler);
 
       dialog.visible = false;
-      await waitForRender();
+      await dialog.updateComplete;
 
       const overlayContainer = dialog.shadowRoot.querySelector(".ea-overlay");
       overlayContainer.dispatchEvent(new Event("transitionend", { bubbles: true }));
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       expect(closedHandler).toHaveBeenCalled();
     });
@@ -863,7 +862,7 @@ describe("EaDialog", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       const openHandler = vi.fn();
       const closeHandler = vi.fn();
@@ -872,12 +871,12 @@ describe("EaDialog", () => {
       dialog.addEventListener("ea-close", closeHandler);
 
       dialog.show();
-      await waitForRender();
+      await dialog.updateComplete;
 
       expect(openHandler).toHaveBeenCalled();
 
       dialog.hide();
-      await waitForRender();
+      await dialog.updateComplete;
 
       expect(closeHandler).toHaveBeenCalled();
     });
@@ -888,7 +887,7 @@ describe("EaDialog", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       dialog.show();
 
@@ -900,7 +899,7 @@ describe("EaDialog", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       const headingEl = dialog.shadowRoot.querySelector('[part="heading"]');
       expect(headingEl.textContent).toBe("");
@@ -914,7 +913,7 @@ describe("EaDialog", () => {
       `;
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       const headerSlot = dialog.shadowRoot.querySelector('slot[name="header"]');
       expect(headerSlot).toBeTruthy();
@@ -928,7 +927,7 @@ describe("EaDialog", () => {
       `;
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       const footerSlot = dialog.shadowRoot.querySelector('slot[name="footer"]');
       expect(footerSlot).toBeTruthy();
@@ -942,7 +941,7 @@ describe("EaDialog", () => {
       dialog.setAttribute("center", "");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       dialog.removeAttribute("modal");
 
@@ -968,7 +967,7 @@ describe("EaDialog", () => {
       dialog.setAttribute("close-on-click-modal", "");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       dialog.show();
       expect(dialog.visible).toBe(true);
@@ -976,7 +975,7 @@ describe("EaDialog", () => {
       const dialogContent = dialog.shadowRoot.querySelector(".ea-dialog");
       dialogContent.click();
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       expect(dialog.visible).toBe(true);
     });
@@ -988,7 +987,7 @@ describe("EaDialog", () => {
       dialog.setAttribute("heading", "Test");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       expect(dialog.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
       expect(dialog.getAttribute("role")).toBe("dialog");
@@ -998,7 +997,7 @@ describe("EaDialog", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       dialog.remove();
 
@@ -1018,7 +1017,7 @@ describe("EaDialog", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
-      await waitForRender();
+      await dialog.updateComplete;
 
       expect(dialog.visible).toBe(false);
       expect(dialog.modal).toBe(true);
@@ -1031,7 +1030,7 @@ describe("EaDialog", () => {
     it("应有 role='dialog'", async () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
-      await waitForRender();
+      await dialog.updateComplete;
 
       expect(dialog.getAttribute("role")).toBe("dialog");
     });
@@ -1039,7 +1038,7 @@ describe("EaDialog", () => {
     it("应有 aria-modal='true'", async () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
-      await waitForRender();
+      await dialog.updateComplete;
 
       expect(dialog.getAttribute("aria-modal")).toBe("true");
     });
@@ -1048,7 +1047,7 @@ describe("EaDialog", () => {
       const dialog = document.createElement("ea-dialog");
       dialog.heading = "Test Dialog";
       container.appendChild(dialog);
-      await waitForRender();
+      await dialog.updateComplete;
 
       const labelledBy = dialog.getAttribute("aria-labelledby");
       expect(labelledBy).not.toBeNull();
@@ -1062,7 +1061,7 @@ describe("EaDialog", () => {
     it("无 heading 时不应有 aria-labelledby 或 aria-label", async () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
-      await waitForRender();
+      await dialog.updateComplete;
 
       expect(dialog.hasAttribute("aria-labelledby")).toBe(false);
       expect(dialog.hasAttribute("aria-label")).toBe(false);
@@ -1072,7 +1071,7 @@ describe("EaDialog", () => {
       const dialog = document.createElement("ea-dialog");
       dialog.alertdialog = true;
       container.appendChild(dialog);
-      await waitForRender();
+      await dialog.updateComplete;
 
       expect(dialog.getAttribute("role")).toBe("alertdialog");
     });
@@ -1081,7 +1080,7 @@ describe("EaDialog", () => {
       const dialog = document.createElement("ea-dialog");
       dialog.description = "This is a description";
       container.appendChild(dialog);
-      await waitForRender();
+      await dialog.updateComplete;
 
       const describedBy = dialog.getAttribute("aria-describedby");
       expect(describedBy).not.toBeNull();
@@ -1095,7 +1094,7 @@ describe("EaDialog", () => {
     it("无 description 时不应有 aria-describedby", async () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
-      await waitForRender();
+      await dialog.updateComplete;
 
       expect(dialog.hasAttribute("aria-describedby")).toBe(false);
     });
@@ -1103,12 +1102,12 @@ describe("EaDialog", () => {
     it("动态修改 heading 应更新 aria-labelledby", async () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
-      await waitForRender();
+      await dialog.updateComplete;
 
       expect(dialog.hasAttribute("aria-labelledby")).toBe(false);
 
       dialog.heading = "New Title";
-      await waitForRender();
+      await dialog.updateComplete;
 
       const labelledBy = dialog.getAttribute("aria-labelledby");
       expect(labelledBy).not.toBeNull();
@@ -1117,12 +1116,12 @@ describe("EaDialog", () => {
     it("动态修改 description 应更新 aria-describedby", async () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
-      await waitForRender();
+      await dialog.updateComplete;
 
       expect(dialog.hasAttribute("aria-describedby")).toBe(false);
 
       dialog.description = "New description";
-      await waitForRender();
+      await dialog.updateComplete;
 
       expect(dialog.hasAttribute("aria-describedby")).toBe(true);
     });
@@ -1131,7 +1130,7 @@ describe("EaDialog", () => {
       const el = document.createElement("ea-dialog");
       el.setAttribute("heading", "Test Dialog");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });

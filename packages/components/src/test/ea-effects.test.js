@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import { waitForRender } from "./utils/waitForRender";
 
 import "../components/ea-effects/index";
 
@@ -70,10 +69,10 @@ describe("EaEffects", () => {
       const el = document.createElement("ea-effects");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       el.setAttribute("effect", "fade");
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-effects");
       expect(containerEl.classList.contains("ea-effects--fade")).toBe(true);
@@ -133,10 +132,10 @@ describe("EaEffects", () => {
       el.setAttribute("effect", "fade");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       el.visible = false;
-      await waitForRender();
+      await el.updateComplete;
 
       expect(el.visible).toBe(false);
     });
@@ -146,10 +145,10 @@ describe("EaEffects", () => {
       el.setAttribute("visible", "false");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       el.visible = true;
-      await waitForRender();
+      await el.updateComplete;
 
       expect(el.visible).toBe(true);
     });
@@ -175,10 +174,10 @@ describe("EaEffects", () => {
       const el = document.createElement("ea-effects");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       el.setAttribute("duration", "2s");
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-effects");
       expect(containerEl.style.getPropertyValue("--ea-effects-duration")).toBe(
@@ -207,10 +206,10 @@ describe("EaEffects", () => {
       const el = document.createElement("ea-effects");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       el.setAttribute("delay", "0.5s");
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-effects");
       expect(containerEl.style.getPropertyValue("--ea-effects-delay")).toBe(
@@ -239,10 +238,10 @@ describe("EaEffects", () => {
       const el = document.createElement("ea-effects");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       el.setAttribute("timing-function", "ease-in");
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-effects");
       expect(
@@ -271,10 +270,10 @@ describe("EaEffects", () => {
       const el = document.createElement("ea-effects");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       el.setAttribute("iteration", "2");
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-effects");
       expect(
@@ -305,13 +304,13 @@ describe("EaEffects", () => {
       el.setAttribute("effect", "fade");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       expect(el.visible).toBe(true);
 
       const containerEl = el.shadowRoot.querySelector(".ea-effects");
       containerEl.click();
-      await waitForRender();
+      await el.updateComplete;
 
       expect(el.visible).toBe(false);
     });
@@ -322,11 +321,11 @@ describe("EaEffects", () => {
       el.setAttribute("effect", "fade");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-effects");
       containerEl.click();
-      await waitForRender();
+      await el.updateComplete;
 
       expect(el.visible).toBe(true);
     });
@@ -338,7 +337,7 @@ describe("EaEffects", () => {
       el.setAttribute("effect", "fade");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       expect(el.visible).toBe(false);
 
@@ -346,7 +345,7 @@ describe("EaEffects", () => {
       containerEl.dispatchEvent(
         new MouseEvent("mouseenter", { bubbles: true })
       );
-      await waitForRender();
+      await el.updateComplete;
 
       expect(el.visible).toBe(true);
     });
@@ -357,13 +356,13 @@ describe("EaEffects", () => {
       el.setAttribute("effect", "fade");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-effects");
       containerEl.dispatchEvent(
         new MouseEvent("mouseleave", { bubbles: true })
       );
-      await waitForRender();
+      await el.updateComplete;
 
       expect(el.visible).toBe(false);
     });
@@ -374,16 +373,16 @@ describe("EaEffects", () => {
       el.setAttribute("effect", "fade");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       el.setAttribute("trigger", "click");
-      await waitForRender();
+      await el.updateComplete;
 
       expect(el.trigger).toBe("click");
 
       const containerEl = el.shadowRoot.querySelector(".ea-effects");
       containerEl.click();
-      await waitForRender();
+      await el.updateComplete;
 
       expect(el.visible).toBe(false);
     });
@@ -429,12 +428,12 @@ describe("EaEffects", () => {
       el.setAttribute("effect", "fade");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-effects");
 
       el.show();
-      await waitForRender();
+      await el.updateComplete;
 
       expect(containerEl.classList.contains("ea-effects--fade-enter")).toBe(
         true
@@ -446,12 +445,12 @@ describe("EaEffects", () => {
       el.setAttribute("effect", "fade");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-effects");
 
       el.hide();
-      await waitForRender();
+      await el.updateComplete;
 
       expect(
         containerEl.classList.contains("ea-effects--fade-before-leave")
@@ -463,17 +462,17 @@ describe("EaEffects", () => {
       el.setAttribute("effect", "fade");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       expect(el.visible).toBe(true);
 
       el.toggle();
-      await waitForRender();
+      await el.updateComplete;
 
       expect(el.visible).toBe(false);
 
       el.toggle();
-      await waitForRender();
+      await el.updateComplete;
 
       expect(el.visible).toBe(true);
     });
@@ -483,13 +482,13 @@ describe("EaEffects", () => {
       el.setAttribute("effect", "fade");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-effects");
       containerEl.classList.add("ea-effects--fade-before-enter");
 
       el.reset();
-      await waitForRender();
+      await el.updateComplete;
 
       expect(
         containerEl.classList.contains("ea-effects--fade-before-enter")
@@ -532,10 +531,10 @@ describe("EaEffects", () => {
       const el = document.createElement("ea-effects");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       el.setAttribute("effect", "fade");
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-effects");
       expect(containerEl.classList.contains("ea-effects--fade")).toBe(true);
@@ -568,10 +567,10 @@ describe("EaEffects", () => {
       el.setAttribute("effect", "fade");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       el.setAttribute("effect", "zoom-center");
-      await waitForRender();
+      await el.updateComplete;
 
       expect(el.effect).toBe("zoom-center");
       const containerEl = el.shadowRoot.querySelector(".ea-effects");
@@ -601,7 +600,7 @@ describe("EaEffects", () => {
       const el = document.createElement("ea-effects");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       expect(() => {
         el.show();
@@ -613,7 +612,7 @@ describe("EaEffects", () => {
       const el = document.createElement("ea-effects");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       expect(() => {
         el.toggle();
@@ -630,7 +629,7 @@ describe("EaEffects", () => {
       el.setAttribute("iteration", "2");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-effects");
       expect(containerEl.style.getPropertyValue("--ea-effects-duration")).toBe(

@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { waitForRender } from "./utils/waitForRender";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-badge/index";
@@ -48,7 +47,7 @@ describe("EaBadge", () => {
       badge.setAttribute("value", "12");
       container.appendChild(badge);
 
-      await waitForRender();
+      await badge.updateComplete;
 
       const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
       expect(contentEl.textContent).toBe("12");
@@ -59,7 +58,7 @@ describe("EaBadge", () => {
       badge.setAttribute("value", "new");
       container.appendChild(badge);
 
-      await waitForRender();
+      await badge.updateComplete;
 
       const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
       expect(contentEl.textContent).toBe("new");
@@ -70,13 +69,13 @@ describe("EaBadge", () => {
       badge.setAttribute("value", "5");
       container.appendChild(badge);
 
-      await waitForRender();
+      await badge.updateComplete;
 
       const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
       expect(contentEl.textContent).toBe("5");
 
       badge.setAttribute("value", "10");
-      await waitForRender();
+      await badge.updateComplete;
 
       expect(contentEl.textContent).toBe("10");
     });
@@ -86,7 +85,7 @@ describe("EaBadge", () => {
       badge.setAttribute("value", "");
       container.appendChild(badge);
 
-      await waitForRender();
+      await badge.updateComplete;
 
       const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
       expect(contentEl.textContent).toBe("");
@@ -100,7 +99,7 @@ describe("EaBadge", () => {
       badge.setAttribute("value", "200");
       container.appendChild(badge);
 
-      await waitForRender();
+      await badge.updateComplete;
 
       const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
       expect(contentEl.textContent).toBe("99+");
@@ -112,7 +111,7 @@ describe("EaBadge", () => {
       badge.setAttribute("value", "50");
       container.appendChild(badge);
 
-      await waitForRender();
+      await badge.updateComplete;
 
       const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
       expect(contentEl.textContent).toBe("50");
@@ -124,7 +123,7 @@ describe("EaBadge", () => {
       badge.setAttribute("value", "99");
       container.appendChild(badge);
 
-      await waitForRender();
+      await badge.updateComplete;
 
       const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
       expect(contentEl.textContent).toBe("99");
@@ -135,7 +134,7 @@ describe("EaBadge", () => {
       badge.setAttribute("value", "999");
       container.appendChild(badge);
 
-      await waitForRender();
+      await badge.updateComplete;
 
       const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
       expect(contentEl.textContent).toBe("999");
@@ -147,7 +146,7 @@ describe("EaBadge", () => {
       badge.setAttribute("value", "abc");
       container.appendChild(badge);
 
-      await waitForRender();
+      await badge.updateComplete;
 
       const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
       expect(contentEl.textContent).toBe("abc");
@@ -165,7 +164,7 @@ describe("EaBadge", () => {
           badge.setAttribute("value", "5");
           container.appendChild(badge);
 
-          await waitForRender();
+          await badge.updateComplete;
 
           const badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
           expect(
@@ -179,7 +178,7 @@ describe("EaBadge", () => {
           badge.setAttribute("value", "5");
           container.appendChild(badge);
 
-          await waitForRender();
+          await badge.updateComplete;
 
           const badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
           expect(
@@ -202,7 +201,7 @@ describe("EaBadge", () => {
       badge.setAttribute("value", "5");
       container.appendChild(badge);
 
-      await waitForRender();
+      await badge.updateComplete;
 
       const badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
       expect(badgeContainer.classList.contains("ea-badge--danger")).toBe(false);
@@ -214,13 +213,13 @@ describe("EaBadge", () => {
       badge.setAttribute("value", "5");
       container.appendChild(badge);
 
-      await waitForRender();
+      await badge.updateComplete;
 
       let badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
       expect(badgeContainer.classList.contains("ea-badge--primary")).toBe(true);
 
       badge.setAttribute("variant", "success");
-      await waitForRender();
+      await badge.updateComplete;
 
       badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
       expect(badgeContainer.classList.contains("ea-badge--success")).toBe(true);
@@ -233,13 +232,13 @@ describe("EaBadge", () => {
       badge.setAttribute("value", "5");
       container.appendChild(badge);
 
-      await waitForRender();
+      await badge.updateComplete;
 
       let badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
       expect(badgeContainer.classList.contains("ea-badge--primary")).toBe(true);
 
       badge.setAttribute("variant", "danger");
-      await waitForRender();
+      await badge.updateComplete;
 
       badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
       expect(badgeContainer.classList.contains("ea-badge--danger")).toBe(false);
@@ -253,7 +252,7 @@ describe("EaBadge", () => {
       badge.setAttribute("is-dot", "");
       container.appendChild(badge);
 
-      await waitForRender();
+      await badge.updateComplete;
 
       const badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
       expect(badgeContainer.classList.contains("is-dot")).toBe(true);
@@ -265,7 +264,7 @@ describe("EaBadge", () => {
       badge.setAttribute("value", "99");
       container.appendChild(badge);
 
-      await waitForRender();
+      await badge.updateComplete;
 
       const badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
       expect(badgeContainer.classList.contains("is-dot")).toBe(true);
@@ -286,7 +285,7 @@ describe("EaBadge", () => {
       badge.setAttribute("value", "5");
       container.appendChild(badge);
 
-      await waitForRender();
+      await badge.updateComplete;
 
       const badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
       expect(badgeContainer.classList.contains("is-hidden")).toBe(true);
@@ -297,13 +296,13 @@ describe("EaBadge", () => {
       badge.setAttribute("value", "5");
       container.appendChild(badge);
 
-      await waitForRender();
+      await badge.updateComplete;
 
       let badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
       expect(badgeContainer.classList.contains("is-hidden")).toBe(false);
 
       badge.setAttribute("data-hidden", "");
-      await waitForRender();
+      await badge.updateComplete;
 
       badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
       expect(badgeContainer.classList.contains("is-hidden")).toBe(true);
@@ -323,7 +322,7 @@ describe("EaBadge", () => {
       badge.setAttribute("value", "0");
       container.appendChild(badge);
 
-      await waitForRender();
+      await badge.updateComplete;
 
       const badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
       expect(badgeContainer.classList.contains("is-hidden")).toBe(false);
@@ -335,7 +334,7 @@ describe("EaBadge", () => {
       badge.setAttribute("show-zero", "");
       container.appendChild(badge);
 
-      await waitForRender();
+      await badge.updateComplete;
 
       const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
       expect(contentEl.textContent).toBe("0");
@@ -346,10 +345,10 @@ describe("EaBadge", () => {
       badge.setAttribute("value", "0");
       container.appendChild(badge);
 
-      await waitForRender();
+      await badge.updateComplete;
 
       badge.showZero = false;
-      await waitForRender();
+      await badge.updateComplete;
 
       const badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
       expect(badgeContainer.classList.contains("is-hidden")).toBe(true);
@@ -461,7 +460,7 @@ describe("EaBadge", () => {
       badge.setAttribute("value", "5");
       container.appendChild(badge);
 
-      await waitForRender();
+      await badge.updateComplete;
 
       const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
       expect(contentEl.textContent).toBe("5");
@@ -476,7 +475,7 @@ describe("EaBadge", () => {
       badge.setAttribute("variant", "primary");
       container.appendChild(badge);
 
-      await waitForRender();
+      await badge.updateComplete;
 
       const badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
       const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
@@ -499,7 +498,7 @@ describe("EaBadge", () => {
       container.appendChild(badge1);
       container.appendChild(badge2);
 
-      await waitForRender();
+      await badge2.updateComplete;
 
       const container1 = badge1.shadowRoot.querySelector(".ea-badge");
       const container2 = badge2.shadowRoot.querySelector(".ea-badge");
@@ -514,7 +513,7 @@ describe("EaBadge", () => {
       badge.setAttribute("variant", "primary");
       container.appendChild(badge);
 
-      await waitForRender();
+      await badge.updateComplete;
 
       const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
       expect(contentEl.textContent).toBe("5");
@@ -522,7 +521,7 @@ describe("EaBadge", () => {
       badge.setAttribute("value", "15");
       badge.setAttribute("variant", "warning");
 
-      await waitForRender();
+      await badge.updateComplete;
 
       const badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
 
@@ -536,7 +535,7 @@ describe("EaBadge", () => {
       badge.setAttribute("value", "99");
       container.appendChild(badge);
 
-      await waitForRender();
+      await badge.updateComplete;
 
       const badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
       expect(badgeContainer.classList.contains("is-dot")).toBe(true);
@@ -547,10 +546,10 @@ describe("EaBadge", () => {
       badge.setAttribute("value", "0");
       container.appendChild(badge);
 
-      await waitForRender();
+      await badge.updateComplete;
 
       badge.showZero = false;
-      await waitForRender();
+      await badge.updateComplete;
 
       const badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
       expect(badgeContainer.classList.contains("is-hidden")).toBe(true);
@@ -562,7 +561,7 @@ describe("EaBadge", () => {
       badge.setAttribute("value", "100");
       container.appendChild(badge);
 
-      await waitForRender();
+      await badge.updateComplete;
 
       const badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
       expect(badgeContainer.classList.contains("is-hidden")).toBe(true);
@@ -573,7 +572,7 @@ describe("EaBadge", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-badge");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });
@@ -584,7 +583,7 @@ describe("EaBadge", () => {
         badge.setAttribute("value", "5");
         container.appendChild(badge);
 
-        await waitForRender();
+        await badge.updateComplete;
 
         const supEl = badge.shadowRoot.querySelector("sup");
         expect(supEl).toBeTruthy();
@@ -596,7 +595,7 @@ describe("EaBadge", () => {
         badge.setAttribute("is-dot", "");
         container.appendChild(badge);
 
-        await waitForRender();
+        await badge.updateComplete;
 
         const supEl = badge.shadowRoot.querySelector("sup");
         expect(supEl.getAttribute("aria-hidden")).toBe("true");
@@ -608,7 +607,7 @@ describe("EaBadge", () => {
         badge.setAttribute("value", "5");
         container.appendChild(badge);
 
-        await waitForRender();
+        await badge.updateComplete;
 
         const supEl = badge.shadowRoot.querySelector("sup");
         expect(supEl.getAttribute("aria-hidden")).toBe("true");

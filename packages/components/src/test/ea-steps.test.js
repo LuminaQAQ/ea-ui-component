@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import { waitForRender } from "./utils/waitForRender.js";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 import "../components/ea-steps/index.ts";
@@ -45,7 +44,7 @@ describe("EaSteps Component", () => {
       const steps = document.createElement("ea-steps");
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepsContainer =
         steps.shadowRoot.querySelector('[part="container"]');
@@ -69,7 +68,7 @@ describe("EaSteps Component", () => {
       const step = document.createElement("ea-step");
       container.appendChild(step);
 
-      await waitForRender();
+      await step.updateComplete;
 
       const parts = [
         "container",
@@ -92,7 +91,7 @@ describe("EaSteps Component", () => {
       const step = document.createElement("ea-step");
       container.appendChild(step);
 
-      await waitForRender();
+      await step.updateComplete;
 
       const slots = step.shadowRoot.querySelectorAll("slot");
       const slotNames = [...slots].map(s => s.name || "default");
@@ -107,7 +106,7 @@ describe("EaSteps Component", () => {
       const step = document.createElement("ea-step");
       container.appendChild(step);
 
-      await waitForRender();
+      await step.updateComplete;
 
       const stepContainer = step.shadowRoot.querySelector('[part="container"]');
       expect(stepContainer.classList.contains("ea-step")).toBe(true);
@@ -129,7 +128,7 @@ describe("EaSteps Component", () => {
       steps.space = "200px";
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       expect(steps.style.getPropertyValue("--ea-step-tail-spacing")).toBe(
         "200px"
@@ -140,10 +139,10 @@ describe("EaSteps Component", () => {
       const steps = document.createElement("ea-steps");
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       steps.space = "100px";
-      await waitForRender();
+      await steps.updateComplete;
 
       expect(steps.style.getPropertyValue("--ea-step-tail-spacing")).toBe(
         "100px"
@@ -158,7 +157,7 @@ describe("EaSteps Component", () => {
       const steps = document.createElement("ea-steps");
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       expect(steps.active).toBe(0);
     });
@@ -168,7 +167,7 @@ describe("EaSteps Component", () => {
       steps.active = 2;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       expect(steps.active).toBe(2);
     });
@@ -182,10 +181,10 @@ describe("EaSteps Component", () => {
       `;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       steps.active = 1;
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepElements = steps.querySelectorAll("ea-step");
       expect(stepElements[0].getAttribute("status")).toBe("finish");
@@ -201,7 +200,7 @@ describe("EaSteps Component", () => {
       `;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepElements = steps.querySelectorAll("ea-step");
       expect(stepElements[0].getAttribute("status")).toBe("process");
@@ -217,7 +216,7 @@ describe("EaSteps Component", () => {
       `;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepElements = steps.querySelectorAll("ea-step");
       expect(stepElements[0].getAttribute("status")).toBe("finish");
@@ -244,7 +243,7 @@ describe("EaSteps Component", () => {
       `;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepElements = steps.querySelectorAll("ea-step");
       expect(stepElements[0].getAttribute("status")).toBe("error");
@@ -271,7 +270,7 @@ describe("EaSteps Component", () => {
       `;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepElements = steps.querySelectorAll("ea-step");
       expect(stepElements[0].getAttribute("status")).toBe("success");
@@ -293,7 +292,7 @@ describe("EaSteps Component", () => {
       steps.alignCenter = true;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepsContainer =
         steps.shadowRoot.querySelector('[part="container"]');
@@ -309,7 +308,7 @@ describe("EaSteps Component", () => {
       `;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepElements = steps.querySelectorAll("ea-step");
       expect(stepElements[0].hasAttribute("align-center")).toBe(true);
@@ -322,7 +321,7 @@ describe("EaSteps Component", () => {
       steps.innerHTML = `<ea-step heading="Step 1"></ea-step>`;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepElement = steps.querySelector("ea-step");
       const stepContainer =
@@ -336,10 +335,10 @@ describe("EaSteps Component", () => {
       steps.innerHTML = `<ea-step heading="Step 1"></ea-step>`;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       steps.alignCenter = false;
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepsContainer =
         steps.shadowRoot.querySelector('[part="container"]');
@@ -365,7 +364,7 @@ describe("EaSteps Component", () => {
       steps.simple = true;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepsContainer =
         steps.shadowRoot.querySelector('[part="container"]');
@@ -381,7 +380,7 @@ describe("EaSteps Component", () => {
       `;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepElements = steps.querySelectorAll("ea-step");
       expect(stepElements[0].hasAttribute("simple")).toBe(true);
@@ -394,7 +393,7 @@ describe("EaSteps Component", () => {
       steps.innerHTML = `<ea-step heading="Step 1"></ea-step>`;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepElement = steps.querySelector("ea-step");
       const stepContainer =
@@ -411,7 +410,7 @@ describe("EaSteps Component", () => {
       `;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepElements = steps.querySelectorAll("ea-step");
       const arrow1 = stepElements[0].querySelector('[slot="simple-arrow"]');
@@ -429,7 +428,7 @@ describe("EaSteps Component", () => {
       `;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepElements = steps.querySelectorAll("ea-step");
       const lastArrow = stepElements[1].querySelector('[slot="simple-arrow"]');
@@ -445,7 +444,7 @@ describe("EaSteps Component", () => {
       `;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepElements = steps.querySelectorAll("ea-step");
       const lastContainer =
@@ -459,10 +458,10 @@ describe("EaSteps Component", () => {
       steps.innerHTML = `<ea-step heading="Step 1"></ea-step>`;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       steps.simple = false;
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepElement = steps.querySelector("ea-step");
       const arrow = stepElement.querySelector('[slot="simple-arrow"]');
@@ -475,10 +474,10 @@ describe("EaSteps Component", () => {
       steps.innerHTML = `<ea-step heading="Step 1"></ea-step>`;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       steps.simple = false;
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepElement = steps.querySelector("ea-step");
       expect(stepElement.hasAttribute("simple")).toBe(false);
@@ -508,7 +507,7 @@ describe("EaSteps Component", () => {
       `;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepElements = steps.querySelectorAll("ea-step");
       expect(stepElements[0].getAttribute("direction")).toBe("vertical");
@@ -521,7 +520,7 @@ describe("EaSteps Component", () => {
       steps.innerHTML = `<ea-step heading="Step 1"></ea-step>`;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepElement = steps.querySelector("ea-step");
       const stepContainer =
@@ -534,10 +533,10 @@ describe("EaSteps Component", () => {
       steps.innerHTML = `<ea-step heading="Step 1"></ea-step>`;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       steps.direction = "vertical";
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepElement = steps.querySelector("ea-step");
       expect(stepElement.getAttribute("direction")).toBe("vertical");
@@ -563,7 +562,7 @@ describe("EaSteps Component", () => {
       step.heading = "Step 1";
       container.appendChild(step);
 
-      await waitForRender();
+      await step.updateComplete;
 
       const headingSlot = step.shadowRoot.querySelector('slot[name="heading"]');
       expect(headingSlot.textContent).toBe("Step 1");
@@ -574,10 +573,10 @@ describe("EaSteps Component", () => {
       step.heading = "Step 1";
       container.appendChild(step);
 
-      await waitForRender();
+      await step.updateComplete;
 
       step.heading = "Updated Step";
-      await waitForRender();
+      await step.updateComplete;
 
       const headingSlot = step.shadowRoot.querySelector('slot[name="heading"]');
       expect(headingSlot.textContent).toBe("Updated Step");
@@ -599,7 +598,7 @@ describe("EaSteps Component", () => {
       step.description = "Some description";
       container.appendChild(step);
 
-      await waitForRender();
+      await step.updateComplete;
 
       const descriptionSlot = step.shadowRoot.querySelector(
         'slot[name="description"]'
@@ -612,10 +611,10 @@ describe("EaSteps Component", () => {
       step.description = "Old description";
       container.appendChild(step);
 
-      await waitForRender();
+      await step.updateComplete;
 
       step.description = "New description";
-      await waitForRender();
+      await step.updateComplete;
 
       const descriptionSlot = step.shadowRoot.querySelector(
         'slot[name="description"]'
@@ -639,7 +638,7 @@ describe("EaSteps Component", () => {
       step.icon = "music";
       container.appendChild(step);
 
-      await waitForRender();
+      await step.updateComplete;
 
       const iconElement = step.shadowRoot.querySelector('[part="icon"]');
       expect(iconElement.getAttribute("name")).toBe("music");
@@ -650,7 +649,7 @@ describe("EaSteps Component", () => {
       step.icon = "music";
       container.appendChild(step);
 
-      await waitForRender();
+      await step.updateComplete;
 
       const stepContainer = step.shadowRoot.querySelector('[part="container"]');
       expect(stepContainer.classList.contains("is-icon")).toBe(true);
@@ -661,10 +660,10 @@ describe("EaSteps Component", () => {
       step.icon = "music";
       container.appendChild(step);
 
-      await waitForRender();
+      await step.updateComplete;
 
       step.icon = "video";
-      await waitForRender();
+      await step.updateComplete;
 
       const iconElement = step.shadowRoot.querySelector('[part="icon"]');
       expect(iconElement.getAttribute("name")).toBe("video");
@@ -689,7 +688,7 @@ describe("EaSteps Component", () => {
         step.status = status;
         container.appendChild(step);
 
-        await waitForRender();
+        await step.updateComplete;
 
         const stepContainer =
           step.shadowRoot.querySelector('[part="container"]');
@@ -705,7 +704,7 @@ describe("EaSteps Component", () => {
       step.index = 2;
       container.appendChild(step);
 
-      await waitForRender();
+      await step.updateComplete;
 
       const iconElement = step.shadowRoot.querySelector('[part="icon"]');
       expect(iconElement.textContent).toBe("3");
@@ -717,7 +716,7 @@ describe("EaSteps Component", () => {
       step.status = "finish";
       container.appendChild(step);
 
-      await waitForRender();
+      await step.updateComplete;
 
       const iconElement = step.shadowRoot.querySelector('[part="icon"]');
       expect(iconElement.getAttribute("name")).toBe("music");
@@ -739,7 +738,7 @@ describe("EaSteps Component", () => {
       step.index = 0;
       container.appendChild(step);
 
-      await waitForRender();
+      await step.updateComplete;
 
       const stepContainer = step.shadowRoot.querySelector('[part="container"]');
       expect(stepContainer.classList.contains("is-first")).toBe(true);
@@ -761,7 +760,7 @@ describe("EaSteps Component", () => {
       step.direction = "vertical";
       container.appendChild(step);
 
-      await waitForRender();
+      await step.updateComplete;
 
       const stepContainer = step.shadowRoot.querySelector('[part="container"]');
       expect(stepContainer.classList.contains("ea-step--vertical")).toBe(true);
@@ -772,7 +771,7 @@ describe("EaSteps Component", () => {
       step.direction = "horizontal";
       container.appendChild(step);
 
-      await waitForRender();
+      await step.updateComplete;
 
       const stepContainer = step.shadowRoot.querySelector('[part="container"]');
       expect(stepContainer.classList.contains("ea-step--horizontal")).toBe(
@@ -793,7 +792,7 @@ describe("EaSteps Component", () => {
       `;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepElements = steps.querySelectorAll("ea-step");
       expect(stepElements[0].index).toBe(0);
@@ -810,7 +809,7 @@ describe("EaSteps Component", () => {
       `;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepElements = steps.querySelectorAll("ea-step");
       expect(stepElements[0].hasAttribute("first")).toBe(true);
@@ -829,7 +828,7 @@ describe("EaSteps Component", () => {
       `;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepElements = steps.querySelectorAll("ea-step");
       const lastContainer =
@@ -853,7 +852,7 @@ describe("EaSteps Component", () => {
       `;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepElements = steps.querySelectorAll("ea-step");
       expect(stepElements[0].getAttribute("status")).toBe("finish");
@@ -871,7 +870,7 @@ describe("EaSteps Component", () => {
       `;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepElements = steps.querySelectorAll("ea-step");
       const container0 =
@@ -895,10 +894,10 @@ describe("EaSteps Component", () => {
       `;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       steps.active = 2;
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepElements = steps.querySelectorAll("ea-step");
       expect(stepElements[0].getAttribute("status")).toBe("finish");
@@ -922,7 +921,7 @@ describe("EaSteps Component", () => {
       `;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepElements = steps.querySelectorAll("ea-step");
       const iconElement =
@@ -940,7 +939,7 @@ describe("EaSteps Component", () => {
       `;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepElements = steps.querySelectorAll("ea-step");
       const iconElement =
@@ -959,7 +958,7 @@ describe("EaSteps Component", () => {
       `;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepElements = steps.querySelectorAll("ea-step");
       const iconElement =
@@ -976,7 +975,7 @@ describe("EaSteps Component", () => {
       `;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepElement = steps.querySelector("ea-step");
       const iconElement = stepElement.shadowRoot.querySelector('[part="icon"]');
@@ -999,7 +998,7 @@ describe("EaSteps Component", () => {
       steps.innerHTML = `<ea-step heading="Only Step"></ea-step>`;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepElement = steps.querySelector("ea-step");
       expect(stepElement.hasAttribute("first")).toBe(true);
@@ -1011,7 +1010,7 @@ describe("EaSteps Component", () => {
       steps.innerHTML = `<ea-step heading="Only Step"></ea-step>`;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepElement = steps.querySelector("ea-step");
       const stepContainer =
@@ -1028,7 +1027,7 @@ describe("EaSteps Component", () => {
       `;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepElements = steps.querySelectorAll("ea-step");
       expect(stepElements[0].hasAttribute("first")).toBe(true);
@@ -1045,13 +1044,13 @@ describe("EaSteps Component", () => {
       `;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const newStep = document.createElement("ea-step");
       newStep.heading = "Step 3";
       steps.appendChild(newStep);
 
-      await waitForRender();
+      await newStep.updateComplete;
 
       const stepElements = steps.querySelectorAll("ea-step");
       expect(stepElements.length).toBe(3);
@@ -1071,12 +1070,12 @@ describe("EaSteps Component", () => {
       `;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepElements = steps.querySelectorAll("ea-step");
       stepElements[1].remove();
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const remainingSteps = steps.querySelectorAll("ea-step");
       expect(remainingSteps.length).toBe(2);
@@ -1095,7 +1094,7 @@ describe("EaSteps Component", () => {
       `;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepElements = steps.querySelectorAll("ea-step");
       expect(stepElements[0].getAttribute("status")).toBe("wait");
@@ -1120,13 +1119,13 @@ describe("EaSteps Component", () => {
       steps.alignCenter = true;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const step = document.createElement("ea-step");
       step.heading = "New Step";
       steps.appendChild(step);
 
-      await waitForRender();
+      await step.updateComplete;
 
       expect(step.hasAttribute("align-center")).toBe(true);
     });
@@ -1136,13 +1135,13 @@ describe("EaSteps Component", () => {
       steps.direction = "vertical";
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const step = document.createElement("ea-step");
       step.heading = "New Step";
       steps.appendChild(step);
 
-      await waitForRender();
+      await step.updateComplete;
 
       expect(step.getAttribute("direction")).toBe("vertical");
     });
@@ -1152,16 +1151,16 @@ describe("EaSteps Component", () => {
       steps.innerHTML = `<ea-step heading="Step 1"></ea-step>`;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       steps.direction = "vertical";
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepElement = steps.querySelector("ea-step");
       expect(stepElement.getAttribute("direction")).toBe("vertical");
 
       steps.direction = "horizontal";
-      await waitForRender();
+      await steps.updateComplete;
 
       expect(stepElement.getAttribute("direction")).toBe("horizontal");
     });
@@ -1175,10 +1174,10 @@ describe("EaSteps Component", () => {
       `;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       steps.active = 0;
-      await waitForRender();
+      await steps.updateComplete;
 
       let stepElements = steps.querySelectorAll("ea-step");
       expect(stepElements[0].getAttribute("status")).toBe("process");
@@ -1186,7 +1185,7 @@ describe("EaSteps Component", () => {
       expect(stepElements[2].getAttribute("status")).toBe("wait");
 
       steps.active = 1;
-      await waitForRender();
+      await steps.updateComplete;
 
       stepElements = steps.querySelectorAll("ea-step");
       expect(stepElements[0].getAttribute("status")).toBe("finish");
@@ -1194,7 +1193,7 @@ describe("EaSteps Component", () => {
       expect(stepElements[2].getAttribute("status")).toBe("wait");
 
       steps.active = 2;
-      await waitForRender();
+      await steps.updateComplete;
 
       stepElements = steps.querySelectorAll("ea-step");
       expect(stepElements[0].getAttribute("status")).toBe("finish");
@@ -1210,7 +1209,7 @@ describe("EaSteps Component", () => {
       const steps = document.createElement("ea-steps");
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepsContainer =
         steps.shadowRoot.querySelector('[part="container"]');
@@ -1224,7 +1223,7 @@ describe("EaSteps Component", () => {
       steps.simple = true;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepsContainer =
         steps.shadowRoot.querySelector('[part="container"]');
@@ -1236,7 +1235,7 @@ describe("EaSteps Component", () => {
       steps.alignCenter = true;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepsContainer =
         steps.shadowRoot.querySelector('[part="container"]');
@@ -1249,7 +1248,7 @@ describe("EaSteps Component", () => {
       steps.alignCenter = true;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepsContainer =
         steps.shadowRoot.querySelector('[part="container"]');
@@ -1270,7 +1269,7 @@ describe("EaSteps Component", () => {
       `;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepElements = steps.querySelectorAll("ea-step");
       const container0 =
@@ -1287,7 +1286,7 @@ describe("EaSteps Component", () => {
       steps.innerHTML = `<ea-step heading="Step 1" icon="star"></ea-step>`;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepElement = steps.querySelector("ea-step");
       const stepContainer =
@@ -1302,7 +1301,7 @@ describe("EaSteps Component", () => {
       steps.innerHTML = `<ea-step heading="Step 1"></ea-step>`;
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const stepElement = steps.querySelector("ea-step");
       const stepContainer =
@@ -1319,7 +1318,7 @@ describe("EaSteps Component", () => {
       const steps = document.createElement("ea-steps");
       container.appendChild(steps);
 
-      await waitForRender();
+      await steps.updateComplete;
 
       const result = steps.updateContainerClasslist();
       expect(result).toContain("ea-steps");
@@ -1329,7 +1328,7 @@ describe("EaSteps Component", () => {
       const step = document.createElement("ea-step");
       container.appendChild(step);
 
-      await waitForRender();
+      await step.updateComplete;
 
       const result = step.updateContainerClasslist();
       expect(result).toContain("ea-step");
@@ -1341,7 +1340,7 @@ describe("EaSteps Component", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-steps");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });
@@ -1350,7 +1349,7 @@ describe("EaSteps Component", () => {
       it("ea-steps 容器应该有 role=list", async () => {
         const steps = document.createElement("ea-steps");
         container.appendChild(steps);
-        await waitForRender();
+        await steps.updateComplete;
         const containerEl = steps.shadowRoot.querySelector('[part="container"]');
         expect(containerEl.getAttribute("role")).toBe("list");
       });
@@ -1358,7 +1357,7 @@ describe("EaSteps Component", () => {
       it("ea-step 容器应该有 role=listitem", async () => {
         const step = document.createElement("ea-step");
         container.appendChild(step);
-        await waitForRender();
+        await step.updateComplete;
         const containerEl = step.shadowRoot.querySelector('[part="container"]');
         expect(containerEl.getAttribute("role")).toBe("listitem");
       });
@@ -1371,7 +1370,7 @@ describe("EaSteps Component", () => {
           <ea-step heading="Step 3"></ea-step>
         `;
         container.appendChild(steps);
-        await waitForRender();
+        await steps.updateComplete;
         const stepElements = steps.querySelectorAll("ea-step");
         const processStep = stepElements[0].shadowRoot.querySelector('[part="container"]');
         expect(processStep.getAttribute("aria-current")).toBe("step");
@@ -1385,7 +1384,7 @@ describe("EaSteps Component", () => {
           <ea-step heading="Step 3"></ea-step>
         `;
         container.appendChild(steps);
-        await waitForRender();
+        await steps.updateComplete;
         const stepElements = steps.querySelectorAll("ea-step");
         const waitStep = stepElements[1].shadowRoot.querySelector('[part="container"]');
         expect(waitStep.hasAttribute("aria-current")).toBe(false);
@@ -1398,14 +1397,14 @@ describe("EaSteps Component", () => {
           <ea-step heading="Step 2"></ea-step>
         `;
         container.appendChild(steps);
-        await waitForRender();
+        await steps.updateComplete;
 
         const stepElements = steps.querySelectorAll("ea-step");
         const container0 = stepElements[0].shadowRoot.querySelector('[part="container"]');
         expect(container0.getAttribute("aria-current")).toBe("step");
 
         steps.active = 1;
-        await waitForRender();
+        await steps.updateComplete;
 
         expect(container0.hasAttribute("aria-current")).toBe(false);
         const container1 = stepElements[1].shadowRoot.querySelector('[part="container"]');

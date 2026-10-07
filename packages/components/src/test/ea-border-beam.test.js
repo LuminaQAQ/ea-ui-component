@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import { waitForRender } from "./utils/waitForRender";
 
 import "../components/ea-border-beam/index";
 
@@ -83,7 +82,7 @@ describe("EaBorderBeam", () => {
       );
 
       el.setAttribute("count", "3");
-      await waitForRender();
+      await el.updateComplete;
 
       const indicators = el.shadowRoot.querySelectorAll('[part="indicator"]');
       expect(indicators.length).toBe(3);
@@ -99,7 +98,7 @@ describe("EaBorderBeam", () => {
       );
 
       el.setAttribute("count", "1");
-      await waitForRender();
+      await el.updateComplete;
 
       const indicators = el.shadowRoot.querySelectorAll('[part="indicator"]');
       expect(indicators.length).toBe(1);
@@ -110,7 +109,7 @@ describe("EaBorderBeam", () => {
       el.setAttribute("count", "0");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const indicators = el.shadowRoot.querySelectorAll('[part="indicator"]');
       expect(indicators.length).toBe(1);
@@ -137,10 +136,10 @@ describe("EaBorderBeam", () => {
       const el = document.createElement("ea-border-beam");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       el.setAttribute("trigger", "hover");
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-border-beam");
       expect(containerEl.classList.contains("is-trigger-hover")).toBe(true);
@@ -167,10 +166,10 @@ describe("EaBorderBeam", () => {
       const el = document.createElement("ea-border-beam");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       el.setAttribute("size", "56");
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-border-beam");
       expect(
@@ -199,10 +198,10 @@ describe("EaBorderBeam", () => {
       const el = document.createElement("ea-border-beam");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       el.setAttribute("line-width", "3");
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-border-beam");
       expect(
@@ -233,10 +232,10 @@ describe("EaBorderBeam", () => {
       const el = document.createElement("ea-border-beam");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       el.setAttribute("duration", "5");
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-border-beam");
       expect(
@@ -265,10 +264,10 @@ describe("EaBorderBeam", () => {
       const el = document.createElement("ea-border-beam");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       el.setAttribute("start-delay", "2");
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-border-beam");
       expect(
@@ -286,7 +285,7 @@ describe("EaBorderBeam", () => {
       el.setAttribute("start-delay", "1");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-border-beam");
       expect(
@@ -311,7 +310,7 @@ describe("EaBorderBeam", () => {
       const el = document.createElement("ea-border-beam");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-border-beam");
       expect(containerEl.classList.contains("ea-border-beam")).toBe(true);
@@ -322,7 +321,7 @@ describe("EaBorderBeam", () => {
       el.setAttribute("trigger", "hover");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-border-beam");
       expect(containerEl.classList.contains("is-trigger-hover")).toBe(true);
@@ -355,10 +354,10 @@ describe("EaBorderBeam", () => {
       el.setAttribute("count", "3");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       el.setAttribute("count", "5");
-      await waitForRender();
+      await el.updateComplete;
 
       const indicators = el.shadowRoot.querySelectorAll('[part="indicator"]');
       expect(indicators.length).toBe(5);

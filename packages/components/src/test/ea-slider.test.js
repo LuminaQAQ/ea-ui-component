@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { waitForRender } from "./utils/waitForRender.js";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 import "../components/ea-slider/index.ts";
@@ -174,7 +173,7 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       slider.value = 50;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const tooltip = slider.shadowRoot.querySelector('[part="tooltip"]');
       expect(tooltip.textContent).toBe("50");
@@ -184,13 +183,13 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       slider.value = 0;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
       expect(trigger.style.left).toBe("0%");
 
       slider.value = 50;
-      await waitForRender();
+      await slider.updateComplete;
 
       expect(trigger.style.left).toBe("50%");
     });
@@ -199,13 +198,13 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       slider.value = 0;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const bar = slider.shadowRoot.querySelector('[part="bar"]');
       expect(bar.style.width).toBe("0%");
 
       slider.value = 50;
-      await waitForRender();
+      await slider.updateComplete;
 
       expect(bar.style.width).toBe("50%");
     });
@@ -239,7 +238,7 @@ describe("EaSlider Component", () => {
       slider.addEventListener("input", handler);
 
       slider.value = 50;
-      await waitForRender();
+      await slider.updateComplete;
 
       expect(handler).not.toHaveBeenCalled();
     });
@@ -248,13 +247,13 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       slider.value = 0;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const handler = vi.fn();
       slider.addEventListener("change", handler);
 
       slider.value = 50;
-      await waitForRender();
+      await slider.updateComplete;
 
       expect(handler).not.toHaveBeenCalled();
     });
@@ -331,13 +330,13 @@ describe("EaSlider Component", () => {
       slider.max = 100;
       slider.value = 50;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
       expect(trigger.style.left).toBe("50%");
 
       slider.max = 200;
-      await waitForRender();
+      await slider.updateComplete;
 
       expect(trigger.style.left).toBe("25%");
     });
@@ -348,13 +347,13 @@ describe("EaSlider Component", () => {
       slider.max = 100;
       slider.value = 50;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const bar = slider.shadowRoot.querySelector('[part="bar"]');
       expect(bar.style.width).toBe("50%");
 
       slider.max = 200;
-      await waitForRender();
+      await slider.updateComplete;
 
       expect(bar.style.width).toBe("25%");
     });
@@ -376,7 +375,7 @@ describe("EaSlider Component", () => {
       slider.max = 100;
       slider.value = 0;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
       expect(trigger.style.left).toBe("50%");
@@ -467,13 +466,13 @@ describe("EaSlider Component", () => {
     it("disabled 变化时应该正确更新容器 class", async () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const containerEl = slider.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-disabled")).toBe(false);
 
       slider.disabled = true;
-      await waitForRender();
+      await slider.updateComplete;
 
       expect(containerEl.classList.contains("is-disabled")).toBe(true);
     });
@@ -495,7 +494,7 @@ describe("EaSlider Component", () => {
       slider.disabled = true;
       slider.showStops = true;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const containerEl = slider.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-disabled")).toBe(true);
@@ -522,13 +521,13 @@ describe("EaSlider Component", () => {
     it("vertical 变化时应该正确更新容器 class", async () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const containerEl = slider.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-vertical")).toBe(false);
 
       slider.vertical = true;
-      await waitForRender();
+      await slider.updateComplete;
 
       expect(containerEl.classList.contains("is-vertical")).toBe(true);
     });
@@ -538,7 +537,7 @@ describe("EaSlider Component", () => {
       slider.vertical = true;
       slider.value = 50;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
       expect(trigger.style.top).toBe("50%");
@@ -549,7 +548,7 @@ describe("EaSlider Component", () => {
       slider.vertical = true;
       slider.value = 50;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
       expect(trigger.style.left).toBe("50%");
@@ -560,7 +559,7 @@ describe("EaSlider Component", () => {
       slider.vertical = true;
       slider.value = 50;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const bar = slider.shadowRoot.querySelector('[part="bar"]');
       expect(bar.style.height).toBe("50%");
@@ -571,7 +570,7 @@ describe("EaSlider Component", () => {
       slider.vertical = true;
       slider.value = 50;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const bar = slider.shadowRoot.querySelector('[part="bar"]');
       expect(bar.style.width).toBe("");
@@ -582,7 +581,7 @@ describe("EaSlider Component", () => {
       slider.vertical = true;
       slider.value = 0;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
       expect(trigger.style.top).toBe("0%");
@@ -593,7 +592,7 @@ describe("EaSlider Component", () => {
       slider.vertical = true;
       slider.value = 100;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
       expect(trigger.style.top).toBe("100%");
@@ -606,7 +605,7 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
 
       slider.vertical = false;
-      await waitForRender();
+      await slider.updateComplete;
 
       const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
       expect(trigger.style.left).toBe("50%");
@@ -620,7 +619,7 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
 
       slider.vertical = false;
-      await waitForRender();
+      await slider.updateComplete;
 
       const bar = slider.shadowRoot.querySelector('[part="bar"]');
       expect(bar.style.width).toBe("50%");
@@ -649,7 +648,7 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       slider.value = 50;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const containerEl = slider.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-show-tooltip")).toBe(true);
@@ -661,7 +660,7 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
 
       slider.showTooltip = false;
-      await waitForRender();
+      await slider.updateComplete;
 
       const containerEl = slider.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-show-tooltip")).toBe(false);
@@ -670,17 +669,17 @@ describe("EaSlider Component", () => {
     it("动态切换 showTooltip 应该正确更新 class", async () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const containerEl = slider.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-show-tooltip")).toBe(true);
 
       slider.showTooltip = false;
-      await waitForRender();
+      await slider.updateComplete;
       expect(containerEl.classList.contains("is-show-tooltip")).toBe(false);
 
       slider.showTooltip = true;
-      await waitForRender();
+      await slider.updateComplete;
       expect(containerEl.classList.contains("is-show-tooltip")).toBe(true);
     });
   });
@@ -725,7 +724,7 @@ describe("EaSlider Component", () => {
       expect(trigger.getAttribute("placement")).toBe("top");
 
       slider.placement = "right";
-      await waitForRender();
+      await slider.updateComplete;
 
       expect(trigger.getAttribute("placement")).toBe("right");
     });
@@ -785,13 +784,13 @@ describe("EaSlider Component", () => {
     it("showStops 变化时应该正确更新容器 class", async () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const containerEl = slider.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-show-stops")).toBe(false);
 
       slider.showStops = true;
-      await waitForRender();
+      await slider.updateComplete;
 
       expect(containerEl.classList.contains("is-show-stops")).toBe(true);
     });
@@ -801,7 +800,7 @@ describe("EaSlider Component", () => {
       slider.showStops = true;
       slider.step = 25;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const stops = slider.shadowRoot.querySelectorAll('[part="stop"]');
       expect(stops.length).toBe(5);
@@ -821,7 +820,7 @@ describe("EaSlider Component", () => {
       slider.showStops = true;
       slider.step = 10;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const stops = slider.shadowRoot.querySelectorAll('[part="stop"]');
       expect(stops.length).toBe(11);
@@ -832,7 +831,7 @@ describe("EaSlider Component", () => {
       slider.showStops = true;
       slider.step = 50;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const stops = slider.shadowRoot.querySelectorAll('[part="stop"]');
       expect(stops[0].style.left).toBe("0%");
@@ -846,7 +845,7 @@ describe("EaSlider Component", () => {
       slider.showStops = true;
       slider.step = 50;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const stops = slider.shadowRoot.querySelectorAll('[part="stop"]');
       expect(stops[0].style.top).toBe("0%");
@@ -863,13 +862,13 @@ describe("EaSlider Component", () => {
       expect(stops.length).toBe(0);
 
       slider.showStops = true;
-      await waitForRender();
+      await slider.updateComplete;
 
       stops = slider.shadowRoot.querySelectorAll('[part="stop"]');
       expect(stops.length).toBe(5);
 
       slider.showStops = false;
-      await waitForRender();
+      await slider.updateComplete;
 
       stops = slider.shadowRoot.querySelectorAll('[part="stop"]');
       expect(stops.length).toBe(0);
@@ -888,7 +887,7 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       slider.showInput = true;
       container.appendChild(slider);
-      await waitForRender(200);
+      await slider.updateComplete;
 
       expect(slider.showInput).toBe(true);
     });
@@ -896,14 +895,13 @@ describe("EaSlider Component", () => {
     it("showInput 变化时应该正确更新容器 class", async () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const containerEl = slider.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-show-input")).toBe(false);
 
       slider.showInput = true;
-      await waitForRender(200);
-
+      await slider.updateComplete;
       expect(containerEl.classList.contains("is-show-input")).toBe(true);
     });
 
@@ -912,7 +910,7 @@ describe("EaSlider Component", () => {
       slider.value = 50;
       slider.showInput = true;
       container.appendChild(slider);
-      await waitForRender(200);
+      await slider.updateComplete;
 
       const input = slider.shadowRoot.querySelector('[part="input"]');
       expect(input.value).toBe(50);
@@ -925,7 +923,7 @@ describe("EaSlider Component", () => {
       slider.step = 5;
       slider.showInput = true;
       container.appendChild(slider);
-      await waitForRender(200);
+      await slider.updateComplete;
 
       const input = slider.shadowRoot.querySelector('[part="input"]');
       expect(input.min).toBe(10);
@@ -938,10 +936,14 @@ describe("EaSlider Component", () => {
       slider.showInput = true;
       slider.value = 30;
       container.appendChild(slider);
-      await waitForRender(200);
+      await vi.waitFor(() => {
+        expect(slider.shadowRoot.querySelector('[part="input"]').value).toBe(
+          30
+        );
+      });
 
       slider.value = 70;
-      await waitForRender();
+      await slider.updateComplete;
 
       const input = slider.shadowRoot.querySelector('[part="input"]');
       expect(input.value).toBe(70);
@@ -951,13 +953,13 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       slider.showInput = true;
       container.appendChild(slider);
-      await waitForRender(200);
+      await slider.updateComplete;
 
       const containerEl = slider.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-show-input")).toBe(true);
 
       slider.showInput = false;
-      await waitForRender();
+      await slider.updateComplete;
 
       expect(containerEl.classList.contains("is-show-input")).toBe(false);
     });
@@ -999,13 +1001,13 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       slider.size = "small";
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const containerEl = slider.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("ea-slider--small")).toBe(true);
 
       slider.size = "large";
-      await waitForRender();
+      await slider.updateComplete;
 
       expect(containerEl.classList.contains("ea-slider--large")).toBe(true);
       expect(containerEl.classList.contains("ea-slider--small")).toBe(false);
@@ -1014,7 +1016,7 @@ describe("EaSlider Component", () => {
     it("size 为空时不应有 size 修饰符 class", async () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const containerEl = slider.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("ea-slider--small")).toBe(false);
@@ -1027,7 +1029,7 @@ describe("EaSlider Component", () => {
       slider.showInput = true;
       slider.size = "small";
       container.appendChild(slider);
-      await waitForRender(200);
+      await slider.updateComplete;
 
       const input = slider.shadowRoot.querySelector('[part="input"]');
       expect(input.getAttribute("size")).toBe("small");
@@ -1038,10 +1040,10 @@ describe("EaSlider Component", () => {
       slider.showInput = true;
       slider.size = "small";
       container.appendChild(slider);
-      await waitForRender(200);
+      await slider.updateComplete;
 
       slider.size = "large";
-      await waitForRender();
+      await slider.updateComplete;
 
       const input = slider.shadowRoot.querySelector('[part="input"]');
       expect(input.getAttribute("size")).toBe("large");
@@ -1067,13 +1069,13 @@ describe("EaSlider Component", () => {
     it("label 变化时应该更新 form-label 文本", async () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const labelEl = slider.shadowRoot.querySelector('[part="form-label"]');
       expect(labelEl.textContent).toBe("");
 
       slider.label = "Volume";
-      await waitForRender();
+      await slider.updateComplete;
 
       expect(labelEl.textContent).toBe("Volume");
     });
@@ -1082,10 +1084,10 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       slider.label = "Test";
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       slider.label = "";
-      await waitForRender();
+      await slider.updateComplete;
 
       const labelEl = slider.shadowRoot.querySelector('[part="form-label"]');
       expect(labelEl.textContent).toBe("");
@@ -1094,16 +1096,16 @@ describe("EaSlider Component", () => {
     it("动态修改 label 应该实时更新", async () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       slider.label = "First";
-      await waitForRender();
+      await slider.updateComplete;
 
       const labelEl = slider.shadowRoot.querySelector('[part="form-label"]');
       expect(labelEl.textContent).toBe("First");
 
       slider.label = "Second";
-      await waitForRender();
+      await slider.updateComplete;
 
       expect(labelEl.textContent).toBe("Second");
     });
@@ -1160,7 +1162,7 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
 
       slider.marks = { 0: "0°C", 50: "50°C", 100: "100°C" };
-      await waitForRender();
+      await slider.updateComplete;
 
       const markLabels = slider.shadowRoot.querySelectorAll(
         ".ea-slider__mark-label"
@@ -1173,7 +1175,7 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
 
       slider.marks = { 0: "0°C", 50: "50°C", 100: "100°C" };
-      await waitForRender();
+      await slider.updateComplete;
 
       const markStops = slider.shadowRoot.querySelectorAll(
         ".ea-slider__mark-stop"
@@ -1186,7 +1188,7 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
 
       slider.marks = { 0: "0°C", 50: "50°C", 100: "100°C" };
-      await waitForRender();
+      await slider.updateComplete;
 
       let markLabels = slider.shadowRoot.querySelectorAll(
         ".ea-slider__mark-label"
@@ -1194,7 +1196,7 @@ describe("EaSlider Component", () => {
       expect(markLabels.length).toBe(3);
 
       slider.marks = null;
-      await waitForRender();
+      await slider.updateComplete;
 
       markLabels = slider.shadowRoot.querySelectorAll(".ea-slider__mark-label");
       expect(markLabels.length).toBe(0);
@@ -1207,7 +1209,7 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
 
       slider.marks = { 0: "0°C", 50: "50°C", 150: "150°C" };
-      await waitForRender();
+      await slider.updateComplete;
 
       const markLabels = slider.shadowRoot.querySelectorAll(
         ".ea-slider__mark-label"
@@ -1220,7 +1222,7 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
 
       slider.marks = { 0: "0°C", abc: "invalid", 100: "100°C" };
-      await waitForRender();
+      await slider.updateComplete;
 
       const markLabels = slider.shadowRoot.querySelectorAll(
         ".ea-slider__mark-label"
@@ -1233,7 +1235,7 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
 
       slider.marks = { 0: "0°C", 50: "50°C", 100: "100°C" };
-      await waitForRender();
+      await slider.updateComplete;
 
       const markElements =
         slider.shadowRoot.querySelectorAll(".ea-slider__mark");
@@ -1248,7 +1250,7 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
 
       slider.marks = { 0: "0°C", 50: "50°C", 100: "100°C" };
-      await waitForRender();
+      await slider.updateComplete;
 
       const markElements =
         slider.shadowRoot.querySelectorAll(".ea-slider__mark");
@@ -1264,7 +1266,7 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
 
       slider.marks = { 0: "0°C", 50: "50°C", 100: "100°C" };
-      await waitForRender();
+      await slider.updateComplete;
 
       const allStops = slider.shadowRoot.querySelectorAll('[part~="stop"]');
       const markStops = slider.shadowRoot.querySelectorAll(
@@ -1279,7 +1281,7 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
 
       slider.marks = { 0: "Start", 100: "End" };
-      await waitForRender();
+      await slider.updateComplete;
 
       const markLabels = slider.shadowRoot.querySelectorAll(
         ".ea-slider__mark-label"
@@ -1293,7 +1295,7 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
 
       slider.marks = { 0: "0°C", 50: "50°C", 100: "100°C" };
-      await waitForRender();
+      await slider.updateComplete;
 
       const markStops = slider.shadowRoot.querySelectorAll(
         '[part~="mark-stop"]'
@@ -1306,7 +1308,7 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
 
       slider.marks = { 0: "0°C", 50: "50°C", 100: "100°C" };
-      await waitForRender();
+      await slider.updateComplete;
 
       const markStops = slider.shadowRoot.querySelectorAll('[part~="stop"]');
       expect(markStops.length).toBe(3);
@@ -1336,13 +1338,13 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       slider.value = 50;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const tooltip = slider.shadowRoot.querySelector('[part="tooltip"]');
       expect(tooltip.textContent).toBe("50");
 
       slider.formatTooltip = value => value + "%";
-      await waitForRender();
+      await slider.updateComplete;
 
       expect(tooltip.textContent).toBe("50%");
     });
@@ -1353,7 +1355,7 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
 
       slider.formatTooltip = value => `¥${value}.00`;
-      await waitForRender();
+      await slider.updateComplete;
 
       const tooltip = slider.shadowRoot.querySelector('[part="tooltip"]');
       expect(tooltip.textContent).toBe("¥75.00");
@@ -1367,7 +1369,7 @@ describe("EaSlider Component", () => {
       slider.formatTooltip = value => `${value}km`;
 
       slider.value = 60;
-      await waitForRender();
+      await slider.updateComplete;
 
       const tooltip = slider.shadowRoot.querySelector('[part="tooltip"]');
       expect(tooltip.textContent).toBe("60km");
@@ -1382,11 +1384,11 @@ describe("EaSlider Component", () => {
       const containerEl = slider.shadowRoot.querySelector('[part="container"]');
 
       slider.disabled = true;
-      await waitForRender();
+      await slider.updateComplete;
       expect(containerEl.classList.contains("is-disabled")).toBe(true);
 
       slider.disabled = false;
-      await waitForRender();
+      await slider.updateComplete;
       expect(containerEl.classList.contains("is-disabled")).toBe(false);
     });
 
@@ -1397,24 +1399,24 @@ describe("EaSlider Component", () => {
       const containerEl = slider.shadowRoot.querySelector('[part="container"]');
 
       slider.vertical = true;
-      await waitForRender();
+      await slider.updateComplete;
       expect(containerEl.classList.contains("is-vertical")).toBe(true);
 
       slider.vertical = false;
-      await waitForRender();
+      await slider.updateComplete;
       expect(containerEl.classList.contains("is-vertical")).toBe(false);
     });
 
     it("showTooltip 状态应该正确反映在容器 class 中", async () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const containerEl = slider.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-show-tooltip")).toBe(true);
 
       slider.showTooltip = false;
-      await waitForRender();
+      await slider.updateComplete;
       expect(containerEl.classList.contains("is-show-tooltip")).toBe(false);
     });
 
@@ -1425,11 +1427,11 @@ describe("EaSlider Component", () => {
       const containerEl = slider.shadowRoot.querySelector('[part="container"]');
 
       slider.showStops = true;
-      await waitForRender();
+      await slider.updateComplete;
       expect(containerEl.classList.contains("is-show-stops")).toBe(true);
 
       slider.showStops = false;
-      await waitForRender();
+      await slider.updateComplete;
       expect(containerEl.classList.contains("is-show-stops")).toBe(false);
     });
 
@@ -1440,11 +1442,12 @@ describe("EaSlider Component", () => {
       const containerEl = slider.shadowRoot.querySelector('[part="container"]');
 
       slider.showInput = true;
-      await waitForRender(200);
+      await slider.updateComplete;
+
       expect(containerEl.classList.contains("is-show-input")).toBe(true);
 
       slider.showInput = false;
-      await waitForRender();
+      await slider.updateComplete;
       expect(containerEl.classList.contains("is-show-input")).toBe(false);
     });
 
@@ -1455,11 +1458,11 @@ describe("EaSlider Component", () => {
       const containerEl = slider.shadowRoot.querySelector('[part="container"]');
 
       slider.size = "small";
-      await waitForRender();
+      await slider.updateComplete;
       expect(containerEl.classList.contains("ea-slider--small")).toBe(true);
 
       slider.size = "large";
-      await waitForRender();
+      await slider.updateComplete;
       expect(containerEl.classList.contains("ea-slider--large")).toBe(true);
       expect(containerEl.classList.contains("ea-slider--small")).toBe(false);
     });
@@ -1470,7 +1473,7 @@ describe("EaSlider Component", () => {
       slider.showStops = true;
       slider.size = "small";
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const containerEl = slider.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-disabled")).toBe(true);
@@ -1496,7 +1499,7 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       slider.value = 0;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
       expect(trigger.style.left).toBe("0%");
@@ -1506,7 +1509,7 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       slider.value = 50;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
       expect(trigger.style.left).toBe("50%");
@@ -1516,7 +1519,7 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       slider.value = 100;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
       expect(trigger.style.left).toBe("100%");
@@ -1526,7 +1529,7 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       slider.value = 0;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const bar = slider.shadowRoot.querySelector('[part="bar"]');
       expect(bar.style.width).toBe("0%");
@@ -1536,7 +1539,7 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       slider.value = 50;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const bar = slider.shadowRoot.querySelector('[part="bar"]');
       expect(bar.style.width).toBe("50%");
@@ -1546,7 +1549,7 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       slider.value = 100;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const bar = slider.shadowRoot.querySelector('[part="bar"]');
       expect(bar.style.width).toBe("100%");
@@ -1558,7 +1561,7 @@ describe("EaSlider Component", () => {
       slider.max = 200;
       slider.value = 100;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
       expect(trigger.style.left).toBe("50%");
@@ -1570,7 +1573,7 @@ describe("EaSlider Component", () => {
       slider.max = 200;
       slider.value = 100;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const bar = slider.shadowRoot.querySelector('[part="bar"]');
       expect(bar.style.width).toBe("50%");
@@ -1581,7 +1584,7 @@ describe("EaSlider Component", () => {
       slider.vertical = true;
       slider.value = 50;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
       expect(trigger.style.top).toBe("50%");
@@ -1592,7 +1595,7 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       slider.value = 50;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
       expect(trigger.style.left).toBe("50%");
@@ -1603,13 +1606,13 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       slider.value = 0;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const tooltip = slider.shadowRoot.querySelector('[part="tooltip"]');
       expect(tooltip.textContent).toBe("0");
 
       slider.value = 75;
-      await waitForRender();
+      await slider.updateComplete;
 
       expect(tooltip.textContent).toBe("75");
     });
@@ -1620,7 +1623,7 @@ describe("EaSlider Component", () => {
       slider.max = 100;
       slider.value = 75;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
       expect(trigger.style.left).toBe("50%");
@@ -1632,7 +1635,7 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       slider.value = 0;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       let receivedDetail = null;
       slider.addEventListener("input", e => {
@@ -1650,7 +1653,7 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       slider.value = 0;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       let receivedDetail = null;
       slider.addEventListener("change", e => {
@@ -1667,7 +1670,7 @@ describe("EaSlider Component", () => {
     it("input 事件应该冒泡", async () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const handler = vi.fn();
       container.addEventListener("input", handler);
@@ -1682,7 +1685,7 @@ describe("EaSlider Component", () => {
     it("change 事件应该冒泡", async () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const handler = vi.fn();
       container.addEventListener("change", handler);
@@ -1700,7 +1703,7 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       slider.value = 0;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const handler = vi.fn();
       slider.addEventListener("input", handler);
@@ -1722,7 +1725,7 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       slider.value = 0;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const handler = vi.fn();
       slider.addEventListener("input", handler);
@@ -1744,7 +1747,7 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       slider.disabled = true;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const handler = vi.fn();
       slider.addEventListener("input", handler);
@@ -1766,7 +1769,7 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       slider.disabled = true;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const handler = vi.fn();
       slider.addEventListener("input", handler);
@@ -1787,7 +1790,7 @@ describe("EaSlider Component", () => {
     it("mousedown 在 rail 上应该设置 trigger 的 visible 属性", async () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
       const rail = slider.shadowRoot.querySelector('[part="rail"]');
@@ -1807,7 +1810,7 @@ describe("EaSlider Component", () => {
     it("mouseup 应该触发 change 事件", async () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const changeHandler = vi.fn();
       slider.addEventListener("change", changeHandler);
@@ -1830,7 +1833,7 @@ describe("EaSlider Component", () => {
     it("mouseup 后应该移除 trigger 的 visible 属性", async () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
       const rail = slider.shadowRoot.querySelector('[part="rail"]');
@@ -1856,7 +1859,7 @@ describe("EaSlider Component", () => {
     it("鼠标进入 thumb 应该设置 trigger 的 visible 属性", async () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
       const thumb = slider.shadowRoot.querySelector('[part="thumb"]');
@@ -1869,7 +1872,7 @@ describe("EaSlider Component", () => {
     it("鼠标离开 thumb 应该移除 trigger 的 visible 属性", async () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
       const thumb = slider.shadowRoot.querySelector('[part="thumb"]');
@@ -1885,7 +1888,7 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       slider.disabled = true;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
       const thumb = slider.shadowRoot.querySelector('[part="thumb"]');
@@ -1898,7 +1901,7 @@ describe("EaSlider Component", () => {
     it("disabled 时鼠标离开 thumb 不应该移除 visible", async () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
       const thumb = slider.shadowRoot.querySelector('[part="thumb"]');
@@ -1907,7 +1910,7 @@ describe("EaSlider Component", () => {
       expect(trigger.hasAttribute("visible")).toBe(true);
 
       slider.disabled = true;
-      await waitForRender();
+      await slider.updateComplete;
 
       thumb.dispatchEvent(new MouseEvent("mouseleave", { bubbles: true }));
       expect(trigger.hasAttribute("visible")).toBe(true);
@@ -2042,7 +2045,7 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
 
       slider.marks = { 0: "0", 50: "50", 100: "100" };
-      await waitForRender();
+      await slider.updateComplete;
 
       const markLabels = slider.shadowRoot.querySelectorAll(
         ".ea-slider__mark-label"
@@ -2123,7 +2126,7 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       slider.setAttribute("show-input", "");
       container.appendChild(slider);
-      await waitForRender(200);
+      await slider.updateComplete;
 
       expect(slider.showInput).toBe(true);
     });
@@ -2211,7 +2214,7 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       slider.value = 75;
       container.appendChild(slider);
-      await waitForRender();
+      await slider.updateComplete;
 
       const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
       expect(trigger.style.left).toBe("75%");
@@ -2226,8 +2229,10 @@ describe("EaSlider Component", () => {
       const el = document.createElement("ea-slider");
       el.setAttribute("label", "Slider");
       container.appendChild(el);
-      await waitForRender();
-      const results = await runAxe(el, { rules: { "nested-interactive": { enabled: false } } });
+      await el.updateComplete;
+      const results = await runAxe(el, {
+        rules: { "nested-interactive": { enabled: false } },
+      });
       assertNoA11yViolations(results);
     });
 
@@ -2236,8 +2241,10 @@ describe("EaSlider Component", () => {
       el.setAttribute("label", "Slider");
       el.setAttribute("disabled", "");
       container.appendChild(el);
-      await waitForRender();
-      const results = await runAxe(el, { rules: { "nested-interactive": { enabled: false } } });
+      await el.updateComplete;
+      const results = await runAxe(el, {
+        rules: { "nested-interactive": { enabled: false } },
+      });
       assertNoA11yViolations(results);
     });
 
@@ -2245,7 +2252,7 @@ describe("EaSlider Component", () => {
       it("宿主元素应该有 role=slider", async () => {
         const el = document.createElement("ea-slider");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("role")).toBe("slider");
       });
 
@@ -2253,7 +2260,7 @@ describe("EaSlider Component", () => {
         const el = document.createElement("ea-slider");
         el.value = 50;
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-valuenow")).toBe("50");
       });
 
@@ -2261,7 +2268,7 @@ describe("EaSlider Component", () => {
         const el = document.createElement("ea-slider");
         el.min = 10;
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-valuemin")).toBe("10");
       });
 
@@ -2269,7 +2276,7 @@ describe("EaSlider Component", () => {
         const el = document.createElement("ea-slider");
         el.max = 200;
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-valuemax")).toBe("200");
       });
 
@@ -2277,14 +2284,14 @@ describe("EaSlider Component", () => {
         const el = document.createElement("ea-slider");
         el.disabled = true;
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-disabled")).toBe("true");
       });
 
       it("非 disabled 时宿主元素 aria-disabled 应该为 false", async () => {
         const el = document.createElement("ea-slider");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-disabled")).toBe("false");
       });
 
@@ -2292,14 +2299,14 @@ describe("EaSlider Component", () => {
         const el = document.createElement("ea-slider");
         el.vertical = true;
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-orientation")).toBe("vertical");
       });
 
       it("非 vertical 时宿主元素不应该有 aria-orientation", async () => {
         const el = document.createElement("ea-slider");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-orientation")).toBeNull();
       });
 
@@ -2307,16 +2314,16 @@ describe("EaSlider Component", () => {
         const el = document.createElement("ea-slider");
         el.label = "Volume";
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-label")).toBe("Volume");
       });
 
       it("value 变化时 aria-valuenow 应该同步更新", async () => {
         const el = document.createElement("ea-slider");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         el.value = 75;
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-valuenow")).toBe("75");
       });
     });
@@ -2326,9 +2333,9 @@ describe("EaSlider Component", () => {
         const el = document.createElement("ea-slider");
         el.value = 50;
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         el.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight" }));
-        await waitForRender();
+        await el.updateComplete;
         expect(el.value).toBe(51);
       });
 
@@ -2336,9 +2343,9 @@ describe("EaSlider Component", () => {
         const el = document.createElement("ea-slider");
         el.value = 50;
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         el.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowLeft" }));
-        await waitForRender();
+        await el.updateComplete;
         expect(el.value).toBe(49);
       });
 
@@ -2346,9 +2353,9 @@ describe("EaSlider Component", () => {
         const el = document.createElement("ea-slider");
         el.value = 50;
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         el.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowUp" }));
-        await waitForRender();
+        await el.updateComplete;
         expect(el.value).toBe(51);
       });
 
@@ -2356,9 +2363,9 @@ describe("EaSlider Component", () => {
         const el = document.createElement("ea-slider");
         el.value = 50;
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         el.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowDown" }));
-        await waitForRender();
+        await el.updateComplete;
         expect(el.value).toBe(49);
       });
 
@@ -2367,9 +2374,9 @@ describe("EaSlider Component", () => {
         el.min = 10;
         el.value = 50;
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         el.dispatchEvent(new KeyboardEvent("keydown", { key: "Home" }));
-        await waitForRender();
+        await el.updateComplete;
         expect(el.value).toBe(10);
       });
 
@@ -2378,9 +2385,9 @@ describe("EaSlider Component", () => {
         el.max = 200;
         el.value = 50;
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         el.dispatchEvent(new KeyboardEvent("keydown", { key: "End" }));
-        await waitForRender();
+        await el.updateComplete;
         expect(el.value).toBe(200);
       });
 
@@ -2389,9 +2396,9 @@ describe("EaSlider Component", () => {
         el.value = 50;
         el.disabled = true;
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         el.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight" }));
-        await waitForRender();
+        await el.updateComplete;
         expect(el.value).toBe(50);
       });
 
@@ -2400,9 +2407,9 @@ describe("EaSlider Component", () => {
         el.value = 100;
         el.max = 100;
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         el.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight" }));
-        await waitForRender();
+        await el.updateComplete;
         expect(el.value).toBe(100);
       });
 
@@ -2411,9 +2418,9 @@ describe("EaSlider Component", () => {
         el.value = 0;
         el.min = 0;
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         el.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowLeft" }));
-        await waitForRender();
+        await el.updateComplete;
         expect(el.value).toBe(0);
       });
     });

@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { waitForRender } from "./utils/waitForRender.js";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-descriptions/index.ts";
@@ -118,7 +117,7 @@ describe("EaDescriptions", () => {
       descriptions.setAttribute("border", "");
       container.appendChild(descriptions);
 
-      await waitForRender();
+      await descriptions.updateComplete;
 
       const table = descriptions.shadowRoot.querySelector("table");
       expect(table.classList.contains("is-border")).toBe(true);
@@ -146,7 +145,7 @@ describe("EaDescriptions", () => {
       descriptions.setAttribute("direction", "vertical");
       container.appendChild(descriptions);
 
-      await waitForRender();
+      await descriptions.updateComplete;
 
       const table = descriptions.shadowRoot.querySelector("table");
       expect(table.classList.contains("is-vertical")).toBe(true);
@@ -166,7 +165,7 @@ describe("EaDescriptions", () => {
       descriptions.setAttribute("size", "large");
       container.appendChild(descriptions);
 
-      await waitForRender();
+      await descriptions.updateComplete;
 
       expect(descriptions.size).toBe("large");
       const table = descriptions.shadowRoot.querySelector("table");
@@ -178,7 +177,7 @@ describe("EaDescriptions", () => {
       descriptions.setAttribute("size", "small");
       container.appendChild(descriptions);
 
-      await waitForRender();
+      await descriptions.updateComplete;
 
       expect(descriptions.size).toBe("small");
       const table = descriptions.shadowRoot.querySelector("table");
@@ -217,7 +216,7 @@ describe("EaDescriptions", () => {
       descriptions.setAttribute("label-width", "120px");
       container.appendChild(descriptions);
 
-      await waitForRender();
+      await descriptions.updateComplete;
 
       const value = descriptions.style.getPropertyValue("--ea-descriptions-label-width");
       expect(value).toBe("120px");
@@ -233,7 +232,7 @@ describe("EaDescriptions", () => {
       `;
       container.appendChild(descriptions);
 
-      await waitForRender();
+      await descriptions.updateComplete;
 
       const tbody = descriptions.shadowRoot.querySelector(".ea-descriptions__body");
       expect(tbody).not.toBeNull();
@@ -248,7 +247,7 @@ describe("EaDescriptions", () => {
       `;
       container.appendChild(descriptions);
 
-      await waitForRender();
+      await descriptions.updateComplete;
 
       const cells = descriptions.shadowRoot.querySelectorAll(".ea-descriptions__cell");
       expect(cells.length).toBeGreaterThan(0);
@@ -269,7 +268,7 @@ describe("EaDescriptions", () => {
       `;
       container.appendChild(descriptions);
 
-      await waitForRender();
+      await descriptions.updateComplete;
 
       const labels = descriptions.shadowRoot.querySelectorAll("td.ea-descriptions__label");
       const contents = descriptions.shadowRoot.querySelectorAll("td.ea-descriptions__content");
@@ -287,7 +286,7 @@ describe("EaDescriptions", () => {
       `;
       container.appendChild(descriptions);
 
-      await waitForRender();
+      await descriptions.updateComplete;
 
       const thElements = descriptions.shadowRoot.querySelectorAll("th");
       const tdElements = descriptions.shadowRoot.querySelectorAll("td.ea-descriptions__content");
@@ -301,14 +300,14 @@ describe("EaDescriptions", () => {
       const descriptions = document.createElement("ea-descriptions");
       container.appendChild(descriptions);
 
-      await waitForRender();
+      await descriptions.updateComplete;
 
       const newItem = document.createElement("ea-descriptions-item");
       newItem.setAttribute("label", "New");
       newItem.textContent = "Value";
       descriptions.appendChild(newItem);
 
-      await waitForRender();
+      await newItem.updateComplete;
 
       expect(descriptions.querySelector("ea-descriptions-item")).not.toBeNull();
     });
@@ -319,7 +318,7 @@ describe("EaDescriptions", () => {
       const descriptions = document.createElement("ea-descriptions");
       container.appendChild(descriptions);
 
-      await waitForRender();
+      await descriptions.updateComplete;
 
       const tbody = descriptions.shadowRoot.querySelector(".ea-descriptions__body");
       expect(tbody.children.length).toBe(0);
@@ -332,7 +331,7 @@ describe("EaDescriptions", () => {
       `;
       container.appendChild(descriptions);
 
-      await waitForRender();
+      await descriptions.updateComplete;
 
       const tbody = descriptions.shadowRoot.querySelector(".ea-descriptions__body");
       expect(tbody.children.length).toBeGreaterThan(0);
@@ -348,7 +347,7 @@ describe("EaDescriptions", () => {
       `;
       container.appendChild(descriptions);
 
-      await waitForRender();
+      await descriptions.updateComplete;
 
       const rows = descriptions.shadowRoot.querySelectorAll(".ea-descriptions__row");
       expect(rows.length).toBeGreaterThanOrEqual(2);
@@ -573,14 +572,14 @@ describe("EaDescriptionsItem", () => {
       const item = document.createElement("ea-descriptions-item");
       container.appendChild(item);
 
-      await waitForRender();
+      await item.updateComplete;
 
       const handler = vi.fn();
       item.addEventListener("ea-descriptions-item-change", handler);
 
       item.setAttribute("label", "New Label");
 
-      await waitForRender();
+      await item.updateComplete;
 
       expect(handler).toHaveBeenCalled();
     });
@@ -589,14 +588,14 @@ describe("EaDescriptionsItem", () => {
       const item = document.createElement("ea-descriptions-item");
       container.appendChild(item);
 
-      await waitForRender();
+      await item.updateComplete;
 
       const handler = vi.fn();
       item.addEventListener("ea-descriptions-item-change", handler);
 
       item.setAttribute("colspan", "2");
 
-      await waitForRender();
+      await item.updateComplete;
 
       expect(handler).toHaveBeenCalled();
     });
@@ -605,14 +604,14 @@ describe("EaDescriptionsItem", () => {
       const item = document.createElement("ea-descriptions-item");
       container.appendChild(item);
 
-      await waitForRender();
+      await item.updateComplete;
 
       const handler = vi.fn();
       item.addEventListener("ea-descriptions-item-change", handler);
 
       item.setAttribute("rowspan", "2");
 
-      await waitForRender();
+      await item.updateComplete;
 
       expect(handler).toHaveBeenCalled();
     });
@@ -624,14 +623,14 @@ describe("EaDescriptionsItem", () => {
       item.setAttribute("label", "Test");
       container.appendChild(item);
 
-      await waitForRender();
+      await item.updateComplete;
 
       const handler = vi.fn();
       item.addEventListener("ea-descriptions-item-change", handler);
 
       item.textContent = "New Content";
 
-      await waitForRender();
+      await item.updateComplete;
 
       expect(handler).toHaveBeenCalled();
     });
@@ -677,7 +676,7 @@ describe("EaDescriptionsItem", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-descriptions-item");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });
@@ -688,7 +687,7 @@ describe("EaDescriptionsItem", () => {
         el.setAttribute("caption", "User Info");
         el.innerHTML = `<ea-descriptions-item label="Name">John</ea-descriptions-item>`;
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const table = el.shadowRoot.querySelector("table");
         expect(table.getAttribute("aria-labelledby")).toBeTruthy();
       });
@@ -697,7 +696,7 @@ describe("EaDescriptionsItem", () => {
         const el = document.createElement("ea-descriptions");
         el.innerHTML = `<ea-descriptions-item label="Name">John</ea-descriptions-item>`;
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const labels = el.shadowRoot.querySelectorAll(".ea-descriptions__label");
         expect(labels.length).toBeGreaterThan(0);
         labels.forEach(label => {

@@ -221,7 +221,7 @@ describe("EaAlert", () => {
       expect(headingEl.textContent).toContain("Old Heading");
 
       alert.setAttribute("heading", "New Heading");
-      await waitForRender();
+      await alert.updateComplete;
 
       expect(headingEl.textContent).toContain("New Heading");
     });
@@ -246,7 +246,7 @@ describe("EaAlert", () => {
       expect(headingEl.textContent).toContain("Has Value");
 
       alert.setAttribute("heading", "");
-      await waitForRender();
+      await alert.updateComplete;
 
       const slot = headingEl.querySelector('slot[name="heading"]');
       expect(slot).not.toBeNull();
@@ -318,7 +318,7 @@ describe("EaAlert", () => {
       expect(descriptionEl.textContent).toContain("Has Value");
 
       alert.setAttribute("description", "");
-      await waitForRender();
+      await alert.updateComplete;
 
       const slot = descriptionEl.querySelector("slot");
       expect(slot).not.toBeNull();
@@ -328,7 +328,7 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
+      await alert.updateComplete;
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("is-has-description")).toBe(false);
@@ -339,7 +339,7 @@ describe("EaAlert", () => {
       alert.setAttribute("description", "Some description");
       container.appendChild(alert);
 
-      await waitForRender();
+      await alert.updateComplete;
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("is-has-description")).toBe(true);
@@ -350,13 +350,13 @@ describe("EaAlert", () => {
       alert.setAttribute("description", "Has description");
       container.appendChild(alert);
 
-      await waitForRender();
+      await alert.updateComplete;
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("is-has-description")).toBe(true);
 
       alert.setAttribute("description", "");
-      await waitForRender();
+      await alert.updateComplete;
 
       expect(containerEl.classList.contains("is-has-description")).toBe(false);
     });
@@ -370,7 +370,7 @@ describe("EaAlert", () => {
       expect(containerEl.classList.contains("is-has-description")).toBe(false);
 
       alert.setAttribute("description", "Now has description");
-      await waitForRender();
+      await alert.updateComplete;
 
       expect(containerEl.classList.contains("is-has-description")).toBe(true);
     });
@@ -424,7 +424,7 @@ describe("EaAlert", () => {
       expect(containerEl.classList.contains("ea-alert--info")).toBe(true);
 
       alert.setAttribute("variant", "success");
-      await waitForRender();
+      await alert.updateComplete;
 
       expect(containerEl.classList.contains("ea-alert--success")).toBe(true);
       expect(containerEl.classList.contains("ea-alert--info")).toBe(false);
@@ -441,7 +441,7 @@ describe("EaAlert", () => {
       expect(iconEl.getAttribute("name")).toBe("circle-info");
 
       alert.setAttribute("variant", "success");
-      await waitForRender();
+      await alert.updateComplete;
 
       iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
       expect(iconEl.getAttribute("name")).toBe("circle-check");
@@ -457,7 +457,7 @@ describe("EaAlert", () => {
       expect(iconEl).toBeNull();
 
       alert.setAttribute("variant", "success");
-      await waitForRender();
+      await alert.updateComplete;
 
       iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
       expect(iconEl).toBeNull();
@@ -503,7 +503,7 @@ describe("EaAlert", () => {
       expect(containerEl.classList.contains("ea-alert--light")).toBe(true);
 
       alert.setAttribute("effect", "dark");
-      await waitForRender();
+      await alert.updateComplete;
 
       expect(containerEl.classList.contains("ea-alert--dark")).toBe(true);
       expect(containerEl.classList.contains("ea-alert--light")).toBe(false);
@@ -535,7 +535,7 @@ describe("EaAlert", () => {
 
 
       alert.closable = false;
-      await waitForRender();
+      await alert.updateComplete;
 
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
       expect(closeBtn.innerHTML).toBe("");
@@ -547,13 +547,13 @@ describe("EaAlert", () => {
 
 
       alert.closable = false;
-      await waitForRender();
+      await alert.updateComplete;
 
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
       expect(closeBtn.querySelector(".ea-alert__close-icon")).toBeNull();
 
       alert.closable = true;
-      await waitForRender();
+      await alert.updateComplete;
 
       expect(closeBtn.querySelector(".ea-alert__close-icon")).not.toBeNull();
     });
@@ -578,7 +578,7 @@ describe("EaAlert", () => {
       expect(closeBtn.textContent).toBe("关闭");
 
       alert.closable = false;
-      await waitForRender();
+      await alert.updateComplete;
 
       expect(closeBtn.innerHTML).toBe("");
     });
@@ -590,13 +590,13 @@ describe("EaAlert", () => {
 
 
       alert.closable = false;
-      await waitForRender();
+      await alert.updateComplete;
 
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
       expect(closeBtn.innerHTML).toBe("");
 
       alert.closable = true;
-      await waitForRender();
+      await alert.updateComplete;
 
       expect(closeBtn.textContent).toBe("知道了");
     });
@@ -631,7 +631,7 @@ describe("EaAlert", () => {
       expect(closeBtn.textContent).toBe("关闭");
 
       alert.setAttribute("close-text", "Close");
-      await waitForRender();
+      await alert.updateComplete;
 
       expect(closeBtn.textContent).toBe("Close");
     });
@@ -658,7 +658,7 @@ describe("EaAlert", () => {
       expect(closeBtn.querySelector(".ea-alert__close-icon")).toBeNull();
 
       alert.setAttribute("close-text", "");
-      await waitForRender();
+      await alert.updateComplete;
 
       expect(closeBtn.querySelector(".ea-alert__close-icon")).not.toBeNull();
     });
@@ -670,13 +670,13 @@ describe("EaAlert", () => {
 
 
       alert.closable = false;
-      await waitForRender();
+      await alert.updateComplete;
 
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
       expect(closeBtn.innerHTML).toBe("");
 
       alert.setAttribute("close-text", "");
-      await waitForRender();
+      await alert.updateComplete;
 
       expect(closeBtn.querySelector(".ea-alert__close-icon")).toBeNull();
     });
@@ -710,7 +710,7 @@ describe("EaAlert", () => {
       expect(iconEl).toBeNull();
 
       alert.setAttribute("show-icon", "");
-      await waitForRender();
+      await alert.updateComplete;
 
       iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
       expect(iconEl).not.toBeNull();
@@ -736,7 +736,7 @@ describe("EaAlert", () => {
       expect(iconEl).not.toBeNull();
 
       alert.showIcon = false;
-      await waitForRender();
+      await alert.updateComplete;
 
       iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
       expect(iconEl).toBeNull();
@@ -777,7 +777,7 @@ describe("EaAlert", () => {
       expect(iconEl.getAttribute("name")).toBe("circle-info");
 
       alert.setAttribute("variant", "danger");
-      await waitForRender();
+      await alert.updateComplete;
 
       iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
       expect(iconEl.getAttribute("name")).toBe("circle-xmark");
@@ -821,7 +821,7 @@ describe("EaAlert", () => {
       expect(containerEl.classList.contains("is-center")).toBe(false);
 
       alert.setAttribute("center", "");
-      await waitForRender();
+      await alert.updateComplete;
 
       expect(containerEl.classList.contains("is-center")).toBe(true);
     });
@@ -836,7 +836,7 @@ describe("EaAlert", () => {
       expect(containerEl.classList.contains("is-center")).toBe(true);
 
       alert.removeAttribute("center");
-      await waitForRender();
+      await alert.updateComplete;
 
       expect(containerEl.classList.contains("is-center")).toBe(false);
     });
@@ -897,7 +897,7 @@ describe("EaAlert", () => {
 
       alert.setAttribute("variant", "danger");
       alert.setAttribute("effect", "dark");
-      await waitForRender();
+      await alert.updateComplete;
 
       expect(containerEl.classList.contains("ea-alert--danger")).toBe(true);
       expect(containerEl.classList.contains("ea-alert--dark")).toBe(true);
@@ -910,7 +910,7 @@ describe("EaAlert", () => {
       alert.setAttribute("description", "Description text");
       container.appendChild(alert);
 
-      await waitForRender();
+      await alert.updateComplete;
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("is-has-description")).toBe(true);
@@ -920,7 +920,7 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
+      await alert.updateComplete;
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("is-has-description")).toBe(false);
@@ -1014,7 +1014,7 @@ describe("EaAlert", () => {
 
 
       alert.closable = false;
-      await waitForRender();
+      await alert.updateComplete;
 
       const closeIcon = alert.shadowRoot.querySelector('[part="close-icon"]');
       expect(closeIcon).toBeNull();
@@ -1063,7 +1063,7 @@ describe("EaAlert", () => {
         })
       );
 
-      await waitForRender();
+      await alert.updateComplete;
 
       expect(closeHandler).toHaveBeenCalled();
     });
@@ -1089,7 +1089,7 @@ describe("EaAlert", () => {
         })
       );
 
-      await waitForRender();
+      await alert.updateComplete;
 
       expect(eventDetail).toEqual({ visible: false });
     });
@@ -1110,7 +1110,7 @@ describe("EaAlert", () => {
         })
       );
 
-      await waitForRender();
+      await alert.updateComplete;
 
       expect(container.contains(alert)).toBe(false);
     });
@@ -1136,7 +1136,7 @@ describe("EaAlert", () => {
         })
       );
 
-      await waitForRender();
+      await alert.updateComplete;
 
       expect(closeHandler).toHaveBeenCalled();
     });
@@ -1147,7 +1147,7 @@ describe("EaAlert", () => {
 
 
       alert.closable = false;
-      await waitForRender();
+      await alert.updateComplete;
 
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
       closeBtn.click();
@@ -1192,7 +1192,7 @@ describe("EaAlert", () => {
         })
       );
 
-      await waitForRender();
+      await alert.updateComplete;
 
       expect(caughtEvent).not.toBeNull();
       expect(caughtEvent.bubbles).toBe(true);
@@ -1210,7 +1210,7 @@ describe("EaAlert", () => {
 
       container.appendChild(alert);
 
-      await waitForRender();
+      await alert.updateComplete;
 
       expect(openHandler).not.toHaveBeenCalled();
 
@@ -1261,7 +1261,7 @@ describe("EaAlert", () => {
       alert.setAttribute("show-after", "500");
       container.appendChild(alert);
 
-      await waitForRender();
+      await alert.updateComplete;
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("is-hide")).toBe(true);
@@ -1272,7 +1272,7 @@ describe("EaAlert", () => {
       alert.setAttribute("show-after", "100");
       container.appendChild(alert);
 
-      await waitForRender();
+      await alert.updateComplete;
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("is-hide")).toBe(true);
@@ -1291,7 +1291,7 @@ describe("EaAlert", () => {
 
       container.appendChild(alert);
 
-      await waitForRender();
+      await alert.updateComplete;
 
       expect(openHandler).not.toHaveBeenCalled();
 
@@ -1305,7 +1305,7 @@ describe("EaAlert", () => {
       alert.setAttribute("show-after", "-100");
       container.appendChild(alert);
 
-      await waitForRender();
+      await alert.updateComplete;
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("is-hide")).toBe(true);
@@ -1324,9 +1324,9 @@ describe("EaAlert", () => {
       alert.addEventListener("ea-open", openHandler);
 
       alert.setAttribute("show-after", "0");
-      await waitForRender();
-
-      expect(openHandler).toHaveBeenCalled();
+      await vi.waitFor(() => {
+        expect(openHandler).toHaveBeenCalled();
+      });
     });
 
     it("showAfter 隐藏期间变更其他属性不应丢失 is-hide 状态", async () => {
@@ -1334,13 +1334,13 @@ describe("EaAlert", () => {
       alert.setAttribute("show-after", "500");
       container.appendChild(alert);
 
-      await waitForRender();
+      await alert.updateComplete;
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("is-hide")).toBe(true);
 
       alert.setAttribute("variant", "success");
-      await waitForRender();
+      await alert.updateComplete;
 
       expect(containerEl.classList.contains("is-hide")).toBe(true);
       expect(containerEl.classList.contains("ea-alert--success")).toBe(true);
@@ -1355,10 +1355,10 @@ describe("EaAlert", () => {
 
       container.appendChild(alert);
 
-      await waitForRender();
+      await alert.updateComplete;
 
       alert.setAttribute("show-after", "300");
-      await waitForRender();
+      await alert.updateComplete;
 
       await waitForRender(150);
       expect(openHandler).not.toHaveBeenCalled();
@@ -1376,7 +1376,7 @@ describe("EaAlert", () => {
 
       container.appendChild(alert);
 
-      await waitForRender();
+      await alert.updateComplete;
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("is-hide")).toBe(true);
@@ -1402,7 +1402,7 @@ describe("EaAlert", () => {
       alert.setAttribute("auto-close", "100");
       container.appendChild(alert);
 
-      await waitForRender();
+      await alert.updateComplete;
 
       await waitForRender(200);
 
@@ -1418,7 +1418,7 @@ describe("EaAlert", () => {
       const closeHandler = vi.fn();
       alert.addEventListener("ea-close", closeHandler);
 
-      await waitForRender();
+      await alert.updateComplete;
 
       await waitForRender(200);
 
@@ -1430,7 +1430,7 @@ describe("EaAlert", () => {
         })
       );
 
-      await waitForRender();
+      await alert.updateComplete;
 
       expect(closeHandler).toHaveBeenCalled();
     });
@@ -1440,10 +1440,10 @@ describe("EaAlert", () => {
       alert.setAttribute("auto-close", "100");
       container.appendChild(alert);
 
-      await waitForRender();
+      await alert.updateComplete;
 
       alert.closable = false;
-      await waitForRender();
+      await alert.updateComplete;
 
       alert.setAttribute("auto-close", "100");
       await waitForRender(200);
@@ -1457,7 +1457,7 @@ describe("EaAlert", () => {
       alert.setAttribute("auto-close", "0");
       container.appendChild(alert);
 
-      await waitForRender();
+      await alert.updateComplete;
 
       await waitForRender(200);
 
@@ -1470,10 +1470,10 @@ describe("EaAlert", () => {
       alert.setAttribute("auto-close", "200");
       container.appendChild(alert);
 
-      await waitForRender();
+      await alert.updateComplete;
 
       alert.setAttribute("auto-close", "300");
-      await waitForRender();
+      await alert.updateComplete;
 
       await waitForRender(150);
 
@@ -1490,10 +1490,10 @@ describe("EaAlert", () => {
       alert.setAttribute("auto-close", "100");
       container.appendChild(alert);
 
-      await waitForRender();
+      await alert.updateComplete;
 
       alert.setAttribute("auto-close", "0");
-      await waitForRender();
+      await alert.updateComplete;
 
       await waitForRender(200);
 
@@ -1525,7 +1525,7 @@ describe("EaAlert", () => {
       alert.setAttribute("hide-after", "150");
       container.appendChild(alert);
 
-      await waitForRender();
+      await alert.updateComplete;
 
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
       closeBtn.click();
@@ -1557,7 +1557,7 @@ describe("EaAlert", () => {
       alert.setAttribute("hide-after", "500");
       container.appendChild(alert);
 
-      await waitForRender();
+      await alert.updateComplete;
 
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
       closeBtn.click();
@@ -1611,7 +1611,7 @@ describe("EaAlert", () => {
       alert.setAttribute("show-after", "500");
       container.appendChild(alert);
 
-      await waitForRender();
+      await alert.updateComplete;
 
       const className = alert.updateContainerClasslist();
       expect(className).toContain("is-hide");
@@ -1634,7 +1634,7 @@ describe("EaAlert", () => {
       alert.setAttribute("description", "Description text");
       container.appendChild(alert);
 
-      await waitForRender();
+      await alert.updateComplete;
 
       const className = alert.updateContainerClasslist();
       expect(className).toContain("is-has-description");
@@ -1644,7 +1644,7 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      await waitForRender();
+      await alert.updateComplete;
 
       const className = alert.updateContainerClasslist();
       expect(className).not.toContain("is-has-description");
@@ -1685,7 +1685,7 @@ describe("EaAlert", () => {
       alert.setAttribute("variant", "warning");
       alert.setAttribute("effect", "dark");
       alert.setAttribute("center", "");
-      await waitForRender();
+      await alert.updateComplete;
 
       expect(containerEl.classList.contains("ea-alert--warning")).toBe(true);
       expect(containerEl.classList.contains("ea-alert--dark")).toBe(true);
@@ -1905,7 +1905,7 @@ describe("EaAlert", () => {
 
       container.appendChild(alert);
 
-      await waitForRender();
+      await alert.updateComplete;
 
       alert.remove();
 
@@ -1923,7 +1923,7 @@ describe("EaAlert", () => {
 
       container.appendChild(alert);
 
-      await waitForRender();
+      await alert.updateComplete;
 
       alert.remove();
 
@@ -1964,7 +1964,7 @@ describe("EaAlert", () => {
       alert.setAttribute("variant", "primary");
       alert.setAttribute("variant", "success");
       alert.setAttribute("variant", "danger");
-      await waitForRender();
+      await alert.updateComplete;
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("ea-alert--danger")).toBe(true);
@@ -1991,7 +1991,7 @@ describe("EaAlert", () => {
       expect(iconEl).toBeNull();
 
       alert.setAttribute("show-icon", "");
-      await waitForRender();
+      await alert.updateComplete;
 
       iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
       expect(iconEl).not.toBeNull();
@@ -2008,7 +2008,7 @@ describe("EaAlert", () => {
       expect(iconEl).not.toBeNull();
 
       alert.showIcon = false;
-      await waitForRender();
+      await alert.updateComplete;
 
       iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
       expect(iconEl).toBeNull();
@@ -2020,7 +2020,7 @@ describe("EaAlert", () => {
 
 
       alert.closable = false;
-      await waitForRender();
+      await alert.updateComplete;
 
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
       expect(closeBtn.innerHTML).toBe("");
@@ -2032,7 +2032,7 @@ describe("EaAlert", () => {
 
 
       alert.closable = false;
-      await waitForRender();
+      await alert.updateComplete;
 
       const closeIcon = alert.shadowRoot.querySelector('[part="close-icon"]');
       expect(closeIcon).toBeNull();
@@ -2108,7 +2108,7 @@ describe("EaAlert", () => {
         })
       );
 
-      await waitForRender();
+      await alert.updateComplete;
 
       expect(closeHandler).toHaveBeenCalledTimes(1);
     });
@@ -2131,7 +2131,7 @@ describe("EaAlert", () => {
 
       container.appendChild(alert);
 
-      await waitForRender();
+      await alert.updateComplete;
 
       alert.setAttribute("show-after", "500");
       alert.setAttribute("show-after", "200");
@@ -2149,7 +2149,7 @@ describe("EaAlert", () => {
 
       container.appendChild(alert);
 
-      await waitForRender();
+      await alert.updateComplete;
 
       alert.setAttribute("auto-close", "500");
       alert.setAttribute("auto-close", "200");
@@ -2249,7 +2249,7 @@ describe("EaAlert", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-alert");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });

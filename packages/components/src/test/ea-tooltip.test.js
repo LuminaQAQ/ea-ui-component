@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { waitForRender } from "./utils/waitForRender.js";
 import { fireKeydown } from "./utils/keyboard.js";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
@@ -62,7 +61,7 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const contentEl = tooltip.shadowRoot.querySelector(
         ".ea-tooltip__content"
@@ -135,7 +134,7 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const containerEl =
         tooltip.shadowRoot.querySelector('[part="container"]');
@@ -148,7 +147,7 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const containerEl =
         tooltip.shadowRoot.querySelector('[part="container"]');
@@ -161,7 +160,7 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const containerEl =
         tooltip.shadowRoot.querySelector('[part="container"]');
@@ -174,18 +173,18 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const containerEl =
         tooltip.shadowRoot.querySelector('[part="container"]');
 
       tooltip.setAttribute("effect", "light");
-      await waitForRender();
+      await tooltip.updateComplete;
       expect(containerEl.classList.contains("ea-tooltip--light")).toBe(true);
       expect(containerEl.classList.contains("ea-tooltip--dark")).toBe(false);
 
       tooltip.setAttribute("effect", "dark");
-      await waitForRender();
+      await tooltip.updateComplete;
       expect(containerEl.classList.contains("ea-tooltip--dark")).toBe(true);
       expect(containerEl.classList.contains("ea-tooltip--light")).toBe(false);
     });
@@ -196,14 +195,14 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const containerEl =
         tooltip.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("ea-tooltip--dark")).toBe(true);
 
       tooltip.setAttribute("effect", "customized");
-      await waitForRender();
+      await tooltip.updateComplete;
 
       expect(containerEl.classList.contains("ea-tooltip--dark")).toBe(false);
     });
@@ -260,7 +259,7 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Custom trigger</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       tooltip.dispatchEvent(new Event("mouseover"));
       expect(tooltip.visible === false || tooltip.visible === null).toBe(true);
@@ -272,7 +271,7 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       tooltip.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
       expect(tooltip.visible).toBe(true);
@@ -284,7 +283,7 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Click me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       tooltip.dispatchEvent(
         new MouseEvent("click", { detail: 1, bubbles: true })
@@ -303,7 +302,7 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Focus me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       tooltip.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
       expect(tooltip.visible).toBe(true);
@@ -315,14 +314,14 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Right click</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const contextmenuEvent = new MouseEvent("contextmenu", {
         bubbles: true,
         cancelable: true,
       });
       tooltip.dispatchEvent(contextmenuEvent);
-      await waitForRender();
+      await tooltip.updateComplete;
 
       expect(contextmenuEvent.defaultPrevented).toBe(true);
       expect(tooltip.visible).toBe(true);
@@ -334,13 +333,13 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       tooltip.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       expect(tooltip.visible).toBe(false);
 
       tooltip.setAttribute("trigger", "click");
-      await waitForRender();
+      await tooltip.updateComplete;
 
       tooltip.dispatchEvent(
         new MouseEvent("click", { detail: 1, bubbles: true })
@@ -354,10 +353,10 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       tooltip.setAttribute("trigger", "customized");
-      await waitForRender();
+      await tooltip.updateComplete;
 
       tooltip.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
       expect(tooltip.visible === false || tooltip.visible === null).toBe(true);
@@ -398,10 +397,10 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       tooltip.content = "Hello tooltip";
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const contentEl = tooltip.shadowRoot.querySelector(
         ".ea-tooltip__content"
@@ -415,10 +414,10 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       tooltip.content = "Hello tooltip";
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const containerEl =
         tooltip.shadowRoot.querySelector('[part="container"]');
@@ -430,7 +429,7 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const containerEl =
         tooltip.shadowRoot.querySelector('[part="container"]');
@@ -442,7 +441,7 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       tooltip.content = "Hello tooltip";
       const defaultSlot = tooltip.shadowRoot.querySelector(
@@ -456,10 +455,10 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       tooltip.content = "Hello tooltip";
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const originalEl = tooltip.shadowRoot.querySelector(
         ".ea-popper__original"
@@ -474,10 +473,10 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       tooltip.content = "First content";
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const contentEl = tooltip.shadowRoot.querySelector(
         ".ea-tooltip__content"
@@ -485,7 +484,7 @@ describe("EaTooltip Component", () => {
       expect(contentEl.textContent).toBe("First content");
 
       tooltip.content = "Updated content";
-      await waitForRender();
+      await tooltip.updateComplete;
 
       expect(contentEl.textContent).toBe("Updated content");
     });
@@ -495,10 +494,10 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       tooltip.content = "Test";
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const contentEl = tooltip.shadowRoot.querySelector(
         ".ea-tooltip__content"
@@ -514,7 +513,7 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const contentEl = tooltip.shadowRoot.querySelector(
         ".ea-tooltip__content"
@@ -528,17 +527,17 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       tooltip.content = "Hello";
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const containerEl =
         tooltip.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-has-content")).toBe(true);
 
       tooltip.content = "";
-      await waitForRender();
+      await tooltip.updateComplete;
 
       expect(containerEl.classList.contains("is-has-content")).toBe(false);
     });
@@ -586,7 +585,7 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const containerEl =
         tooltip.shadowRoot.querySelector('[part="container"]');
@@ -618,10 +617,10 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       tooltip.show();
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const containerEl =
         tooltip.shadowRoot.querySelector('[part="container"]');
@@ -634,7 +633,7 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const containerEl =
         tooltip.shadowRoot.querySelector('[part="container"]');
@@ -666,7 +665,7 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       expect(tooltip.style.getPropertyValue("--ea-popper-width")).toBe("300px");
     });
@@ -696,7 +695,7 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
       tooltip.showArrow = false;
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const containerEl =
         tooltip.shadowRoot.querySelector('[part="container"]');
@@ -708,7 +707,7 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
       tooltip.showArrow = true;
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const containerEl =
         tooltip.shadowRoot.querySelector('[part="container"]');
@@ -740,7 +739,7 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       expect(tooltip.style.getPropertyValue("--ea-popper-transform-x")).toBe(
         "10px"
@@ -820,13 +819,13 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const showHandler = vi.fn();
       tooltip.addEventListener("ea-show", showHandler);
 
       tooltip.show();
-      await waitForRender();
+      await tooltip.updateComplete;
 
       expect(showHandler).toHaveBeenCalled();
     });
@@ -837,16 +836,16 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       tooltip.show();
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const hideHandler = vi.fn();
       tooltip.addEventListener("ea-hide", hideHandler);
 
       tooltip.hide();
-      await waitForRender();
+      await tooltip.updateComplete;
 
       expect(hideHandler).toHaveBeenCalled();
     });
@@ -857,13 +856,13 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const showHandler = vi.fn();
       tooltip.addEventListener("ea-show", showHandler);
 
       tooltip.show();
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const event = showHandler.mock.calls[0][0];
       expect(event.bubbles).toBe(true);
@@ -876,16 +875,16 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       tooltip.show();
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const hideHandler = vi.fn();
       tooltip.addEventListener("ea-hide", hideHandler);
 
       tooltip.hide();
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const event = hideHandler.mock.calls[0][0];
       expect(event.bubbles).toBe(true);
@@ -898,18 +897,18 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const shownHandler = vi.fn();
       tooltip.addEventListener("ea-shown", shownHandler);
 
       tooltip.show();
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const containerEl =
         tooltip.shadowRoot.querySelector('[part="container"]');
       containerEl.dispatchEvent(new Event("transitionend", { bubbles: true }));
-      await waitForRender();
+      await tooltip.updateComplete;
 
       expect(shownHandler).toHaveBeenCalled();
     });
@@ -920,24 +919,24 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       tooltip.show();
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const containerEl =
         tooltip.shadowRoot.querySelector('[part="container"]');
       containerEl.dispatchEvent(new Event("transitionend", { bubbles: true }));
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const hiddenHandler = vi.fn();
       tooltip.addEventListener("ea-hidden", hiddenHandler);
 
       tooltip.hide();
-      await waitForRender();
+      await tooltip.updateComplete;
 
       containerEl.dispatchEvent(new Event("transitionend", { bubbles: true }));
-      await waitForRender();
+      await tooltip.updateComplete;
 
       expect(hiddenHandler).toHaveBeenCalled();
     });
@@ -949,7 +948,7 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const containerEl =
         tooltip.shadowRoot.querySelector('[part="container"]');
@@ -963,7 +962,7 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const containerEl =
         tooltip.shadowRoot.querySelector('[part="container"]');
@@ -976,7 +975,7 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const containerEl =
         tooltip.shadowRoot.querySelector('[part="container"]');
@@ -988,7 +987,7 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const containerEl =
         tooltip.shadowRoot.querySelector('[part="container"]');
@@ -1001,7 +1000,7 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       tooltip.show();
       const className = tooltip.updateContainerClasslist();
@@ -1014,7 +1013,7 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const className = tooltip.updateContainerClasslist();
       const classList = className.split(" ");
@@ -1057,7 +1056,7 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const containerEl =
         tooltip.shadowRoot.querySelector('[part="container"]');
@@ -1071,14 +1070,14 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       tooltip.content = "Hello";
-      await waitForRender();
+      await tooltip.updateComplete;
 
       tooltip.setAttribute("placement", "bottom");
       tooltip.setAttribute("effect", "light");
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const contentEl = tooltip.shadowRoot.querySelector(
         ".ea-tooltip__content"
@@ -1126,10 +1125,10 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       tooltip.content = "";
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const contentEl = tooltip.shadowRoot.querySelector(
         ".ea-tooltip__content"
@@ -1143,17 +1142,17 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       tooltip.content = "Hello";
-      await waitForRender();
+      await tooltip.updateComplete;
 
       let contentEl = tooltip.shadowRoot.querySelector(".ea-tooltip__content");
       expect(contentEl).toBeTruthy();
       expect(contentEl.textContent).toBe("Hello");
 
       tooltip.content = "";
-      await waitForRender();
+      await tooltip.updateComplete;
 
       contentEl = tooltip.shadowRoot.querySelector(".ea-tooltip__content");
       expect(contentEl).toBeTruthy();
@@ -1177,7 +1176,7 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       tooltip.remove();
 
@@ -1200,13 +1199,13 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const containerEl =
         tooltip.shadowRoot.querySelector('[part="container"]');
 
       tooltip.setAttribute("placement", "bottom");
-      await waitForRender();
+      await tooltip.updateComplete;
 
       expect(containerEl.classList.contains("ea-popper--bottom")).toBe(true);
       expect(containerEl.classList.contains("ea-popper--top")).toBe(false);
@@ -1217,18 +1216,18 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const containerEl =
         tooltip.shadowRoot.querySelector('[part="container"]');
 
       tooltip.showArrow = false;
-      await waitForRender();
+      await tooltip.updateComplete;
 
       expect(containerEl.classList.contains("is-show-arrow")).toBe(false);
 
       tooltip.showArrow = true;
-      await waitForRender();
+      await tooltip.updateComplete;
 
       expect(containerEl.classList.contains("is-show-arrow")).toBe(true);
     });
@@ -1240,7 +1239,7 @@ describe("EaTooltip Component", () => {
       el.setAttribute("content", "Tooltip text");
       el.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });
@@ -1251,7 +1250,7 @@ describe("EaTooltip Component", () => {
         el.setAttribute("content", "Tooltip text");
         el.innerHTML = `<span slot="reference">Hover me</span>`;
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const original = el.shadowRoot.querySelector(".ea-popper__original");
         expect(original.getAttribute("role")).toBe("tooltip");
       });
@@ -1261,7 +1260,7 @@ describe("EaTooltip Component", () => {
         el.setAttribute("content", "Tooltip text");
         el.innerHTML = `<button slot="reference">Hover me</button>`;
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const trigger = el.querySelector("[slot='reference']");
         const original = el.shadowRoot.querySelector(".ea-popper__original");
         expect(trigger.getAttribute("aria-describedby")).toBe(original.id);
@@ -1272,7 +1271,7 @@ describe("EaTooltip Component", () => {
         el.setAttribute("content", "Tooltip text");
         el.innerHTML = `<span slot="reference">Hover me</span>`;
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const trigger = el.querySelector("[slot='reference']");
         expect(trigger.getAttribute("tabindex")).toBe("0");
       });
@@ -1308,7 +1307,7 @@ describe("EaTooltip Interaction And Keyboard", () => {
   describe("Trigger Event Strategies", () => {
     it("hover 模式鼠标移入应该显示", async () => {
       const tooltip = createTooltip("hover");
-      await waitForRender();
+      await tooltip.updateComplete;
 
       getTrigger(tooltip).dispatchEvent(
         new MouseEvent("mouseover", { bubbles: true })
@@ -1319,7 +1318,7 @@ describe("EaTooltip Interaction And Keyboard", () => {
 
     it("hover 模式焦点在外时鼠标移出应该隐藏", async () => {
       const tooltip = createTooltip("hover");
-      await waitForRender();
+      await tooltip.updateComplete;
       tooltip.show();
 
       getTrigger(tooltip).dispatchEvent(
@@ -1331,7 +1330,7 @@ describe("EaTooltip Interaction And Keyboard", () => {
 
     it("hover 模式焦点仍在组件内时鼠标移出不应隐藏", async () => {
       const tooltip = createTooltip("hover");
-      await waitForRender();
+      await tooltip.updateComplete;
       tooltip.show();
 
       const trigger = getTrigger(tooltip);
@@ -1343,7 +1342,7 @@ describe("EaTooltip Interaction And Keyboard", () => {
 
     it("hover 模式聚焦触发器应该显示", async () => {
       const tooltip = createTooltip("hover");
-      await waitForRender();
+      await tooltip.updateComplete;
 
       getTrigger(tooltip).dispatchEvent(
         new FocusEvent("focusin", { bubbles: true, composed: true })
@@ -1354,7 +1353,7 @@ describe("EaTooltip Interaction And Keyboard", () => {
 
     it("hover 模式焦点移出组件后应该隐藏", async () => {
       const tooltip = createTooltip("hover");
-      await waitForRender();
+      await tooltip.updateComplete;
       tooltip.show();
 
       const outside = document.createElement("button");
@@ -1364,14 +1363,15 @@ describe("EaTooltip Interaction And Keyboard", () => {
       getTrigger(tooltip).dispatchEvent(
         new FocusEvent("focusout", { bubbles: true, composed: true })
       );
-      await waitForRender();
 
-      expect(tooltip.visible).toBe(false);
+      await vi.waitFor(() => {
+        expect(tooltip.visible).toBe(false);
+      });
     });
 
     it("click 模式 detail 为 1 的点击应该切换显示", async () => {
       const tooltip = createTooltip("click");
-      await waitForRender();
+      await tooltip.updateComplete;
 
       getTrigger(tooltip).dispatchEvent(
         new MouseEvent("click", { bubbles: true, composed: true, detail: 1 })
@@ -1386,7 +1386,7 @@ describe("EaTooltip Interaction And Keyboard", () => {
 
     it("click 模式键盘触发的点击（detail 为 0）不应切换", async () => {
       const tooltip = createTooltip("click");
-      await waitForRender();
+      await tooltip.updateComplete;
 
       getTrigger(tooltip).dispatchEvent(
         new MouseEvent("click", { bubbles: true, composed: true, detail: 0 })
@@ -1400,10 +1400,10 @@ describe("EaTooltip Interaction And Keyboard", () => {
         "focus",
         `<button slot="reference">Trigger</button>`
       );
-      await waitForRender();
+      await tooltip.updateComplete;
 
       getTrigger(tooltip).focus();
-      await waitForRender();
+      await tooltip.updateComplete;
 
       expect(tooltip.visible).toBe(true);
     });
@@ -1413,7 +1413,7 @@ describe("EaTooltip Interaction And Keyboard", () => {
         "focus",
         `<button slot="reference">Trigger</button>`
       );
-      await waitForRender();
+      await tooltip.updateComplete;
       tooltip.show();
 
       const outside = document.createElement("button");
@@ -1423,14 +1423,15 @@ describe("EaTooltip Interaction And Keyboard", () => {
       getTrigger(tooltip).dispatchEvent(
         new FocusEvent("focusout", { bubbles: true, composed: true })
       );
-      await waitForRender();
 
-      expect(tooltip.visible).toBe(false);
+      await vi.waitFor(() => {
+        expect(tooltip.visible).toBe(false);
+      });
     });
 
     it("contextmenu 模式右键应该显示并阻止默认行为", async () => {
       const tooltip = createTooltip("contextmenu");
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const event = new MouseEvent("contextmenu", {
         bubbles: true,
@@ -1444,7 +1445,7 @@ describe("EaTooltip Interaction And Keyboard", () => {
 
     it("contextmenu 模式点击组件外部应该隐藏", async () => {
       const tooltip = createTooltip("contextmenu");
-      await waitForRender();
+      await tooltip.updateComplete;
 
       getTrigger(tooltip).dispatchEvent(
         new MouseEvent("contextmenu", { bubbles: true, cancelable: true })
@@ -1460,7 +1461,7 @@ describe("EaTooltip Interaction And Keyboard", () => {
 
     it("customized 模式不绑定任何触发监听", async () => {
       const tooltip = createTooltip("customized");
-      await waitForRender();
+      await tooltip.updateComplete;
 
       getTrigger(tooltip).dispatchEvent(
         new MouseEvent("mouseover", { bubbles: true })
@@ -1476,7 +1477,7 @@ describe("EaTooltip Interaction And Keyboard", () => {
   describe("Keyboard Interaction", () => {
     it("触发器上按 Escape 应该关闭并阻止默认行为", async () => {
       const tooltip = createTooltip("click");
-      await waitForRender();
+      await tooltip.updateComplete;
       tooltip.show();
 
       const event = fireKeydown(getTrigger(tooltip), "Escape");
@@ -1487,7 +1488,7 @@ describe("EaTooltip Interaction And Keyboard", () => {
 
     it("click 模式按 Enter 应该切换并阻止默认行为", async () => {
       const tooltip = createTooltip("click");
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const event = fireKeydown(getTrigger(tooltip), "Enter");
 
@@ -1497,7 +1498,7 @@ describe("EaTooltip Interaction And Keyboard", () => {
 
     it("click 模式按空格应该切换", async () => {
       const tooltip = createTooltip("click");
-      await waitForRender();
+      await tooltip.updateComplete;
 
       fireKeydown(getTrigger(tooltip), " ");
 
@@ -1506,7 +1507,7 @@ describe("EaTooltip Interaction And Keyboard", () => {
 
     it("hover 模式按 Enter 不应切换", async () => {
       const tooltip = createTooltip("hover");
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const event = fireKeydown(getTrigger(tooltip), "Enter");
 
@@ -1516,7 +1517,7 @@ describe("EaTooltip Interaction And Keyboard", () => {
 
     it("focus 模式按 Enter 不应切换", async () => {
       const tooltip = createTooltip("focus");
-      await waitForRender();
+      await tooltip.updateComplete;
 
       const event = fireKeydown(getTrigger(tooltip), "Enter");
 
@@ -1526,7 +1527,7 @@ describe("EaTooltip Interaction And Keyboard", () => {
 
     it("customized 模式按 Enter 不应切换", async () => {
       const tooltip = createTooltip("customized");
-      await waitForRender();
+      await tooltip.updateComplete;
 
       fireKeydown(getTrigger(tooltip), "Enter");
 
@@ -1535,7 +1536,7 @@ describe("EaTooltip Interaction And Keyboard", () => {
 
     it("非触发器目标上的 Escape 不应关闭", async () => {
       const tooltip = createTooltip("click");
-      await waitForRender();
+      await tooltip.updateComplete;
       tooltip.show();
 
       const event = fireKeydown(tooltip, "Escape");
@@ -1551,7 +1552,7 @@ describe("EaTooltip Interaction And Keyboard", () => {
         "hover",
         `<div slot="reference" tabindex="0">Trigger</div>`
       );
-      await waitForRender();
+      await tooltip.updateComplete;
 
       expect(getTrigger(tooltip).getAttribute("tabindex")).toBe("0");
     });

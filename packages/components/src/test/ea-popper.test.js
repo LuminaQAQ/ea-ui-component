@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { waitForRender } from "./utils/waitForRender.js";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 import "../common/ea-popper/index.ts";
@@ -98,7 +97,7 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       const containerEl = popper.shadowRoot.querySelector(".ea-popper");
       expect(containerEl.getAttribute("tabindex")).toBe("-1");
@@ -109,7 +108,7 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       const originalEl = popper.shadowRoot.querySelector(
         ".ea-popper__original"
@@ -122,7 +121,7 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       const referenceEl = popper.shadowRoot.querySelector(
         ".ea-popper__reference"
@@ -154,10 +153,10 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.width = 300;
-      await waitForRender();
+      await popper.updateComplete;
 
       expect(popper.style.getPropertyValue("--ea-popper-width")).toBe("300px");
     });
@@ -168,7 +167,7 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       expect(popper.style.getPropertyValue("--ea-popper-width")).toBe("250px");
     });
@@ -225,7 +224,7 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       const containerEl = popper.shadowRoot.querySelector(".ea-popper");
       expect(containerEl.classList.contains("ea-popper--bottom-start")).toBe(
@@ -238,13 +237,13 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       const containerEl = popper.shadowRoot.querySelector(".ea-popper");
       expect(containerEl.classList.contains("ea-popper--top")).toBe(true);
 
       popper.placement = "bottom";
-      await waitForRender();
+      await popper.updateComplete;
 
       expect(containerEl.classList.contains("ea-popper--top")).toBe(false);
       expect(containerEl.classList.contains("ea-popper--bottom")).toBe(true);
@@ -274,7 +273,7 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       const containerEl = popper.shadowRoot.querySelector(".ea-popper");
       expect(containerEl.classList.contains("is-show-arrow")).toBe(true);
@@ -285,7 +284,7 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.showArrow = false;
       expect(popper.showArrow).toBe(false);
@@ -296,10 +295,10 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.showArrow = false;
-      await waitForRender();
+      await popper.updateComplete;
 
       const containerEl = popper.shadowRoot.querySelector(".ea-popper");
       expect(containerEl.classList.contains("is-show-arrow")).toBe(false);
@@ -310,13 +309,13 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       const containerEl = popper.shadowRoot.querySelector(".ea-popper");
       expect(containerEl.classList.contains("is-show-arrow")).toBe(true);
 
       popper.showArrow = false;
-      await waitForRender();
+      await popper.updateComplete;
 
       expect(containerEl.classList.contains("is-show-arrow")).toBe(false);
     });
@@ -326,16 +325,16 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.showArrow = false;
-      await waitForRender();
+      await popper.updateComplete;
 
       const containerEl = popper.shadowRoot.querySelector(".ea-popper");
       expect(containerEl.classList.contains("is-show-arrow")).toBe(false);
 
       popper.showArrow = true;
-      await waitForRender();
+      await popper.updateComplete;
 
       expect(containerEl.classList.contains("is-show-arrow")).toBe(true);
     });
@@ -364,10 +363,10 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.show();
-      await waitForRender();
+      await popper.updateComplete;
 
       const containerEl = popper.shadowRoot.querySelector(".ea-popper");
       expect(containerEl.classList.contains("is-show")).toBe(true);
@@ -378,7 +377,7 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       const containerEl = popper.shadowRoot.querySelector(".ea-popper");
       expect(containerEl.classList.contains("is-show")).toBe(false);
@@ -389,13 +388,13 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.show();
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.hide();
-      await waitForRender();
+      await popper.updateComplete;
 
       const containerEl = popper.shadowRoot.querySelector(".ea-popper");
       expect(containerEl.classList.contains("is-before-hide")).toBe(true);
@@ -406,13 +405,13 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.show();
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.hide();
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.show();
       expect(popper.visible).toBe(true);
@@ -451,10 +450,10 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.offset = "30 40";
-      await waitForRender();
+      await popper.updateComplete;
 
       expect(popper.style.getPropertyValue("--ea-popper-transform-x")).toBe(
         "30px"
@@ -470,7 +469,7 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       expect(popper.style.getPropertyValue("--ea-popper-transform-x")).toBe(
         "0px"
@@ -490,7 +489,7 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       expect(consoleSpy).toHaveBeenCalled();
 
@@ -507,7 +506,7 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       expect(consoleSpy).toHaveBeenCalled();
 
@@ -520,7 +519,7 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       expect(popper.style.getPropertyValue("--ea-popper-transform-x")).toBe(
         "-10px"
@@ -545,7 +544,7 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.flip = false;
       expect(popper.flip).toBe(false);
@@ -606,7 +605,7 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.show();
       popper.show();
@@ -619,7 +618,7 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.hide();
       popper.hide();
@@ -645,11 +644,11 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.placement = "bottom";
       popper.showArrow = false;
-      await waitForRender();
+      await popper.updateComplete;
 
       const containerEl = popper.shadowRoot.querySelector(".ea-popper");
       expect(containerEl.classList.contains("ea-popper--bottom")).toBe(true);
@@ -662,7 +661,7 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.show();
       const className = popper.updateContainerClasslist();
@@ -674,7 +673,7 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       const className = popper.updateContainerClasslist();
       const classList = className.split(" ");
@@ -699,13 +698,13 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       const showHandler = vi.fn();
       popper.addEventListener("ea-show", showHandler);
 
       popper.show();
-      await waitForRender();
+      await popper.updateComplete;
 
       expect(showHandler).toHaveBeenCalled();
     });
@@ -715,16 +714,16 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.show();
-      await waitForRender();
+      await popper.updateComplete;
 
       const hideHandler = vi.fn();
       popper.addEventListener("ea-hide", hideHandler);
 
       popper.hide();
-      await waitForRender();
+      await popper.updateComplete;
 
       expect(hideHandler).toHaveBeenCalled();
     });
@@ -734,18 +733,18 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       const shownHandler = vi.fn();
       popper.addEventListener("ea-shown", shownHandler);
 
       popper.show();
-      await waitForRender();
+      await popper.updateComplete;
 
       const containerEl = popper.shadowRoot.querySelector(".ea-popper");
       containerEl.dispatchEvent(new Event("transitionend", { bubbles: true }));
 
-      await waitForRender();
+      await popper.updateComplete;
 
       expect(shownHandler).toHaveBeenCalled();
     });
@@ -755,21 +754,21 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.show();
-      await waitForRender();
+      await popper.updateComplete;
 
       const hiddenHandler = vi.fn();
       popper.addEventListener("ea-hidden", hiddenHandler);
 
       popper.hide();
-      await waitForRender();
+      await popper.updateComplete;
 
       const containerEl = popper.shadowRoot.querySelector(".ea-popper");
       containerEl.dispatchEvent(new Event("transitionend", { bubbles: true }));
 
-      await waitForRender();
+      await popper.updateComplete;
 
       expect(hiddenHandler).toHaveBeenCalled();
     });
@@ -779,7 +778,7 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       let eventBubbles = false;
       popper.addEventListener("ea-show", e => {
@@ -787,7 +786,7 @@ describe("EaPopper Component", () => {
       });
 
       popper.show();
-      await waitForRender();
+      await popper.updateComplete;
 
       expect(eventBubbles).toBe(true);
     });
@@ -797,7 +796,7 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       let eventComposed = false;
       popper.addEventListener("ea-show", e => {
@@ -805,7 +804,7 @@ describe("EaPopper Component", () => {
       });
 
       popper.show();
-      await waitForRender();
+      await popper.updateComplete;
 
       expect(eventComposed).toBe(true);
     });
@@ -815,10 +814,10 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.show();
-      await waitForRender();
+      await popper.updateComplete;
 
       let eventBubbles = false;
       popper.addEventListener("ea-hide", e => {
@@ -826,7 +825,7 @@ describe("EaPopper Component", () => {
       });
 
       popper.hide();
-      await waitForRender();
+      await popper.updateComplete;
 
       expect(eventBubbles).toBe(true);
     });
@@ -836,7 +835,7 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       let eventTypeName = "";
       popper.addEventListener("ea-show", e => {
@@ -844,7 +843,7 @@ describe("EaPopper Component", () => {
       });
 
       popper.show();
-      await waitForRender();
+      await popper.updateComplete;
 
       expect(eventTypeName).toBe("EaPopperShowEvent");
     });
@@ -854,10 +853,10 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.show();
-      await waitForRender();
+      await popper.updateComplete;
 
       let eventTypeName = "";
       popper.addEventListener("ea-hide", e => {
@@ -865,7 +864,7 @@ describe("EaPopper Component", () => {
       });
 
       popper.hide();
-      await waitForRender();
+      await popper.updateComplete;
 
       expect(eventTypeName).toBe("EaPopperHideEvent");
     });
@@ -875,15 +874,15 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.show();
-      await waitForRender();
+      await popper.updateComplete;
 
       const containerEl = popper.shadowRoot.querySelector(".ea-popper");
       containerEl.dispatchEvent(new Event("transitionend", { bubbles: true }));
 
-      await waitForRender();
+      await popper.updateComplete;
 
       expect(containerEl.classList.contains("is-show")).toBe(true);
       expect(containerEl.classList.contains("ea-popper--top")).toBe(true);
@@ -894,18 +893,18 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.show();
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.hide();
-      await waitForRender();
+      await popper.updateComplete;
 
       const containerEl = popper.shadowRoot.querySelector(".ea-popper");
       containerEl.dispatchEvent(new Event("transitionend", { bubbles: true }));
 
-      await waitForRender();
+      await popper.updateComplete;
 
       expect(containerEl.classList.contains("is-show")).toBe(false);
       expect(containerEl.classList.contains("is-before-show")).toBe(false);
@@ -918,13 +917,13 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.flip = false;
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.show();
-      await waitForRender();
+      await popper.updateComplete;
 
       const containerEl = popper.shadowRoot.querySelector(".ea-popper");
       expect(containerEl.classList.contains("is-show")).toBe(true);
@@ -935,13 +934,13 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.flip = false;
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.show();
-      await waitForRender();
+      await popper.updateComplete;
 
       const containerEl = popper.shadowRoot.querySelector(".ea-popper");
       expect(containerEl.classList.contains("is-before-show")).toBe(true);
@@ -952,13 +951,13 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.show();
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.hide();
-      await waitForRender();
+      await popper.updateComplete;
 
       const containerEl = popper.shadowRoot.querySelector(".ea-popper");
       expect(containerEl.classList.contains("is-before-hide")).toBe(true);
@@ -969,7 +968,7 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.show();
       popper.hide();
@@ -984,12 +983,12 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.show();
       popper.hide();
       popper.show();
-      await waitForRender();
+      await popper.updateComplete;
 
       expect(popper.visible).toBe(true);
 
@@ -1005,7 +1004,7 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       expect(popper.style.getPropertyValue("--ea-popper-width")).toBe("200px");
     });
@@ -1016,7 +1015,7 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       expect(popper.style.getPropertyValue("--ea-popper-transform-x")).toBe(
         "10px"
@@ -1032,7 +1031,7 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       expect(popper.style.getPropertyValue("--ea-popper-width")).toBe("180px");
     });
@@ -1042,10 +1041,10 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.width = 400;
-      await waitForRender();
+      await popper.updateComplete;
 
       expect(popper.style.getPropertyValue("--ea-popper-width")).toBe("400px");
     });
@@ -1055,10 +1054,10 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.offset = "50 60";
-      await waitForRender();
+      await popper.updateComplete;
 
       expect(popper.style.getPropertyValue("--ea-popper-transform-x")).toBe(
         "50px"
@@ -1093,7 +1092,7 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.showArrow = false;
       popper.flip = false;
@@ -1109,7 +1108,7 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.width = 300;
       popper.placement = "left";
@@ -1117,7 +1116,7 @@ describe("EaPopper Component", () => {
       expect(popper.width).toBe(300);
       expect(popper.placement).toBe("left");
       expect(popper.showArrow).toBe(false);
-      await waitForRender();
+      await popper.updateComplete;
 
       const containerEl = popper.shadowRoot.querySelector(".ea-popper");
       expect(containerEl.classList.contains("ea-popper--left")).toBe(true);
@@ -1132,7 +1131,7 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       const containerEl = popper.shadowRoot.querySelector(".ea-popper");
       expect(containerEl.classList.contains("ea-popper--bottom")).toBe(true);
@@ -1152,10 +1151,10 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.show();
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.remove();
 
@@ -1167,10 +1166,10 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.remove();
-      await waitForRender();
+      await popper.updateComplete;
 
       container.appendChild(popper);
       expect(popper.shadowRoot).toBeTruthy();
@@ -1195,7 +1194,7 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       const containerEl = popper.shadowRoot.querySelector(".ea-popper");
       const referenceEl = containerEl.querySelector(".ea-popper__reference");
@@ -1211,7 +1210,7 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       const referenceEl = popper.shadowRoot.querySelector(
         ".ea-popper__reference"
@@ -1226,7 +1225,7 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       const originalEl = popper.shadowRoot.querySelector(
         ".ea-popper__original"
@@ -1241,7 +1240,7 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       const referenceEl = popper.shadowRoot.querySelector(
         ".ea-popper__reference"
@@ -1268,7 +1267,7 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.showArrow = false;
       const className = popper.updateContainerClasslist();
@@ -1281,7 +1280,7 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      await waitForRender();
+      await popper.updateComplete;
 
       popper.show();
       const className = popper.updateContainerClasslist();
@@ -1296,7 +1295,7 @@ describe("EaPopper Component", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-popper");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });
@@ -1305,7 +1304,7 @@ describe("EaPopper Component", () => {
       it("弹出内容应该有 id 属性", async () => {
         const popper = document.createElement("ea-popper");
         container.appendChild(popper);
-        await waitForRender();
+        await popper.updateComplete;
         const original = popper.shadowRoot.querySelector(
           ".ea-popper__original"
         );
@@ -1315,7 +1314,7 @@ describe("EaPopper Component", () => {
       it("触发器应该有 aria-controls 指向弹出内容", async () => {
         const popper = document.createElement("ea-popper");
         container.appendChild(popper);
-        await waitForRender();
+        await popper.updateComplete;
         const original = popper.shadowRoot.querySelector(
           ".ea-popper__original"
         );
@@ -1331,7 +1330,7 @@ describe("EaPopper Component", () => {
       it("触发器应该有 aria-expanded 属性", async () => {
         const popper = document.createElement("ea-popper");
         container.appendChild(popper);
-        await waitForRender();
+        await popper.updateComplete;
         const referenceSlot = popper.shadowRoot.querySelector(
           'slot[name="reference"]'
         );
@@ -1344,7 +1343,7 @@ describe("EaPopper Component", () => {
       it("关闭时触发器 aria-expanded 应该为 false", async () => {
         const popper = document.createElement("ea-popper");
         container.appendChild(popper);
-        await waitForRender();
+        await popper.updateComplete;
         const referenceSlot = popper.shadowRoot.querySelector(
           'slot[name="reference"]'
         );
@@ -1358,7 +1357,7 @@ describe("EaPopper Component", () => {
         const popper = document.createElement("ea-popper");
         popper.setAttribute("visible", "");
         container.appendChild(popper);
-        await waitForRender();
+        await popper.updateComplete;
         const referenceSlot = popper.shadowRoot.querySelector(
           'slot[name="reference"]'
         );

@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import { waitForRender } from "./utils/waitForRender";
 
 import "../components/ea-divider/index";
 
@@ -83,10 +82,10 @@ describe("EaDivider", () => {
       const el = document.createElement("ea-divider");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       el.setAttribute("variant", "dashed");
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-divider");
       expect(
@@ -142,7 +141,7 @@ describe("EaDivider", () => {
       const el = document.createElement("ea-divider");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-divider");
       expect(containerEl.classList.contains("is-empty")).toBe(true);
@@ -153,7 +152,7 @@ describe("EaDivider", () => {
       el.textContent = "Text Content";
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-divider");
       expect(containerEl.classList.contains("is-empty")).toBe(false);
@@ -163,14 +162,14 @@ describe("EaDivider", () => {
       const el = document.createElement("ea-divider");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-divider");
       expect(containerEl.classList.contains("is-empty")).toBe(true);
 
       el.textContent = "New Content";
       el.dispatchEvent(new Event("slotchange", { bubbles: true }));
-      await waitForRender();
+      await el.updateComplete;
 
       expect(containerEl.classList.contains("is-empty")).toBe(false);
     });
@@ -190,7 +189,7 @@ describe("EaDivider", () => {
       el.setAttribute("content-position", "start");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-divider");
       expect(containerEl.classList.contains("ea-divider--start")).toBe(true);
@@ -201,7 +200,7 @@ describe("EaDivider", () => {
       el.setAttribute("direction", "vertical");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-divider");
       expect(containerEl.classList.contains("ea-divider--vertical")).toBe(true);

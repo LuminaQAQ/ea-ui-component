@@ -84,7 +84,7 @@ describe("EaCollapse Component", () => {
       `;
       container.appendChild(collapse);
 
-      await waitForRender();
+      await collapse.updateComplete;
 
       collapse.active = "1";
       expect(collapse.active).toBe("1");
@@ -98,7 +98,7 @@ describe("EaCollapse Component", () => {
       `;
       container.appendChild(collapse);
 
-      await waitForRender();
+      await collapse.updateComplete;
 
       collapse.active = ["1", "2"];
       expect(collapse.active).toEqual(["1", "2"]);
@@ -139,11 +139,11 @@ describe("EaCollapse Component", () => {
       `;
       container.appendChild(collapse);
 
-      await waitForRender();
+      await collapse.updateComplete;
 
       collapse.setAttribute("expand-icon-position", "left");
 
-      await waitForRender();
+      await collapse.updateComplete;
 
       const item = collapse.querySelector("ea-collapse-item");
       expect(item.expandIconPosition).toBe("left");
@@ -158,7 +158,7 @@ describe("EaCollapse Component", () => {
       `;
       container.appendChild(collapse);
 
-      await waitForRender();
+      await collapse.updateComplete;
 
       const changeHandler = vi.fn();
       collapse.addEventListener("ea-change", changeHandler);
@@ -169,7 +169,7 @@ describe("EaCollapse Component", () => {
       );
       headerWrap.click();
 
-      await waitForRender();
+      await collapse.updateComplete;
 
       expect(changeHandler).toHaveBeenCalled();
     });
@@ -181,7 +181,7 @@ describe("EaCollapse Component", () => {
       `;
       container.appendChild(collapse);
 
-      await waitForRender();
+      await collapse.updateComplete;
 
       let eventDetail = null;
       collapse.addEventListener("ea-change", e => {
@@ -194,7 +194,7 @@ describe("EaCollapse Component", () => {
       );
       headerWrap.click();
 
-      await waitForRender();
+      await collapse.updateComplete;
 
       expect(eventDetail).toMatchObject({
         name: "1",
@@ -210,7 +210,7 @@ describe("EaCollapse Component", () => {
       `;
       container.appendChild(collapse);
 
-      await waitForRender();
+      await collapse.updateComplete;
 
       let receivedEvent = null;
       collapse.addEventListener("ea-change", e => {
@@ -223,7 +223,7 @@ describe("EaCollapse Component", () => {
       );
       headerWrap.click();
 
-      await waitForRender();
+      await collapse.updateComplete;
 
       expect(receivedEvent).toBeDefined();
       expect(receivedEvent.type).toBe("ea-change");
@@ -240,7 +240,7 @@ describe("EaCollapse Component", () => {
       `;
       container.appendChild(collapse);
 
-      await waitForRender();
+      await collapse.updateComplete;
 
       collapse.beforeCollapse = () => false;
 
@@ -253,7 +253,7 @@ describe("EaCollapse Component", () => {
       );
       headerWrap.click();
 
-      await waitForRender();
+      await collapse.updateComplete;
 
       expect(changeHandler).not.toHaveBeenCalled();
     });
@@ -265,7 +265,7 @@ describe("EaCollapse Component", () => {
       `;
       container.appendChild(collapse);
 
-      await waitForRender();
+      await collapse.updateComplete;
 
       collapse.beforeCollapse = () => true;
 
@@ -278,7 +278,7 @@ describe("EaCollapse Component", () => {
       );
       headerWrap.click();
 
-      await waitForRender();
+      await collapse.updateComplete;
 
       expect(changeHandler).toHaveBeenCalled();
     });
@@ -290,7 +290,7 @@ describe("EaCollapse Component", () => {
       `;
       container.appendChild(collapse);
 
-      await waitForRender();
+      await collapse.updateComplete;
 
       collapse.beforeCollapse = async () => {
         await new Promise(resolve => setTimeout(resolve, 10));
@@ -318,7 +318,7 @@ describe("EaCollapse Component", () => {
       `;
       container.appendChild(collapse);
 
-      await waitForRender();
+      await collapse.updateComplete;
 
       collapse.beforeCollapse = async () => {
         throw new Error("rejected");
@@ -345,7 +345,7 @@ describe("EaCollapse Component", () => {
       `;
       container.appendChild(collapse);
 
-      await waitForRender();
+      await collapse.updateComplete;
 
       collapse.beforeCollapse = null;
 
@@ -358,7 +358,7 @@ describe("EaCollapse Component", () => {
       );
       headerWrap.click();
 
-      await waitForRender();
+      await collapse.updateComplete;
 
       expect(changeHandler).toHaveBeenCalled();
     });
@@ -374,7 +374,7 @@ describe("EaCollapse Component", () => {
       `;
       container.appendChild(collapse);
 
-      await waitForRender();
+      await collapse.updateComplete;
 
       const items = collapse.querySelectorAll("ea-collapse-item");
 
@@ -386,7 +386,7 @@ describe("EaCollapse Component", () => {
         })
       );
 
-      await waitForRender();
+      await collapse.updateComplete;
 
       expect(items[0].hasAttribute("active")).toBe(true);
       expect(items[1].hasAttribute("active")).toBe(false);
@@ -399,7 +399,7 @@ describe("EaCollapse Component", () => {
         })
       );
 
-      await waitForRender();
+      await collapse.updateComplete;
 
       expect(items[0].hasAttribute("active")).toBe(false);
       expect(items[1].hasAttribute("active")).toBe(true);
@@ -413,7 +413,7 @@ describe("EaCollapse Component", () => {
       `;
       container.appendChild(collapse);
 
-      await waitForRender();
+      await collapse.updateComplete;
 
       const item = collapse.querySelector("ea-collapse-item");
 
@@ -425,7 +425,7 @@ describe("EaCollapse Component", () => {
         })
       );
 
-      await waitForRender();
+      await collapse.updateComplete;
 
       expect(item.hasAttribute("active")).toBe(true);
 
@@ -437,7 +437,7 @@ describe("EaCollapse Component", () => {
         })
       );
 
-      await waitForRender();
+      await collapse.updateComplete;
 
       expect(item.hasAttribute("active")).toBe(false);
     });
@@ -452,7 +452,7 @@ describe("EaCollapse Component", () => {
       `;
       container.appendChild(collapse);
 
-      await waitForRender();
+      await collapse.updateComplete;
 
       const items = collapse.querySelectorAll("ea-collapse-item");
 
@@ -464,7 +464,7 @@ describe("EaCollapse Component", () => {
         })
       );
 
-      await waitForRender();
+      await collapse.updateComplete;
 
       expect(items[0].hasAttribute("active")).toBe(true);
 
@@ -476,7 +476,7 @@ describe("EaCollapse Component", () => {
         })
       );
 
-      await waitForRender();
+      await collapse.updateComplete;
 
       expect(items[0].hasAttribute("active")).toBe(true);
       expect(items[1].hasAttribute("active")).toBe(true);
@@ -489,7 +489,7 @@ describe("EaCollapse Component", () => {
       `;
       container.appendChild(collapse);
 
-      await waitForRender();
+      await collapse.updateComplete;
 
       const item = collapse.querySelector("ea-collapse-item");
 
@@ -501,7 +501,7 @@ describe("EaCollapse Component", () => {
         })
       );
 
-      await waitForRender();
+      await collapse.updateComplete;
 
       expect(item.hasAttribute("active")).toBe(true);
 
@@ -513,7 +513,7 @@ describe("EaCollapse Component", () => {
         })
       );
 
-      await waitForRender();
+      await collapse.updateComplete;
 
       expect(item.hasAttribute("active")).toBe(false);
     });
@@ -528,7 +528,7 @@ describe("EaCollapse Component", () => {
       `;
       container.appendChild(collapse);
 
-      await waitForRender();
+      await collapse.updateComplete;
 
       collapse.setActiveNames(["1"]);
 
@@ -546,7 +546,7 @@ describe("EaCollapse Component", () => {
       `;
       container.appendChild(collapse);
 
-      await waitForRender();
+      await collapse.updateComplete;
 
       collapse.setActiveNames("2");
 
@@ -563,7 +563,7 @@ describe("EaCollapse Component", () => {
       `;
       container.appendChild(collapse);
 
-      await waitForRender();
+      await collapse.updateComplete;
 
       collapse.setActiveNames([]);
 
@@ -582,7 +582,7 @@ describe("EaCollapse Component", () => {
       `;
       container.appendChild(collapse);
 
-      await waitForRender();
+      await collapse.updateComplete;
 
       const items = collapse.querySelectorAll("ea-collapse-item");
       expect(items[0].getAttribute("name")).toBe("0");
@@ -742,7 +742,7 @@ describe("EaCollapseItem Component", () => {
       item.setAttribute("disabled", "");
       container.appendChild(item);
 
-      await waitForRender();
+      await item.updateComplete;
 
       expect(item.disabled).toBe(true);
 
@@ -791,7 +791,7 @@ describe("EaCollapseItem Component", () => {
       item.setAttribute("name", "1");
       container.appendChild(item);
 
-      await waitForRender();
+      await item.updateComplete;
 
       const clickHandler = vi.fn();
       item.addEventListener("ea-collapse-item-click", clickHandler);
@@ -809,7 +809,7 @@ describe("EaCollapseItem Component", () => {
       item.setAttribute("name", "test-name");
       container.appendChild(item);
 
-      await waitForRender();
+      await item.updateComplete;
 
       let eventDetail = null;
       item.addEventListener("ea-collapse-item-click", e => {
@@ -850,7 +850,7 @@ describe("EaCollapseItem Component", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-collapse");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });
@@ -877,7 +877,7 @@ describe("EaCollapseItem Component", () => {
         const item = document.createElement("ea-collapse-item");
         item.setAttribute("header", "Test");
         container.appendChild(item);
-        await waitForRender();
+        await item.updateComplete;
         const headerWrap = item.shadowRoot.querySelector(".ea-collapse-item__header-wrap");
         expect(headerWrap.getAttribute("aria-expanded")).toBe("false");
       });
@@ -887,7 +887,7 @@ describe("EaCollapseItem Component", () => {
         item.setAttribute("header", "Test");
         item.setAttribute("active", "");
         container.appendChild(item);
-        await waitForRender();
+        await item.updateComplete;
         const headerWrap = item.shadowRoot.querySelector(".ea-collapse-item__header-wrap");
         expect(headerWrap.getAttribute("aria-expanded")).toBe("true");
       });
@@ -896,7 +896,7 @@ describe("EaCollapseItem Component", () => {
         const item = document.createElement("ea-collapse-item");
         item.setAttribute("header", "Test");
         container.appendChild(item);
-        await waitForRender();
+        await item.updateComplete;
         const headerWrap = item.shadowRoot.querySelector(".ea-collapse-item__header-wrap");
         const ariaControls = headerWrap.getAttribute("aria-controls");
         expect(ariaControls).toBeTruthy();
@@ -907,7 +907,7 @@ describe("EaCollapseItem Component", () => {
         const item = document.createElement("ea-collapse-item");
         item.setAttribute("header", "Test");
         container.appendChild(item);
-        await waitForRender();
+        await item.updateComplete;
         const content = item.shadowRoot.querySelector(".ea-collapse-item__content");
         expect(content.getAttribute("role")).toBe("region");
       });
@@ -916,7 +916,7 @@ describe("EaCollapseItem Component", () => {
         const item = document.createElement("ea-collapse-item");
         item.setAttribute("header", "Test");
         container.appendChild(item);
-        await waitForRender();
+        await item.updateComplete;
         const content = item.shadowRoot.querySelector(".ea-collapse-item__content");
         const labelledby = content.getAttribute("aria-labelledby");
         expect(labelledby).toBeTruthy();
@@ -928,7 +928,7 @@ describe("EaCollapseItem Component", () => {
         item.setAttribute("header", "Test");
         item.setAttribute("disabled", "");
         container.appendChild(item);
-        await waitForRender();
+        await item.updateComplete;
         const headerWrap = item.shadowRoot.querySelector(".ea-collapse-item__header-wrap");
         expect(headerWrap.getAttribute("aria-disabled")).toBe("true");
       });
@@ -938,7 +938,7 @@ describe("EaCollapseItem Component", () => {
         item.setAttribute("header", "Test");
         item.setAttribute("disabled", "");
         container.appendChild(item);
-        await waitForRender();
+        await item.updateComplete;
         const headerWrap = item.shadowRoot.querySelector(".ea-collapse-item__header-wrap");
         expect(headerWrap.getAttribute("tabindex")).toBe("-1");
       });
@@ -947,7 +947,7 @@ describe("EaCollapseItem Component", () => {
         const item = document.createElement("ea-collapse-item");
         item.setAttribute("header", "Test");
         container.appendChild(item);
-        await waitForRender();
+        await item.updateComplete;
         const content = item.shadowRoot.querySelector(".ea-collapse-item__content");
         expect(content.hasAttribute("inert")).toBe(true);
       });
@@ -957,7 +957,7 @@ describe("EaCollapseItem Component", () => {
         item.setAttribute("header", "Test");
         item.setAttribute("active", "");
         container.appendChild(item);
-        await waitForRender();
+        await item.updateComplete;
         const content = item.shadowRoot.querySelector(".ea-collapse-item__content");
         expect(content.hasAttribute("inert")).toBe(false);
       });
@@ -970,12 +970,12 @@ describe("EaCollapseItem Component", () => {
           <ea-collapse-item header="Item 1" name="1">Content 1</ea-collapse-item>
         `;
         container.appendChild(collapse);
-        await waitForRender();
+        await collapse.updateComplete;
 
         const item = collapse.querySelector("ea-collapse-item");
         const headerWrap = item.shadowRoot.querySelector(".ea-collapse-item__header-wrap");
         headerWrap.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
-        await waitForRender();
+        await collapse.updateComplete;
 
         expect(item.hasAttribute("active")).toBe(true);
       });
@@ -986,12 +986,12 @@ describe("EaCollapseItem Component", () => {
           <ea-collapse-item header="Item 1" name="1">Content 1</ea-collapse-item>
         `;
         container.appendChild(collapse);
-        await waitForRender();
+        await collapse.updateComplete;
 
         const item = collapse.querySelector("ea-collapse-item");
         const headerWrap = item.shadowRoot.querySelector(".ea-collapse-item__header-wrap");
         headerWrap.dispatchEvent(new KeyboardEvent("keydown", { key: " ", bubbles: true }));
-        await waitForRender();
+        await collapse.updateComplete;
 
         expect(item.hasAttribute("active")).toBe(true);
       });
@@ -1002,17 +1002,17 @@ describe("EaCollapseItem Component", () => {
           <ea-collapse-item header="Item 1" name="1">Content 1</ea-collapse-item>
         `;
         container.appendChild(collapse);
-        await waitForRender();
+        await collapse.updateComplete;
 
         collapse.setActiveNames(["1"]);
-        await waitForRender();
+        await collapse.updateComplete;
 
         const item = collapse.querySelector("ea-collapse-item");
         expect(item.hasAttribute("active")).toBe(true);
 
         const headerWrap = item.shadowRoot.querySelector(".ea-collapse-item__header-wrap");
         headerWrap.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
-        await waitForRender();
+        await collapse.updateComplete;
 
         expect(item.hasAttribute("active")).toBe(false);
       });
@@ -1023,12 +1023,12 @@ describe("EaCollapseItem Component", () => {
           <ea-collapse-item header="Item 1" name="1" disabled>Content 1</ea-collapse-item>
         `;
         container.appendChild(collapse);
-        await waitForRender();
+        await collapse.updateComplete;
 
         const item = collapse.querySelector("ea-collapse-item");
         const headerWrap = item.shadowRoot.querySelector(".ea-collapse-item__header-wrap");
         headerWrap.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
-        await waitForRender();
+        await collapse.updateComplete;
 
         expect(item.hasAttribute("active")).toBe(false);
       });

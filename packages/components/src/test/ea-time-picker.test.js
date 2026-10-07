@@ -144,7 +144,7 @@ describe("EaTimePicker Component", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const input = timePicker.shadowRoot.querySelector("ea-input");
       expect(input.hasAttribute("readonly")).toBe(true);
@@ -154,7 +154,7 @@ describe("EaTimePicker Component", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const input = timePicker.shadowRoot.querySelector("ea-input");
       expect(input.getAttribute("autocomplete")).toBe("off");
@@ -164,7 +164,7 @@ describe("EaTimePicker Component", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const input = timePicker.shadowRoot.querySelector("ea-input");
       expect(input.getAttribute("prefix-icon")).toBe("clock");
@@ -176,7 +176,7 @@ describe("EaTimePicker Component", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const containerEl =
         timePicker.shadowRoot.querySelector(".ea-time-picker");
@@ -188,7 +188,7 @@ describe("EaTimePicker Component", () => {
       timePicker.setAttribute("disabled", "");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const containerEl =
         timePicker.shadowRoot.querySelector(".ea-time-picker");
@@ -200,7 +200,7 @@ describe("EaTimePicker Component", () => {
       timePicker.setAttribute("size", "small");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const containerEl =
         timePicker.shadowRoot.querySelector(".ea-time-picker");
@@ -214,7 +214,7 @@ describe("EaTimePicker Component", () => {
       timePicker.setAttribute("size", "large");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const containerEl =
         timePicker.shadowRoot.querySelector(".ea-time-picker");
@@ -228,7 +228,7 @@ describe("EaTimePicker Component", () => {
       timePicker.setAttribute("size", "default");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const containerEl =
         timePicker.shadowRoot.querySelector(".ea-time-picker");
@@ -242,7 +242,7 @@ describe("EaTimePicker Component", () => {
       timePicker.setAttribute("align", "center");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const containerEl =
         timePicker.shadowRoot.querySelector(".ea-time-picker");
@@ -254,7 +254,7 @@ describe("EaTimePicker Component", () => {
       timePicker.setAttribute("align", "right");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const containerEl =
         timePicker.shadowRoot.querySelector(".ea-time-picker");
@@ -265,7 +265,7 @@ describe("EaTimePicker Component", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const containerEl =
         timePicker.shadowRoot.querySelector(".ea-time-picker");
@@ -278,10 +278,10 @@ describe("EaTimePicker Component", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       timePicker.handleOpen();
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const containerEl =
         timePicker.shadowRoot.querySelector(".ea-time-picker");
@@ -292,12 +292,12 @@ describe("EaTimePicker Component", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       timePicker.handleOpen();
-      await waitForRender();
+      await timePicker.updateComplete;
       timePicker.handleClose();
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const containerEl =
         timePicker.shadowRoot.querySelector(".ea-time-picker");
@@ -337,7 +337,7 @@ describe("EaTimePicker Component", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       timePicker.value = "08:30:00";
       expect(timePicker.value).toBe("08:30:00");
@@ -356,7 +356,7 @@ describe("EaTimePicker Component", () => {
       timePicker.value = "08:00:00";
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       timePicker.value = "16:30:00";
       expect(timePicker.value).toBe("16:30:00");
@@ -367,7 +367,7 @@ describe("EaTimePicker Component", () => {
       timePicker.value = "12:00:00";
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       timePicker.value = "";
       expect(timePicker.value).toBe("");
@@ -378,7 +378,7 @@ describe("EaTimePicker Component", () => {
       timePicker.setAttribute("value", "14:30:45");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const input = timePicker.shadowRoot.querySelector("ea-input");
       expect(input.value).toBe("14:30:45");
@@ -405,7 +405,7 @@ describe("EaTimePicker Component", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       timePicker.disabled = true;
       expect(timePicker.disabled).toBe(true);
@@ -416,7 +416,7 @@ describe("EaTimePicker Component", () => {
       timePicker.setAttribute("disabled", "");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       expect(timePicker.disabled).toBe(true);
 
@@ -429,10 +429,10 @@ describe("EaTimePicker Component", () => {
       timePicker.setAttribute("disabled", "");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       timePicker.handleOpen();
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const containerEl =
         timePicker.shadowRoot.querySelector(".ea-time-picker");
@@ -485,7 +485,7 @@ describe("EaTimePicker Component", () => {
       timePicker.setAttribute("size", "large");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const input = timePicker.shadowRoot.querySelector("ea-input");
       expect(input.getAttribute("size")).toBe("large");
@@ -528,10 +528,10 @@ describe("EaTimePicker Component", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       timePicker.setAttribute("align", "center");
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const containerEl =
         timePicker.shadowRoot.querySelector(".ea-time-picker");
@@ -561,7 +561,7 @@ describe("EaTimePicker Component", () => {
       timePicker.setAttribute("width", "300px");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const containerEl =
         timePicker.shadowRoot.querySelector(".ea-time-picker");
@@ -592,7 +592,7 @@ describe("EaTimePicker Component", () => {
       timePicker.setAttribute("label", "My Label");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const input = timePicker.shadowRoot.querySelector("ea-input");
       expect(input.label).toBe("My Label");
@@ -628,7 +628,7 @@ describe("EaTimePicker Component", () => {
       timePicker.setAttribute("placeholder", "Test placeholder");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const input = timePicker.shadowRoot.querySelector("ea-input");
       expect(input.placeholder).toBe("Test placeholder");
@@ -672,7 +672,7 @@ describe("EaTimePicker Component", () => {
       timePicker.setAttribute("limit-range-end", "18:00:00");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const hourWrap = timePicker.shadowRoot.querySelector(
         ".ea-time-picker__dropdown-inner--hour"
@@ -707,7 +707,7 @@ describe("EaTimePicker Component", () => {
       );
 
       timePicker.limitRangeStart = "09:00:00";
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const hour08 = hourWrap.querySelector('li[data-value="8"]');
       const hour09 = hourWrap.querySelector('li[data-value="9"]');
@@ -724,7 +724,7 @@ describe("EaTimePicker Component", () => {
       );
 
       timePicker.limitRangeEnd = "18:00:00";
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const hour18 = hourWrap.querySelector('li[data-value="18"]');
       const hour19 = hourWrap.querySelector('li[data-value="19"]');
@@ -738,7 +738,7 @@ describe("EaTimePicker Component", () => {
 
       timePicker.limitRangeStart = "09:00:00";
       timePicker.limitRangeEnd = "18:00:00";
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const hourWrap = timePicker.shadowRoot.querySelector(
         ".ea-time-picker__dropdown-inner--hour"
@@ -760,7 +760,7 @@ describe("EaTimePicker Component", () => {
       timePicker.setAttribute("limit-range-end", "18:45:30");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const minuteWrap = timePicker.shadowRoot.querySelector(
         ".ea-time-picker__dropdown-inner--minute"
@@ -782,7 +782,7 @@ describe("EaTimePicker Component", () => {
       timePicker.setAttribute("limit-range-end", "18:45:45");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const secondWrap = timePicker.shadowRoot.querySelector(
         ".ea-time-picker__dropdown-inner--second"
@@ -828,7 +828,7 @@ describe("EaTimePicker Component", () => {
       timePicker.setAttribute("required", "");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const input = timePicker.shadowRoot.querySelector("ea-input");
       expect(input.hasAttribute("required")).toBe(true);
@@ -879,11 +879,11 @@ describe("EaTimePicker Component", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const input = timePicker.shadowRoot.querySelector("ea-input");
       input.click();
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const containerEl =
         timePicker.shadowRoot.querySelector(".ea-time-picker");
@@ -894,10 +894,10 @@ describe("EaTimePicker Component", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       timePicker.focus();
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const containerEl =
         timePicker.shadowRoot.querySelector(".ea-time-picker");
@@ -908,17 +908,17 @@ describe("EaTimePicker Component", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       timePicker.handleOpen();
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const containerEl =
         timePicker.shadowRoot.querySelector(".ea-time-picker");
       expect(containerEl.classList.contains("is-open")).toBe(true);
 
       document.body.click();
-      await waitForRender();
+      await timePicker.updateComplete;
 
       expect(containerEl.classList.contains("is-open")).toBe(false);
     });
@@ -928,11 +928,11 @@ describe("EaTimePicker Component", () => {
       timePicker.setAttribute("disabled", "");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const input = timePicker.shadowRoot.querySelector("ea-input");
       input.click();
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const containerEl =
         timePicker.shadowRoot.querySelector(".ea-time-picker");
@@ -944,10 +944,10 @@ describe("EaTimePicker Component", () => {
       timePicker.setAttribute("disabled", "");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       timePicker.focus();
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const containerEl =
         timePicker.shadowRoot.querySelector(".ea-time-picker");
@@ -960,7 +960,7 @@ describe("EaTimePicker Component", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       let focusTriggered = false;
       timePicker.addEventListener("focus", () => {
@@ -968,7 +968,7 @@ describe("EaTimePicker Component", () => {
       });
 
       timePicker.focus();
-      await waitForRender();
+      await timePicker.updateComplete;
 
       expect(focusTriggered).toBe(true);
     });
@@ -977,7 +977,7 @@ describe("EaTimePicker Component", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       let blurTriggered = false;
       timePicker.addEventListener("blur", () => {
@@ -985,9 +985,9 @@ describe("EaTimePicker Component", () => {
       });
 
       timePicker.focus();
-      await waitForRender();
+      await timePicker.updateComplete;
       timePicker.blur();
-      await waitForRender();
+      await timePicker.updateComplete;
 
       expect(blurTriggered).toBe(true);
     });
@@ -996,7 +996,7 @@ describe("EaTimePicker Component", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       let visibleChangeDetail = null;
       timePicker.addEventListener("ea-visible-change", e => {
@@ -1004,7 +1004,7 @@ describe("EaTimePicker Component", () => {
       });
 
       timePicker.handleOpen();
-      await waitForRender();
+      await timePicker.updateComplete;
 
       expect(visibleChangeDetail).toBeDefined();
       expect(visibleChangeDetail.visible).toBe(true);
@@ -1014,10 +1014,10 @@ describe("EaTimePicker Component", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       timePicker.handleOpen();
-      await waitForRender();
+      await timePicker.updateComplete;
 
       let visibleChangeDetail = null;
       timePicker.addEventListener("ea-visible-change", e => {
@@ -1025,7 +1025,7 @@ describe("EaTimePicker Component", () => {
       });
 
       timePicker.handleClose();
-      await waitForRender();
+      await timePicker.updateComplete;
 
       expect(visibleChangeDetail).toBeDefined();
       expect(visibleChangeDetail.visible).toBe(false);
@@ -1035,10 +1035,10 @@ describe("EaTimePicker Component", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       timePicker.handleOpen();
-      await waitForRender();
+      await timePicker.updateComplete;
 
       let changeDetail = null;
       timePicker.addEventListener("change", e => {
@@ -1051,7 +1051,7 @@ describe("EaTimePicker Component", () => {
       const hour10 = hourWrap.querySelector('li[data-value="10"]');
       hour10.click();
 
-      await waitForRender(200);
+      await timePicker.updateComplete;
 
       expect(changeDetail).toBeDefined();
       expect(changeDetail.value).toBe("10:00:00");
@@ -1062,10 +1062,10 @@ describe("EaTimePicker Component", () => {
       timePicker.setAttribute("value", "10:00:00");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       timePicker.handleOpen();
-      await waitForRender();
+      await timePicker.updateComplete;
 
       let changeDetail = null;
       timePicker.addEventListener("change", e => {
@@ -1078,7 +1078,7 @@ describe("EaTimePicker Component", () => {
       const minute30 = minuteWrap.querySelector('li[data-value="30"]');
       minute30.click();
 
-      await waitForRender(200);
+      await timePicker.updateComplete;
 
       expect(changeDetail).toBeDefined();
       expect(changeDetail.value).toBe("10:30:00");
@@ -1089,10 +1089,10 @@ describe("EaTimePicker Component", () => {
       timePicker.setAttribute("value", "10:30:00");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       timePicker.handleOpen();
-      await waitForRender();
+      await timePicker.updateComplete;
 
       let changeDetail = null;
       timePicker.addEventListener("change", e => {
@@ -1105,7 +1105,7 @@ describe("EaTimePicker Component", () => {
       const second45 = secondWrap.querySelector('li[data-value="45"]');
       second45.click();
 
-      await waitForRender(200);
+      await timePicker.updateComplete;
 
       expect(changeDetail).toBeDefined();
       expect(changeDetail.value).toBe("10:30:45");
@@ -1115,7 +1115,7 @@ describe("EaTimePicker Component", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       let callCount = 0;
       timePicker.addEventListener("ea-visible-change", () => {
@@ -1123,9 +1123,9 @@ describe("EaTimePicker Component", () => {
       });
 
       timePicker.handleOpen();
-      await waitForRender();
+      await timePicker.updateComplete;
       timePicker.handleOpen();
-      await waitForRender();
+      await timePicker.updateComplete;
 
       expect(callCount).toBe(1);
     });
@@ -1134,10 +1134,10 @@ describe("EaTimePicker Component", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       timePicker.handleOpen();
-      await waitForRender();
+      await timePicker.updateComplete;
 
       let callCount = 0;
       timePicker.addEventListener("ea-visible-change", () => {
@@ -1145,9 +1145,9 @@ describe("EaTimePicker Component", () => {
       });
 
       timePicker.handleClose();
-      await waitForRender();
+      await timePicker.updateComplete;
       timePicker.handleClose();
-      await waitForRender();
+      await timePicker.updateComplete;
 
       expect(callCount).toBe(1);
     });
@@ -1157,7 +1157,7 @@ describe("EaTimePicker Component", () => {
       timePicker.setAttribute("disabled", "");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       let eventTriggered = false;
       timePicker.addEventListener("ea-visible-change", () => {
@@ -1165,7 +1165,7 @@ describe("EaTimePicker Component", () => {
       });
 
       timePicker.handleOpen();
-      await waitForRender();
+      await timePicker.updateComplete;
 
       expect(eventTriggered).toBe(false);
     });
@@ -1174,10 +1174,10 @@ describe("EaTimePicker Component", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       timePicker.handleOpen();
-      await waitForRender();
+      await timePicker.updateComplete;
 
       let changeDetail = null;
       timePicker.addEventListener("change", e => {
@@ -1190,7 +1190,7 @@ describe("EaTimePicker Component", () => {
       const hour15 = hourWrap.querySelector('li[data-value="15"]');
       hour15.click();
 
-      await waitForRender(200);
+      await timePicker.updateComplete;
 
       expect(changeDetail).not.toBeNull();
       expect(changeDetail.value).toBeDefined();
@@ -1203,10 +1203,10 @@ describe("EaTimePicker Component", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       timePicker.handleOpen();
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const containerEl =
         timePicker.shadowRoot.querySelector(".ea-time-picker");
@@ -1217,12 +1217,12 @@ describe("EaTimePicker Component", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       timePicker.handleOpen();
-      await waitForRender();
+      await timePicker.updateComplete;
       timePicker.handleClose();
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const containerEl =
         timePicker.shadowRoot.querySelector(".ea-time-picker");
@@ -1233,7 +1233,7 @@ describe("EaTimePicker Component", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       expect(() => timePicker.focus()).not.toThrow();
     });
@@ -1242,7 +1242,7 @@ describe("EaTimePicker Component", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       expect(() => timePicker.blur()).not.toThrow();
     });
@@ -1251,10 +1251,10 @@ describe("EaTimePicker Component", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       timePicker.focus();
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const containerEl =
         timePicker.shadowRoot.querySelector(".ea-time-picker");
@@ -1330,7 +1330,7 @@ describe("EaTimePicker Component", () => {
       timePicker.setAttribute("align", "center");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const containerEl =
         timePicker.shadowRoot.querySelector(".ea-time-picker");
@@ -1371,7 +1371,7 @@ describe("EaTimePicker Component", () => {
       timePicker.setAttribute("value", "18:30:45");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       timePicker.remove();
       container.appendChild(timePicker);
@@ -1394,10 +1394,10 @@ describe("EaTimePicker Component", () => {
       timePicker.setAttribute("limit-range-end", "18:00:00");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       timePicker.handleOpen();
-      await waitForRender();
+      await timePicker.updateComplete;
 
       let changeTriggered = false;
       timePicker.addEventListener("change", () => {
@@ -1439,17 +1439,17 @@ describe("EaTimePicker Component", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       timePicker.setAttribute("disabled", "");
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const containerEl =
         timePicker.shadowRoot.querySelector(".ea-time-picker");
       expect(containerEl.classList.contains("is-disabled")).toBe(true);
 
       timePicker.removeAttribute("disabled");
-      await waitForRender();
+      await timePicker.updateComplete;
 
       expect(containerEl.classList.contains("is-disabled")).toBe(false);
     });
@@ -1458,10 +1458,10 @@ describe("EaTimePicker Component", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       timePicker.setAttribute("align", "right");
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const containerEl =
         timePicker.shadowRoot.querySelector(".ea-time-picker");
@@ -1475,7 +1475,7 @@ describe("EaTimePicker Component", () => {
       timePicker.setAttribute("value", "14:30:45");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const hourWrap = timePicker.shadowRoot.querySelector(
         ".ea-time-picker__dropdown-inner--hour"
@@ -1501,14 +1501,14 @@ describe("EaTimePicker Component", () => {
       timePicker.setAttribute("value", "14:30:45");
       container.appendChild(timePicker);
 
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const hourWrap = timePicker.shadowRoot.querySelector(
         ".ea-time-picker__dropdown-inner--hour"
       );
 
       timePicker.value = "08:00:00";
-      await waitForRender();
+      await timePicker.updateComplete;
 
       const hour14 = hourWrap.querySelector('li[data-value="14"]');
       const hour08 = hourWrap.querySelector('li[data-value="8"]');
@@ -1532,14 +1532,14 @@ describe("EaTimePicker Component", () => {
       it("Escape 应该关闭时间面板", async () => {
         const el = document.createElement("ea-time-picker");
         container.appendChild(el);
-        await waitForRender();
-        await waitForRender();
+        await el.updateComplete;
+        await el.updateComplete;
         el.handleOpen();
-        await waitForRender();
+        await el.updateComplete;
         el.dispatchEvent(
           new KeyboardEvent("keydown", { key: "Escape", bubbles: true })
         );
-        await waitForRender();
+        await el.updateComplete;
         expect(el._container.classList.contains("is-open")).toBe(false);
       });
     });
@@ -1548,7 +1548,7 @@ describe("EaTimePicker Component", () => {
       const el = document.createElement("ea-time-picker");
       el.setAttribute("label", "Time");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el, {
         rules: {
           list: { enabled: false },
@@ -1563,7 +1563,7 @@ describe("EaTimePicker Component", () => {
       it("输入框应该有 role=combobox", async () => {
         const timePicker = document.createElement("ea-time-picker");
         container.appendChild(timePicker);
-        await waitForRender();
+        await timePicker.updateComplete;
         const input = timePicker.shadowRoot.querySelector("ea-input");
         expect(input.getAttribute("role")).toBe("combobox");
       });
@@ -1571,7 +1571,7 @@ describe("EaTimePicker Component", () => {
       it("输入框应该有 aria-haspopup=listbox", async () => {
         const timePicker = document.createElement("ea-time-picker");
         container.appendChild(timePicker);
-        await waitForRender();
+        await timePicker.updateComplete;
         const input = timePicker.shadowRoot.querySelector("ea-input");
         expect(input.getAttribute("aria-haspopup")).toBe("listbox");
       });
@@ -1579,7 +1579,7 @@ describe("EaTimePicker Component", () => {
       it("输入框应该有 aria-controls 指向 dropdown", async () => {
         const timePicker = document.createElement("ea-time-picker");
         container.appendChild(timePicker);
-        await waitForRender();
+        await timePicker.updateComplete;
         const input = timePicker.shadowRoot.querySelector("ea-input");
         const dropdown = timePicker.shadowRoot.querySelector(
           ".ea-time-picker__dropdown"
@@ -1590,7 +1590,7 @@ describe("EaTimePicker Component", () => {
       it("关闭时输入框 aria-expanded 应该为 false", async () => {
         const timePicker = document.createElement("ea-time-picker");
         container.appendChild(timePicker);
-        await waitForRender();
+        await timePicker.updateComplete;
         const input = timePicker.shadowRoot.querySelector("ea-input");
         expect(input.getAttribute("aria-expanded")).toBe("false");
       });
@@ -1598,9 +1598,9 @@ describe("EaTimePicker Component", () => {
       it("打开时输入框 aria-expanded 应该为 true", async () => {
         const timePicker = document.createElement("ea-time-picker");
         container.appendChild(timePicker);
-        await waitForRender();
+        await timePicker.updateComplete;
         timePicker.handleOpen();
-        await waitForRender();
+        await timePicker.updateComplete;
         const input = timePicker.shadowRoot.querySelector("ea-input");
         expect(input.getAttribute("aria-expanded")).toBe("true");
       });
@@ -1608,7 +1608,7 @@ describe("EaTimePicker Component", () => {
       it("下拉面板应该有 role=listbox", async () => {
         const timePicker = document.createElement("ea-time-picker");
         container.appendChild(timePicker);
-        await waitForRender();
+        await timePicker.updateComplete;
         const dropdown = timePicker.shadowRoot.querySelector(
           ".ea-time-picker__dropdown"
         );
@@ -1619,21 +1619,21 @@ describe("EaTimePicker Component", () => {
         const timePicker = document.createElement("ea-time-picker");
         timePicker.disabled = true;
         container.appendChild(timePicker);
-        await waitForRender();
+        await timePicker.updateComplete;
         expect(timePicker.getAttribute("aria-disabled")).toBe("true");
       });
 
       it("宿主元素非 disabled 时 aria-disabled 应该为 false", async () => {
         const timePicker = document.createElement("ea-time-picker");
         container.appendChild(timePicker);
-        await waitForRender();
+        await timePicker.updateComplete;
         expect(timePicker.getAttribute("aria-disabled")).toBe("false");
       });
 
       it("时间项应该有 role=option", async () => {
         const timePicker = document.createElement("ea-time-picker");
         container.appendChild(timePicker);
-        await waitForRender();
+        await timePicker.updateComplete;
         const items = timePicker.shadowRoot.querySelectorAll(
           ".ea-time-picker__dropdown-item"
         );
@@ -1646,7 +1646,7 @@ describe("EaTimePicker Component", () => {
       it("时间项应该有 aria-selected 属性", async () => {
         const timePicker = document.createElement("ea-time-picker");
         container.appendChild(timePicker);
-        await waitForRender();
+        await timePicker.updateComplete;
         const items = timePicker.shadowRoot.querySelectorAll(
           ".ea-time-picker__dropdown-item"
         );
@@ -1659,7 +1659,7 @@ describe("EaTimePicker Component", () => {
         const timePicker = document.createElement("ea-time-picker");
         timePicker.setAttribute("value", "14:30:45");
         container.appendChild(timePicker);
-        await waitForRender();
+        await timePicker.updateComplete;
         const hourWrap = timePicker.shadowRoot.querySelector(
           ".ea-time-picker__dropdown-inner--hour"
         );
@@ -1671,7 +1671,7 @@ describe("EaTimePicker Component", () => {
         const timePicker = document.createElement("ea-time-picker");
         timePicker.setAttribute("value", "14:30:45");
         container.appendChild(timePicker);
-        await waitForRender();
+        await timePicker.updateComplete;
         const hourWrap = timePicker.shadowRoot.querySelector(
           ".ea-time-picker__dropdown-inner--hour"
         );

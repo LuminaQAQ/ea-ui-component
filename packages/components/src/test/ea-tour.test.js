@@ -3,7 +3,6 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import "../components/ea-icon/index";
 import "../components/ea-button/index";
 import "../components/ea-tour/index";
-import { waitForRender } from "./utils/waitForRender";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 function createTour(stepsHTML = "", attrs = {}) {
@@ -81,7 +80,7 @@ describe("EaTour Component", () => {
       const tour = createTour();
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       expect(tour.shadowRoot.querySelector(".ea-tour__svg")).toBeTruthy();
       expect(tour.shadowRoot.querySelector(".ea-tour__mask")).toBeTruthy();
@@ -128,7 +127,7 @@ describe("EaTour Component", () => {
       const tour = createTour();
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       const tourEl = tour.shadowRoot.querySelector(".ea-tour");
       expect(tourEl.classList.contains("is-visible")).toBe(false);
@@ -153,10 +152,10 @@ describe("EaTour Component", () => {
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       tour.visible = true;
-      await waitForRender();
+      await tour.updateComplete;
 
       expect(tour.visible).toBe(true);
       const tourEl = tour.shadowRoot.querySelector(".ea-tour");
@@ -179,10 +178,10 @@ describe("EaTour Component", () => {
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       tour.visible = true;
-      await waitForRender();
+      await tour.updateComplete;
 
       expect(document.body.style.overflow).toBe("hidden");
     });
@@ -193,13 +192,13 @@ describe("EaTour Component", () => {
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       tour.visible = true;
-      await waitForRender();
+      await tour.updateComplete;
 
       tour.visible = false;
-      await waitForRender();
+      await tour.updateComplete;
 
       expect(document.body.style.overflow).toBe("auto");
     });
@@ -211,13 +210,13 @@ describe("EaTour Component", () => {
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       tour.current = 1;
-      await waitForRender();
+      await tour.updateComplete;
 
       tour.visible = true;
-      await waitForRender();
+      await tour.updateComplete;
 
       expect(tour.current).toBe(0);
     });
@@ -237,7 +236,7 @@ describe("EaTour Component", () => {
       const tour = createTour();
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       const tourEl = tour.shadowRoot.querySelector(".ea-tour");
       expect(tourEl.classList.contains("is-mask")).toBe(true);
@@ -248,7 +247,7 @@ describe("EaTour Component", () => {
       document.body.appendChild(tour);
 
       tour.setAttribute("mask", "false");
-      await waitForRender();
+      await tour.updateComplete;
 
       expect(tour.mask).toBe(false);
       const tourEl = tour.shadowRoot.querySelector(".ea-tour");
@@ -260,10 +259,10 @@ describe("EaTour Component", () => {
       document.body.appendChild(tour);
 
       tour.setAttribute("mask", "false");
-      await waitForRender();
+      await tour.updateComplete;
 
       tour.visible = true;
-      await waitForRender();
+      await tour.updateComplete;
 
       expect(document.body.style.overflow).not.toBe("hidden");
     });
@@ -289,7 +288,7 @@ describe("EaTour Component", () => {
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       tour.current = 1;
       expect(tour.current).toBe(1);
@@ -301,10 +300,10 @@ describe("EaTour Component", () => {
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       tour.current = -1;
-      await waitForRender();
+      await tour.updateComplete;
 
       expect(tour.current).toBe(0);
     });
@@ -316,10 +315,10 @@ describe("EaTour Component", () => {
       tour.visible = true;
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       tour.current = 5;
-      await waitForRender();
+      await tour.updateComplete;
 
       expect(tour.visible).toBe(false);
     });
@@ -331,11 +330,11 @@ describe("EaTour Component", () => {
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       const steps = tour.querySelectorAll("ea-tour-step");
       tour.current = 1;
-      await waitForRender();
+      await tour.updateComplete;
 
       expect(steps[1].style.getPropertyValue("--ea-tour-step-visible")).toBe(
         "block"
@@ -395,7 +394,7 @@ describe("EaTour Component", () => {
       tour.variant = "primary";
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
       expect(step.getAttribute("variant")).toBe("primary");
@@ -408,10 +407,10 @@ describe("EaTour Component", () => {
       tour.variant = "primary";
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       tour.variant = "default";
-      await waitForRender();
+      await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
       expect(step.hasAttribute("variant")).toBe(false);
@@ -443,7 +442,7 @@ describe("EaTour Component", () => {
       tour.placement = "top-start";
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
       expect(step.getAttribute("placement")).toBe("top-start");
@@ -456,7 +455,7 @@ describe("EaTour Component", () => {
       tour.placement = "top";
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
       expect(step.getAttribute("placement")).toBe("left");
@@ -493,13 +492,15 @@ describe("EaTour Component", () => {
       tour.visible = true;
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       const changeHandler = vi.fn();
       tour.addEventListener("ea-tour-change", changeHandler);
 
-      tour.dispatchEvent(new CustomEvent("ea-tour-step-next", { bubbles: true }));
-      await waitForRender();
+      tour.dispatchEvent(
+        new CustomEvent("ea-tour-step-next", { bubbles: true })
+      );
+      await tour.updateComplete;
 
       expect(changeHandler).toHaveBeenCalled();
     });
@@ -512,16 +513,18 @@ describe("EaTour Component", () => {
       tour.visible = true;
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       tour.current = 1;
-      await waitForRender();
+      await tour.updateComplete;
 
       const changeHandler = vi.fn();
       tour.addEventListener("ea-tour-change", changeHandler);
 
-      tour.dispatchEvent(new CustomEvent("ea-tour-step-previous", { bubbles: true }));
-      await waitForRender();
+      tour.dispatchEvent(
+        new CustomEvent("ea-tour-step-previous", { bubbles: true })
+      );
+      await tour.updateComplete;
 
       expect(changeHandler).toHaveBeenCalled();
     });
@@ -533,7 +536,7 @@ describe("EaTour Component", () => {
       tour.visible = true;
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       tour.dispatchEvent(new CustomEvent("ea-close", { bubbles: true }));
       expect(tour.visible).toBe(false);
@@ -546,13 +549,15 @@ describe("EaTour Component", () => {
       tour.visible = true;
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       const finishHandler = vi.fn();
       tour.addEventListener("ea-tour-finish", finishHandler);
 
-      tour.dispatchEvent(new CustomEvent("ea-tour-step-finish", { bubbles: true }));
-      await waitForRender();
+      tour.dispatchEvent(
+        new CustomEvent("ea-tour-step-finish", { bubbles: true })
+      );
+      await tour.updateComplete;
 
       expect(tour.visible).toBe(false);
       expect(finishHandler).toHaveBeenCalled();
@@ -570,11 +575,13 @@ describe("EaTour Component", () => {
       tour.visible = true;
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       expect(tour.current).toBe(0);
 
-      tour.dispatchEvent(new CustomEvent("ea-tour-step-next", { bubbles: true }));
+      tour.dispatchEvent(
+        new CustomEvent("ea-tour-step-next", { bubbles: true })
+      );
       expect(tour.current).toBe(1);
     });
 
@@ -586,13 +593,17 @@ describe("EaTour Component", () => {
       tour.visible = true;
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
-      tour.dispatchEvent(new CustomEvent("ea-tour-step-next", { bubbles: true }));
-      await waitForRender();
+      tour.dispatchEvent(
+        new CustomEvent("ea-tour-step-next", { bubbles: true })
+      );
+      await tour.updateComplete;
       expect(tour.current).toBe(1);
 
-      tour.dispatchEvent(new CustomEvent("ea-tour-step-previous", { bubbles: true }));
+      tour.dispatchEvent(
+        new CustomEvent("ea-tour-step-previous", { bubbles: true })
+      );
       expect(tour.current).toBe(0);
     });
 
@@ -603,9 +614,11 @@ describe("EaTour Component", () => {
       tour.visible = true;
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
-      tour.dispatchEvent(new CustomEvent("ea-tour-step-finish", { bubbles: true }));
+      tour.dispatchEvent(
+        new CustomEvent("ea-tour-step-finish", { bubbles: true })
+      );
       expect(tour.visible).toBe(false);
     });
 
@@ -616,10 +629,10 @@ describe("EaTour Component", () => {
       tour.visible = true;
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       tour.current = 10;
-      await waitForRender();
+      await tour.updateComplete;
 
       expect(tour.visible).toBe(false);
     });
@@ -634,7 +647,7 @@ describe("EaTour Component", () => {
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       expect(tour.shadowRoot).toBeTruthy();
       expect(tour.querySelectorAll("ea-tour-step").length).toBe(1);
@@ -646,7 +659,7 @@ describe("EaTour Component", () => {
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       tour.remove();
       expect(tour.isConnected).toBe(false);
@@ -659,16 +672,18 @@ describe("EaTour Component", () => {
       tour.visible = true;
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       tour.remove();
-      await waitForRender();
+      await tour.updateComplete;
 
       const changeHandler = vi.fn();
       tour.addEventListener("ea-tour-change", changeHandler);
 
-      tour.dispatchEvent(new CustomEvent("ea-tour-step-next", { bubbles: true }));
-      await waitForRender();
+      tour.dispatchEvent(
+        new CustomEvent("ea-tour-step-next", { bubbles: true })
+      );
+      await tour.updateComplete;
 
       expect(changeHandler).not.toHaveBeenCalled();
     });
@@ -681,7 +696,7 @@ describe("EaTour Component", () => {
       const tour = createTour();
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       const tourEl = tour.shadowRoot.querySelector(".ea-tour");
       expect(tourEl).toBeTruthy();
@@ -694,10 +709,10 @@ describe("EaTour Component", () => {
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       tour.visible = true;
-      await waitForRender();
+      await tour.updateComplete;
 
       const tourEl = tour.shadowRoot.querySelector(".ea-tour");
       expect(tourEl.classList.contains("is-visible")).toBe(true);
@@ -707,7 +722,7 @@ describe("EaTour Component", () => {
       const tour = createTour();
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       const tourEl = tour.shadowRoot.querySelector(".ea-tour");
       expect(tourEl.classList.contains("is-mask")).toBe(true);
@@ -718,7 +733,7 @@ describe("EaTour Component", () => {
       tour.setAttribute("mask", "false");
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       const tourEl = tour.shadowRoot.querySelector(".ea-tour");
       expect(tourEl.classList.contains("is-mask")).toBe(false);
@@ -990,7 +1005,7 @@ describe("EaTourStep Component", () => {
 
       const step = tour.querySelector("ea-tour-step");
       step.setAttribute("heading", "New Title");
-      await waitForRender();
+      await tour.updateComplete;
 
       const titleSlot = step.shadowRoot.querySelector(
         ".ea-tour-step__header slot"
@@ -1063,7 +1078,7 @@ describe("EaTourStep Component", () => {
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
       const container = step.shadowRoot.querySelector(".ea-tour-step");
@@ -1076,7 +1091,7 @@ describe("EaTourStep Component", () => {
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
       const container = step.shadowRoot.querySelector(".ea-tour-step");
@@ -1089,7 +1104,7 @@ describe("EaTourStep Component", () => {
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
       const nextBtn = step.shadowRoot.querySelector('[part="next"]');
@@ -1104,7 +1119,7 @@ describe("EaTourStep Component", () => {
 
       const step = tour.querySelector("ea-tour-step");
       step.setAttribute("variant", "default");
-      await waitForRender();
+      await tour.updateComplete;
 
       const nextBtn = step.shadowRoot.querySelector('[part="next"]');
       expect(nextBtn.hasAttribute("variant")).toBe(false);
@@ -1156,7 +1171,7 @@ describe("EaTourStep Component", () => {
         `);
         document.body.appendChild(tour);
 
-        await waitForRender();
+        await tour.updateComplete;
 
         const step = tour.querySelector("ea-tour-step");
         expect(step.placement).toBe(placement);
@@ -1175,7 +1190,7 @@ describe("EaTourStep Component", () => {
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
       const prevBtn = step.shadowRoot.querySelector(".ea-tour-step__previous");
@@ -1189,7 +1204,7 @@ describe("EaTourStep Component", () => {
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
       const nextBtn = step.shadowRoot.querySelector(".ea-tour-step__next");
@@ -1203,7 +1218,7 @@ describe("EaTourStep Component", () => {
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
       const finishBtn = step.shadowRoot.querySelector(".ea-tour-step__finish");
@@ -1242,7 +1257,7 @@ describe("EaTourStep Component", () => {
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
       const buttons = step.shadowRoot.querySelectorAll("ea-button");
@@ -1261,7 +1276,7 @@ describe("EaTourStep Component", () => {
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       const steps = tour.querySelectorAll("ea-tour-step");
       const indicators = steps[0].shadowRoot.querySelectorAll(
@@ -1277,7 +1292,7 @@ describe("EaTourStep Component", () => {
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       const steps = tour.querySelectorAll("ea-tour-step");
       const indicators = steps[0].shadowRoot.querySelectorAll(
@@ -1294,7 +1309,7 @@ describe("EaTourStep Component", () => {
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       let steps = tour.querySelectorAll("ea-tour-step");
       let indicators = steps[0].shadowRoot.querySelectorAll(
@@ -1307,7 +1322,7 @@ describe("EaTourStep Component", () => {
       newStep.innerHTML = "<div>Content 3</div>";
       tour.appendChild(newStep);
 
-      await waitForRender();
+      await newStep.updateComplete;
 
       steps = tour.querySelectorAll("ea-tour-step");
       indicators = steps[0].shadowRoot.querySelectorAll(
@@ -1324,7 +1339,7 @@ describe("EaTourStep Component", () => {
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       let steps = tour.querySelectorAll("ea-tour-step");
       let indicators = steps[0].shadowRoot.querySelectorAll(
@@ -1334,13 +1349,15 @@ describe("EaTourStep Component", () => {
 
       steps[2].remove();
 
-      await waitForRender();
+      await tour.updateComplete;
 
-      steps = tour.querySelectorAll("ea-tour-step");
-      indicators = steps[0].shadowRoot.querySelectorAll(
-        ".ea-tour-step__indicator"
-      );
-      expect(indicators.length).toBe(2);
+      await vi.waitFor(() => {
+        steps = tour.querySelectorAll("ea-tour-step");
+        indicators = steps[0].shadowRoot.querySelectorAll(
+          ".ea-tour-step__indicator"
+        );
+        expect(indicators.length).toBe(2);
+      });
     });
 
     it("动态添加步骤后所有步骤的指示器数量应该一致", async () => {
@@ -1349,14 +1366,14 @@ describe("EaTourStep Component", () => {
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       const newStep = document.createElement("ea-tour-step");
       newStep.setAttribute("heading", "Step 2");
       newStep.innerHTML = "<div>Content 2</div>";
       tour.appendChild(newStep);
 
-      await waitForRender();
+      await newStep.updateComplete;
 
       const steps = tour.querySelectorAll("ea-tour-step");
       const indicators1 = steps[0].shadowRoot.querySelectorAll(
@@ -1376,13 +1393,13 @@ describe("EaTourStep Component", () => {
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       const steps = tour.querySelectorAll("ea-tour-step");
       expect(typeof steps[0].updateIndicators).toBe("function");
 
       steps[0].updateIndicators([...steps]);
-      await waitForRender();
+      await tour.updateComplete;
 
       const indicators = steps[0].shadowRoot.querySelectorAll(
         ".ea-tour-step__indicator"
@@ -1400,7 +1417,7 @@ describe("EaTourStep Component", () => {
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
       const nextHandler = vi.fn();
@@ -1408,7 +1425,7 @@ describe("EaTourStep Component", () => {
 
       const nextBtn = step.shadowRoot.querySelector('[part="next"]');
       nextBtn.click();
-      await waitForRender();
+      await tour.updateComplete;
 
       expect(nextHandler).toHaveBeenCalled();
     });
@@ -1419,7 +1436,7 @@ describe("EaTourStep Component", () => {
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
       const previousHandler = vi.fn();
@@ -1427,7 +1444,7 @@ describe("EaTourStep Component", () => {
 
       const previousBtn = step.shadowRoot.querySelector('[part="previous"]');
       previousBtn.click();
-      await waitForRender();
+      await tour.updateComplete;
 
       expect(previousHandler).toHaveBeenCalled();
     });
@@ -1438,7 +1455,7 @@ describe("EaTourStep Component", () => {
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
       const finishHandler = vi.fn();
@@ -1446,7 +1463,7 @@ describe("EaTourStep Component", () => {
 
       const finishBtn = step.shadowRoot.querySelector('[part="finish"]');
       finishBtn.click();
-      await waitForRender();
+      await tour.updateComplete;
 
       expect(finishHandler).toHaveBeenCalled();
     });
@@ -1457,7 +1474,7 @@ describe("EaTourStep Component", () => {
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
       const closeHandler = vi.fn();
@@ -1467,7 +1484,7 @@ describe("EaTourStep Component", () => {
         ".ea-tour-step__close-icon"
       );
       closeIcon.click();
-      await waitForRender();
+      await tour.updateComplete;
 
       expect(closeHandler).toHaveBeenCalled();
     });
@@ -1479,7 +1496,7 @@ describe("EaTourStep Component", () => {
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       const steps = tour.querySelectorAll("ea-tour-step");
       let closeEventDetail = null;
@@ -1501,7 +1518,7 @@ describe("EaTourStep Component", () => {
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
       const closeHandler = vi.fn();
@@ -1511,7 +1528,7 @@ describe("EaTourStep Component", () => {
         ".ea-tour-step__close-icon"
       );
       closeIcon.click();
-      await waitForRender();
+      await tour.updateComplete;
 
       expect(closeHandler).toHaveBeenCalled();
     });
@@ -1524,7 +1541,7 @@ describe("EaTourStep Component", () => {
       tour.visible = true;
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
       const nextBtn = step.shadowRoot.querySelector('[part="next"]');
@@ -1542,7 +1559,7 @@ describe("EaTourStep Component", () => {
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
       const containerEl = step.shadowRoot.querySelector(".ea-tour-step");
@@ -1643,7 +1660,7 @@ describe("EaTourStep Component", () => {
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
       const containerEl = step.shadowRoot.querySelector(".ea-tour-step");
@@ -1672,7 +1689,7 @@ describe("EaTourStep Component", () => {
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
       tour.remove();
@@ -1689,7 +1706,7 @@ describe("EaTourStep Component", () => {
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
       const slot = step.shadowRoot.querySelector(".ea-tour-step__content slot");
@@ -1706,7 +1723,7 @@ describe("EaTourStep Component", () => {
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
       const headerSlot = step.shadowRoot.querySelector("slot[name='header']");
@@ -1724,7 +1741,7 @@ describe("EaTourStep Component", () => {
       `);
       document.body.appendChild(tour);
 
-      await waitForRender();
+      await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
       const footerSlot = step.shadowRoot.querySelector("slot[name='footer']");
@@ -1756,7 +1773,7 @@ describe("EaTourStep Component", () => {
 
       const step = tour.querySelector("ea-tour-step");
       step.setAttribute("variant", "primary");
-      await waitForRender();
+      await step.updateComplete;
 
       const containerEl = step.shadowRoot.querySelector(".ea-tour-step");
       expect(containerEl.classList.contains("ea-tour-step--primary")).toBe(
@@ -1764,7 +1781,7 @@ describe("EaTourStep Component", () => {
       );
 
       step.setAttribute("variant", "default");
-      await waitForRender();
+      await step.updateComplete;
 
       expect(containerEl.classList.contains("ea-tour-step--primary")).toBe(
         false
@@ -1787,8 +1804,10 @@ describe("EaTourStep Component", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-tour-step");
       container.appendChild(el);
-      await waitForRender();
-      const results = await runAxe(el, { rules: { "aria-prohibited-attr": { enabled: false } } });
+      await el.updateComplete;
+      const results = await runAxe(el, {
+        rules: { "aria-prohibited-attr": { enabled: false } },
+      });
       assertNoA11yViolations(results);
     });
 
@@ -1796,7 +1815,7 @@ describe("EaTourStep Component", () => {
       it("step 容器应该有 role='dialog'", async () => {
         const el = document.createElement("ea-tour-step");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const containerEl = el.shadowRoot.querySelector('[part="container"]');
         expect(containerEl.getAttribute("role")).toBe("dialog");
       });
@@ -1804,7 +1823,7 @@ describe("EaTourStep Component", () => {
       it("step 容器应该有 aria-modal='true'", async () => {
         const el = document.createElement("ea-tour-step");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const containerEl = el.shadowRoot.querySelector('[part="container"]');
         expect(containerEl.getAttribute("aria-modal")).toBe("true");
       });
@@ -1812,7 +1831,7 @@ describe("EaTourStep Component", () => {
       it("关闭图标应该有 aria-label='close'", async () => {
         const el = document.createElement("ea-tour-step");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const closeIcon = el.shadowRoot.querySelector('[part="close-icon"]');
         expect(closeIcon.getAttribute("aria-label")).toBe("close");
       });

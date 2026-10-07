@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { waitForRender } from "./utils/waitForRender";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 if (!window.CSS) {
@@ -272,7 +271,7 @@ describe("EaProgress Component", () => {
       ).toBeTruthy();
 
       progress.setAttribute("variant", "circle");
-      await waitForRender();
+      await progress.updateComplete;
 
       expect(progress.variant).toBe("circle");
       expect(progress.shadowRoot.querySelector("svg")).toBeTruthy();
@@ -287,7 +286,7 @@ describe("EaProgress Component", () => {
       expect(progress.shadowRoot.querySelector("mask#myMask")).toBeFalsy();
 
       progress.setAttribute("variant", "dashboard");
-      await waitForRender();
+      await progress.updateComplete;
 
       expect(progress.variant).toBe("dashboard");
       expect(progress.shadowRoot.querySelector("mask#myMask")).toBeTruthy();
@@ -310,7 +309,7 @@ describe("EaProgress Component", () => {
       ).toBeTruthy();
 
       progress.setAttribute("variant", "circle");
-      await waitForRender();
+      await progress.updateComplete;
 
       expect(
         progress.shadowRoot.querySelector("section.ea-progress__track")
@@ -340,7 +339,7 @@ describe("EaProgress Component", () => {
       progress.setAttribute("percentage", "150");
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       expect(progress.percentage).toBe(100);
     });
@@ -350,7 +349,7 @@ describe("EaProgress Component", () => {
       progress.setAttribute("percentage", "-10");
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       expect(progress.percentage).toBe(0);
     });
@@ -384,7 +383,7 @@ describe("EaProgress Component", () => {
       progress.setAttribute("percentage", "50");
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       const containerEl = progress.shadowRoot.querySelector(".ea-progress");
       expect(
@@ -397,7 +396,7 @@ describe("EaProgress Component", () => {
       container.appendChild(progress);
 
       progress.setAttribute("percentage", "75");
-      await waitForRender();
+      await progress.updateComplete;
 
       const containerEl = progress.shadowRoot.querySelector(".ea-progress");
       expect(
@@ -411,7 +410,7 @@ describe("EaProgress Component", () => {
       progress.setAttribute("percentage", "50");
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       const containerEl = progress.shadowRoot.querySelector(".ea-progress");
       const cssVar = containerEl.style.getPropertyValue(
@@ -427,7 +426,7 @@ describe("EaProgress Component", () => {
       progress.setAttribute("percentage", "0");
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       const containerEl = progress.shadowRoot.querySelector(".ea-progress");
       expect(
@@ -441,7 +440,7 @@ describe("EaProgress Component", () => {
       progress.setAttribute("percentage", "100");
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       const containerEl = progress.shadowRoot.querySelector(".ea-progress");
       expect(
@@ -455,7 +454,7 @@ describe("EaProgress Component", () => {
       progress.setAttribute("percentage", "50");
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       const containerEl = progress.shadowRoot.querySelector(".ea-progress");
       expect(
@@ -469,7 +468,7 @@ describe("EaProgress Component", () => {
       progress.setAttribute("percentage", "50");
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       const pathCircle = progress.shadowRoot.querySelector(
         "circle.ea-progress__path"
@@ -489,7 +488,7 @@ describe("EaProgress Component", () => {
       progress.setAttribute("percentage", "0");
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       const containerEl = progress.shadowRoot.querySelector(".ea-progress");
       const cssVar = containerEl.style.getPropertyValue(
@@ -507,7 +506,7 @@ describe("EaProgress Component", () => {
       progress.addEventListener("change", changeHandler);
 
       progress.setAttribute("percentage", "50");
-      await waitForRender();
+      await progress.updateComplete;
 
       expect(changeHandler).toHaveBeenCalled();
     });
@@ -580,7 +579,7 @@ describe("EaProgress Component", () => {
       progress.setAttribute("percentage", "50");
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       const icon = progress.shadowRoot.querySelector(
         "ea-icon.ea-progress__status"
@@ -595,7 +594,7 @@ describe("EaProgress Component", () => {
       progress.setAttribute("percentage", "50");
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       const icon = progress.shadowRoot.querySelector(
         "ea-icon.ea-progress__status"
@@ -610,7 +609,7 @@ describe("EaProgress Component", () => {
       progress.setAttribute("percentage", "50");
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       const icon = progress.shadowRoot.querySelector(
         "ea-icon.ea-progress__status"
@@ -624,7 +623,7 @@ describe("EaProgress Component", () => {
       progress.setAttribute("percentage", "50");
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       const text = progress.shadowRoot.querySelector(
         ".ea-progress__percentage"
@@ -638,7 +637,7 @@ describe("EaProgress Component", () => {
       progress.setAttribute("percentage", "50");
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       const icon = progress.shadowRoot.querySelector('[part="status-icon"]');
       expect(icon).toBeTruthy();
@@ -651,7 +650,7 @@ describe("EaProgress Component", () => {
       progress.setAttribute("percentage", "50");
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       const icon = progress.shadowRoot.querySelector(
         "ea-icon.ea-progress__status"
@@ -673,7 +672,7 @@ describe("EaProgress Component", () => {
       expect(containerEl.classList.contains("ea-progress--success")).toBe(true);
 
       progress.setAttribute("status", "warning");
-      await waitForRender();
+      await progress.updateComplete;
 
       expect(containerEl.classList.contains("ea-progress--success")).toBe(
         false
@@ -690,7 +689,7 @@ describe("EaProgress Component", () => {
       expect(containerEl.classList.contains("ea-progress--success")).toBe(true);
 
       progress.removeAttribute("status");
-      await waitForRender();
+      await progress.updateComplete;
 
       expect(containerEl.classList.contains("ea-progress--success")).toBe(
         false
@@ -727,7 +726,7 @@ describe("EaProgress Component", () => {
       progress.setAttribute("stroke-width", "16px");
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       const containerEl = progress.shadowRoot.querySelector(".ea-progress");
       expect(
@@ -740,7 +739,7 @@ describe("EaProgress Component", () => {
       container.appendChild(progress);
 
       progress.setAttribute("stroke-width", "24px");
-      await waitForRender();
+      await progress.updateComplete;
 
       const containerEl = progress.shadowRoot.querySelector(".ea-progress");
       expect(
@@ -755,7 +754,7 @@ describe("EaProgress Component", () => {
       progress.setAttribute("stroke-width", "invalid");
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       expect(warnSpy).toHaveBeenCalled();
       warnSpy.mockRestore();
@@ -768,7 +767,7 @@ describe("EaProgress Component", () => {
       progress.setAttribute("stroke-width", "1rem");
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       expect(warnSpy).not.toHaveBeenCalled();
       warnSpy.mockRestore();
@@ -781,7 +780,7 @@ describe("EaProgress Component", () => {
       progress.setAttribute("percentage", "50");
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       const pathCircle = progress.shadowRoot.querySelector(
         "circle.ea-progress__path"
@@ -832,7 +831,7 @@ describe("EaProgress Component", () => {
       progress.setAttribute("text-inside", "");
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       const path = progress.shadowRoot.querySelector(".ea-progress__path");
       const text = progress.shadowRoot.querySelector(
@@ -869,12 +868,12 @@ describe("EaProgress Component", () => {
       expect(wrapper.contains(text)).toBe(true);
 
       progress.setAttribute("text-inside", "");
-      await waitForRender();
+      await progress.updateComplete;
 
       expect(path.contains(text)).toBe(true);
 
       progress.removeAttribute("text-inside");
-      await waitForRender();
+      await progress.updateComplete;
 
       expect(wrapper.contains(text)).toBe(true);
     });
@@ -934,7 +933,7 @@ describe("EaProgress Component", () => {
       expect(containerEl.classList.contains("is-indeterminate")).toBe(true);
 
       progress.removeAttribute("indeterminate");
-      await waitForRender();
+      await progress.updateComplete;
 
       expect(containerEl.classList.contains("is-indeterminate")).toBe(false);
     });
@@ -961,7 +960,7 @@ describe("EaProgress Component", () => {
       progress.setAttribute("duration", "5");
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       const containerEl = progress.shadowRoot.querySelector(".ea-progress");
       expect(
@@ -974,7 +973,7 @@ describe("EaProgress Component", () => {
       container.appendChild(progress);
 
       progress.setAttribute("duration", "10");
-      await waitForRender();
+      await progress.updateComplete;
 
       const containerEl = progress.shadowRoot.querySelector(".ea-progress");
       expect(
@@ -987,7 +986,7 @@ describe("EaProgress Component", () => {
       progress.setAttribute("duration", "2.5");
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       const containerEl = progress.shadowRoot.querySelector(".ea-progress");
       expect(
@@ -1041,12 +1040,12 @@ describe("EaProgress Component", () => {
       );
 
       progress.setAttribute("striped", "");
-      await waitForRender();
+      await progress.updateComplete;
 
       expect(containerEl.classList.contains("ea-progress--striped")).toBe(true);
 
       progress.removeAttribute("striped");
-      await waitForRender();
+      await progress.updateComplete;
 
       expect(containerEl.classList.contains("ea-progress--striped")).toBe(
         false
@@ -1110,7 +1109,7 @@ describe("EaProgress Component", () => {
       progress.setAttribute("size", "200px");
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       const containerEl = progress.shadowRoot.querySelector(".ea-progress");
       expect(containerEl.style.getPropertyValue("--ea-progress-size")).toBe(
@@ -1124,7 +1123,7 @@ describe("EaProgress Component", () => {
       progress.setAttribute("size", "180px");
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       const containerEl = progress.shadowRoot.querySelector(".ea-progress");
       expect(containerEl.style.getPropertyValue("--ea-progress-size")).toBe(
@@ -1137,7 +1136,7 @@ describe("EaProgress Component", () => {
       progress.setAttribute("size", "200px");
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       const containerEl = progress.shadowRoot.querySelector(".ea-progress");
       expect(containerEl.style.getPropertyValue("--ea-progress-size")).toBe("");
@@ -1149,7 +1148,7 @@ describe("EaProgress Component", () => {
       container.appendChild(progress);
 
       progress.setAttribute("size", "250px");
-      await waitForRender();
+      await progress.updateComplete;
 
       const containerEl = progress.shadowRoot.querySelector(".ea-progress");
       expect(containerEl.style.getPropertyValue("--ea-progress-size")).toBe(
@@ -1199,12 +1198,12 @@ describe("EaProgress Component", () => {
       expect(containerEl.classList.contains("is-show-text")).toBe(true);
 
       progress.setAttribute("show-text", "false");
-      await waitForRender();
+      await progress.updateComplete;
 
       expect(containerEl.classList.contains("is-show-text")).toBe(false);
 
       progress.showText = true;
-      await waitForRender();
+      await progress.updateComplete;
 
       expect(containerEl.classList.contains("is-show-text")).toBe(true);
     });
@@ -1262,7 +1261,7 @@ describe("EaProgress Component", () => {
       ];
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       const pathEl = progress.shadowRoot.querySelector(".ea-progress__path");
       expect(pathEl.style.getPropertyValue("--ea-progress-path-color")).toBe(
@@ -1279,7 +1278,7 @@ describe("EaProgress Component", () => {
       ];
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       const pathEl = progress.shadowRoot.querySelector(".ea-progress__path");
       expect(pathEl.style.getPropertyValue("--ea-progress-path-color")).toBe(
@@ -1296,7 +1295,7 @@ describe("EaProgress Component", () => {
       ];
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       const pathEl = progress.shadowRoot.querySelector(".ea-progress__path");
       expect(pathEl.style.getPropertyValue("--ea-progress-path-color")).toBe(
@@ -1313,7 +1312,7 @@ describe("EaProgress Component", () => {
       ];
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       const pathEl = progress.shadowRoot.querySelector(".ea-progress__path");
       expect(pathEl.style.getPropertyValue("--ea-progress-path-color")).toBe(
@@ -1346,7 +1345,7 @@ describe("EaProgress Component", () => {
       progress.color = colorFn;
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       expect(colorFn).toHaveBeenCalledWith(50);
       const pathEl = progress.shadowRoot.querySelector(".ea-progress__path");
@@ -1359,7 +1358,7 @@ describe("EaProgress Component", () => {
       const progress = document.createElement("ea-progress");
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       const pathEl = progress.shadowRoot.querySelector(".ea-progress__path");
       expect(pathEl.style.getPropertyValue("--ea-progress-path-color")).toBe(
@@ -1372,10 +1371,10 @@ describe("EaProgress Component", () => {
       progress.setAttribute("percentage", "50");
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       progress.color = undefined;
-      await waitForRender();
+      await progress.updateComplete;
 
       const pathEl = progress.shadowRoot.querySelector(".ea-progress__path");
       expect(pathEl.style.getPropertyValue("--ea-progress-path-color")).toBe(
@@ -1395,12 +1394,12 @@ describe("EaProgress Component", () => {
       progress.color = colorFn;
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       expect(colorFn).toHaveBeenCalledWith(20);
 
       progress.setAttribute("percentage", "80");
-      await waitForRender();
+      await progress.updateComplete;
 
       expect(colorFn).toHaveBeenCalledWith(80);
     });
@@ -1458,7 +1457,7 @@ describe("EaProgress Component", () => {
       progress.addEventListener("change", changeHandler);
 
       progress.setAttribute("percentage", "50");
-      await waitForRender();
+      await progress.updateComplete;
 
       expect(changeHandler).toHaveBeenCalled();
     });
@@ -1474,7 +1473,7 @@ describe("EaProgress Component", () => {
       });
 
       progress.setAttribute("percentage", "75");
-      await waitForRender();
+      await progress.updateComplete;
 
       expect(eventDetail).toBeTruthy();
       expect(eventDetail.percentage).toBe(75);
@@ -1485,16 +1484,16 @@ describe("EaProgress Component", () => {
       progress.setAttribute("percentage", "0");
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       const changeHandler = vi.fn();
       progress.addEventListener("change", changeHandler);
 
       progress.setAttribute("percentage", "25");
-      await waitForRender();
+      await progress.updateComplete;
 
       progress.setAttribute("percentage", "50");
-      await waitForRender();
+      await progress.updateComplete;
 
       expect(changeHandler).toHaveBeenCalledTimes(2);
     });
@@ -1508,7 +1507,7 @@ describe("EaProgress Component", () => {
       container.addEventListener("change", changeHandler);
 
       progress.setAttribute("percentage", "50");
-      await waitForRender();
+      await progress.updateComplete;
 
       expect(changeHandler).toHaveBeenCalled();
     });
@@ -1522,7 +1521,7 @@ describe("EaProgress Component", () => {
       progress.addEventListener("change", changeHandler);
 
       progress.setAttribute("percentage", "-10");
-      await waitForRender();
+      await progress.updateComplete;
 
       expect(changeHandler).toHaveBeenCalled();
     });
@@ -1536,7 +1535,7 @@ describe("EaProgress Component", () => {
       progress.addEventListener("change", changeHandler);
 
       progress.setAttribute("percentage", "150");
-      await waitForRender();
+      await progress.updateComplete;
 
       expect(changeHandler).toHaveBeenCalled();
     });
@@ -1705,7 +1704,7 @@ describe("EaProgress Component", () => {
       expect(progress.variant).toBe("line");
 
       progress.setAttribute("variant", "circle");
-      await waitForRender();
+      await progress.updateComplete;
 
       expect(progress.variant).toBe("circle");
       expect(progress.shadowRoot.querySelector("svg")).toBeTruthy();
@@ -1716,7 +1715,7 @@ describe("EaProgress Component", () => {
       progress.setAttribute("color", "#ff0000");
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       expect(progress.color).toBe("#ff0000");
     });
@@ -1751,7 +1750,7 @@ describe("EaProgress Component", () => {
       progress.setAttribute("percentage", "50");
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       const icon = progress.shadowRoot.querySelector(
         "ea-icon.ea-progress__status"
@@ -1843,7 +1842,7 @@ describe("EaProgress Component", () => {
       expect(progress.percentage).toBe(60);
 
       progress.setAttribute("variant", "circle");
-      await waitForRender();
+      await progress.updateComplete;
 
       expect(progress.variant).toBe("circle");
       expect(progress.percentage).toBe(60);
@@ -1857,7 +1856,7 @@ describe("EaProgress Component", () => {
       expect(progress.shadowRoot.querySelector("svg")).toBeTruthy();
 
       progress.setAttribute("variant", "line");
-      await waitForRender();
+      await progress.updateComplete;
 
       expect(progress.variant).toBe("line");
       expect(
@@ -1873,18 +1872,18 @@ describe("EaProgress Component", () => {
       const containerEl = progress.shadowRoot.querySelector(".ea-progress");
 
       progress.setAttribute("status", "success");
-      await waitForRender();
+      await progress.updateComplete;
       expect(containerEl.classList.contains("ea-progress--success")).toBe(true);
 
       progress.setAttribute("status", "warning");
-      await waitForRender();
+      await progress.updateComplete;
       expect(containerEl.classList.contains("ea-progress--success")).toBe(
         false
       );
       expect(containerEl.classList.contains("ea-progress--warning")).toBe(true);
 
       progress.setAttribute("status", "exception");
-      await waitForRender();
+      await progress.updateComplete;
       expect(containerEl.classList.contains("ea-progress--warning")).toBe(
         false
       );
@@ -1905,12 +1904,12 @@ describe("EaProgress Component", () => {
       progress.color = colorFn;
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       expect(colorFn).toHaveBeenCalledWith(20);
 
       progress.setAttribute("percentage", "80");
-      await waitForRender();
+      await progress.updateComplete;
 
       expect(colorFn).toHaveBeenCalledWith(80);
     });
@@ -1954,7 +1953,7 @@ describe("EaProgress Component", () => {
       progress.setAttribute("percentage", "50");
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       const pathCircle = progress.shadowRoot.querySelector(
         "circle.ea-progress__path"
@@ -1975,7 +1974,7 @@ describe("EaProgress Component", () => {
       expect(progress.shadowRoot.querySelector("mask#myMask")).toBeTruthy();
 
       progress.setAttribute("variant", "line");
-      await waitForRender();
+      await progress.updateComplete;
 
       expect(progress.shadowRoot.querySelector("svg")).toBeFalsy();
       expect(progress.shadowRoot.querySelector("mask#myMask")).toBeFalsy();
@@ -1995,17 +1994,17 @@ describe("EaProgress Component", () => {
       ).toBeTruthy();
 
       progress.setAttribute("variant", "circle");
-      await waitForRender();
+      await progress.updateComplete;
       expect(progress.variant).toBe("circle");
       expect(progress.shadowRoot.querySelector("svg")).toBeTruthy();
 
       progress.setAttribute("variant", "dashboard");
-      await waitForRender();
+      await progress.updateComplete;
       expect(progress.variant).toBe("dashboard");
       expect(progress.shadowRoot.querySelector("mask#myMask")).toBeTruthy();
 
       progress.setAttribute("variant", "line");
-      await waitForRender();
+      await progress.updateComplete;
       expect(progress.variant).toBe("line");
       expect(
         progress.shadowRoot.querySelector("section.ea-progress__track")
@@ -2023,7 +2022,7 @@ describe("EaProgress Component", () => {
       ];
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       const pathEl = progress.shadowRoot.querySelector(".ea-progress__path");
       expect(pathEl.style.getPropertyValue("--ea-progress-path-color")).toBe(
@@ -2031,14 +2030,14 @@ describe("EaProgress Component", () => {
       );
 
       progress.setAttribute("percentage", "50");
-      await waitForRender();
+      await progress.updateComplete;
 
       expect(pathEl.style.getPropertyValue("--ea-progress-path-color")).toBe(
         "#5cb87a"
       );
 
       progress.setAttribute("percentage", "90");
-      await waitForRender();
+      await progress.updateComplete;
 
       expect(pathEl.style.getPropertyValue("--ea-progress-path-color")).toBe(
         "#f56c6c"
@@ -2063,7 +2062,7 @@ describe("EaProgress Component", () => {
       progress.setAttribute("percentage", "50");
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       const containerEl = progress.shadowRoot.querySelector(".ea-progress");
       expect(containerEl.style.getPropertyValue("--ea-progress-size")).toBe(
@@ -2081,7 +2080,7 @@ describe("EaProgress Component", () => {
       progress.setAttribute("percentage", "50");
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       const icon = progress.shadowRoot.querySelector(
         "ea-icon.ea-progress__status"
@@ -2097,7 +2096,7 @@ describe("EaProgress Component", () => {
       progress.setAttribute("percentage", "50");
       container.appendChild(progress);
 
-      await waitForRender();
+      await progress.updateComplete;
 
       const icon = progress.shadowRoot.querySelector(
         "ea-icon.ea-progress__status"
@@ -2113,7 +2112,7 @@ describe("EaProgress Component", () => {
       el.setAttribute("percentage", "50");
       el.setAttribute("aria-label", "Progress");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });
@@ -2122,7 +2121,7 @@ describe("EaProgress Component", () => {
       it("line 变体宿主元素应该有 role=progressbar", async () => {
         const el = document.createElement("ea-progress");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("role")).toBe("progressbar");
       });
 
@@ -2130,7 +2129,7 @@ describe("EaProgress Component", () => {
         const el = document.createElement("ea-progress");
         el.variant = "circle";
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("role")).toBe("progressbar");
       });
 
@@ -2138,7 +2137,7 @@ describe("EaProgress Component", () => {
         const el = document.createElement("ea-progress");
         el.variant = "dashboard";
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("role")).toBe("meter");
       });
 
@@ -2146,40 +2145,40 @@ describe("EaProgress Component", () => {
         const el = document.createElement("ea-progress");
         el.percentage = 50;
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-valuenow")).toBe("50");
       });
 
       it("宿主元素应该有 aria-valuemin=0", async () => {
         const el = document.createElement("ea-progress");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-valuemin")).toBe("0");
       });
 
       it("宿主元素应该有 aria-valuemax=100", async () => {
         const el = document.createElement("ea-progress");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-valuemax")).toBe("100");
       });
 
       it("percentage 变化时 aria-valuenow 应该同步更新", async () => {
         const el = document.createElement("ea-progress");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         el.percentage = 75;
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-valuenow")).toBe("75");
       });
 
       it("variant 变化时 role 应该同步更新", async () => {
         const el = document.createElement("ea-progress");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("role")).toBe("progressbar");
         el.variant = "dashboard";
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("role")).toBe("meter");
       });
     });

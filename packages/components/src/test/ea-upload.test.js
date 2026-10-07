@@ -7,7 +7,6 @@ global.cancelAnimationFrame = id => {
   clearTimeout(id);
 };
 
-import { waitForRender } from "./utils/waitForRender.js";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 import "../components/ea-upload/index.ts";
@@ -63,7 +62,7 @@ describe("EaUpload Component", () => {
       const upload = document.createElement("ea-upload");
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       const preview = upload.shadowRoot.querySelector("ea-image-preview");
       expect(preview).toBeTruthy();
@@ -76,7 +75,7 @@ describe("EaUpload Component", () => {
       upload.innerHTML = `<ea-button>Click to upload</ea-button>`;
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       const defaultSlot = upload.shadowRoot.querySelector("slot:not([name])");
       expect(defaultSlot).toBeTruthy();
@@ -148,7 +147,7 @@ describe("EaUpload Component", () => {
       upload.setAttribute("multiple", "");
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       expect(upload.multiple).toBe(true);
       const input = upload.shadowRoot.querySelector("input#original");
@@ -167,7 +166,7 @@ describe("EaUpload Component", () => {
       upload.setAttribute("disabled", "");
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       expect(upload.disabled).toBe(true);
       const input = upload.shadowRoot.querySelector("input#original");
@@ -268,7 +267,7 @@ describe("EaUpload Component", () => {
       const upload = document.createElement("ea-upload");
       upload.setAttribute("directory", "");
       container.appendChild(upload);
-      await waitForRender();
+      await upload.updateComplete;
 
       expect(upload.directory).toBe(true);
       const input = upload.shadowRoot.querySelector("input#original");
@@ -280,7 +279,7 @@ describe("EaUpload Component", () => {
       upload.setAttribute("accept", "image/*");
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       expect(upload.accept).toBe("image/*");
       const input = upload.shadowRoot.querySelector("input#original");
@@ -326,7 +325,7 @@ describe("EaUpload Component", () => {
       upload.setAttribute("list-type", "picture");
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       const el = upload.shadowRoot.querySelector(".ea-upload");
       expect(el.classList.contains("ea-upload--picture")).toBe(true);
@@ -337,7 +336,7 @@ describe("EaUpload Component", () => {
       upload.setAttribute("list-type", "picture-card");
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       const el = upload.shadowRoot.querySelector(".ea-upload");
       expect(el.classList.contains("ea-upload--picture-card")).toBe(true);
@@ -348,7 +347,7 @@ describe("EaUpload Component", () => {
       upload.setAttribute("drag", "");
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       const el = upload.shadowRoot.querySelector(".ea-upload");
       expect(el.classList.contains("ea-upload--drag")).toBe(true);
@@ -358,13 +357,13 @@ describe("EaUpload Component", () => {
       const upload = document.createElement("ea-upload");
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       const el = upload.shadowRoot.querySelector(".ea-upload");
       expect(el.classList.contains("ea-upload--text")).toBe(true);
 
       upload.setAttribute("list-type", "picture");
-      await waitForRender();
+      await upload.updateComplete;
 
       expect(el.classList.contains("ea-upload--picture")).toBe(true);
       expect(el.classList.contains("ea-upload--text")).toBe(false);
@@ -383,11 +382,11 @@ describe("EaUpload Component", () => {
       const upload = document.createElement("ea-upload");
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       upload.fileList = [{ uid: "1", name: "test.txt", status: "done" }];
 
-      await waitForRender();
+      await upload.updateComplete;
 
       const listEl = upload.shadowRoot.querySelector(".ea-upload__list");
       const li = listEl.querySelector('li[data-uid="1"]');
@@ -399,11 +398,11 @@ describe("EaUpload Component", () => {
       const upload = document.createElement("ea-upload");
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       upload.fileList = [{ uid: "1", name: "test.txt", status: "done" }];
 
-      await waitForRender();
+      await upload.updateComplete;
 
       const fileItem = upload.shadowRoot.querySelector("ea-upload-file-item");
       expect(fileItem).toBeTruthy();
@@ -414,11 +413,11 @@ describe("EaUpload Component", () => {
       upload.setAttribute("auto-upload", "false");
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       upload.fileList = [{ uid: "1", name: "test.txt", status: "pending" }];
 
-      await waitForRender();
+      await upload.updateComplete;
 
       const li = upload.shadowRoot.querySelector('li[data-uid="1"]');
       expect(li.classList.contains("is-pending")).toBe(true);
@@ -426,13 +425,13 @@ describe("EaUpload Component", () => {
       // 重新赋值 fileList 触发 observer
       upload.fileList[0].status = "uploading";
       upload.fileList = [...upload.fileList];
-      await waitForRender();
+      await upload.updateComplete;
 
       expect(li.classList.contains("is-uploading")).toBe(true);
 
       upload.fileList[0].status = "done";
       upload.fileList = [...upload.fileList];
-      await waitForRender();
+      await upload.updateComplete;
 
       expect(li.classList.contains("is-done")).toBe(true);
     });
@@ -441,7 +440,7 @@ describe("EaUpload Component", () => {
       const upload = document.createElement("ea-upload");
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       upload.fileList = [{ name: "test.txt", status: "done" }];
 
@@ -454,7 +453,7 @@ describe("EaUpload Component", () => {
       const upload = document.createElement("ea-upload");
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       upload.defaultFileList = [{ name: "test.txt", status: "done" }];
 
@@ -467,7 +466,7 @@ describe("EaUpload Component", () => {
       const upload = document.createElement("ea-upload");
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       upload.defaultFileList = [{ name: "test.txt" }];
 
@@ -508,7 +507,7 @@ describe("EaUpload Component", () => {
       const upload = document.createElement("ea-upload");
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       upload.fileList = [{ uid: "1", name: "test.txt", status: "done" }];
 
@@ -522,17 +521,17 @@ describe("EaUpload Component", () => {
       const upload = document.createElement("ea-upload");
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       const handler = vi.fn();
       upload.addEventListener("change", handler);
 
       upload.fileList = [{ uid: "1", name: "test.txt", status: "done" }];
 
-      await waitForRender();
+      await upload.updateComplete;
 
       upload.clearFiles();
-      await waitForRender();
+      await upload.updateComplete;
 
       expect(handler).toHaveBeenCalled();
     });
@@ -541,7 +540,7 @@ describe("EaUpload Component", () => {
       const upload = document.createElement("ea-upload");
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       const mockController = {
         abort: vi.fn(),
@@ -558,7 +557,7 @@ describe("EaUpload Component", () => {
         },
       ];
 
-      await waitForRender();
+      await upload.updateComplete;
 
       upload.abort();
 
@@ -569,7 +568,7 @@ describe("EaUpload Component", () => {
       const upload = document.createElement("ea-upload");
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       const mockController1 = {
         abort: vi.fn(),
@@ -597,7 +596,7 @@ describe("EaUpload Component", () => {
         },
       ];
 
-      await waitForRender();
+      await upload.updateComplete;
 
       upload.abort("1");
 
@@ -609,7 +608,7 @@ describe("EaUpload Component", () => {
       const upload = document.createElement("ea-upload");
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       const input = upload.shadowRoot.querySelector("input#original");
       const clickHandler = vi.fn();
@@ -625,7 +624,7 @@ describe("EaUpload Component", () => {
       upload.setAttribute("disabled", "");
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       const input = upload.shadowRoot.querySelector("input#original");
       const clickHandler = vi.fn();
@@ -642,7 +641,7 @@ describe("EaUpload Component", () => {
       const upload = document.createElement("ea-upload");
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       const handler = vi.fn();
       upload.addEventListener("change", handler);
@@ -657,7 +656,7 @@ describe("EaUpload Component", () => {
           composed: true,
         })
       );
-      await waitForRender();
+      await upload.updateComplete;
 
       expect(handler).toHaveBeenCalled();
     });
@@ -666,14 +665,14 @@ describe("EaUpload Component", () => {
       const upload = document.createElement("ea-upload");
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       const handler = vi.fn();
       upload.addEventListener("ea-upload-remove", handler);
 
       upload.fileList = [{ uid: "1", name: "test.txt", status: "done" }];
 
-      await waitForRender();
+      await upload.updateComplete;
 
       // 模拟文件项删除事件
       const fileItem = upload.shadowRoot.querySelector("ea-upload-file-item");
@@ -685,7 +684,7 @@ describe("EaUpload Component", () => {
         })
       );
 
-      await waitForRender();
+      await upload.updateComplete;
 
       expect(handler).toHaveBeenCalled();
     });
@@ -694,7 +693,7 @@ describe("EaUpload Component", () => {
       const upload = document.createElement("ea-upload");
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       const handler = vi.fn();
       upload.addEventListener("ea-upload-success", handler);
@@ -722,7 +721,7 @@ describe("EaUpload Component", () => {
       upload.onChange = onChange;
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       upload.fileList = [{ uid: "1", name: "test.txt", status: "done" }];
 
@@ -738,11 +737,11 @@ describe("EaUpload Component", () => {
       upload.onRemove = onRemove;
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       upload.fileList = [{ uid: "1", name: "test.txt", status: "done" }];
 
-      await waitForRender();
+      await upload.updateComplete;
 
       // 模拟文件删除
       const fileItem = upload.shadowRoot.querySelector("ea-upload-file-item");
@@ -754,7 +753,7 @@ describe("EaUpload Component", () => {
         })
       );
 
-      await waitForRender();
+      await upload.updateComplete;
 
       expect(onRemove).toHaveBeenCalled();
     });
@@ -764,7 +763,7 @@ describe("EaUpload Component", () => {
       upload.beforeRemove = () => false;
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       upload.fileList = [{ uid: "1", name: "test.txt", status: "done" }];
 
@@ -788,11 +787,11 @@ describe("EaUpload Component", () => {
       upload.beforeRemove = () => Promise.resolve(false);
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       upload.fileList = [{ uid: "1", name: "test.txt", status: "done" }];
 
-      await waitForRender();
+      await upload.updateComplete;
 
       // 模拟文件删除
       const fileItem = upload.shadowRoot.querySelector("ea-upload-file-item");
@@ -817,11 +816,11 @@ describe("EaUpload Component", () => {
       upload.onExceed = onExceed;
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       upload.fileList = [{ uid: "1", name: "test.txt", status: "done" }];
 
-      await waitForRender();
+      await upload.updateComplete;
 
       // 尝试添加超过限制的文件 - 直接通过 Object.defineProperty 来模拟 input.files
       const file = new File(["content"], "test2.txt", { type: "text/plain" });
@@ -832,7 +831,7 @@ describe("EaUpload Component", () => {
       });
       input.dispatchEvent(new Event("change", { bubbles: true }));
 
-      await waitForRender();
+      await upload.updateComplete;
 
       // 由于已有1个文件，limit=1，再添加会触发 onExceed
       expect(onExceed).toHaveBeenCalled();
@@ -844,7 +843,7 @@ describe("EaUpload Component", () => {
       const upload = document.createElement("ea-upload");
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       const contentEl = upload.shadowRoot.querySelector(".ea-upload__content");
       const dragoverHandler = vi.fn();
@@ -866,7 +865,7 @@ describe("EaUpload Component", () => {
       upload.setAttribute("drag", "");
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       const contentEl = upload.shadowRoot.querySelector(".ea-upload__content");
       const event = new DragEvent("dragover", {
@@ -883,7 +882,7 @@ describe("EaUpload Component", () => {
       upload.setAttribute("drag", "");
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       const contentEl = upload.shadowRoot.querySelector(".ea-upload__content");
       const event = new DragEvent("dragenter", {
@@ -901,7 +900,7 @@ describe("EaUpload Component", () => {
       upload.setAttribute("drag", "");
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       const contentEl = upload.shadowRoot.querySelector(".ea-upload__content");
 
@@ -925,7 +924,7 @@ describe("EaUpload Component", () => {
       upload.setAttribute("auto-upload", "false");
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       const file = new File(["content"], "test.txt", { type: "text/plain" });
       const dt = new DataTransfer();
@@ -950,7 +949,7 @@ describe("EaUpload Component", () => {
       upload.setAttribute("auto-upload", "false");
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       const file = new File(["content"], "test.txt", { type: "text/plain" });
       const input = upload.shadowRoot.querySelector("input#original");
@@ -971,7 +970,7 @@ describe("EaUpload Component", () => {
       upload.setAttribute("auto-upload", "false");
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       const input = upload.shadowRoot.querySelector("input#original");
       Object.defineProperty(input, "files", {
@@ -992,7 +991,7 @@ describe("EaUpload Component", () => {
       upload.setAttribute("auto-upload", "false");
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       const file = new File(["content"], "test.txt", { type: "text/plain" });
       const input = upload.shadowRoot.querySelector("input#original");
@@ -1013,7 +1012,7 @@ describe("EaUpload Component", () => {
       const upload = document.createElement("ea-upload");
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       expect(() => upload.submit()).not.toThrow();
     });
@@ -1023,7 +1022,7 @@ describe("EaUpload Component", () => {
       upload.beforeUpload = () => false;
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       const httpRequest = vi.fn().mockReturnValue({
         submit: vi.fn(),
@@ -1041,7 +1040,7 @@ describe("EaUpload Component", () => {
         },
       ];
 
-      await waitForRender();
+      await upload.updateComplete;
 
       await upload.submit();
 
@@ -1053,7 +1052,7 @@ describe("EaUpload Component", () => {
       upload.beforeUpload = () => Promise.resolve(false);
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       const httpRequest = vi.fn().mockReturnValue({
         submit: vi.fn(),
@@ -1071,7 +1070,7 @@ describe("EaUpload Component", () => {
         },
       ];
 
-      await waitForRender();
+      await upload.updateComplete;
 
       await upload.submit();
 
@@ -1090,7 +1089,7 @@ describe("EaUpload Component", () => {
       });
       upload.httpRequest = httpRequest;
 
-      await waitForRender();
+      await upload.updateComplete;
 
       upload.fileList = [
         {
@@ -1101,7 +1100,7 @@ describe("EaUpload Component", () => {
         },
       ];
 
-      await waitForRender();
+      await upload.updateComplete;
 
       // autoUpload 为 true 时，fileList 变化会触发 submit
       expect(httpRequest).toHaveBeenCalled();
@@ -1114,7 +1113,7 @@ describe("EaUpload Component", () => {
       upload.setAttribute("auto-upload", "false");
       upload.setAttribute("action", "https://example.com/upload");
       container.appendChild(upload);
-      await waitForRender();
+      await upload.updateComplete;
 
       upload.fileList = [
         {
@@ -1124,7 +1123,7 @@ describe("EaUpload Component", () => {
           raw: new File(["content"], "a.txt"),
         },
       ];
-      await waitForRender();
+      await upload.updateComplete;
 
       const captured = { options: null };
       upload.httpRequest = vi.fn(options => {
@@ -1168,7 +1167,14 @@ describe("EaUpload Component", () => {
 
       const file = upload.fileList[0];
       options.onProgress({ loaded: 30, total: 60 }, file, upload.fileList);
-      await waitForRender();
+
+      await vi.waitFor(() => {
+        const li = upload.shadowRoot.querySelector('li[data-uid="1"]');
+        const progressEl = li
+          .querySelector("ea-upload-file-item")
+          .shadowRoot.querySelector("ea-progress");
+        expect(progressEl.getAttribute("percentage")).toBe("50");
+      });
 
       expect(onProgress).toHaveBeenCalled();
       expect(handler).toHaveBeenCalled();
@@ -1178,7 +1184,6 @@ describe("EaUpload Component", () => {
       const progressEl = li
         .querySelector("ea-upload-file-item")
         .shadowRoot.querySelector("ea-progress");
-      expect(progressEl.getAttribute("percentage")).toBe("50");
 
       options.onProgress({ loaded: 60, total: 60 }, file, upload.fileList);
       expect(file.percent).toBe(100);
@@ -1226,10 +1231,10 @@ describe("EaUpload Component", () => {
       upload.setAttribute("auto-upload", "false");
       upload.beforeRemove = () => Promise.reject(new Error("no"));
       container.appendChild(upload);
-      await waitForRender();
+      await upload.updateComplete;
 
       upload.fileList = [{ uid: "1", name: "a.txt", status: "done" }];
-      await waitForRender();
+      await upload.updateComplete;
 
       const fileItem = upload.shadowRoot.querySelector("ea-upload-file-item");
       fileItem.dispatchEvent(
@@ -1239,7 +1244,7 @@ describe("EaUpload Component", () => {
           composed: true,
         })
       );
-      await waitForRender();
+      await upload.updateComplete;
 
       expect(upload.fileList.length).toBe(1);
     });
@@ -1248,7 +1253,7 @@ describe("EaUpload Component", () => {
       const upload = document.createElement("ea-upload");
       upload.setAttribute("auto-upload", "false");
       container.appendChild(upload);
-      await waitForRender();
+      await upload.updateComplete;
 
       const controller = { abort: vi.fn() };
       upload.fileList = [
@@ -1260,7 +1265,7 @@ describe("EaUpload Component", () => {
           controller,
         },
       ];
-      await waitForRender();
+      await upload.updateComplete;
 
       const fileItem = upload.shadowRoot.querySelector("ea-upload-file-item");
       fileItem.dispatchEvent(
@@ -1270,7 +1275,7 @@ describe("EaUpload Component", () => {
           composed: true,
         })
       );
-      await waitForRender();
+      await upload.updateComplete;
 
       expect(controller.abort).toHaveBeenCalled();
       expect(upload.fileList.length).toBe(0);
@@ -1280,13 +1285,13 @@ describe("EaUpload Component", () => {
       const upload = document.createElement("ea-upload");
       upload.setAttribute("auto-upload", "false");
       container.appendChild(upload);
-      await waitForRender();
+      await upload.updateComplete;
 
       upload.fileList = [
         { uid: "1", name: "a.png", status: "done", url: "blob:a" },
         { uid: "2", name: "b.png", status: "done", url: "blob:b" },
       ];
-      await waitForRender();
+      await upload.updateComplete;
 
       const previewEl = upload.shadowRoot.querySelector(".ea-upload__preview");
       const fileItem = upload.shadowRoot.querySelector("ea-upload-file-item");
@@ -1297,7 +1302,7 @@ describe("EaUpload Component", () => {
           composed: true,
         })
       );
-      await waitForRender();
+      await upload.updateComplete;
 
       expect(previewEl.visible).toBe(true);
       expect(previewEl.urlList).toEqual(["blob:a", "blob:b"]);
@@ -1311,7 +1316,7 @@ describe("EaUpload Component", () => {
       upload.setAttribute("action", "https://example.com/upload");
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       const results = await runAxe(upload, {
         rules: {
@@ -1327,7 +1332,7 @@ describe("EaUpload Component", () => {
       upload.setAttribute("disabled", "");
       container.appendChild(upload);
 
-      await waitForRender();
+      await upload.updateComplete;
 
       const results = await runAxe(upload, {
         rules: {

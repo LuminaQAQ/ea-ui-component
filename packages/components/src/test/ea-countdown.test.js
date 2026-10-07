@@ -268,7 +268,7 @@ describe("EaCountdown Component", () => {
       countdown.setAttribute("value", String(futureTime1));
       container.appendChild(countdown);
 
-      await waitForRender();
+      await countdown.updateComplete;
 
       const futureTime2 = Date.now() + 120000;
       countdown.setAttribute("value", String(futureTime2));
@@ -299,7 +299,7 @@ describe("EaCountdown Component", () => {
       countdown.setAttribute("value", String(Date.now() + 3600000));
       container.appendChild(countdown);
 
-      await waitForRender();
+      await countdown.updateComplete;
 
       countdown.setAttribute("format", "mm:ss");
 
@@ -327,7 +327,7 @@ describe("EaCountdown Component", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
 
-      await waitForRender();
+      await countdown.updateComplete;
 
       countdown.setAttribute("refresh-interval", "2000");
 
@@ -356,7 +356,7 @@ describe("EaCountdown Component", () => {
       countdown.setAttribute("heading", "Start to grab");
       container.appendChild(countdown);
 
-      await waitForRender();
+      await countdown.updateComplete;
 
       const header = countdown.shadowRoot.querySelector(
         ".ea-countdown__header"
@@ -369,10 +369,10 @@ describe("EaCountdown Component", () => {
       countdown.setAttribute("heading", "Old Title");
       container.appendChild(countdown);
 
-      await waitForRender();
+      await countdown.updateComplete;
 
       countdown.setAttribute("heading", "New Title");
-      await waitForRender();
+      await countdown.updateComplete;
 
       const header = countdown.shadowRoot.querySelector(
         ".ea-countdown__header"
@@ -405,7 +405,7 @@ describe("EaCountdown Component", () => {
       countdown.setAttribute("value", String(Date.now() + 60000));
       container.appendChild(countdown);
 
-      await waitForRender();
+      await countdown.updateComplete;
 
       expect(typeof countdown.displayValue).toBe("string");
       expect(countdown.displayValue.length).toBeGreaterThan(0);
@@ -416,7 +416,7 @@ describe("EaCountdown Component", () => {
       countdown.setAttribute("value", String(Date.now() + 3600000));
       container.appendChild(countdown);
 
-      await waitForRender();
+      await countdown.updateComplete;
 
       const numberEl = countdown.shadowRoot.querySelector(
         ".ea-countdown__number"
@@ -508,7 +508,7 @@ describe("EaCountdown Component", () => {
       countdown.setAttribute("value", String(Date.now() + 3600000));
       container.appendChild(countdown);
 
-      await waitForRender();
+      await countdown.updateComplete;
 
       const numberEl = countdown.shadowRoot.querySelector(
         ".ea-countdown__number"
@@ -521,7 +521,7 @@ describe("EaCountdown Component", () => {
       countdown.setAttribute("value", String(Date.now() - 1000));
       container.appendChild(countdown);
 
-      await waitForRender();
+      await countdown.updateComplete;
 
       const numberEl = countdown.shadowRoot.querySelector(
         ".ea-countdown__number"
@@ -533,7 +533,7 @@ describe("EaCountdown Component", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
 
-      await waitForRender();
+      await countdown.updateComplete;
 
       const numberEl = countdown.shadowRoot.querySelector(
         ".ea-countdown__number"
@@ -547,7 +547,7 @@ describe("EaCountdown Component", () => {
       countdown.setAttribute("format", "DD [days] HH:mm:ss");
       container.appendChild(countdown);
 
-      await waitForRender();
+      await countdown.updateComplete;
 
       const numberEl = countdown.shadowRoot.querySelector(
         ".ea-countdown__number"
@@ -562,7 +562,7 @@ describe("EaCountdown Component", () => {
       countdown.setAttribute("format", "mm:ss");
       container.appendChild(countdown);
 
-      await waitForRender();
+      await countdown.updateComplete;
 
       const numberEl = countdown.shadowRoot.querySelector(
         ".ea-countdown__number"
@@ -576,7 +576,7 @@ describe("EaCountdown Component", () => {
       countdown.setAttribute("format", "HH:mm");
       container.appendChild(countdown);
 
-      await waitForRender();
+      await countdown.updateComplete;
 
       const numberEl = countdown.shadowRoot.querySelector(
         ".ea-countdown__number"
@@ -591,7 +591,7 @@ describe("EaCountdown Component", () => {
       countdown.setAttribute("value", String(Date.now() + 60000));
       container.appendChild(countdown);
 
-      await waitForRender();
+      await countdown.updateComplete;
 
       const changeHandler = vi.fn();
       countdown.addEventListener("ea-change", changeHandler);
@@ -606,7 +606,7 @@ describe("EaCountdown Component", () => {
       countdown.setAttribute("value", String(Date.now() + 60000));
       container.appendChild(countdown);
 
-      await waitForRender();
+      await countdown.updateComplete;
 
       const changeHandler = vi.fn();
       countdown.addEventListener("ea-change", changeHandler);
@@ -625,7 +625,7 @@ describe("EaCountdown Component", () => {
       countdown.setAttribute("value", String(Date.now() + 60000));
       container.appendChild(countdown);
 
-      await waitForRender();
+      await countdown.updateComplete;
 
       const changeHandler = vi.fn();
       countdown.addEventListener("ea-change", changeHandler);
@@ -643,7 +643,7 @@ describe("EaCountdown Component", () => {
       countdown.setAttribute("value", String(Date.now() + 60000));
       container.appendChild(countdown);
 
-      await waitForRender();
+      await countdown.updateComplete;
 
       const changeHandler = vi.fn();
       countdown.addEventListener("ea-change", changeHandler);
@@ -661,7 +661,7 @@ describe("EaCountdown Component", () => {
       countdown.setAttribute("value", String(Date.now() + 60000));
       container.appendChild(countdown);
 
-      await waitForRender();
+      await countdown.updateComplete;
 
       const changeHandler = vi.fn();
       countdown.addEventListener("ea-change", changeHandler);
@@ -753,7 +753,7 @@ describe("EaCountdown Component", () => {
       countdown.setAttribute("value", String(Date.now() + 60000));
       container.appendChild(countdown);
 
-      await waitForRender();
+      await countdown.updateComplete;
 
       const changeHandler = vi.fn();
       countdown.addEventListener("ea-change", changeHandler);
@@ -769,16 +769,16 @@ describe("EaCountdown Component", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
 
-      await waitForRender();
+      await countdown.updateComplete;
 
       countdown.setAttribute("value", String(Date.now() + 60000));
-      await waitForRender();
+      await countdown.updateComplete;
 
       countdown.setAttribute("value", String(Date.now() + 120000));
-      await waitForRender();
+      await countdown.updateComplete;
 
       countdown.setAttribute("value", String(Date.now() + 180000));
-      await waitForRender();
+      await countdown.updateComplete;
 
       const changeHandler = vi.fn();
       countdown.addEventListener("ea-change", changeHandler);
@@ -805,11 +805,11 @@ describe("EaCountdown Component", () => {
       countdown.setAttribute("value", String(Date.now() + 60000));
       container.appendChild(countdown);
 
-      await waitForRender();
+      await countdown.updateComplete;
 
       countdown.remove();
 
-      await waitForRender();
+      await countdown.updateComplete;
 
       expect(countdown.isConnected).toBe(false);
     });
@@ -820,13 +820,13 @@ describe("EaCountdown Component", () => {
       countdown.setAttribute("value", String(Date.now() + 60000));
       container.appendChild(countdown);
 
-      await waitForRender();
+      await countdown.updateComplete;
 
       countdown.remove();
-      await waitForRender();
+      await countdown.updateComplete;
 
       container.appendChild(countdown);
-      await waitForRender();
+      await countdown.updateComplete;
 
       expect(countdown.isConnected).toBe(true);
       expect(countdown.heading).toBe("Reconnect Test");
@@ -840,7 +840,7 @@ describe("EaCountdown Component", () => {
       countdown.setAttribute("value", String(Date.now() + 3600000));
       container.appendChild(countdown);
 
-      await waitForRender();
+      await countdown.updateComplete;
 
       expect(countdown.heading).toBe("Remaining Time");
       const header = countdown.shadowRoot.querySelector(
@@ -859,10 +859,10 @@ describe("EaCountdown Component", () => {
       countdown.setAttribute("heading", "Test");
       container.appendChild(countdown);
 
-      await waitForRender();
+      await countdown.updateComplete;
 
       countdown.removeAttribute("heading");
-      await waitForRender();
+      await countdown.updateComplete;
 
       expect(countdown.heading).toBe("");
     });
@@ -872,10 +872,10 @@ describe("EaCountdown Component", () => {
       countdown.setAttribute("value", String(Date.now() + 60000));
       container.appendChild(countdown);
 
-      await waitForRender();
+      await countdown.updateComplete;
 
       countdown.removeAttribute("value");
-      await waitForRender();
+      await countdown.updateComplete;
 
       expect(countdown.value).toBe("");
     });
@@ -887,7 +887,7 @@ describe("EaCountdown Component", () => {
       countdown.setAttribute("value", String(Date.now()));
       container.appendChild(countdown);
 
-      await waitForRender();
+      await countdown.updateComplete;
 
       const numberEl = countdown.shadowRoot.querySelector(
         ".ea-countdown__number"
@@ -900,7 +900,7 @@ describe("EaCountdown Component", () => {
       countdown.setAttribute("value", String(Date.now() - 86400000));
       container.appendChild(countdown);
 
-      await waitForRender();
+      await countdown.updateComplete;
 
       const numberEl = countdown.shadowRoot.querySelector(
         ".ea-countdown__number"
@@ -921,7 +921,7 @@ describe("EaCountdown Component", () => {
       countdown.innerHTML = `<div slot="title">Slot Title</div>`;
       container.appendChild(countdown);
 
-      await waitForRender();
+      await countdown.updateComplete;
 
       const headerBefore = countdown.shadowRoot.querySelector(
         ".ea-countdown__header"
@@ -929,7 +929,7 @@ describe("EaCountdown Component", () => {
       expect(headerBefore.querySelector('slot[name="title"]')).toBeTruthy();
 
       countdown.setAttribute("heading", "Attribute Title");
-      await waitForRender();
+      await countdown.updateComplete;
 
       expect(countdown.heading).toBe("Attribute Title");
       const headerAfter = countdown.shadowRoot.querySelector(
@@ -951,7 +951,7 @@ describe("EaCountdown Component", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-countdown");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });

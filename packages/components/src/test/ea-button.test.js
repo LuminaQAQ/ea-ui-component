@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { waitForRender } from "./utils/waitForRender";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-button/index";
@@ -124,11 +123,11 @@ describe("EaButton Component", () => {
       button.setAttribute("variant", "normal");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
       expect(button.variant).toBe("normal");
 
       button.setAttribute("variant", "primary");
-      await waitForRender();
+      await button.updateComplete;
 
       expect(button.variant).toBe("primary");
     });
@@ -138,13 +137,13 @@ describe("EaButton Component", () => {
       button.setAttribute("variant", "primary");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.classList.contains("ea-button--primary")).toBe(true);
 
       button.setAttribute("variant", "success");
-      await waitForRender();
+      await button.updateComplete;
 
       expect(containerEl.classList.contains("ea-button--success")).toBe(true);
       expect(containerEl.classList.contains("ea-button--primary")).toBe(false);
@@ -155,7 +154,7 @@ describe("EaButton Component", () => {
       button.setAttribute("variant", "info");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.classList.contains("ea-button--info")).toBe(true);
@@ -196,13 +195,13 @@ describe("EaButton Component", () => {
       button.setAttribute("size", "small");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.classList.contains("ea-button--small")).toBe(true);
 
       button.setAttribute("size", "large");
-      await waitForRender();
+      await button.updateComplete;
 
       expect(containerEl.classList.contains("ea-button--large")).toBe(true);
       expect(containerEl.classList.contains("ea-button--small")).toBe(false);
@@ -214,7 +213,7 @@ describe("EaButton Component", () => {
       button.setAttribute("size", "small");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const loadingIcon = button.shadowRoot.querySelector(
         ".ea-button__loading-icon"
@@ -222,7 +221,7 @@ describe("EaButton Component", () => {
       expect(loadingIcon.getAttribute("size")).toBe("small");
 
       button.setAttribute("size", "large");
-      await waitForRender();
+      await button.updateComplete;
 
       expect(loadingIcon.getAttribute("size")).toBe("large");
     });
@@ -233,7 +232,7 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       expect(button.disabled).toBe(false);
     });
@@ -243,7 +242,7 @@ describe("EaButton Component", () => {
       button.setAttribute("disabled", "");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       expect(button.disabled).toBe(true);
       expect(button.hasAttribute("disabled")).toBe(true);
@@ -253,13 +252,13 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.classList.contains("is-disabled")).toBe(false);
 
       button.setAttribute("disabled", "");
-      await waitForRender();
+      await button.updateComplete;
 
       expect(containerEl.classList.contains("is-disabled")).toBe(true);
     });
@@ -269,11 +268,11 @@ describe("EaButton Component", () => {
       button.setAttribute("disabled", "");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
       expect(button.disabled).toBe(true);
 
       button.removeAttribute("disabled");
-      await waitForRender();
+      await button.updateComplete;
 
       expect(button.disabled).toBe(false);
       expect(button.hasAttribute("disabled")).toBe(false);
@@ -300,13 +299,13 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.classList.contains("ea-button--plain")).toBe(false);
 
       button.setAttribute("plain", "");
-      await waitForRender();
+      await button.updateComplete;
 
       expect(containerEl.classList.contains("ea-button--plain")).toBe(true);
     });
@@ -332,13 +331,13 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.classList.contains("ea-button--round")).toBe(false);
 
       button.setAttribute("round", "");
-      await waitForRender();
+      await button.updateComplete;
 
       expect(containerEl.classList.contains("ea-button--round")).toBe(true);
     });
@@ -364,13 +363,13 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.classList.contains("ea-button--circle")).toBe(false);
 
       button.setAttribute("circle", "");
-      await waitForRender();
+      await button.updateComplete;
 
       expect(containerEl.classList.contains("ea-button--circle")).toBe(true);
     });
@@ -396,13 +395,13 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.classList.contains("ea-button--text")).toBe(false);
 
       button.setAttribute("text", "");
-      await waitForRender();
+      await button.updateComplete;
 
       expect(containerEl.classList.contains("ea-button--text")).toBe(true);
     });
@@ -428,10 +427,10 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       button.setAttribute("loading", "");
-      await waitForRender();
+      await button.updateComplete;
 
       expect(button.hasAttribute("disabled")).toBe(true);
     });
@@ -441,7 +440,7 @@ describe("EaButton Component", () => {
       button.setAttribute("loading", "");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.classList.contains("is-loading")).toBe(true);
@@ -452,7 +451,7 @@ describe("EaButton Component", () => {
       button.setAttribute("loading", "");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.classList.contains("is-disabled")).toBe(true);
@@ -462,7 +461,7 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.classList.contains("is-loading")).toBe(false);
@@ -472,19 +471,19 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.classList.contains("is-loading")).toBe(false);
 
       button.setAttribute("loading", "");
-      await waitForRender();
+      await button.updateComplete;
 
       expect(containerEl.classList.contains("is-loading")).toBe(true);
       expect(button.hasAttribute("disabled")).toBe(true);
 
       button.removeAttribute("loading");
-      await waitForRender();
+      await button.updateComplete;
 
       expect(containerEl.classList.contains("is-loading")).toBe(false);
       expect(button.hasAttribute("disabled")).toBe(false);
@@ -495,10 +494,10 @@ describe("EaButton Component", () => {
       button.setAttribute("size", "large");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       button.setAttribute("loading", "");
-      await waitForRender();
+      await button.updateComplete;
 
       const loadingIcon = button.shadowRoot.querySelector(
         ".ea-button__loading-icon"
@@ -528,7 +527,7 @@ describe("EaButton Component", () => {
       button.setAttribute("icon", "coffee");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.classList.contains("is-icon")).toBe(true);
@@ -538,7 +537,7 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.classList.contains("is-icon")).toBe(false);
@@ -549,13 +548,13 @@ describe("EaButton Component", () => {
       button.setAttribute("icon", "coffee");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const iconEl = button.shadowRoot.querySelector(".ea-button__icon");
       expect(iconEl.getAttribute("name")).toBe("coffee");
 
       button.setAttribute("icon", "search");
-      await waitForRender();
+      await button.updateComplete;
 
       expect(iconEl.getAttribute("name")).toBe("search");
     });
@@ -566,7 +565,7 @@ describe("EaButton Component", () => {
       button.setAttribute("size", "large");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const iconEl = button.shadowRoot.querySelector(".ea-button__icon");
       expect(iconEl.getAttribute("size")).toBe("large");
@@ -577,13 +576,13 @@ describe("EaButton Component", () => {
       button.setAttribute("icon", "coffee");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.classList.contains("is-icon")).toBe(true);
 
       button.removeAttribute("icon");
-      await waitForRender();
+      await button.updateComplete;
 
       expect(containerEl.classList.contains("is-icon")).toBe(false);
     });
@@ -610,7 +609,7 @@ describe("EaButton Component", () => {
       button.setAttribute("link", "");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.tagName.toLowerCase()).toBe("a");
@@ -620,7 +619,7 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.tagName.toLowerCase()).toBe("button");
@@ -631,7 +630,7 @@ describe("EaButton Component", () => {
       button.setAttribute("link", "");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.classList.contains("ea-button--link")).toBe(true);
@@ -642,7 +641,7 @@ describe("EaButton Component", () => {
       button.setAttribute("link", "");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.classList.contains("ea-button--text")).toBe(true);
@@ -663,7 +662,7 @@ describe("EaButton Component", () => {
       button.setAttribute("href", "https://example.com");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.getAttribute("href")).toBe("https://example.com");
@@ -675,13 +674,13 @@ describe("EaButton Component", () => {
       button.setAttribute("href", "https://example.com");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.getAttribute("href")).toBe("https://example.com");
 
       button.setAttribute("href", "https://new.example.com");
-      await waitForRender();
+      await button.updateComplete;
 
       expect(containerEl.getAttribute("href")).toBe("https://new.example.com");
     });
@@ -690,13 +689,13 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       let containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.tagName.toLowerCase()).toBe("button");
 
       button.setAttribute("link", "");
-      await waitForRender();
+      await button.updateComplete;
 
       containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.tagName.toLowerCase()).toBe("a");
@@ -707,7 +706,7 @@ describe("EaButton Component", () => {
       button.setAttribute("link", "");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.getAttribute("type")).toBeNull();
@@ -719,7 +718,7 @@ describe("EaButton Component", () => {
       button.setAttribute("target", "_blank");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       expect(button.target).toBe("_blank");
       const containerEl = button.shadowRoot.querySelector(".ea-button");
@@ -732,7 +731,7 @@ describe("EaButton Component", () => {
       button.setAttribute("rel", "noopener noreferrer");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       expect(button.rel).toBe("noopener noreferrer");
       const containerEl = button.shadowRoot.querySelector(".ea-button");
@@ -745,7 +744,7 @@ describe("EaButton Component", () => {
       button.setAttribute("download", "file.pdf");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       expect(button.download).toBe("file.pdf");
       const containerEl = button.shadowRoot.querySelector(".ea-button");
@@ -757,10 +756,10 @@ describe("EaButton Component", () => {
       button.setAttribute("link", "");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       button.setAttribute("target", "_blank");
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.getAttribute("target")).toBe("_blank");
@@ -771,7 +770,7 @@ describe("EaButton Component", () => {
       button.setAttribute("target", "_blank");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.getAttribute("target")).toBeNull();
@@ -783,7 +782,7 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       expect(button.type).toBe("button");
     });
@@ -793,7 +792,7 @@ describe("EaButton Component", () => {
       button.setAttribute("type", "submit");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       expect(button.type).toBe("submit");
     });
@@ -806,7 +805,7 @@ describe("EaButton Component", () => {
         button.setAttribute("type", t);
         container.appendChild(button);
 
-        await waitForRender();
+        await button.updateComplete;
 
         expect(button.type).toBe(t);
         container.removeChild(button);
@@ -818,7 +817,7 @@ describe("EaButton Component", () => {
       button.setAttribute("type", "submit");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.getAttribute("type")).toBe("submit");
@@ -828,13 +827,13 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.getAttribute("type")).toBe("button");
 
       button.setAttribute("type", "reset");
-      await waitForRender();
+      await button.updateComplete;
 
       expect(containerEl.getAttribute("type")).toBe("reset");
     });
@@ -845,7 +844,7 @@ describe("EaButton Component", () => {
       button.setAttribute("type", "submit");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.tagName.toLowerCase()).toBe("a");
@@ -858,7 +857,7 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.classList.contains("ea-button")).toBe(true);
@@ -871,7 +870,7 @@ describe("EaButton Component", () => {
       button.setAttribute("variant", "primary");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.classList.contains("ea-button--primary")).toBe(true);
@@ -882,7 +881,7 @@ describe("EaButton Component", () => {
       button.setAttribute("size", "small");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.classList.contains("ea-button--small")).toBe(true);
@@ -893,7 +892,7 @@ describe("EaButton Component", () => {
       button.setAttribute("disabled", "");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.classList.contains("is-disabled")).toBe(true);
@@ -904,7 +903,7 @@ describe("EaButton Component", () => {
       button.setAttribute("text", "");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.classList.contains("ea-button--text")).toBe(true);
@@ -915,7 +914,7 @@ describe("EaButton Component", () => {
       button.setAttribute("plain", "");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.classList.contains("ea-button--plain")).toBe(true);
@@ -926,7 +925,7 @@ describe("EaButton Component", () => {
       button.setAttribute("round", "");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.classList.contains("ea-button--round")).toBe(true);
@@ -937,7 +936,7 @@ describe("EaButton Component", () => {
       button.setAttribute("circle", "");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.classList.contains("ea-button--circle")).toBe(true);
@@ -948,7 +947,7 @@ describe("EaButton Component", () => {
       button.setAttribute("loading", "");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.classList.contains("is-loading")).toBe(true);
@@ -959,7 +958,7 @@ describe("EaButton Component", () => {
       button.setAttribute("icon", "coffee");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.classList.contains("is-icon")).toBe(true);
@@ -970,7 +969,7 @@ describe("EaButton Component", () => {
       button.setAttribute("link", "");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.classList.contains("ea-button--link")).toBe(true);
@@ -1014,7 +1013,7 @@ describe("EaButton Component", () => {
       const clickHandler = vi.fn();
       button.addEventListener("click", clickHandler);
 
-      await waitForRender();
+      await button.updateComplete;
 
       button.click();
 
@@ -1025,7 +1024,7 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const clickHandler = vi.fn();
       button.addEventListener("click", clickHandler);
@@ -1044,7 +1043,7 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const clickHandler = vi.fn();
       button.addEventListener("click", clickHandler);
@@ -1063,7 +1062,7 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const clickHandler = vi.fn();
       button.addEventListener("click", clickHandler);
@@ -1087,7 +1086,7 @@ describe("EaButton Component", () => {
       button.textContent = "Submit";
       form.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const submitHandler = vi.fn();
       form.addEventListener("submit", submitHandler);
@@ -1112,7 +1111,7 @@ describe("EaButton Component", () => {
       button.textContent = "Reset";
       form.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const resetSpy = vi.spyOn(form, "reset");
       const innerButton = button.shadowRoot.querySelector(".ea-button");
@@ -1126,7 +1125,7 @@ describe("EaButton Component", () => {
       button.setAttribute("type", "submit");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       expect(() => button.click()).not.toThrow();
     });
@@ -1136,7 +1135,7 @@ describe("EaButton Component", () => {
       button.setAttribute("type", "reset");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       expect(() => button.click()).not.toThrow();
     });
@@ -1151,7 +1150,7 @@ describe("EaButton Component", () => {
       button.textContent = "Primary Button";
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       expect(button.variant).toBe("primary");
       expect(button.size).toBe("large");
@@ -1170,7 +1169,7 @@ describe("EaButton Component", () => {
       button.setAttribute("variant", "primary");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       expect(button.icon).toBe("coffee");
       expect(button.circle).toBe(true);
@@ -1190,7 +1189,7 @@ describe("EaButton Component", () => {
       button.textContent = "Link Button";
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.tagName.toLowerCase()).toBe("a");
@@ -1206,7 +1205,7 @@ describe("EaButton Component", () => {
       button.textContent = "Text Button";
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       expect(button.text).toBe(true);
       expect(button.icon).toBe("coffee");
@@ -1220,19 +1219,19 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.classList.contains("is-loading")).toBe(false);
 
       button.setAttribute("loading", "");
-      await waitForRender();
+      await button.updateComplete;
 
       expect(containerEl.classList.contains("is-loading")).toBe(true);
       expect(button.hasAttribute("disabled")).toBe(true);
 
       button.removeAttribute("loading");
-      await waitForRender();
+      await button.updateComplete;
 
       expect(containerEl.classList.contains("is-loading")).toBe(false);
       expect(button.hasAttribute("disabled")).toBe(false);
@@ -1244,14 +1243,14 @@ describe("EaButton Component", () => {
       button.setAttribute("loading", "");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.classList.contains("is-disabled")).toBe(true);
       expect(containerEl.classList.contains("is-loading")).toBe(true);
 
       button.removeAttribute("loading");
-      await waitForRender();
+      await button.updateComplete;
 
       expect(containerEl.classList.contains("is-disabled")).toBe(false);
       expect(containerEl.classList.contains("is-loading")).toBe(false);
@@ -1263,12 +1262,12 @@ describe("EaButton Component", () => {
       button.setAttribute("loading", "");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       expect(button.hasAttribute("disabled")).toBe(true);
 
       button.removeAttribute("loading");
-      await waitForRender();
+      await button.updateComplete;
 
       expect(button.hasAttribute("disabled")).toBe(false);
     });
@@ -1279,7 +1278,7 @@ describe("EaButton Component", () => {
       button.setAttribute("plain", "");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.classList.contains("ea-button--primary")).toBe(true);
@@ -1291,13 +1290,13 @@ describe("EaButton Component", () => {
       button.setAttribute("variant", "primary");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.classList.contains("ea-button--primary")).toBe(true);
 
       button.setAttribute("variant", "danger");
-      await waitForRender();
+      await button.updateComplete;
 
       expect(containerEl.classList.contains("ea-button--danger")).toBe(true);
       expect(containerEl.classList.contains("ea-button--primary")).toBe(false);
@@ -1308,13 +1307,13 @@ describe("EaButton Component", () => {
       button.setAttribute("size", "small");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.classList.contains("ea-button--small")).toBe(true);
 
       button.setAttribute("size", "large");
-      await waitForRender();
+      await button.updateComplete;
 
       expect(containerEl.classList.contains("ea-button--large")).toBe(true);
       expect(containerEl.classList.contains("ea-button--small")).toBe(false);
@@ -1324,21 +1323,21 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       let containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.tagName.toLowerCase()).toBe("button");
 
       button.setAttribute("link", "");
       button.setAttribute("href", "https://example.com");
-      await waitForRender();
+      await button.updateComplete;
 
       containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.tagName.toLowerCase()).toBe("a");
       expect(containerEl.getAttribute("href")).toBe("https://example.com");
 
       button.removeAttribute("link");
-      await waitForRender();
+      await button.updateComplete;
 
       containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.tagName.toLowerCase()).toBe("button");
@@ -1362,7 +1361,7 @@ describe("EaButton Component", () => {
           button.setAttribute("size", size);
           container.appendChild(button);
 
-          await waitForRender();
+          await button.updateComplete;
 
           const containerEl = button.shadowRoot.querySelector(".ea-button");
           expect(containerEl.classList.contains(`ea-button--${variant}`)).toBe(
@@ -1384,7 +1383,7 @@ describe("EaButton Component", () => {
       button.textContent = "Button";
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const results = await runAxe(button);
       assertNoA11yViolations(results);
@@ -1396,7 +1395,7 @@ describe("EaButton Component", () => {
       button.textContent = "Disabled Button";
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const results = await runAxe(button);
       assertNoA11yViolations(results);
@@ -1409,7 +1408,7 @@ describe("EaButton Component", () => {
       button.textContent = "Link Button";
       container.appendChild(button);
 
-      await waitForRender();
+      await button.updateComplete;
 
       const results = await runAxe(button);
       assertNoA11yViolations(results);
@@ -1420,14 +1419,14 @@ describe("EaButton Component", () => {
         const el = document.createElement("ea-button");
         el.setAttribute("disabled", "");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-disabled")).toBe("true");
       });
 
       it("非 disabled 时 aria-disabled 应该为 false", async () => {
         const el = document.createElement("ea-button");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-disabled")).toBe("false");
       });
 
@@ -1435,11 +1434,11 @@ describe("EaButton Component", () => {
         const el = document.createElement("ea-button");
         el.setAttribute("disabled", "");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-disabled")).toBe("true");
 
         el.removeAttribute("disabled");
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-disabled")).toBe("false");
       });
 
@@ -1447,14 +1446,14 @@ describe("EaButton Component", () => {
         const el = document.createElement("ea-button");
         el.setAttribute("loading", "");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-busy")).toBe("true");
       });
 
       it("非 loading 时 aria-busy 应该为 false", async () => {
         const el = document.createElement("ea-button");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-busy")).toBe("false");
       });
 
@@ -1462,11 +1461,11 @@ describe("EaButton Component", () => {
         const el = document.createElement("ea-button");
         el.setAttribute("loading", "");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-busy")).toBe("true");
 
         el.removeAttribute("loading");
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-busy")).toBe("false");
       });
 
@@ -1474,14 +1473,14 @@ describe("EaButton Component", () => {
         const el = document.createElement("ea-button");
         el.setAttribute("toggle", "");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-pressed")).toBe("true");
       });
 
       it("非 toggle 按钮时 aria-pressed 应该为 false", async () => {
         const el = document.createElement("ea-button");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-pressed")).toBe("false");
       });
     });
@@ -1542,7 +1541,7 @@ describe("EaButtonGroup Component", () => {
       const group = document.createElement("ea-button-group");
       container.appendChild(group);
 
-      await waitForRender();
+      await group.updateComplete;
 
       expect(group.disabled).toBe(false);
     });
@@ -1552,7 +1551,7 @@ describe("EaButtonGroup Component", () => {
       group.setAttribute("disabled", "");
       container.appendChild(group);
 
-      await waitForRender();
+      await group.updateComplete;
 
       expect(group.disabled).toBe(true);
     });
@@ -1597,10 +1596,10 @@ describe("EaButtonGroup Component", () => {
       group.appendChild(btn2);
       container.appendChild(group);
 
-      await waitForRender();
+      await btn2.updateComplete;
 
       group.setAttribute("size", "large");
-      await waitForRender();
+      await group.updateComplete;
 
       expect(btn1.getAttribute("size")).toBe("large");
       expect(btn2.getAttribute("size")).toBe("large");
@@ -1653,10 +1652,10 @@ describe("EaButtonGroup Component", () => {
       group.appendChild(btn2);
       container.appendChild(group);
 
-      await waitForRender();
+      await btn2.updateComplete;
 
       group.setAttribute("variant", "primary");
-      await waitForRender();
+      await group.updateComplete;
 
       expect(btn1.getAttribute("variant")).toBe("primary");
       expect(btn2.getAttribute("variant")).toBe("primary");
@@ -1677,7 +1676,7 @@ describe("EaButtonGroup Component", () => {
       group.appendChild(btn3);
       container.appendChild(group);
 
-      await waitForRender();
+      await btn3.updateComplete;
 
       const buttons = group.querySelectorAll("ea-button");
       expect(buttons.length).toBe(3);
@@ -1692,7 +1691,7 @@ describe("EaButtonGroup Component", () => {
       group.appendChild(btn);
       container.appendChild(group);
 
-      await waitForRender();
+      await btn.updateComplete;
 
       expect(btn.getAttribute("size")).toBe("small");
       expect(btn.getAttribute("variant")).toBe("danger");

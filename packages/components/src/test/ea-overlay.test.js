@@ -53,7 +53,9 @@ describe("EaOverlay", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      const slot = overlay.shadowRoot.querySelector(".ea-overlay__content slot");
+      const slot = overlay.shadowRoot.querySelector(
+        ".ea-overlay__content slot"
+      );
       expect(slot).toBeTruthy();
     });
   });
@@ -63,7 +65,9 @@ describe("EaOverlay", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      expect(overlay.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(
+        overlay.shadowRoot.querySelector('[part="container"]')
+      ).toBeTruthy();
     });
 
     it("should have mask part", () => {
@@ -86,7 +90,7 @@ describe("EaOverlay", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       const containerEl = overlay.shadowRoot.querySelector(".ea-overlay");
       expect(containerEl.classList.contains("ea-overlay")).toBe(true);
@@ -96,7 +100,7 @@ describe("EaOverlay", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       const containerEl = overlay.shadowRoot.querySelector(".ea-overlay");
       expect(containerEl.classList.contains("is-modal")).toBe(true);
@@ -106,10 +110,10 @@ describe("EaOverlay", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       overlay.visible = true;
-      await waitForRender();
+      await overlay.updateComplete;
 
       const containerEl = overlay.shadowRoot.querySelector(".ea-overlay");
       expect(containerEl.classList.contains("ea-overlay--open")).toBe(true);
@@ -120,7 +124,7 @@ describe("EaOverlay", () => {
       container.appendChild(overlay);
 
       overlay.modal = false;
-      await waitForRender();
+      await overlay.updateComplete;
 
       const containerEl = overlay.shadowRoot.querySelector(".ea-overlay");
       expect(containerEl.classList.contains("is-modal")).toBe(false);
@@ -130,10 +134,10 @@ describe("EaOverlay", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       overlay.visible = true;
-      await waitForRender();
+      await overlay.updateComplete;
 
       await new Promise(resolve => requestAnimationFrame(resolve));
 
@@ -145,13 +149,13 @@ describe("EaOverlay", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       overlay.visible = true;
-      await waitForRender();
+      await overlay.updateComplete;
 
       overlay.visible = false;
-      await waitForRender(0);
+      await overlay.updateComplete;
 
       const containerEl = overlay.shadowRoot.querySelector(".ea-overlay");
       expect(containerEl.classList.contains("is-before-close")).toBe(true);
@@ -163,7 +167,7 @@ describe("EaOverlay", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       expect(overlay.visible).toBe(false);
     });
@@ -173,7 +177,7 @@ describe("EaOverlay", () => {
       overlay.setAttribute("visible", "");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       expect(overlay.visible).toBe(true);
     });
@@ -182,7 +186,7 @@ describe("EaOverlay", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       overlay.show();
       expect(overlay.visible).toBe(true);
@@ -192,7 +196,7 @@ describe("EaOverlay", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       overlay.show();
       expect(overlay.visible).toBe(true);
@@ -205,18 +209,18 @@ describe("EaOverlay", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       overlay.show();
-      await waitForRender();
+      await overlay.updateComplete;
       expect(overlay.visible).toBe(true);
 
       overlay.hide();
-      await waitForRender();
+      await overlay.updateComplete;
       expect(overlay.visible).toBe(false);
 
       overlay.show();
-      await waitForRender();
+      await overlay.updateComplete;
       expect(overlay.visible).toBe(true);
     });
   });
@@ -242,13 +246,13 @@ describe("EaOverlay", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       const containerEl = overlay.shadowRoot.querySelector(".ea-overlay");
       expect(containerEl.classList.contains("is-modal")).toBe(true);
 
       overlay.modal = false;
-      await waitForRender();
+      await overlay.updateComplete;
 
       expect(containerEl.classList.contains("is-modal")).toBe(false);
     });
@@ -266,16 +270,16 @@ describe("EaOverlay", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       overlay.show();
-      await waitForRender();
+      await overlay.updateComplete;
       expect(overlay.visible).toBe(true);
 
       const mask = overlay.shadowRoot.querySelector(".ea-overlay__mask");
       mask.dispatchEvent(new Event("click", { bubbles: true }));
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       expect(overlay.visible).toBe(false);
     });
@@ -284,17 +288,17 @@ describe("EaOverlay", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       overlay.closeOnClickModal = false;
       overlay.show();
-      await waitForRender();
+      await overlay.updateComplete;
       expect(overlay.visible).toBe(true);
 
       const mask = overlay.shadowRoot.querySelector(".ea-overlay__mask");
       mask.dispatchEvent(new Event("click", { bubbles: true }));
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       expect(overlay.visible).toBe(true);
     });
@@ -312,10 +316,10 @@ describe("EaOverlay", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       overlay.show();
-      await waitForRender();
+      await overlay.updateComplete;
       expect(overlay.visible).toBe(true);
 
       const escapeEvent = new KeyboardEvent("keydown", {
@@ -324,7 +328,7 @@ describe("EaOverlay", () => {
       });
       document.dispatchEvent(escapeEvent);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       expect(overlay.visible).toBe(false);
     });
@@ -333,11 +337,11 @@ describe("EaOverlay", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       overlay.closeOnPressEscape = false;
       overlay.show();
-      await waitForRender();
+      await overlay.updateComplete;
       expect(overlay.visible).toBe(true);
 
       const escapeEvent = new KeyboardEvent("keydown", {
@@ -346,7 +350,7 @@ describe("EaOverlay", () => {
       });
       document.dispatchEvent(escapeEvent);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       expect(overlay.visible).toBe(true);
     });
@@ -355,7 +359,7 @@ describe("EaOverlay", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       expect(overlay.visible).toBe(false);
 
@@ -365,7 +369,7 @@ describe("EaOverlay", () => {
       });
       document.dispatchEvent(escapeEvent);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       expect(overlay.visible).toBe(false);
     });
@@ -376,7 +380,7 @@ describe("EaOverlay", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       expect(overlay.appendToBody).toBe(false);
     });
@@ -386,7 +390,7 @@ describe("EaOverlay", () => {
       overlay.setAttribute("append-to-body", "");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       expect(overlay.parentElement).toBe(document.body);
     });
@@ -395,7 +399,7 @@ describe("EaOverlay", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       expect(overlay.parentElement).toBe(container);
     });
@@ -406,7 +410,7 @@ describe("EaOverlay", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       expect(overlay.appendTo).toBe("body");
     });
@@ -420,7 +424,7 @@ describe("EaOverlay", () => {
       overlay.setAttribute("append-to", "#overlay-target");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       expect(overlay.parentElement).toBe(target);
 
@@ -432,7 +436,7 @@ describe("EaOverlay", () => {
       overlay.setAttribute("append-to", "#non-existent");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       expect(overlay.parentElement).toBe(container);
     });
@@ -444,10 +448,12 @@ describe("EaOverlay", () => {
       overlay.setAttribute("z-index", "2000");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       expect(overlay.zIndex).toBe("2000");
-      expect(overlay.style.getPropertyValue("--ea-overlay-z-index")).toBe("2000");
+      expect(overlay.style.getPropertyValue("--ea-overlay-z-index")).toBe(
+        "2000"
+      );
     });
 
     it("should support background-color attribute", async () => {
@@ -455,10 +461,12 @@ describe("EaOverlay", () => {
       overlay.setAttribute("background-color", "rgba(0,0,0,0.8)");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       expect(overlay.backgroundColor).toBe("rgba(0,0,0,0.8)");
-      expect(overlay.style.getPropertyValue("--ea-overlay-background-color")).toBe("rgba(0,0,0,0.8)");
+      expect(
+        overlay.style.getPropertyValue("--ea-overlay-background-color")
+      ).toBe("rgba(0,0,0,0.8)");
     });
 
     it("should support content-width attribute", async () => {
@@ -466,10 +474,12 @@ describe("EaOverlay", () => {
       overlay.setAttribute("content-width", "80%");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       expect(overlay.contentWidth).toBe("80%");
-      expect(overlay.style.getPropertyValue("--ea-overlay-content-width")).toBe("80%");
+      expect(overlay.style.getPropertyValue("--ea-overlay-content-width")).toBe(
+        "80%"
+      );
     });
 
     it("should support content-max-width attribute", async () => {
@@ -477,10 +487,12 @@ describe("EaOverlay", () => {
       overlay.setAttribute("content-max-width", "600px");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       expect(overlay.contentMaxWidth).toBe("600px");
-      expect(overlay.style.getPropertyValue("--ea-overlay-content-max-width")).toBe("600px");
+      expect(
+        overlay.style.getPropertyValue("--ea-overlay-content-max-width")
+      ).toBe("600px");
     });
 
     it("should support content-height attribute", async () => {
@@ -488,10 +500,12 @@ describe("EaOverlay", () => {
       overlay.setAttribute("content-height", "60%");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       expect(overlay.contentHeight).toBe("60%");
-      expect(overlay.style.getPropertyValue("--ea-overlay-content-height")).toBe("60%");
+      expect(
+        overlay.style.getPropertyValue("--ea-overlay-content-height")
+      ).toBe("60%");
     });
 
     it("should default CSS variable attributes to empty string", () => {
@@ -511,7 +525,7 @@ describe("EaOverlay", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       expect(overlay.beforeClose).toBeNull();
     });
@@ -521,19 +535,19 @@ describe("EaOverlay", () => {
       overlay.setAttribute("close-on-click-modal", "");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       const beforeCloseHandler = vi.fn(done => done());
       overlay.beforeClose = beforeCloseHandler;
 
       overlay.show();
-      await waitForRender();
+      await overlay.updateComplete;
       expect(overlay.visible).toBe(true);
 
       const mask = overlay.shadowRoot.querySelector(".ea-overlay__mask");
       mask.dispatchEvent(new Event("click", { bubbles: true }));
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       expect(beforeCloseHandler).toHaveBeenCalled();
     });
@@ -543,7 +557,7 @@ describe("EaOverlay", () => {
       overlay.setAttribute("close-on-click-modal", "");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       let doneFn = null;
       overlay.beforeClose = done => {
@@ -551,17 +565,17 @@ describe("EaOverlay", () => {
       };
 
       overlay.show();
-      await waitForRender();
+      await overlay.updateComplete;
 
       const mask = overlay.shadowRoot.querySelector(".ea-overlay__mask");
       mask.dispatchEvent(new Event("click", { bubbles: true }));
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       expect(overlay.visible).toBe(true);
 
       if (doneFn) doneFn();
-      await waitForRender();
+      await overlay.updateComplete;
 
       expect(overlay.visible).toBe(false);
     });
@@ -571,7 +585,7 @@ describe("EaOverlay", () => {
       overlay.setAttribute("close-on-click-modal", "");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       let doneCalled = false;
       overlay.beforeClose = async done => {
@@ -581,7 +595,7 @@ describe("EaOverlay", () => {
       };
 
       overlay.show();
-      await waitForRender();
+      await overlay.updateComplete;
 
       const mask = overlay.shadowRoot.querySelector(".ea-overlay__mask");
       mask.dispatchEvent(new Event("click", { bubbles: true }));
@@ -598,13 +612,13 @@ describe("EaOverlay", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       const openHandler = vi.fn();
       overlay.addEventListener("ea-open", openHandler);
 
       overlay.visible = true;
-      await waitForRender();
+      await overlay.updateComplete;
 
       expect(openHandler).toHaveBeenCalled();
       expect(openHandler.mock.calls[0][0] instanceof Event).toBe(true);
@@ -615,19 +629,19 @@ describe("EaOverlay", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       const openedHandler = vi.fn();
       overlay.addEventListener("ea-opened", openedHandler);
 
       overlay.show();
       await new Promise(resolve => requestAnimationFrame(resolve));
-      await waitForRender();
+      await overlay.updateComplete;
 
       const containerEl = overlay.shadowRoot.querySelector(".ea-overlay");
       containerEl.dispatchEvent(new Event("transitionend", { bubbles: true }));
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       expect(openedHandler).toHaveBeenCalled();
       expect(openedHandler.mock.calls[0][0].type).toBe("ea-opened");
@@ -637,16 +651,16 @@ describe("EaOverlay", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       overlay.visible = true;
-      await waitForRender();
+      await overlay.updateComplete;
 
       const closeHandler = vi.fn();
       overlay.addEventListener("ea-close", closeHandler);
 
       overlay.visible = false;
-      await waitForRender();
+      await overlay.updateComplete;
 
       expect(closeHandler).toHaveBeenCalled();
       expect(closeHandler.mock.calls[0][0].type).toBe("ea-close");
@@ -656,21 +670,21 @@ describe("EaOverlay", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       overlay.visible = true;
-      await waitForRender();
+      await overlay.updateComplete;
 
       const closedHandler = vi.fn();
       overlay.addEventListener("ea-closed", closedHandler);
 
       overlay.visible = false;
-      await waitForRender();
+      await overlay.updateComplete;
 
       const containerEl = overlay.shadowRoot.querySelector(".ea-overlay");
       containerEl.dispatchEvent(new Event("transitionend", { bubbles: true }));
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       expect(closedHandler).toHaveBeenCalled();
       expect(closedHandler.mock.calls[0][0].type).toBe("ea-closed");
@@ -680,13 +694,13 @@ describe("EaOverlay", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       const openHandler = vi.fn();
       overlay.addEventListener("ea-open", openHandler);
 
       overlay.visible = true;
-      await waitForRender();
+      await overlay.updateComplete;
 
       expect(openHandler).toHaveBeenCalled();
       const event = openHandler.mock.calls[0][0];
@@ -721,7 +735,7 @@ describe("EaOverlay", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       overlay.visible = true;
       const result = overlay.updateContainerClasslist();
@@ -750,7 +764,7 @@ describe("EaOverlay", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       overlay.show();
       expect(overlay.visible).toBe(true);
@@ -769,13 +783,13 @@ describe("EaOverlay", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       overlay.visible = true;
       overlay.visible = false;
       overlay.visible = true;
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       expect(overlay.visible).toBe(true);
     });
@@ -820,10 +834,10 @@ describe("EaOverlay", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await waitForRender();
+      await overlay.updateComplete;
 
       overlay.show();
-      await waitForRender();
+      await overlay.updateComplete;
 
       overlay.remove();
       expect(overlay.isConnected).toBe(false);
@@ -850,11 +864,11 @@ describe("EaOverlay", () => {
       btn.textContent = "Trigger";
       container.appendChild(btn);
       container.appendChild(overlay);
-      await waitForRender();
+      await overlay.updateComplete;
 
       btn.focus();
       overlay.visible = true;
-      await waitForRender(200);
+      await overlay.updateComplete;
 
       expect(overlay.visible).toBe(true);
     });
@@ -865,14 +879,14 @@ describe("EaOverlay", () => {
       btn.textContent = "Trigger";
       container.appendChild(btn);
       container.appendChild(overlay);
-      await waitForRender();
+      await overlay.updateComplete;
 
       btn.focus();
       overlay.visible = true;
-      await waitForRender(200);
+      await overlay.updateComplete;
 
       overlay.visible = false;
-      await waitForRender(200);
+      await overlay.updateComplete;
 
       expect(document.activeElement).toBe(btn);
     });
@@ -886,10 +900,10 @@ describe("EaOverlay", () => {
       overlay.appendChild(btn1);
       overlay.appendChild(btn2);
       container.appendChild(overlay);
-      await waitForRender();
+      await overlay.updateComplete;
 
       overlay.visible = true;
-      await waitForRender(200);
+      await overlay.updateComplete;
 
       btn2.focus();
       const tabEvent = new KeyboardEvent("keydown", {
@@ -898,9 +912,10 @@ describe("EaOverlay", () => {
         cancelable: true,
       });
       document.dispatchEvent(tabEvent);
-      await waitForRender();
 
-      expect(document.activeElement).toBe(btn1);
+      await vi.waitFor(() => {
+        expect(document.activeElement).toBe(btn1);
+      });
     });
 
     it("Shift+Tab 应在弹窗内循环（焦点陷阱）", async () => {
@@ -912,10 +927,10 @@ describe("EaOverlay", () => {
       overlay.appendChild(btn1);
       overlay.appendChild(btn2);
       container.appendChild(overlay);
-      await waitForRender();
+      await overlay.updateComplete;
 
       overlay.visible = true;
-      await waitForRender(200);
+      await overlay.updateComplete;
 
       btn1.focus();
       const shiftTabEvent = new KeyboardEvent("keydown", {
@@ -925,15 +940,16 @@ describe("EaOverlay", () => {
         cancelable: true,
       });
       document.dispatchEvent(shiftTabEvent);
-      await waitForRender();
 
-      expect(document.activeElement).toBe(btn2);
+      await vi.waitFor(() => {
+        expect(document.activeElement).toBe(btn2);
+      });
     });
 
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-overlay");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });

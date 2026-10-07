@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import { waitForRender } from "./utils/waitForRender";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-container/index";
@@ -123,13 +122,13 @@ describe("EaContainer", () => {
       const el = document.createElement("ea-container");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-container");
       expect(containerEl.classList.contains("ea-container--horizontal")).toBe(true);
 
       el.setAttribute("direction", "vertical");
-      await waitForRender();
+      await el.updateComplete;
 
       expect(containerEl.classList.contains("ea-container--vertical")).toBe(true);
       expect(containerEl.classList.contains("ea-container--horizontal")).toBe(false);
@@ -143,7 +142,7 @@ describe("EaContainer", () => {
       el.appendChild(header);
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       expect(el.direction).toBe("vertical");
     });
@@ -154,7 +153,7 @@ describe("EaContainer", () => {
       el.appendChild(footer);
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       expect(el.direction).toBe("vertical");
     });
@@ -167,7 +166,7 @@ describe("EaContainer", () => {
       el.appendChild(footer);
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       expect(el.direction).toBe("vertical");
     });
@@ -190,7 +189,7 @@ describe("EaContainer", () => {
       el.appendChild(header);
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       expect(el.getAttribute("direction")).toBe("horizontal");
     });
@@ -199,14 +198,14 @@ describe("EaContainer", () => {
       const el = document.createElement("ea-container");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       expect(el.direction).toBe("horizontal");
 
       const header = document.createElement("ea-header");
       el.appendChild(header);
 
-      await waitForRender();
+      await header.updateComplete;
 
       expect(el.direction).toBe("vertical");
     });
@@ -217,13 +216,13 @@ describe("EaContainer", () => {
       el.appendChild(header);
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       expect(el.direction).toBe("vertical");
 
       header.remove();
 
-      await waitForRender();
+      await header.updateComplete;
 
       expect(["horizontal", "vertical"].includes(el.direction)).toBe(true);
     });
@@ -266,7 +265,7 @@ describe("EaContainer", () => {
       el.setAttribute("height", "");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       expect(el.style.getPropertyValue("--ea-header-height")).toBe("auto");
     });
@@ -310,7 +309,7 @@ describe("EaContainer", () => {
       el.setAttribute("height", "");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       expect(el.style.getPropertyValue("--ea-footer-height")).toBe("auto");
     });
@@ -371,7 +370,7 @@ describe("EaContainer", () => {
       el.appendChild(main);
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       expect(el.direction).toBe("vertical");
       expect(el.querySelector("ea-header")).toBeTruthy();
@@ -389,7 +388,7 @@ describe("EaContainer", () => {
       el.appendChild(footer);
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       expect(el.direction).toBe("vertical");
       expect(el.querySelector("ea-header")).toBeTruthy();
@@ -426,7 +425,7 @@ describe("EaContainer", () => {
       outer.appendChild(inner);
       container.appendChild(outer);
 
-      await waitForRender();
+      await outer.updateComplete;
 
       expect(outer.direction).toBe("vertical");
       expect(inner.direction).toBe("horizontal");
@@ -502,7 +501,7 @@ describe("EaContainer", () => {
       const el = document.createElement("ea-container");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-container");
       expect(containerEl.classList.contains("ea-container")).toBe(true);
@@ -514,7 +513,7 @@ describe("EaContainer", () => {
       el.setAttribute("direction", "vertical");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-container");
       expect(containerEl.classList.contains("ea-container--vertical")).toBe(true);
@@ -563,7 +562,7 @@ describe("EaContainer", () => {
       el.textContent = "Text content";
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       expect(el.shadowRoot).toBeTruthy();
     });
@@ -624,7 +623,7 @@ describe("EaContainer", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-container");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });
@@ -634,7 +633,7 @@ describe("EaContainer", () => {
         const header = document.createElement("ea-header");
         header.setAttribute("label", "Site header");
         container.appendChild(header);
-        await waitForRender();
+        await header.updateComplete;
         const headerEl = header.shadowRoot.querySelector(".ea-header");
         expect(headerEl.getAttribute("aria-label")).toBe("Site header");
       });
@@ -642,7 +641,7 @@ describe("EaContainer", () => {
       it("ea-header 未设置 label 时不应该有 aria-label", async () => {
         const header = document.createElement("ea-header");
         container.appendChild(header);
-        await waitForRender();
+        await header.updateComplete;
         const headerEl = header.shadowRoot.querySelector(".ea-header");
         expect(headerEl.hasAttribute("aria-label")).toBe(false);
       });
@@ -651,7 +650,7 @@ describe("EaContainer", () => {
         const footer = document.createElement("ea-footer");
         footer.setAttribute("label", "Site footer");
         container.appendChild(footer);
-        await waitForRender();
+        await footer.updateComplete;
         const footerEl = footer.shadowRoot.querySelector(".ea-footer");
         expect(footerEl.getAttribute("aria-label")).toBe("Site footer");
       });
@@ -659,7 +658,7 @@ describe("EaContainer", () => {
       it("ea-footer 未设置 label 时不应该有 aria-label", async () => {
         const footer = document.createElement("ea-footer");
         container.appendChild(footer);
-        await waitForRender();
+        await footer.updateComplete;
         const footerEl = footer.shadowRoot.querySelector(".ea-footer");
         expect(footerEl.hasAttribute("aria-label")).toBe(false);
       });
@@ -668,7 +667,7 @@ describe("EaContainer", () => {
         const aside = document.createElement("ea-aside");
         aside.setAttribute("label", "Sidebar navigation");
         container.appendChild(aside);
-        await waitForRender();
+        await aside.updateComplete;
         const asideEl = aside.shadowRoot.querySelector(".ea-aside");
         expect(asideEl.getAttribute("aria-label")).toBe("Sidebar navigation");
       });
@@ -676,7 +675,7 @@ describe("EaContainer", () => {
       it("ea-aside 未设置 label 时不应该有 aria-label", async () => {
         const aside = document.createElement("ea-aside");
         container.appendChild(aside);
-        await waitForRender();
+        await aside.updateComplete;
         const asideEl = aside.shadowRoot.querySelector(".ea-aside");
         expect(asideEl.hasAttribute("aria-label")).toBe(false);
       });
@@ -685,7 +684,7 @@ describe("EaContainer", () => {
         const main = document.createElement("ea-main");
         main.setAttribute("label", "Main content");
         container.appendChild(main);
-        await waitForRender();
+        await main.updateComplete;
         const mainEl = main.shadowRoot.querySelector(".ea-main");
         expect(mainEl.getAttribute("aria-label")).toBe("Main content");
       });
@@ -693,7 +692,7 @@ describe("EaContainer", () => {
       it("ea-main 未设置 label 时不应该有 aria-label", async () => {
         const main = document.createElement("ea-main");
         container.appendChild(main);
-        await waitForRender();
+        await main.updateComplete;
         const mainEl = main.shadowRoot.querySelector(".ea-main");
         expect(mainEl.hasAttribute("aria-label")).toBe(false);
       });

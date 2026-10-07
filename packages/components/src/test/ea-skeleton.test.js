@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { waitForRender } from "./utils/waitForRender.js";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-skeleton/index";
@@ -75,7 +74,7 @@ describe("EaSkeleton Component", () => {
       const skeleton = document.createElement("ea-skeleton");
       container.appendChild(skeleton);
 
-      await waitForRender();
+      await skeleton.updateComplete;
 
       const containerEl =
         skeleton.shadowRoot.querySelector('[part="container"]');
@@ -104,7 +103,7 @@ describe("EaSkeleton Component", () => {
       skeleton.loading = true;
       container.appendChild(skeleton);
 
-      await waitForRender();
+      await skeleton.updateComplete;
 
       skeleton.loading = false;
 
@@ -116,7 +115,7 @@ describe("EaSkeleton Component", () => {
       skeleton.loading = false;
       container.appendChild(skeleton);
 
-      await waitForRender();
+      await skeleton.updateComplete;
 
       skeleton.loading = true;
 
@@ -128,7 +127,7 @@ describe("EaSkeleton Component", () => {
       skeleton.loading = true;
       container.appendChild(skeleton);
 
-      await waitForRender();
+      await skeleton.updateComplete;
 
       const containerEl =
         skeleton.shadowRoot.querySelector('[part="container"]');
@@ -140,7 +139,7 @@ describe("EaSkeleton Component", () => {
       skeleton.loading = false;
       container.appendChild(skeleton);
 
-      await waitForRender();
+      await skeleton.updateComplete;
 
       const containerEl =
         skeleton.shadowRoot.querySelector('[part="container"]');
@@ -151,21 +150,23 @@ describe("EaSkeleton Component", () => {
       const skeleton = document.createElement("ea-skeleton");
       container.appendChild(skeleton);
 
-      await waitForRender();
+      await skeleton.updateComplete;
 
       const containerEl =
         skeleton.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-loading")).toBe(true);
 
       skeleton.loading = false;
-      await waitForRender();
 
-      expect(containerEl.classList.contains("is-loading")).toBe(false);
+      await vi.waitFor(() => {
+        expect(containerEl.classList.contains("is-loading")).toBe(false);
+      });
 
       skeleton.loading = true;
-      await waitForRender();
 
-      expect(containerEl.classList.contains("is-loading")).toBe(true);
+      await vi.waitFor(() => {
+        expect(containerEl.classList.contains("is-loading")).toBe(true);
+      });
     });
 
     it("通过 HTML 属性设置 loading 应该生效", () => {
@@ -232,10 +233,10 @@ describe("EaSkeleton Component", () => {
       const skeleton = document.createElement("ea-skeleton");
       container.appendChild(skeleton);
 
-      await waitForRender();
+      await skeleton.updateComplete;
 
       skeleton.animated = true;
-      await waitForRender();
+      await skeleton.updateComplete;
 
       expect(skeleton.animated).toBe(true);
 
@@ -248,7 +249,7 @@ describe("EaSkeleton Component", () => {
       skeleton.animated = true;
       container.appendChild(skeleton);
 
-      await waitForRender();
+      await skeleton.updateComplete;
 
       const items = skeleton.shadowRoot.querySelectorAll("ea-skeleton-item");
       items.forEach(item => {
@@ -260,10 +261,10 @@ describe("EaSkeleton Component", () => {
       const skeleton = document.createElement("ea-skeleton");
       container.appendChild(skeleton);
 
-      await waitForRender();
+      await skeleton.updateComplete;
 
       skeleton.animated = true;
-      await waitForRender();
+      await skeleton.updateComplete;
 
       const items = skeleton.shadowRoot.querySelectorAll("ea-skeleton-item");
       items.forEach(item => {
@@ -271,7 +272,7 @@ describe("EaSkeleton Component", () => {
       });
 
       skeleton.animated = false;
-      await waitForRender();
+      await skeleton.updateComplete;
 
       items.forEach(item => {
         expect(item.animated).toBe(false);
@@ -286,7 +287,7 @@ describe("EaSkeleton Component", () => {
       skeleton.appendChild(item);
       container.appendChild(skeleton);
 
-      await waitForRender();
+      await item.updateComplete;
 
       expect(item.animated).toBe(true);
     });
@@ -321,7 +322,7 @@ describe("EaSkeleton Component", () => {
       skeleton.rows = 3;
       container.appendChild(skeleton);
 
-      await waitForRender();
+      await skeleton.updateComplete;
 
       const items = skeleton.shadowRoot.querySelectorAll("ea-skeleton-item");
       expect(items.length).toBe(3);
@@ -331,10 +332,10 @@ describe("EaSkeleton Component", () => {
       const skeleton = document.createElement("ea-skeleton");
       container.appendChild(skeleton);
 
-      await waitForRender();
+      await skeleton.updateComplete;
 
       skeleton.rows = 5;
-      await waitForRender();
+      await skeleton.updateComplete;
 
       const items = skeleton.shadowRoot.querySelectorAll("ea-skeleton-item");
       expect(items.length).toBe(5);
@@ -344,7 +345,7 @@ describe("EaSkeleton Component", () => {
       const skeleton = document.createElement("ea-skeleton");
       container.appendChild(skeleton);
 
-      await waitForRender();
+      await skeleton.updateComplete;
 
       const items = skeleton.shadowRoot.querySelectorAll("ea-skeleton-item");
       items.forEach(item => {
@@ -360,7 +361,7 @@ describe("EaSkeleton Component", () => {
       skeleton.appendChild(item);
       container.appendChild(skeleton);
 
-      await waitForRender();
+      await item.updateComplete;
 
       const items = skeleton.querySelectorAll("ea-skeleton-item");
       expect(items.length).toBe(1);
@@ -465,7 +466,7 @@ describe("EaSkeleton Component", () => {
       skeleton.throttleLeading = 200;
       container.appendChild(skeleton);
 
-      await waitForRender();
+      await skeleton.updateComplete;
 
       const containerEl =
         skeleton.shadowRoot.querySelector('[part="container"]');
@@ -492,7 +493,7 @@ describe("EaSkeleton Component", () => {
       skeleton.throttleTrailing = 200;
       container.appendChild(skeleton);
 
-      await waitForRender();
+      await skeleton.updateComplete;
 
       const containerEl =
         skeleton.shadowRoot.querySelector('[part="container"]');
@@ -519,7 +520,7 @@ describe("EaSkeleton Component", () => {
       skeleton.throttleTrailing = 200;
       container.appendChild(skeleton);
 
-      await waitForRender();
+      await skeleton.updateComplete;
 
       const containerEl =
         skeleton.shadowRoot.querySelector('[part="container"]');
@@ -558,7 +559,7 @@ describe("EaSkeleton Component", () => {
       const item = document.createElement("ea-skeleton-item");
       container.appendChild(item);
 
-      await waitForRender();
+      await item.updateComplete;
 
       const containerEl = item.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("ea-skeleton-item")).toBe(true);
@@ -641,17 +642,17 @@ describe("EaSkeleton Component", () => {
       const item = document.createElement("ea-skeleton-item");
       container.appendChild(item);
 
-      await waitForRender();
+      await item.updateComplete;
 
       const containerEl = item.shadowRoot.querySelector('[part="container"]');
 
       item.variant = "h1";
-      await waitForRender();
+      await item.updateComplete;
 
       expect(containerEl.classList.contains("ea-skeleton-item--h1")).toBe(true);
 
       item.variant = "button";
-      await waitForRender();
+      await item.updateComplete;
 
       expect(containerEl.classList.contains("ea-skeleton-item--button")).toBe(
         true
@@ -665,7 +666,7 @@ describe("EaSkeleton Component", () => {
       const item = document.createElement("ea-skeleton-item");
       container.appendChild(item);
 
-      await waitForRender();
+      await item.updateComplete;
 
       const containerEl = item.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("ea-skeleton-item--p")).toBe(true);
@@ -676,7 +677,7 @@ describe("EaSkeleton Component", () => {
       item.variant = "image";
       container.appendChild(item);
 
-      await waitForRender();
+      await item.updateComplete;
 
       const containerEl = item.shadowRoot.querySelector('[part="container"]');
       const svg = containerEl.querySelector("svg");
@@ -689,7 +690,7 @@ describe("EaSkeleton Component", () => {
       item.variant = "p";
       container.appendChild(item);
 
-      await waitForRender();
+      await item.updateComplete;
 
       const containerEl = item.shadowRoot.querySelector('[part="container"]');
       const svg = containerEl.querySelector("svg");
@@ -701,13 +702,13 @@ describe("EaSkeleton Component", () => {
       item.variant = "p";
       container.appendChild(item);
 
-      await waitForRender();
+      await item.updateComplete;
 
       let containerEl = item.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.querySelector("svg")).toBeNull();
 
       item.variant = "image";
-      await waitForRender();
+      await item.updateComplete;
 
       containerEl = item.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.querySelector("svg")).toBeTruthy();
@@ -718,13 +719,13 @@ describe("EaSkeleton Component", () => {
       item.variant = "image";
       container.appendChild(item);
 
-      await waitForRender();
+      await item.updateComplete;
 
       let containerEl = item.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.querySelector("svg")).toBeTruthy();
 
       item.variant = "p";
-      await waitForRender();
+      await item.updateComplete;
 
       containerEl = item.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.querySelector("svg")).toBeNull();
@@ -756,7 +757,7 @@ describe("EaSkeleton Component", () => {
         item.variant = variant;
         container.appendChild(item);
 
-        await waitForRender();
+        await item.updateComplete;
 
         expect(item.variant).toBe(variant);
         const containerEl = item.shadowRoot.querySelector('[part="container"]');
@@ -798,7 +799,7 @@ describe("EaSkeleton Component", () => {
       item.animated = true;
       container.appendChild(item);
 
-      await waitForRender();
+      await item.updateComplete;
 
       const containerEl = item.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-animated")).toBe(true);
@@ -808,7 +809,7 @@ describe("EaSkeleton Component", () => {
       const item = document.createElement("ea-skeleton-item");
       container.appendChild(item);
 
-      await waitForRender();
+      await item.updateComplete;
 
       const containerEl = item.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-animated")).toBe(false);
@@ -818,17 +819,17 @@ describe("EaSkeleton Component", () => {
       const item = document.createElement("ea-skeleton-item");
       container.appendChild(item);
 
-      await waitForRender();
+      await item.updateComplete;
 
       const containerEl = item.shadowRoot.querySelector('[part="container"]');
 
       item.animated = true;
-      await waitForRender();
+      await item.updateComplete;
 
       expect(containerEl.classList.contains("is-animated")).toBe(true);
 
       item.animated = false;
-      await waitForRender();
+      await item.updateComplete;
 
       expect(containerEl.classList.contains("is-animated")).toBe(false);
     });
@@ -839,7 +840,7 @@ describe("EaSkeleton Component", () => {
       const item = document.createElement("ea-skeleton-item");
       container.appendChild(item);
 
-      await waitForRender();
+      await item.updateComplete;
 
       const containerEl = item.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.className).toBe(
@@ -852,7 +853,7 @@ describe("EaSkeleton Component", () => {
       item.animated = true;
       container.appendChild(item);
 
-      await waitForRender();
+      await item.updateComplete;
 
       const containerEl = item.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.className).toBe(
@@ -866,7 +867,7 @@ describe("EaSkeleton Component", () => {
       item.animated = true;
       container.appendChild(item);
 
-      await waitForRender();
+      await item.updateComplete;
 
       const containerEl = item.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.className).toBe(
@@ -883,7 +884,7 @@ describe("EaSkeleton Component", () => {
       skeleton.appendChild(item);
       container.appendChild(skeleton);
 
-      await waitForRender();
+      await item.updateComplete;
 
       expect(skeleton.querySelector("ea-skeleton-item")).toBeTruthy();
     });
@@ -899,7 +900,7 @@ describe("EaSkeleton Component", () => {
 
       container.appendChild(skeleton);
 
-      await waitForRender();
+      await skeleton.updateComplete;
 
       expect(skeleton.querySelectorAll("ea-skeleton-item").length).toBe(3);
     });
@@ -914,7 +915,7 @@ describe("EaSkeleton Component", () => {
       `;
       container.appendChild(skeleton);
 
-      await waitForRender();
+      await skeleton.updateComplete;
 
       expect(skeleton.querySelectorAll("ea-skeleton-item").length).toBe(2);
     });
@@ -930,7 +931,7 @@ describe("EaSkeleton Component", () => {
       `;
       container.appendChild(skeleton);
 
-      await waitForRender();
+      await skeleton.updateComplete;
 
       const containerEl =
         skeleton.shadowRoot.querySelector('[part="container"]');
@@ -948,7 +949,7 @@ describe("EaSkeleton Component", () => {
       `;
       container.appendChild(skeleton);
 
-      await waitForRender();
+      await skeleton.updateComplete;
 
       expect(skeleton.textContent).toContain("Real Content");
       const containerEl =
@@ -969,7 +970,7 @@ describe("EaSkeleton Component", () => {
       `;
       container.appendChild(skeleton);
 
-      await waitForRender();
+      await skeleton.updateComplete;
 
       const items = skeleton.querySelectorAll("ea-skeleton-item");
       expect(items.length).toBe(5);
@@ -989,7 +990,7 @@ describe("EaSkeleton Component", () => {
       `;
       container.appendChild(skeleton);
 
-      await waitForRender();
+      await skeleton.updateComplete;
 
       const items = skeleton.querySelectorAll("ea-skeleton-item");
       items.forEach(item => {
@@ -1028,7 +1029,7 @@ describe("EaSkeleton Component", () => {
       const skeleton = document.createElement("ea-skeleton");
       container.appendChild(skeleton);
 
-      await waitForRender();
+      await skeleton.updateComplete;
 
       skeleton.loading = false;
       skeleton.loading = true;
@@ -1050,22 +1051,22 @@ describe("EaSkeleton Component", () => {
       const item = document.createElement("ea-skeleton-item");
       container.appendChild(item);
 
-      await waitForRender();
+      await item.updateComplete;
 
       item.variant = "image";
-      await waitForRender();
+      await item.updateComplete;
 
       let containerEl = item.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.querySelector("svg")).toBeTruthy();
 
       item.variant = "rect";
-      await waitForRender();
+      await item.updateComplete;
 
       containerEl = item.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.querySelector("svg")).toBeNull();
 
       item.variant = "image";
-      await waitForRender();
+      await item.updateComplete;
 
       containerEl = item.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.querySelector("svg")).toBeTruthy();
@@ -1098,7 +1099,7 @@ describe("EaSkeleton Component", () => {
       skeleton.loading = true;
       container.appendChild(skeleton);
 
-      await waitForRender();
+      await skeleton.updateComplete;
 
       skeleton.loading = false;
 
@@ -1109,7 +1110,7 @@ describe("EaSkeleton Component", () => {
       const skeleton = document.createElement("ea-skeleton");
       container.appendChild(skeleton);
 
-      await waitForRender();
+      await skeleton.updateComplete;
 
       skeleton.animated = true;
 
@@ -1121,7 +1122,7 @@ describe("EaSkeleton Component", () => {
       skeleton.rows = 2;
       container.appendChild(skeleton);
 
-      await waitForRender();
+      await skeleton.updateComplete;
 
       skeleton.rows = 6;
 
@@ -1133,7 +1134,7 @@ describe("EaSkeleton Component", () => {
       skeleton.count = 1;
       container.appendChild(skeleton);
 
-      await waitForRender();
+      await skeleton.updateComplete;
 
       skeleton.count = 5;
 
@@ -1145,7 +1146,7 @@ describe("EaSkeleton Component", () => {
       item.variant = "p";
       container.appendChild(item);
 
-      await waitForRender();
+      await item.updateComplete;
 
       item.variant = "h1";
 
@@ -1166,7 +1167,7 @@ describe("EaSkeleton Component", () => {
       skeleton.rows = 3;
       container.appendChild(skeleton);
 
-      await waitForRender();
+      await skeleton.updateComplete;
 
       skeleton.remove();
       container.appendChild(skeleton);
@@ -1182,7 +1183,7 @@ describe("EaSkeleton Component", () => {
       const skeleton = document.createElement("ea-skeleton");
       container.appendChild(skeleton);
 
-      await waitForRender();
+      await skeleton.updateComplete;
 
       const result = skeleton.updateContainerClasslist();
       expect(result).toContain("ea-skeleton");
@@ -1194,7 +1195,7 @@ describe("EaSkeleton Component", () => {
       skeleton.loading = false;
       container.appendChild(skeleton);
 
-      await waitForRender();
+      await skeleton.updateComplete;
 
       const result = skeleton.updateContainerClasslist();
       expect(result).toBe("ea-skeleton");
@@ -1204,7 +1205,7 @@ describe("EaSkeleton Component", () => {
       const item = document.createElement("ea-skeleton-item");
       container.appendChild(item);
 
-      await waitForRender();
+      await item.updateComplete;
 
       const result = item.updateContainerClasslist();
       expect(result).toContain("ea-skeleton-item");
@@ -1216,7 +1217,7 @@ describe("EaSkeleton Component", () => {
       item.animated = true;
       container.appendChild(item);
 
-      await waitForRender();
+      await item.updateComplete;
 
       const result = item.updateContainerClasslist();
       expect(result).toContain("is-animated");
@@ -1227,7 +1228,7 @@ describe("EaSkeleton Component", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-skeleton");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });
@@ -1237,9 +1238,10 @@ describe("EaSkeleton Component", () => {
         const skeleton = document.createElement("ea-skeleton");
         container.appendChild(skeleton);
 
-        await waitForRender();
+        await skeleton.updateComplete;
 
-        const containerEl = skeleton.shadowRoot.querySelector('[part="container"]');
+        const containerEl =
+          skeleton.shadowRoot.querySelector('[part="container"]');
         expect(containerEl.getAttribute("aria-hidden")).toBe("true");
       });
 
@@ -1248,9 +1250,10 @@ describe("EaSkeleton Component", () => {
         skeleton.loading = true;
         container.appendChild(skeleton);
 
-        await waitForRender();
+        await skeleton.updateComplete;
 
-        const containerEl = skeleton.shadowRoot.querySelector('[part="container"]');
+        const containerEl =
+          skeleton.shadowRoot.querySelector('[part="container"]');
         expect(containerEl.getAttribute("aria-busy")).toBe("true");
       });
 
@@ -1259,9 +1262,10 @@ describe("EaSkeleton Component", () => {
         skeleton.loading = false;
         container.appendChild(skeleton);
 
-        await waitForRender();
+        await skeleton.updateComplete;
 
-        const containerEl = skeleton.shadowRoot.querySelector('[part="container"]');
+        const containerEl =
+          skeleton.shadowRoot.querySelector('[part="container"]');
         expect(containerEl.getAttribute("aria-busy")).toBe("false");
       });
 
@@ -1270,13 +1274,14 @@ describe("EaSkeleton Component", () => {
         skeleton.loading = true;
         container.appendChild(skeleton);
 
-        await waitForRender();
+        await skeleton.updateComplete;
 
-        const containerEl = skeleton.shadowRoot.querySelector('[part="container"]');
+        const containerEl =
+          skeleton.shadowRoot.querySelector('[part="container"]');
         expect(containerEl.getAttribute("aria-busy")).toBe("true");
 
         skeleton.loading = false;
-        await waitForRender();
+        await skeleton.updateComplete;
 
         expect(containerEl.getAttribute("aria-busy")).toBe("true");
       });

@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { waitForRender } from "./utils/waitForRender.js";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-link/index.ts";
@@ -109,10 +108,10 @@ describe("EaLink", () => {
       const link = document.createElement("ea-link");
       container.appendChild(link);
 
-      await waitForRender();
+      await link.updateComplete;
 
       link.setAttribute("variant", "primary");
-      await waitForRender();
+      await link.updateComplete;
 
       const anchorElement = link.shadowRoot.querySelector("a.ea-link");
       expect(anchorElement.classList.contains("ea-link--primary")).toBe(true);
@@ -148,7 +147,7 @@ describe("EaLink", () => {
         link.setAttribute("href", href);
         container.appendChild(link);
 
-        await waitForRender(30);
+        await link.updateComplete;
 
         const anchorElement = link.shadowRoot.querySelector("a.ea-link");
         expect(anchorElement.getAttribute("href")).toBe(href);
@@ -161,13 +160,13 @@ describe("EaLink", () => {
       link.setAttribute("href", "https://old.com");
       container.appendChild(link);
 
-      await waitForRender();
+      await link.updateComplete;
 
       const anchorElement = link.shadowRoot.querySelector("a.ea-link");
       expect(anchorElement.getAttribute("href")).toBe("https://old.com");
 
       link.setAttribute("href", "https://new.com");
-      await waitForRender();
+      await link.updateComplete;
 
       expect(anchorElement.getAttribute("href")).toBe("https://new.com");
     });
@@ -187,7 +186,7 @@ describe("EaLink", () => {
       link.setAttribute("target", "_blank");
       container.appendChild(link);
 
-      await waitForRender();
+      await link.updateComplete;
 
       expect(link.target).toBe("_blank");
       const anchorElement = link.shadowRoot.querySelector("a.ea-link");
@@ -200,7 +199,7 @@ describe("EaLink", () => {
       link.setAttribute("target", "_self");
       container.appendChild(link);
 
-      await waitForRender();
+      await link.updateComplete;
 
       const anchorElement = link.shadowRoot.querySelector("a.ea-link");
       expect(anchorElement.getAttribute("target")).toBe("_self");
@@ -212,13 +211,13 @@ describe("EaLink", () => {
       link.setAttribute("target", "_blank");
       container.appendChild(link);
 
-      await waitForRender();
+      await link.updateComplete;
 
       const anchorElement = link.shadowRoot.querySelector("a.ea-link");
       expect(anchorElement.getAttribute("target")).toBe("_blank");
 
       link.setAttribute("target", "_self");
-      await waitForRender();
+      await link.updateComplete;
 
       expect(anchorElement.getAttribute("target")).toBe("_self");
     });
@@ -238,7 +237,7 @@ describe("EaLink", () => {
       link.setAttribute("rel", "noopener noreferrer");
       container.appendChild(link);
 
-      await waitForRender();
+      await link.updateComplete;
 
       expect(link.rel).toBe("noopener noreferrer");
       const anchorElement = link.shadowRoot.querySelector("a.ea-link");
@@ -251,13 +250,13 @@ describe("EaLink", () => {
       link.setAttribute("rel", "noopener");
       container.appendChild(link);
 
-      await waitForRender();
+      await link.updateComplete;
 
       const anchorElement = link.shadowRoot.querySelector("a.ea-link");
       expect(anchorElement.getAttribute("rel")).toBe("noopener");
 
       link.setAttribute("rel", "noopener noreferrer");
-      await waitForRender();
+      await link.updateComplete;
 
       expect(anchorElement.getAttribute("rel")).toBe("noopener noreferrer");
     });
@@ -277,7 +276,7 @@ describe("EaLink", () => {
       link.setAttribute("download", "document.pdf");
       container.appendChild(link);
 
-      await waitForRender();
+      await link.updateComplete;
 
       expect(link.download).toBe("document.pdf");
       const anchorElement = link.shadowRoot.querySelector("a.ea-link");
@@ -290,13 +289,13 @@ describe("EaLink", () => {
       link.setAttribute("download", "old.pdf");
       container.appendChild(link);
 
-      await waitForRender();
+      await link.updateComplete;
 
       const anchorElement = link.shadowRoot.querySelector("a.ea-link");
       expect(anchorElement.getAttribute("download")).toBe("old.pdf");
 
       link.setAttribute("download", "new.pdf");
-      await waitForRender();
+      await link.updateComplete;
 
       expect(anchorElement.getAttribute("download")).toBe("new.pdf");
     });
@@ -323,7 +322,7 @@ describe("EaLink", () => {
       link.setAttribute("disabled", "");
       container.appendChild(link);
 
-      await waitForRender();
+      await link.updateComplete;
 
       const anchorElement = link.shadowRoot.querySelector("a.ea-link");
       expect(anchorElement.classList.contains("is-disabled")).toBe(true);
@@ -367,10 +366,12 @@ describe("EaLink", () => {
       link.setAttribute("underline", "always");
       container.appendChild(link);
 
-      await waitForRender();
+      await link.updateComplete;
 
       const anchorElement = link.shadowRoot.querySelector("a.ea-link");
-      expect(anchorElement.classList.contains("ea-link--underline-always")).toBe(true);
+      expect(
+        anchorElement.classList.contains("ea-link--underline-always")
+      ).toBe(true);
     });
 
     it("underline='hover' 时应该添加 ea-link--underline-hover 修饰符类", async () => {
@@ -378,10 +379,12 @@ describe("EaLink", () => {
       link.setAttribute("underline", "hover");
       container.appendChild(link);
 
-      await waitForRender();
+      await link.updateComplete;
 
       const anchorElement = link.shadowRoot.querySelector("a.ea-link");
-      expect(anchorElement.classList.contains("ea-link--underline-hover")).toBe(true);
+      expect(anchorElement.classList.contains("ea-link--underline-hover")).toBe(
+        true
+      );
     });
   });
 
@@ -398,7 +401,7 @@ describe("EaLink", () => {
       link.setAttribute("icon", "eye");
       container.appendChild(link);
 
-      await waitForRender();
+      await link.updateComplete;
 
       const iconElement = link.shadowRoot.querySelector("ea-icon");
       expect(iconElement.getAttribute("name")).toBe("eye");
@@ -409,7 +412,7 @@ describe("EaLink", () => {
       link.setAttribute("icon", "eye");
       container.appendChild(link);
 
-      await waitForRender();
+      await link.updateComplete;
 
       const anchorElement = link.shadowRoot.querySelector("a.ea-link");
       expect(anchorElement.classList.contains("is-icon")).toBe(true);
@@ -420,13 +423,13 @@ describe("EaLink", () => {
       link.setAttribute("icon", "eye");
       container.appendChild(link);
 
-      await waitForRender();
+      await link.updateComplete;
 
       const iconElement = link.shadowRoot.querySelector("ea-icon");
       expect(iconElement.getAttribute("name")).toBe("eye");
 
       link.setAttribute("icon", "share");
-      await waitForRender();
+      await link.updateComplete;
 
       expect(iconElement.getAttribute("name")).toBe("share");
     });
@@ -459,7 +462,7 @@ describe("EaLink", () => {
       link.setAttribute("underline", "always");
       container.appendChild(link);
 
-      await waitForRender();
+      await link.updateComplete;
 
       const iconElement = link.shadowRoot.querySelector("ea-icon");
       expect(iconElement.getAttribute("name")).toBe("eye");
@@ -473,7 +476,7 @@ describe("EaLink", () => {
       link.setAttribute("rel", "noopener noreferrer");
       container.appendChild(link);
 
-      await waitForRender();
+      await link.updateComplete;
 
       const anchorElement = link.shadowRoot.querySelector("a.ea-link");
       expect(anchorElement.getAttribute("href")).toBe("https://example.com");
@@ -521,7 +524,7 @@ describe("EaLink", () => {
       link.setAttribute("href", "#");
       container.appendChild(link);
 
-      await waitForRender();
+      await link.updateComplete;
 
       const anchorElement = link.shadowRoot.querySelector("a.ea-link");
 
@@ -546,7 +549,7 @@ describe("EaLink", () => {
       link.setAttribute("href", "");
       container.appendChild(link);
 
-      await waitForRender();
+      await link.updateComplete;
 
       const anchorElement = link.shadowRoot.querySelector("a.ea-link");
       expect(anchorElement.getAttribute("href")).toBe("");
@@ -557,7 +560,7 @@ describe("EaLink", () => {
       link.setAttribute("icon", "");
       container.appendChild(link);
 
-      await waitForRender();
+      await link.updateComplete;
 
       const iconElement = link.shadowRoot.querySelector("ea-icon");
       expect(iconElement.getAttribute("name")).toBe("");
@@ -568,7 +571,7 @@ describe("EaLink", () => {
       link.setAttribute("href", "/path?query=value&other=test");
       container.appendChild(link);
 
-      await waitForRender();
+      await link.updateComplete;
 
       const anchorElement = link.shadowRoot.querySelector("a.ea-link");
       expect(anchorElement.getAttribute("href")).toBe(
@@ -625,7 +628,7 @@ describe("EaLink", () => {
       el.setAttribute("href", "https://example.com");
       el.textContent = "Link";
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });
@@ -636,7 +639,7 @@ describe("EaLink", () => {
       el.setAttribute("disabled", "");
       el.textContent = "Link";
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });
@@ -646,14 +649,14 @@ describe("EaLink", () => {
         const el = document.createElement("ea-link");
         el.disabled = true;
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-disabled")).toBe("true");
       });
 
       it("非 disabled 时宿主元素 aria-disabled 应该为 false", async () => {
         const el = document.createElement("ea-link");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-disabled")).toBe("false");
       });
 
@@ -661,7 +664,7 @@ describe("EaLink", () => {
         const el = document.createElement("ea-link");
         el.textContent = "Link";
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const anchor = el.shadowRoot.querySelector("a.ea-link");
         expect(anchor.getAttribute("role")).toBe("link");
       });
@@ -670,7 +673,7 @@ describe("EaLink", () => {
         const el = document.createElement("ea-link");
         el.href = "https://example.com";
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const anchor = el.shadowRoot.querySelector("a.ea-link");
         expect(anchor.getAttribute("role")).toBeNull();
       });

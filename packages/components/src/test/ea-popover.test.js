@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { waitForRender } from "./utils/waitForRender.js";
 import { fireKeydown } from "./utils/keyboard.js";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
@@ -131,12 +130,12 @@ describe("EaPopover Component", () => {
       popover.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popover);
 
-      await waitForRender();
+      await popover.updateComplete;
 
       expect(popover.trigger).toBe("hover");
 
       popover.setAttribute("trigger", "click");
-      await waitForRender();
+      await popover.updateComplete;
 
       expect(popover.trigger).toBe("click");
     });
@@ -177,7 +176,7 @@ describe("EaPopover Component", () => {
       popover.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popover);
 
-      await waitForRender();
+      await popover.updateComplete;
 
       const titleEl = popover.shadowRoot.querySelector(".ea-popover__title");
       expect(titleEl).toBeTruthy();
@@ -208,10 +207,10 @@ describe("EaPopover Component", () => {
       popover.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popover);
 
-      await waitForRender();
+      await popover.updateComplete;
 
       popover.setAttribute("heading", "Dynamic Title");
-      await waitForRender();
+      await popover.updateComplete;
 
       const titleEl = popover.shadowRoot.querySelector(".ea-popover__title");
       expect(titleEl.textContent).toBe("Dynamic Title");
@@ -226,10 +225,10 @@ describe("EaPopover Component", () => {
       popover.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popover);
 
-      await waitForRender();
+      await popover.updateComplete;
 
       popover.setAttribute("heading", "");
-      await waitForRender();
+      await popover.updateComplete;
 
       const containerEl = popover.shadowRoot.querySelector(".ea-popper");
       expect(containerEl.classList.contains("is-has-heading")).toBe(false);
@@ -252,7 +251,7 @@ describe("EaPopover Component", () => {
       popover.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popover);
 
-      await waitForRender();
+      await popover.updateComplete;
 
       const contentEl = popover.shadowRoot.querySelector(
         ".ea-popover__content"
@@ -297,10 +296,10 @@ describe("EaPopover Component", () => {
       popover.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popover);
 
-      await waitForRender();
+      await popover.updateComplete;
 
       popover.setAttribute("content", "Dynamic Content");
-      await waitForRender();
+      await popover.updateComplete;
 
       const contentEl = popover.shadowRoot.querySelector(
         ".ea-popover__content"
@@ -317,10 +316,10 @@ describe("EaPopover Component", () => {
       popover.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popover);
 
-      await waitForRender();
+      await popover.updateComplete;
 
       popover.setAttribute("content", "");
-      await waitForRender();
+      await popover.updateComplete;
 
       const containerEl = popover.shadowRoot.querySelector(".ea-popper");
       expect(containerEl.classList.contains("is-has-content")).toBe(false);
@@ -447,7 +446,7 @@ describe("EaPopover Component", () => {
       popover.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popover);
 
-      await waitForRender();
+      await popover.updateComplete;
 
       expect(popover.visible).toBe(false);
 
@@ -462,7 +461,7 @@ describe("EaPopover Component", () => {
       popover.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popover);
 
-      await waitForRender();
+      await popover.updateComplete;
 
       popover.show();
       expect(popover.visible).toBe(true);
@@ -478,7 +477,7 @@ describe("EaPopover Component", () => {
       popover.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popover);
 
-      await waitForRender();
+      await popover.updateComplete;
 
       popover.show();
       expect(popover.visible).toBe(true);
@@ -498,13 +497,13 @@ describe("EaPopover Component", () => {
       popover.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popover);
 
-      await waitForRender();
+      await popover.updateComplete;
 
       const showHandler = vi.fn();
       popover.addEventListener("ea-show", showHandler);
 
       popover.show();
-      await waitForRender();
+      await popover.updateComplete;
 
       expect(showHandler).toHaveBeenCalled();
     });
@@ -516,13 +515,13 @@ describe("EaPopover Component", () => {
       popover.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popover);
 
-      await waitForRender();
+      await popover.updateComplete;
 
       const hideHandler = vi.fn();
       popover.addEventListener("ea-hide", hideHandler);
 
       popover.hide();
-      await waitForRender();
+      await popover.updateComplete;
 
       expect(hideHandler).toHaveBeenCalled();
     });
@@ -533,7 +532,7 @@ describe("EaPopover Component", () => {
       popover.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popover);
 
-      await waitForRender();
+      await popover.updateComplete;
 
       let eventTypeName = "";
       popover.addEventListener("ea-show", e => {
@@ -541,7 +540,7 @@ describe("EaPopover Component", () => {
       });
 
       popover.show();
-      await waitForRender();
+      await popover.updateComplete;
 
       expect(eventTypeName).toBe("EaPopperShowEvent");
     });
@@ -553,7 +552,7 @@ describe("EaPopover Component", () => {
       popover.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popover);
 
-      await waitForRender();
+      await popover.updateComplete;
 
       let eventTypeName = "";
       popover.addEventListener("ea-hide", e => {
@@ -561,7 +560,7 @@ describe("EaPopover Component", () => {
       });
 
       popover.hide();
-      await waitForRender();
+      await popover.updateComplete;
 
       expect(eventTypeName).toBe("EaPopperHideEvent");
     });
@@ -572,7 +571,7 @@ describe("EaPopover Component", () => {
       popover.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popover);
 
-      await waitForRender();
+      await popover.updateComplete;
 
       let eventBubbles = false;
       popover.addEventListener("ea-show", e => {
@@ -580,7 +579,7 @@ describe("EaPopover Component", () => {
       });
 
       popover.show();
-      await waitForRender();
+      await popover.updateComplete;
 
       expect(eventBubbles).toBe(true);
     });
@@ -591,7 +590,7 @@ describe("EaPopover Component", () => {
       popover.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popover);
 
-      await waitForRender();
+      await popover.updateComplete;
 
       let eventComposed = false;
       popover.addEventListener("ea-show", e => {
@@ -599,7 +598,7 @@ describe("EaPopover Component", () => {
       });
 
       popover.show();
-      await waitForRender();
+      await popover.updateComplete;
 
       expect(eventComposed).toBe(true);
     });
@@ -709,7 +708,7 @@ describe("EaPopover Component", () => {
       popover.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popover);
 
-      await waitForRender();
+      await popover.updateComplete;
 
       popover.remove();
 
@@ -721,12 +720,12 @@ describe("EaPopover Component", () => {
       popover.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popover);
 
-      await waitForRender();
+      await popover.updateComplete;
 
       expect(popover.heading).toBe("");
 
       popover.setAttribute("heading", "New Title");
-      await waitForRender();
+      await popover.updateComplete;
 
       expect(popover.heading).toBe("New Title");
     });
@@ -736,13 +735,13 @@ describe("EaPopover Component", () => {
       popover.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popover);
 
-      await waitForRender();
+      await popover.updateComplete;
 
       popover.remove();
-      await waitForRender();
+      await popover.updateComplete;
 
       container.appendChild(popover);
-      await waitForRender();
+      await popover.updateComplete;
 
       expect(popover.shadowRoot).toBeTruthy();
       expect(popover.placement).toBe("top");
@@ -755,7 +754,7 @@ describe("EaPopover Component", () => {
       el.setAttribute("heading", "Test Popover");
       el.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });
@@ -766,7 +765,7 @@ describe("EaPopover Component", () => {
         el.setAttribute("heading", "Test Popover");
         el.innerHTML = `<button slot="reference">Trigger</button>`;
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const trigger = el.querySelector('[slot="reference"]');
         expect(trigger.getAttribute("aria-haspopup")).toBe("dialog");
       });
@@ -776,7 +775,7 @@ describe("EaPopover Component", () => {
         el.setAttribute("heading", "Test Popover");
         el.innerHTML = `<button slot="reference">Trigger</button>`;
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const popper = el.shadowRoot.querySelector('[part="original"]');
         expect(popper.getAttribute("role")).toBe("dialog");
       });
@@ -786,7 +785,7 @@ describe("EaPopover Component", () => {
         el.setAttribute("heading", "Test Popover");
         el.innerHTML = `<button slot="reference">Trigger</button>`;
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const popper = el.shadowRoot.querySelector('[part="original"]');
         expect(popper.getAttribute("aria-labelledby")).toBeTruthy();
       });
@@ -796,7 +795,7 @@ describe("EaPopover Component", () => {
         el.setAttribute("heading", "Test Popover");
         el.innerHTML = `<button slot="reference">Trigger</button>`;
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const trigger = el.querySelector('[slot="reference"]');
         expect(trigger.hasAttribute("aria-expanded")).toBe(true);
       });
@@ -827,7 +826,7 @@ describe("EaPopover Interaction And Focus", () => {
   describe("Trigger Keyboard Activation", () => {
     it("触发元素按 Enter 应该切换显示状态", async () => {
       const popover = createPopover();
-      await waitForRender();
+      await popover.updateComplete;
 
       const trigger = popover.querySelector('[slot="reference"]');
 
@@ -840,7 +839,7 @@ describe("EaPopover Interaction And Focus", () => {
 
     it("触发元素按空格应该切换显示状态", async () => {
       const popover = createPopover();
-      await waitForRender();
+      await popover.updateComplete;
 
       const trigger = popover.querySelector('[slot="reference"]');
       fireKeydown(trigger, " ");
@@ -850,7 +849,7 @@ describe("EaPopover Interaction And Focus", () => {
 
     it("Enter 激活应该阻止默认行为", async () => {
       const popover = createPopover();
-      await waitForRender();
+      await popover.updateComplete;
 
       const trigger = popover.querySelector('[slot="reference"]');
       const event = fireKeydown(trigger, "Enter");
@@ -860,7 +859,7 @@ describe("EaPopover Interaction And Focus", () => {
 
     it("focus 模式下按 Enter 不应该切换显示状态", async () => {
       const popover = createPopover("focus");
-      await waitForRender();
+      await popover.updateComplete;
 
       const trigger = popover.querySelector('[slot="reference"]');
       const event = fireKeydown(trigger, "Enter");
@@ -871,7 +870,7 @@ describe("EaPopover Interaction And Focus", () => {
 
     it("customized 模式下按 Enter 只标记键盘激活", async () => {
       const popover = createPopover("customized");
-      await waitForRender();
+      await popover.updateComplete;
 
       const trigger = popover.querySelector('[slot="reference"]');
       fireKeydown(trigger, "Enter");
@@ -882,7 +881,7 @@ describe("EaPopover Interaction And Focus", () => {
 
     it("触发元素上的其他按键不应该有影响", async () => {
       const popover = createPopover();
-      await waitForRender();
+      await popover.updateComplete;
 
       const trigger = popover.querySelector('[slot="reference"]');
       fireKeydown(trigger, "a");
@@ -894,36 +893,36 @@ describe("EaPopover Interaction And Focus", () => {
   describe("Trigger Event Strategies", () => {
     it("hover 模式鼠标移入显示、移出隐藏", async () => {
       const popover = createPopover("hover");
-      await waitForRender();
+      await popover.updateComplete;
 
       popover.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
-      await waitForRender();
+      await popover.updateComplete;
       expect(popover.visible).toBe(true);
 
       popover.dispatchEvent(new MouseEvent("mouseout", { bubbles: true }));
-      await waitForRender();
+      await popover.updateComplete;
       expect(popover.visible).toBe(false);
     });
 
     it("click 模式点击触发元素切换显示状态", async () => {
       const popover = createPopover("click");
-      await waitForRender();
+      await popover.updateComplete;
 
       const trigger = popover.querySelector('[slot="reference"]');
       const clickInit = { bubbles: true, composed: true, detail: 1 };
 
       trigger.dispatchEvent(new MouseEvent("click", clickInit));
-      await waitForRender();
+      await popover.updateComplete;
       expect(popover.visible).toBe(true);
 
       trigger.dispatchEvent(new MouseEvent("click", clickInit));
-      await waitForRender();
+      await popover.updateComplete;
       expect(popover.visible).toBe(false);
     });
 
     it("detail 为 0 的点击不应该切换显示状态", async () => {
       const popover = createPopover("click");
-      await waitForRender();
+      await popover.updateComplete;
 
       const trigger = popover.querySelector('[slot="reference"]');
       trigger.dispatchEvent(
@@ -935,30 +934,31 @@ describe("EaPopover Interaction And Focus", () => {
 
     it("focus 模式聚焦组件时显示", async () => {
       const popover = createPopover("focus");
-      await waitForRender();
+      await popover.updateComplete;
 
       popover.querySelector('[slot="reference"]').focus();
-      await waitForRender();
+      await popover.updateComplete;
 
       expect(popover.visible).toBe(true);
     });
 
     it("contextmenu 模式右键显示、点击外部隐藏", async () => {
       const popover = createPopover("contextmenu");
-      await waitForRender();
+      await popover.updateComplete;
 
       popover.dispatchEvent(
         new MouseEvent("contextmenu", { bubbles: true, cancelable: true })
       );
-      await waitForRender();
+      await popover.updateComplete;
       expect(popover.visible).toBe(true);
 
       const outside = document.createElement("button");
       container.appendChild(outside);
       outside.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      await waitForRender();
 
-      expect(popover.visible).toBe(false);
+      await vi.waitFor(() => {
+        expect(popover.visible).toBe(false);
+      });
     });
   });
 
@@ -967,7 +967,7 @@ describe("EaPopover Interaction And Focus", () => {
       const popover = document.createElement("ea-popover");
       popover.innerHTML = `<span slot="reference">Trigger</span>`;
       container.appendChild(popover);
-      await waitForRender();
+      await popover.updateComplete;
 
       const trigger = popover.querySelector('[slot="reference"]');
       expect(trigger.getAttribute("tabindex")).toBe("0");
@@ -978,7 +978,7 @@ describe("EaPopover Interaction And Focus", () => {
       const popover = document.createElement("ea-popover");
       popover.innerHTML = `<div slot="reference" tabindex="0">Trigger</div>`;
       container.appendChild(popover);
-      await waitForRender();
+      await popover.updateComplete;
 
       const trigger = popover.querySelector('[slot="reference"]');
       expect(trigger.hasAttribute("role")).toBe(false);
@@ -991,10 +991,10 @@ describe("EaPopover Interaction And Focus", () => {
         "click",
         `<button class="inner">X</button>`
       );
-      await waitForRender();
+      await popover.updateComplete;
 
       popover.show();
-      await waitForRender();
+      await popover.updateComplete;
 
       const trigger = popover.querySelector('[slot="reference"]');
       const event = fireKeydown(popover.querySelector(".inner"), "Escape");
@@ -1009,10 +1009,10 @@ describe("EaPopover Interaction And Focus", () => {
         "click",
         `<button class="a">A</button><button class="b">B</button>`
       );
-      await waitForRender();
+      await popover.updateComplete;
 
       popover.show();
-      await waitForRender();
+      await popover.updateComplete;
 
       const event = fireKeydown(popover.querySelector(".b"), "Tab");
 
@@ -1025,10 +1025,10 @@ describe("EaPopover Interaction And Focus", () => {
         "click",
         `<button class="a">A</button><button class="b">B</button>`
       );
-      await waitForRender();
+      await popover.updateComplete;
 
       popover.show();
-      await waitForRender();
+      await popover.updateComplete;
 
       const event = fireKeydown(popover.querySelector(".a"), "Tab", {
         shiftKey: true,
@@ -1043,10 +1043,10 @@ describe("EaPopover Interaction And Focus", () => {
         "click",
         `<button class="a">A</button><button class="b">B</button><button class="c">C</button>`
       );
-      await waitForRender();
+      await popover.updateComplete;
 
       popover.show();
-      await waitForRender();
+      await popover.updateComplete;
 
       const event = fireKeydown(popover.querySelector(".b"), "Tab");
 
@@ -1058,10 +1058,10 @@ describe("EaPopover Interaction And Focus", () => {
         "click",
         `<button class="a">A</button><button class="b">B</button><button class="c">C</button>`
       );
-      await waitForRender();
+      await popover.updateComplete;
 
       popover.show();
-      await waitForRender();
+      await popover.updateComplete;
 
       const event = fireKeydown(popover.querySelector(".b"), "Tab", {
         shiftKey: true,
@@ -1072,10 +1072,10 @@ describe("EaPopover Interaction And Focus", () => {
 
     it("内容区没有可聚焦元素时 Tab 不做处理", async () => {
       const popover = createPopover("click", `<span class="text">Text</span>`);
-      await waitForRender();
+      await popover.updateComplete;
 
       popover.show();
-      await waitForRender();
+      await popover.updateComplete;
 
       const event = fireKeydown(popover.querySelector(".text"), "Tab");
 
@@ -1087,10 +1087,10 @@ describe("EaPopover Interaction And Focus", () => {
         "click",
         `<button class="d" disabled>D</button>`
       );
-      await waitForRender();
+      await popover.updateComplete;
 
       popover.show();
-      await waitForRender();
+      await popover.updateComplete;
 
       const event = fireKeydown(popover.querySelector(".d"), "Tab");
 
@@ -1104,29 +1104,33 @@ describe("EaPopover Interaction And Focus", () => {
         "click",
         `<button class="first">F</button>`
       );
-      await waitForRender();
+      await popover.updateComplete;
 
       const trigger = popover.querySelector('[slot="reference"]');
       fireKeydown(trigger, "Enter");
-      await waitForRender();
+      await popover.updateComplete;
 
-      expect(document.activeElement).toBe(popover.querySelector(".first"));
+      await vi.waitFor(() => {
+        expect(document.activeElement).toBe(popover.querySelector(".first"));
+      });
     });
 
     it("内容区没有可聚焦元素时应该聚焦原始内容容器", async () => {
       const popover = createPopover("click", `<span>Text</span>`);
-      await waitForRender();
+      await popover.updateComplete;
 
       const trigger = popover.querySelector('[slot="reference"]');
       fireKeydown(trigger, "Enter");
-      await waitForRender();
+      await popover.updateComplete;
 
       const original = popover.shadowRoot.querySelector('[part="original"]');
-      const focused =
-        popover.shadowRoot.activeElement ?? document.activeElement;
 
-      expect(original.tabIndex).toBe(0);
-      expect([popover, original]).toContain(focused);
+      await vi.waitFor(() => {
+        const focused =
+          popover.shadowRoot.activeElement ?? document.activeElement;
+        expect(original.tabIndex).toBe(0);
+        expect([popover, original]).toContain(focused);
+      });
     });
 
     it("自定义元素内容应该聚焦其 Shadow DOM 内的可聚焦元素", async () => {
@@ -1134,18 +1138,20 @@ describe("EaPopover Interaction And Focus", () => {
         "click",
         `<ea-button class="btn">OK</ea-button>`
       );
-      await waitForRender();
+      await popover.updateComplete;
 
       const trigger = popover.querySelector('[slot="reference"]');
       fireKeydown(trigger, "Enter");
-      await waitForRender();
+      await popover.updateComplete;
 
       const btn = popover.querySelector(".btn");
       const inner = btn.shadowRoot.querySelector("button");
-      const focused = btn.shadowRoot.activeElement ?? document.activeElement;
-
       expect(inner).toBeTruthy();
-      expect([btn, inner]).toContain(focused);
+
+      await vi.waitFor(() => {
+        const focused = btn.shadowRoot.activeElement ?? document.activeElement;
+        expect([btn, inner]).toContain(focused);
+      });
     });
 
     it("鼠标激活不应该自动移动焦点", async () => {
@@ -1153,10 +1159,10 @@ describe("EaPopover Interaction And Focus", () => {
         "click",
         `<button class="first">F</button>`
       );
-      await waitForRender();
+      await popover.updateComplete;
 
       popover.show();
-      await waitForRender();
+      await popover.updateComplete;
 
       expect(document.activeElement).not.toBe(popover.querySelector(".first"));
     });
@@ -1168,17 +1174,19 @@ describe("EaPopover Interaction And Focus", () => {
         "click",
         `<button class="inner">X</button>`
       );
-      await waitForRender();
+      await popover.updateComplete;
 
       popover.show();
-      await waitForRender();
+      await popover.updateComplete;
 
       popover.dispatchEvent(
         new FocusEvent("focusout", { bubbles: true, composed: true })
       );
-      await waitForRender();
+      await popover.updateComplete;
 
-      expect(popover.visible).toBe(false);
+      await vi.waitFor(() => {
+        expect(popover.visible).toBe(false);
+      });
     });
 
     it("焦点仍在组件内部时不应该关闭", async () => {
@@ -1186,26 +1194,26 @@ describe("EaPopover Interaction And Focus", () => {
         "click",
         `<button class="inner">X</button>`
       );
-      await waitForRender();
+      await popover.updateComplete;
 
       popover.show();
-      await waitForRender();
+      await popover.updateComplete;
 
       popover.querySelector(".inner").focus();
       popover.dispatchEvent(
         new FocusEvent("focusout", { bubbles: true, composed: true })
       );
-      await waitForRender();
+      await popover.updateComplete;
 
       expect(popover.visible).toBe(true);
     });
 
     it("focus 模式下焦点移出组件时应该关闭", async () => {
       const popover = createPopover("focus");
-      await waitForRender();
+      await popover.updateComplete;
 
       popover.show();
-      await waitForRender();
+      await popover.updateComplete;
       expect(popover.visible).toBe(true);
 
       const outside = document.createElement("button");
@@ -1215,19 +1223,20 @@ describe("EaPopover Interaction And Focus", () => {
       popover.dispatchEvent(
         new FocusEvent("focusout", { bubbles: true, composed: true })
       );
-      await waitForRender();
 
-      expect(popover.visible).toBe(false);
+      await vi.waitFor(() => {
+        expect(popover.visible).toBe(false);
+      });
     });
 
     it("隐藏状态下焦点移出不应该有副作用", async () => {
       const popover = createPopover("click");
-      await waitForRender();
+      await popover.updateComplete;
 
       popover.dispatchEvent(
         new FocusEvent("focusout", { bubbles: true, composed: true })
       );
-      await waitForRender();
+      await popover.updateComplete;
 
       expect(popover.visible).toBe(false);
     });

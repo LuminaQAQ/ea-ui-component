@@ -65,7 +65,7 @@ describe("EaMessage Component", () => {
       const message = document.createElement("ea-message");
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       const icon = message.shadowRoot.querySelector("ea-icon");
       expect(icon).toBeTruthy();
@@ -138,7 +138,7 @@ describe("EaMessage Component", () => {
       message.variant = "success";
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       const icon = message.shadowRoot.querySelector(".ea-message__icon");
       expect(icon.getAttribute("name")).toBe("circle-check");
@@ -149,7 +149,7 @@ describe("EaMessage Component", () => {
       message.variant = "danger";
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       const icon = message.shadowRoot.querySelector(".ea-message__icon");
       expect(icon.getAttribute("name")).toBe("circle-xmark");
@@ -160,7 +160,7 @@ describe("EaMessage Component", () => {
       message.variant = "warning";
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       const icon = message.shadowRoot.querySelector(".ea-message__icon");
       expect(icon.getAttribute("name")).toBe("triangle-exclamation");
@@ -171,7 +171,7 @@ describe("EaMessage Component", () => {
       message.variant = "info";
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       const icon = message.shadowRoot.querySelector(".ea-message__icon");
       expect(icon.getAttribute("name")).toBe("circle-info");
@@ -182,7 +182,7 @@ describe("EaMessage Component", () => {
       message.variant = "primary";
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       const icon = message.shadowRoot.querySelector(".ea-message__icon");
       expect(icon.getAttribute("name")).toBe("circle-info");
@@ -193,10 +193,10 @@ describe("EaMessage Component", () => {
       message.variant = "info";
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       message.variant = "success";
-      await waitForRender();
+      await message.updateComplete;
 
       const icon = message.shadowRoot.querySelector(".ea-message__icon");
       expect(icon.getAttribute("name")).toBe("circle-check");
@@ -207,10 +207,10 @@ describe("EaMessage Component", () => {
       message.variant = "info";
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       message.variant = "danger";
-      await waitForRender();
+      await message.updateComplete;
 
       const containerEl = message.shadowRoot.querySelector(".ea-message");
       expect(containerEl.classList.contains("ea-message--danger")).toBe(true);
@@ -238,7 +238,7 @@ describe("EaMessage Component", () => {
       message.visible = true;
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       const containerEl = message.shadowRoot.querySelector(".ea-message");
       expect(containerEl.classList.contains("is-visible")).toBe(true);
@@ -249,7 +249,7 @@ describe("EaMessage Component", () => {
       message.visible = false;
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       const containerEl = message.shadowRoot.querySelector(".ea-message");
       expect(containerEl.classList.contains("is-visible")).toBe(false);
@@ -259,13 +259,13 @@ describe("EaMessage Component", () => {
       const message = document.createElement("ea-message");
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       const showHandler = vi.fn();
       message.addEventListener("ea-show", showHandler);
 
       message.visible = true;
-      await waitForRender();
+      await message.updateComplete;
 
       expect(showHandler).toHaveBeenCalled();
     });
@@ -275,13 +275,13 @@ describe("EaMessage Component", () => {
       message.visible = true;
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       const hideHandler = vi.fn();
       message.addEventListener("ea-hide", hideHandler);
 
       message.visible = false;
-      await waitForRender();
+      await message.updateComplete;
 
       expect(hideHandler).toHaveBeenCalled();
     });
@@ -308,7 +308,7 @@ describe("EaMessage Component", () => {
       message.message = "Test content";
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       const content = message.shadowRoot.querySelector(".ea-message__content");
       expect(content.textContent).toBe("Test content");
@@ -319,10 +319,10 @@ describe("EaMessage Component", () => {
       message.message = "Initial";
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       message.message = "Updated";
-      await waitForRender();
+      await message.updateComplete;
 
       const content = message.shadowRoot.querySelector(".ea-message__content");
       expect(content.textContent).toBe("Updated");
@@ -350,7 +350,7 @@ describe("EaMessage Component", () => {
       message.showClose = true;
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       const containerEl = message.shadowRoot.querySelector(".ea-message");
       expect(containerEl.classList.contains("is-show-close")).toBe(true);
@@ -361,7 +361,7 @@ describe("EaMessage Component", () => {
       message.showClose = false;
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       const containerEl = message.shadowRoot.querySelector(".ea-message");
       expect(containerEl.classList.contains("is-show-close")).toBe(false);
@@ -372,10 +372,10 @@ describe("EaMessage Component", () => {
       message.showClose = false;
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       message.showClose = true;
-      await waitForRender();
+      await message.updateComplete;
 
       const containerEl = message.shadowRoot.querySelector(".ea-message");
       expect(containerEl.classList.contains("is-show-close")).toBe(true);
@@ -413,7 +413,7 @@ describe("EaMessage Component", () => {
       message.placement = "bottom-left";
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       const containerEl = message.shadowRoot.querySelector(".ea-message");
       expect(containerEl.classList.contains("ea-message--bottom-left")).toBe(
@@ -426,10 +426,10 @@ describe("EaMessage Component", () => {
       message.placement = "top";
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       message.placement = "bottom";
-      await waitForRender();
+      await message.updateComplete;
 
       const containerEl = message.shadowRoot.querySelector(".ea-message");
       expect(containerEl.classList.contains("ea-message--bottom")).toBe(true);
@@ -441,7 +441,7 @@ describe("EaMessage Component", () => {
       message.placement = "middle";
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       const containerEl = message.shadowRoot.querySelector(".ea-message");
       expect(containerEl.classList.contains("ea-message--middle")).toBe(true);
@@ -470,7 +470,7 @@ describe("EaMessage Component", () => {
       message.icon = "custom-icon";
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       const icon = message.shadowRoot.querySelector(".ea-message__icon");
       expect(icon.getAttribute("name")).toBe("custom-icon");
@@ -481,10 +481,10 @@ describe("EaMessage Component", () => {
       message.variant = "info";
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       message.icon = "star";
-      await waitForRender();
+      await message.updateComplete;
 
       const icon = message.shadowRoot.querySelector(".ea-message__icon");
       expect(icon.getAttribute("name")).toBe("star");
@@ -496,10 +496,10 @@ describe("EaMessage Component", () => {
       message.icon = "custom";
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       message.icon = "";
-      await waitForRender();
+      await message.updateComplete;
 
       const icon = message.shadowRoot.querySelector(".ea-message__icon");
       expect(icon.getAttribute("name")).toBe("circle-xmark");
@@ -519,7 +519,7 @@ describe("EaMessage Component", () => {
       message.offset = 20;
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       const y = message.style.getPropertyValue("--ea-message-y");
       expect(y).toBe("20px");
@@ -530,10 +530,10 @@ describe("EaMessage Component", () => {
       message.offset = 10;
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       message.offset = 30;
-      await waitForRender();
+      await message.updateComplete;
 
       const y = message.style.getPropertyValue("--ea-message-y");
       expect(y).toBe("30px");
@@ -554,7 +554,7 @@ describe("EaMessage Component", () => {
       message.message = "<strong>Bold</strong> text";
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       const content = message.shadowRoot.querySelector(".ea-message__content");
       expect(content.innerHTML).toBe("&lt;strong&gt;Bold&lt;/strong&gt; text");
@@ -565,7 +565,7 @@ describe("EaMessage Component", () => {
       message.dangerouslyUseHTMLString = true;
       message.message = "<strong>Bold</strong> text";
       container.appendChild(message);
-      await waitForRender();
+      await message.updateComplete;
 
       const content = message.shadowRoot.querySelector(".ea-message__content");
       expect(content.querySelector("strong")).toBeTruthy();
@@ -585,7 +585,7 @@ describe("EaMessage Component", () => {
       message.visible = true;
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       message.close();
       expect(message.visible).toBe(false);
@@ -595,13 +595,13 @@ describe("EaMessage Component", () => {
       const message = document.createElement("ea-message");
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       const closeHandler = vi.fn();
       message.addEventListener("ea-close", closeHandler);
 
       message.close();
-      await waitForRender();
+      await message.updateComplete;
 
       expect(closeHandler).toHaveBeenCalled();
     });
@@ -634,7 +634,7 @@ describe("EaMessage Component", () => {
       const message = document.createElement("ea-message");
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       const showPromise = new Promise(resolve => {
         message.addEventListener("ea-show", resolve);
@@ -651,7 +651,7 @@ describe("EaMessage Component", () => {
       const message = document.createElement("ea-message");
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       const shownPromise = new Promise(resolve => {
         message.addEventListener("ea-shown", resolve);
@@ -672,7 +672,7 @@ describe("EaMessage Component", () => {
       message.visible = true;
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       const hidePromise = new Promise(resolve => {
         message.addEventListener("ea-hide", resolve);
@@ -690,7 +690,7 @@ describe("EaMessage Component", () => {
       message.visible = true;
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       const hiddenPromise = new Promise(resolve => {
         message.addEventListener("ea-hidden", resolve);
@@ -710,7 +710,7 @@ describe("EaMessage Component", () => {
       const message = document.createElement("ea-message");
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       const closePromise = new Promise(resolve => {
         message.addEventListener("ea-close", resolve);
@@ -727,7 +727,7 @@ describe("EaMessage Component", () => {
       const message = document.createElement("ea-message");
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       let eventType = null;
       message.addEventListener("ea-close", e => {
@@ -746,7 +746,7 @@ describe("EaMessage Component", () => {
       message.visible = true;
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       const closeHandler = vi.fn();
       message.addEventListener("ea-close", closeHandler);
@@ -756,7 +756,7 @@ describe("EaMessage Component", () => {
       );
       closeIcon.click();
 
-      await waitForRender();
+      await message.updateComplete;
 
       expect(closeHandler).toHaveBeenCalled();
     });
@@ -767,7 +767,7 @@ describe("EaMessage Component", () => {
       message.visible = true;
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       const closeHandler = vi.fn();
       message.addEventListener("ea-close", closeHandler);
@@ -777,7 +777,7 @@ describe("EaMessage Component", () => {
       );
       closeIcon.click();
 
-      await waitForRender();
+      await message.updateComplete;
 
       expect(closeHandler).not.toHaveBeenCalled();
     });
@@ -831,7 +831,7 @@ describe("EaMessage Component", () => {
       message.visible = true;
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       const containerEl = message.shadowRoot.querySelector(".ea-message");
       expect(containerEl.classList.contains("ea-message--danger")).toBe(true);
@@ -858,7 +858,7 @@ describe("EaMessage Component", () => {
       message.message = "";
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       const content = message.shadowRoot.querySelector(".ea-message__content");
       expect(content.textContent).toBe("");
@@ -882,7 +882,7 @@ describe("EaMessage Component", () => {
       message2.visible = true;
       document.body.appendChild(message2);
 
-      await waitForRender();
+      await message2.updateComplete;
 
       const messages = document.querySelectorAll("ea-message");
       expect(messages.length).toBe(2);
@@ -907,7 +907,7 @@ describe("EaMessage Component", () => {
       const message = document.createElement("ea-message");
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       message.visible = true;
       message.visible = false;
@@ -958,7 +958,7 @@ describe("EaMessage Component", () => {
       message.variant = "info";
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       message.variant = "danger";
 
@@ -970,7 +970,7 @@ describe("EaMessage Component", () => {
       message.message = "Initial";
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       message.message = "Updated";
 
@@ -994,7 +994,7 @@ describe("EaMessage Component", () => {
       message.message = "Test";
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       message.remove();
       container.appendChild(message);
@@ -1008,7 +1008,7 @@ describe("EaMessage Component", () => {
       const message = document.createElement("ea-message");
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       const containerEl = message.shadowRoot.querySelector(".ea-message");
       expect(containerEl).toBeTruthy();
@@ -1020,7 +1020,7 @@ describe("EaMessage Component", () => {
       message.variant = "success";
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       const containerEl = message.shadowRoot.querySelector(".ea-message");
       expect(containerEl.classList.contains("ea-message--success")).toBe(true);
@@ -1031,7 +1031,7 @@ describe("EaMessage Component", () => {
       message.placement = "bottom-right";
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       const containerEl = message.shadowRoot.querySelector(".ea-message");
       expect(containerEl.classList.contains("ea-message--bottom-right")).toBe(
@@ -1044,7 +1044,7 @@ describe("EaMessage Component", () => {
       message.visible = true;
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       const containerEl = message.shadowRoot.querySelector(".ea-message");
       expect(containerEl.classList.contains("is-show")).toBe(true);
@@ -1055,7 +1055,7 @@ describe("EaMessage Component", () => {
       message.showClose = true;
       container.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       const closeIcon = message.shadowRoot.querySelector(
         ".ea-message__close-icon"
@@ -1070,7 +1070,7 @@ describe("EaMessage Component", () => {
       message.visible = true;
       document.body.appendChild(message);
 
-      await waitForRender();
+      await message.updateComplete;
 
       const y = message.style.getPropertyValue("--ea-message-y");
       expect(y === "" || y === "0px").toBe(true);
@@ -1084,14 +1084,14 @@ describe("EaMessage Component", () => {
       message1.visible = true;
       document.body.appendChild(message1);
 
-      await waitForRender();
+      await message1.updateComplete;
 
       const message2 = document.createElement("ea-message");
       message2.placement = "top";
       message2.visible = true;
       document.body.appendChild(message2);
 
-      await waitForRender();
+      await message2.updateComplete;
 
       const y2 = message2.style.getPropertyValue("--ea-message-y");
       expect(y2).not.toBe("");
@@ -1106,14 +1106,14 @@ describe("EaMessage Component", () => {
       message1.visible = true;
       document.body.appendChild(message1);
 
-      await waitForRender();
+      await message1.updateComplete;
 
       const message2 = document.createElement("ea-message");
       message2.placement = "bottom";
       message2.visible = true;
       document.body.appendChild(message2);
 
-      await waitForRender();
+      await message2.updateComplete;
 
       const y2 = message2.style.getPropertyValue("--ea-message-y");
       expect(y2 === "" || y2 === "0px").toBe(true);
@@ -1168,7 +1168,9 @@ describe("EaMessage Component", () => {
     it("$message.success 调用后应该创建 ea-message 元素", async () => {
       window.$message.success("Success message");
 
-      await waitForRender();
+      await vi.waitFor(() => {
+        expect(document.querySelector("ea-message")).toBeTruthy();
+      });
 
       const messages = document.querySelectorAll("ea-message");
       expect(messages.length).toBeGreaterThan(0);
@@ -1179,7 +1181,9 @@ describe("EaMessage Component", () => {
     it("$message.error 调用后应该创建 variant=danger 的 ea-message 元素", async () => {
       window.$message.error("Error message");
 
-      await waitForRender();
+      await vi.waitFor(() => {
+        expect(document.querySelector("ea-message")).toBeTruthy();
+      });
 
       const messages = document.querySelectorAll("ea-message");
       const lastMessage = messages[messages.length - 1];
@@ -1191,7 +1195,9 @@ describe("EaMessage Component", () => {
     it("$message.danger 调用后应该创建 variant=danger 的 ea-message 元素", async () => {
       window.$message.danger("Danger message");
 
-      await waitForRender();
+      await vi.waitFor(() => {
+        expect(document.querySelector("ea-message")).toBeTruthy();
+      });
 
       const messages = document.querySelectorAll("ea-message");
       const lastMessage = messages[messages.length - 1];
@@ -1203,7 +1209,9 @@ describe("EaMessage Component", () => {
     it("$message 调用后应该设置 visible 为 true", async () => {
       window.$message("Test message");
 
-      await waitForRender();
+      await vi.waitFor(() => {
+        expect(document.querySelector("ea-message")).toBeTruthy();
+      });
 
       const messages = document.querySelectorAll("ea-message");
       const lastMessage = messages[messages.length - 1];
@@ -1215,7 +1223,9 @@ describe("EaMessage Component", () => {
     it("$message 调用后应该设置 message 内容", async () => {
       window.$message("Custom message text");
 
-      await waitForRender();
+      await vi.waitFor(() => {
+        expect(document.querySelector("ea-message")).toBeTruthy();
+      });
 
       const messages = document.querySelectorAll("ea-message");
       const lastMessage = messages[messages.length - 1];
@@ -1227,7 +1237,9 @@ describe("EaMessage Component", () => {
     it("$message 应该支持 placement 选项", async () => {
       window.$message({ message: "Test", placement: "bottom" });
 
-      await waitForRender();
+      await vi.waitFor(() => {
+        expect(document.querySelector("ea-message")).toBeTruthy();
+      });
 
       const messages = document.querySelectorAll("ea-message");
       const lastMessage = messages[messages.length - 1];
@@ -1239,7 +1251,9 @@ describe("EaMessage Component", () => {
     it("$message 应该支持 showClose 选项", async () => {
       window.$message({ message: "Test", showClose: true });
 
-      await waitForRender();
+      await vi.waitFor(() => {
+        expect(document.querySelector("ea-message")).toBeTruthy();
+      });
 
       const messages = document.querySelectorAll("ea-message");
       const lastMessage = messages[messages.length - 1];
@@ -1251,7 +1265,9 @@ describe("EaMessage Component", () => {
     it("$message 应该支持 icon 选项", async () => {
       window.$message({ message: "Test", icon: "custom-icon" });
 
-      await waitForRender();
+      await vi.waitFor(() => {
+        expect(document.querySelector("ea-message")).toBeTruthy();
+      });
 
       const messages = document.querySelectorAll("ea-message");
       const lastMessage = messages[messages.length - 1];
@@ -1266,7 +1282,9 @@ describe("EaMessage Component", () => {
         dangerouslyUseHTMLString: true,
       });
 
-      await waitForRender();
+      await vi.waitFor(() => {
+        expect(document.querySelector("ea-message")).toBeTruthy();
+      });
 
       const messages = document.querySelectorAll("ea-message");
       const lastMessage = messages[messages.length - 1];
@@ -1278,7 +1296,9 @@ describe("EaMessage Component", () => {
     it("$message 应该支持 offset 选项", async () => {
       window.$message({ message: "Test", offset: 20 });
 
-      await waitForRender();
+      await vi.waitFor(() => {
+        expect(document.querySelector("ea-message")).toBeTruthy();
+      });
 
       const messages = document.querySelectorAll("ea-message");
       const lastMessage = messages[messages.length - 1];
@@ -1293,7 +1313,9 @@ describe("EaMessage Component", () => {
 
       window.$message({ message: "Test", appendTo: target });
 
-      await waitForRender();
+      await vi.waitFor(() => {
+        expect(target.querySelector("ea-message")).toBeTruthy();
+      });
 
       expect(target.querySelector("ea-message")).toBeTruthy();
 
@@ -1307,7 +1329,9 @@ describe("EaMessage Component", () => {
 
       window.$message({ message: "Test", appendTo: "#message-target" });
 
-      await waitForRender();
+      await vi.waitFor(() => {
+        expect(target.querySelector("ea-message")).toBeTruthy();
+      });
 
       expect(target.querySelector("ea-message")).toBeTruthy();
 
@@ -1320,7 +1344,9 @@ describe("EaMessage Component", () => {
       const onClose = vi.fn();
       window.$message({ message: "Test", duration: 100, onClose });
 
-      await waitForRender();
+      await vi.waitFor(() => {
+        expect(document.querySelector("ea-message")).toBeTruthy();
+      });
 
       vi.advanceTimersByTime(200);
       await waitForRender();
@@ -1328,7 +1354,9 @@ describe("EaMessage Component", () => {
       const messages = document.querySelectorAll("ea-message");
       const lastMessage = messages[messages.length - 1];
       lastMessage.emit("ea-hidden");
-      await waitForRender();
+      await vi.waitFor(() => {
+        expect(onClose).toHaveBeenCalled();
+      });
 
       expect(onClose).toHaveBeenCalled();
 
@@ -1340,7 +1368,9 @@ describe("EaMessage Component", () => {
 
       window.$message({ message: "Test", duration: 0 });
 
-      await waitForRender();
+      await vi.waitFor(() => {
+        expect(document.querySelector("ea-message")).toBeTruthy();
+      });
 
       const messages = document.querySelectorAll("ea-message");
       const lastMessage = messages[messages.length - 1];
@@ -1356,7 +1386,7 @@ describe("EaMessage Component", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-message");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });
@@ -1365,21 +1395,21 @@ describe("EaMessage Component", () => {
       it("宿主元素应该有 role='alert'", async () => {
         const el = document.createElement("ea-message");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("role")).toBe("alert");
       });
 
       it("宿主元素应该有 aria-live='assertive'", async () => {
         const el = document.createElement("ea-message");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-live")).toBe("assertive");
       });
 
       it("宿主元素应该有 aria-atomic='true'", async () => {
         const el = document.createElement("ea-message");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-atomic")).toBe("true");
       });
     });

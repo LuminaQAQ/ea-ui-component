@@ -8,8 +8,12 @@ global.cancelAnimationFrame = id => {
 };
 
 import "../components/ea-select/index.js";
-import { waitForRender } from "./utils/waitForRender.js";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
+
+async function waitForOptionsMounted(select) {
+  const options = [...select.querySelectorAll("ea-option")];
+  await Promise.all(options.map(option => option.updateComplete));
+}
 
 describe("EaSelect Component", () => {
   let container;
@@ -253,10 +257,10 @@ describe("EaSelect Component", () => {
         '<ea-option value="option1">Option 1</ea-option><ea-option value="option2">Option 2</ea-option>';
       container.appendChild(select);
 
-      await waitForRender();
+      await select.updateComplete;
 
       select.value = ["option1", "option2"];
-      await waitForRender(50);
+      await select.updateComplete;
 
       expect(Array.isArray(select.value)).toBe(true);
     });
@@ -269,7 +273,7 @@ describe("EaSelect Component", () => {
       option.textContent = "Option 1";
       container.appendChild(option);
 
-      await waitForRender(50);
+      await option.updateComplete;
 
       expect(option).toBeDefined();
       expect(option.shadowRoot).toBeDefined();
@@ -280,7 +284,7 @@ describe("EaSelect Component", () => {
       option.value = "1";
       container.appendChild(option);
 
-      await waitForRender(50);
+      await option.updateComplete;
 
       expect(
         option.shadowRoot.querySelector('[part="container"]')
@@ -293,7 +297,7 @@ describe("EaSelect Component", () => {
       option.textContent = "Option 1";
       container.appendChild(option);
 
-      await waitForRender(50);
+      await option.updateComplete;
 
       const slot = option.shadowRoot.querySelector("slot");
       expect(slot).toBeTruthy();
@@ -304,7 +308,7 @@ describe("EaSelect Component", () => {
       option.value = "1";
       container.appendChild(option);
 
-      await waitForRender(50);
+      await option.updateComplete;
 
       const containerEl = option.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("ea-option")).toBe(true);
@@ -317,7 +321,7 @@ describe("EaSelect Component", () => {
       option.value = "option1";
       container.appendChild(option);
 
-      await waitForRender(50);
+      await option.updateComplete;
 
       expect(option.value).toBe("option1");
     });
@@ -329,7 +333,7 @@ describe("EaSelect Component", () => {
       option.value = "1";
       container.appendChild(option);
 
-      await waitForRender(50);
+      await option.updateComplete;
 
       expect(option.selected).toBe(false);
     });
@@ -340,7 +344,7 @@ describe("EaSelect Component", () => {
       option.selected = true;
       container.appendChild(option);
 
-      await waitForRender(50);
+      await option.updateComplete;
 
       expect(option.selected).toBe(true);
     });
@@ -352,7 +356,7 @@ describe("EaSelect Component", () => {
       option.value = "1";
       container.appendChild(option);
 
-      await waitForRender(50);
+      await option.updateComplete;
 
       expect(option.disabled).toBe(false);
     });
@@ -363,7 +367,7 @@ describe("EaSelect Component", () => {
       option.disabled = true;
       container.appendChild(option);
 
-      await waitForRender(50);
+      await option.updateComplete;
 
       expect(option.disabled).toBe(true);
     });
@@ -434,10 +438,10 @@ describe("EaSelect Component", () => {
       const group = document.createElement("ea-option-group");
       container.appendChild(group);
 
-      await waitForRender();
+      await group.updateComplete;
 
       group.label = "Updated Label";
-      await waitForRender();
+      await group.updateComplete;
 
       const headerSlot = group.shadowRoot.querySelector('slot[name="header"]');
       expect(headerSlot).toBeTruthy();
@@ -476,7 +480,7 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.disabled = true;
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       const containerEl = select.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-disabled")).toBe(true);
@@ -485,16 +489,16 @@ describe("EaSelect Component", () => {
     it("disabled 动态切换应正确更新 class", async () => {
       const select = document.createElement("ea-select");
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       const containerEl = select.shadowRoot.querySelector('[part="container"]');
 
       select.disabled = true;
-      await waitForRender();
+      await select.updateComplete;
       expect(containerEl.classList.contains("is-disabled")).toBe(true);
 
       select.disabled = false;
-      await waitForRender();
+      await select.updateComplete;
       expect(containerEl.classList.contains("is-disabled")).toBe(false);
     });
 
@@ -503,10 +507,10 @@ describe("EaSelect Component", () => {
       select.clearable = true;
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       select.value = "1";
-      await waitForRender();
+      await select.updateComplete;
 
       const containerEl = select.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-clearable")).toBe(true);
@@ -516,7 +520,7 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.clearable = true;
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       const containerEl = select.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-clearable")).toBe(false);
@@ -526,7 +530,7 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.setAttribute("size", "large");
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       const containerEl = select.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("ea-select--large")).toBe(true);
@@ -536,7 +540,7 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.setAttribute("size", "small");
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       const containerEl = select.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("ea-select--small")).toBe(true);
@@ -545,7 +549,7 @@ describe("EaSelect Component", () => {
     it("默认 size 不应有 size 修饰符类", async () => {
       const select = document.createElement("ea-select");
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       const containerEl = select.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("ea-select--large")).toBe(false);
@@ -556,7 +560,7 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.multiple = true;
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       const containerEl = select.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-multiple")).toBe(true);
@@ -566,7 +570,7 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.filterable = true;
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       const containerEl = select.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-filterable")).toBe(true);
@@ -576,10 +580,10 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       select.value = "1";
-      await waitForRender();
+      await select.updateComplete;
 
       const containerEl = select.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-has-value")).toBe(true);
@@ -588,7 +592,7 @@ describe("EaSelect Component", () => {
     it("无值时容器不应有 is-has-value 类", async () => {
       const select = document.createElement("ea-select");
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       const containerEl = select.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-has-value")).toBe(false);
@@ -599,10 +603,10 @@ describe("EaSelect Component", () => {
       select.multiple = true;
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       select.value = [];
-      await waitForRender();
+      await select.updateComplete;
 
       const containerEl = select.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-has-value")).toBe(false);
@@ -614,11 +618,11 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       const inputEl = select.shadowRoot.querySelector('[part="input"]');
       inputEl.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      await waitForRender();
+      await select.updateComplete;
 
       const containerEl = select.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-focus")).toBe(true);
@@ -628,14 +632,14 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       const handler = vi.fn();
       select.addEventListener("ea-visible-change", handler);
 
       const inputEl = select.shadowRoot.querySelector('[part="input"]');
       inputEl.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      await waitForRender();
+      await select.updateComplete;
 
       expect(handler).toHaveBeenCalled();
     });
@@ -644,17 +648,17 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       const inputEl = select.shadowRoot.querySelector('[part="input"]');
       inputEl.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      await waitForRender();
+      await select.updateComplete;
 
       const handler = vi.fn();
       select.addEventListener("ea-visible-change", handler);
 
       select.hide();
-      await waitForRender();
+      await select.updateComplete;
 
       expect(handler).toHaveBeenCalled();
       expect(handler.mock.calls[0][0].detail.visible).toBe(false);
@@ -664,10 +668,10 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       select.show();
-      await waitForRender();
+      await select.updateComplete;
 
       const containerEl = select.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-focus")).toBe(true);
@@ -677,13 +681,13 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       select.show();
-      await waitForRender();
+      await select.updateComplete;
 
       select.hide();
-      await waitForRender();
+      await select.updateComplete;
 
       const containerEl = select.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-focus")).toBe(false);
@@ -694,11 +698,11 @@ describe("EaSelect Component", () => {
       select.disabled = true;
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       const inputEl = select.shadowRoot.querySelector('[part="input"]');
       inputEl.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      await waitForRender();
+      await select.updateComplete;
 
       const containerEl = select.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-focus")).toBe(false);
@@ -711,15 +715,15 @@ describe("EaSelect Component", () => {
       select.innerHTML =
         '<ea-option value="1">Option 1</ea-option><ea-option value="2">Option 2</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       const inputEl = select.shadowRoot.querySelector('[part="input"]');
       inputEl.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      await waitForRender();
+      await select.updateComplete;
 
       const option2 = select.querySelector('ea-option[value="2"]');
       option2.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.value).toBe("2");
     });
@@ -729,15 +733,15 @@ describe("EaSelect Component", () => {
       select.innerHTML =
         '<ea-option value="1">Option 1</ea-option><ea-option value="2">Option 2</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       const inputEl = select.shadowRoot.querySelector('[part="input"]');
       inputEl.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      await waitForRender();
+      await select.updateComplete;
 
       const option1 = select.querySelector('ea-option[value="1"]');
       option1.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      await waitForRender();
+      await select.updateComplete;
 
       const containerEl = select.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-focus")).toBe(false);
@@ -748,18 +752,18 @@ describe("EaSelect Component", () => {
       select.innerHTML =
         '<ea-option value="1">Option 1</ea-option><ea-option value="2">Option 2</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       const handler = vi.fn();
       select.addEventListener("change", handler);
 
       const inputEl = select.shadowRoot.querySelector('[part="input"]');
       inputEl.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      await waitForRender();
+      await select.updateComplete;
 
       const option2 = select.querySelector('ea-option[value="2"]');
       option2.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      await waitForRender();
+      await select.updateComplete;
 
       expect(handler).toHaveBeenCalled();
     });
@@ -769,18 +773,18 @@ describe("EaSelect Component", () => {
       select.innerHTML =
         '<ea-option value="1">Option 1</ea-option><ea-option value="2" disabled>Option 2</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       select.value = "1";
-      await waitForRender();
+      await select.updateComplete;
 
       const inputEl = select.shadowRoot.querySelector('[part="input"]');
       inputEl.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      await waitForRender();
+      await select.updateComplete;
 
       const option2 = select.querySelector('ea-option[value="2"]');
       option2.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.value).toBe("1");
     });
@@ -793,15 +797,15 @@ describe("EaSelect Component", () => {
       select.innerHTML =
         '<ea-option value="1">Option 1</ea-option><ea-option value="2">Option 2</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       const inputEl = select.shadowRoot.querySelector('[part="input"]');
       inputEl.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      await waitForRender();
+      await select.updateComplete;
 
       const option1 = select.querySelector('ea-option[value="1"]');
       option1.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      await waitForRender();
+      await select.updateComplete;
 
       expect(Array.isArray(select.value)).toBe(true);
       expect(select.value).toContain("1");
@@ -813,18 +817,18 @@ describe("EaSelect Component", () => {
       select.innerHTML =
         '<ea-option value="1">Option 1</ea-option><ea-option value="2">Option 2</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       select.value = ["1"];
-      await waitForRender();
+      await select.updateComplete;
 
       const inputEl = select.shadowRoot.querySelector('[part="input"]');
       inputEl.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      await waitForRender();
+      await select.updateComplete;
 
       const option1 = select.querySelector('ea-option[value="1"]');
       option1.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.value).not.toContain("1");
     });
@@ -835,15 +839,15 @@ describe("EaSelect Component", () => {
       select.innerHTML =
         '<ea-option value="1">Option 1</ea-option><ea-option value="2">Option 2</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       const inputEl = select.shadowRoot.querySelector('[part="input"]');
       inputEl.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      await waitForRender();
+      await select.updateComplete;
 
       const option1 = select.querySelector('ea-option[value="1"]');
       option1.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      await waitForRender();
+      await select.updateComplete;
 
       const containerEl = select.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-focus")).toBe(true);
@@ -855,18 +859,18 @@ describe("EaSelect Component", () => {
       select.innerHTML =
         '<ea-option value="1">Option 1</ea-option><ea-option value="2">Option 2</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       const handler = vi.fn();
       select.addEventListener("change", handler);
 
       const inputEl = select.shadowRoot.querySelector('[part="input"]');
       inputEl.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      await waitForRender();
+      await select.updateComplete;
 
       const option1 = select.querySelector('ea-option[value="1"]');
       option1.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      await waitForRender();
+      await select.updateComplete;
 
       expect(handler).toHaveBeenCalled();
     });
@@ -878,14 +882,14 @@ describe("EaSelect Component", () => {
       select.clearable = true;
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       select.value = "1";
-      await waitForRender();
+      await select.updateComplete;
 
       const clearIcon = select.shadowRoot.querySelector('[part="clear-icon"]');
       clearIcon.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.value).toBe("");
     });
@@ -895,17 +899,17 @@ describe("EaSelect Component", () => {
       select.clearable = true;
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       select.value = "1";
-      await waitForRender();
+      await select.updateComplete;
 
       const handler = vi.fn();
       select.addEventListener("ea-clear", handler);
 
       const clearIcon = select.shadowRoot.querySelector('[part="clear-icon"]');
       clearIcon.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      await waitForRender();
+      await select.updateComplete;
 
       expect(handler).toHaveBeenCalled();
     });
@@ -917,14 +921,14 @@ describe("EaSelect Component", () => {
       select.innerHTML =
         '<ea-option value="1">Option 1</ea-option><ea-option value="2">Option 2</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       select.value = ["1", "2"];
-      await waitForRender();
+      await select.updateComplete;
 
       const clearIcon = select.shadowRoot.querySelector('[part="clear-icon"]');
       clearIcon.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.value).toEqual([]);
     });
@@ -935,12 +939,12 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       select.dispatchEvent(
         new KeyboardEvent("keydown", { key: "Enter", bubbles: true })
       );
-      await waitForRender();
+      await select.updateComplete;
 
       const containerEl = select.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-focus")).toBe(true);
@@ -950,12 +954,12 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       select.dispatchEvent(
         new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true })
       );
-      await waitForRender();
+      await select.updateComplete;
 
       const containerEl = select.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-focus")).toBe(true);
@@ -965,12 +969,12 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       select.dispatchEvent(
         new KeyboardEvent("keydown", { key: " ", bubbles: true })
       );
-      await waitForRender();
+      await select.updateComplete;
 
       const containerEl = select.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-focus")).toBe(true);
@@ -980,15 +984,15 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       select.show();
-      await waitForRender();
+      await select.updateComplete;
 
       select.dispatchEvent(
         new KeyboardEvent("keydown", { key: "Escape", bubbles: true })
       );
-      await waitForRender();
+      await select.updateComplete;
 
       const containerEl = select.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-focus")).toBe(false);
@@ -999,15 +1003,15 @@ describe("EaSelect Component", () => {
       select.innerHTML =
         '<ea-option value="1">Option 1</ea-option><ea-option value="2">Option 2</ea-option><ea-option value="3">Option 3</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       select.show();
-      await waitForRender();
+      await select.updateComplete;
 
       select.dispatchEvent(
         new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true })
       );
-      await waitForRender();
+      await select.updateComplete;
 
       const options = select.querySelectorAll("ea-option");
       expect(options[1].active).toBe(true);
@@ -1019,20 +1023,20 @@ describe("EaSelect Component", () => {
       select.innerHTML =
         '<ea-option value="1">Option 1</ea-option><ea-option value="2">Option 2</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       select.show();
-      await waitForRender();
+      await select.updateComplete;
 
       select.dispatchEvent(
         new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true })
       );
-      await waitForRender();
+      await select.updateComplete;
 
       select.dispatchEvent(
         new KeyboardEvent("keydown", { key: "ArrowUp", bubbles: true })
       );
-      await waitForRender();
+      await select.updateComplete;
 
       const options = select.querySelectorAll("ea-option");
       expect(options[0].active).toBe(true);
@@ -1043,20 +1047,20 @@ describe("EaSelect Component", () => {
       select.innerHTML =
         '<ea-option value="1">Option 1</ea-option><ea-option value="2">Option 2</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       select.show();
-      await waitForRender();
+      await select.updateComplete;
 
       select.dispatchEvent(
         new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true })
       );
-      await waitForRender();
+      await select.updateComplete;
 
       select.dispatchEvent(
         new KeyboardEvent("keydown", { key: "Enter", bubbles: true })
       );
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.value).toBe("2");
     });
@@ -1066,25 +1070,25 @@ describe("EaSelect Component", () => {
       select.innerHTML =
         '<ea-option value="1">Option 1</ea-option><ea-option value="2">Option 2</ea-option><ea-option value="3">Option 3</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       select.show();
-      await waitForRender();
+      await select.updateComplete;
 
       select.dispatchEvent(
         new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true })
       );
-      await waitForRender();
+      await select.updateComplete;
 
       select.dispatchEvent(
         new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true })
       );
-      await waitForRender();
+      await select.updateComplete;
 
       select.dispatchEvent(
         new KeyboardEvent("keydown", { key: "Home", bubbles: true })
       );
-      await waitForRender();
+      await select.updateComplete;
 
       const options = select.querySelectorAll("ea-option");
       expect(options[0].active).toBe(true);
@@ -1095,15 +1099,15 @@ describe("EaSelect Component", () => {
       select.innerHTML =
         '<ea-option value="1">Option 1</ea-option><ea-option value="2">Option 2</ea-option><ea-option value="3">Option 3</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       select.show();
-      await waitForRender();
+      await select.updateComplete;
 
       select.dispatchEvent(
         new KeyboardEvent("keydown", { key: "End", bubbles: true })
       );
-      await waitForRender();
+      await select.updateComplete;
 
       const options = select.querySelectorAll("ea-option");
       expect(options[2].active).toBe(true);
@@ -1114,12 +1118,12 @@ describe("EaSelect Component", () => {
       select.disabled = true;
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       select.dispatchEvent(
         new KeyboardEvent("keydown", { key: "Enter", bubbles: true })
       );
-      await waitForRender();
+      await select.updateComplete;
 
       const containerEl = select.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-focus")).toBe(false);
@@ -1131,7 +1135,7 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       const result = select.checkValidity();
       expect(typeof result).toBe("boolean");
@@ -1141,7 +1145,7 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       const result = select.reportValidity();
       expect(typeof result).toBe("boolean");
@@ -1152,7 +1156,7 @@ describe("EaSelect Component", () => {
       select.required = true;
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.checkValidity()).toBe(false);
     });
@@ -1162,10 +1166,10 @@ describe("EaSelect Component", () => {
       select.required = true;
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       select.value = "1";
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.checkValidity()).toBe(true);
     });
@@ -1174,7 +1178,7 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.checkValidity()).toBe(true);
     });
@@ -1183,7 +1187,7 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.checkValidity()).toBe(true);
     });
@@ -1195,7 +1199,7 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       form.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.checkValidity()).toBe(true);
     });
@@ -1205,7 +1209,7 @@ describe("EaSelect Component", () => {
       select.required = true;
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.checkValidity()).toBe(false);
     });
@@ -1215,12 +1219,12 @@ describe("EaSelect Component", () => {
       select.required = true;
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.checkValidity()).toBe(false);
 
       select.value = "1";
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.checkValidity()).toBe(true);
     });
@@ -1231,12 +1235,12 @@ describe("EaSelect Component", () => {
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       select.value = "1";
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.checkValidity()).toBe(true);
 
       select.value = "";
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.checkValidity()).toBe(false);
     });
@@ -1247,10 +1251,10 @@ describe("EaSelect Component", () => {
       select.required = true;
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       select.value = [];
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.checkValidity()).toBe(false);
     });
@@ -1261,10 +1265,10 @@ describe("EaSelect Component", () => {
       select.required = true;
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       select.value = ["1"];
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.checkValidity()).toBe(true);
     });
@@ -1276,18 +1280,18 @@ describe("EaSelect Component", () => {
       select.innerHTML =
         '<ea-option value="1">Option 1</ea-option><ea-option value="2">Option 2</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       const handler = vi.fn();
       select.addEventListener("change", handler);
 
       const inputEl = select.shadowRoot.querySelector('[part="input"]');
       inputEl.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      await waitForRender();
+      await select.updateComplete;
 
       const option2 = select.querySelector('ea-option[value="2"]');
       option2.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      await waitForRender();
+      await select.updateComplete;
 
       expect(handler).toHaveBeenCalled();
       expect(handler.mock.calls[0][0].detail.value).toBe("2");
@@ -1299,18 +1303,18 @@ describe("EaSelect Component", () => {
       select.innerHTML =
         '<ea-option value="1">Option 1</ea-option><ea-option value="2">Option 2</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       const handler = vi.fn();
       select.addEventListener("change", handler);
 
       const inputEl = select.shadowRoot.querySelector('[part="input"]');
       inputEl.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      await waitForRender();
+      await select.updateComplete;
 
       const option1 = select.querySelector('ea-option[value="1"]');
       option1.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      await waitForRender();
+      await select.updateComplete;
 
       expect(handler).toHaveBeenCalled();
       expect(Array.isArray(handler.mock.calls[0][0].detail.value)).toBe(true);
@@ -1324,7 +1328,7 @@ describe("EaSelect Component", () => {
       select.appendChild(option);
       container.appendChild(select);
 
-      await waitForRender();
+      await option.updateComplete;
 
       const clickPromise = new Promise(resolve => {
         select.addEventListener("ea-option-click", e => {
@@ -1386,13 +1390,13 @@ describe("EaSelect Component", () => {
     it("动态添加选项应正常工作", async () => {
       const select = document.createElement("ea-select");
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       const option = document.createElement("ea-option");
       option.value = "new";
       option.textContent = "New Option";
       select.appendChild(option);
-      await waitForRender();
+      await option.updateComplete;
 
       expect(select.querySelectorAll("ea-option").length).toBe(1);
     });
@@ -1401,10 +1405,10 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       select.value = "nonexistent";
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.shadowRoot).toBeDefined();
     });
@@ -1414,12 +1418,12 @@ describe("EaSelect Component", () => {
       select.innerHTML =
         '<ea-option value="1">Option 1</ea-option><ea-option value="2">Option 2</ea-option><ea-option value="3">Option 3</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       select.value = "1";
       select.value = "2";
       select.value = "3";
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.value).toBe("3");
     });
@@ -1429,7 +1433,7 @@ describe("EaSelect Component", () => {
       option.value = "1";
       option.selected = true;
       container.appendChild(option);
-      await waitForRender();
+      await option.updateComplete;
 
       const containerEl = option.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-selected")).toBe(true);
@@ -1440,10 +1444,10 @@ describe("EaSelect Component", () => {
       option.value = "1";
       option.selected = true;
       container.appendChild(option);
-      await waitForRender();
+      await option.updateComplete;
 
       option.selected = false;
-      await waitForRender();
+      await option.updateComplete;
 
       const containerEl = option.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-selected")).toBe(false);
@@ -1454,7 +1458,7 @@ describe("EaSelect Component", () => {
       option.value = "1";
       option.disabled = true;
       container.appendChild(option);
-      await waitForRender();
+      await option.updateComplete;
 
       const containerEl = option.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-disabled")).toBe(true);
@@ -1465,7 +1469,7 @@ describe("EaSelect Component", () => {
       option.value = "1";
       option.disabled = true;
       container.appendChild(option);
-      await waitForRender();
+      await option.updateComplete;
 
       const containerEl = option.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.hasAttribute("tabindex")).toBe(false);
@@ -1475,7 +1479,7 @@ describe("EaSelect Component", () => {
       const option = document.createElement("ea-option");
       option.value = "1";
       container.appendChild(option);
-      await waitForRender();
+      await option.updateComplete;
 
       const containerEl = option.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.hasAttribute("tabindex")).toBe(false);
@@ -1485,10 +1489,10 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       select.remove();
-      await waitForRender();
+      await select.updateComplete;
 
       expect(container.querySelector("ea-select")).toBeNull();
     });
@@ -1497,13 +1501,13 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       select.remove();
-      await waitForRender();
+      await select.updateComplete;
 
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.shadowRoot).toBeDefined();
     });
@@ -1514,11 +1518,11 @@ describe("EaSelect Component", () => {
       select.disabled = true;
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       const inputEl = select.shadowRoot.querySelector('[part="input"]');
       inputEl.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      await waitForRender();
+      await select.updateComplete;
 
       const containerEl = select.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-focus")).toBe(false);
@@ -1529,10 +1533,10 @@ describe("EaSelect Component", () => {
       select.innerHTML =
         '<ea-option value="1" label="Display Text">Slot Content</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       select.value = "1";
-      await waitForRender();
+      await select.updateComplete;
 
       const inputEl = select.shadowRoot.querySelector('[part="input"]');
       expect(inputEl).toBeTruthy();
@@ -1546,7 +1550,7 @@ describe("EaSelect Component", () => {
       select.appendChild(option);
       container.appendChild(select);
 
-      await waitForRender();
+      await option.updateComplete;
 
       let eventTriggered = false;
       select.addEventListener("change", () => {
@@ -1554,10 +1558,10 @@ describe("EaSelect Component", () => {
       });
 
       select.show();
-      await waitForRender();
+      await option.updateComplete;
       option.click();
 
-      await waitForRender(100);
+      await option.updateComplete;
       expect(eventTriggered).toBe(false);
     });
   });
@@ -1631,7 +1635,7 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.getAttribute("role")).toBe("combobox");
     });
@@ -1640,7 +1644,7 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.getAttribute("aria-haspopup")).toBe("listbox");
     });
@@ -1649,7 +1653,7 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.getAttribute("aria-expanded")).toBe("false");
     });
@@ -1658,10 +1662,10 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       select.show();
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.getAttribute("aria-expanded")).toBe("true");
     });
@@ -1670,13 +1674,13 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       select.show();
-      await waitForRender();
+      await select.updateComplete;
 
       select.hide();
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.getAttribute("aria-expanded")).toBe("false");
     });
@@ -1685,7 +1689,7 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       const ariaControls = select.getAttribute("aria-controls");
       expect(ariaControls).toBeTruthy();
@@ -1698,7 +1702,7 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       const dropdown = select.shadowRoot.querySelector('[part="dropdown"]');
       expect(dropdown.getAttribute("role")).toBe("listbox");
@@ -1708,7 +1712,7 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       const dropdown = select.shadowRoot.querySelector('[part="dropdown"]');
       expect(dropdown.inert).toBe(true);
@@ -1718,10 +1722,10 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       select.show();
-      await waitForRender();
+      await select.updateComplete;
 
       const dropdown = select.shadowRoot.querySelector('[part="dropdown"]');
       expect(dropdown.inert).toBe(false);
@@ -1732,7 +1736,7 @@ describe("EaSelect Component", () => {
       option.value = "1";
       option.textContent = "Option 1";
       container.appendChild(option);
-      await waitForRender();
+      await option.updateComplete;
 
       expect(option.getAttribute("role")).toBe("option");
     });
@@ -1746,7 +1750,7 @@ describe("EaSelect Component", () => {
       option2.textContent = "Option 2";
       container.appendChild(option1);
       container.appendChild(option2);
-      await waitForRender();
+      await option2.updateComplete;
 
       expect(option1.id).toBeTruthy();
       expect(option2.id).toBeTruthy();
@@ -1758,7 +1762,7 @@ describe("EaSelect Component", () => {
       option.value = "1";
       option.selected = true;
       container.appendChild(option);
-      await waitForRender();
+      await option.updateComplete;
 
       expect(option.getAttribute("aria-selected")).toBe("true");
     });
@@ -1767,7 +1771,7 @@ describe("EaSelect Component", () => {
       const option = document.createElement("ea-option");
       option.value = "1";
       container.appendChild(option);
-      await waitForRender();
+      await option.updateComplete;
 
       expect(option.getAttribute("aria-selected")).toBe("false");
     });
@@ -1777,7 +1781,7 @@ describe("EaSelect Component", () => {
       option.value = "1";
       option.disabled = true;
       container.appendChild(option);
-      await waitForRender();
+      await option.updateComplete;
 
       expect(option.getAttribute("aria-disabled")).toBe("true");
     });
@@ -1786,7 +1790,7 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.disabled = true;
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.getAttribute("aria-disabled")).toBe("true");
     });
@@ -1795,7 +1799,7 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.required = true;
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.getAttribute("aria-required")).toBe("true");
     });
@@ -1804,7 +1808,7 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.label = "Choose an option";
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.getAttribute("aria-label")).toBe("Choose an option");
     });
@@ -1812,7 +1816,7 @@ describe("EaSelect Component", () => {
     it("ea-select 空 label 不应设置 aria-label", async () => {
       const select = document.createElement("ea-select");
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.hasAttribute("aria-label")).toBe(false);
     });
@@ -1820,7 +1824,7 @@ describe("EaSelect Component", () => {
     it("ea-select 应有 tabIndex=0", async () => {
       const select = document.createElement("ea-select");
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.tabIndex).toBe(0);
     });
@@ -1829,7 +1833,7 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.disabled = true;
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.tabIndex).toBe(-1);
     });
@@ -1838,7 +1842,7 @@ describe("EaSelect Component", () => {
       const group = document.createElement("ea-option-group");
       group.label = "Group 1";
       container.appendChild(group);
-      await waitForRender();
+      await group.updateComplete;
 
       const content = group.shadowRoot.querySelector('[part="content"]');
       expect(content.getAttribute("role")).toBe("group");
@@ -1848,7 +1852,7 @@ describe("EaSelect Component", () => {
       const group = document.createElement("ea-option-group");
       group.label = "Group A";
       container.appendChild(group);
-      await waitForRender();
+      await group.updateComplete;
 
       const content = group.shadowRoot.querySelector('[part="content"]');
       expect(content.getAttribute("aria-label")).toBe("Group A");
@@ -1859,10 +1863,11 @@ describe("EaSelect Component", () => {
       select.innerHTML =
         '<ea-option value="1">Option 1</ea-option><ea-option value="2">Option 2</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
+      await waitForOptionsMounted(select);
 
       select.show();
-      await waitForRender();
+      await select.updateComplete;
 
       const activedesc = select.getAttribute("aria-activedescendant");
       expect(activedesc).toBeTruthy();
@@ -1875,13 +1880,13 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       select.show();
-      await waitForRender();
+      await select.updateComplete;
 
       select.hide();
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.hasAttribute("aria-activedescendant")).toBe(false);
     });
@@ -1891,15 +1896,16 @@ describe("EaSelect Component", () => {
       select.innerHTML =
         '<ea-option value="1">Option 1</ea-option><ea-option value="2">Option 2</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
+      await waitForOptionsMounted(select);
 
       select.show();
-      await waitForRender();
+      await select.updateComplete;
 
       select.dispatchEvent(
         new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true })
       );
-      await waitForRender();
+      await select.updateComplete;
 
       const options = select.querySelectorAll("ea-option");
       expect(select.getAttribute("aria-activedescendant")).toBe(options[1].id);
@@ -1910,15 +1916,15 @@ describe("EaSelect Component", () => {
       select.innerHTML =
         '<ea-option value="1">Option 1</ea-option><ea-option value="2">Option 2</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       select.show();
-      await waitForRender();
+      await select.updateComplete;
 
       select.dispatchEvent(
         new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true })
       );
-      await waitForRender();
+      await select.updateComplete;
 
       const options = select.querySelectorAll("ea-option");
       const containerEl =
@@ -1933,7 +1939,7 @@ describe("EaSelect Component", () => {
       select.filterable = true;
       select.innerHTML = '<ea-option value="1">Alabama</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.getAttribute("aria-autocomplete")).toBe("both");
     });
@@ -1942,7 +1948,7 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.hasAttribute("aria-autocomplete")).toBe(false);
     });
@@ -1952,7 +1958,7 @@ describe("EaSelect Component", () => {
       select.filterable = true;
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       const homeEvent = new KeyboardEvent("keydown", {
         key: "Home",
@@ -1975,7 +1981,7 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       const homeEvent = new KeyboardEvent("keydown", {
         key: "Home",
@@ -1991,7 +1997,7 @@ describe("EaSelect Component", () => {
       select.filterable = true;
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       const event = new KeyboardEvent("keydown", {
         key: "a",
@@ -2006,7 +2012,7 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       const event = new KeyboardEvent("keydown", {
         key: "a",
@@ -2022,10 +2028,10 @@ describe("EaSelect Component", () => {
       select.filterable = true;
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       select.show();
-      await waitForRender();
+      await select.updateComplete;
 
       const event = new KeyboardEvent("keydown", {
         key: "Escape",
@@ -2033,7 +2039,7 @@ describe("EaSelect Component", () => {
         cancelable: true,
       });
       select.dispatchEvent(event);
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.getAttribute("aria-expanded")).toBe("false");
     });
@@ -2043,7 +2049,7 @@ describe("EaSelect Component", () => {
       select.filterable = true;
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       const input = select.shadowRoot.querySelector("ea-input");
       if (input) {
@@ -2055,7 +2061,7 @@ describe("EaSelect Component", () => {
         bubbles: true,
       });
       select.dispatchEvent(event);
-      await waitForRender();
+      await select.updateComplete;
 
       expect(input.value).toBe("");
     });
@@ -2065,7 +2071,7 @@ describe("EaSelect Component", () => {
       select.innerHTML =
         '<ea-option value="1">Option 1</ea-option><ea-option value="2">Option 2</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       select.dispatchEvent(
         new KeyboardEvent("keydown", {
@@ -2074,7 +2080,7 @@ describe("EaSelect Component", () => {
           bubbles: true,
         })
       );
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.getAttribute("aria-expanded")).toBe("true");
     });
@@ -2083,10 +2089,10 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       select.show();
-      await waitForRender();
+      await select.updateComplete;
 
       select.dispatchEvent(
         new KeyboardEvent("keydown", {
@@ -2095,7 +2101,7 @@ describe("EaSelect Component", () => {
           bubbles: true,
         })
       );
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.getAttribute("aria-expanded")).toBe("false");
     });
@@ -2105,14 +2111,14 @@ describe("EaSelect Component", () => {
       select.filterable = true;
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       select.show();
-      await waitForRender();
+      await select.updateComplete;
 
       const input = select.shadowRoot.querySelector("ea-input");
       input.dispatchEvent(new Event("click", { bubbles: true }));
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.getAttribute("aria-expanded")).toBe("true");
     });
@@ -2121,17 +2127,17 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.hasAttribute("aria-autocomplete")).toBe(false);
 
       select.filterable = true;
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.getAttribute("aria-autocomplete")).toBe("both");
 
       select.filterable = false;
-      await waitForRender();
+      await select.updateComplete;
 
       expect(select.hasAttribute("aria-autocomplete")).toBe(false);
     });
@@ -2142,7 +2148,7 @@ describe("EaSelect Component", () => {
       const el = document.createElement("ea-select");
       el.setAttribute("label", "Select");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });
@@ -2152,7 +2158,7 @@ describe("EaSelect Component", () => {
       el.setAttribute("label", "Select");
       el.setAttribute("disabled", "");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });

@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import { waitForRender } from "./utils/waitForRender.js";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 // 尝试加载 EaFormAssociatedBase，处理组件尚未重构为 TypeScript 的情况
@@ -263,7 +262,7 @@ describe("EaFormAssociatedBase", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-form-associated-base");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });

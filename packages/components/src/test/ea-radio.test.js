@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 
 import "../components/ea-radio/index.js";
-import { waitForRender } from "./utils/waitForRender.js";
 import { fireKeydown } from "./utils/keyboard.js";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
@@ -247,7 +246,7 @@ describe("EaRadio and EaRadioGroup Components", () => {
       radio.setAttribute("value", "option1");
       container.appendChild(radio);
 
-      await waitForRender();
+      await radio.updateComplete;
 
       const changeHandler = vi.fn();
       radio.addEventListener("change", changeHandler);
@@ -256,7 +255,7 @@ describe("EaRadio and EaRadioGroup Components", () => {
       input.checked = true;
       input.dispatchEvent(new Event("change", { bubbles: true }));
 
-      await waitForRender();
+      await radio.updateComplete;
 
       expect(changeHandler).toHaveBeenCalled();
     });
@@ -266,7 +265,7 @@ describe("EaRadio and EaRadioGroup Components", () => {
       radio.setAttribute("value", "option1");
       container.appendChild(radio);
 
-      await waitForRender();
+      await radio.updateComplete;
 
       let eventDetail = null;
       radio.addEventListener("change", e => {
@@ -277,7 +276,7 @@ describe("EaRadio and EaRadioGroup Components", () => {
       input.checked = true;
       input.dispatchEvent(new Event("change", { bubbles: true }));
 
-      await waitForRender();
+      await radio.updateComplete;
 
       expect(eventDetail).toBeTruthy();
       expect(eventDetail.value).toBe("option1");
@@ -289,7 +288,7 @@ describe("EaRadio and EaRadioGroup Components", () => {
       radio.setAttribute("value", "option1");
       container.appendChild(radio);
 
-      await waitForRender();
+      await radio.updateComplete;
 
       const changeHandler = vi.fn();
       document.addEventListener("change", changeHandler);
@@ -298,7 +297,7 @@ describe("EaRadio and EaRadioGroup Components", () => {
       input.checked = true;
       input.dispatchEvent(new Event("change", { bubbles: true }));
 
-      await waitForRender();
+      await radio.updateComplete;
 
       expect(changeHandler).toHaveBeenCalled();
       document.removeEventListener("change", changeHandler);
@@ -311,7 +310,7 @@ describe("EaRadio and EaRadioGroup Components", () => {
       radio.setAttribute("value", "option1");
       container.appendChild(radio);
 
-      await waitForRender();
+      await radio.updateComplete;
 
       const focusHandler = vi.fn();
       radio.addEventListener("focus", focusHandler);
@@ -319,7 +318,7 @@ describe("EaRadio and EaRadioGroup Components", () => {
       const inner = radio.shadowRoot.querySelector(".ea-radio__inner");
       inner.dispatchEvent(new Event("focus", { bubbles: true }));
 
-      await waitForRender();
+      await radio.updateComplete;
 
       expect(focusHandler).toHaveBeenCalled();
     });
@@ -329,7 +328,7 @@ describe("EaRadio and EaRadioGroup Components", () => {
       radio.setAttribute("value", "option1");
       container.appendChild(radio);
 
-      await waitForRender();
+      await radio.updateComplete;
 
       let eventDetail = null;
       radio.addEventListener("focus", e => {
@@ -339,7 +338,7 @@ describe("EaRadio and EaRadioGroup Components", () => {
       const inner = radio.shadowRoot.querySelector(".ea-radio__inner");
       inner.dispatchEvent(new Event("focus", { bubbles: true }));
 
-      await waitForRender();
+      await radio.updateComplete;
 
       expect(eventDetail).toBeTruthy();
       expect(eventDetail.value).toBe("option1");
@@ -350,7 +349,7 @@ describe("EaRadio and EaRadioGroup Components", () => {
       radio.setAttribute("value", "option1");
       container.appendChild(radio);
 
-      await waitForRender();
+      await radio.updateComplete;
 
       const blurHandler = vi.fn();
       radio.addEventListener("blur", blurHandler);
@@ -358,7 +357,7 @@ describe("EaRadio and EaRadioGroup Components", () => {
       const inner = radio.shadowRoot.querySelector(".ea-radio__inner");
       inner.dispatchEvent(new Event("blur", { bubbles: true }));
 
-      await waitForRender();
+      await radio.updateComplete;
 
       expect(blurHandler).toHaveBeenCalled();
     });
@@ -367,12 +366,12 @@ describe("EaRadio and EaRadioGroup Components", () => {
       const radio = document.createElement("ea-radio");
       container.appendChild(radio);
 
-      await waitForRender();
+      await radio.updateComplete;
 
       const inner = radio.shadowRoot.querySelector(".ea-radio__inner");
       inner.dispatchEvent(new Event("focus", { bubbles: true }));
 
-      await waitForRender();
+      await radio.updateComplete;
 
       const containerEl = radio.shadowRoot.querySelector(".ea-radio");
       expect(containerEl.classList.contains("is-focus")).toBe(true);
@@ -382,14 +381,14 @@ describe("EaRadio and EaRadioGroup Components", () => {
       const radio = document.createElement("ea-radio");
       container.appendChild(radio);
 
-      await waitForRender();
+      await radio.updateComplete;
 
       const inner = radio.shadowRoot.querySelector(".ea-radio__inner");
       inner.dispatchEvent(new Event("focus", { bubbles: true }));
-      await waitForRender();
+      await radio.updateComplete;
 
       inner.dispatchEvent(new Event("blur", { bubbles: true }));
-      await waitForRender();
+      await radio.updateComplete;
 
       const containerEl = radio.shadowRoot.querySelector(".ea-radio");
       expect(containerEl.classList.contains("is-focus")).toBe(false);
@@ -402,11 +401,11 @@ describe("EaRadio and EaRadioGroup Components", () => {
       radio.setAttribute("value", "option1");
       container.appendChild(radio);
 
-      await waitForRender();
+      await radio.updateComplete;
 
       radio.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter" }));
 
-      await waitForRender();
+      await radio.updateComplete;
 
       expect(radio.checked).toBe(true);
     });
@@ -416,11 +415,11 @@ describe("EaRadio and EaRadioGroup Components", () => {
       radio.setAttribute("value", "option1");
       container.appendChild(radio);
 
-      await waitForRender();
+      await radio.updateComplete;
 
       radio.dispatchEvent(new KeyboardEvent("keydown", { key: " " }));
 
-      await waitForRender();
+      await radio.updateComplete;
 
       expect(radio.checked).toBe(true);
     });
@@ -430,14 +429,14 @@ describe("EaRadio and EaRadioGroup Components", () => {
       radio.setAttribute("value", "option1");
       container.appendChild(radio);
 
-      await waitForRender();
+      await radio.updateComplete;
 
       const changeHandler = vi.fn();
       radio.addEventListener("change", changeHandler);
 
       radio.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter" }));
 
-      await waitForRender();
+      await radio.updateComplete;
 
       expect(changeHandler).toHaveBeenCalled();
     });
@@ -478,7 +477,7 @@ describe("EaRadio and EaRadioGroup Components", () => {
       const radio = document.createElement("ea-radio");
       container.appendChild(radio);
 
-      await waitForRender();
+      await radio.updateComplete;
 
       const inner = radio.shadowRoot.querySelector(".ea-radio__inner");
       inner.focus = vi.fn();
@@ -491,7 +490,7 @@ describe("EaRadio and EaRadioGroup Components", () => {
       const radio = document.createElement("ea-radio");
       container.appendChild(radio);
 
-      await waitForRender();
+      await radio.updateComplete;
 
       const inner = radio.shadowRoot.querySelector(".ea-radio__inner");
       inner.blur = vi.fn();
@@ -532,7 +531,7 @@ describe("EaRadio and EaRadioGroup Components", () => {
       const group = document.createElement("ea-radio-group");
       container.appendChild(group);
 
-      await waitForRender();
+      await group.updateComplete;
 
       expect(group.getAttribute("role")).toBe("radiogroup");
     });
@@ -556,7 +555,7 @@ describe("EaRadio and EaRadioGroup Components", () => {
       `;
       container.appendChild(group);
 
-      await waitForRender();
+      await group.updateComplete;
 
       const radios = group.querySelectorAll("ea-radio");
       expect(radios[0].checked).toBeFalsy();
@@ -582,7 +581,7 @@ describe("EaRadio and EaRadioGroup Components", () => {
       `;
       container.appendChild(group);
 
-      await waitForRender();
+      await group.updateComplete;
 
       const radios = group.querySelectorAll("ea-radio");
       expect(radios[0].getAttribute("name")).toBe("test-group");
@@ -608,7 +607,7 @@ describe("EaRadio and EaRadioGroup Components", () => {
       `;
       container.appendChild(group);
 
-      await waitForRender();
+      await group.updateComplete;
 
       const radios = group.querySelectorAll("ea-radio");
       expect(radios[0].disabled).toBe(true);
@@ -651,7 +650,7 @@ describe("EaRadio and EaRadioGroup Components", () => {
       `;
       container.appendChild(group);
 
-      await waitForRender();
+      await group.updateComplete;
 
       const radios = group.querySelectorAll("ea-radio");
       expect(radios[0].border).toBe(true);
@@ -688,14 +687,14 @@ describe("EaRadio and EaRadioGroup Components", () => {
       `;
       container.appendChild(group);
 
-      await waitForRender();
+      await group.updateComplete;
 
       const radios = group.querySelectorAll("ea-radio");
       const input = radios[1].shadowRoot.querySelector('input[type="radio"]');
       input.checked = true;
       input.dispatchEvent(new Event("change", { bubbles: true }));
 
-      await waitForRender();
+      await group.updateComplete;
 
       expect(group.value).toBe("option2");
     });
@@ -709,14 +708,14 @@ describe("EaRadio and EaRadioGroup Components", () => {
       `;
       container.appendChild(group);
 
-      await waitForRender();
+      await group.updateComplete;
 
       const radios = group.querySelectorAll("ea-radio");
 
       const input1 = radios[0].shadowRoot.querySelector('input[type="radio"]');
       input1.checked = true;
       input1.dispatchEvent(new Event("change", { bubbles: true }));
-      await waitForRender();
+      await group.updateComplete;
       expect(group.value).toBe("option1");
       expect(radios[0].checked).toBe(true);
       expect(radios[1].checked).toBe(false);
@@ -724,14 +723,14 @@ describe("EaRadio and EaRadioGroup Components", () => {
       const input2 = radios[1].shadowRoot.querySelector('input[type="radio"]');
       input2.checked = true;
       input2.dispatchEvent(new Event("change", { bubbles: true }));
-      await waitForRender();
+      await group.updateComplete;
       expect(group.value).toBe("option2");
       expect(radios[0].checked).toBe(false);
       expect(radios[1].checked).toBe(true);
 
       input1.checked = true;
       input1.dispatchEvent(new Event("change", { bubbles: true }));
-      await waitForRender();
+      await group.updateComplete;
 
       expect(group.value).toBe("option1");
       expect(radios[0].checked).toBe(true);
@@ -749,7 +748,7 @@ describe("EaRadio and EaRadioGroup Components", () => {
       `;
       container.appendChild(group);
 
-      await waitForRender();
+      await group.updateComplete;
 
       try {
         expect(group.checkValidity()).toBe(false);
@@ -770,7 +769,7 @@ describe("EaRadio and EaRadioGroup Components", () => {
       `;
       container.appendChild(group);
 
-      await waitForRender();
+      await group.updateComplete;
 
       try {
         expect(group.checkValidity()).toBe(true);
@@ -811,14 +810,14 @@ describe("EaRadio and EaRadioGroup Components", () => {
       `;
       container.appendChild(group);
 
-      await waitForRender();
+      await group.updateComplete;
 
       const newRadio = document.createElement("ea-radio");
       newRadio.setAttribute("value", "option3");
       newRadio.textContent = "Option 3";
       group.appendChild(newRadio);
 
-      await waitForRender();
+      await newRadio.updateComplete;
 
       expect(newRadio.checked).toBe(true);
     });
@@ -834,7 +833,7 @@ describe("EaRadio and EaRadioGroup Components", () => {
       `;
       container.appendChild(group);
 
-      await waitForRender();
+      await group.updateComplete;
 
       expect(group.shadowRoot).toBeTruthy();
       const radios = group.querySelectorAll("ea-radio");
@@ -858,13 +857,13 @@ describe("EaRadio and EaRadioGroup Components", () => {
       `;
       container.appendChild(group);
 
-      await waitForRender();
+      await group.updateComplete;
 
       expect(group.value).toBe("");
 
       group.setAttribute("value", "option1");
 
-      await waitForRender();
+      await group.updateComplete;
 
       expect(group.value).toBe("option1");
       const radios = group.querySelectorAll("ea-radio");
@@ -899,7 +898,7 @@ describe("EaRadio and EaRadioGroup Components", () => {
       const el = document.createElement("ea-radio");
       el.setAttribute("label", "Radio");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el, {
         rules: { "nested-interactive": { enabled: false } },
       });
@@ -911,7 +910,7 @@ describe("EaRadio and EaRadioGroup Components", () => {
       el.setAttribute("label", "Radio");
       el.setAttribute("disabled", "");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el, {
         rules: { "nested-interactive": { enabled: false } },
       });
@@ -945,7 +944,7 @@ describe("EaRadioGroup Keyboard And Form APIs", () => {
     }
     if (innerHTML) group.innerHTML = innerHTML;
     container.appendChild(group);
-    await waitForRender();
+    await group.updateComplete;
     return group;
   }
 
@@ -953,7 +952,7 @@ describe("EaRadioGroup Keyboard And Form APIs", () => {
     it("ArrowRight 应选中下一个 radio", async () => {
       const group = await createGroup(THREE_RADIOS);
       group.value = "a";
-      await waitForRender();
+      await group.updateComplete;
 
       const event = fireKeydown(group, "ArrowRight");
 
@@ -964,7 +963,7 @@ describe("EaRadioGroup Keyboard And Form APIs", () => {
     it("ArrowDown 应选中下一个 radio", async () => {
       const group = await createGroup(THREE_RADIOS);
       group.value = "a";
-      await waitForRender();
+      await group.updateComplete;
 
       fireKeydown(group, "ArrowDown");
 
@@ -974,7 +973,7 @@ describe("EaRadioGroup Keyboard And Form APIs", () => {
     it("末尾按 ArrowRight 应回绕到第一个", async () => {
       const group = await createGroup(THREE_RADIOS);
       group.value = "c";
-      await waitForRender();
+      await group.updateComplete;
 
       fireKeydown(group, "ArrowRight");
 
@@ -984,7 +983,7 @@ describe("EaRadioGroup Keyboard And Form APIs", () => {
     it("ArrowLeft 应选中上一个 radio", async () => {
       const group = await createGroup(THREE_RADIOS);
       group.value = "b";
-      await waitForRender();
+      await group.updateComplete;
 
       fireKeydown(group, "ArrowLeft");
 
@@ -994,7 +993,7 @@ describe("EaRadioGroup Keyboard And Form APIs", () => {
     it("ArrowUp 应选中上一个 radio", async () => {
       const group = await createGroup(THREE_RADIOS);
       group.value = "b";
-      await waitForRender();
+      await group.updateComplete;
 
       fireKeydown(group, "ArrowUp");
 
@@ -1004,7 +1003,7 @@ describe("EaRadioGroup Keyboard And Form APIs", () => {
     it("开头按 ArrowLeft 应回绕到最后一个", async () => {
       const group = await createGroup(THREE_RADIOS);
       group.value = "a";
-      await waitForRender();
+      await group.updateComplete;
 
       fireKeydown(group, "ArrowLeft");
 
@@ -1023,7 +1022,7 @@ describe("EaRadioGroup Keyboard And Form APIs", () => {
     it("空格在已选中时不改变选中项", async () => {
       const group = await createGroup(THREE_RADIOS);
       group.value = "b";
-      await waitForRender();
+      await group.updateComplete;
 
       const event = fireKeydown(group, " ");
 
@@ -1038,7 +1037,7 @@ describe("EaRadioGroup Keyboard And Form APIs", () => {
         <ea-radio value="c">C</ea-radio>
       `);
       group.value = "a";
-      await waitForRender();
+      await group.updateComplete;
 
       fireKeydown(group, "ArrowRight");
 
@@ -1067,7 +1066,7 @@ describe("EaRadioGroup Keyboard And Form APIs", () => {
       const group = await createGroup(THREE_RADIOS, { value: "a" });
 
       group.dispatchEvent(new Event("change", { bubbles: true }));
-      await waitForRender();
+      await group.updateComplete;
 
       expect(group.value).toBe("a");
     });
@@ -1109,7 +1108,7 @@ describe("EaRadioGroup Keyboard And Form APIs", () => {
       const group = await createGroup(THREE_RADIOS);
 
       group.setAttribute("size", "small");
-      await waitForRender();
+      await group.updateComplete;
 
       const radios = group.querySelectorAll("ea-radio");
       expect(radios[0].getAttribute("size")).toBe("small");
@@ -1123,7 +1122,7 @@ describe("EaRadioGroup Keyboard And Form APIs", () => {
       `);
 
       group.setAttribute("size", "small");
-      await waitForRender();
+      await group.updateComplete;
 
       const radios = group.querySelectorAll("ea-radio");
       expect(radios[0].getAttribute("size")).toBe("large");
@@ -1134,7 +1133,7 @@ describe("EaRadioGroup Keyboard And Form APIs", () => {
       const group = await createGroup(THREE_RADIOS, { size: "small" });
 
       group.setAttribute("size", "");
-      await waitForRender();
+      await group.updateComplete;
 
       expect(group.size).toBe("");
       expect(group.querySelectorAll("ea-radio")[0].getAttribute("size")).toBe(
@@ -1150,7 +1149,7 @@ describe("EaRadioGroup Keyboard And Form APIs", () => {
         radio.setAttribute(key, value);
       }
       container.appendChild(radio);
-      await waitForRender();
+      await radio.updateComplete;
       return radio;
     }
 

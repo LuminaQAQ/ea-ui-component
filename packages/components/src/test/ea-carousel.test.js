@@ -113,7 +113,7 @@ describe("EaCarousel", () => {
     it("should contain clone slots in content", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const content = getContent(carousel);
       expect(content.querySelector('slot[name="clone-first"]')).toBeTruthy();
@@ -133,7 +133,7 @@ describe("EaCarousel", () => {
     it("should set --ea-carousel-height CSS property", async () => {
       const carousel = createCarousel(3, { height: "300px" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       expect(carousel.style.getPropertyValue("--ea-carousel-height")).toBe(
         "300px"
@@ -144,7 +144,7 @@ describe("EaCarousel", () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
       carousel.setAttribute("height", "500px");
-      await waitForRender();
+      await carousel.updateComplete;
 
       expect(carousel.style.getPropertyValue("--ea-carousel-height")).toBe(
         "500px"
@@ -154,7 +154,7 @@ describe("EaCarousel", () => {
     it("should accept percentage values", async () => {
       const carousel = createCarousel(3, { height: "50%" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       expect(carousel.style.getPropertyValue("--ea-carousel-height")).toBe(
         "50%"
@@ -164,7 +164,7 @@ describe("EaCarousel", () => {
     it("should accept vh values", async () => {
       const carousel = createCarousel(3, { height: "80vh" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       expect(carousel.style.getPropertyValue("--ea-carousel-height")).toBe(
         "80vh"
@@ -185,7 +185,7 @@ describe("EaCarousel", () => {
     it("should apply horizontal class by default", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const containerEl = getContainer(carousel);
       expect(containerEl.classList.contains("ea-carousel--horizontal")).toBe(
@@ -196,7 +196,7 @@ describe("EaCarousel", () => {
     it("should apply vertical class when direction='vertical'", async () => {
       const carousel = createCarousel(3, { direction: "vertical" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const containerEl = getContainer(carousel);
       expect(containerEl.classList.contains("ea-carousel--vertical")).toBe(
@@ -211,7 +211,7 @@ describe("EaCarousel", () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
       carousel.setAttribute("direction", "vertical");
-      await waitForRender();
+      await carousel.updateComplete;
 
       const containerEl = getContainer(carousel);
       expect(containerEl.classList.contains("ea-carousel--vertical")).toBe(
@@ -225,7 +225,7 @@ describe("EaCarousel", () => {
     it("should hide arrows in vertical direction", async () => {
       const carousel = createCarousel(3, { direction: "vertical" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       carousel.next();
       expect(carousel.getAttribute("index")).toBe("1");
@@ -251,7 +251,7 @@ describe("EaCarousel", () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
       carousel.setAttribute("index", "2");
-      await waitForRender();
+      await carousel.updateComplete;
 
       const transform = carousel.style.getPropertyValue(
         "--ea-carousel-transform"
@@ -267,7 +267,7 @@ describe("EaCarousel", () => {
       carousel.addEventListener("ea-change", changeHandler);
 
       carousel.setAttribute("index", "1");
-      await waitForRender();
+      await carousel.updateComplete;
 
       expect(changeHandler).toHaveBeenCalledTimes(1);
       expect(changeHandler.mock.calls[0][0].detail).toEqual({
@@ -279,13 +279,13 @@ describe("EaCarousel", () => {
     it("should emit 'ea-change' event with correct prev and current", async () => {
       const carousel = createCarousel(3, { index: "1" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const changeHandler = vi.fn();
       carousel.addEventListener("ea-change", changeHandler);
 
       carousel.setAttribute("index", "2");
-      await waitForRender();
+      await carousel.updateComplete;
 
       expect(changeHandler).toHaveBeenCalledTimes(1);
       expect(changeHandler.mock.calls[0][0].detail).toEqual({
@@ -297,13 +297,13 @@ describe("EaCarousel", () => {
     it("should emit 'ea-change' event when looping forward", async () => {
       const carousel = createCarousel(3, { index: "2" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const changeHandler = vi.fn();
       carousel.addEventListener("ea-change", changeHandler);
 
       carousel.next();
-      await waitForRender();
+      await carousel.updateComplete;
 
       expect(changeHandler).toHaveBeenCalledTimes(1);
       expect(changeHandler.mock.calls[0][0].detail).toEqual({
@@ -315,13 +315,13 @@ describe("EaCarousel", () => {
     it("should emit 'ea-change' event when looping backward", async () => {
       const carousel = createCarousel(3, { index: "0" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const changeHandler = vi.fn();
       carousel.addEventListener("ea-change", changeHandler);
 
       carousel.prev();
-      await waitForRender();
+      await carousel.updateComplete;
 
       expect(changeHandler).toHaveBeenCalledTimes(1);
       expect(changeHandler.mock.calls[0][0].detail).toEqual({
@@ -386,7 +386,7 @@ describe("EaCarousel", () => {
     it("should apply arrow-always class when arrow='always'", async () => {
       const carousel = createCarousel(3, { arrow: "always" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const containerEl = getContainer(carousel);
       expect(containerEl.classList.contains("is-arrow-always")).toBe(true);
@@ -395,7 +395,7 @@ describe("EaCarousel", () => {
     it("should apply arrow-never class when arrow='never'", async () => {
       const carousel = createCarousel(3, { arrow: "never" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const containerEl = getContainer(carousel);
       expect(containerEl.classList.contains("is-arrow-never")).toBe(true);
@@ -404,13 +404,13 @@ describe("EaCarousel", () => {
     it("should show arrows on mouseenter when arrow='hover'", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const containerEl = getContainer(carousel);
       containerEl.dispatchEvent(
         new MouseEvent("mouseenter", { bubbles: true })
       );
-      await waitForRender();
+      await carousel.updateComplete;
 
       expect(containerEl.classList.contains("is-arrow-hover")).toBe(true);
     });
@@ -418,19 +418,19 @@ describe("EaCarousel", () => {
     it("should hide arrows on mouseleave when arrow='hover'", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const containerEl = getContainer(carousel);
       containerEl.dispatchEvent(
         new MouseEvent("mouseenter", { bubbles: true })
       );
-      await waitForRender();
+      await carousel.updateComplete;
       expect(containerEl.classList.contains("is-arrow-hover")).toBe(true);
 
       containerEl.dispatchEvent(
         new MouseEvent("mouseleave", { bubbles: true })
       );
-      await waitForRender();
+      await carousel.updateComplete;
       expect(containerEl.classList.contains("is-arrow-hover")).toBe(false);
     });
 
@@ -438,7 +438,7 @@ describe("EaCarousel", () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
       carousel.setAttribute("arrow", "always");
-      await waitForRender();
+      await carousel.updateComplete;
 
       const containerEl = getContainer(carousel);
       expect(containerEl.classList.contains("is-arrow-always")).toBe(true);
@@ -455,7 +455,7 @@ describe("EaCarousel", () => {
     it("should accept false value", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       carousel.autoplay = false;
       expect(carousel.autoplay).toBe(false);
@@ -464,7 +464,7 @@ describe("EaCarousel", () => {
     it("should toggle autoplay dynamically", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       carousel.autoplay = false;
       expect(carousel.autoplay).toBe(false);
@@ -481,7 +481,7 @@ describe("EaCarousel", () => {
     it("should accept false value", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       carousel.loop = false;
       expect(carousel.loop).toBe(false);
@@ -490,7 +490,7 @@ describe("EaCarousel", () => {
     it("should toggle loop dynamically", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       carousel.loop = false;
       expect(carousel.loop).toBe(false);
@@ -507,7 +507,7 @@ describe("EaCarousel", () => {
     it("should accept false value", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       carousel.pauseOnHover = false;
       expect(carousel.pauseOnHover).toBe(false);
@@ -518,7 +518,7 @@ describe("EaCarousel", () => {
     it("should default to empty string (inside)", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       expect(carousel.indicatorPosition).toBe("");
       const containerEl = getContainer(carousel);
@@ -531,7 +531,7 @@ describe("EaCarousel", () => {
     it("should hide indicators when indicator-position='none'", async () => {
       const carousel = createCarousel(3, { "indicator-position": "none" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const containerEl = getContainer(carousel);
       expect(containerEl.classList.contains("is-none-indicator")).toBe(true);
@@ -540,7 +540,7 @@ describe("EaCarousel", () => {
     it("should show outside indicators when indicator-position='outside'", async () => {
       const carousel = createCarousel(3, { "indicator-position": "outside" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const containerEl = getContainer(carousel);
       expect(containerEl.classList.contains("is-outside-indicator")).toBe(true);
@@ -550,7 +550,7 @@ describe("EaCarousel", () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
       carousel.setAttribute("indicator-position", "outside");
-      await waitForRender();
+      await carousel.updateComplete;
 
       const containerEl = getContainer(carousel);
       expect(containerEl.classList.contains("is-outside-indicator")).toBe(true);
@@ -561,7 +561,7 @@ describe("EaCarousel", () => {
     it("should move to next item", async () => {
       const carousel = createCarousel(3, { index: "0" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       carousel.next();
       expect(carousel.getAttribute("index")).toBe("1");
@@ -570,7 +570,7 @@ describe("EaCarousel", () => {
     it("should set pause state during transition", async () => {
       const carousel = createCarousel(3, { index: "0" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       carousel.next();
       expect(carousel.getAttribute("index")).toBe("1");
@@ -582,7 +582,7 @@ describe("EaCarousel", () => {
     it("should allow next after transitionend", async () => {
       const carousel = createCarousel(3, { index: "0" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       carousel.next();
       expect(carousel.getAttribute("index")).toBe("1");
@@ -596,7 +596,7 @@ describe("EaCarousel", () => {
     it("should go to clone-first when on last item (loop)", async () => {
       const carousel = createCarousel(3, { index: "2" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       carousel.next();
       expect(carousel.getAttribute("index")).toBe("3");
@@ -605,7 +605,7 @@ describe("EaCarousel", () => {
     it("should reset to first item after transitionend on clone-first", async () => {
       const carousel = createCarousel(3, { index: "2" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       carousel.next();
       expect(carousel.getAttribute("index")).toBe("3");
@@ -620,7 +620,7 @@ describe("EaCarousel", () => {
     it("should move to previous item", async () => {
       const carousel = createCarousel(3, { index: "2" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       carousel.prev();
       expect(carousel.getAttribute("index")).toBe("1");
@@ -629,7 +629,7 @@ describe("EaCarousel", () => {
     it("should set pause state during transition", async () => {
       const carousel = createCarousel(3, { index: "2" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       carousel.prev();
       expect(carousel.getAttribute("index")).toBe("1");
@@ -641,7 +641,7 @@ describe("EaCarousel", () => {
     it("should allow prev after transitionend", async () => {
       const carousel = createCarousel(3, { index: "2" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       carousel.prev();
       expect(carousel.getAttribute("index")).toBe("1");
@@ -655,7 +655,7 @@ describe("EaCarousel", () => {
     it("should go to clone-last when on first item (loop)", async () => {
       const carousel = createCarousel(3, { index: "0" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       carousel.prev();
       expect(carousel.getAttribute("index")).toBe("-1");
@@ -664,7 +664,7 @@ describe("EaCarousel", () => {
     it("should reset to last item after transitionend on clone-last", async () => {
       const carousel = createCarousel(3, { index: "0" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       carousel.prev();
       expect(carousel.getAttribute("index")).toBe("-1");
@@ -679,7 +679,7 @@ describe("EaCarousel", () => {
     it("should call prev() on left arrow click", async () => {
       const carousel = createCarousel(3, { index: "1" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const leftArrow = carousel.shadowRoot.querySelector(".arrow-left");
       leftArrow.click();
@@ -690,7 +690,7 @@ describe("EaCarousel", () => {
     it("should call next() on right arrow click", async () => {
       const carousel = createCarousel(3, { index: "1" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const rightArrow = carousel.shadowRoot.querySelector(".arrow-right");
       rightArrow.click();
@@ -701,7 +701,7 @@ describe("EaCarousel", () => {
     it("should ignore arrow clicks when arrow='never'", async () => {
       const carousel = createCarousel(3, { index: "1", arrow: "never" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const rightArrow = carousel.shadowRoot.querySelector(".arrow-right");
       rightArrow.click();
@@ -712,7 +712,7 @@ describe("EaCarousel", () => {
     it("should ignore arrow clicks when direction='vertical'", async () => {
       const carousel = createCarousel(3, { index: "1", direction: "vertical" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const rightArrow = carousel.shadowRoot.querySelector(".arrow-right");
       rightArrow.click();
@@ -725,7 +725,7 @@ describe("EaCarousel", () => {
     it("should generate indicators based on item count", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const indicators = getIndicators(carousel);
       expect(indicators.length).toBe(3);
@@ -734,7 +734,7 @@ describe("EaCarousel", () => {
     it("should generate correct number of indicators for different counts", async () => {
       const carousel = createCarousel(5);
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const indicators = getIndicators(carousel);
       expect(indicators.length).toBe(5);
@@ -743,7 +743,7 @@ describe("EaCarousel", () => {
     it("should mark first indicator as active by default", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const indicators = getIndicators(carousel);
       expect(indicators[0].classList.contains("is-active")).toBe(true);
@@ -753,7 +753,7 @@ describe("EaCarousel", () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
       carousel.setAttribute("index", "1");
-      await waitForRender();
+      await carousel.updateComplete;
 
       const indicators = getIndicators(carousel);
       expect(indicators[0].classList.contains("is-active")).toBe(false);
@@ -763,7 +763,7 @@ describe("EaCarousel", () => {
     it("should navigate to item on indicator click", async () => {
       const carousel = createCarousel(3, { trigger: "click" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const indicators = getIndicators(carousel);
       indicators[2].dispatchEvent(new Event("click", { bubbles: true }));
@@ -773,7 +773,7 @@ describe("EaCarousel", () => {
     it("should navigate to item on indicator hover when trigger='hover'", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const indicators = getIndicators(carousel);
       indicators[1].dispatchEvent(
@@ -794,7 +794,7 @@ describe("EaCarousel", () => {
     it("should update indicators when items are added dynamically", async () => {
       const carousel = createCarousel(2);
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       let indicators = getIndicators(carousel);
       expect(indicators.length).toBe(2);
@@ -803,7 +803,7 @@ describe("EaCarousel", () => {
       newItem.textContent = "Item 3";
       carousel.appendChild(newItem);
       carousel.$mount();
-      await waitForRender();
+      await newItem.updateComplete;
 
       indicators = getIndicators(carousel);
       expect(indicators.length).toBe(3);
@@ -812,7 +812,7 @@ describe("EaCarousel", () => {
     it("should update indicators when items are removed", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       let indicators = getIndicators(carousel);
       expect(indicators.length).toBe(3);
@@ -820,7 +820,7 @@ describe("EaCarousel", () => {
       const items = carousel.querySelectorAll("ea-carousel-item:not([slot])");
       items[2].remove();
       carousel.$mount();
-      await waitForRender();
+      await carousel.updateComplete;
 
       indicators = getIndicators(carousel);
       expect(indicators.length).toBe(2);
@@ -831,7 +831,7 @@ describe("EaCarousel", () => {
     it("should create clone-first and clone-last items", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const cloneFirst = carousel.querySelector(
         'ea-carousel-item[slot="clone-first"]'
@@ -846,7 +846,7 @@ describe("EaCarousel", () => {
     it("should clone content of first item for clone-first", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const cloneFirst = carousel.querySelector(
         'ea-carousel-item[slot="clone-first"]'
@@ -858,7 +858,7 @@ describe("EaCarousel", () => {
     it("should clone content of last item for clone-last", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const cloneLast = carousel.querySelector(
         'ea-carousel-item[slot="clone-last"]'
@@ -871,25 +871,25 @@ describe("EaCarousel", () => {
     it("should sync clone content when original item changes", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const firstItem = carousel.querySelector("ea-carousel-item:not([slot])");
       firstItem.textContent = "Updated First";
-      await waitForRender(200);
-
-      const cloneFirst = carousel.querySelector(
-        'ea-carousel-item[slot="clone-first"]'
-      );
-      expect(cloneFirst.textContent).toBe("Updated First");
+      await vi.waitFor(() => {
+        expect(
+          carousel.querySelector('ea-carousel-item[slot="clone-first"]')
+            .textContent
+        ).toBe("Updated First");
+      });
     });
 
     it("should remove old clones before creating new ones on remount", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       carousel.$mount();
-      await waitForRender();
+      await carousel.updateComplete;
 
       const clones = carousel.querySelectorAll(
         'ea-carousel-item[slot^="clone-"]'
@@ -902,7 +902,7 @@ describe("EaCarousel", () => {
     it("should disable transition during loop reset", async () => {
       const carousel = createCarousel(3, { index: "2" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       carousel.next();
       expect(carousel.getAttribute("index")).toBe("3");
@@ -915,7 +915,7 @@ describe("EaCarousel", () => {
     it("should re-enable transition after loop reset", async () => {
       const carousel = createCarousel(3, { index: "2" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       carousel.next();
       await simulateTransitionEnd(carousel);
@@ -927,7 +927,7 @@ describe("EaCarousel", () => {
     it("should handle backward loop transition correctly", async () => {
       const carousel = createCarousel(3, { index: "0" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       carousel.prev();
       expect(carousel.getAttribute("index")).toBe("-1");
@@ -940,7 +940,7 @@ describe("EaCarousel", () => {
     it("should allow navigation after full loop cycle", async () => {
       const carousel = createCarousel(3, { index: "2" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       carousel.next();
       await simulateTransitionEnd(carousel);
@@ -960,7 +960,7 @@ describe("EaCarousel", () => {
     it("should start autoplay on mount by default", async () => {
       const carousel = createCarousel(3, { interval: "50" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       await new Promise(resolve => setTimeout(resolve, 100));
       expect(carousel.getAttribute("index")).toBe("1");
@@ -969,10 +969,10 @@ describe("EaCarousel", () => {
     it("should not autoplay when autoplay is false", async () => {
       const carousel = createCarousel(3, { interval: "500" });
       container.appendChild(carousel);
-      await waitForRender(0);
+      await carousel.updateComplete;
 
       carousel.autoplay = false;
-      await waitForRender();
+      await carousel.updateComplete;
 
       await new Promise(resolve => setTimeout(resolve, 600));
       expect(carousel.getAttribute("index") || "0").toBe("0");
@@ -981,7 +981,7 @@ describe("EaCarousel", () => {
     it("should respect custom interval", async () => {
       const carousel = createCarousel(3, { interval: "500" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       await new Promise(resolve => setTimeout(resolve, 200));
       expect(carousel.getAttribute("index") || "0").toBe("0");
@@ -993,13 +993,13 @@ describe("EaCarousel", () => {
     it("should pause autoplay on mouseenter when pauseOnHover is true", async () => {
       const carousel = createCarousel(3, { interval: "500" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const containerEl = getContainer(carousel);
       containerEl.dispatchEvent(
         new MouseEvent("mouseenter", { bubbles: true })
       );
-      await waitForRender();
+      await carousel.updateComplete;
 
       await new Promise(resolve => setTimeout(resolve, 600));
       expect(carousel.getAttribute("index") || "0").toBe("0");
@@ -1008,18 +1008,18 @@ describe("EaCarousel", () => {
     it("should resume autoplay on mouseleave when pauseOnHover is true", async () => {
       const carousel = createCarousel(3, { interval: "50" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const containerEl = getContainer(carousel);
       containerEl.dispatchEvent(
         new MouseEvent("mouseenter", { bubbles: true })
       );
-      await waitForRender();
+      await carousel.updateComplete;
 
       containerEl.dispatchEvent(
         new MouseEvent("mouseleave", { bubbles: true })
       );
-      await waitForRender();
+      await carousel.updateComplete;
 
       await new Promise(resolve => setTimeout(resolve, 100));
       expect(carousel.getAttribute("index")).toBe("1");
@@ -1028,16 +1028,16 @@ describe("EaCarousel", () => {
     it("should not pause on hover when pauseOnHover is false", async () => {
       const carousel = createCarousel(3, { interval: "50" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       carousel.pauseOnHover = false;
-      await waitForRender();
+      await carousel.updateComplete;
 
       const containerEl = getContainer(carousel);
       containerEl.dispatchEvent(
         new MouseEvent("mouseenter", { bubbles: true })
       );
-      await waitForRender();
+      await carousel.updateComplete;
 
       await new Promise(resolve => setTimeout(resolve, 100));
       expect(carousel.getAttribute("index")).toBe("1");
@@ -1046,7 +1046,7 @@ describe("EaCarousel", () => {
     it("should restart autoplay after manual navigation and transitionend", async () => {
       const carousel = createCarousel(3, { index: "0", interval: "50" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       carousel.next();
       await simulateTransitionEnd(carousel);
@@ -1064,7 +1064,7 @@ describe("EaCarousel", () => {
       container.addEventListener("ea-change", changeHandler);
 
       carousel.setAttribute("index", "1");
-      await waitForRender();
+      await carousel.updateComplete;
 
       expect(changeHandler).toHaveBeenCalledTimes(1);
     });
@@ -1072,13 +1072,13 @@ describe("EaCarousel", () => {
     it("should emit 'ea-change' event with correct detail on loop forward", async () => {
       const carousel = createCarousel(3, { index: "2" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const changeHandler = vi.fn();
       carousel.addEventListener("ea-change", changeHandler);
 
       carousel.next();
-      await waitForRender();
+      await carousel.updateComplete;
 
       expect(changeHandler).toHaveBeenCalledTimes(1);
       expect(changeHandler.mock.calls[0][0].detail.current).toBe(0);
@@ -1088,13 +1088,13 @@ describe("EaCarousel", () => {
     it("should emit 'ea-change' event with correct detail on loop backward", async () => {
       const carousel = createCarousel(3, { index: "0" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const changeHandler = vi.fn();
       carousel.addEventListener("ea-change", changeHandler);
 
       carousel.prev();
-      await waitForRender();
+      await carousel.updateComplete;
 
       expect(changeHandler).toHaveBeenCalledTimes(1);
       expect(changeHandler.mock.calls[0][0].detail.current).toBe(2);
@@ -1109,7 +1109,7 @@ describe("EaCarousel", () => {
       changeHandler.mockClear();
 
       carousel.setAttribute("index", "0");
-      await waitForRender();
+      await carousel.updateComplete;
 
       expect(changeHandler).toHaveBeenCalledTimes(1);
     });
@@ -1119,7 +1119,7 @@ describe("EaCarousel", () => {
     it("should apply correct direction class", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const containerEl = getContainer(carousel);
       expect(containerEl.classList.contains("ea-carousel--horizontal")).toBe(
@@ -1130,13 +1130,13 @@ describe("EaCarousel", () => {
     it("should apply arrow class on mouseenter", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const containerEl = getContainer(carousel);
       containerEl.dispatchEvent(
         new MouseEvent("mouseenter", { bubbles: true })
       );
-      await waitForRender();
+      await carousel.updateComplete;
 
       expect(containerEl.classList.contains("is-arrow-hover")).toBe(true);
     });
@@ -1144,7 +1144,7 @@ describe("EaCarousel", () => {
     it("should apply none-indicator class", async () => {
       const carousel = createCarousel(3, { "indicator-position": "none" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const containerEl = getContainer(carousel);
       expect(containerEl.classList.contains("is-none-indicator")).toBe(true);
@@ -1153,7 +1153,7 @@ describe("EaCarousel", () => {
     it("should apply outside-indicator class", async () => {
       const carousel = createCarousel(3, { "indicator-position": "outside" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const containerEl = getContainer(carousel);
       expect(containerEl.classList.contains("is-outside-indicator")).toBe(true);
@@ -1166,7 +1166,7 @@ describe("EaCarousel", () => {
         "indicator-position": "outside",
       });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const containerEl = getContainer(carousel);
       expect(containerEl.classList.contains("ea-carousel--vertical")).toBe(
@@ -1181,19 +1181,18 @@ describe("EaCarousel", () => {
     it("should update position on window resize", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const initialTransform = carousel.style.getPropertyValue(
         "--ea-carousel-transform"
       );
 
       window.dispatchEvent(new Event("resize"));
-      await waitForRender(200);
-
-      const newTransform = carousel.style.getPropertyValue(
-        "--ea-carousel-transform"
-      );
-      expect(newTransform).toBeTruthy();
+      await vi.waitFor(() => {
+        expect(
+          carousel.style.getPropertyValue("--ea-carousel-transform")
+        ).toBeTruthy();
+      });
     });
   });
 
@@ -1201,7 +1200,7 @@ describe("EaCarousel", () => {
     it("should reinitialize on slot change", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const indicators = getIndicators(carousel);
       expect(indicators.length).toBe(3);
@@ -1212,7 +1211,7 @@ describe("EaCarousel", () => {
 
       const slot = getContent(carousel).querySelector("slot:not([name])");
       slot.dispatchEvent(new Event("slotchange"));
-      await waitForRender();
+      await newItem.updateComplete;
 
       const updatedIndicators = getIndicators(carousel);
       expect(updatedIndicators.length).toBe(4);
@@ -1221,7 +1220,7 @@ describe("EaCarousel", () => {
     it("should reset index to 0 on slot change", async () => {
       const carousel = createCarousel(3, { index: "2" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       expect(carousel.getAttribute("index")).toBe("2");
 
@@ -1239,7 +1238,7 @@ describe("EaCarousel", () => {
     it("should initialize correctly on mount", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       expect(carousel.shadowRoot.querySelector(".ea-carousel")).toBeTruthy();
       expect(getContent(carousel)).toBeTruthy();
@@ -1257,7 +1256,7 @@ describe("EaCarousel", () => {
     it("should clean up abort controllers on unmount", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       carousel.$beforeUnmount();
       carousel.remove();
@@ -1268,10 +1267,10 @@ describe("EaCarousel", () => {
     it("should support remount after unmount", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       carousel.remove();
-      await waitForRender();
+      await carousel.updateComplete;
 
       container.appendChild(carousel);
       expect(carousel.shadowRoot.querySelector(".ea-carousel")).toBeTruthy();
@@ -1282,7 +1281,7 @@ describe("EaCarousel", () => {
     it("should handle no carousel items gracefully", async () => {
       const carousel = document.createElement("ea-carousel");
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const items = carousel.querySelectorAll("ea-carousel-item:not([slot])");
       expect(items.length).toBe(0);
@@ -1294,7 +1293,7 @@ describe("EaCarousel", () => {
     it("should handle single carousel item", async () => {
       const carousel = createCarousel(1);
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const items = carousel.querySelectorAll("ea-carousel-item:not([slot])");
       expect(items.length).toBe(1);
@@ -1306,7 +1305,7 @@ describe("EaCarousel", () => {
     it("should handle single item navigation", async () => {
       const carousel = createCarousel(1);
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       carousel.next();
       expect(carousel.getAttribute("index")).toBe("1");
@@ -1318,7 +1317,7 @@ describe("EaCarousel", () => {
     it("should handle rapid navigation blocked by pause state", async () => {
       const carousel = createCarousel(3, { index: "0" });
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       carousel.next();
       carousel.next();
@@ -1337,7 +1336,7 @@ describe("EaCarousel", () => {
     it("should handle large number of items", async () => {
       const carousel = createCarousel(20);
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const indicators = getIndicators(carousel);
       expect(indicators.length).toBe(20);
@@ -1346,29 +1345,29 @@ describe("EaCarousel", () => {
     it("should handle dynamic item content update via MutationObserver", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const firstItem = carousel.querySelector("ea-carousel-item:not([slot])");
       const span = document.createElement("span");
       span.textContent = "Updated";
       firstItem.appendChild(span);
-      await waitForRender(200);
-
-      const cloneFirst = carousel.querySelector(
-        'ea-carousel-item[slot="clone-first"]'
-      );
-      expect(cloneFirst.innerHTML).toBe(firstItem.innerHTML);
+      await vi.waitFor(() => {
+        expect(
+          carousel.querySelector('ea-carousel-item[slot="clone-first"]')
+            .innerHTML
+        ).toBe(firstItem.innerHTML);
+      });
     });
 
     it("should handle removing all items", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       const items = carousel.querySelectorAll("ea-carousel-item:not([slot])");
       items.forEach(item => item.remove());
       carousel.$mount();
-      await waitForRender();
+      await carousel.updateComplete;
 
       const indicators = getIndicators(carousel);
       expect(indicators.length).toBe(0);
@@ -1377,7 +1376,7 @@ describe("EaCarousel", () => {
     it("should handle setting index via property", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       carousel.index = 2;
       expect(carousel.getAttribute("index")).toBe("2");
@@ -1386,10 +1385,10 @@ describe("EaCarousel", () => {
     it("should handle setting direction via property", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      await waitForRender();
+      await carousel.updateComplete;
 
       carousel.direction = "vertical";
-      await waitForRender();
+      await carousel.updateComplete;
 
       expect(carousel.getAttribute("direction")).toBe("vertical");
       const containerEl = getContainer(carousel);
@@ -1406,10 +1405,14 @@ describe("EaCarousel", () => {
         el.setAttribute("autoplay", "false");
         el.innerHTML = `<ea-carousel-item>1</ea-carousel-item><ea-carousel-item>2</ea-carousel-item><ea-carousel-item>3</ea-carousel-item>`;
         container.appendChild(el);
-        await waitForRender();
-        const indicatorWrap = el.shadowRoot.querySelector(".ea-carousel__indicator-wrap");
+        await el.updateComplete;
+        const indicatorWrap = el.shadowRoot.querySelector(
+          ".ea-carousel__indicator-wrap"
+        );
         if (indicatorWrap) {
-          indicatorWrap.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
+          indicatorWrap.dispatchEvent(
+            new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true })
+          );
         }
       });
 
@@ -1418,10 +1421,14 @@ describe("EaCarousel", () => {
         el.setAttribute("autoplay", "false");
         el.innerHTML = `<ea-carousel-item>1</ea-carousel-item><ea-carousel-item>2</ea-carousel-item><ea-carousel-item>3</ea-carousel-item>`;
         container.appendChild(el);
-        await waitForRender();
-        const indicatorWrap = el.shadowRoot.querySelector(".ea-carousel__indicator-wrap");
+        await el.updateComplete;
+        const indicatorWrap = el.shadowRoot.querySelector(
+          ".ea-carousel__indicator-wrap"
+        );
         if (indicatorWrap) {
-          indicatorWrap.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true }));
+          indicatorWrap.dispatchEvent(
+            new KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true })
+          );
         }
       });
 
@@ -1430,10 +1437,14 @@ describe("EaCarousel", () => {
         el.setAttribute("autoplay", "false");
         el.innerHTML = `<ea-carousel-item>1</ea-carousel-item><ea-carousel-item>2</ea-carousel-item><ea-carousel-item>3</ea-carousel-item>`;
         container.appendChild(el);
-        await waitForRender();
-        const indicatorWrap = el.shadowRoot.querySelector(".ea-carousel__indicator-wrap");
+        await el.updateComplete;
+        const indicatorWrap = el.shadowRoot.querySelector(
+          ".ea-carousel__indicator-wrap"
+        );
         if (indicatorWrap) {
-          indicatorWrap.dispatchEvent(new KeyboardEvent("keydown", { key: "Home", bubbles: true }));
+          indicatorWrap.dispatchEvent(
+            new KeyboardEvent("keydown", { key: "Home", bubbles: true })
+          );
         }
       });
 
@@ -1442,10 +1453,14 @@ describe("EaCarousel", () => {
         el.setAttribute("autoplay", "false");
         el.innerHTML = `<ea-carousel-item>1</ea-carousel-item><ea-carousel-item>2</ea-carousel-item><ea-carousel-item>3</ea-carousel-item>`;
         container.appendChild(el);
-        await waitForRender();
-        const indicatorWrap = el.shadowRoot.querySelector(".ea-carousel__indicator-wrap");
+        await el.updateComplete;
+        const indicatorWrap = el.shadowRoot.querySelector(
+          ".ea-carousel__indicator-wrap"
+        );
         if (indicatorWrap) {
-          indicatorWrap.dispatchEvent(new KeyboardEvent("keydown", { key: "End", bubbles: true }));
+          indicatorWrap.dispatchEvent(
+            new KeyboardEvent("keydown", { key: "End", bubbles: true })
+          );
         }
       });
     });
@@ -1453,7 +1468,7 @@ describe("EaCarousel", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-carousel");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });
@@ -1462,7 +1477,7 @@ describe("EaCarousel", () => {
       it("容器应该有 role=region", async () => {
         const carousel = createCarousel(3);
         container.appendChild(carousel);
-        await waitForRender();
+        await carousel.updateComplete;
         const containerEl = getContainer(carousel);
         expect(containerEl.getAttribute("role")).toBe("region");
       });
@@ -1470,15 +1485,17 @@ describe("EaCarousel", () => {
       it("容器应该有 aria-roledescription=carousel", async () => {
         const carousel = createCarousel(3);
         container.appendChild(carousel);
-        await waitForRender();
+        await carousel.updateComplete;
         const containerEl = getContainer(carousel);
-        expect(containerEl.getAttribute("aria-roledescription")).toBe("carousel");
+        expect(containerEl.getAttribute("aria-roledescription")).toBe(
+          "carousel"
+        );
       });
 
       it("容器应该有 aria-label=Carousel", async () => {
         const carousel = createCarousel(3);
         container.appendChild(carousel);
-        await waitForRender();
+        await carousel.updateComplete;
         const containerEl = getContainer(carousel);
         expect(containerEl.getAttribute("aria-label")).toBe("Carousel");
       });
@@ -1486,7 +1503,7 @@ describe("EaCarousel", () => {
       it("content 区域应该有 aria-live=off（自动播放时）", async () => {
         const carousel = createCarousel(3);
         container.appendChild(carousel);
-        await waitForRender();
+        await carousel.updateComplete;
         const content = getContent(carousel);
         expect(content.getAttribute("aria-live")).toBe("off");
       });
@@ -1494,15 +1511,17 @@ describe("EaCarousel", () => {
       it("indicator-wrap 应该有 role=tablist", async () => {
         const carousel = createCarousel(3);
         container.appendChild(carousel);
-        await waitForRender();
-        const indicatorWrap = carousel.shadowRoot.querySelector(".ea-carousel__indicator-wrap");
+        await carousel.updateComplete;
+        const indicatorWrap = carousel.shadowRoot.querySelector(
+          ".ea-carousel__indicator-wrap"
+        );
         expect(indicatorWrap.getAttribute("role")).toBe("tablist");
       });
 
       it("indicator 应该有 role=tab", async () => {
         const carousel = createCarousel(3);
         container.appendChild(carousel);
-        await waitForRender();
+        await carousel.updateComplete;
         const indicators = getIndicators(carousel);
         expect(indicators[0].getAttribute("role")).toBe("tab");
       });
@@ -1510,7 +1529,7 @@ describe("EaCarousel", () => {
       it("激活的 indicator 应该有 aria-selected=true", async () => {
         const carousel = createCarousel(3);
         container.appendChild(carousel);
-        await waitForRender();
+        await carousel.updateComplete;
         const indicators = getIndicators(carousel);
         expect(indicators[0].getAttribute("aria-selected")).toBe("true");
       });
@@ -1518,7 +1537,7 @@ describe("EaCarousel", () => {
       it("非激活的 indicator 应该有 aria-selected=false", async () => {
         const carousel = createCarousel(3);
         container.appendChild(carousel);
-        await waitForRender();
+        await carousel.updateComplete;
         const indicators = getIndicators(carousel);
         expect(indicators[1].getAttribute("aria-selected")).toBe("false");
       });
@@ -1526,7 +1545,7 @@ describe("EaCarousel", () => {
       it("indicator 应该有 aria-controls 属性", async () => {
         const carousel = createCarousel(3);
         container.appendChild(carousel);
-        await waitForRender();
+        await carousel.updateComplete;
         const indicators = getIndicators(carousel);
         expect(indicators[0].getAttribute("aria-controls")).toBeTruthy();
       });
@@ -1534,7 +1553,7 @@ describe("EaCarousel", () => {
       it("箭头按钮应该有 aria-label", async () => {
         const carousel = createCarousel(3);
         container.appendChild(carousel);
-        await waitForRender();
+        await carousel.updateComplete;
         const leftArrow = carousel.shadowRoot.querySelector(".arrow-left");
         const rightArrow = carousel.shadowRoot.querySelector(".arrow-right");
         expect(leftArrow.getAttribute("aria-label")).toBeTruthy();
@@ -1544,17 +1563,21 @@ describe("EaCarousel", () => {
       it("箭头按钮应该有 aria-controls=carousel-content", async () => {
         const carousel = createCarousel(3);
         container.appendChild(carousel);
-        await waitForRender();
+        await carousel.updateComplete;
         const leftArrow = carousel.shadowRoot.querySelector(".arrow-left");
         const rightArrow = carousel.shadowRoot.querySelector(".arrow-right");
-        expect(leftArrow.getAttribute("aria-controls")).toBe("carousel-content");
-        expect(rightArrow.getAttribute("aria-controls")).toBe("carousel-content");
+        expect(leftArrow.getAttribute("aria-controls")).toBe(
+          "carousel-content"
+        );
+        expect(rightArrow.getAttribute("aria-controls")).toBe(
+          "carousel-content"
+        );
       });
 
       it("ea-carousel-item 容器应该有 role=group", async () => {
         const item = document.createElement("ea-carousel-item");
         container.appendChild(item);
-        await waitForRender();
+        await item.updateComplete;
         const containerEl = item.shadowRoot.querySelector(".ea-carousel-item");
         expect(containerEl.getAttribute("role")).toBe("group");
       });
@@ -1562,7 +1585,7 @@ describe("EaCarousel", () => {
       it("ea-carousel-item 容器应该有 aria-roledescription=slide", async () => {
         const item = document.createElement("ea-carousel-item");
         container.appendChild(item);
-        await waitForRender();
+        await item.updateComplete;
         const containerEl = item.shadowRoot.querySelector(".ea-carousel-item");
         expect(containerEl.getAttribute("aria-roledescription")).toBe("slide");
       });

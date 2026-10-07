@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { waitForRender } from "./utils/waitForRender.js";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 class MockIntersectionObserver {
@@ -80,7 +79,7 @@ describe("EaImage Component", () => {
     it("应该包含 ea-image-preview 子组件", async () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       const preview = image.shadowRoot.querySelector("ea-image-preview");
       expect(preview).toBeTruthy();
@@ -89,7 +88,7 @@ describe("EaImage Component", () => {
     it("空 src 时应该显示 error 状态", async () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       const containerEl = image.shadowRoot.querySelector(".ea-image");
       expect(containerEl.classList.contains("ea-image--error")).toBe(true);
@@ -98,7 +97,7 @@ describe("EaImage Component", () => {
     it("无 src 时应该隐藏 image 和 placeholder，显示 error", async () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       const containerEl = image.shadowRoot.querySelector(".ea-image");
       expect(containerEl.classList.contains("ea-image--error")).toBe(true);
@@ -118,7 +117,7 @@ describe("EaImage Component", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("src", "https://example.com/slow-image.jpg");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       const containerEl = image.shadowRoot.querySelector(".ea-image");
       expect(containerEl.classList.contains("ea-image--loading")).toBe(true);
@@ -142,7 +141,7 @@ describe("EaImage Component", () => {
     it("动态修改 src 应该生效", async () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       image.setAttribute("src", "https://example.com/image1.jpg");
       expect(image.src).toBe("https://example.com/image1.jpg");
@@ -154,10 +153,10 @@ describe("EaImage Component", () => {
     it("设置 src 后应该触发 _loadImage 加载图片", async () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       image.setAttribute("src", "https://example.com/test.jpg");
-      await waitForRender();
+      await image.updateComplete;
 
       const containerEl = image.shadowRoot.querySelector(".ea-image");
       expect(
@@ -180,7 +179,7 @@ describe("EaImage Component", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("width", "200px");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       expect(image.width).toBe("200px");
       expect(image.style.getPropertyValue("--ea-image-width")).toBe("200px");
@@ -190,7 +189,7 @@ describe("EaImage Component", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("height", "150px");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       expect(image.height).toBe("150px");
       expect(image.style.getPropertyValue("--ea-image-height")).toBe("150px");
@@ -208,7 +207,7 @@ describe("EaImage Component", () => {
     it("动态修改 width/height 应该生效", async () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       image.setAttribute("width", "100px");
       image.setAttribute("height", "100px");
@@ -221,10 +220,10 @@ describe("EaImage Component", () => {
       CSS.supports = vi.fn().mockReturnValue(false);
       const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       image.setAttribute("width", "invalid-value");
-      await waitForRender();
+      await image.updateComplete;
 
       expect(warnSpy).toHaveBeenCalled();
       warnSpy.mockRestore();
@@ -236,10 +235,10 @@ describe("EaImage Component", () => {
       CSS.supports = vi.fn().mockReturnValue(false);
       const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       image.setAttribute("height", "invalid-value");
-      await waitForRender();
+      await image.updateComplete;
 
       expect(warnSpy).toHaveBeenCalled();
       warnSpy.mockRestore();
@@ -271,7 +270,7 @@ describe("EaImage Component", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("fit", "cover");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       expect(image.style.getPropertyValue("--ea-image-fit")).toBe("cover");
     });
@@ -280,10 +279,10 @@ describe("EaImage Component", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("fit", "fill");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       image.setAttribute("fit", "cover");
-      await waitForRender();
+      await image.updateComplete;
 
       expect(image.fit).toBe("cover");
       expect(image.style.getPropertyValue("--ea-image-fit")).toBe("cover");
@@ -294,10 +293,10 @@ describe("EaImage Component", () => {
       CSS.supports = vi.fn().mockReturnValue(false);
       const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       image.setAttribute("fit", "invalid-fit");
-      await waitForRender();
+      await image.updateComplete;
 
       expect(warnSpy).toHaveBeenCalled();
       warnSpy.mockRestore();
@@ -323,7 +322,7 @@ describe("EaImage Component", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("alt", "Test alt text");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       const imgElement = image.shadowRoot.querySelector("img.ea-image__image");
       expect(imgElement.alt).toBe("Test alt text");
@@ -348,7 +347,7 @@ describe("EaImage Component", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("loading", "lazy");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       const imgElement = image.shadowRoot.querySelector("img.ea-image__image");
       expect(imgElement.getAttribute("loading")).toBe("lazy");
@@ -381,7 +380,7 @@ describe("EaImage Component", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("referrerpolicy", "no-referrer");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       expect(image.referrerpolicy).toBe("no-referrer");
       const imgElement = image.shadowRoot.querySelector("img.ea-image__image");
@@ -398,7 +397,7 @@ describe("EaImage Component", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("crossorigin", "anonymous");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       expect(image.crossorigin).toBe("anonymous");
       const imgElement = image.shadowRoot.querySelector("img.ea-image__image");
@@ -548,11 +547,11 @@ describe("EaImage Component", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("preview", "");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       const urls = ["https://example.com/1.jpg", "https://example.com/2.jpg"];
       image.previewSrcList = urls;
-      await waitForRender();
+      await image.updateComplete;
 
       const preview = image.shadowRoot.querySelector("ea-image-preview");
       expect(preview.urlList).toEqual(urls);
@@ -561,12 +560,12 @@ describe("EaImage Component", () => {
     it("未启用 preview 时设置 previewSrcList 应该触发警告", async () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
       image.previewSrcList = ["https://example.com/1.jpg"];
-      await waitForRender();
+      await image.updateComplete;
 
       expect(warnSpy).toHaveBeenCalled();
       warnSpy.mockRestore();
@@ -619,7 +618,7 @@ describe("EaImage Component", () => {
       image.setAttribute("preview", "");
       image.innerHTML = `<section slot="progress"><span data-active></span></section>`;
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       const progressSlot = image.shadowRoot.querySelector(
         'slot[name="progress"]'
@@ -632,7 +631,7 @@ describe("EaImage Component", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("preview", "");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       const progressSlot = image.shadowRoot.querySelector(
         'slot[name="progress"]'
@@ -645,7 +644,7 @@ describe("EaImage Component", () => {
       image.setAttribute("preview", "");
       image.innerHTML = `<section slot="toolbar"><ea-icon data-action="zoom-in"></ea-icon></section>`;
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       const toolbarSlot = image.shadowRoot.querySelector(
         'slot[name="toolbar"]'
@@ -658,7 +657,7 @@ describe("EaImage Component", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("preview", "");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       const toolbarSlot = image.shadowRoot.querySelector(
         'slot[name="toolbar"]'
@@ -669,7 +668,7 @@ describe("EaImage Component", () => {
     it("error 插槽默认内容应该是 FAILED", async () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       const errorSlot = image.shadowRoot.querySelector('slot[name="error"]');
       expect(errorSlot.textContent).toContain("FAILED");
@@ -699,10 +698,10 @@ describe("EaImage Component", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("preview", "");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       image.showPreview();
-      await waitForRender();
+      await image.updateComplete;
 
       const preview = image.shadowRoot.querySelector("ea-image-preview");
       expect(preview.visible).toBe(true);
@@ -724,11 +723,11 @@ describe("EaImage Component", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("preview", "");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       const preview = image.shadowRoot.querySelector("ea-image-preview");
       preview.urlList = ["a.jpg", "b.jpg", "c.jpg"];
-      await waitForRender();
+      await image.updateComplete;
 
       image.setActiveItem(2);
       expect(preview.index).toBe(2);
@@ -738,12 +737,12 @@ describe("EaImage Component", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("preview", "");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       const preview = image.shadowRoot.querySelector("ea-image-preview");
       preview.urlList = ["a.jpg", "b.jpg"];
       preview.scale = 2;
-      await waitForRender();
+      await image.updateComplete;
 
       image.reset();
       expect(preview.scale).toBe(1);
@@ -762,7 +761,7 @@ describe("EaImage Component", () => {
     it("应该支持 load 事件监听", async () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       const listener = vi.fn();
       image.addEventListener("load", listener);
@@ -776,7 +775,7 @@ describe("EaImage Component", () => {
     it("应该支持 error 事件监听", async () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       const listener = vi.fn();
       image.addEventListener("error", listener);
@@ -790,7 +789,7 @@ describe("EaImage Component", () => {
     it("dispatchEvent 应该触发 Event 且 bubbles 和 composed", async () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       let capturedEvent = null;
       image.addEventListener("load", e => {
@@ -809,11 +808,11 @@ describe("EaImage Component", () => {
     it("没有 preview 属性时点击不应该打开预览", async () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       const imgContainer = image.shadowRoot.querySelector(".ea-image");
       imgContainer.click();
-      await waitForRender();
+      await image.updateComplete;
 
       const preview = image.shadowRoot.querySelector("ea-image-preview");
       expect(preview.visible).toBe(false);
@@ -823,11 +822,11 @@ describe("EaImage Component", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("preview", "");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       const imgContainer = image.shadowRoot.querySelector(".ea-image");
       imgContainer.click();
-      await waitForRender();
+      await image.updateComplete;
 
       const preview = image.shadowRoot.querySelector("ea-image-preview");
       expect(preview.visible).toBe(true);
@@ -840,7 +839,7 @@ describe("EaImage Component", () => {
       image.setAttribute("preview", "");
       image.setAttribute("zoom-rate", "1.5");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       const preview = image.shadowRoot.querySelector("ea-image-preview");
       expect(preview.zoomRate).toBe(1.5);
@@ -851,7 +850,7 @@ describe("EaImage Component", () => {
       image.setAttribute("preview", "");
       image.setAttribute("hide-on-click-modal", "");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       const preview = image.shadowRoot.querySelector("ea-image-preview");
       expect(preview.closeOnClickModal).toBe(false);
@@ -861,7 +860,7 @@ describe("EaImage Component", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("preview", "");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       const preview = image.shadowRoot.querySelector("ea-image-preview");
       expect(preview.closeOnClickModal).toBe(true);
@@ -872,7 +871,7 @@ describe("EaImage Component", () => {
       image.setAttribute("preview", "");
       image.setAttribute("z-index", "5000");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       const preview = image.shadowRoot.querySelector("ea-image-preview");
       expect(preview.zIndex).toBe("5000");
@@ -883,7 +882,7 @@ describe("EaImage Component", () => {
       image.setAttribute("preview", "");
       image.setAttribute("initial-index", "1");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       const preview = image.shadowRoot.querySelector("ea-image-preview");
       expect(preview.initialIndex).toBe(1);
@@ -893,7 +892,7 @@ describe("EaImage Component", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("preview", "");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       const preview = image.shadowRoot.querySelector("ea-image-preview");
       expect(preview.closeOnPressEscape).toBe(true);
@@ -903,7 +902,7 @@ describe("EaImage Component", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("preview", "");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       const preview = image.shadowRoot.querySelector("ea-image-preview");
       expect(preview.infinite).toBe(true);
@@ -914,7 +913,7 @@ describe("EaImage Component", () => {
       image.setAttribute("preview", "");
       image.setAttribute("scale", "2");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       const preview = image.shadowRoot.querySelector("ea-image-preview");
       expect(preview.scale).toBe(2);
@@ -925,7 +924,7 @@ describe("EaImage Component", () => {
       image.setAttribute("preview", "");
       image.setAttribute("min-scale", "0.5");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       const preview = image.shadowRoot.querySelector("ea-image-preview");
       expect(preview.minScale).toBe(0.5);
@@ -936,7 +935,7 @@ describe("EaImage Component", () => {
       image.setAttribute("preview", "");
       image.setAttribute("max-scale", "10");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       const preview = image.shadowRoot.querySelector("ea-image-preview");
       expect(preview.maxScale).toBe(10);
@@ -947,7 +946,7 @@ describe("EaImage Component", () => {
       image.setAttribute("preview", "");
       image.setAttribute("show-progress", "");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       const preview = image.shadowRoot.querySelector("ea-image-preview");
       expect(preview.showProgress).toBe(true);
@@ -957,7 +956,7 @@ describe("EaImage Component", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("zoom-rate", "1.5");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       const preview = image.shadowRoot.querySelector("ea-image-preview");
       expect(preview.zoomRate).toBe(1.2);
@@ -968,7 +967,7 @@ describe("EaImage Component", () => {
     it("初始状态应该是 error（无 src）", async () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       const containerEl = image.shadowRoot.querySelector(".ea-image");
       expect(containerEl.classList.contains("ea-image--error")).toBe(true);
@@ -978,7 +977,7 @@ describe("EaImage Component", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("src", "https://example.com/image.jpg");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       const containerEl = image.shadowRoot.querySelector(".ea-image");
       expect(
@@ -992,11 +991,11 @@ describe("EaImage Component", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("src", "test.jpg");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       image._states.imageStatus = "success";
       image.updateContainerClasslist();
-      await waitForRender();
+      await image.updateComplete;
 
       const containerEl = image.shadowRoot.querySelector(".ea-image");
       expect(containerEl.classList.contains("ea-image--success")).toBe(true);
@@ -1005,7 +1004,7 @@ describe("EaImage Component", () => {
     it("success 状态时背景应该变为透明", async () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       const containerEl = image.shadowRoot.querySelector(".ea-image");
       containerEl.classList.add("ea-image--success");
@@ -1029,7 +1028,7 @@ describe("EaImage Component", () => {
       const image = document.createElement("ea-image");
       image.setAttribute("lazy", "");
       container.appendChild(image);
-      await waitForRender();
+      await image.updateComplete;
 
       image.remove();
       expect(image.isConnected).toBe(false);
@@ -1042,7 +1041,7 @@ describe("EaImage Component", () => {
       el.setAttribute("src", "https://example.com/image.png");
       el.setAttribute("alt", "Example image");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });
@@ -1052,7 +1051,7 @@ describe("EaImage Component", () => {
         const el = document.createElement("ea-image");
         el.setAttribute("src", "invalid-image.png");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const error = el.shadowRoot.querySelector('[part="error"]');
         expect(error.getAttribute("role")).toBe("alert");
       });

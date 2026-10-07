@@ -7,7 +7,6 @@ global.cancelAnimationFrame = id => {
   clearTimeout(id);
 };
 
-import { waitForRender } from "./utils/waitForRender.js";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 import "../components/ea-input/index.ts";
@@ -83,7 +82,7 @@ describe("EaInput", () => {
       input.setAttribute("label", "用户名");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       expect(input.label).toBe("用户名");
       const labelElement = input.shadowRoot.querySelector(
@@ -96,7 +95,7 @@ describe("EaInput", () => {
       const input = document.createElement("ea-input");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const labelElement = input.shadowRoot.querySelector(
         ".ea-input__form-label"
@@ -108,10 +107,10 @@ describe("EaInput", () => {
       const input = document.createElement("ea-input");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       input.setAttribute("label", "密码");
-      await waitForRender();
+      await input.updateComplete;
 
       const labelElement = input.shadowRoot.querySelector(
         ".ea-input__form-label"
@@ -125,7 +124,7 @@ describe("EaInput", () => {
       const input = document.createElement("ea-input");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -138,7 +137,7 @@ describe("EaInput", () => {
       input.setAttribute("type", "password");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -173,7 +172,7 @@ describe("EaInput", () => {
         input.setAttribute("type", type);
         container.appendChild(input);
 
-        await waitForRender();
+        await input.updateComplete;
 
         const originalElement = input.shadowRoot.querySelector(
           ".ea-input__original"
@@ -189,12 +188,12 @@ describe("EaInput", () => {
       const input = document.createElement("ea-input");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       expect(input.shadowRoot.querySelector("input.ea-input__original")).toBeTruthy();
 
       input.setAttribute("type", "textarea");
-      await waitForRender();
+      await input.updateComplete;
 
       expect(input.shadowRoot.querySelector("textarea.ea-input__original")).toBeTruthy();
     });
@@ -204,12 +203,12 @@ describe("EaInput", () => {
       input.setAttribute("type", "textarea");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       expect(input.shadowRoot.querySelector("textarea.ea-input__original")).toBeTruthy();
 
       input.setAttribute("type", "text");
-      await waitForRender();
+      await input.updateComplete;
 
       expect(input.shadowRoot.querySelector("input.ea-input__original")).toBeTruthy();
     });
@@ -218,10 +217,10 @@ describe("EaInput", () => {
       const input = document.createElement("ea-input");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       input.setAttribute("type", "textarea");
-      await waitForRender();
+      await input.updateComplete;
 
       const handler = vi.fn();
       input.addEventListener("input", handler);
@@ -231,7 +230,7 @@ describe("EaInput", () => {
       );
       textarea.value = "hello textarea";
       textarea.dispatchEvent(new Event("input", { bubbles: true }));
-      await waitForRender();
+      await input.updateComplete;
 
       expect(handler).toHaveBeenCalled();
       expect(input.value).toBe("hello textarea");
@@ -242,10 +241,10 @@ describe("EaInput", () => {
       input.setAttribute("type", "textarea");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       input.setAttribute("type", "text");
-      await waitForRender();
+      await input.updateComplete;
 
       const handler = vi.fn();
       input.addEventListener("input", handler);
@@ -255,7 +254,7 @@ describe("EaInput", () => {
       );
       inputElement.value = "hello input";
       inputElement.dispatchEvent(new Event("input", { bubbles: true }));
-      await waitForRender();
+      await input.updateComplete;
 
       expect(handler).toHaveBeenCalled();
       expect(input.value).toBe("hello input");
@@ -267,7 +266,7 @@ describe("EaInput", () => {
       const input = document.createElement("ea-input");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       expect(input.value).toBe("");
       const inputElement = input.shadowRoot.querySelector(
@@ -281,7 +280,7 @@ describe("EaInput", () => {
       input.setAttribute("value", "test value");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       expect(input.value).toBe("test value");
       const inputElement = input.shadowRoot.querySelector(
@@ -294,10 +293,10 @@ describe("EaInput", () => {
       const input = document.createElement("ea-input");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       input.setAttribute("value", "new value");
-      await waitForRender();
+      await input.updateComplete;
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -309,10 +308,10 @@ describe("EaInput", () => {
       const input = document.createElement("ea-input");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       input.value = "js value";
-      await waitForRender();
+      await input.updateComplete;
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -326,7 +325,7 @@ describe("EaInput", () => {
       const input = document.createElement("ea-input");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -339,7 +338,7 @@ describe("EaInput", () => {
       input.setAttribute("placeholder", "Please input");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -353,7 +352,7 @@ describe("EaInput", () => {
       const input = document.createElement("ea-input");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       expect(input.disabled).toBe(false);
       const inputElement = input.shadowRoot.querySelector(
@@ -367,7 +366,7 @@ describe("EaInput", () => {
       input.setAttribute("disabled", "");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       expect(input.disabled).toBe(true);
       const inputElement = input.shadowRoot.querySelector(
@@ -382,7 +381,7 @@ describe("EaInput", () => {
       const input = document.createElement("ea-input");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -395,7 +394,7 @@ describe("EaInput", () => {
       input.setAttribute("readonly", "");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -468,11 +467,11 @@ describe("EaInput", () => {
       input.setAttribute("value", "test value");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const clearIcon = input.shadowRoot.querySelector(".ea-input__clear-icon");
       clearIcon.click();
-      await waitForRender();
+      await input.updateComplete;
 
       expect(input.value).toBe("");
       const inputElement = input.shadowRoot.querySelector(
@@ -487,14 +486,14 @@ describe("EaInput", () => {
       input.setAttribute("value", "test value");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const handler = vi.fn();
       input.addEventListener("ea-clear", handler);
 
       const clearIcon = input.shadowRoot.querySelector(".ea-input__clear-icon");
       clearIcon.click();
-      await waitForRender();
+      await input.updateComplete;
 
       expect(handler).toHaveBeenCalled();
       expect(handler.mock.calls[0][0].detail.oldValue).toBe("test value");
@@ -534,13 +533,13 @@ describe("EaInput", () => {
       input.setAttribute("value", "secret");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const icon = input.shadowRoot.querySelector(
         ".ea-input__show-password-icon"
       );
       icon.click();
-      await waitForRender();
+      await input.updateComplete;
 
       expect(input.type).toBe("text");
     });
@@ -552,18 +551,18 @@ describe("EaInput", () => {
       input.setAttribute("value", "secret");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const icon = input.shadowRoot.querySelector(
         ".ea-input__show-password-icon"
       );
       icon.click();
-      await waitForRender();
+      await input.updateComplete;
 
       expect(input.type).toBe("text");
 
       icon.click();
-      await waitForRender();
+      await input.updateComplete;
 
       expect(input.type).toBe("password");
     });
@@ -575,14 +574,14 @@ describe("EaInput", () => {
       input.setAttribute("value", "my-secret");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const icon = input.shadowRoot.querySelector(
         ".ea-input__show-password-icon"
       );
 
       icon.click();
-      await waitForRender();
+      await input.updateComplete;
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -591,7 +590,7 @@ describe("EaInput", () => {
       expect(input.value).toBe("my-secret");
 
       icon.click();
-      await waitForRender();
+      await input.updateComplete;
 
       const inputElement2 = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -607,13 +606,13 @@ describe("EaInput", () => {
       input.setAttribute("value", "secret");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const icon = input.shadowRoot.querySelector(
         ".ea-input__show-password-icon"
       );
       icon.click();
-      await waitForRender();
+      await input.updateComplete;
 
       const handler = vi.fn();
       input.addEventListener("input", handler);
@@ -623,7 +622,7 @@ describe("EaInput", () => {
       );
       inputElement.value = "new-secret";
       inputElement.dispatchEvent(new Event("input", { bubbles: true }));
-      await waitForRender();
+      await input.updateComplete;
 
       expect(handler).toHaveBeenCalled();
       expect(input.value).toBe("new-secret");
@@ -636,7 +635,7 @@ describe("EaInput", () => {
       input.setAttribute("maxlength", "10");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -649,7 +648,7 @@ describe("EaInput", () => {
       input.setAttribute("minlength", "5");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -681,7 +680,7 @@ describe("EaInput", () => {
       input.setAttribute("value", "hello");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const wordCount = input.shadowRoot.querySelector(".ea-input__word-count");
       expect(wordCount.textContent).toBe("5 / 10");
@@ -694,7 +693,7 @@ describe("EaInput", () => {
       input.setAttribute("show-word-limit", "");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const wordCount = input.shadowRoot.querySelector(".ea-input__word-count");
       expect(wordCount).toBeTruthy();
@@ -707,14 +706,14 @@ describe("EaInput", () => {
       input.setAttribute("show-word-limit", "");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
       );
       inputElement.value = "hello";
       inputElement.dispatchEvent(new Event("input", { bubbles: true }));
-      await waitForRender();
+      await input.updateComplete;
 
       const wordCount = input.shadowRoot.querySelector(".ea-input__word-count");
       expect(wordCount.textContent).toBe("5 / 10");
@@ -727,10 +726,10 @@ describe("EaInput", () => {
       input.setAttribute("value", "hello");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       input.value = "";
-      await waitForRender();
+      await input.updateComplete;
 
       const wordCount = input.shadowRoot.querySelector(".ea-input__word-count");
       expect(wordCount.textContent).toBe("0 / 10");
@@ -772,7 +771,7 @@ describe("EaInput", () => {
       input.setAttribute("rows", "4");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const textareaElement = input.shadowRoot.querySelector(
         "textarea.ea-input__original"
@@ -796,7 +795,7 @@ describe("EaInput", () => {
       input.setAttribute("min-rows", "2");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       expect(input.minRows).toBe(2);
     });
@@ -807,7 +806,7 @@ describe("EaInput", () => {
       input.setAttribute("max-rows", "6");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       expect(input.maxRows).toBe(6);
     });
@@ -829,7 +828,7 @@ describe("EaInput", () => {
       input.setAttribute("min", "0");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -843,7 +842,7 @@ describe("EaInput", () => {
       input.setAttribute("max", "100");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -857,7 +856,7 @@ describe("EaInput", () => {
       input.setAttribute("step", "0.5");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -870,7 +869,7 @@ describe("EaInput", () => {
       input.setAttribute("pattern", "[A-Za-z]{3}");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -883,7 +882,7 @@ describe("EaInput", () => {
       input.setAttribute("aria-label", "用户名输入框");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -896,7 +895,7 @@ describe("EaInput", () => {
       input.setAttribute("tabindex", "1");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -909,7 +908,7 @@ describe("EaInput", () => {
       input.setAttribute("inputmode", "numeric");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -922,7 +921,7 @@ describe("EaInput", () => {
       input.setAttribute("name", "username");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -935,7 +934,7 @@ describe("EaInput", () => {
       input.setAttribute("autocomplete", "on");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -948,7 +947,7 @@ describe("EaInput", () => {
       input.setAttribute("autofocus", "");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -961,7 +960,7 @@ describe("EaInput", () => {
       input.setAttribute("required", "");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -1044,7 +1043,7 @@ describe("EaInput", () => {
       input.setAttribute("value", "test value");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       input.clear();
 
@@ -1061,7 +1060,7 @@ describe("EaInput", () => {
       const input = document.createElement("ea-input");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -1073,7 +1072,7 @@ describe("EaInput", () => {
       inputElement.value = "new value";
       inputElement.dispatchEvent(new Event("input", { bubbles: true }));
 
-      await waitForRender();
+      await input.updateComplete;
 
       expect(handler).toHaveBeenCalled();
       expect(handler.mock.calls[0][0].detail.value).toBe("new value");
@@ -1085,7 +1084,7 @@ describe("EaInput", () => {
       input.setAttribute("value", "test value");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const handler = vi.fn();
       input.addEventListener("ea-clear", handler);
@@ -1093,7 +1092,7 @@ describe("EaInput", () => {
       const clearIcon = input.shadowRoot.querySelector(".ea-input__clear-icon");
       clearIcon.click();
 
-      await waitForRender();
+      await input.updateComplete;
 
       expect(handler).toHaveBeenCalled();
       expect(handler.mock.calls[0][0].detail.oldValue).toBe("test value");
@@ -1105,7 +1104,7 @@ describe("EaInput", () => {
       const input = document.createElement("ea-input");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       expect(typeof input.checkValidity).toBe("function");
       expect(typeof input.reportValidity).toBe("function");
@@ -1115,7 +1114,7 @@ describe("EaInput", () => {
       const input = document.createElement("ea-input");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       expect(input.checkValidity()).toBe(true);
     });
@@ -1125,7 +1124,7 @@ describe("EaInput", () => {
       input.setAttribute("required", "");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -1138,7 +1137,7 @@ describe("EaInput", () => {
       const input = document.createElement("ea-input");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       expect(typeof input.setCustomValidity).toBe("function");
     });
@@ -1148,7 +1147,7 @@ describe("EaInput", () => {
       input.setAttribute("disabled", "");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       expect(typeof input.checkValidity).toBe("function");
       expect(typeof input.reportValidity).toBe("function");
@@ -1160,13 +1159,13 @@ describe("EaInput", () => {
       const input = document.createElement("ea-input");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
       );
       inputElement.dispatchEvent(new Event("focusin", { bubbles: true }));
-      await waitForRender();
+      await input.updateComplete;
 
       const el = input.shadowRoot.querySelector(".ea-input");
       expect(el.classList.contains("is-focus")).toBe(true);
@@ -1176,16 +1175,16 @@ describe("EaInput", () => {
       const input = document.createElement("ea-input");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
       );
       inputElement.dispatchEvent(new Event("focusin", { bubbles: true }));
-      await waitForRender();
+      await input.updateComplete;
 
       inputElement.dispatchEvent(new Event("focusout", { bubbles: true }));
-      await waitForRender();
+      await input.updateComplete;
 
       const el = input.shadowRoot.querySelector(".ea-input");
       expect(el.classList.contains("is-focus")).toBe(false);
@@ -1206,7 +1205,7 @@ describe("EaInput", () => {
       input.setAttribute("size", "large");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const el = input.shadowRoot.querySelector(".ea-input");
       expect(el.classList.contains("ea-input--size-large")).toBe(true);
@@ -1217,7 +1216,7 @@ describe("EaInput", () => {
       input.setAttribute("disabled", "");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const el = input.shadowRoot.querySelector(".ea-input");
       expect(el.classList.contains("is-disabled")).toBe(true);
@@ -1228,7 +1227,7 @@ describe("EaInput", () => {
       input.setAttribute("type", "textarea");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const el = input.shadowRoot.querySelector(".ea-input");
       expect(el.classList.contains("ea-input--textarea")).toBe(true);
@@ -1240,7 +1239,7 @@ describe("EaInput", () => {
       input.setAttribute("value", "test");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const el = input.shadowRoot.querySelector(".ea-input");
       expect(el.classList.contains("is-clearable")).toBe(true);
@@ -1251,7 +1250,7 @@ describe("EaInput", () => {
       input.setAttribute("clearable", "");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const el = input.shadowRoot.querySelector(".ea-input");
       expect(el.classList.contains("is-clearable")).toBe(false);
@@ -1264,7 +1263,7 @@ describe("EaInput", () => {
       input.setAttribute("value", "secret");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const el = input.shadowRoot.querySelector(".ea-input");
       expect(el.classList.contains("ea-input--show-password")).toBe(true);
@@ -1276,7 +1275,7 @@ describe("EaInput", () => {
       input.setAttribute("show-word-limit", "");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const el = input.shadowRoot.querySelector(".ea-input");
       expect(el.classList.contains("ea-input--show-word-limit")).toBe(true);
@@ -1288,10 +1287,10 @@ describe("EaInput", () => {
       const input = document.createElement("ea-input");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       input.focus();
-      await waitForRender();
+      await input.updateComplete;
 
       const el = input.shadowRoot.querySelector(".ea-input");
       expect(el.classList.contains("is-focus")).toBe(true);
@@ -1308,13 +1307,13 @@ describe("EaInput", () => {
       const input = document.createElement("ea-input");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       input.focus();
-      await waitForRender();
+      await input.updateComplete;
 
       input.blur();
-      await waitForRender();
+      await input.updateComplete;
 
       const el = input.shadowRoot.querySelector(".ea-input");
       expect(el.classList.contains("is-focus")).toBe(false);
@@ -1325,7 +1324,7 @@ describe("EaInput", () => {
       input.setAttribute("value", "hello world");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       input.focus();
       input.select();
@@ -1342,7 +1341,7 @@ describe("EaInput", () => {
       input.setAttribute("value", "hello world");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       input.setRangeText("beautiful", 6, 11, "end");
 
@@ -1354,7 +1353,7 @@ describe("EaInput", () => {
       input.setAttribute("value", "hello world");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       input.focus();
       input.setSelectionRange(0, 5);
@@ -1372,7 +1371,7 @@ describe("EaInput", () => {
       input.setAttribute("value", "5");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       input.stepUp();
 
@@ -1385,7 +1384,7 @@ describe("EaInput", () => {
       input.setAttribute("value", "5");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       input.stepDown();
 
@@ -1398,7 +1397,7 @@ describe("EaInput", () => {
       input.setAttribute("value", "5");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       input.stepUp();
 
@@ -1411,7 +1410,7 @@ describe("EaInput", () => {
       input.setAttribute("value", "5");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       input.stepDown();
 
@@ -1430,10 +1429,10 @@ describe("EaInput", () => {
       input.setAttribute("value", "test value");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       input.clear();
-      await waitForRender();
+      await input.updateComplete;
 
       expect(input.value).toBe("");
       const inputElement = input.shadowRoot.querySelector(
@@ -1448,7 +1447,7 @@ describe("EaInput", () => {
       const input = document.createElement("ea-input");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const handler = vi.fn();
       input.addEventListener("focus", handler);
@@ -1457,7 +1456,7 @@ describe("EaInput", () => {
         "input.ea-input__original"
       );
       inputElement.dispatchEvent(new Event("focusin", { bubbles: true }));
-      await waitForRender();
+      await input.updateComplete;
 
       expect(handler).toHaveBeenCalled();
     });
@@ -1466,7 +1465,7 @@ describe("EaInput", () => {
       const input = document.createElement("ea-input");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const handler = vi.fn();
       input.addEventListener("blur", handler);
@@ -1475,10 +1474,10 @@ describe("EaInput", () => {
         "input.ea-input__original"
       );
       inputElement.dispatchEvent(new Event("focusin", { bubbles: true }));
-      await waitForRender();
+      await input.updateComplete;
 
       inputElement.dispatchEvent(new Event("focusout", { bubbles: true }));
-      await waitForRender();
+      await input.updateComplete;
 
       expect(handler).toHaveBeenCalled();
     });
@@ -1487,7 +1486,7 @@ describe("EaInput", () => {
       const input = document.createElement("ea-input");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const handler = vi.fn();
       input.addEventListener("change", handler);
@@ -1497,7 +1496,7 @@ describe("EaInput", () => {
       );
       inputElement.value = "new value";
       inputElement.dispatchEvent(new Event("change", { bubbles: true }));
-      await waitForRender();
+      await input.updateComplete;
 
       expect(handler).toHaveBeenCalled();
       expect(handler.mock.calls[0][0].detail.value).toBe("new value");
@@ -1507,7 +1506,7 @@ describe("EaInput", () => {
       const input = document.createElement("ea-input");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const handler = vi.fn();
       input.addEventListener("input", handler);
@@ -1517,7 +1516,7 @@ describe("EaInput", () => {
       );
       inputElement.value = "typing";
       inputElement.dispatchEvent(new Event("input", { bubbles: true }));
-      await waitForRender();
+      await input.updateComplete;
 
       expect(handler).toHaveBeenCalled();
       expect(handler.mock.calls[0][0].detail.value).toBe("typing");
@@ -1529,14 +1528,14 @@ describe("EaInput", () => {
       input.setAttribute("value", "test value");
       container.appendChild(input);
 
-      await waitForRender();
+      await input.updateComplete;
 
       const handler = vi.fn();
       input.addEventListener("ea-clear", handler);
 
       const clearIcon = input.shadowRoot.querySelector(".ea-input__clear-icon");
       clearIcon.click();
-      await waitForRender();
+      await input.updateComplete;
 
       expect(handler).toHaveBeenCalled();
       expect(handler.mock.calls[0][0].detail.oldValue).toBe("test value");
@@ -1549,7 +1548,7 @@ describe("EaInput", () => {
         const el = document.createElement("ea-input");
         el.setAttribute("required", "");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const inputEl = el.shadowRoot.querySelector("input.ea-input__original");
         expect(inputEl.getAttribute("aria-required")).toBe("true");
       });
@@ -1558,7 +1557,7 @@ describe("EaInput", () => {
         const el = document.createElement("ea-input");
         el.setAttribute("disabled", "");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const inputEl = el.shadowRoot.querySelector("input.ea-input__original");
         expect(inputEl.getAttribute("aria-disabled")).toBe("true");
       });
@@ -1567,7 +1566,7 @@ describe("EaInput", () => {
         const el = document.createElement("ea-input");
         el.setAttribute("aria-label", "用户名");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const inputEl = el.shadowRoot.querySelector("input.ea-input__original");
         expect(inputEl.getAttribute("aria-label")).toBe("用户名");
       });
@@ -1576,9 +1575,9 @@ describe("EaInput", () => {
         const el = document.createElement("ea-input");
         el.setAttribute("required", "");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         el.checkValidity();
-        await waitForRender();
+        await el.updateComplete;
         const inputEl = el.shadowRoot.querySelector("input.ea-input__original");
         expect(inputEl.getAttribute("aria-invalid")).toBe("true");
       });
@@ -1587,9 +1586,9 @@ describe("EaInput", () => {
         const el = document.createElement("ea-input");
         el.setAttribute("value", "hello");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         el.checkValidity();
-        await waitForRender();
+        await el.updateComplete;
         const inputEl = el.shadowRoot.querySelector("input.ea-input__original");
         expect(inputEl.hasAttribute("aria-invalid")).toBe(false);
       });
@@ -1597,10 +1596,10 @@ describe("EaInput", () => {
       it("setCustomValidity 设置错误后 aria-invalid 应为 true", async () => {
         const el = document.createElement("ea-input");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         el.setCustomValidity("自定义错误");
         el.checkValidity();
-        await waitForRender();
+        await el.updateComplete;
         const inputEl = el.shadowRoot.querySelector("input.ea-input__original");
         expect(inputEl.getAttribute("aria-invalid")).toBe("true");
       });
@@ -1608,13 +1607,13 @@ describe("EaInput", () => {
       it("清除自定义错误后 aria-invalid 应被移除", async () => {
         const el = document.createElement("ea-input");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         el.setCustomValidity("自定义错误");
         el.checkValidity();
-        await waitForRender();
+        await el.updateComplete;
         el.setCustomValidity("");
         el.checkValidity();
-        await waitForRender();
+        await el.updateComplete;
         const inputEl = el.shadowRoot.querySelector("input.ea-input__original");
         expect(inputEl.hasAttribute("aria-invalid")).toBe(false);
       });
@@ -1624,7 +1623,7 @@ describe("EaInput", () => {
       const el = document.createElement("ea-input");
       el.setAttribute("label", "Input");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });
@@ -1634,7 +1633,7 @@ describe("EaInput", () => {
       el.setAttribute("label", "Input");
       el.setAttribute("disabled", "");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });

@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 
 import "../components/ea-tag/index";
-import { waitForRender } from "./utils/waitForRender";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 describe("EaTag", () => {
@@ -100,10 +99,10 @@ describe("EaTag", () => {
       const tag = document.createElement("ea-tag");
       container.appendChild(tag);
 
-      await waitForRender();
+      await tag.updateComplete;
 
       tag.variant = "success";
-      await waitForRender();
+      await tag.updateComplete;
 
       const containerEl = tag.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("ea-tag--success")).toBe(true);
@@ -138,10 +137,10 @@ describe("EaTag", () => {
       const tag = document.createElement("ea-tag");
       container.appendChild(tag);
 
-      await waitForRender();
+      await tag.updateComplete;
 
       tag.size = "large";
-      await waitForRender();
+      await tag.updateComplete;
 
       const containerEl = tag.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("ea-tag--large-size")).toBe(true);
@@ -176,10 +175,10 @@ describe("EaTag", () => {
       const tag = document.createElement("ea-tag");
       container.appendChild(tag);
 
-      await waitForRender();
+      await tag.updateComplete;
 
       tag.effect = "dark";
-      await waitForRender();
+      await tag.updateComplete;
 
       const containerEl = tag.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("ea-tag--dark")).toBe(true);
@@ -211,7 +210,7 @@ describe("EaTag", () => {
       tag.textContent = "Test Tag";
       container.appendChild(tag);
 
-      await waitForRender();
+      await tag.updateComplete;
 
       let removeDetail = null;
       tag.addEventListener("ea-remove", e => {
@@ -221,7 +220,7 @@ describe("EaTag", () => {
       const closeIcon = tag.shadowRoot.querySelector('[part="close-icon"]');
       closeIcon.click();
 
-      await waitForRender();
+      await tag.updateComplete;
 
       expect(removeDetail).not.toBeNull();
       expect(removeDetail.text).toBe("Test Tag");
@@ -280,7 +279,7 @@ describe("EaTag", () => {
       tag.color = "not-a-color";
       container.appendChild(tag);
 
-      await waitForRender();
+      await tag.updateComplete;
 
       expect(warnSpy).toHaveBeenCalled();
       warnSpy.mockRestore();
@@ -371,11 +370,11 @@ describe("EaTag", () => {
       const tag = document.createElement("ea-tag");
       container.appendChild(tag);
 
-      await waitForRender();
+      await tag.updateComplete;
 
       tag.variant = "success";
 
-      await waitForRender();
+      await tag.updateComplete;
 
       expect(tag.variant).toBe("success");
     });
@@ -442,13 +441,13 @@ describe("EaCheckTag", () => {
       const checkTag = document.createElement("ea-check-tag");
       container.appendChild(checkTag);
 
-      await waitForRender();
+      await checkTag.updateComplete;
 
       const containerEl =
         checkTag.shadowRoot.querySelector('[part="container"]');
       containerEl.click();
 
-      await waitForRender();
+      await checkTag.updateComplete;
 
       expect(checkTag.checked).toBe(true);
     });
@@ -457,7 +456,7 @@ describe("EaCheckTag", () => {
       const checkTag = document.createElement("ea-check-tag");
       container.appendChild(checkTag);
 
-      await waitForRender();
+      await checkTag.updateComplete;
 
       let changeDetail = null;
       checkTag.addEventListener("change", e => {
@@ -468,7 +467,7 @@ describe("EaCheckTag", () => {
         checkTag.shadowRoot.querySelector('[part="container"]');
       containerEl.click();
 
-      await waitForRender();
+      await checkTag.updateComplete;
 
       expect(changeDetail).not.toBeNull();
       expect(changeDetail.checked).toBe(true);
@@ -479,13 +478,13 @@ describe("EaCheckTag", () => {
       checkTag.checked = true;
       container.appendChild(checkTag);
 
-      await waitForRender();
+      await checkTag.updateComplete;
 
       const containerEl =
         checkTag.shadowRoot.querySelector('[part="container"]');
       containerEl.click();
 
-      await waitForRender();
+      await checkTag.updateComplete;
 
       expect(checkTag.checked).toBe(false);
     });
@@ -512,13 +511,13 @@ describe("EaCheckTag", () => {
       checkTag.disabled = true;
       container.appendChild(checkTag);
 
-      await waitForRender();
+      await checkTag.updateComplete;
 
       const containerEl =
         checkTag.shadowRoot.querySelector('[part="container"]');
       containerEl.click();
 
-      await waitForRender();
+      await checkTag.updateComplete;
 
       expect(checkTag.checked).toBe(false);
     });
@@ -528,7 +527,7 @@ describe("EaCheckTag", () => {
       checkTag.disabled = true;
       container.appendChild(checkTag);
 
-      await waitForRender();
+      await checkTag.updateComplete;
 
       let changeFired = false;
       checkTag.addEventListener("change", () => {
@@ -539,7 +538,7 @@ describe("EaCheckTag", () => {
         checkTag.shadowRoot.querySelector('[part="container"]');
       containerEl.click();
 
-      await waitForRender();
+      await checkTag.updateComplete;
 
       expect(changeFired).toBe(false);
     });
@@ -669,11 +668,11 @@ describe("EaCheckTag", () => {
       const checkTag = document.createElement("ea-check-tag");
       container.appendChild(checkTag);
 
-      await waitForRender();
+      await checkTag.updateComplete;
 
       checkTag.checked = true;
 
-      await waitForRender();
+      await checkTag.updateComplete;
 
       expect(checkTag.checked).toBe(true);
     });
@@ -682,11 +681,11 @@ describe("EaCheckTag", () => {
       const checkTag = document.createElement("ea-check-tag");
       container.appendChild(checkTag);
 
-      await waitForRender();
+      await checkTag.updateComplete;
 
       checkTag.disabled = true;
 
-      await waitForRender();
+      await checkTag.updateComplete;
 
       expect(checkTag.disabled).toBe(true);
     });
@@ -738,7 +737,7 @@ describe("Combined Tests", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-tag");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });
@@ -814,12 +813,12 @@ describe("Combined Tests", () => {
         const checkTag = document.createElement("ea-check-tag");
         container.appendChild(checkTag);
 
-        await waitForRender();
+        await checkTag.updateComplete;
 
         expect(checkTag.getAttribute("aria-checked")).toBe("false");
 
         checkTag.checked = true;
-        await waitForRender();
+        await checkTag.updateComplete;
 
         expect(checkTag.getAttribute("aria-checked")).toBe("true");
       });

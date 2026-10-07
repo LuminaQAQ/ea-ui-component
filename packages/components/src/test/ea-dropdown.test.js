@@ -97,7 +97,7 @@ describe("EaDropdown Component", () => {
     it("container 应该有 tabindex=-1", async () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       const containerEl = dropdown.shadowRoot.querySelector(".ea-popper");
       expect(containerEl.getAttribute("tabindex")).toBe("-1");
@@ -106,7 +106,7 @@ describe("EaDropdown Component", () => {
     it("original 应该有 tabindex=-1", async () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       const originalEl = dropdown.shadowRoot.querySelector(
         ".ea-popper__original"
@@ -117,7 +117,7 @@ describe("EaDropdown Component", () => {
     it("reference 应该有 tabindex=-1", async () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       const referenceEl = dropdown.shadowRoot.querySelector(
         ".ea-popper__reference"
@@ -163,7 +163,7 @@ describe("EaDropdown Component", () => {
     it("应该渲染 reference slot", async () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       const referenceSlot = dropdown.shadowRoot.querySelector(
         'slot[name="reference"]'
@@ -188,7 +188,7 @@ describe("EaDropdown Component", () => {
          </ea-dropdown-menu>`
       );
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       const referenceSlot = dropdown.shadowRoot.querySelector(
         'slot[name="reference"]'
@@ -227,7 +227,7 @@ describe("EaDropdown Component", () => {
     it("动态修改 trigger 属性应该更新", async () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       expect(dropdown.trigger).toBe("hover");
 
@@ -239,7 +239,7 @@ describe("EaDropdown Component", () => {
     it("无效的 trigger 值时 getter 应该返回默认值", async () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       dropdown.setAttribute("trigger", "invalid");
 
@@ -249,15 +249,15 @@ describe("EaDropdown Component", () => {
     it("动态修改 trigger 应该重新绑定事件监听器", async () => {
       const dropdown = createDropdown({ trigger: "click" }, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       dropdown.trigger = "hover";
-      await waitForRender(0);
+      await dropdown.updateComplete;
 
       expect(dropdown.visible).toBe(false);
 
       dropdown.dispatchEvent(new MouseEvent("mouseenter"));
-      await waitForRender(0);
+      await dropdown.updateComplete;
 
       expect(dropdown.visible).toBe(true);
     });
@@ -269,7 +269,7 @@ describe("EaDropdown Component", () => {
     it("默认 placement 应该是 bottom（未显式设置时）", async () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       expect(dropdown.placement).toBe("bottom");
     });
@@ -277,7 +277,7 @@ describe("EaDropdown Component", () => {
     it("显式设置 placement 应该生效", async () => {
       const dropdown = createDropdown({ placement: "top" }, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       expect(dropdown.placement).toBe("top");
     });
@@ -288,7 +288,7 @@ describe("EaDropdown Component", () => {
         withReference()
       );
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       expect(dropdown.placement).toBe("bottom-start");
     });
@@ -299,7 +299,7 @@ describe("EaDropdown Component", () => {
         withReference()
       );
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       expect(dropdown.placement).toBe("bottom-end");
     });
@@ -310,7 +310,7 @@ describe("EaDropdown Component", () => {
         withReference()
       );
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       expect(dropdown.placement).toBe("top-start");
     });
@@ -321,7 +321,7 @@ describe("EaDropdown Component", () => {
         withReference()
       );
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       expect(dropdown.placement).toBe("top-end");
     });
@@ -329,10 +329,10 @@ describe("EaDropdown Component", () => {
     it("动态修改 placement 应该更新容器类名", async () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       dropdown.placement = "top";
-      await waitForRender(0);
+      await dropdown.updateComplete;
 
       const containerEl = dropdown.shadowRoot.querySelector(".ea-popper");
       expect(containerEl.classList.toString()).toContain("ea-popper--top");
@@ -352,7 +352,7 @@ describe("EaDropdown Component", () => {
     it("设置 hide-on-click='false' 应该禁用点击隐藏", async () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
       dropdown.hideOnClick = false;
 
       expect(dropdown.hideOnClick).toBe(false);
@@ -361,7 +361,7 @@ describe("EaDropdown Component", () => {
     it("动态修改 hideOnClick 应该生效", async () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       expect(dropdown.hideOnClick).toBe(true);
 
@@ -430,7 +430,7 @@ describe("EaDropdown Component", () => {
     it("设置 show-arrow='false' 应该隐藏箭头", async () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
       dropdown.showArrow = false;
 
       expect(dropdown.showArrow).toBe(false);
@@ -439,7 +439,7 @@ describe("EaDropdown Component", () => {
     it("默认 visible 应该是 false", async () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       expect(dropdown.visible).toBe(false);
     });
@@ -486,12 +486,12 @@ describe("EaDropdown Component", () => {
     it("调用 show 方法应该设置 visible 为 true", async () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       expect(dropdown.visible).toBe(false);
 
       dropdown.show();
-      await waitForRender(0);
+      await dropdown.updateComplete;
 
       expect(dropdown.visible).toBe(true);
     });
@@ -499,13 +499,13 @@ describe("EaDropdown Component", () => {
     it("调用 hide 方法应该设置 visible 为 false", async () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       dropdown.show();
-      await waitForRender(0);
+      await dropdown.updateComplete;
 
       dropdown.hide();
-      await waitForRender(0);
+      await dropdown.updateComplete;
 
       expect(dropdown.visible).toBe(false);
     });
@@ -513,17 +513,17 @@ describe("EaDropdown Component", () => {
     it("调用 toggle 方法应该切换 visible", async () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       expect(dropdown.visible).toBe(false);
 
       dropdown.toggle();
-      await waitForRender(0);
+      await dropdown.updateComplete;
 
       expect(dropdown.visible).toBe(true);
 
       dropdown.toggle();
-      await waitForRender(0);
+      await dropdown.updateComplete;
 
       expect(dropdown.visible).toBe(false);
     });
@@ -535,13 +535,13 @@ describe("EaDropdown Component", () => {
     it("调用 show 应该触发 ea-show 事件", async () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       const showHandler = vi.fn();
       dropdown.addEventListener("ea-show", showHandler);
 
       dropdown.show();
-      await waitForRender(0);
+      await dropdown.updateComplete;
 
       expect(showHandler).toHaveBeenCalled();
     });
@@ -549,16 +549,16 @@ describe("EaDropdown Component", () => {
     it("调用 hide 应该触发 ea-hide 事件", async () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       dropdown.show();
-      await waitForRender(0);
+      await dropdown.updateComplete;
 
       const hideHandler = vi.fn();
       dropdown.addEventListener("ea-hide", hideHandler);
 
       dropdown.hide();
-      await waitForRender(0);
+      await dropdown.updateComplete;
 
       expect(hideHandler).toHaveBeenCalled();
     });
@@ -566,13 +566,13 @@ describe("EaDropdown Component", () => {
     it("ea-show 事件应该冒泡", async () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       const showHandler = vi.fn();
       container.addEventListener("ea-show", showHandler);
 
       dropdown.show();
-      await waitForRender(0);
+      await dropdown.updateComplete;
 
       expect(showHandler).toHaveBeenCalled();
     });
@@ -580,16 +580,16 @@ describe("EaDropdown Component", () => {
     it("ea-hide 事件应该冒泡", async () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       dropdown.show();
-      await waitForRender(0);
+      await dropdown.updateComplete;
 
       const hideHandler = vi.fn();
       container.addEventListener("ea-hide", hideHandler);
 
       dropdown.hide();
-      await waitForRender(0);
+      await dropdown.updateComplete;
 
       expect(hideHandler).toHaveBeenCalled();
     });
@@ -603,7 +603,7 @@ describe("EaDropdown Component", () => {
          </ea-dropdown-menu>`
       );
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       const commandHandler = vi.fn();
       dropdown.addEventListener("ea-command", commandHandler);
@@ -629,7 +629,7 @@ describe("EaDropdown Component", () => {
          </ea-dropdown-menu>`
       );
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       const commandHandler = vi.fn();
       dropdown.addEventListener("ea-command", commandHandler);
@@ -655,7 +655,7 @@ describe("EaDropdown Component", () => {
          </ea-dropdown-menu>`
       );
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       const clickHandler = vi.fn();
       container.addEventListener("ea-dropdown-item-click", clickHandler, true);
@@ -678,10 +678,10 @@ describe("EaDropdown Component", () => {
          </ea-dropdown-menu>`
       );
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       dropdown.show();
-      await waitForRender(0);
+      await dropdown.updateComplete;
       expect(dropdown.visible).toBe(true);
 
       const item = dropdown.querySelector("ea-dropdown-item");
@@ -689,7 +689,7 @@ describe("EaDropdown Component", () => {
         ".ea-dropdown-item__content"
       );
       content.click();
-      await waitForRender(0);
+      await dropdown.updateComplete;
 
       expect(dropdown.visible).toBe(false);
     });
@@ -703,12 +703,12 @@ describe("EaDropdown Component", () => {
          </ea-dropdown-menu>`
       );
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
       dropdown.hideOnClick = false;
-      await waitForRender();
+      await dropdown.updateComplete;
 
       dropdown.show();
-      await waitForRender(0);
+      await dropdown.updateComplete;
       expect(dropdown.visible).toBe(true);
 
       const item = dropdown.querySelector("ea-dropdown-item");
@@ -716,7 +716,7 @@ describe("EaDropdown Component", () => {
         ".ea-dropdown-item__content"
       );
       content.click();
-      await waitForRender(0);
+      await dropdown.updateComplete;
 
       expect(dropdown.visible).toBe(true);
     });
@@ -728,12 +728,12 @@ describe("EaDropdown Component", () => {
     it("hover 触发时，mouseenter 应该显示下拉菜单", async () => {
       const dropdown = createDropdown({ trigger: "hover" }, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       expect(dropdown.visible).toBe(false);
 
       dropdown.dispatchEvent(new MouseEvent("mouseenter"));
-      await waitForRender(0);
+      await dropdown.updateComplete;
 
       expect(dropdown.visible).toBe(true);
     });
@@ -741,10 +741,10 @@ describe("EaDropdown Component", () => {
     it("hover 触发时，mouseleave 应该延迟隐藏下拉菜单", async () => {
       const dropdown = createDropdown({ trigger: "hover" }, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       dropdown.dispatchEvent(new MouseEvent("mouseenter"));
-      await waitForRender(0);
+      await dropdown.updateComplete;
       expect(dropdown.visible).toBe(true);
 
       dropdown.dispatchEvent(new MouseEvent("mouseleave"));
@@ -759,17 +759,17 @@ describe("EaDropdown Component", () => {
     it("mouseleave 延迟期间重新 mouseenter 应该取消隐藏", async () => {
       const dropdown = createDropdown({ trigger: "hover" }, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       dropdown.dispatchEvent(new MouseEvent("mouseenter"));
-      await waitForRender(0);
+      await dropdown.updateComplete;
       expect(dropdown.visible).toBe(true);
 
       dropdown.dispatchEvent(new MouseEvent("mouseleave"));
       await waitForRender(80);
 
       dropdown.dispatchEvent(new MouseEvent("mouseenter"));
-      await waitForRender(0);
+      await dropdown.updateComplete;
 
       await waitForRender(200);
       expect(dropdown.visible).toBe(true);
@@ -788,7 +788,7 @@ describe("EaDropdown Component", () => {
          </ea-dropdown-menu>`
       );
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       expect(dropdown.visible).toBe(false);
 
@@ -796,12 +796,12 @@ describe("EaDropdown Component", () => {
         'slot[name="reference"]'
       );
       referenceSlot.dispatchEvent(new Event("click", { bubbles: true }));
-      await waitForRender(0);
+      await dropdown.updateComplete;
 
       expect(dropdown.visible).toBe(true);
 
       referenceSlot.dispatchEvent(new Event("click", { bubbles: true }));
-      await waitForRender(0);
+      await dropdown.updateComplete;
 
       expect(dropdown.visible).toBe(false);
     });
@@ -816,14 +816,14 @@ describe("EaDropdown Component", () => {
         withReference()
       );
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       expect(dropdown.visible).toBe(false);
 
       dropdown.dispatchEvent(
         new MouseEvent("contextmenu", { cancelable: true })
       );
-      await waitForRender(0);
+      await dropdown.updateComplete;
 
       expect(dropdown.visible).toBe(true);
     });
@@ -834,7 +834,7 @@ describe("EaDropdown Component", () => {
         withReference()
       );
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       const event = new MouseEvent("contextmenu", { cancelable: true });
       dropdown.dispatchEvent(event);
@@ -849,7 +849,7 @@ describe("EaDropdown Component", () => {
     it("初始状态应该包含 placement 类名", async () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       const containerEl = dropdown.shadowRoot.querySelector(".ea-popper");
       expect(containerEl.classList.toString()).toContain("ea-popper--bottom");
@@ -858,10 +858,10 @@ describe("EaDropdown Component", () => {
     it("show 时应该添加 is-show 状态类", async () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       dropdown.show();
-      await waitForRender(0);
+      await dropdown.updateComplete;
 
       const containerEl = dropdown.shadowRoot.querySelector(".ea-popper");
       expect(containerEl.classList.contains("is-show")).toBe(true);
@@ -870,7 +870,7 @@ describe("EaDropdown Component", () => {
     it("showArrow 为 true 时应该包含 show-arrow 状态类", async () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       const containerEl = dropdown.shadowRoot.querySelector(".ea-popper");
       expect(containerEl.classList.contains("is-show-arrow")).toBe(true);
@@ -879,9 +879,9 @@ describe("EaDropdown Component", () => {
     it("showArrow 为 false 时不应该包含 show-arrow 状态类", async () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
       dropdown.showArrow = false;
-      await waitForRender();
+      await dropdown.updateComplete;
 
       const containerEl = dropdown.shadowRoot.querySelector(".ea-popper");
       expect(containerEl.classList.contains("is-show-arrow")).toBe(false);
@@ -894,7 +894,7 @@ describe("EaDropdown Component", () => {
     it("设置 width 应该设置 --ea-popper-width CSS 变量", async () => {
       const dropdown = createDropdown({ width: "200" }, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       expect(dropdown.style.getPropertyValue("--ea-popper-width")).toBe(
         "200px"
@@ -904,7 +904,7 @@ describe("EaDropdown Component", () => {
     it("设置 offset 应该设置 --ea-popper-transform-x 和 --ea-popper-transform-y CSS 变量", async () => {
       const dropdown = createDropdown({ offset: "10 20" }, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       expect(dropdown.style.getPropertyValue("--ea-popper-transform-x")).toBe(
         "10px"
@@ -950,14 +950,14 @@ describe("EaDropdown Component", () => {
     it("连续调用 show 不应该出错", async () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       dropdown.show();
-      await waitForRender(0);
+      await dropdown.updateComplete;
       dropdown.show();
-      await waitForRender(0);
+      await dropdown.updateComplete;
       dropdown.show();
-      await waitForRender(0);
+      await dropdown.updateComplete;
 
       expect(dropdown.visible).toBe(true);
     });
@@ -965,12 +965,12 @@ describe("EaDropdown Component", () => {
     it("连续调用 hide 不应该出错", async () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       dropdown.hide();
-      await waitForRender(0);
+      await dropdown.updateComplete;
       dropdown.hide();
-      await waitForRender(0);
+      await dropdown.updateComplete;
 
       expect(dropdown.visible).toBe(false);
     });
@@ -978,10 +978,10 @@ describe("EaDropdown Component", () => {
     it("未 show 时调用 hide 不应该出错", async () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       dropdown.hide();
-      await waitForRender(0);
+      await dropdown.updateComplete;
 
       expect(dropdown.visible).toBe(false);
     });
@@ -1029,7 +1029,7 @@ describe("EaDropdown Component", () => {
          </ea-dropdown-menu>`
       );
       container.appendChild(dropdown);
-      await waitForRender();
+      await dropdown.updateComplete;
 
       dropdown.remove();
       container.appendChild(dropdown);
@@ -1142,7 +1142,7 @@ describe("EaDropdownItem Component", () => {
     it("disabled 时应该设置 aria-disabled 属性", async () => {
       const item = createDropdownItem({ disabled: "" });
       container.appendChild(item);
-      await waitForRender();
+      await item.updateComplete;
 
       expect(item.hasAttribute("aria-disabled")).toBe(true);
     });
@@ -1150,7 +1150,7 @@ describe("EaDropdownItem Component", () => {
     it("disabled 时容器应该包含 disabled 修饰符类名", async () => {
       const item = createDropdownItem({ disabled: "" });
       container.appendChild(item);
-      await waitForRender();
+      await item.updateComplete;
 
       const containerEl = item.shadowRoot.querySelector(".ea-dropdown-item");
       expect(containerEl.classList.toString()).toContain(
@@ -1161,10 +1161,10 @@ describe("EaDropdownItem Component", () => {
     it("动态修改 disabled 应该更新类名", async () => {
       const item = createDropdownItem();
       container.appendChild(item);
-      await waitForRender();
+      await item.updateComplete;
 
       item.disabled = true;
-      await waitForRender(0);
+      await item.updateComplete;
 
       const containerEl = item.shadowRoot.querySelector(".ea-dropdown-item");
       expect(containerEl.classList.toString()).toContain(
@@ -1172,7 +1172,7 @@ describe("EaDropdownItem Component", () => {
       );
 
       item.disabled = false;
-      await waitForRender(0);
+      await item.updateComplete;
 
       expect(containerEl.classList.toString()).not.toContain(
         "ea-dropdown-item--disabled"
@@ -1200,7 +1200,7 @@ describe("EaDropdownItem Component", () => {
     it("divided 时容器应该包含 divided 状态类名", async () => {
       const item = createDropdownItem({ divided: "" });
       container.appendChild(item);
-      await waitForRender();
+      await item.updateComplete;
 
       const containerEl = item.shadowRoot.querySelector(".ea-dropdown-item");
       expect(containerEl.classList.contains("is-divided")).toBe(true);
@@ -1209,7 +1209,7 @@ describe("EaDropdownItem Component", () => {
     it("未 divided 时容器不应该包含 divided 状态类名", async () => {
       const item = createDropdownItem();
       container.appendChild(item);
-      await waitForRender();
+      await item.updateComplete;
 
       const containerEl = item.shadowRoot.querySelector(".ea-dropdown-item");
       expect(containerEl.classList.contains("is-divided")).toBe(false);
@@ -1218,16 +1218,16 @@ describe("EaDropdownItem Component", () => {
     it("动态修改 divided 应该更新类名", async () => {
       const item = createDropdownItem();
       container.appendChild(item);
-      await waitForRender();
+      await item.updateComplete;
 
       item.divided = true;
-      await waitForRender(0);
+      await item.updateComplete;
 
       const containerEl = item.shadowRoot.querySelector(".ea-dropdown-item");
       expect(containerEl.classList.contains("is-divided")).toBe(true);
 
       item.divided = false;
-      await waitForRender(0);
+      await item.updateComplete;
 
       expect(containerEl.classList.contains("is-divided")).toBe(false);
     });
@@ -1253,7 +1253,7 @@ describe("EaDropdownItem Component", () => {
     it("动态修改 command 应该生效", async () => {
       const item = createDropdownItem();
       container.appendChild(item);
-      await waitForRender();
+      await item.updateComplete;
 
       item.command = "new-cmd";
 
@@ -1267,7 +1267,7 @@ describe("EaDropdownItem Component", () => {
     it("点击应该触发 ea-dropdown-item-click 事件", async () => {
       const item = createDropdownItem();
       container.appendChild(item);
-      await waitForRender();
+      await item.updateComplete;
 
       const clickHandler = vi.fn();
       item.addEventListener("ea-dropdown-item-click", clickHandler);
@@ -1283,7 +1283,7 @@ describe("EaDropdownItem Component", () => {
     it("点击设置了 command 的项应该触发 ea-command 事件", async () => {
       const item = createDropdownItem({ command: "my-command" });
       container.appendChild(item);
-      await waitForRender();
+      await item.updateComplete;
 
       const commandHandler = vi.fn();
       item.addEventListener("ea-command", commandHandler);
@@ -1300,7 +1300,7 @@ describe("EaDropdownItem Component", () => {
     it("ea-command 事件应该是 EaDropdownCommandEvent 实例", async () => {
       const item = createDropdownItem({ command: "test" });
       container.appendChild(item);
-      await waitForRender();
+      await item.updateComplete;
 
       const commandHandler = vi.fn();
       item.addEventListener("ea-command", commandHandler);
@@ -1319,7 +1319,7 @@ describe("EaDropdownItem Component", () => {
     it("没有 command 的项点击不应该触发 ea-command 事件", async () => {
       const item = createDropdownItem();
       container.appendChild(item);
-      await waitForRender();
+      await item.updateComplete;
 
       const commandHandler = vi.fn();
       item.addEventListener("ea-command", commandHandler);
@@ -1335,7 +1335,7 @@ describe("EaDropdownItem Component", () => {
     it("禁用时点击不应该触发 ea-dropdown-item-click 事件", async () => {
       const item = createDropdownItem({ disabled: "" });
       container.appendChild(item);
-      await waitForRender();
+      await item.updateComplete;
 
       const clickHandler = vi.fn();
       item.addEventListener("ea-dropdown-item-click", clickHandler);
@@ -1351,7 +1351,7 @@ describe("EaDropdownItem Component", () => {
     it("禁用时点击不应该触发 ea-command 事件", async () => {
       const item = createDropdownItem({ disabled: "", command: "test" });
       container.appendChild(item);
-      await waitForRender();
+      await item.updateComplete;
 
       const commandHandler = vi.fn();
       item.addEventListener("ea-command", commandHandler);
@@ -1367,7 +1367,7 @@ describe("EaDropdownItem Component", () => {
     it("ea-dropdown-item-click 事件应该冒泡", async () => {
       const item = createDropdownItem();
       container.appendChild(item);
-      await waitForRender();
+      await item.updateComplete;
 
       const bubbleHandler = vi.fn();
       container.addEventListener("ea-dropdown-item-click", bubbleHandler);
@@ -1383,7 +1383,7 @@ describe("EaDropdownItem Component", () => {
     it("ea-command 事件应该冒泡", async () => {
       const item = createDropdownItem({ command: "test" });
       container.appendChild(item);
-      await waitForRender();
+      await item.updateComplete;
 
       const bubbleHandler = vi.fn();
       container.addEventListener("ea-command", bubbleHandler);
@@ -1403,7 +1403,7 @@ describe("EaDropdownItem Component", () => {
     it("disabled + divided 应该同时包含两个类名", async () => {
       const item = createDropdownItem({ disabled: "", divided: "" });
       container.appendChild(item);
-      await waitForRender();
+      await item.updateComplete;
 
       const containerEl = item.shadowRoot.querySelector(".ea-dropdown-item");
       expect(containerEl.classList.toString()).toContain(
@@ -1415,7 +1415,7 @@ describe("EaDropdownItem Component", () => {
     it("无属性时应该只有基础类名", async () => {
       const item = createDropdownItem();
       container.appendChild(item);
-      await waitForRender();
+      await item.updateComplete;
 
       const containerEl = item.shadowRoot.querySelector(".ea-dropdown-item");
       expect(containerEl.classList.contains("ea-dropdown-item")).toBe(true);
@@ -1488,7 +1488,7 @@ describe("EaDropdownMenu Component", () => {
         <ea-dropdown-item>Item 3</ea-dropdown-item>
       `);
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       const items = menu.querySelectorAll("ea-dropdown-item");
       expect(items.length).toBe(3);
@@ -1509,7 +1509,7 @@ describe("EaDropdownMenu Component", () => {
         menu.appendChild(item);
       }
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       const items = menu.querySelectorAll("ea-dropdown-item");
       expect(items.length).toBe(10);
@@ -1542,7 +1542,7 @@ describe("Integration Tests", () => {
        </ea-dropdown-menu>`
     );
     container.appendChild(dropdown);
-    await waitForRender();
+    await dropdown.updateComplete;
 
     expect(dropdown.shadowRoot).toBeTruthy();
     expect(dropdown.querySelectorAll("ea-dropdown-item").length).toBe(3);
@@ -1558,7 +1558,7 @@ describe("Integration Tests", () => {
        </ea-dropdown-menu>`
     );
     container.appendChild(dropdown);
-    await waitForRender();
+    await dropdown.updateComplete;
 
     const commandHandler = vi.fn();
     dropdown.addEventListener("ea-command", commandHandler);
@@ -1580,16 +1580,16 @@ describe("Integration Tests", () => {
        </ea-dropdown-menu>`
     );
     container.appendChild(dropdown);
-    await waitForRender();
+    await dropdown.updateComplete;
 
     dropdown.show();
-    await waitForRender(0);
+    await dropdown.updateComplete;
     expect(dropdown.visible).toBe(true);
 
     const item = dropdown.querySelector("ea-dropdown-item");
     const content = item.shadowRoot.querySelector(".ea-dropdown-item__content");
     content.click();
-    await waitForRender(0);
+    await dropdown.updateComplete;
 
     expect(dropdown.visible).toBe(false);
   });
@@ -1604,7 +1604,7 @@ describe("Integration Tests", () => {
        </ea-dropdown-menu>`
     );
     container.appendChild(dropdown);
-    await waitForRender();
+    await dropdown.updateComplete;
 
     const commandHandler = vi.fn();
     dropdown.addEventListener("ea-command", commandHandler);
@@ -1636,7 +1636,7 @@ describe("Integration Tests", () => {
        </ea-dropdown-menu>`
     );
     container.appendChild(dropdown);
-    await waitForRender();
+    await dropdown.updateComplete;
 
     const commandHandler = vi.fn();
     dropdown.addEventListener("ea-command", commandHandler);
@@ -1667,12 +1667,12 @@ describe("Integration Tests", () => {
        </ea-dropdown-menu>`
     );
     container.appendChild(dropdown);
-    await waitForRender();
+    await dropdown.updateComplete;
     dropdown.hideOnClick = false;
-    await waitForRender();
+    await dropdown.updateComplete;
 
     dropdown.show();
-    await waitForRender(0);
+    await dropdown.updateComplete;
     expect(dropdown.visible).toBe(true);
 
     const items = dropdown.querySelectorAll("ea-dropdown-item");
@@ -1680,7 +1680,7 @@ describe("Integration Tests", () => {
       ".ea-dropdown-item__content"
     );
     content1.click();
-    await waitForRender(0);
+    await dropdown.updateComplete;
 
     expect(dropdown.visible).toBe(true);
 
@@ -1688,7 +1688,7 @@ describe("Integration Tests", () => {
       ".ea-dropdown-item__content"
     );
     content2.click();
-    await waitForRender(0);
+    await dropdown.updateComplete;
 
     expect(dropdown.visible).toBe(true);
   });
@@ -1699,12 +1699,14 @@ describe("Integration Tests", () => {
         const el = document.createElement("ea-dropdown");
         el.innerHTML = `<span slot="reference" class="ref">Trigger</span><ea-dropdown-menu><ea-dropdown-item>1</ea-dropdown-item></ea-dropdown-menu>`;
         container.appendChild(el);
-        await waitForRender();
-        await waitForRender();
+        await el.updateComplete;
+        await el.updateComplete;
         el.visible = true;
-        await waitForRender();
-        el.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
-        await waitForRender();
+        await el.updateComplete;
+        el.dispatchEvent(
+          new KeyboardEvent("keydown", { key: "Escape", bubbles: true })
+        );
+        await el.updateComplete;
         expect(el.visible).toBe(false);
       });
 
@@ -1712,11 +1714,13 @@ describe("Integration Tests", () => {
         const el = document.createElement("ea-dropdown");
         el.innerHTML = `<span slot="reference" class="ref">Trigger</span><ea-dropdown-menu><ea-dropdown-item>1</ea-dropdown-item></ea-dropdown-menu>`;
         container.appendChild(el);
-        await waitForRender();
-        await waitForRender();
+        await el.updateComplete;
+        await el.updateComplete;
         const trigger = el.querySelector('[slot="reference"]');
-        trigger.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
-        await waitForRender();
+        trigger.dispatchEvent(
+          new KeyboardEvent("keydown", { key: "Enter", bubbles: true })
+        );
+        await el.updateComplete;
         expect(el.visible).toBe(true);
       });
 
@@ -1724,11 +1728,13 @@ describe("Integration Tests", () => {
         const el = document.createElement("ea-dropdown");
         el.innerHTML = `<span slot="reference" class="ref">Trigger</span><ea-dropdown-menu><ea-dropdown-item>1</ea-dropdown-item></ea-dropdown-menu>`;
         container.appendChild(el);
-        await waitForRender();
-        await waitForRender();
+        await el.updateComplete;
+        await el.updateComplete;
         const trigger = el.querySelector('[slot="reference"]');
-        trigger.dispatchEvent(new KeyboardEvent("keydown", { key: " ", bubbles: true }));
-        await waitForRender();
+        trigger.dispatchEvent(
+          new KeyboardEvent("keydown", { key: " ", bubbles: true })
+        );
+        await el.updateComplete;
         expect(el.visible).toBe(true);
       });
     });
@@ -1740,7 +1746,7 @@ describe("Integration Tests", () => {
          <ea-dropdown-item>Item 1</ea-dropdown-item>
        </ea-dropdown-menu>`;
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });

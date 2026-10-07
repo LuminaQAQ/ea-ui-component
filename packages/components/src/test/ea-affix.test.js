@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { waitForRender } from "./utils/waitForRender";
 
 import "../components/ea-affix/index";
 
@@ -129,7 +128,7 @@ describe("EaAffix", () => {
       const el = document.createElement("ea-affix");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-affix");
       expect(containerEl.classList.contains("ea-affix")).toBe(true);
@@ -140,7 +139,7 @@ describe("EaAffix", () => {
       el.setAttribute("position", "top");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-affix");
       expect(containerEl.classList.contains("ea-affix--top")).toBe(true);
@@ -151,7 +150,7 @@ describe("EaAffix", () => {
       el.setAttribute("position", "bottom");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-affix");
       expect(containerEl.classList.contains("ea-affix--bottom")).toBe(true);
@@ -173,7 +172,7 @@ describe("EaAffix", () => {
       });
 
       window.dispatchEvent(new Event("scroll"));
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-affix");
       expect(containerEl.classList.contains("is-affix")).toBe(false);
@@ -193,7 +192,7 @@ describe("EaAffix", () => {
       });
 
       window.dispatchEvent(new Event("scroll"));
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-affix");
       expect(containerEl.classList.contains("is-affix")).toBe(true);
@@ -213,7 +212,7 @@ describe("EaAffix", () => {
       });
 
       window.dispatchEvent(new Event("scroll"));
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-affix");
       expect(containerEl.style.getPropertyValue("--ea-affix-x")).toBe("10px");
@@ -234,7 +233,7 @@ describe("EaAffix", () => {
       });
 
       window.dispatchEvent(new Event("scroll"));
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-affix");
       expect(containerEl.style.getPropertyValue("--ea-affix-x")).toBe("");
@@ -256,7 +255,7 @@ describe("EaAffix", () => {
       });
 
       window.dispatchEvent(new Event("scroll"));
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-affix");
       expect(containerEl.classList.contains("is-affix")).toBe(true);
@@ -276,7 +275,7 @@ describe("EaAffix", () => {
       });
 
       window.dispatchEvent(new Event("resize"));
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-affix");
       expect(containerEl.classList.contains("is-affix")).toBe(true);

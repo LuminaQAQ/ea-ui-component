@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { waitForRender } from "./utils/waitForRender";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-page-header/index.ts";
@@ -503,7 +502,7 @@ describe("EaPageHeader Component", () => {
       pageHeader.setAttribute("icon", "arrow-left");
       container.appendChild(pageHeader);
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       const iconEl = pageHeader.shadowRoot.querySelector("ea-icon");
       expect(iconEl.getAttribute("name")).toBe("arrow-left");
@@ -513,10 +512,10 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       pageHeader.icon = "chevron-left";
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       expect(pageHeader.icon).toBe("chevron-left");
     });
@@ -526,12 +525,12 @@ describe("EaPageHeader Component", () => {
       pageHeader.setAttribute("icon", "arrow-left");
       container.appendChild(pageHeader);
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       expect(pageHeader.icon).toBe("arrow-left");
 
       pageHeader.setAttribute("icon", "rotate-left");
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       expect(pageHeader.icon).toBe("rotate-left");
     });
@@ -541,10 +540,10 @@ describe("EaPageHeader Component", () => {
       pageHeader.setAttribute("icon", "arrow-left");
       container.appendChild(pageHeader);
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       pageHeader.setAttribute("icon", "");
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       expect(pageHeader.icon).toBe("");
       const iconEl = pageHeader.shadowRoot.querySelector(
@@ -558,7 +557,7 @@ describe("EaPageHeader Component", () => {
       pageHeader.setAttribute("icon", "");
       container.appendChild(pageHeader);
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       const iconEl = pageHeader.shadowRoot.querySelector("ea-icon");
       expect(iconEl).toBeNull();
@@ -569,7 +568,7 @@ describe("EaPageHeader Component", () => {
       pageHeader.setAttribute("icon", "");
       container.appendChild(pageHeader);
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       const iconContainer = pageHeader.shadowRoot.querySelector(
         ".ea-page-header__icon"
@@ -577,7 +576,7 @@ describe("EaPageHeader Component", () => {
       expect(iconContainer.classList.contains("is-hidden")).toBe(true);
 
       pageHeader.setAttribute("icon", "arrow-left");
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       expect(iconContainer.classList.contains("is-hidden")).toBe(false);
       const iconEl = pageHeader.shadowRoot.querySelector("ea-icon");
@@ -617,7 +616,7 @@ describe("EaPageHeader Component", () => {
       pageHeader.setAttribute("heading", "Go Back");
       container.appendChild(pageHeader);
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       const headingEl = pageHeader.shadowRoot.querySelector(
         ".ea-page-header__heading"
@@ -629,10 +628,10 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       pageHeader.heading = "JS Property Heading";
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       expect(pageHeader.heading).toBe("JS Property Heading");
       const headingEl = pageHeader.shadowRoot.querySelector(
@@ -646,7 +645,7 @@ describe("EaPageHeader Component", () => {
       pageHeader.setAttribute("heading", "初始标题");
       container.appendChild(pageHeader);
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       const headingEl = pageHeader.shadowRoot.querySelector(
         ".ea-page-header__heading"
@@ -654,7 +653,7 @@ describe("EaPageHeader Component", () => {
       expect(headingEl.textContent).toBe("初始标题");
 
       pageHeader.setAttribute("heading", "更新后的标题");
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       const updatedHeadingEl = pageHeader.shadowRoot.querySelector(
         ".ea-page-header__heading"
@@ -667,10 +666,10 @@ describe("EaPageHeader Component", () => {
       pageHeader.setAttribute("heading", "临时标题");
       container.appendChild(pageHeader);
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       pageHeader.setAttribute("heading", "");
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       expect(pageHeader.heading).toBe("");
       const titleSlot =
@@ -722,7 +721,7 @@ describe("EaPageHeader Component", () => {
       pageHeader.setAttribute("content", "Page Title");
       container.appendChild(pageHeader);
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       const contentEl = pageHeader.shadowRoot.querySelector(
         ".ea-page-header__content"
@@ -734,10 +733,10 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       pageHeader.content = "JS Property Content";
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       expect(pageHeader.content).toBe("JS Property Content");
       const contentEl = pageHeader.shadowRoot.querySelector(
@@ -751,7 +750,7 @@ describe("EaPageHeader Component", () => {
       pageHeader.setAttribute("content", "初始内容");
       container.appendChild(pageHeader);
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       const contentEl = pageHeader.shadowRoot.querySelector(
         ".ea-page-header__content"
@@ -759,7 +758,7 @@ describe("EaPageHeader Component", () => {
       expect(contentEl.textContent).toBe("初始内容");
 
       pageHeader.setAttribute("content", "更新后的内容");
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       const updatedContentEl = pageHeader.shadowRoot.querySelector(
         ".ea-page-header__content"
@@ -772,10 +771,10 @@ describe("EaPageHeader Component", () => {
       pageHeader.setAttribute("content", "临时内容");
       container.appendChild(pageHeader);
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       pageHeader.setAttribute("content", "");
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       expect(pageHeader.content).toBe("");
       const contentSlot = pageHeader.shadowRoot.querySelector(
@@ -792,7 +791,7 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       const backHandler = vi.fn();
       pageHeader.addEventListener("ea-back", backHandler);
@@ -809,7 +808,7 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       const backHandler = vi.fn();
       pageHeader.addEventListener("ea-back", backHandler);
@@ -828,7 +827,7 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       let receivedEvent;
       pageHeader.addEventListener("ea-back", e => {
@@ -850,7 +849,7 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       const backHandler = vi.fn();
       pageHeader.addEventListener("ea-back", backHandler);
@@ -867,7 +866,7 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       const backHandler = vi.fn();
       pageHeader.addEventListener("ea-back", backHandler);
@@ -884,7 +883,7 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       const backHandler = vi.fn();
       pageHeader.addEventListener("ea-back", backHandler);
@@ -901,7 +900,7 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       const backHandler = vi.fn();
       pageHeader.addEventListener("ea-back", backHandler);
@@ -918,7 +917,7 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       const backHandler = vi.fn();
       pageHeader.addEventListener("ea-back", backHandler);
@@ -957,7 +956,7 @@ describe("EaPageHeader Component", () => {
       pageHeader.setAttribute("heading", "自定义返回");
       container.appendChild(pageHeader);
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       const headingEl = pageHeader.shadowRoot.querySelector(
         ".ea-page-header__heading"
@@ -971,7 +970,7 @@ describe("EaPageHeader Component", () => {
       pageHeader.setAttribute("content", "详情页面");
       container.appendChild(pageHeader);
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       const contentEl = pageHeader.shadowRoot.querySelector(
         ".ea-page-header__content"
@@ -984,7 +983,7 @@ describe("EaPageHeader Component", () => {
       pageHeader.setAttribute("icon", "chevron-left");
       container.appendChild(pageHeader);
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       const iconEl = pageHeader.shadowRoot.querySelector("ea-icon");
       expect(iconEl.getAttribute("name")).toBe("chevron-left");
@@ -994,18 +993,18 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       pageHeader.setAttribute("heading", "标题一");
       pageHeader.setAttribute("content", "内容一");
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       expect(pageHeader.heading).toBe("标题一");
       expect(pageHeader.content).toBe("内容一");
 
       pageHeader.setAttribute("heading", "标题二");
       pageHeader.setAttribute("content", "内容二");
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       expect(pageHeader.heading).toBe("标题二");
       expect(pageHeader.content).toBe("内容二");
@@ -1069,12 +1068,12 @@ describe("EaPageHeader Component", () => {
       pageHeader.setAttribute("heading", "Reconnect Test");
       container.appendChild(pageHeader);
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       pageHeader.remove();
       container.appendChild(pageHeader);
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       expect(pageHeader.isConnected).toBe(true);
       expect(pageHeader.shadowRoot).toBeDefined();
@@ -1084,13 +1083,13 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       expect(pageHeader.heading).toBe("");
 
       pageHeader.setAttribute("heading", "New Title");
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       expect(pageHeader.heading).toBe("New Title");
     });
@@ -1099,11 +1098,11 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       pageHeader.setAttribute("heading", "Updated Title");
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       const headingEl = pageHeader.shadowRoot.querySelector(
         ".ea-page-header__heading"
@@ -1115,11 +1114,11 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       pageHeader.setAttribute("content", "Updated Content");
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       const contentEl = pageHeader.shadowRoot.querySelector(
         ".ea-page-header__content"
@@ -1131,11 +1130,11 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       pageHeader.setAttribute("icon", "chevron-left");
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       const iconEl = pageHeader.shadowRoot.querySelector("ea-icon");
       expect(iconEl.getAttribute("name")).toBe("chevron-left");
@@ -1162,7 +1161,7 @@ describe("EaPageHeader Component", () => {
       pageHeader.setAttribute("heading", longText);
       container.appendChild(pageHeader);
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       expect(pageHeader.heading).toBe(longText);
       const headingEl = pageHeader.shadowRoot.querySelector(
@@ -1178,7 +1177,7 @@ describe("EaPageHeader Component", () => {
       pageHeader.setAttribute("content", longText);
       container.appendChild(pageHeader);
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       expect(pageHeader.content).toBe(longText);
       const contentEl = pageHeader.shadowRoot.querySelector(
@@ -1192,7 +1191,7 @@ describe("EaPageHeader Component", () => {
       pageHeader.setAttribute("heading", "<script>alert('xss')</script>");
       container.appendChild(pageHeader);
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       expect(pageHeader.heading).toBe("<script>alert('xss')</script>");
       const headingEl = pageHeader.shadowRoot.querySelector(
@@ -1215,13 +1214,13 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       pageHeader.setAttribute("heading", "标题1");
       pageHeader.setAttribute("heading", "标题2");
       pageHeader.setAttribute("heading", "标题3");
 
-      await waitForRender();
+      await pageHeader.updateComplete;
 
       expect(pageHeader.heading).toBe("标题3");
     });
@@ -1380,7 +1379,7 @@ describe("EaPageHeader Component", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-page-header");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });

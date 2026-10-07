@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 
 import "../components/ea-checkbox/index";
-import { waitForRender } from "./utils/waitForRender.js";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 describe("EaCheckbox Component", () => {
@@ -21,7 +20,7 @@ describe("EaCheckbox Component", () => {
       const checkbox = document.createElement("ea-checkbox");
       container.appendChild(checkbox);
 
-      await waitForRender();
+      await checkbox.updateComplete;
 
       expect(checkbox).toBeDefined();
       expect(checkbox.shadowRoot).toBeDefined();
@@ -101,7 +100,7 @@ describe("EaCheckbox Component", () => {
       checkbox.setAttribute("label", "Test Label");
       container.appendChild(checkbox);
 
-      await waitForRender();
+      await checkbox.updateComplete;
 
       const labelEl = checkbox.shadowRoot.querySelector(".ea-checkbox__label");
       expect(labelEl.textContent).toContain("Test Label");
@@ -166,10 +165,10 @@ describe("EaCheckbox Component", () => {
       const checkbox = document.createElement("ea-checkbox");
       container.appendChild(checkbox);
 
-      await waitForRender();
+      await checkbox.updateComplete;
 
       checkbox.checked = true;
-      await waitForRender();
+      await checkbox.updateComplete;
 
       expect(checkbox.checked).toBe(true);
 
@@ -191,7 +190,7 @@ describe("EaCheckbox Component", () => {
       checkbox.setAttribute("checked", "");
       container.appendChild(checkbox);
 
-      await waitForRender();
+      await checkbox.updateComplete;
 
       const containerEl = checkbox.shadowRoot.querySelector(".ea-checkbox");
       expect(containerEl.classList.contains("is-checked")).toBe(true);
@@ -229,10 +228,10 @@ describe("EaCheckbox Component", () => {
       const checkbox = document.createElement("ea-checkbox");
       container.appendChild(checkbox);
 
-      await waitForRender();
+      await checkbox.updateComplete;
 
       checkbox.disabled = true;
-      await waitForRender();
+      await checkbox.updateComplete;
 
       expect(checkbox.disabled).toBe(true);
 
@@ -245,7 +244,7 @@ describe("EaCheckbox Component", () => {
       checkbox.setAttribute("disabled", "");
       container.appendChild(checkbox);
 
-      await waitForRender();
+      await checkbox.updateComplete;
 
       const containerEl = checkbox.shadowRoot.querySelector(".ea-checkbox");
       expect(containerEl.classList.contains("is-disabled")).toBe(true);
@@ -274,10 +273,10 @@ describe("EaCheckbox Component", () => {
       const checkbox = document.createElement("ea-checkbox");
       container.appendChild(checkbox);
 
-      await waitForRender();
+      await checkbox.updateComplete;
 
       checkbox.indeterminate = true;
-      await waitForRender();
+      await checkbox.updateComplete;
 
       expect(checkbox.indeterminate).toBe(true);
 
@@ -290,7 +289,7 @@ describe("EaCheckbox Component", () => {
       checkbox.setAttribute("indeterminate", "");
       container.appendChild(checkbox);
 
-      await waitForRender();
+      await checkbox.updateComplete;
 
       const containerEl = checkbox.shadowRoot.querySelector(".ea-checkbox");
       expect(containerEl.classList.contains("is-indeterminate")).toBe(true);
@@ -348,7 +347,7 @@ describe("EaCheckbox Component", () => {
       checkbox.setAttribute("size", "large");
       container.appendChild(checkbox);
 
-      await waitForRender();
+      await checkbox.updateComplete;
 
       const containerEl = checkbox.shadowRoot.querySelector(".ea-checkbox");
       expect(containerEl.classList.contains("ea-checkbox--large")).toBe(true);
@@ -377,10 +376,10 @@ describe("EaCheckbox Component", () => {
       const checkbox = document.createElement("ea-checkbox");
       container.appendChild(checkbox);
 
-      await waitForRender();
+      await checkbox.updateComplete;
 
       checkbox.border = true;
-      await waitForRender();
+      await checkbox.updateComplete;
 
       expect(checkbox.border).toBe(true);
 
@@ -393,7 +392,7 @@ describe("EaCheckbox Component", () => {
       checkbox.setAttribute("border", "");
       container.appendChild(checkbox);
 
-      await waitForRender();
+      await checkbox.updateComplete;
 
       const containerEl = checkbox.shadowRoot.querySelector(".ea-checkbox");
       expect(containerEl.classList.contains("is-border")).toBe(true);
@@ -423,7 +422,7 @@ describe("EaCheckbox Component", () => {
       checkbox.setAttribute("limit-disabled", "");
       container.appendChild(checkbox);
 
-      await waitForRender();
+      await checkbox.updateComplete;
 
       const input = checkbox.shadowRoot.querySelector(".ea-checkbox__original");
       expect(input.disabled).toBe(true);
@@ -434,7 +433,7 @@ describe("EaCheckbox Component", () => {
       checkbox.setAttribute("limit-disabled", "");
       container.appendChild(checkbox);
 
-      await waitForRender();
+      await checkbox.updateComplete;
 
       const containerEl = checkbox.shadowRoot.querySelector(".ea-checkbox");
       expect(containerEl.classList.contains("is-limit-disabled")).toBe(true);
@@ -475,7 +474,7 @@ describe("EaCheckbox Component", () => {
       checkbox.setAttribute("value", "option1");
       container.appendChild(checkbox);
 
-      await waitForRender();
+      await checkbox.updateComplete;
 
       const input = checkbox.shadowRoot.querySelector(".ea-checkbox__original");
 
@@ -491,7 +490,7 @@ describe("EaCheckbox Component", () => {
       checkbox.setAttribute("value", "option1");
       container.appendChild(checkbox);
 
-      await waitForRender();
+      await checkbox.updateComplete;
 
       const handler = vi.fn();
       checkbox.addEventListener("change", handler);
@@ -500,7 +499,7 @@ describe("EaCheckbox Component", () => {
       input.checked = true;
       input.dispatchEvent(new Event("change", { bubbles: true }));
 
-      await waitForRender();
+      await checkbox.updateComplete;
 
       expect(handler).toHaveBeenCalled();
       expect(handler.mock.calls[0][0].detail).toEqual({
@@ -515,7 +514,7 @@ describe("EaCheckbox Component", () => {
       checkbox.setAttribute("checked", "");
       container.appendChild(checkbox);
 
-      await waitForRender();
+      await checkbox.updateComplete;
 
       const handler = vi.fn();
       checkbox.addEventListener("change", handler);
@@ -524,7 +523,7 @@ describe("EaCheckbox Component", () => {
       input.checked = false;
       input.dispatchEvent(new Event("change", { bubbles: true }));
 
-      await waitForRender();
+      await checkbox.updateComplete;
 
       expect(handler).toHaveBeenCalled();
       expect(handler.mock.calls[0][0].detail.checked).toBe(false);
@@ -535,14 +534,14 @@ describe("EaCheckbox Component", () => {
       checkbox.setAttribute("value", "option1");
       container.appendChild(checkbox);
 
-      await waitForRender();
+      await checkbox.updateComplete;
 
       const handler = vi.fn();
       checkbox.addEventListener("change", handler);
 
       checkbox.dispatchEvent(new KeyboardEvent("keydown", { key: " " }));
 
-      await waitForRender();
+      await checkbox.updateComplete;
 
       expect(handler).toHaveBeenCalled();
       expect(checkbox.checked).toBe(true);
@@ -554,7 +553,7 @@ describe("EaCheckbox Component", () => {
       const checkbox = document.createElement("ea-checkbox");
       container.appendChild(checkbox);
 
-      await waitForRender();
+      await checkbox.updateComplete;
 
       try {
         const result = checkbox.checkValidity();
@@ -570,7 +569,7 @@ describe("EaCheckbox Component", () => {
       checkbox.setAttribute("checked", "");
       container.appendChild(checkbox);
 
-      await waitForRender();
+      await checkbox.updateComplete;
 
       try {
         const result = checkbox.checkValidity();
@@ -585,7 +584,7 @@ describe("EaCheckbox Component", () => {
       checkbox.setAttribute("required", "");
       container.appendChild(checkbox);
 
-      await waitForRender();
+      await checkbox.updateComplete;
 
       try {
         const result = checkbox.checkValidity();
@@ -611,7 +610,7 @@ describe("EaCheckbox Component", () => {
       const checkbox = document.createElement("ea-checkbox");
       container.appendChild(checkbox);
 
-      await waitForRender();
+      await checkbox.updateComplete;
 
       checkbox.focus();
       const innerEl = checkbox.shadowRoot.querySelector(".ea-checkbox__inner");
@@ -622,10 +621,10 @@ describe("EaCheckbox Component", () => {
       const checkbox = document.createElement("ea-checkbox");
       container.appendChild(checkbox);
 
-      await waitForRender();
+      await checkbox.updateComplete;
 
       checkbox.focus();
-      await waitForRender();
+      await checkbox.updateComplete;
 
       checkbox.blur();
     });
@@ -635,13 +634,13 @@ describe("EaCheckbox Component", () => {
       checkbox.setAttribute("value", "option1");
       container.appendChild(checkbox);
 
-      await waitForRender();
+      await checkbox.updateComplete;
 
       const handler = vi.fn();
       checkbox.addEventListener("focus", handler);
 
       checkbox.focus();
-      await waitForRender();
+      await checkbox.updateComplete;
 
       expect(handler).toHaveBeenCalled();
       expect(handler.mock.calls[0][0].detail).toEqual({
@@ -655,16 +654,16 @@ describe("EaCheckbox Component", () => {
       checkbox.setAttribute("value", "option1");
       container.appendChild(checkbox);
 
-      await waitForRender();
+      await checkbox.updateComplete;
 
       checkbox.focus();
-      await waitForRender();
+      await checkbox.updateComplete;
 
       const handler = vi.fn();
       checkbox.addEventListener("blur", handler);
 
       checkbox.blur();
-      await waitForRender();
+      await checkbox.updateComplete;
 
       expect(handler).toHaveBeenCalled();
       expect(handler.mock.calls[0][0].detail).toEqual({
@@ -677,10 +676,10 @@ describe("EaCheckbox Component", () => {
       const checkbox = document.createElement("ea-checkbox");
       container.appendChild(checkbox);
 
-      await waitForRender();
+      await checkbox.updateComplete;
 
       checkbox.focus();
-      await waitForRender();
+      await checkbox.updateComplete;
 
       expect(document.activeElement).toBe(checkbox);
     });
@@ -689,13 +688,13 @@ describe("EaCheckbox Component", () => {
       const checkbox = document.createElement("ea-checkbox");
       container.appendChild(checkbox);
 
-      await waitForRender();
+      await checkbox.updateComplete;
 
       checkbox.focus();
-      await waitForRender();
+      await checkbox.updateComplete;
 
       checkbox.blur();
-      await waitForRender();
+      await checkbox.updateComplete;
 
       expect(document.activeElement).not.toBe(checkbox);
     });
@@ -706,12 +705,12 @@ describe("EaCheckbox Component", () => {
       const checkbox = document.createElement("ea-checkbox");
       container.appendChild(checkbox);
 
-      await waitForRender();
+      await checkbox.updateComplete;
 
       expect(checkbox.checked).toBe(false);
 
       checkbox.toggle();
-      await waitForRender();
+      await checkbox.updateComplete;
 
       expect(checkbox.checked).toBe(true);
 
@@ -724,13 +723,13 @@ describe("EaCheckbox Component", () => {
       checkbox.setAttribute("value", "option1");
       container.appendChild(checkbox);
 
-      await waitForRender();
+      await checkbox.updateComplete;
 
       const handler = vi.fn();
       checkbox.addEventListener("change", handler);
 
       checkbox.toggle();
-      await waitForRender();
+      await checkbox.updateComplete;
 
       expect(handler).toHaveBeenCalled();
       expect(handler.mock.calls[0][0].detail).toEqual({
@@ -743,14 +742,14 @@ describe("EaCheckbox Component", () => {
       const checkbox = document.createElement("ea-checkbox");
       container.appendChild(checkbox);
 
-      await waitForRender();
+      await checkbox.updateComplete;
 
       checkbox.toggle();
-      await waitForRender();
+      await checkbox.updateComplete;
       expect(checkbox.checked).toBe(true);
 
       checkbox.toggle();
-      await waitForRender();
+      await checkbox.updateComplete;
       expect(checkbox.checked).toBe(false);
 
       checkbox.toggle();
@@ -765,7 +764,7 @@ describe("EaCheckbox Component", () => {
       checkbox.setAttribute("disabled", "");
       container.appendChild(checkbox);
 
-      await waitForRender();
+      await checkbox.updateComplete;
 
       const containerEl = checkbox.shadowRoot.querySelector(".ea-checkbox");
       expect(containerEl.classList.contains("is-checked")).toBe(true);
@@ -778,7 +777,7 @@ describe("EaCheckbox Component", () => {
       checkbox.setAttribute("border", "");
       container.appendChild(checkbox);
 
-      await waitForRender();
+      await checkbox.updateComplete;
 
       const containerEl = checkbox.shadowRoot.querySelector(".ea-checkbox");
       expect(containerEl.classList.contains("is-checked")).toBe(true);
@@ -791,7 +790,7 @@ describe("EaCheckbox Component", () => {
       checkbox.setAttribute("disabled", "");
       container.appendChild(checkbox);
 
-      await waitForRender();
+      await checkbox.updateComplete;
 
       const containerEl = checkbox.shadowRoot.querySelector(".ea-checkbox");
       expect(containerEl.classList.contains("is-indeterminate")).toBe(true);
@@ -805,7 +804,7 @@ describe("EaCheckbox Component", () => {
       checkbox.setAttribute("border", "");
       container.appendChild(checkbox);
 
-      await waitForRender();
+      await checkbox.updateComplete;
 
       const containerEl = checkbox.shadowRoot.querySelector(".ea-checkbox");
       expect(containerEl.classList.contains("ea-checkbox--large")).toBe(true);
@@ -819,14 +818,14 @@ describe("EaCheckbox Component", () => {
       it("宿主元素应该有 role=checkbox", async () => {
         const el = document.createElement("ea-checkbox");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("role")).toBe("checkbox");
       });
 
       it("未选中时 aria-checked 应该为 false", async () => {
         const el = document.createElement("ea-checkbox");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-checked")).toBe("false");
       });
 
@@ -834,7 +833,7 @@ describe("EaCheckbox Component", () => {
         const el = document.createElement("ea-checkbox");
         el.setAttribute("checked", "");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-checked")).toBe("true");
       });
 
@@ -842,7 +841,7 @@ describe("EaCheckbox Component", () => {
         const el = document.createElement("ea-checkbox");
         el.setAttribute("indeterminate", "");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-checked")).toBe("mixed");
       });
 
@@ -850,7 +849,7 @@ describe("EaCheckbox Component", () => {
         const el = document.createElement("ea-checkbox");
         el.setAttribute("disabled", "");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-disabled")).toBe("true");
       });
 
@@ -858,14 +857,14 @@ describe("EaCheckbox Component", () => {
         const el = document.createElement("ea-checkbox");
         el.setAttribute("limit-disabled", "");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-disabled")).toBe("true");
       });
 
       it("非 disabled 且非 limit-disabled 时 aria-disabled 应该为 false", async () => {
         const el = document.createElement("ea-checkbox");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-disabled")).toBe("false");
       });
 
@@ -873,11 +872,11 @@ describe("EaCheckbox Component", () => {
         const el = document.createElement("ea-checkbox");
         el.setAttribute("disabled", "");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-disabled")).toBe("true");
 
         el.removeAttribute("disabled");
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-disabled")).toBe("false");
       });
 
@@ -885,14 +884,14 @@ describe("EaCheckbox Component", () => {
         const el = document.createElement("ea-checkbox");
         el.setAttribute("required", "");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-required")).toBe("true");
       });
 
       it("非 required 时 aria-required 应该为 false", async () => {
         const el = document.createElement("ea-checkbox");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-required")).toBe("false");
       });
     });
@@ -916,7 +915,7 @@ describe("EaCheckboxGroup Component", () => {
       const group = document.createElement("ea-checkbox-group");
       container.appendChild(group);
 
-      await waitForRender();
+      await group.updateComplete;
 
       expect(group).toBeDefined();
       expect(group.shadowRoot).toBeDefined();
@@ -956,7 +955,7 @@ describe("EaCheckboxGroup Component", () => {
       container.appendChild(group);
 
       group.setAttribute("label", "Group Label");
-      await waitForRender();
+      await group.updateComplete;
 
       expect(group.label).toBe("Group Label");
 
@@ -981,7 +980,7 @@ describe("EaCheckboxGroup Component", () => {
       const group = document.createElement("ea-checkbox-group");
       container.appendChild(group);
 
-      await waitForRender();
+      await group.updateComplete;
 
       expect(group.name).toBeTruthy();
       expect(group.name.length).toBeGreaterThan(0);
@@ -992,7 +991,7 @@ describe("EaCheckboxGroup Component", () => {
       group.setAttribute("name", "custom-name");
       container.appendChild(group);
 
-      await waitForRender();
+      await group.updateComplete;
 
       expect(group.name).toBe("custom-name");
     });
@@ -1005,7 +1004,7 @@ describe("EaCheckboxGroup Component", () => {
         <ea-checkbox label="B" value="b"></ea-checkbox>
       `;
       container.appendChild(group);
-      await waitForRender();
+      await group.updateComplete;
 
       const checkboxes = group.querySelectorAll("ea-checkbox");
       checkboxes.forEach(checkbox => {
@@ -1019,7 +1018,7 @@ describe("EaCheckboxGroup Component", () => {
       const group = document.createElement("ea-checkbox-group");
       container.appendChild(group);
 
-      await waitForRender();
+      await group.updateComplete;
 
       expect(Array.isArray(group.value)).toBe(true);
       expect(group.value.length).toBe(0);
@@ -1040,7 +1039,7 @@ describe("EaCheckboxGroup Component", () => {
         <ea-checkbox label="B" value="b"></ea-checkbox>
       `;
       container.appendChild(group);
-      await waitForRender();
+      await group.updateComplete;
 
       const checkboxA = group.querySelector('ea-checkbox[value="a"]');
 
@@ -1068,10 +1067,10 @@ describe("EaCheckboxGroup Component", () => {
       `;
       container.appendChild(group);
 
-      await waitForRender();
+      await group.updateComplete;
 
       group.disabled = true;
-      await waitForRender();
+      await group.updateComplete;
 
       const checkboxes = group.querySelectorAll("ea-checkbox");
       checkboxes.forEach(checkbox => {
@@ -1087,13 +1086,13 @@ describe("EaCheckboxGroup Component", () => {
       `;
       container.appendChild(group);
 
-      await waitForRender();
+      await group.updateComplete;
 
       group.disabled = true;
-      await waitForRender();
+      await group.updateComplete;
 
       group.disabled = false;
-      await waitForRender();
+      await group.updateComplete;
 
       const checkboxes = group.querySelectorAll("ea-checkbox");
       checkboxes.forEach(checkbox => {
@@ -1119,7 +1118,7 @@ describe("EaCheckboxGroup Component", () => {
       container.appendChild(group);
 
       group.setAttribute("size", "large");
-      await waitForRender();
+      await group.updateComplete;
 
       const checkboxes = group.querySelectorAll("ea-checkbox");
       checkboxes.forEach(checkbox => {
@@ -1159,7 +1158,7 @@ describe("EaCheckboxGroup Component", () => {
       const group = document.createElement("ea-checkbox-group");
       container.appendChild(group);
 
-      await waitForRender();
+      await group.updateComplete;
 
       group.setAttribute("min", "1");
       group.innerHTML = `
@@ -1167,8 +1166,8 @@ describe("EaCheckboxGroup Component", () => {
         <ea-checkbox label="B" value="b"></ea-checkbox>
       `;
 
-      await waitForRender();
-      await waitForRender();
+      await group.updateComplete;
+      await group.updateComplete;
 
       const checkedCheckbox = group.querySelector('ea-checkbox[checked=""]');
 
@@ -1183,7 +1182,7 @@ describe("EaCheckboxGroup Component", () => {
       const group = document.createElement("ea-checkbox-group");
       container.appendChild(group);
 
-      await waitForRender();
+      await group.updateComplete;
 
       group.setAttribute("max", "1");
       group.innerHTML = `
@@ -1224,7 +1223,7 @@ describe("EaCheckboxGroup Component", () => {
         <ea-checkbox label="B" value="b"></ea-checkbox>
       `;
       container.appendChild(group);
-      await waitForRender();
+      await group.updateComplete;
 
       try {
         const result = group.checkValidity();
@@ -1241,14 +1240,14 @@ describe("EaCheckboxGroup Component", () => {
       group.setAttribute("name", "test-group");
       container.appendChild(group);
 
-      await waitForRender();
+      await group.updateComplete;
 
       group.innerHTML = `
         <ea-checkbox label="A" value="a"></ea-checkbox>
       `;
 
-      await waitForRender();
-      await waitForRender();
+      await group.updateComplete;
+      await group.updateComplete;
 
       const checkbox = group.querySelector("ea-checkbox");
       expect(checkbox).not.toBeNull();
@@ -1265,7 +1264,7 @@ describe("EaCheckboxGroup Component", () => {
       `;
       container.appendChild(group);
 
-      await waitForRender();
+      await group.updateComplete;
 
       group.setAttribute("label", "Test Group");
       group.setAttribute("size", "large");
@@ -1285,7 +1284,7 @@ describe("EaCheckboxGroup Component", () => {
         <ea-checkbox label="B" value="b"></ea-checkbox>
       `;
       container.appendChild(group);
-      await waitForRender();
+      await group.updateComplete;
 
       group.formResetCallback();
 
@@ -1298,7 +1297,7 @@ describe("EaCheckboxGroup Component", () => {
       const el = document.createElement("ea-checkbox");
       el.setAttribute("label", "Checkbox");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el, { rules: { "nested-interactive": { enabled: false } } });
       assertNoA11yViolations(results);
     });
@@ -1308,7 +1307,7 @@ describe("EaCheckboxGroup Component", () => {
       el.setAttribute("label", "Checkbox");
       el.setAttribute("disabled", "");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el, { rules: { "nested-interactive": { enabled: false } } });
       assertNoA11yViolations(results);
     });

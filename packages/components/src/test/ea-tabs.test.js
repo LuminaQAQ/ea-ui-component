@@ -2,7 +2,6 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 
 Element.prototype.scrollTo = Element.prototype.scrollTo || function () {};
 
-import { waitForRender } from "./utils/waitForRender.js";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 import "../components/ea-tabs/index.ts";
@@ -56,7 +55,7 @@ describe("EaTabs", () => {
     it("应该包含所有必需的 CSS Parts", async () => {
       const tabs = createTabs();
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       const parts = [
         "container",
@@ -75,7 +74,7 @@ describe("EaTabs", () => {
     it("应该包含 nav slot", async () => {
       const tabs = createTabs();
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       const navSlot = tabs.shadowRoot.querySelector('slot[name="nav"]');
       expect(navSlot).toBeTruthy();
@@ -94,7 +93,7 @@ describe("EaTabs", () => {
     it("应该正确渲染导航按钮图标", async () => {
       const tabs = createTabs();
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       const prevBtn = tabs.shadowRoot.querySelector('[part="prev"]');
       const nextBtn = tabs.shadowRoot.querySelector('[part="next"]');
@@ -117,7 +116,7 @@ describe("EaTabs", () => {
     it("设置 type='card' 应该更新类名", async () => {
       const tabs = createTabs({ type: "card" });
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       expect(tabs.type).toBe("card");
 
@@ -128,7 +127,7 @@ describe("EaTabs", () => {
     it("设置 type='border-card' 应该更新类名", async () => {
       const tabs = createTabs({ type: "border-card" });
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       expect(tabs.type).toBe("border-card");
 
@@ -139,10 +138,10 @@ describe("EaTabs", () => {
     it("type 改变时应该同步到子组件 ea-tab", async () => {
       const tabs = createTabs({ type: "" });
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       tabs.type = "card";
-      await waitForRender();
+      await tabs.updateComplete;
 
       const tabEls = tabs.querySelectorAll("ea-tab");
       tabEls.forEach(tab => {
@@ -153,10 +152,10 @@ describe("EaTabs", () => {
     it("type 改变时应该同步到子组件 ea-tab-panel", async () => {
       const tabs = createTabs({ type: "" });
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       tabs.type = "border-card";
-      await waitForRender();
+      await tabs.updateComplete;
 
       const panelEls = tabs.querySelectorAll("ea-tab-panel");
       panelEls.forEach(panel => {
@@ -167,7 +166,7 @@ describe("EaTabs", () => {
     it("BEM 类名不应该重复", async () => {
       const tabs = createTabs({ type: "border-card" });
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       const containerEl = tabs.shadowRoot.querySelector('[part="container"]');
       const className = containerEl.className;
@@ -179,7 +178,7 @@ describe("EaTabs", () => {
     it("type 为空时不应该添加类型修饰符", async () => {
       const tabs = createTabs({ type: "" });
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       const containerEl = tabs.shadowRoot.querySelector('[part="container"]');
       const className = containerEl.className;
@@ -198,7 +197,7 @@ describe("EaTabs", () => {
     it("$mount 时如果没有设置 active，应该自动选择第一个 tab", async () => {
       const tabs = createTabs();
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       expect(tabs.active).toBe("panel0");
     });
@@ -206,7 +205,7 @@ describe("EaTabs", () => {
     it("如果设置了 active 属性，应该保持该值", async () => {
       const tabs = createTabs({ active: "panel1" });
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       expect(tabs.active).toBe("panel1");
     });
@@ -214,7 +213,7 @@ describe("EaTabs", () => {
     it("设置 active 应该激活对应的 tab 和 panel", async () => {
       const tabs = createTabs({ active: "panel1" });
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       const activeTab = tabs.querySelector('ea-tab[panel="panel1"]');
       const inactiveTab = tabs.querySelector('ea-tab[panel="panel0"]');
@@ -230,7 +229,7 @@ describe("EaTabs", () => {
     it("切换 active 应该触发 ea-tabs-change 事件", async () => {
       const tabs = createTabs({ active: "panel0" });
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       let eventFired = false;
       let eventData = null;
@@ -241,7 +240,7 @@ describe("EaTabs", () => {
       });
 
       tabs.active = "panel1";
-      await waitForRender();
+      await tabs.updateComplete;
 
       expect(eventFired).toBe(true);
       expect(eventData.name).toBe("panel1");
@@ -250,7 +249,7 @@ describe("EaTabs", () => {
     it("切换 active 应该触发 EaTabsChangeEvent 实例", async () => {
       const tabs = createTabs({ active: "panel0" });
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       let eventInstance = null;
 
@@ -259,7 +258,7 @@ describe("EaTabs", () => {
       });
 
       tabs.active = "panel1";
-      await waitForRender();
+      await tabs.updateComplete;
 
       expect(eventInstance).toBeDefined();
       expect(eventInstance.constructor.name).toBe("EaTabsChangeEvent");
@@ -270,7 +269,7 @@ describe("EaTabs", () => {
     it("active 为不存在的 panel 名称时不应该报错", async () => {
       const tabs = createTabs({ active: "nonexistent" });
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       const allTabs = tabs.querySelectorAll("ea-tab[active]");
       expect(allTabs.length).toBe(0);
@@ -288,7 +287,7 @@ describe("EaTabs", () => {
     it("支持 top 方向", async () => {
       const tabs = createTabs({ tabPosition: "top" });
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       expect(tabs.tabPosition).toBe("top");
 
@@ -299,7 +298,7 @@ describe("EaTabs", () => {
     it("支持 bottom 方向", async () => {
       const tabs = createTabs({ tabPosition: "bottom" });
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       expect(tabs.tabPosition).toBe("bottom");
 
@@ -310,7 +309,7 @@ describe("EaTabs", () => {
     it("支持 left 方向", async () => {
       const tabs = createTabs({ tabPosition: "left" });
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       expect(tabs.tabPosition).toBe("left");
 
@@ -321,7 +320,7 @@ describe("EaTabs", () => {
     it("支持 right 方向", async () => {
       const tabs = createTabs({ tabPosition: "right" });
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       expect(tabs.tabPosition).toBe("right");
 
@@ -332,10 +331,10 @@ describe("EaTabs", () => {
     it("tabPosition 改变时应该同步到子组件 ea-tab", async () => {
       const tabs = createTabs({ tabPosition: "top" });
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       tabs.tabPosition = "left";
-      await waitForRender();
+      await tabs.updateComplete;
 
       const tabEls = tabs.querySelectorAll("ea-tab");
       tabEls.forEach(tab => {
@@ -346,10 +345,10 @@ describe("EaTabs", () => {
     it("tabPosition 改变时应该同步到子组件 ea-tab-panel", async () => {
       const tabs = createTabs({ tabPosition: "top" });
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       tabs.tabPosition = "bottom";
-      await waitForRender();
+      await tabs.updateComplete;
 
       const panelEls = tabs.querySelectorAll("ea-tab-panel");
       panelEls.forEach(panel => {
@@ -360,7 +359,7 @@ describe("EaTabs", () => {
     it("垂直方向（left/right）应该改变导航按钮图标为箭头", async () => {
       const tabs = createTabs({ tabPosition: "left" });
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       const prevBtn = tabs.shadowRoot.querySelector('[part="prev"]');
       const nextBtn = tabs.shadowRoot.querySelector('[part="next"]');
@@ -372,7 +371,7 @@ describe("EaTabs", () => {
     it("水平方向（top/bottom）应该使用上下箭头图标", async () => {
       const tabs = createTabs({ tabPosition: "top" });
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       const prevBtn = tabs.shadowRoot.querySelector('[part="prev"]');
       const nextBtn = tabs.shadowRoot.querySelector('[part="next"]');
@@ -393,7 +392,7 @@ describe("EaTabs", () => {
     it("设置 editable=true 应该给所有 tab 添加 editable 属性", async () => {
       const tabs = createTabs({ editable: true });
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       expect(tabs.editable).toBe(true);
 
@@ -406,10 +405,10 @@ describe("EaTabs", () => {
     it("动态修改 editable 应该同步到子组件", async () => {
       const tabs = createTabs({ editable: false });
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       tabs.editable = true;
-      await waitForRender();
+      await tabs.updateComplete;
 
       const tabEls = tabs.querySelectorAll("ea-tab");
       tabEls.forEach(tab => {
@@ -420,7 +419,7 @@ describe("EaTabs", () => {
     it("editable=true 时 tab 应该显示关闭图标（is-closable 类）", async () => {
       const tabs = createTabs({ editable: true });
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       const tabEls = tabs.querySelectorAll("ea-tab");
       tabEls.forEach(tab => {
@@ -435,7 +434,7 @@ describe("EaTabs", () => {
       it("点击 tab 应该触发 ea-tab-click 事件", async () => {
         const tabs = createTabs({ active: "panel0" });
         container.appendChild(tabs);
-        await waitForRender();
+        await tabs.updateComplete;
 
         let eventDetail = null;
         let eventFired = false;
@@ -447,8 +446,11 @@ describe("EaTabs", () => {
 
         const tab = tabs.querySelector('ea-tab[panel="panel1"]');
         if (tab) {
+          await vi.waitFor(() => {
+            expect(tab.getAttribute("slot")).toBe("nav");
+          });
           tab.click();
-          await waitForRender();
+          await tabs.updateComplete;
         }
 
         expect(eventFired).toBe(true);
@@ -459,7 +461,7 @@ describe("EaTabs", () => {
       it("ea-tab-click 事件应该是 EaTabClickEvent 实例", async () => {
         const tabs = createTabs({ active: "panel0" });
         container.appendChild(tabs);
-        await waitForRender();
+        await tabs.updateComplete;
 
         let eventInstance = null;
 
@@ -469,8 +471,11 @@ describe("EaTabs", () => {
 
         const tab = tabs.querySelector('ea-tab[panel="panel1"]');
         if (tab) {
+          await vi.waitFor(() => {
+            expect(tab.getAttribute("slot")).toBe("nav");
+          });
           tab.click();
-          await waitForRender();
+          await tabs.updateComplete;
         }
 
         expect(eventInstance).toBeDefined();
@@ -494,7 +499,7 @@ describe("EaTabs", () => {
         tabs.insertBefore(disabledPanel, tabs.firstChild);
 
         container.appendChild(tabs);
-        await waitForRender();
+        await disabledPanel.updateComplete;
 
         const originalActive = tabs.active;
         let eventFired = false;
@@ -504,7 +509,7 @@ describe("EaTabs", () => {
         });
 
         disabledTab.click();
-        await waitForRender();
+        await disabledPanel.updateComplete;
 
         expect(tabs.active).toBe(originalActive);
         expect(eventFired).toBe(false);
@@ -513,12 +518,15 @@ describe("EaTabs", () => {
       it("点击 tab 后 active 应该更新为新 tab 的 panel 值", async () => {
         const tabs = createTabs({ active: "panel0" });
         container.appendChild(tabs);
-        await waitForRender();
+        await tabs.updateComplete;
 
         const tab = tabs.querySelector('ea-tab[panel="panel1"]');
         if (tab) {
+          await vi.waitFor(() => {
+            expect(tab.getAttribute("slot")).toBe("nav");
+          });
           tab.click();
-          await waitForRender();
+          await tabs.updateComplete;
         }
 
         expect(tabs.active).toBe("panel1");
@@ -533,7 +541,7 @@ describe("EaTabs", () => {
           active: "panel0",
         });
         container.appendChild(tabs);
-        await waitForRender();
+        await tabs.updateComplete;
 
         let removeEventFired = false;
         let removedName = null;
@@ -550,7 +558,7 @@ describe("EaTabs", () => {
           );
           if (closeIcon) {
             closeIcon.click();
-            await waitForRender();
+            await tabs.updateComplete;
           }
         }
 
@@ -565,7 +573,7 @@ describe("EaTabs", () => {
           active: "panel0",
         });
         container.appendChild(tabs);
-        await waitForRender();
+        await tabs.updateComplete;
 
         let eventInstance = null;
 
@@ -580,7 +588,7 @@ describe("EaTabs", () => {
           );
           if (closeIcon) {
             closeIcon.click();
-            await waitForRender();
+            await tabs.updateComplete;
           }
         }
 
@@ -597,7 +605,7 @@ describe("EaTabs", () => {
           active: "panel0",
         });
         container.appendChild(tabs);
-        await waitForRender();
+        await tabs.updateComplete;
 
         const initialTabCount = tabs.querySelectorAll("ea-tab").length;
         const initialPanelCount = tabs.querySelectorAll("ea-tab-panel").length;
@@ -609,7 +617,7 @@ describe("EaTabs", () => {
           );
           if (closeIcon) {
             closeIcon.click();
-            await waitForRender();
+            await tabs.updateComplete;
           }
         }
 
@@ -628,7 +636,7 @@ describe("EaTabs", () => {
           active: "panel1",
         });
         container.appendChild(tabs);
-        await waitForRender();
+        await tabs.updateComplete;
 
         const secondTab = tabs.querySelector('ea-tab[panel="panel1"]');
         if (secondTab && secondTab.shadowRoot) {
@@ -637,7 +645,7 @@ describe("EaTabs", () => {
           );
           if (closeIcon) {
             closeIcon.click();
-            await waitForRender();
+            await tabs.updateComplete;
           }
         }
 
@@ -651,7 +659,7 @@ describe("EaTabs", () => {
           active: "panel0",
         });
         container.appendChild(tabs);
-        await waitForRender();
+        await tabs.updateComplete;
 
         const firstTab = tabs.querySelector('ea-tab[panel="panel0"]');
         if (firstTab && firstTab.shadowRoot) {
@@ -660,7 +668,7 @@ describe("EaTabs", () => {
           );
           if (closeIcon) {
             closeIcon.click();
-            await waitForRender();
+            await tabs.updateComplete;
           }
         }
 
@@ -674,7 +682,7 @@ describe("EaTabs", () => {
           active: "panel0",
         });
         container.appendChild(tabs);
-        await waitForRender();
+        await tabs.updateComplete;
 
         const thirdTab = tabs.querySelector('ea-tab[panel="panel2"]');
         if (thirdTab && thirdTab.shadowRoot) {
@@ -683,7 +691,7 @@ describe("EaTabs", () => {
           );
           if (closeIcon) {
             closeIcon.click();
-            await waitForRender();
+            await tabs.updateComplete;
           }
         }
 
@@ -695,7 +703,7 @@ describe("EaTabs", () => {
       it("点击 prev 按钮应该调用 scrollTo", async () => {
         const tabs = createTabs();
         container.appendChild(tabs);
-        await waitForRender();
+        await tabs.updateComplete;
 
         const prevBtn = tabs.shadowRoot.querySelector('[part="prev"]');
         const navEl = tabs.shadowRoot.querySelector('[part="nav"]');
@@ -703,7 +711,7 @@ describe("EaTabs", () => {
         const scrollToSpy = vi.spyOn(navEl, "scrollTo");
 
         prevBtn.click();
-        await waitForRender();
+        await tabs.updateComplete;
 
         expect(scrollToSpy).toHaveBeenCalled();
       });
@@ -711,7 +719,7 @@ describe("EaTabs", () => {
       it("点击 next 按钮应该调用 scrollTo", async () => {
         const tabs = createTabs();
         container.appendChild(tabs);
-        await waitForRender();
+        await tabs.updateComplete;
 
         const nextBtn = tabs.shadowRoot.querySelector('[part="next"]');
         const navEl = tabs.shadowRoot.querySelector('[part="nav"]');
@@ -719,7 +727,7 @@ describe("EaTabs", () => {
         const scrollToSpy = vi.spyOn(navEl, "scrollTo");
 
         nextBtn.click();
-        await waitForRender();
+        await tabs.updateComplete;
 
         expect(scrollToSpy).toHaveBeenCalled();
       });
@@ -730,7 +738,7 @@ describe("EaTabs", () => {
     it("动态添加 tab 应该自动设置 slot='nav'", async () => {
       const tabs = createTabs();
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       const newTab = document.createElement("ea-tab");
       newTab.setAttribute("panel", "new-panel");
@@ -742,75 +750,75 @@ describe("EaTabs", () => {
       newPanel.textContent = "New Content";
       tabs.appendChild(newPanel);
 
-      await waitForRender();
-
-      expect(newTab.getAttribute("slot")).toBe("nav");
+      await vi.waitFor(() => {
+        expect(newTab.getAttribute("slot")).toBe("nav");
+      });
     });
 
     it("动态添加 tab 应该继承父组件的 type 属性", async () => {
       const tabs = createTabs({ type: "card" });
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       const newTab = document.createElement("ea-tab");
       newTab.setAttribute("panel", "dynamic-panel");
       newTab.textContent = "Dynamic Tab";
       tabs.appendChild(newTab);
 
-      await waitForRender();
-
-      expect(newTab.getAttribute("type")).toBe("card");
+      await vi.waitFor(() => {
+        expect(newTab.getAttribute("type")).toBe("card");
+      });
     });
 
     it("动态添加 tab 应该继承父组件的 tab-position 属性", async () => {
       const tabs = createTabs({ tabPosition: "left" });
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       const newTab = document.createElement("ea-tab");
       newTab.setAttribute("panel", "dynamic-panel");
       newTab.textContent = "Dynamic Tab";
       tabs.appendChild(newTab);
 
-      await waitForRender();
-
-      expect(newTab.getAttribute("tab-position")).toBe("left");
+      await vi.waitFor(() => {
+        expect(newTab.getAttribute("tab-position")).toBe("left");
+      });
     });
 
     it("动态添加 tab-panel 应该继承父组件的 type 属性", async () => {
       const tabs = createTabs({ type: "border-card" });
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       const newPanel = document.createElement("ea-tab-panel");
       newPanel.setAttribute("name", "dynamic-panel");
       newPanel.textContent = "Dynamic Content";
       tabs.appendChild(newPanel);
 
-      await waitForRender();
-
-      expect(newPanel.getAttribute("type")).toBe("border-card");
+      await vi.waitFor(() => {
+        expect(newPanel.getAttribute("type")).toBe("border-card");
+      });
     });
 
     it("动态添加 tab-panel 应该继承父组件的 tab-position 属性", async () => {
       const tabs = createTabs({ tabPosition: "right" });
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       const newPanel = document.createElement("ea-tab-panel");
       newPanel.setAttribute("name", "dynamic-panel");
       newPanel.textContent = "Dynamic Content";
       tabs.appendChild(newPanel);
 
-      await waitForRender();
-
-      expect(newPanel.getAttribute("tab-position")).toBe("right");
+      await vi.waitFor(() => {
+        expect(newPanel.getAttribute("tab-position")).toBe("right");
+      });
     });
 
     it("快速连续添加多个 tab 应该正确处理（防抖）", async () => {
       const tabs = createTabs({ type: "card" });
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       for (let i = 0; i < 5; i++) {
         const tab = document.createElement("ea-tab");
@@ -824,8 +832,11 @@ describe("EaTabs", () => {
         tabs.appendChild(panel);
       }
 
-      await waitForRender();
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await vi.waitFor(() => {
+        tabs.querySelectorAll("ea-tab").forEach(tab => {
+          expect(tab.getAttribute("slot")).toBe("nav");
+        });
+      });
 
       const allTabs = tabs.querySelectorAll("ea-tab");
       allTabs.forEach(tab => {
@@ -839,7 +850,7 @@ describe("EaTabs", () => {
     it("动态删除 tab 应该更新其他 tab 的状态", async () => {
       const tabs = createTabs({ active: "panel1", editable: true });
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       const tab0 = tabs.querySelector('ea-tab[panel="panel0"]');
       if (tab0) {
@@ -851,7 +862,7 @@ describe("EaTabs", () => {
         panel0.remove();
       }
 
-      await waitForRender();
+      await tabs.updateComplete;
 
       expect(tabs.querySelectorAll("ea-tab").length).toBe(1);
       expect(tabs.querySelectorAll("ea-tab-panel").length).toBe(1);
@@ -862,7 +873,7 @@ describe("EaTabs", () => {
     it("updateContainerClasslist 应该返回类名字符串", async () => {
       const tabs = createTabs();
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       const className = tabs.updateContainerClasslist();
       expect(typeof className).toBe("string");
@@ -872,7 +883,7 @@ describe("EaTabs", () => {
     it("updateContainerClasslist 应该包含正确的 BEM 结构", async () => {
       const tabs = createTabs({ type: "card", tabPosition: "top" });
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       const className = tabs.updateContainerClasslist();
 
@@ -886,7 +897,7 @@ describe("EaTabs", () => {
     it("$mount 应该初始化 ResizeObserver", async () => {
       const tabs = createTabs();
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       const navEl = tabs.shadowRoot.querySelector('[part="nav"]');
       expect(navEl).toBeTruthy();
@@ -895,7 +906,7 @@ describe("EaTabs", () => {
     it("$beforeUnmount 应该清理定时器和观察器", async () => {
       const tabs = createTabs();
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       tabs.remove();
 
@@ -905,7 +916,7 @@ describe("EaTabs", () => {
     it("空组件（无子元素）不应该报错", async () => {
       const tabs = document.createElement("ea-tabs");
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       expect(tabs.shadowRoot).toBeDefined();
       expect(tabs.active).toBe("");
@@ -938,7 +949,7 @@ describe("EaTabs", () => {
         tab.setAttribute("panel", "test");
         tab.textContent = "Hello World";
         container.appendChild(tab);
-        await waitForRender();
+        await tab.updateComplete;
 
         expect(tab.textContent).toContain("Hello World");
       });
@@ -948,7 +959,7 @@ describe("EaTabs", () => {
       it("panel 属性应该可读写", async () => {
         const tab = document.createElement("ea-tab");
         container.appendChild(tab);
-        await waitForRender();
+        await tab.updateComplete;
 
         expect(tab.panel).toBe("");
 
@@ -961,7 +972,7 @@ describe("EaTabs", () => {
         tab.setAttribute("panel", "test");
         tab.setAttribute("type", "card");
         container.appendChild(tab);
-        await waitForRender();
+        await tab.updateComplete;
 
         const containerEl = tab.shadowRoot.querySelector('[part="container"]');
         expect(containerEl.className).toContain("ea-tab--card");
@@ -972,7 +983,7 @@ describe("EaTabs", () => {
         tab.setAttribute("panel", "test");
         tab.disabled = true;
         container.appendChild(tab);
-        await waitForRender();
+        await tab.updateComplete;
 
         const containerEl = tab.shadowRoot.querySelector('[part="container"]');
         expect(containerEl.className).toContain("is-disabled");
@@ -983,7 +994,7 @@ describe("EaTabs", () => {
         tab.setAttribute("panel", "test");
         tab.active = true;
         container.appendChild(tab);
-        await waitForRender();
+        await tab.updateComplete;
 
         const containerEl = tab.shadowRoot.querySelector('[part="container"]');
         expect(containerEl.className).toContain("is-active");
@@ -994,7 +1005,7 @@ describe("EaTabs", () => {
         tab.setAttribute("panel", "test");
         tab.tabPosition = "left";
         container.appendChild(tab);
-        await waitForRender();
+        await tab.updateComplete;
 
         const containerEl = tab.shadowRoot.querySelector('[part="container"]');
         expect(containerEl.className).toContain("ea-tab--left");
@@ -1005,7 +1016,7 @@ describe("EaTabs", () => {
         tab.setAttribute("panel", "test");
         tab.editable = true;
         container.appendChild(tab);
-        await waitForRender();
+        await tab.updateComplete;
 
         const containerEl = tab.shadowRoot.querySelector('[part="container"]');
         expect(containerEl.className).toContain("is-closable");
@@ -1016,7 +1027,7 @@ describe("EaTabs", () => {
         tab.setAttribute("panel", "test");
         tab.closable = true;
         container.appendChild(tab);
-        await waitForRender();
+        await tab.updateComplete;
 
         const containerEl = tab.shadowRoot.querySelector('[part="container"]');
         expect(containerEl.className).toContain("is-closable");
@@ -1027,7 +1038,7 @@ describe("EaTabs", () => {
       it("第一个 tab 应该有 is-first 类", async () => {
         const tabs = createTabs();
         container.appendChild(tabs);
-        await waitForRender();
+        await tabs.updateComplete;
 
         const firstTab = tabs.querySelector("ea-tab");
         const containerEl =
@@ -1038,7 +1049,7 @@ describe("EaTabs", () => {
       it("最后一个 tab 应该有 is-last 类", async () => {
         const tabs = createTabs({ tabCount: 3 });
         container.appendChild(tabs);
-        await waitForRender();
+        await tabs.updateComplete;
 
         const allTabs = tabs.querySelectorAll("ea-tab");
         const lastTab = allTabs[allTabs.length - 1];
@@ -1050,7 +1061,7 @@ describe("EaTabs", () => {
       it("中间的 tab 不应该有 is-first 或 is-last 类", async () => {
         const tabs = createTabs({ tabCount: 4 });
         container.appendChild(tabs);
-        await waitForRender();
+        await tabs.updateComplete;
 
         const middleTab = tabs.querySelectorAll("ea-tab")[1];
         const containerEl =
@@ -1062,7 +1073,7 @@ describe("EaTabs", () => {
       it("只有一个 tab 时应该同时有 is-first 和 is-last 类", async () => {
         const tabs = createTabs({ tabCount: 1 });
         container.appendChild(tabs);
-        await waitForRender();
+        await tabs.updateComplete;
 
         const onlyTab = tabs.querySelector("ea-tab");
         const containerEl =
@@ -1077,7 +1088,7 @@ describe("EaTabs", () => {
         const tab = document.createElement("ea-tab");
         tab.setAttribute("panel", "test");
         container.appendChild(tab);
-        await waitForRender();
+        await tab.updateComplete;
 
         let eventFired = false;
         let eventDetail = null;
@@ -1090,7 +1101,7 @@ describe("EaTabs", () => {
         const closeIcon = tab.shadowRoot.querySelector('[part="close-icon"]');
         if (closeIcon) {
           closeIcon.click();
-          await waitForRender();
+          await tab.updateComplete;
         }
 
         expect(eventFired).toBe(true);
@@ -1124,7 +1135,7 @@ describe("EaTabs", () => {
         panel.setAttribute("name", "test");
         panel.innerHTML = "<p>Panel Content</p>";
         container.appendChild(panel);
-        await waitForRender();
+        await panel.updateComplete;
 
         expect(panel.innerHTML).toContain("<p>Panel Content</p>");
       });
@@ -1134,7 +1145,7 @@ describe("EaTabs", () => {
       it("name 属性应该可读写", async () => {
         const panel = document.createElement("ea-tab-panel");
         container.appendChild(panel);
-        await waitForRender();
+        await panel.updateComplete;
 
         expect(panel.name).toBe("");
 
@@ -1147,7 +1158,7 @@ describe("EaTabs", () => {
         panel.setAttribute("name", "test");
         panel.setAttribute("type", "card");
         container.appendChild(panel);
-        await waitForRender();
+        await panel.updateComplete;
 
         const containerEl =
           panel.shadowRoot.querySelector('[part="container"]');
@@ -1159,7 +1170,7 @@ describe("EaTabs", () => {
         panel.setAttribute("name", "test");
         panel.setAttribute("type", "border-card");
         container.appendChild(panel);
-        await waitForRender();
+        await panel.updateComplete;
 
         const containerEl =
           panel.shadowRoot.querySelector('[part="container"]');
@@ -1170,7 +1181,7 @@ describe("EaTabs", () => {
         const panel = document.createElement("ea-tab-panel");
         panel.setAttribute("name", "test");
         container.appendChild(panel);
-        await waitForRender();
+        await panel.updateComplete;
 
         const containerEl =
           panel.shadowRoot.querySelector('[part="container"]');
@@ -1185,7 +1196,7 @@ describe("EaTabs", () => {
       it("active 属性应该通过父组件设置", async () => {
         const tabs = createTabs({ active: "panel0" });
         container.appendChild(tabs);
-        await waitForRender();
+        await tabs.updateComplete;
 
         const activePanel = tabs.querySelector('ea-tab-panel[name="panel0"]');
         const inactivePanel = tabs.querySelector('ea-tab-panel[name="panel1"]');
@@ -1197,10 +1208,10 @@ describe("EaTabs", () => {
       it("切换 active 应该更新 panel 的 active 属性", async () => {
         const tabs = createTabs({ active: "panel0" });
         container.appendChild(tabs);
-        await waitForRender();
+        await tabs.updateComplete;
 
         tabs.active = "panel1";
-        await waitForRender();
+        await tabs.updateComplete;
 
         const previouslyActivePanel = tabs.querySelector(
           'ea-tab-panel[name="panel0"]'
@@ -1220,7 +1231,7 @@ describe("EaTabs", () => {
       const tabs = document.createElement("ea-tabs");
       tabs.innerHTML = `<ea-tab panel="only-tab">Only Tab</ea-tab>`;
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       expect(tabs.shadowRoot).toBeDefined();
       expect(tabs.querySelectorAll("ea-tab").length).toBe(1);
@@ -1230,7 +1241,7 @@ describe("EaTabs", () => {
       const tabs = document.createElement("ea-tabs");
       tabs.innerHTML = `<ea-tab-panel name="only-panel">Only Panel</ea-tab-panel>`;
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       expect(tabs.shadowRoot).toBeDefined();
       expect(tabs.querySelectorAll("ea-tab-panel").length).toBe(1);
@@ -1255,7 +1266,7 @@ describe("EaTabs", () => {
 
       tabs.innerHTML = innerHTML;
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       expect(tabs.querySelectorAll("ea-tab").length).toBe(10);
       expect(tabs.querySelectorAll("ea-tab-panel").length).toBe(10);
@@ -1271,7 +1282,7 @@ describe("EaTabs", () => {
         <ea-tab-panel name="same">Content 2</ea-tab-panel>
       `;
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       const activeTabs = tabs.querySelectorAll("ea-tab[active]");
       expect(activeTabs.length).toBe(2);
@@ -1284,7 +1295,7 @@ describe("EaTabs", () => {
         <ea-tab-panel name="panel-with-special-chars_123">Special Content</ea-tab-panel>
       `;
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       expect(tabs.active).toBe("panel-with-special-chars_123");
     });
@@ -1292,13 +1303,13 @@ describe("EaTabs", () => {
     it("频繁切换 active 不应该导致错误", async () => {
       const tabs = createTabs({ tabCount: 5 });
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       for (let i = 0; i < 10; i++) {
         tabs.active = `panel${i % 5}`;
       }
 
-      await waitForRender();
+      await tabs.updateComplete;
 
       expect(tabs.active).toBe("panel4");
     });
@@ -1306,14 +1317,14 @@ describe("EaTabs", () => {
     it("在 editable=false 时点击关闭图标不应该触发删除", async () => {
       const tabs = createTabs({ editable: false, tabCount: 2 });
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       const initialTabCount = tabs.querySelectorAll("ea-tab").length;
 
       const closeIcon = tabs.querySelector(".ea-tab__close-icon");
       if (closeIcon) {
         closeIcon.click();
-        await waitForRender();
+        await tabs.updateComplete;
       }
 
       expect(tabs.querySelectorAll("ea-tab").length).toBe(initialTabCount);
@@ -1336,7 +1347,7 @@ describe("EaTabs", () => {
     it("通过 JavaScript 属性设置 type 应该反映到 HTML 属性", async () => {
       const tabs = createTabs();
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       tabs.type = "border-card";
 
@@ -1351,7 +1362,7 @@ describe("EaTabs", () => {
         <ea-tab-panel name="custom-active">Custom Content</ea-tab-panel>
       `;
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       expect(tabs.active).toBe("custom-active");
     });
@@ -1371,7 +1382,7 @@ describe("EaTabs", () => {
     it("移除 HTML 属性应该更新 JavaScript 属性", async () => {
       const tabs = createTabs({ editable: true });
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       tabs.removeAttribute("editable");
 
@@ -1399,7 +1410,7 @@ describe("EaTabs", () => {
     it("tabs 组件作为容器不需要 tabindex", async () => {
       const tabs = createTabs();
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       expect(tabs.getAttribute("tabindex")).toBeNull();
     });
@@ -1407,7 +1418,7 @@ describe("EaTabs", () => {
     it("每个 tab 应该有 tabindex", async () => {
       const tabs = createTabs();
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       const tabEls = tabs.querySelectorAll("ea-tab");
       tabEls.forEach(tab => {
@@ -1423,7 +1434,7 @@ describe("EaTabs", () => {
     it("每个 tab-panel 不需要 tabindex", async () => {
       const tabs = createTabs();
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       const panelEls = tabs.querySelectorAll("ea-tab-panel");
       panelEls.forEach(panel => {
@@ -1434,7 +1445,7 @@ describe("EaTabs", () => {
     it("line 元素应该有 tabindex=-1", async () => {
       const tabs = createTabs();
       container.appendChild(tabs);
-      await waitForRender();
+      await tabs.updateComplete;
 
       const lineEl = tabs.shadowRoot.querySelector('[part="line"]');
       expect(lineEl.getAttribute("tabindex")).toBe("-1");
@@ -1449,8 +1460,10 @@ describe("EaTabs", () => {
       tab.textContent = "Content 1";
       el.appendChild(tab);
       container.appendChild(el);
-      await waitForRender();
-      const results = await runAxe(el, { rules: { "aria-required-children": { enabled: false } } });
+      await tab.updateComplete;
+      const results = await runAxe(el, {
+        rules: { "aria-required-children": { enabled: false } },
+      });
       assertNoA11yViolations(results);
     });
 
@@ -1458,7 +1471,7 @@ describe("EaTabs", () => {
       it("ea-tabs 宿主元素应该有 role=tablist", async () => {
         const tabs = createTabs();
         container.appendChild(tabs);
-        await waitForRender();
+        await tabs.updateComplete;
 
         expect(tabs.getAttribute("role")).toBe("tablist");
       });
@@ -1466,7 +1479,7 @@ describe("EaTabs", () => {
       it("ea-tabs 应该有 aria-orientation 属性", async () => {
         const tabs = createTabs();
         container.appendChild(tabs);
-        await waitForRender();
+        await tabs.updateComplete;
 
         expect(tabs.getAttribute("aria-orientation")).toBe("horizontal");
       });
@@ -1474,7 +1487,7 @@ describe("EaTabs", () => {
       it("垂直方向时 aria-orientation 应为 vertical", async () => {
         const tabs = createTabs({ tabPosition: "left" });
         container.appendChild(tabs);
-        await waitForRender();
+        await tabs.updateComplete;
 
         expect(tabs.getAttribute("aria-orientation")).toBe("vertical");
       });
@@ -1482,60 +1495,70 @@ describe("EaTabs", () => {
       it("ea-tab 内部容器应该有 role=tab", async () => {
         const tabs = createTabs();
         container.appendChild(tabs);
-        await waitForRender();
+        await tabs.updateComplete;
 
         const tabEl = tabs.querySelector("ea-tab");
-        const containerEl = tabEl.shadowRoot.querySelector('[part="container"]');
+        const containerEl =
+          tabEl.shadowRoot.querySelector('[part="container"]');
         expect(containerEl.getAttribute("role")).toBe("tab");
       });
 
       it("激活的 ea-tab 应该有 aria-selected=true", async () => {
         const tabs = createTabs({ active: "panel0" });
         container.appendChild(tabs);
-        await waitForRender();
+        await tabs.updateComplete;
 
         const activeTab = tabs.querySelector('ea-tab[panel="panel0"]');
-        const containerEl = activeTab.shadowRoot.querySelector('[part="container"]');
-        expect(containerEl.getAttribute("aria-selected")).toBe("true");
+        const containerEl =
+          activeTab.shadowRoot.querySelector('[part="container"]');
+        await vi.waitFor(() => {
+          expect(containerEl.getAttribute("aria-selected")).toBe("true");
+        });
       });
 
       it("未激活的 ea-tab 应该有 aria-selected=false", async () => {
         const tabs = createTabs({ active: "panel0" });
         container.appendChild(tabs);
-        await waitForRender();
+        await tabs.updateComplete;
 
         const inactiveTab = tabs.querySelector('ea-tab[panel="panel1"]');
-        const containerEl = inactiveTab.shadowRoot.querySelector('[part="container"]');
+        const containerEl =
+          inactiveTab.shadowRoot.querySelector('[part="container"]');
         expect(containerEl.getAttribute("aria-selected")).toBe("false");
       });
 
       it("ea-tab 应该有 aria-controls 指向对应 panel", async () => {
         const tabs = createTabs();
         container.appendChild(tabs);
-        await waitForRender();
+        await tabs.updateComplete;
 
         const tabEl = tabs.querySelector('ea-tab[panel="panel0"]');
-        const containerEl = tabEl.shadowRoot.querySelector('[part="container"]');
-        expect(containerEl.getAttribute("aria-controls")).toBe("ea-tab-panel-panel0");
+        const containerEl =
+          tabEl.shadowRoot.querySelector('[part="container"]');
+        expect(containerEl.getAttribute("aria-controls")).toBe(
+          "ea-tab-panel-panel0"
+        );
       });
 
       it("ea-tab-panel 内部容器应该有 role=tabpanel", async () => {
         const tabs = createTabs();
         container.appendChild(tabs);
-        await waitForRender();
+        await tabs.updateComplete;
 
         const panelEl = tabs.querySelector('ea-tab-panel[name="panel0"]');
-        const containerEl = panelEl.shadowRoot.querySelector('[part="container"]');
+        const containerEl =
+          panelEl.shadowRoot.querySelector('[part="container"]');
         expect(containerEl.getAttribute("role")).toBe("tabpanel");
       });
 
       it("ea-tab-panel 应该有 aria-labelledby 指向对应 tab", async () => {
         const tabs = createTabs();
         container.appendChild(tabs);
-        await waitForRender();
+        await tabs.updateComplete;
 
         const panelEl = tabs.querySelector('ea-tab-panel[name="panel0"]');
-        const containerEl = panelEl.shadowRoot.querySelector('[part="container"]');
+        const containerEl =
+          panelEl.shadowRoot.querySelector('[part="container"]');
         const labelledby = containerEl.getAttribute("aria-labelledby");
         expect(labelledby).toBeTruthy();
         expect(labelledby).toContain("ea-tab-");
@@ -1546,7 +1569,7 @@ describe("EaTabs", () => {
         tab.setAttribute("panel", "test");
         tab.disabled = true;
         container.appendChild(tab);
-        await waitForRender();
+        await tab.updateComplete;
 
         expect(tab.getAttribute("aria-disabled")).toBe("true");
       });
@@ -1556,12 +1579,14 @@ describe("EaTabs", () => {
       it("ArrowRight 应该将焦点移到下一个 tab", async () => {
         const tabs = createTabs({ active: "panel0" });
         container.appendChild(tabs);
-        await waitForRender();
+        await tabs.updateComplete;
 
         const firstTab = tabs.querySelector('ea-tab[panel="panel0"]');
         const navEl = tabs.shadowRoot.querySelector('[part="nav"]');
-        navEl.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
-        await waitForRender();
+        navEl.dispatchEvent(
+          new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true })
+        );
+        await tabs.updateComplete;
 
         const secondTab = tabs.querySelector('ea-tab[panel="panel1"]');
         expect(secondTab.getAttribute("tabindex")).toBe("0");
@@ -1570,11 +1595,13 @@ describe("EaTabs", () => {
       it("ArrowLeft 应该将焦点移到上一个 tab", async () => {
         const tabs = createTabs({ active: "panel1" });
         container.appendChild(tabs);
-        await waitForRender();
+        await tabs.updateComplete;
 
         const navEl = tabs.shadowRoot.querySelector('[part="nav"]');
-        navEl.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true }));
-        await waitForRender();
+        navEl.dispatchEvent(
+          new KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true })
+        );
+        await tabs.updateComplete;
 
         const firstTab = tabs.querySelector('ea-tab[panel="panel0"]');
         expect(firstTab.getAttribute("tabindex")).toBe("0");

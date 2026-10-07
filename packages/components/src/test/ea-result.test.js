@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { waitForRender } from "./utils/waitForRender";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 if (typeof CSS === "undefined") {
@@ -418,7 +417,7 @@ describe("EaResult", () => {
       result.setAttribute("heading", "操作成功");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       const titleEl = result.shadowRoot.querySelector(".ea-result__title");
       expect(titleEl.textContent).toBe("操作成功");
@@ -428,10 +427,10 @@ describe("EaResult", () => {
       const result = document.createElement("ea-result");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       result.heading = "JS Property Heading";
-      await waitForRender();
+      await result.updateComplete;
 
       expect(result.heading).toBe("JS Property Heading");
       const titleEl = result.shadowRoot.querySelector(".ea-result__title");
@@ -443,13 +442,13 @@ describe("EaResult", () => {
       result.setAttribute("heading", "初始标题");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       let titleEl = result.shadowRoot.querySelector(".ea-result__title");
       expect(titleEl.textContent).toBe("初始标题");
 
       result.setAttribute("heading", "更新后的标题");
-      await waitForRender();
+      await result.updateComplete;
 
       titleEl = result.shadowRoot.querySelector(".ea-result__title");
       expect(titleEl.textContent).toBe("更新后的标题");
@@ -460,7 +459,7 @@ describe("EaResult", () => {
       result.setAttribute("heading", "临时标题");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       result.setAttribute("heading", "");
 
@@ -506,7 +505,7 @@ describe("EaResult", () => {
       result.setAttribute("sub-title", "内容描述");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       const subTitleEl = result.shadowRoot.querySelector(
         ".ea-result__sub-title"
@@ -518,10 +517,10 @@ describe("EaResult", () => {
       const result = document.createElement("ea-result");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       result.subTitle = "JS Subtitle";
-      await waitForRender();
+      await result.updateComplete;
 
       expect(result.subTitle).toBe("JS Subtitle");
       const subTitleEl = result.shadowRoot.querySelector(
@@ -535,13 +534,13 @@ describe("EaResult", () => {
       result.setAttribute("sub-title", "初始描述");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       let subTitleEl = result.shadowRoot.querySelector(".ea-result__sub-title");
       expect(subTitleEl.textContent).toBe("初始描述");
 
       result.setAttribute("sub-title", "更新后的描述");
-      await waitForRender();
+      await result.updateComplete;
 
       subTitleEl = result.shadowRoot.querySelector(".ea-result__sub-title");
       expect(subTitleEl.textContent).toBe("更新后的描述");
@@ -552,7 +551,7 @@ describe("EaResult", () => {
       result.setAttribute("sub-title", "临时描述");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       result.setAttribute("sub-title", "");
 
@@ -585,7 +584,7 @@ describe("EaResult", () => {
       result.setAttribute("variant", "primary");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       expect(result.variant).toBe("primary");
       const containerEl = result.shadowRoot.querySelector(".ea-result");
@@ -597,7 +596,7 @@ describe("EaResult", () => {
       result.setAttribute("variant", "success");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       expect(result.variant).toBe("success");
       const containerEl = result.shadowRoot.querySelector(".ea-result");
@@ -609,7 +608,7 @@ describe("EaResult", () => {
       result.setAttribute("variant", "warning");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       expect(result.variant).toBe("warning");
       const containerEl = result.shadowRoot.querySelector(".ea-result");
@@ -621,7 +620,7 @@ describe("EaResult", () => {
       result.setAttribute("variant", "danger");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       expect(result.variant).toBe("danger");
       const containerEl = result.shadowRoot.querySelector(".ea-result");
@@ -633,7 +632,7 @@ describe("EaResult", () => {
       result.setAttribute("variant", "info");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       expect(result.variant).toBe("info");
       const containerEl = result.shadowRoot.querySelector(".ea-result");
@@ -644,10 +643,10 @@ describe("EaResult", () => {
       const result = document.createElement("ea-result");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       result.setAttribute("variant", "invalid-variant");
-      await waitForRender();
+      await result.updateComplete;
 
       const containerEl = result.shadowRoot.querySelector(".ea-result");
       const modifierClasses = Array.from(containerEl.classList).filter(c =>
@@ -661,13 +660,13 @@ describe("EaResult", () => {
       result.setAttribute("variant", "success");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       let containerEl = result.shadowRoot.querySelector(".ea-result");
       expect(containerEl.classList.contains("ea-result--success")).toBe(true);
 
       result.setAttribute("variant", "danger");
-      await waitForRender();
+      await result.updateComplete;
 
       containerEl = result.shadowRoot.querySelector(".ea-result");
       expect(containerEl.classList.contains("ea-result--success")).toBe(false);
@@ -679,12 +678,12 @@ describe("EaResult", () => {
       result.setAttribute("variant", "info");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       expect(result.variant).toBe("info");
 
       result.removeAttribute("variant");
-      await waitForRender();
+      await result.updateComplete;
 
       const containerEl = result.shadowRoot.querySelector(".ea-result");
       expect(containerEl.className.trim()).toBe("ea-result");
@@ -695,7 +694,7 @@ describe("EaResult", () => {
       result.setAttribute("variant", "primary");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       const icon = result.shadowRoot.querySelector(".ea-result__icon");
       expect(icon.getAttribute("name")).toBe("circle-info");
@@ -706,7 +705,7 @@ describe("EaResult", () => {
       result.setAttribute("variant", "success");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       const icon = result.shadowRoot.querySelector(".ea-result__icon");
       expect(icon.getAttribute("name")).toBe("circle-check");
@@ -717,7 +716,7 @@ describe("EaResult", () => {
       result.setAttribute("variant", "warning");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       const icon = result.shadowRoot.querySelector(".ea-result__icon");
       expect(icon.getAttribute("name")).toBe("triangle-exclamation");
@@ -728,7 +727,7 @@ describe("EaResult", () => {
       result.setAttribute("variant", "danger");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       const icon = result.shadowRoot.querySelector(".ea-result__icon");
       expect(icon.getAttribute("name")).toBe("circle-xmark");
@@ -739,7 +738,7 @@ describe("EaResult", () => {
       result.setAttribute("variant", "info");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       const icon = result.shadowRoot.querySelector(".ea-result__icon");
       expect(icon.getAttribute("name")).toBe("circle-info");
@@ -750,13 +749,13 @@ describe("EaResult", () => {
       result.setAttribute("variant", "success");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       let icon = result.shadowRoot.querySelector(".ea-result__icon");
       expect(icon.getAttribute("name")).toBe("circle-check");
 
       result.setAttribute("variant", "warning");
-      await waitForRender();
+      await result.updateComplete;
 
       icon = result.shadowRoot.querySelector(".ea-result__icon");
       expect(icon.getAttribute("name")).toBe("triangle-exclamation");
@@ -784,7 +783,7 @@ describe("EaResult", () => {
       result.setAttribute("icon", "star");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       const icon = result.shadowRoot.querySelector(".ea-result__icon");
       expect(icon.getAttribute("name")).toBe("star");
@@ -794,10 +793,10 @@ describe("EaResult", () => {
       const result = document.createElement("ea-result");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       result.icon = "heart";
-      await waitForRender();
+      await result.updateComplete;
 
       expect(result.icon).toBe("heart");
       const icon = result.shadowRoot.querySelector(".ea-result__icon");
@@ -810,7 +809,7 @@ describe("EaResult", () => {
       result.setAttribute("icon", "custom-icon");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       const icon = result.shadowRoot.querySelector(".ea-result__icon");
       expect(icon.getAttribute("name")).toBe("custom-icon");
@@ -822,13 +821,13 @@ describe("EaResult", () => {
       result.setAttribute("icon", "custom-icon");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       const icon = result.shadowRoot.querySelector(".ea-result__icon");
       expect(icon.getAttribute("name")).toBe("custom-icon");
 
       result.removeAttribute("icon");
-      await waitForRender();
+      await result.updateComplete;
 
       expect(icon.getAttribute("name")).toBe("circle-check");
     });
@@ -839,10 +838,10 @@ describe("EaResult", () => {
       result.setAttribute("icon", "temporary-icon");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       result.setAttribute("icon", "");
-      await waitForRender();
+      await result.updateComplete;
 
       const icon = result.shadowRoot.querySelector(".ea-result__icon");
       expect(icon.getAttribute("name")).toBe("triangle-exclamation");
@@ -853,13 +852,13 @@ describe("EaResult", () => {
       result.setAttribute("icon", "icon-a");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       let icon = result.shadowRoot.querySelector(".ea-result__icon");
       expect(icon.getAttribute("name")).toBe("icon-a");
 
       result.setAttribute("icon", "icon-b");
-      await waitForRender();
+      await result.updateComplete;
 
       icon = result.shadowRoot.querySelector(".ea-result__icon");
       expect(icon.getAttribute("name")).toBe("icon-b");
@@ -872,10 +871,10 @@ describe("EaResult", () => {
       result.setAttribute("icon", "custom-icon");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       result.setAttribute("variant", "success");
-      await waitForRender();
+      await result.updateComplete;
 
       const icon = result.shadowRoot.querySelector(".ea-result__icon");
       expect(icon.getAttribute("name")).toBe("custom-icon");
@@ -886,13 +885,13 @@ describe("EaResult", () => {
       result.setAttribute("variant", "success");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       let icon = result.shadowRoot.querySelector(".ea-result__icon");
       expect(icon.getAttribute("name")).toBe("circle-check");
 
       result.setAttribute("icon", "overriding-icon");
-      await waitForRender();
+      await result.updateComplete;
 
       expect(icon.getAttribute("name")).toBe("overriding-icon");
     });
@@ -903,7 +902,7 @@ describe("EaResult", () => {
       result.setAttribute("icon", "star");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       expect(result.variant).toBe("success");
       expect(result.icon).toBe("star");
@@ -917,11 +916,11 @@ describe("EaResult", () => {
       result.setAttribute("icon", "persistent-icon");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       result.removeAttribute("icon");
       result.setAttribute("variant", "danger");
-      await waitForRender();
+      await result.updateComplete;
 
       const icon = result.shadowRoot.querySelector(".ea-result__icon");
       expect(icon.getAttribute("name")).toBe("circle-xmark");
@@ -965,7 +964,7 @@ describe("EaResult", () => {
       const result = document.createElement("ea-result");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       result.remove();
       container.appendChild(result);
@@ -990,10 +989,10 @@ describe("EaResult", () => {
       const result = document.createElement("ea-result");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       result.setAttribute("heading", "挂载后设置");
-      await waitForRender();
+      await result.updateComplete;
 
       expect(result.heading).toBe("挂载后设置");
       const titleEl = result.shadowRoot.querySelector(".ea-result__title");
@@ -1006,10 +1005,10 @@ describe("EaResult", () => {
       const result = document.createElement("ea-result");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       result.setAttribute("variant", "success");
-      await waitForRender();
+      await result.updateComplete;
 
       expect(result.variant).toBe("success");
       const containerEl = result.shadowRoot.querySelector(".ea-result");
@@ -1021,10 +1020,10 @@ describe("EaResult", () => {
       result.setAttribute("heading", "初始标题");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       result.setAttribute("heading", "更新标题");
-      await waitForRender();
+      await result.updateComplete;
 
       const titleEl = result.shadowRoot.querySelector(".ea-result__title");
       expect(titleEl.textContent).toBe("更新标题");
@@ -1035,10 +1034,10 @@ describe("EaResult", () => {
       result.setAttribute("sub-title", "初始描述");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       result.setAttribute("sub-title", "更新描述");
-      await waitForRender();
+      await result.updateComplete;
 
       const subTitleEl = result.shadowRoot.querySelector(
         ".ea-result__sub-title"
@@ -1050,7 +1049,7 @@ describe("EaResult", () => {
       const result = document.createElement("ea-result");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       result.heading = "Property Set";
       expect(result.getAttribute("heading")).toBe("Property Set");
@@ -1091,7 +1090,7 @@ describe("EaResult", () => {
       result.setAttribute("heading", "<script>alert('xss')</script>");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       const titleEl = result.shadowRoot.querySelector(".ea-result__title");
       expect(titleEl.querySelector("script")).toBeNull();
@@ -1102,7 +1101,7 @@ describe("EaResult", () => {
       result.setAttribute("sub-title", '<img src=x onerror="alert(1)">');
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       const subTitleEl = result.shadowRoot.querySelector(
         ".ea-result__sub-title"
@@ -1148,13 +1147,13 @@ describe("EaResult", () => {
       const result = document.createElement("ea-result");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       result.setAttribute("heading", "A");
       result.setAttribute("heading", "B");
       result.setAttribute("heading", "最终值");
 
-      await waitForRender();
+      await result.updateComplete;
 
       const titleEl = result.shadowRoot.querySelector(".ea-result__title");
       expect(titleEl.textContent).toBe("最终值");
@@ -1164,13 +1163,13 @@ describe("EaResult", () => {
       const result = document.createElement("ea-result");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       result.setAttribute("variant", "success");
       result.setAttribute("variant", "warning");
       result.setAttribute("variant", "danger");
 
-      await waitForRender();
+      await result.updateComplete;
 
       const containerEl = result.shadowRoot.querySelector(".ea-result");
       expect(containerEl.classList.contains("ea-result--danger")).toBe(true);
@@ -1183,7 +1182,7 @@ describe("EaResult", () => {
       result.setAttribute("variant", "success");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       result.remove();
       container.appendChild(result);
@@ -1272,7 +1271,7 @@ describe("EaResult", () => {
       result.style.setProperty("--ea-result-icon-size", "80px");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       const size = getComputedStyle(result).getPropertyValue(
         "--ea-result-icon-size"
@@ -1295,7 +1294,7 @@ describe("EaResult", () => {
       `;
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       expect(result.variant).toBe("success");
       expect(result.heading).toBe("支付成功");
@@ -1319,7 +1318,7 @@ describe("EaResult", () => {
       result.innerHTML = `<button slot="extra">重试</button>`;
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       const icon = result.shadowRoot.querySelector(".ea-result__icon");
       expect(icon.getAttribute("name")).toBe("bug");
@@ -1340,7 +1339,7 @@ describe("EaResult", () => {
       result.setAttribute("sub-title", "已完成");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       expect(result.variant).toBe("success");
       expect(result.heading).toBe("操作成功");
@@ -1348,7 +1347,7 @@ describe("EaResult", () => {
       result.removeAttribute("variant");
       result.setAttribute("heading", "");
       result.setAttribute("sub-title", "");
-      await waitForRender();
+      await result.updateComplete;
 
       const containerEl = result.shadowRoot.querySelector(".ea-result");
       expect(containerEl.className.trim()).toBe("ea-result");
@@ -1389,12 +1388,12 @@ describe("EaResult", () => {
       const result = document.createElement("ea-result");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       result.setAttribute("variant", "success");
       result.setAttribute("heading", "成功");
       result.setAttribute("icon", "check");
-      await waitForRender();
+      await result.updateComplete;
 
       expect(result.variant).toBe("success");
       expect(result.heading).toBe("成功");
@@ -1402,7 +1401,7 @@ describe("EaResult", () => {
       result.setAttribute("variant", "danger");
       result.setAttribute("heading", "失败");
       result.setAttribute("icon", "close");
-      await waitForRender();
+      await result.updateComplete;
 
       expect(result.variant).toBe("danger");
       expect(result.heading).toBe("失败");
@@ -1427,10 +1426,10 @@ describe("EaResult", () => {
       const result = document.createElement("ea-result");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       result.setAttribute("variant", undefined);
-      await waitForRender();
+      await result.updateComplete;
 
       const containerEl = result.shadowRoot.querySelector(".ea-result");
       expect(containerEl.className.trim()).toBe("ea-result");
@@ -1441,7 +1440,7 @@ describe("EaResult", () => {
       result.setAttribute("variant", "success");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       result.setAttribute("variant", null);
 
@@ -1462,13 +1461,13 @@ describe("EaResult", () => {
       result.setAttribute("heading", "保持不变");
       container.appendChild(result);
 
-      await waitForRender();
+      await result.updateComplete;
 
       const titleEl = result.shadowRoot.querySelector(".ea-result__title");
       expect(titleEl.textContent).toBe("保持不变");
 
       result.setAttribute("heading", "保持不变");
-      await waitForRender();
+      await result.updateComplete;
 
       expect(titleEl.textContent).toBe("保持不变");
     });
@@ -1486,7 +1485,7 @@ describe("EaResult", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-result");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });

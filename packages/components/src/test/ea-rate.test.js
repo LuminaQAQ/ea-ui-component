@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { waitForRender } from "./utils/waitForRender";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-rate/index";
@@ -61,7 +60,7 @@ describe("EaRate", () => {
       const rate = createRate();
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       expect(symbols.length).toBe(5);
@@ -71,7 +70,7 @@ describe("EaRate", () => {
       const rate = createRate();
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const symbols = rate.shadowRoot.querySelectorAll('[part="symbol-wrap"]');
       expect(symbols.length).toBe(5);
@@ -81,7 +80,7 @@ describe("EaRate", () => {
       const rate = createRate();
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const icons = rate.shadowRoot.querySelectorAll(
         ".ea-rate__symbol ea-icon"
@@ -93,7 +92,7 @@ describe("EaRate", () => {
       const rate = createRate();
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const label = rate.shadowRoot.querySelector(".ea-rate__label");
       expect(label.textContent).toBe("");
@@ -122,7 +121,7 @@ describe("EaRate", () => {
       const rate = createRate();
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       rate.value = 4;
 
@@ -133,7 +132,7 @@ describe("EaRate", () => {
       const rate = createRate({ value: 3 });
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       expect(symbols[0].classList.contains("is-selected")).toBe(true);
@@ -147,7 +146,7 @@ describe("EaRate", () => {
       const rate = createRate({ value: 0 });
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       symbols.forEach(symbol => {
@@ -159,7 +158,7 @@ describe("EaRate", () => {
       const rate = createRate({ value: 1 });
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       expect(symbols[0].classList.contains("is-selected")).toBe(true);
@@ -178,7 +177,7 @@ describe("EaRate", () => {
 
       rate.setAttribute("value", "4");
 
-      await waitForRender();
+      await rate.updateComplete;
 
       expect(rate.value).toBe(4);
 
@@ -194,7 +193,7 @@ describe("EaRate", () => {
 
       rate.setAttribute("value", "0");
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       symbols.forEach(symbol => {
@@ -217,7 +216,7 @@ describe("EaRate", () => {
       const rate = createRate({ max: 3 });
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       expect(rate.max).toBe(3);
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
@@ -228,7 +227,7 @@ describe("EaRate", () => {
       const rate = createRate({ max: 10 });
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       expect(rate.max).toBe(10);
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
@@ -239,7 +238,7 @@ describe("EaRate", () => {
       const rate = createRate({ max: 1 });
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       expect(rate.max).toBe(1);
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
@@ -250,7 +249,7 @@ describe("EaRate", () => {
       const rate = createRate({ max: 5 });
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       expect(rate.shadowRoot.querySelectorAll(".ea-rate__symbol").length).toBe(
         5
@@ -258,7 +257,7 @@ describe("EaRate", () => {
 
       rate.setAttribute("max", "3");
 
-      await waitForRender();
+      await rate.updateComplete;
 
       expect(rate.max).toBe(3);
       expect(rate.shadowRoot.querySelectorAll(".ea-rate__symbol").length).toBe(
@@ -272,7 +271,7 @@ describe("EaRate", () => {
 
       rate.setAttribute("max", "7");
 
-      await waitForRender();
+      await rate.updateComplete;
 
       expect(rate.shadowRoot.querySelectorAll(".ea-rate__symbol").length).toBe(
         7
@@ -285,7 +284,7 @@ describe("EaRate", () => {
 
       rate.setAttribute("max", "4");
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       expect(symbols[0].classList.contains("is-selected")).toBe(true);
@@ -307,7 +306,7 @@ describe("EaRate", () => {
       const rate = createRate({ size: "large" });
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       expect(rate.size).toBe("large");
       const containerEl = rate.shadowRoot.querySelector(".ea-rate");
@@ -318,7 +317,7 @@ describe("EaRate", () => {
       const rate = createRate({ size: "small" });
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       expect(rate.size).toBe("small");
       const containerEl = rate.shadowRoot.querySelector(".ea-rate");
@@ -329,7 +328,7 @@ describe("EaRate", () => {
       const rate = createRate({ size: "default" });
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       expect(rate.size).toBe("default");
       const containerEl = rate.shadowRoot.querySelector(".ea-rate");
@@ -340,14 +339,14 @@ describe("EaRate", () => {
       const rate = createRate({ size: "small" });
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const containerEl = rate.shadowRoot.querySelector(".ea-rate");
       expect(containerEl.classList.contains("ea-rate--small")).toBe(true);
 
       rate.setAttribute("size", "large");
 
-      await waitForRender();
+      await rate.updateComplete;
 
       expect(containerEl.classList.contains("ea-rate--large")).toBe(true);
       expect(containerEl.classList.contains("ea-rate--small")).toBe(false);
@@ -359,7 +358,7 @@ describe("EaRate", () => {
 
       rate.removeAttribute("size");
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const containerEl = rate.shadowRoot.querySelector(".ea-rate");
       expect(containerEl.classList.contains("ea-rate--large")).toBe(false);
@@ -380,7 +379,7 @@ describe("EaRate", () => {
       const rate = createRate({ label: "评分" });
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       expect(rate.label).toBe("评分");
       const labelEl = rate.shadowRoot.querySelector(".ea-rate__label");
@@ -393,7 +392,7 @@ describe("EaRate", () => {
 
       rate.setAttribute("label", "更新后");
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const labelEl = rate.shadowRoot.querySelector(".ea-rate__label");
       expect(labelEl.textContent).toBe("更新后");
@@ -421,7 +420,7 @@ describe("EaRate", () => {
       const rate = createRate({ value: 2, readonly: true });
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       symbols[3].dispatchEvent(new Event("click", { bubbles: true }));
@@ -433,7 +432,7 @@ describe("EaRate", () => {
       const rate = createRate({ readonly: true });
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const containerEl = rate.shadowRoot.querySelector(".ea-rate");
       containerEl.dispatchEvent(new Event("mouseover", { bubbles: true }));
@@ -441,7 +440,7 @@ describe("EaRate", () => {
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       symbols[2].dispatchEvent(new Event("mousemove", { bubbles: true }));
 
-      await waitForRender();
+      await rate.updateComplete;
 
       expect(symbols[2].classList.contains("is-selected")).toBe(false);
     });
@@ -483,7 +482,7 @@ describe("EaRate", () => {
       const rate = createRate({ disabled: true });
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const containerEl = rate.shadowRoot.querySelector(".ea-rate");
       expect(containerEl.classList.contains("is-disabled")).toBe(true);
@@ -493,7 +492,7 @@ describe("EaRate", () => {
       const rate = createRate({ value: 2, disabled: true });
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       symbols[3].dispatchEvent(new Event("click", { bubbles: true }));
@@ -505,7 +504,7 @@ describe("EaRate", () => {
       const rate = createRate({ disabled: true });
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const containerEl = rate.shadowRoot.querySelector(".ea-rate");
       containerEl.dispatchEvent(new Event("mouseover", { bubbles: true }));
@@ -513,7 +512,7 @@ describe("EaRate", () => {
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       symbols[2].dispatchEvent(new Event("mousemove", { bubbles: true }));
 
-      await waitForRender();
+      await rate.updateComplete;
 
       expect(symbols[2].classList.contains("is-selected")).toBe(false);
     });
@@ -524,7 +523,7 @@ describe("EaRate", () => {
 
       rate.setAttribute("disabled", "");
 
-      await waitForRender();
+      await rate.updateComplete;
 
       expect(rate.disabled).toBe(true);
 
@@ -533,7 +532,7 @@ describe("EaRate", () => {
 
       rate.removeAttribute("disabled");
 
-      await waitForRender();
+      await rate.updateComplete;
 
       expect(rate.disabled === false || rate.disabled === null).toBe(true);
       expect(containerEl.classList.contains("is-disabled")).toBe(false);
@@ -554,11 +553,11 @@ describe("EaRate", () => {
       const rate = createRate();
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       rate.getSymbol = () => `<span class="custom-icon">★</span>`;
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const customIcons = rate.shadowRoot.querySelectorAll(".custom-icon");
       expect(customIcons.length).toBe(5);
@@ -568,14 +567,14 @@ describe("EaRate", () => {
       const rate = createRate({ value: 3 });
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const getSymbolMock = vi.fn(
         (value, isSelected) => `<span>${value}-${isSelected}</span>`
       );
       rate.getSymbol = getSymbolMock;
 
-      await waitForRender();
+      await rate.updateComplete;
 
       expect(getSymbolMock).toHaveBeenCalled();
       const calls = getSymbolMock.mock.calls;
@@ -588,14 +587,14 @@ describe("EaRate", () => {
       const rate = createRate();
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const symbolsBefore =
         rate.shadowRoot.querySelectorAll(".ea-rate__symbol").length;
 
       rate.getSymbol = null;
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const symbolsAfter = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       expect(symbolsAfter.length).toBe(symbolsBefore);
@@ -605,17 +604,17 @@ describe("EaRate", () => {
       const rate = createRate();
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       rate.getSymbol = () => `<span class="icon-a">A</span>`;
 
-      await waitForRender();
+      await rate.updateComplete;
 
       expect(rate.shadowRoot.querySelectorAll(".icon-a").length).toBe(5);
 
       rate.getSymbol = () => `<span class="icon-b">B</span>`;
 
-      await waitForRender();
+      await rate.updateComplete;
 
       expect(rate.shadowRoot.querySelectorAll(".icon-a").length).toBe(0);
       expect(rate.shadowRoot.querySelectorAll(".icon-b").length).toBe(5);
@@ -629,7 +628,7 @@ describe("EaRate", () => {
       const rate = createRate();
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       symbols[3].dispatchEvent(new Event("click", { bubbles: true }));
@@ -641,7 +640,7 @@ describe("EaRate", () => {
       const rate = createRate({ value: 3 });
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       expect(rate.value).toBe(3);
 
@@ -655,7 +654,7 @@ describe("EaRate", () => {
       const rate = createRate({ value: 3 });
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       symbols[4].dispatchEvent(new Event("click", { bubbles: true }));
@@ -667,7 +666,7 @@ describe("EaRate", () => {
       const rate = createRate();
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       symbols[0].dispatchEvent(new Event("click", { bubbles: true }));
@@ -679,7 +678,7 @@ describe("EaRate", () => {
       const rate = createRate();
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const containerEl = rate.shadowRoot.querySelector(".ea-rate");
       containerEl.dispatchEvent(new Event("mouseover", { bubbles: true }));
@@ -687,7 +686,7 @@ describe("EaRate", () => {
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       symbols[2].dispatchEvent(new Event("mousemove", { bubbles: true }));
 
-      await waitForRender();
+      await rate.updateComplete;
 
       expect(symbols[2].classList.contains("is-selected")).toBe(true);
     });
@@ -696,7 +695,7 @@ describe("EaRate", () => {
       const rate = createRate({ value: 2 });
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const containerEl = rate.shadowRoot.querySelector(".ea-rate");
       containerEl.dispatchEvent(new Event("mouseover", { bubbles: true }));
@@ -704,13 +703,13 @@ describe("EaRate", () => {
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       symbols[3].dispatchEvent(new Event("mousemove", { bubbles: true }));
 
-      await waitForRender();
+      await rate.updateComplete;
 
       expect(symbols[3].classList.contains("is-selected")).toBe(true);
 
       containerEl.dispatchEvent(new Event("mouseout", { bubbles: true }));
 
-      await waitForRender();
+      await rate.updateComplete;
 
       expect(symbols[3].classList.contains("is-selected")).toBe(false);
       expect(symbols[1].classList.contains("is-selected")).toBe(true);
@@ -720,7 +719,7 @@ describe("EaRate", () => {
       const rate = createRate();
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const containerEl = rate.shadowRoot.querySelector(".ea-rate");
       containerEl.dispatchEvent(new Event("mouseover", { bubbles: true }));
@@ -728,11 +727,11 @@ describe("EaRate", () => {
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       symbols[2].dispatchEvent(new Event("mousemove", { bubbles: true }));
 
-      await waitForRender();
+      await rate.updateComplete;
 
       containerEl.dispatchEvent(new Event("mouseout", { bubbles: true }));
 
-      await waitForRender();
+      await rate.updateComplete;
 
       symbols.forEach(symbol => {
         expect(symbol.classList.contains("is-selected")).toBe(false);
@@ -747,7 +746,7 @@ describe("EaRate", () => {
       const rate = createRate();
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const changeHandler = vi.fn();
       rate.addEventListener("change", changeHandler);
@@ -755,7 +754,7 @@ describe("EaRate", () => {
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       symbols[2].dispatchEvent(new Event("click", { bubbles: true }));
 
-      await waitForRender();
+      await rate.updateComplete;
 
       expect(changeHandler).toHaveBeenCalledTimes(1);
     });
@@ -764,7 +763,7 @@ describe("EaRate", () => {
       const rate = createRate();
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       let caughtEvent = null;
       rate.addEventListener("change", e => {
@@ -784,7 +783,7 @@ describe("EaRate", () => {
       const rate = createRate({ value: 3 });
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       let eventDetail = null;
       rate.addEventListener("change", e => {
@@ -802,7 +801,7 @@ describe("EaRate", () => {
       const rate = createRate({ readonly: true });
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const changeHandler = vi.fn();
       rate.addEventListener("change", changeHandler);
@@ -810,7 +809,7 @@ describe("EaRate", () => {
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       symbols[2].dispatchEvent(new Event("click", { bubbles: true }));
 
-      await waitForRender();
+      await rate.updateComplete;
 
       expect(changeHandler).not.toHaveBeenCalled();
     });
@@ -819,7 +818,7 @@ describe("EaRate", () => {
       const rate = createRate({ disabled: true });
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const changeHandler = vi.fn();
       rate.addEventListener("change", changeHandler);
@@ -827,7 +826,7 @@ describe("EaRate", () => {
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       symbols[2].dispatchEvent(new Event("click", { bubbles: true }));
 
-      await waitForRender();
+      await rate.updateComplete;
 
       expect(changeHandler).not.toHaveBeenCalled();
     });
@@ -840,7 +839,7 @@ describe("EaRate", () => {
       const rate = createRate();
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const hoverHandler = vi.fn();
       rate.addEventListener("ea-hover", hoverHandler);
@@ -851,7 +850,7 @@ describe("EaRate", () => {
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       symbols[2].dispatchEvent(new Event("mousemove", { bubbles: true }));
 
-      await waitForRender();
+      await rate.updateComplete;
 
       expect(hoverHandler).toHaveBeenCalled();
     });
@@ -860,7 +859,7 @@ describe("EaRate", () => {
       const rate = createRate();
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       let caughtEvent = null;
       rate.addEventListener("ea-hover", e => {
@@ -884,7 +883,7 @@ describe("EaRate", () => {
       const rate = createRate();
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       let eventDetail = null;
       rate.addEventListener("ea-hover", e => {
@@ -904,7 +903,7 @@ describe("EaRate", () => {
       const rate = createRate();
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const hoverHandler = vi.fn();
       rate.addEventListener("ea-hover", hoverHandler);
@@ -917,7 +916,7 @@ describe("EaRate", () => {
       symbols[2].dispatchEvent(new Event("mousemove", { bubbles: true }));
       symbols[2].dispatchEvent(new Event("mousemove", { bubbles: true }));
 
-      await waitForRender();
+      await rate.updateComplete;
 
       expect(hoverHandler).toHaveBeenCalledTimes(1);
     });
@@ -926,7 +925,7 @@ describe("EaRate", () => {
       const rate = createRate({ value: 2 });
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       let eventDetail = null;
       rate.addEventListener("ea-hover", e => {
@@ -939,7 +938,7 @@ describe("EaRate", () => {
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       symbols[3].dispatchEvent(new Event("mousemove", { bubbles: true }));
 
-      await waitForRender();
+      await rate.updateComplete;
 
       containerEl.dispatchEvent(new Event("mouseout", { bubbles: true }));
 
@@ -951,7 +950,7 @@ describe("EaRate", () => {
       const rate = createRate();
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       let eventDetail = null;
       rate.addEventListener("ea-hover", e => {
@@ -964,7 +963,7 @@ describe("EaRate", () => {
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       symbols[2].dispatchEvent(new Event("mousemove", { bubbles: true }));
 
-      await waitForRender();
+      await rate.updateComplete;
 
       containerEl.dispatchEvent(new Event("mouseout", { bubbles: true }));
 
@@ -976,7 +975,7 @@ describe("EaRate", () => {
       const rate = createRate({ readonly: true });
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const hoverHandler = vi.fn();
       rate.addEventListener("ea-hover", hoverHandler);
@@ -987,7 +986,7 @@ describe("EaRate", () => {
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       symbols[2].dispatchEvent(new Event("mousemove", { bubbles: true }));
 
-      await waitForRender();
+      await rate.updateComplete;
 
       expect(hoverHandler).not.toHaveBeenCalled();
     });
@@ -996,7 +995,7 @@ describe("EaRate", () => {
       const rate = createRate({ disabled: true });
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const hoverHandler = vi.fn();
       rate.addEventListener("ea-hover", hoverHandler);
@@ -1007,7 +1006,7 @@ describe("EaRate", () => {
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       symbols[2].dispatchEvent(new Event("mousemove", { bubbles: true }));
 
-      await waitForRender();
+      await rate.updateComplete;
 
       expect(hoverHandler).not.toHaveBeenCalled();
     });
@@ -1016,7 +1015,7 @@ describe("EaRate", () => {
       const rate = createRate();
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const hoverHandler = vi.fn();
       rate.addEventListener("ea-hover", hoverHandler);
@@ -1027,16 +1026,16 @@ describe("EaRate", () => {
       containerEl.dispatchEvent(new Event("mouseover", { bubbles: true }));
       symbols[1].dispatchEvent(new Event("mousemove", { bubbles: true }));
 
-      await waitForRender();
+      await rate.updateComplete;
 
       containerEl.dispatchEvent(new Event("mouseout", { bubbles: true }));
 
-      await waitForRender();
+      await rate.updateComplete;
 
       containerEl.dispatchEvent(new Event("mouseover", { bubbles: true }));
       symbols[1].dispatchEvent(new Event("mousemove", { bubbles: true }));
 
-      await waitForRender();
+      await rate.updateComplete;
 
       expect(hoverHandler).toHaveBeenCalledTimes(3);
     });
@@ -1084,7 +1083,7 @@ describe("EaRate", () => {
       const rate = createRate({ value: 3 });
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       expect(rate.shadowRoot).toBeTruthy();
       expect(rate.value).toBe(3);
@@ -1097,7 +1096,7 @@ describe("EaRate", () => {
       const rate = createRate();
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       rate.remove();
 
@@ -1108,7 +1107,7 @@ describe("EaRate", () => {
       const rate = createRate({ size: "large", disabled: true });
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const containerEl = rate.shadowRoot.querySelector(".ea-rate");
       expect(containerEl.classList.contains("ea-rate--large")).toBe(true);
@@ -1119,7 +1118,7 @@ describe("EaRate", () => {
       const rate = createRate();
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const containerEl = rate.shadowRoot.querySelector(".ea-rate");
       containerEl.dispatchEvent(new Event("mouseover", { bubbles: true }));
@@ -1132,7 +1131,7 @@ describe("EaRate", () => {
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       symbols[2].dispatchEvent(new Event("mousemove", { bubbles: true }));
 
-      await waitForRender();
+      await rate.updateComplete;
 
       expect(hoverHandler).not.toHaveBeenCalled();
     });
@@ -1145,7 +1144,7 @@ describe("EaRate", () => {
       const rate = createRate({ max: 0 });
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       expect(symbols.length).toBe(0);
@@ -1155,7 +1154,7 @@ describe("EaRate", () => {
       const rate = createRate({ max: 3, value: 5 });
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       expect(rate.value).toBe(5);
       expect(rate.max).toBe(3);
@@ -1171,7 +1170,7 @@ describe("EaRate", () => {
       const rate = createRate({ value: -1 });
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       expect(rate.value).toBe(-1);
 
@@ -1201,7 +1200,7 @@ describe("EaRate", () => {
       rate.setAttribute("value", "0");
       rate.setAttribute("value", "5");
 
-      await waitForRender();
+      await rate.updateComplete;
 
       expect(rate.value).toBe(5);
 
@@ -1214,7 +1213,7 @@ describe("EaRate", () => {
       const rate = createRate({ value: 2.7 });
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       expect(rate.value).toBe(2.7);
 
@@ -1226,7 +1225,7 @@ describe("EaRate", () => {
       const rate = createRate({ size: "x-large" });
       container.appendChild(rate);
 
-      await waitForRender();
+      await rate.updateComplete;
 
       const containerEl = rate.shadowRoot.querySelector(".ea-rate");
       expect(containerEl.classList.contains("ea-rate--x-large")).toBe(false);
@@ -1237,7 +1236,7 @@ describe("EaRate", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-rate");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });
@@ -1246,7 +1245,7 @@ describe("EaRate", () => {
       const el = document.createElement("ea-rate");
       el.setAttribute("disabled", "");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });
@@ -1255,14 +1254,14 @@ describe("EaRate", () => {
       it("宿主元素应该有 role=radiogroup", async () => {
         const el = document.createElement("ea-rate");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("role")).toBe("radiogroup");
       });
 
       it("每个评分项应该有 role=radio", async () => {
         const el = document.createElement("ea-rate");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const symbols = el.shadowRoot.querySelectorAll(".ea-rate__symbol");
         symbols.forEach(symbol => {
           expect(symbol.getAttribute("role")).toBe("radio");
@@ -1273,7 +1272,7 @@ describe("EaRate", () => {
         const el = document.createElement("ea-rate");
         el.value = 3;
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const symbols = el.shadowRoot.querySelectorAll(".ea-rate__symbol");
         expect(symbols[2].getAttribute("aria-checked")).toBe("true");
       });
@@ -1282,7 +1281,7 @@ describe("EaRate", () => {
         const el = document.createElement("ea-rate");
         el.value = 3;
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const symbols = el.shadowRoot.querySelectorAll(".ea-rate__symbol");
         expect(symbols[0].getAttribute("aria-checked")).toBe("false");
         expect(symbols[3].getAttribute("aria-checked")).toBe("false");
@@ -1292,14 +1291,14 @@ describe("EaRate", () => {
         const el = document.createElement("ea-rate");
         el.disabled = true;
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-disabled")).toBe("true");
       });
 
       it("每个评分项应该有 aria-label", async () => {
         const el = document.createElement("ea-rate");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const symbols = el.shadowRoot.querySelectorAll(".ea-rate__symbol");
         symbols.forEach(symbol => {
           expect(symbol.getAttribute("aria-label")).toBeTruthy();
@@ -1310,9 +1309,9 @@ describe("EaRate", () => {
         const el = document.createElement("ea-rate");
         el.value = 2;
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         el.value = 4;
-        await waitForRender();
+        await el.updateComplete;
         const symbols = el.shadowRoot.querySelectorAll(".ea-rate__symbol");
         expect(symbols[3].getAttribute("aria-checked")).toBe("true");
         expect(symbols[1].getAttribute("aria-checked")).toBe("false");
@@ -1324,7 +1323,7 @@ describe("EaRate", () => {
         const el = document.createElement("ea-rate");
         el.value = 2;
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const symbols = el.shadowRoot.querySelectorAll(".ea-rate__symbol");
         symbols[1].dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
         expect(el.value).toBe(3);
@@ -1334,7 +1333,7 @@ describe("EaRate", () => {
         const el = document.createElement("ea-rate");
         el.value = 3;
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const symbols = el.shadowRoot.querySelectorAll(".ea-rate__symbol");
         symbols[2].dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true }));
         expect(el.value).toBe(2);
@@ -1344,7 +1343,7 @@ describe("EaRate", () => {
         const el = document.createElement("ea-rate");
         el.value = 0;
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const symbols = el.shadowRoot.querySelectorAll(".ea-rate__symbol");
         symbols[2].dispatchEvent(new KeyboardEvent("keydown", { key: " ", bubbles: true }));
         expect(el.value).toBe(3);
@@ -1355,7 +1354,7 @@ describe("EaRate", () => {
         el.value = 2;
         el.disabled = true;
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const symbols = el.shadowRoot.querySelectorAll(".ea-rate__symbol");
         symbols[1].dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
         expect(el.value).toBe(2);
@@ -1366,7 +1365,7 @@ describe("EaRate", () => {
         el.value = 2;
         el.readonly = true;
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const symbols = el.shadowRoot.querySelectorAll(".ea-rate__symbol");
         symbols[1].dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
         expect(el.value).toBe(2);

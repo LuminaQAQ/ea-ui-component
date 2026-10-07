@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { waitForRender } from "./utils/waitForRender.js";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 import "../components/ea-color-picker/index.ts";
@@ -104,7 +103,7 @@ describe("EaColorPicker Component", () => {
       picker.setAttribute("label", "主题色");
       container.appendChild(picker);
 
-      await waitForRender();
+      await picker.updateComplete;
 
       const labelEl = picker.shadowRoot.querySelector(
         ".ea-color-picker__form-label"
@@ -118,10 +117,10 @@ describe("EaColorPicker Component", () => {
       picker.setAttribute("label", "旧标签");
       container.appendChild(picker);
 
-      await waitForRender();
+      await picker.updateComplete;
 
       picker.setAttribute("label", "新标签");
-      await waitForRender();
+      await picker.updateComplete;
 
       const labelEl = picker.shadowRoot.querySelector(
         ".ea-color-picker__form-label"
@@ -151,7 +150,7 @@ describe("EaColorPicker Component", () => {
       picker.setAttribute("value", "#409eff");
       container.appendChild(picker);
 
-      await waitForRender();
+      await picker.updateComplete;
 
       picker.setAttribute("value", "#67c23a");
       expect(picker.value).toBe("#67c23a");
@@ -162,7 +161,7 @@ describe("EaColorPicker Component", () => {
       picker.setAttribute("value", "#409eff");
       container.appendChild(picker);
 
-      await waitForRender();
+      await picker.updateComplete;
 
       const inner = picker.shadowRoot.querySelector('[part="inner"]');
       expect(inner).toBeTruthy();
@@ -177,10 +176,10 @@ describe("EaColorPicker Component", () => {
       picker.setAttribute("value", "#409eff");
       container.appendChild(picker);
 
-      await waitForRender();
+      await picker.updateComplete;
 
       picker.removeAttribute("value");
-      await waitForRender();
+      await picker.updateComplete;
 
       const inner = picker.shadowRoot.querySelector('[part="inner"]');
       const bg = inner.style.getPropertyValue(
@@ -193,7 +192,7 @@ describe("EaColorPicker Component", () => {
       const picker = document.createElement("ea-color-picker");
       container.appendChild(picker);
 
-      await waitForRender();
+      await picker.updateComplete;
 
       const statusIcon = picker.shadowRoot.querySelector(
         '[part="status-icon"]'
@@ -201,7 +200,7 @@ describe("EaColorPicker Component", () => {
       expect(statusIcon.getAttribute("name")).toBe("xmark");
 
       picker.setAttribute("value", "#409eff");
-      await waitForRender();
+      await picker.updateComplete;
 
       expect(statusIcon.getAttribute("name")).toBe("angle-down");
     });
@@ -211,7 +210,7 @@ describe("EaColorPicker Component", () => {
       picker.setAttribute("value", "#409eff");
       container.appendChild(picker);
 
-      await waitForRender();
+      await picker.updateComplete;
 
       const panel = picker.shadowRoot.querySelector("ea-color-picker-panel");
       expect(panel.value).toBeTruthy();
@@ -239,7 +238,7 @@ describe("EaColorPicker Component", () => {
       picker.setAttribute("disabled", "");
       container.appendChild(picker);
 
-      await waitForRender();
+      await picker.updateComplete;
 
       const containerEl = picker.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-disabled")).toBe(true);
@@ -249,18 +248,18 @@ describe("EaColorPicker Component", () => {
       const picker = document.createElement("ea-color-picker");
       container.appendChild(picker);
 
-      await waitForRender();
+      await picker.updateComplete;
 
       const containerEl = picker.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-disabled")).toBe(false);
 
       picker.setAttribute("disabled", "");
-      await waitForRender();
+      await picker.updateComplete;
 
       expect(containerEl.classList.contains("is-disabled")).toBe(true);
 
       picker.removeAttribute("disabled");
-      await waitForRender();
+      await picker.updateComplete;
 
       expect(containerEl.classList.contains("is-disabled")).toBe(false);
     });
@@ -275,7 +274,7 @@ describe("EaColorPicker Component", () => {
         picker.setAttribute("size", size);
         container.appendChild(picker);
 
-        await waitForRender();
+        await picker.updateComplete;
 
         const containerEl =
           picker.shadowRoot.querySelector('[part="container"]');
@@ -297,7 +296,7 @@ describe("EaColorPicker Component", () => {
       picker.setAttribute("size", "small");
       container.appendChild(picker);
 
-      await waitForRender();
+      await picker.updateComplete;
 
       const containerEl = picker.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("ea-color-picker--small")).toBe(
@@ -305,7 +304,7 @@ describe("EaColorPicker Component", () => {
       );
 
       picker.setAttribute("size", "large");
-      await waitForRender();
+      await picker.updateComplete;
 
       expect(containerEl.classList.contains("ea-color-picker--small")).toBe(
         false
@@ -337,7 +336,7 @@ describe("EaColorPicker Component", () => {
       picker.setAttribute("clearable", "");
       container.appendChild(picker);
 
-      await waitForRender();
+      await picker.updateComplete;
 
       const panel = picker.shadowRoot.querySelector("ea-color-picker-panel");
       expect(panel.getAttribute("clearable")).toBe("true");
@@ -369,7 +368,7 @@ describe("EaColorPicker Component", () => {
       picker.setAttribute("color-format", "rgb");
       container.appendChild(picker);
 
-      await waitForRender();
+      await picker.updateComplete;
 
       const panel = picker.shadowRoot.querySelector("ea-color-picker-panel");
       expect(panel.getAttribute("color-format")).toBe("rgb");
@@ -397,7 +396,7 @@ describe("EaColorPicker Component", () => {
       picker.setAttribute("show-alpha", "");
       container.appendChild(picker);
 
-      await waitForRender();
+      await picker.updateComplete;
 
       const panel = picker.shadowRoot.querySelector("ea-color-picker-panel");
       expect(panel.getAttribute("show-alpha")).toBe("true");
@@ -442,7 +441,7 @@ describe("EaColorPicker Component", () => {
       picker.setAttribute("placement", "top-start");
       container.appendChild(picker);
 
-      await waitForRender();
+      await picker.updateComplete;
 
       const popper = picker.shadowRoot.querySelector("ea-popper");
       expect(popper.getAttribute("placement")).toBe("top-start");
@@ -519,7 +518,7 @@ describe("EaColorPicker Component", () => {
       const picker = document.createElement("ea-color-picker");
       container.appendChild(picker);
 
-      await waitForRender();
+      await picker.updateComplete;
 
       expect(picker.predefine).toEqual([]);
     });
@@ -528,12 +527,12 @@ describe("EaColorPicker Component", () => {
       const picker = document.createElement("ea-color-picker");
       container.appendChild(picker);
 
-      await waitForRender();
+      await picker.updateComplete;
 
       const predefineList = ["#ff4500", "#ff8c00", "#ffd700"];
       picker.predefine = predefineList;
 
-      await waitForRender();
+      await picker.updateComplete;
 
       expect(picker.predefine).toEqual(predefineList);
     });
@@ -542,12 +541,12 @@ describe("EaColorPicker Component", () => {
       const picker = document.createElement("ea-color-picker");
       container.appendChild(picker);
 
-      await waitForRender();
+      await picker.updateComplete;
 
       const predefineList = ["#ff4500", "#ff8c00"];
       picker.predefine = predefineList;
 
-      await waitForRender();
+      await picker.updateComplete;
 
       const panel = picker.shadowRoot.querySelector("ea-color-picker-panel");
       expect(panel.predefine).toEqual(predefineList);
@@ -560,7 +559,7 @@ describe("EaColorPicker Component", () => {
       picker.setAttribute("value", "#409eff");
       container.appendChild(picker);
 
-      await waitForRender();
+      await picker.updateComplete;
 
       const panel = picker.shadowRoot.querySelector("ea-color-picker-panel");
       panel.dispatchEvent(
@@ -580,7 +579,7 @@ describe("EaColorPicker Component", () => {
       picker.setAttribute("clearable", "");
       container.appendChild(picker);
 
-      await waitForRender();
+      await picker.updateComplete;
 
       const clearHandler = vi.fn();
       picker.addEventListener("ea-clear", clearHandler);
@@ -588,7 +587,7 @@ describe("EaColorPicker Component", () => {
       const clearBtn = picker.shadowRoot.querySelector('[part="clear-btn"]');
       clearBtn.click();
 
-      await waitForRender();
+      await picker.updateComplete;
 
       expect(clearHandler).toHaveBeenCalledTimes(1);
     });
@@ -599,7 +598,7 @@ describe("EaColorPicker Component", () => {
       picker.setAttribute("clearable", "");
       container.appendChild(picker);
 
-      await waitForRender();
+      await picker.updateComplete;
 
       const clearBtn = picker.shadowRoot.querySelector('[part="clear-btn"]');
       clearBtn.click();
@@ -613,7 +612,7 @@ describe("EaColorPicker Component", () => {
       picker.setAttribute("clearable", "");
       container.appendChild(picker);
 
-      await waitForRender();
+      await picker.updateComplete;
 
       const changeHandler = vi.fn();
       picker.addEventListener("change", changeHandler);
@@ -621,7 +620,7 @@ describe("EaColorPicker Component", () => {
       const clearBtn = picker.shadowRoot.querySelector('[part="clear-btn"]');
       clearBtn.click();
 
-      await waitForRender();
+      await picker.updateComplete;
 
       expect(changeHandler).toHaveBeenCalled();
     });
@@ -677,7 +676,7 @@ describe("EaColorPicker Component", () => {
       picker.setAttribute("value", "#409eff");
       container.appendChild(picker);
 
-      await waitForRender();
+      await picker.updateComplete;
 
       const containerEl = picker.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-has-value")).toBe(true);
@@ -687,7 +686,7 @@ describe("EaColorPicker Component", () => {
       const picker = document.createElement("ea-color-picker");
       container.appendChild(picker);
 
-      await waitForRender();
+      await picker.updateComplete;
 
       const containerEl = picker.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-has-value")).toBe(false);
@@ -701,7 +700,7 @@ describe("EaColorPicker Component", () => {
       picker.setAttribute("clearable", "");
       container.appendChild(picker);
 
-      await waitForRender();
+      await picker.updateComplete;
 
       const panel = picker.shadowRoot.querySelector("ea-color-picker-panel");
       expect(panel.value).toBeTruthy();
@@ -715,7 +714,7 @@ describe("EaColorPicker Component", () => {
       picker.setAttribute("show-alpha", "");
       container.appendChild(picker);
 
-      await waitForRender();
+      await picker.updateComplete;
 
       const panel = picker.shadowRoot.querySelector("ea-color-picker-panel");
       expect(panel.getAttribute("color-format")).toBe("rgb");
@@ -749,7 +748,7 @@ describe("EaColorPickerPanel Component", () => {
       const panel = document.createElement("ea-color-picker-panel");
       container.appendChild(panel);
 
-      await waitForRender();
+      await panel.updateComplete;
 
       const parts = [
         "container",
@@ -823,7 +822,7 @@ describe("EaColorPickerPanel Component", () => {
       panel.setAttribute("value", "#409eff");
       container.appendChild(panel);
 
-      await waitForRender();
+      await panel.updateComplete;
 
       expect(panel.value).toMatch(/^rgb\(/);
     });
@@ -850,7 +849,7 @@ describe("EaColorPickerPanel Component", () => {
       panel.setAttribute("value", "#409eff");
       container.appendChild(panel);
 
-      await waitForRender();
+      await panel.updateComplete;
 
       panel.setAttribute("value", "#67c23a");
       expect(panel.value).toBe("#67c23a");
@@ -883,7 +882,7 @@ describe("EaColorPickerPanel Component", () => {
       panel.setAttribute("value", "#409eff");
       container.appendChild(panel);
 
-      await waitForRender();
+      await panel.updateComplete;
 
       expect(panel.value).toMatch(/^rgb\(/);
     });
@@ -894,7 +893,7 @@ describe("EaColorPickerPanel Component", () => {
       panel.setAttribute("value", "#409eff");
       container.appendChild(panel);
 
-      await waitForRender();
+      await panel.updateComplete;
 
       expect(panel.value).toMatch(/^hsl\(/);
     });
@@ -904,12 +903,12 @@ describe("EaColorPickerPanel Component", () => {
       panel.setAttribute("value", "#409eff");
       container.appendChild(panel);
 
-      await waitForRender();
+      await panel.updateComplete;
 
       expect(panel.value).toBe("#409eff");
 
       panel.setAttribute("color-format", "rgb");
-      await waitForRender();
+      await panel.updateComplete;
 
       expect(panel.value).toMatch(/^rgb\(/);
     });
@@ -937,7 +936,7 @@ describe("EaColorPickerPanel Component", () => {
       panel.setAttribute("value", "#409eff");
       container.appendChild(panel);
 
-      await waitForRender();
+      await panel.updateComplete;
 
       expect(panel.value).toMatch(/^rgb/);
     });
@@ -949,7 +948,7 @@ describe("EaColorPickerPanel Component", () => {
       panel.setAttribute("value", "#409eff");
       container.appendChild(panel);
 
-      await waitForRender();
+      await panel.updateComplete;
 
       expect(panel.value).toMatch(/^rgb/);
     });
@@ -961,7 +960,7 @@ describe("EaColorPickerPanel Component", () => {
       panel.setAttribute("value", "#409eff");
       container.appendChild(panel);
 
-      await waitForRender();
+      await panel.updateComplete;
 
       expect(panel.value).toMatch(/^hsl/);
     });
@@ -980,12 +979,12 @@ describe("EaColorPickerPanel Component", () => {
       panel.setAttribute("value", "#409eff");
       container.appendChild(panel);
 
-      await waitForRender();
+      await panel.updateComplete;
 
       expect(panel.value).toBe("#409eff");
 
       panel.setAttribute("show-alpha", "");
-      await waitForRender();
+      await panel.updateComplete;
       expect(panel.value).toMatch(/^rgb/);
     });
 
@@ -1003,7 +1002,7 @@ describe("EaColorPickerPanel Component", () => {
       panel.setAttribute("show-alpha", "");
       container.appendChild(panel);
 
-      await waitForRender();
+      await panel.updateComplete;
 
       const containerEl = panel.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-show-alpha")).toBe(true);
@@ -1031,7 +1030,7 @@ describe("EaColorPickerPanel Component", () => {
       panel.setAttribute("disabled", "");
       container.appendChild(panel);
 
-      await waitForRender();
+      await panel.updateComplete;
 
       const containerEl = panel.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-disabled")).toBe(true);
@@ -1059,7 +1058,7 @@ describe("EaColorPickerPanel Component", () => {
       panel.setAttribute("border", "");
       container.appendChild(panel);
 
-      await waitForRender();
+      await panel.updateComplete;
 
       const containerEl = panel.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-border")).toBe(true);
@@ -1087,7 +1086,7 @@ describe("EaColorPickerPanel Component", () => {
       const panel = document.createElement("ea-color-picker-panel");
       container.appendChild(panel);
 
-      await waitForRender();
+      await panel.updateComplete;
 
       const containerEl = panel.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-clearable")).toBe(true);
@@ -1099,7 +1098,7 @@ describe("EaColorPickerPanel Component", () => {
 
       panel.clearable = false;
 
-      await waitForRender();
+      await panel.updateComplete;
 
       const containerEl = panel.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("is-clearable")).toBe(false);
@@ -1111,7 +1110,7 @@ describe("EaColorPickerPanel Component", () => {
       const panel = document.createElement("ea-color-picker-panel");
       container.appendChild(panel);
 
-      await waitForRender();
+      await panel.updateComplete;
 
       expect(panel.predefine).toEqual([]);
     });
@@ -1120,12 +1119,12 @@ describe("EaColorPickerPanel Component", () => {
       const panel = document.createElement("ea-color-picker-panel");
       container.appendChild(panel);
 
-      await waitForRender();
+      await panel.updateComplete;
 
       const predefineList = ["#ff4500", "#ff8c00", "#ffd700"];
       panel.predefine = predefineList;
 
-      await waitForRender();
+      await panel.updateComplete;
 
       expect(panel.predefine).toEqual(predefineList);
     });
@@ -1134,12 +1133,12 @@ describe("EaColorPickerPanel Component", () => {
       const panel = document.createElement("ea-color-picker-panel");
       container.appendChild(panel);
 
-      await waitForRender();
+      await panel.updateComplete;
 
       const predefineList = ["#ff4500", "#ff8c00", "#ffd700"];
       panel.predefine = predefineList;
 
-      await waitForRender();
+      await panel.updateComplete;
 
       const colors = panel.shadowRoot.querySelectorAll(
         ".ea-color-picker-panel__predefine-color"
@@ -1151,12 +1150,12 @@ describe("EaColorPickerPanel Component", () => {
       const panel = document.createElement("ea-color-picker-panel");
       container.appendChild(panel);
 
-      await waitForRender();
+      await panel.updateComplete;
 
       const predefineList = ["#ff4500", "#ff8c00"];
       panel.predefine = predefineList;
 
-      await waitForRender();
+      await panel.updateComplete;
 
       const colors = panel.shadowRoot.querySelectorAll(
         ".ea-color-picker-panel__predefine-color"
@@ -1169,11 +1168,11 @@ describe("EaColorPickerPanel Component", () => {
       const panel = document.createElement("ea-color-picker-panel");
       container.appendChild(panel);
 
-      await waitForRender();
+      await panel.updateComplete;
 
       panel.predefine = ["#ff4500"];
 
-      await waitForRender();
+      await panel.updateComplete;
 
       const colorsBefore = panel.shadowRoot.querySelectorAll(
         ".ea-color-picker-panel__predefine-color"
@@ -1182,7 +1181,7 @@ describe("EaColorPickerPanel Component", () => {
 
       panel.predefine = [];
 
-      await waitForRender();
+      await panel.updateComplete;
 
       const colors = panel.shadowRoot.querySelectorAll(
         ".ea-color-picker-panel__predefine-color"
@@ -1196,7 +1195,7 @@ describe("EaColorPickerPanel Component", () => {
       const panel = document.createElement("ea-color-picker-panel");
       container.appendChild(panel);
 
-      await waitForRender();
+      await panel.updateComplete;
 
       const handler = vi.fn();
       panel.addEventListener("ea-active-change", handler);
@@ -1208,7 +1207,7 @@ describe("EaColorPickerPanel Component", () => {
       const panel = document.createElement("ea-color-picker-panel");
       container.appendChild(panel);
 
-      await waitForRender();
+      await panel.updateComplete;
 
       const handler = vi.fn();
       panel.addEventListener("ea-invalid-color", handler);
@@ -1220,7 +1219,7 @@ describe("EaColorPickerPanel Component", () => {
       const panel = document.createElement("ea-color-picker-panel");
       container.appendChild(panel);
 
-      await waitForRender();
+      await panel.updateComplete;
 
       const handler = vi.fn();
       panel.addEventListener("change", handler);
@@ -1242,7 +1241,7 @@ describe("EaColorPickerPanel Component", () => {
       panel.setAttribute("value", "#409eff");
       container.appendChild(panel);
 
-      await waitForRender();
+      await panel.updateComplete;
 
       const svCursor = panel.shadowRoot.querySelector(
         '[part="svpanel-cursor"]'
@@ -1281,7 +1280,7 @@ describe("EaColorPickerPanel Component", () => {
       panel.setAttribute("value", "#409eff");
       container.appendChild(panel);
 
-      await waitForRender();
+      await panel.updateComplete;
 
       const colorInput = panel.shadowRoot.querySelector("ea-input");
       expect(colorInput.getAttribute("value")).toBe("#409eff");
@@ -1294,7 +1293,7 @@ describe("EaColorPickerPanel Component", () => {
       panel.setAttribute("value", "#409eff");
       container.appendChild(panel);
 
-      await waitForRender();
+      await panel.updateComplete;
 
       const bgColor = panel.style.getPropertyValue(
         "--ea-color-picker-panel-background-color"
@@ -1308,7 +1307,7 @@ describe("EaColorPickerPanel Component", () => {
       const el = document.createElement("ea-color-picker");
       el.setAttribute("label", "Color");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el, {
         rules: {
           "aria-command-name": { enabled: false },
@@ -1323,7 +1322,7 @@ describe("EaColorPickerPanel Component", () => {
       el.setAttribute("label", "Color");
       el.setAttribute("disabled", "");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el, {
         rules: {
           "aria-command-name": { enabled: false },
@@ -1337,7 +1336,7 @@ describe("EaColorPickerPanel Component", () => {
       it("trigger 应该有 role='button'", async () => {
         const el = document.createElement("ea-color-picker");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const trigger = el.shadowRoot.querySelector('[part="trigger"]');
         expect(trigger.getAttribute("role")).toBe("button");
       });
@@ -1345,7 +1344,7 @@ describe("EaColorPickerPanel Component", () => {
       it("trigger 应该有 aria-haspopup='dialog'", async () => {
         const el = document.createElement("ea-color-picker");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const trigger = el.shadowRoot.querySelector('[part="trigger"]');
         expect(trigger.getAttribute("aria-haspopup")).toBe("dialog");
       });
@@ -1353,7 +1352,7 @@ describe("EaColorPickerPanel Component", () => {
       it("trigger 应该有 aria-expanded 属性", async () => {
         const el = document.createElement("ea-color-picker");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const trigger = el.shadowRoot.querySelector('[part="trigger"]');
         expect(trigger.hasAttribute("aria-expanded")).toBe(true);
       });
@@ -1361,7 +1360,7 @@ describe("EaColorPickerPanel Component", () => {
       it("svpanel 应该有 role='slider'", async () => {
         const panel = document.createElement("ea-color-picker-panel");
         container.appendChild(panel);
-        await waitForRender();
+        await panel.updateComplete;
         const svpanel = panel.shadowRoot.querySelector('[part="svpanel"]');
         expect(svpanel.getAttribute("role")).toBe("slider");
       });
@@ -1369,7 +1368,7 @@ describe("EaColorPickerPanel Component", () => {
       it("svpanel 应该有 aria-label='Saturation and brightness'", async () => {
         const panel = document.createElement("ea-color-picker-panel");
         container.appendChild(panel);
-        await waitForRender();
+        await panel.updateComplete;
         const svpanel = panel.shadowRoot.querySelector('[part="svpanel"]');
         expect(svpanel.getAttribute("aria-label")).toBe(
           "Saturation and brightness"
@@ -1379,7 +1378,7 @@ describe("EaColorPickerPanel Component", () => {
       it("svpanel 应该有 aria-valuemin='0' 和 aria-valuemax='100'", async () => {
         const panel = document.createElement("ea-color-picker-panel");
         container.appendChild(panel);
-        await waitForRender();
+        await panel.updateComplete;
         const svpanel = panel.shadowRoot.querySelector('[part="svpanel"]');
         expect(svpanel.getAttribute("aria-valuemin")).toBe("0");
         expect(svpanel.getAttribute("aria-valuemax")).toBe("100");
@@ -1388,7 +1387,7 @@ describe("EaColorPickerPanel Component", () => {
       it("hue slider 应该有 role='slider'", async () => {
         const panel = document.createElement("ea-color-picker-panel");
         container.appendChild(panel);
-        await waitForRender();
+        await panel.updateComplete;
         const hueSlider = panel.shadowRoot.querySelector('[part="hue-slider"]');
         expect(hueSlider.getAttribute("role")).toBe("slider");
       });
@@ -1396,7 +1395,7 @@ describe("EaColorPickerPanel Component", () => {
       it("hue slider 应该有 aria-label='Hue'", async () => {
         const panel = document.createElement("ea-color-picker-panel");
         container.appendChild(panel);
-        await waitForRender();
+        await panel.updateComplete;
         const hueSlider = panel.shadowRoot.querySelector('[part="hue-slider"]');
         expect(hueSlider.getAttribute("aria-label")).toBe("Hue");
       });
@@ -1404,7 +1403,7 @@ describe("EaColorPickerPanel Component", () => {
       it("hue slider 应该有 aria-valuemin='0' 和 aria-valuemax='360'", async () => {
         const panel = document.createElement("ea-color-picker-panel");
         container.appendChild(panel);
-        await waitForRender();
+        await panel.updateComplete;
         const hueSlider = panel.shadowRoot.querySelector('[part="hue-slider"]');
         expect(hueSlider.getAttribute("aria-valuemin")).toBe("0");
         expect(hueSlider.getAttribute("aria-valuemax")).toBe("360");
@@ -1413,7 +1412,7 @@ describe("EaColorPickerPanel Component", () => {
       it("alpha slider 应该有 role='slider'", async () => {
         const panel = document.createElement("ea-color-picker-panel");
         container.appendChild(panel);
-        await waitForRender();
+        await panel.updateComplete;
         const alphaSlider = panel.shadowRoot.querySelector(
           '[part="alpha-slider"]'
         );
@@ -1423,7 +1422,7 @@ describe("EaColorPickerPanel Component", () => {
       it("alpha slider 应该有 aria-label='Opacity'", async () => {
         const panel = document.createElement("ea-color-picker-panel");
         container.appendChild(panel);
-        await waitForRender();
+        await panel.updateComplete;
         const alphaSlider = panel.shadowRoot.querySelector(
           '[part="alpha-slider"]'
         );
@@ -1433,7 +1432,7 @@ describe("EaColorPickerPanel Component", () => {
       it("alpha slider 应该有 aria-valuemin='0' 和 aria-valuemax='100'", async () => {
         const panel = document.createElement("ea-color-picker-panel");
         container.appendChild(panel);
-        await waitForRender();
+        await panel.updateComplete;
         const alphaSlider = panel.shadowRoot.querySelector(
           '[part="alpha-slider"]'
         );

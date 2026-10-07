@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 
 import "../components/ea-statistic/index.ts";
-import { waitForRender } from "./utils/waitForRender.js";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 describe("EaStatistic Component", () => {
@@ -170,7 +169,7 @@ describe("EaStatistic Component", () => {
       statistic.setAttribute("heading", "Daily Active Users");
       container.appendChild(statistic);
 
-      await waitForRender();
+      await statistic.updateComplete;
 
       const header = statistic.shadowRoot.querySelector(
         ".ea-statistic__header"
@@ -183,10 +182,10 @@ describe("EaStatistic Component", () => {
       statistic.setAttribute("heading", "Old Title");
       container.appendChild(statistic);
 
-      await waitForRender();
+      await statistic.updateComplete;
 
       statistic.setAttribute("heading", "New Title");
-      await waitForRender();
+      await statistic.updateComplete;
 
       const header = statistic.shadowRoot.querySelector(
         ".ea-statistic__header"
@@ -199,7 +198,7 @@ describe("EaStatistic Component", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
 
-      await waitForRender();
+      await statistic.updateComplete;
 
       const header = statistic.shadowRoot.querySelector(
         ".ea-statistic__header"
@@ -237,7 +236,7 @@ describe("EaStatistic Component", () => {
       statistic.setAttribute("value", "1000000");
       container.appendChild(statistic);
 
-      await waitForRender();
+      await statistic.updateComplete;
 
       const numberEl = statistic.shadowRoot.querySelector(
         ".ea-statistic__number"
@@ -250,7 +249,7 @@ describe("EaStatistic Component", () => {
       statistic.setAttribute("value", "0");
       container.appendChild(statistic);
 
-      await waitForRender();
+      await statistic.updateComplete;
 
       const numberEl = statistic.shadowRoot.querySelector(
         ".ea-statistic__number"
@@ -263,7 +262,7 @@ describe("EaStatistic Component", () => {
       statistic.setAttribute("value", "1234.56");
       container.appendChild(statistic);
 
-      await waitForRender();
+      await statistic.updateComplete;
 
       const numberEl = statistic.shadowRoot.querySelector(
         ".ea-statistic__number"
@@ -276,10 +275,10 @@ describe("EaStatistic Component", () => {
       statistic.setAttribute("value", "500");
       container.appendChild(statistic);
 
-      await waitForRender();
+      await statistic.updateComplete;
 
       statistic.setAttribute("value", "999999");
-      await waitForRender();
+      await statistic.updateComplete;
 
       const numberEl = statistic.shadowRoot.querySelector(
         ".ea-statistic__number"
@@ -293,7 +292,7 @@ describe("EaStatistic Component", () => {
       statistic.setAttribute("value", "-1000");
       container.appendChild(statistic);
 
-      await waitForRender();
+      await statistic.updateComplete;
 
       expect(statistic.value).toBe(-1000);
       const numberEl = statistic.shadowRoot.querySelector(
@@ -489,7 +488,7 @@ describe("EaStatistic Component", () => {
       statistic.setAttribute("value", "268500");
       container.appendChild(statistic);
 
-      await waitForRender();
+      await statistic.updateComplete;
 
       expect(statistic.heading).toBe("Total Users");
       expect(statistic.value).toBe(268500);
@@ -568,7 +567,7 @@ describe("EaStatistic Component", () => {
       statistic.setAttribute("value", "9999999999");
       container.appendChild(statistic);
 
-      await waitForRender();
+      await statistic.updateComplete;
 
       const numberEl = statistic.shadowRoot.querySelector(
         ".ea-statistic__number"
@@ -589,7 +588,7 @@ describe("EaStatistic Component", () => {
       statistic.innerHTML = `<div slot="title">Slot Title</div>`;
       container.appendChild(statistic);
 
-      await waitForRender();
+      await statistic.updateComplete;
 
       const headerBefore = statistic.shadowRoot.querySelector(
         ".ea-statistic__header"
@@ -597,7 +596,7 @@ describe("EaStatistic Component", () => {
       expect(headerBefore.querySelector('slot[name="title"]')).toBeTruthy();
 
       statistic.setAttribute("heading", "Attribute Title");
-      await waitForRender();
+      await statistic.updateComplete;
 
       expect(statistic.heading).toBe("Attribute Title");
       const headerAfter = statistic.shadowRoot.querySelector(
@@ -613,7 +612,7 @@ describe("EaStatistic Component", () => {
       const el = document.createElement("ea-statistic");
       el.setAttribute("value", "100");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });
@@ -623,7 +622,7 @@ describe("EaStatistic Component", () => {
         const statistic = document.createElement("ea-statistic");
         container.appendChild(statistic);
 
-        await waitForRender();
+        await statistic.updateComplete;
 
         const numberEl = statistic.shadowRoot.querySelector(".ea-statistic__number");
         expect(numberEl.getAttribute("aria-live")).toBe("polite");
@@ -634,7 +633,7 @@ describe("EaStatistic Component", () => {
         statistic.setAttribute("value", "1000");
         container.appendChild(statistic);
 
-        await waitForRender();
+        await statistic.updateComplete;
 
         const numberEl = statistic.shadowRoot.querySelector(".ea-statistic__number");
         expect(numberEl.getAttribute("aria-live")).toBe("polite");
@@ -645,10 +644,10 @@ describe("EaStatistic Component", () => {
         statistic.setAttribute("value", "100");
         container.appendChild(statistic);
 
-        await waitForRender();
+        await statistic.updateComplete;
 
         statistic.setAttribute("value", "2000");
-        await waitForRender();
+        await statistic.updateComplete;
 
         const numberEl = statistic.shadowRoot.querySelector(".ea-statistic__number");
         expect(numberEl.getAttribute("aria-live")).toBe("polite");

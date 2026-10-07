@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { waitForRender } from "./utils/waitForRender.js";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 if (!Element.prototype.scrollTo) {
@@ -11,10 +10,10 @@ if (!Element.prototype.scrollTo) {
   };
 }
 
-global.requestAnimationFrame = (callback) => {
+global.requestAnimationFrame = callback => {
   return setTimeout(callback, 16);
 };
-global.cancelAnimationFrame = (id) => {
+global.cancelAnimationFrame = id => {
   clearTimeout(id);
 };
 
@@ -66,9 +65,7 @@ describe("EaScrollbar Component", () => {
       expect(
         scrollbar.shadowRoot.querySelector('[part="thumb-vertical"]')
       ).toBeTruthy();
-      expect(
-        scrollbar.shadowRoot.querySelector('[part="view"]')
-      ).toBeTruthy();
+      expect(scrollbar.shadowRoot.querySelector('[part="view"]')).toBeTruthy();
     });
 
     it("应该渲染默认插槽内容", () => {
@@ -138,7 +135,7 @@ describe("EaScrollbar Component", () => {
       scrollbar.innerHTML = `<div>Content</div>`;
       container.appendChild(scrollbar);
 
-      await waitForRender();
+      await scrollbar.updateComplete;
 
       const containerEl = scrollbar.shadowRoot.querySelector(".ea-scrollbar");
       expect(containerEl.style.height).toBe("200px");
@@ -149,7 +146,7 @@ describe("EaScrollbar Component", () => {
       scrollbar.innerHTML = `<div>Content</div>`;
       container.appendChild(scrollbar);
 
-      await waitForRender();
+      await scrollbar.updateComplete;
 
       const containerEl = scrollbar.shadowRoot.querySelector(".ea-scrollbar");
       expect(containerEl.style.height).toBe("100%");
@@ -180,7 +177,7 @@ describe("EaScrollbar Component", () => {
       scrollbar.innerHTML = `<div>Content</div>`;
       container.appendChild(scrollbar);
 
-      await waitForRender();
+      await scrollbar.updateComplete;
 
       const containerEl = scrollbar.shadowRoot.querySelector(".ea-scrollbar");
       expect(containerEl.classList.contains("ea-scrollbar--native")).toBe(true);
@@ -211,7 +208,7 @@ describe("EaScrollbar Component", () => {
       scrollbar.innerHTML = `<div>Content</div>`;
       container.appendChild(scrollbar);
 
-      await waitForRender();
+      await scrollbar.updateComplete;
 
       const containerEl = scrollbar.shadowRoot.querySelector(".ea-scrollbar");
       expect(containerEl.classList.contains("ea-scrollbar--noresize")).toBe(
@@ -244,7 +241,7 @@ describe("EaScrollbar Component", () => {
       scrollbar.innerHTML = `<div>Content</div>`;
       container.appendChild(scrollbar);
 
-      await waitForRender();
+      await scrollbar.updateComplete;
 
       const containerEl = scrollbar.shadowRoot.querySelector(".ea-scrollbar");
       expect(containerEl.classList.contains("ea-scrollbar--always")).toBe(true);
@@ -259,7 +256,7 @@ describe("EaScrollbar Component", () => {
       `;
       container.appendChild(scrollbar);
 
-      await waitForRender();
+      await scrollbar.updateComplete;
 
       const scrollHandler = vi.fn();
       scrollbar.addEventListener("ea-scroll", scrollHandler);
@@ -268,7 +265,7 @@ describe("EaScrollbar Component", () => {
       view.scrollTop = 100;
       view.dispatchEvent(new Event("scroll"));
 
-      await waitForRender();
+      await scrollbar.updateComplete;
 
       expect(scrollHandler).toHaveBeenCalled();
     });
@@ -280,10 +277,10 @@ describe("EaScrollbar Component", () => {
       `;
       container.appendChild(scrollbar);
 
-      await waitForRender();
+      await scrollbar.updateComplete;
 
       let eventDetail = null;
-      scrollbar.addEventListener("ea-scroll", (e) => {
+      scrollbar.addEventListener("ea-scroll", e => {
         eventDetail = e.detail;
       });
 
@@ -292,7 +289,7 @@ describe("EaScrollbar Component", () => {
       view.scrollLeft = 30;
       view.dispatchEvent(new Event("scroll"));
 
-      await waitForRender();
+      await scrollbar.updateComplete;
 
       expect(eventDetail).toBeTruthy();
       expect(typeof eventDetail.scrollTop).toBe("number");
@@ -306,21 +303,33 @@ describe("EaScrollbar Component", () => {
       `;
       container.appendChild(scrollbar);
 
-      await waitForRender();
+      await scrollbar.updateComplete;
 
       const view = scrollbar.shadowRoot.querySelector(".ea-scrollbar__view");
 
-      Object.defineProperty(view, "scrollTop", { value: 0, configurable: true });
-      Object.defineProperty(view, "scrollHeight", { value: 500, configurable: true });
-      Object.defineProperty(view, "scrollLeft", { value: 0, configurable: true });
-      Object.defineProperty(view, "scrollWidth", { value: 400, configurable: true });
+      Object.defineProperty(view, "scrollTop", {
+        value: 0,
+        configurable: true,
+      });
+      Object.defineProperty(view, "scrollHeight", {
+        value: 500,
+        configurable: true,
+      });
+      Object.defineProperty(view, "scrollLeft", {
+        value: 0,
+        configurable: true,
+      });
+      Object.defineProperty(view, "scrollWidth", {
+        value: 400,
+        configurable: true,
+      });
 
       const endReachedHandler = vi.fn();
       scrollbar.addEventListener("ea-end-reached", endReachedHandler);
 
       view.dispatchEvent(new Event("scroll"));
 
-      await waitForRender();
+      await scrollbar.updateComplete;
 
       expect(endReachedHandler).toHaveBeenCalled();
     });
@@ -332,23 +341,35 @@ describe("EaScrollbar Component", () => {
       `;
       container.appendChild(scrollbar);
 
-      await waitForRender();
+      await scrollbar.updateComplete;
 
       const view = scrollbar.shadowRoot.querySelector(".ea-scrollbar__view");
 
-      Object.defineProperty(view, "scrollTop", { value: 0, configurable: true });
-      Object.defineProperty(view, "scrollHeight", { value: 500, configurable: true });
-      Object.defineProperty(view, "scrollLeft", { value: 0, configurable: true });
-      Object.defineProperty(view, "scrollWidth", { value: 400, configurable: true });
+      Object.defineProperty(view, "scrollTop", {
+        value: 0,
+        configurable: true,
+      });
+      Object.defineProperty(view, "scrollHeight", {
+        value: 500,
+        configurable: true,
+      });
+      Object.defineProperty(view, "scrollLeft", {
+        value: 0,
+        configurable: true,
+      });
+      Object.defineProperty(view, "scrollWidth", {
+        value: 400,
+        configurable: true,
+      });
 
       let eventDetail = null;
-      scrollbar.addEventListener("ea-end-reached", (e) => {
+      scrollbar.addEventListener("ea-end-reached", e => {
         eventDetail = e.detail;
       });
 
       view.dispatchEvent(new Event("scroll"));
 
-      await waitForRender();
+      await scrollbar.updateComplete;
 
       expect(eventDetail).toBeTruthy();
       expect(["top", "bottom", "left", "right"]).toContain(
@@ -375,13 +396,13 @@ describe("EaScrollbar Component", () => {
       `;
       container.appendChild(scrollbar);
 
-      await waitForRender();
+      await scrollbar.updateComplete;
 
       const view = scrollbar.shadowRoot.querySelector(".ea-scrollbar__view");
 
       scrollbar.scrollTo({ top: 100 });
 
-      await waitForRender();
+      await scrollbar.updateComplete;
 
       expect(view.scrollTop).toBeGreaterThanOrEqual(0);
     });
@@ -393,7 +414,7 @@ describe("EaScrollbar Component", () => {
       `;
       container.appendChild(scrollbar);
 
-      await waitForRender();
+      await scrollbar.updateComplete;
 
       expect(() => scrollbar.scrollTo(0, 100)).not.toThrow();
     });
@@ -405,7 +426,7 @@ describe("EaScrollbar Component", () => {
       scrollbar.innerHTML = `<div style="height: 500px;">Content</div>`;
       container.appendChild(scrollbar);
 
-      await waitForRender();
+      await scrollbar.updateComplete;
 
       const verticalThumb = scrollbar.shadowRoot.querySelector(
         ".ea-scrollbar__thumb-vertical"
@@ -419,7 +440,7 @@ describe("EaScrollbar Component", () => {
       });
       verticalThumb.dispatchEvent(mousedownEvent);
 
-      await waitForRender();
+      await scrollbar.updateComplete;
 
       const containerEl = scrollbar.shadowRoot.querySelector(".ea-scrollbar");
       expect(containerEl.classList.contains("is-dragging")).toBe(true);
@@ -427,7 +448,7 @@ describe("EaScrollbar Component", () => {
       const mouseupEvent = new MouseEvent("mouseup", { bubbles: true });
       window.dispatchEvent(mouseupEvent);
 
-      await waitForRender();
+      await scrollbar.updateComplete;
 
       expect(containerEl.classList.contains("is-dragging")).toBe(false);
     });
@@ -437,7 +458,7 @@ describe("EaScrollbar Component", () => {
       scrollbar.innerHTML = `<div style="height: 500px;">Content</div>`;
       container.appendChild(scrollbar);
 
-      await waitForRender();
+      await scrollbar.updateComplete;
 
       const verticalThumb = scrollbar.shadowRoot.querySelector(
         ".ea-scrollbar__thumb-vertical"
@@ -451,14 +472,14 @@ describe("EaScrollbar Component", () => {
       });
       verticalThumb.dispatchEvent(mousedownEvent);
 
-      await waitForRender();
+      await scrollbar.updateComplete;
 
       expect(verticalThumb.classList.contains("is-active")).toBe(true);
 
       const mouseupEvent = new MouseEvent("mouseup", { bubbles: true });
       window.dispatchEvent(mouseupEvent);
 
-      await waitForRender();
+      await scrollbar.updateComplete;
 
       expect(verticalThumb.classList.contains("is-active")).toBe(false);
     });
@@ -472,7 +493,7 @@ describe("EaScrollbar Component", () => {
       `;
       container.appendChild(scrollbar);
 
-      await waitForRender();
+      await scrollbar.updateComplete;
 
       const view = scrollbar.shadowRoot.querySelector(".ea-scrollbar__view");
       const initialScrollTop = view.scrollTop;
@@ -480,7 +501,7 @@ describe("EaScrollbar Component", () => {
       const keydownEvent = new KeyboardEvent("keydown", { key: "ArrowDown" });
       scrollbar.dispatchEvent(keydownEvent);
 
-      await waitForRender();
+      await scrollbar.updateComplete;
 
       expect(view.scrollTop >= initialScrollTop).toBe(true);
     });
@@ -492,7 +513,7 @@ describe("EaScrollbar Component", () => {
       `;
       container.appendChild(scrollbar);
 
-      await waitForRender();
+      await scrollbar.updateComplete;
 
       const view = scrollbar.shadowRoot.querySelector(".ea-scrollbar__view");
       const initialScrollLeft = view.scrollLeft;
@@ -500,7 +521,7 @@ describe("EaScrollbar Component", () => {
       const keydownEvent = new KeyboardEvent("keydown", { key: "ArrowRight" });
       scrollbar.dispatchEvent(keydownEvent);
 
-      await waitForRender();
+      await scrollbar.updateComplete;
 
       expect(view.scrollLeft >= initialScrollLeft).toBe(true);
     });
@@ -512,7 +533,7 @@ describe("EaScrollbar Component", () => {
       scrollbar.innerHTML = `<div style="height: 50px;">Small Content</div>`;
       container.appendChild(scrollbar);
 
-      await waitForRender(200);
+      await scrollbar.updateComplete;
 
       const view = scrollbar.shadowRoot.querySelector(".ea-scrollbar__view");
       const verticalTrack = scrollbar.shadowRoot.querySelector(
@@ -523,14 +544,20 @@ describe("EaScrollbar Component", () => {
         value: () => ({ height: 300, width: 400 }),
         configurable: true,
       });
-      Object.defineProperty(view, "scrollHeight", { value: 300, configurable: true });
-      Object.defineProperty(view, "scrollWidth", { value: 400, configurable: true });
+      Object.defineProperty(view, "scrollHeight", {
+        value: 300,
+        configurable: true,
+      });
+      Object.defineProperty(view, "scrollWidth", {
+        value: 400,
+        configurable: true,
+      });
 
       window.dispatchEvent(new Event("resize"));
 
-      await waitForRender(200);
-
-      expect(verticalTrack.classList.contains("is-hidden")).toBe(true);
+      await vi.waitFor(() => {
+        expect(verticalTrack.classList.contains("is-hidden")).toBe(true);
+      });
     });
   });
 
@@ -569,7 +596,7 @@ describe("EaScrollbar Component", () => {
       scrollbar.innerHTML = `<div style="height: 100px;">Initial Content</div>`;
       container.appendChild(scrollbar);
 
-      await waitForRender();
+      await scrollbar.updateComplete;
 
       const newContent = document.createElement("div");
       newContent.style.height = "500px";
@@ -594,7 +621,7 @@ describe("EaScrollbar Component", () => {
       scrollbar.innerHTML = `<div>Content</div>`;
       container.appendChild(scrollbar);
 
-      await waitForRender();
+      await scrollbar.updateComplete;
 
       scrollbar.remove();
 
@@ -620,7 +647,7 @@ describe("EaScrollbar Component", () => {
       scrollbar.innerHTML = `<div>Content</div>`;
       container.appendChild(scrollbar);
 
-      await waitForRender();
+      await scrollbar.updateComplete;
 
       const containerEl = scrollbar.shadowRoot.querySelector(".ea-scrollbar");
       expect(containerEl.classList.contains("ea-scrollbar--native")).toBe(true);
@@ -632,7 +659,7 @@ describe("EaScrollbar Component", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-scrollbar");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });

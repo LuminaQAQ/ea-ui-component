@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { waitForRender } from "./utils/waitForRender";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 if (typeof CSS === "undefined") {
@@ -290,7 +289,7 @@ describe("EaEmpty", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
 
-      await waitForRender();
+      await empty.updateComplete;
 
       const defaultSvg = empty.shadowRoot.querySelector(".ea-empty__default");
       const imgEl = empty.shadowRoot.querySelector(".ea-empty__image");
@@ -311,7 +310,7 @@ describe("EaEmpty", () => {
       empty.setAttribute("image", "https://example.com/custom.png");
       container.appendChild(empty);
 
-      await waitForRender();
+      await empty.updateComplete;
 
       const defaultSvg = empty.shadowRoot.querySelector(".ea-empty__default");
       const imgEl = empty.shadowRoot.querySelector(".ea-empty__image");
@@ -325,7 +324,7 @@ describe("EaEmpty", () => {
       empty.setAttribute("image", "https://example.com/custom.png");
       container.appendChild(empty);
 
-      await waitForRender();
+      await empty.updateComplete;
 
       const imgEl = empty.shadowRoot.querySelector(".ea-empty__image");
       expect(imgEl.getAttribute("src")).toBe("https://example.com/custom.png");
@@ -336,7 +335,7 @@ describe("EaEmpty", () => {
       empty.setAttribute("image", "https://example.com/custom.png");
       container.appendChild(empty);
 
-      await waitForRender();
+      await empty.updateComplete;
 
       const imgEl = empty.shadowRoot.querySelector(".ea-empty__image");
       expect(imgEl.getAttribute("alt")).toBe("empty image");
@@ -347,7 +346,7 @@ describe("EaEmpty", () => {
       empty.setAttribute("image", "https://example.com/custom.png");
       container.appendChild(empty);
 
-      await waitForRender();
+      await empty.updateComplete;
 
       const imgEl = empty.shadowRoot.querySelector('[part="image"]');
       expect(imgEl).toBeDefined();
@@ -359,10 +358,10 @@ describe("EaEmpty", () => {
       empty.setAttribute("image", "https://example.com/custom.png");
       container.appendChild(empty);
 
-      await waitForRender();
+      await empty.updateComplete;
 
       empty.setAttribute("image", "");
-      await waitForRender();
+      await empty.updateComplete;
 
       const defaultSvg = empty.shadowRoot.querySelector(".ea-empty__default");
       const imgEl = empty.shadowRoot.querySelector(".ea-empty__image");
@@ -375,13 +374,13 @@ describe("EaEmpty", () => {
       empty.setAttribute("image", "https://example.com/first.png");
       container.appendChild(empty);
 
-      await waitForRender();
+      await empty.updateComplete;
 
       let imgEl = empty.shadowRoot.querySelector(".ea-empty__image");
       expect(imgEl.getAttribute("src")).toBe("https://example.com/first.png");
 
       empty.setAttribute("image", "https://example.com/second.png");
-      await waitForRender();
+      await empty.updateComplete;
 
       imgEl = empty.shadowRoot.querySelector(".ea-empty__image");
       expect(imgEl.getAttribute("src")).toBe("https://example.com/second.png");
@@ -391,10 +390,10 @@ describe("EaEmpty", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
 
-      await waitForRender();
+      await empty.updateComplete;
 
       empty.image = "https://example.com/js-property.png";
-      await waitForRender();
+      await empty.updateComplete;
 
       const imgEl = empty.shadowRoot.querySelector(".ea-empty__image");
       expect(imgEl).toBeDefined();
@@ -408,10 +407,10 @@ describe("EaEmpty", () => {
       empty.setAttribute("image", "https://example.com/temp.png");
       container.appendChild(empty);
 
-      await waitForRender();
+      await empty.updateComplete;
 
       empty.image = "";
-      await waitForRender();
+      await empty.updateComplete;
 
       expect(empty.image).toBe("");
       expect(
@@ -442,8 +441,8 @@ describe("EaEmpty", () => {
       empty.setAttribute("image-size", "200px");
       container.appendChild(empty);
 
-      await waitForRender();
-      await waitForRender();
+      await empty.updateComplete;
+      await empty.updateComplete;
 
       expect(empty.imageSize).toBe("200px");
       expect(empty.getAttribute("image-size")).toBe("200px");
@@ -479,7 +478,7 @@ describe("EaEmpty", () => {
       empty.imageSize = "300px";
       container.appendChild(empty);
 
-      await waitForRender();
+      await empty.updateComplete;
 
       expect(empty.imageSize).toBe("300px");
       expect(empty.style.getPropertyValue("--ea-empty-size")).toBe("300px");
@@ -504,7 +503,7 @@ describe("EaEmpty", () => {
       empty.setAttribute("image-size", "invalid-value!!!");
       container.appendChild(empty);
 
-      await waitForRender();
+      await empty.updateComplete;
 
       expect(warnSpy).toHaveBeenCalledWith(
         "[ea-empty] The size value invalid-value!!! is not supported."
@@ -520,12 +519,12 @@ describe("EaEmpty", () => {
       empty.setAttribute("image-size", "200px");
       container.appendChild(empty);
 
-      await waitForRender();
+      await empty.updateComplete;
 
       expect(empty.style.getPropertyValue("--ea-empty-size")).toBe("200px");
 
       empty.setAttribute("image-size", "not-valid!!!");
-      await waitForRender();
+      await empty.updateComplete;
 
       expect(empty.style.getPropertyValue("--ea-empty-size")).toBe("200px");
 
@@ -537,12 +536,12 @@ describe("EaEmpty", () => {
       empty.setAttribute("image-size", "200px");
       container.appendChild(empty);
 
-      await waitForRender();
+      await empty.updateComplete;
 
       expect(empty.style.getPropertyValue("--ea-empty-size")).toBe("200px");
 
       empty.setAttribute("image-size", "");
-      await waitForRender();
+      await empty.updateComplete;
 
       expect(empty.imageSize).toBe("");
       expect(empty.style.getPropertyValue("--ea-empty-size")).toBe("");
@@ -561,7 +560,7 @@ describe("EaEmpty", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
 
-      await waitForRender();
+      await empty.updateComplete;
 
       const descSlot = empty.shadowRoot.querySelector(
         '.ea-empty__description slot[name="description"]'
@@ -582,7 +581,7 @@ describe("EaEmpty", () => {
       empty.setAttribute("description", "Custom Description Text");
       container.appendChild(empty);
 
-      await waitForRender();
+      await empty.updateComplete;
 
       const descSlot = empty.shadowRoot.querySelector(
         '.ea-empty__description slot[name="description"]'
@@ -595,10 +594,10 @@ describe("EaEmpty", () => {
       empty.setAttribute("description", "Temporary Text");
       container.appendChild(empty);
 
-      await waitForRender();
+      await empty.updateComplete;
 
       empty.setAttribute("description", "");
-      await waitForRender();
+      await empty.updateComplete;
 
       const descSlot = empty.shadowRoot.querySelector(
         '.ea-empty__description slot[name="description"]'
@@ -610,10 +609,10 @@ describe("EaEmpty", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
 
-      await waitForRender();
+      await empty.updateComplete;
 
       empty.description = "JS Property Description";
-      await waitForRender();
+      await empty.updateComplete;
 
       expect(empty.description).toBe("JS Property Description");
       const descSlot = empty.shadowRoot.querySelector(
@@ -627,7 +626,7 @@ describe("EaEmpty", () => {
       empty.setAttribute("description", "First Text");
       container.appendChild(empty);
 
-      await waitForRender();
+      await empty.updateComplete;
 
       let descSlot = empty.shadowRoot.querySelector(
         '.ea-empty__description slot[name="description"]'
@@ -635,7 +634,7 @@ describe("EaEmpty", () => {
       expect(descSlot.textContent).toBe("First Text");
 
       empty.setAttribute("description", "Second Text");
-      await waitForRender();
+      await empty.updateComplete;
 
       descSlot = empty.shadowRoot.querySelector(
         '.ea-empty__description slot[name="description"]'
@@ -711,7 +710,7 @@ describe("EaEmpty", () => {
       empty.style.setProperty("--ea-empty-size", "80px");
       container.appendChild(empty);
 
-      await waitForRender();
+      await empty.updateComplete;
 
       const size = getComputedStyle(empty).getPropertyValue("--ea-empty-size");
       expect(size.trim()).toBe("80px");
@@ -835,7 +834,7 @@ describe("EaEmpty", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
 
-      await waitForRender();
+      await empty.updateComplete;
 
       expect(empty.image).toBe("");
       expect(empty.imageSize).toBe("");
@@ -851,7 +850,7 @@ describe("EaEmpty", () => {
       empty.setAttribute("image-size", "200px");
       container.appendChild(empty);
 
-      await waitForRender();
+      await empty.updateComplete;
 
       expect(empty.image).toBe("https://example.com/img.png");
       expect(empty.imageSize).toBe("200px");
@@ -899,13 +898,13 @@ describe("EaEmpty", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
 
-      await waitForRender();
+      await empty.updateComplete;
 
       empty.setAttribute("image", "https://example.com/1.png");
       empty.setAttribute("image", "https://example.com/2.png");
       empty.setAttribute("image", "https://example.com/3.png");
 
-      await waitForRender();
+      await empty.updateComplete;
 
       const imgEl = empty.shadowRoot.querySelector(".ea-empty__image");
       expect(imgEl.getAttribute("src")).toBe("https://example.com/3.png");
@@ -915,13 +914,13 @@ describe("EaEmpty", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
 
-      await waitForRender();
+      await empty.updateComplete;
 
       empty.setAttribute("description", "A");
       empty.setAttribute("description", "B");
       empty.setAttribute("description", "C");
 
-      await waitForRender();
+      await empty.updateComplete;
 
       const descSlot = empty.shadowRoot.querySelector(
         '.ea-empty__description slot[name="description"]'
@@ -934,7 +933,7 @@ describe("EaEmpty", () => {
       empty.setAttribute("image", "./assets/empty.png");
       container.appendChild(empty);
 
-      await waitForRender();
+      await empty.updateComplete;
 
       const imgEl = empty.shadowRoot.querySelector(".ea-empty__image");
       expect(imgEl.getAttribute("src")).toBe("./assets/empty.png");
@@ -945,7 +944,7 @@ describe("EaEmpty", () => {
       empty.setAttribute("image", "data:image/svg+xml,...");
       container.appendChild(empty);
 
-      await waitForRender();
+      await empty.updateComplete;
 
       const imgEl = empty.shadowRoot.querySelector(".ea-empty__image");
       expect(imgEl.getAttribute("src")).toBe("data:image/svg+xml,...");
@@ -961,7 +960,7 @@ describe("EaEmpty", () => {
       empty.innerHTML = "<button>重新加载</button>";
       container.appendChild(empty);
 
-      await waitForRender();
+      await empty.updateComplete;
 
       expect(empty.image).toBe("https://example.com/full.png");
       expect(empty.imageSize).toBe("160px");
@@ -982,13 +981,13 @@ describe("EaEmpty", () => {
       empty.setAttribute("description", "临时描述");
       container.appendChild(empty);
 
-      await waitForRender();
+      await empty.updateComplete;
 
       expect(empty.shadowRoot.querySelector(".ea-empty__image")).toBeDefined();
 
       empty.setAttribute("image", "");
       empty.setAttribute("description", "");
-      await waitForRender();
+      await empty.updateComplete;
 
       expect(
         empty.shadowRoot.querySelector(".ea-empty__default")
@@ -1004,7 +1003,7 @@ describe("EaEmpty", () => {
       empty.setAttribute("description", "Only Description");
       container.appendChild(empty);
 
-      await waitForRender();
+      await empty.updateComplete;
 
       expect(
         empty.shadowRoot.querySelector(".ea-empty__default")
@@ -1018,7 +1017,7 @@ describe("EaEmpty", () => {
       empty.setAttribute("image-size", "200px");
       container.appendChild(empty);
 
-      await waitForRender();
+      await empty.updateComplete;
 
       expect(
         empty.shadowRoot.querySelector(".ea-empty__default")
@@ -1048,7 +1047,7 @@ describe("EaEmpty", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-empty");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });

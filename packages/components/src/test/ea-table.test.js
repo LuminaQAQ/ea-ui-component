@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { waitForRender } from "./utils/waitForRender";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-table/index";
@@ -306,7 +305,7 @@ describe("EaTable Component", () => {
       table.stripe = true;
       container.appendChild(table);
 
-      await waitForRender();
+      await table.updateComplete;
 
       const containerEl = table.shadowRoot.querySelector(".ea-table");
       expect(containerEl.classList.contains("is-stripe")).toBe(true);
@@ -316,13 +315,13 @@ describe("EaTable Component", () => {
       const table = document.createElement("ea-table");
       container.appendChild(table);
 
-      await waitForRender();
+      await table.updateComplete;
 
       const containerEl = table.shadowRoot.querySelector(".ea-table");
       expect(containerEl.classList.contains("is-stripe")).toBe(false);
 
       table.stripe = true;
-      await waitForRender();
+      await table.updateComplete;
 
       expect(containerEl.classList.contains("is-stripe")).toBe(true);
     });
@@ -349,7 +348,7 @@ describe("EaTable Component", () => {
       table.border = true;
       container.appendChild(table);
 
-      await waitForRender();
+      await table.updateComplete;
 
       const containerEl = table.shadowRoot.querySelector(".ea-table");
       expect(containerEl.classList.contains("is-border")).toBe(true);
@@ -359,13 +358,13 @@ describe("EaTable Component", () => {
       const table = document.createElement("ea-table");
       container.appendChild(table);
 
-      await waitForRender();
+      await table.updateComplete;
 
       const containerEl = table.shadowRoot.querySelector(".ea-table");
       expect(containerEl.classList.contains("is-border")).toBe(false);
 
       table.border = true;
-      await waitForRender();
+      await table.updateComplete;
 
       expect(containerEl.classList.contains("is-border")).toBe(true);
     });
@@ -392,7 +391,7 @@ describe("EaTable Component", () => {
       table.height = "300px";
       container.appendChild(table);
 
-      await waitForRender();
+      await table.updateComplete;
 
       expect(table.style.getPropertyValue("--ea-table-height")).toBe("300px");
     });
@@ -401,10 +400,10 @@ describe("EaTable Component", () => {
       const table = document.createElement("ea-table");
       container.appendChild(table);
 
-      await waitForRender();
+      await table.updateComplete;
 
       table.height = "400px";
-      await waitForRender();
+      await table.updateComplete;
 
       expect(table.height).toBe("400px");
       expect(table.style.getPropertyValue("--ea-table-height")).toBe("400px");
@@ -432,7 +431,7 @@ describe("EaTable Component", () => {
       table.maxHeight = "500px";
       container.appendChild(table);
 
-      await waitForRender();
+      await table.updateComplete;
 
       expect(table.style.getPropertyValue("--ea-table-max-height")).toBe(
         "500px"
@@ -496,7 +495,7 @@ describe("EaTable Component", () => {
       column.prop = "name";
       container.appendChild(column);
 
-      await waitForRender();
+      await column.updateComplete;
 
       const labelEl = column.shadowRoot.querySelector(
         ".ea-table-column__label"
@@ -504,7 +503,7 @@ describe("EaTable Component", () => {
       expect(labelEl.textContent).toContain("Old");
 
       column.label = "New";
-      await waitForRender();
+      await column.updateComplete;
 
       expect(labelEl.textContent).toContain("New");
     });
@@ -599,7 +598,7 @@ describe("EaTable Component", () => {
       column.setAttribute("fixed", "left");
       container.appendChild(column);
 
-      await waitForRender();
+      await column.updateComplete;
 
       expect(column.getAttribute("fixed")).toBe("left");
     });
@@ -609,7 +608,7 @@ describe("EaTable Component", () => {
       column.setAttribute("fixed", "right");
       container.appendChild(column);
 
-      await waitForRender();
+      await column.updateComplete;
 
       expect(column.getAttribute("fixed")).toBe("right");
     });
@@ -682,11 +681,9 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       expect(table.data).toEqual(testData);
     });
@@ -697,11 +694,9 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData([]);
-
-      await waitForRender(200);
+      await table.setData([]);
 
       expect(table.data).toEqual([]);
     });
@@ -713,11 +708,9 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       const rows = table.shadowRoot.querySelectorAll("tbody .ea-table__tr");
       expect(rows.length).toBe(3);
@@ -730,11 +723,9 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       const firstRowTds = table.shadowRoot.querySelectorAll(
         'tbody .ea-table__tr[data-index="0"] .ea-table__td[data-scope]'
@@ -751,11 +742,9 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       const cols = table.shadowRoot.querySelectorAll("colgroup col");
       expect(cols.length).toBe(2);
@@ -767,14 +756,12 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
       const handler = vi.fn();
       table.addEventListener("ea-table-data-rendered", handler);
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       expect(handler).toHaveBeenCalled();
     });
@@ -785,16 +772,12 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       const newData = [{ id: 10 }, { id: 20 }];
-      table.setData(newData);
-
-      await waitForRender(200);
+      await table.setData(newData);
 
       const rows = table.shadowRoot.querySelectorAll("tbody .ea-table__tr");
       expect(rows.length).toBe(2);
@@ -808,11 +791,9 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(partialData);
-
-      await waitForRender(200);
+      await table.setData(partialData);
 
       const rows = table.shadowRoot.querySelectorAll("tbody .ea-table__tr");
       const firstRowNameTd = rows[0].querySelector(
@@ -835,11 +816,11 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
       table.data = testData;
 
-      await waitForRender(200);
+      await table.updateComplete;
 
       const rows = table.shadowRoot.querySelectorAll("tbody .ea-table__tr");
       expect(rows.length).toBe(3);
@@ -854,11 +835,9 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       const ths = table.shadowRoot.querySelectorAll("thead .ea-table__th");
       expect(ths.length).toBe(2);
@@ -872,11 +851,9 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       const th = table.shadowRoot.querySelector("thead .ea-table__th");
       expect(th.getAttribute("data-prop")).toBe("date");
@@ -889,11 +866,9 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       const theadCheckbox = table.shadowRoot.querySelector(
         'thead ea-checkbox[data-type="selection"]'
@@ -910,11 +885,9 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       const tfootTds = table.shadowRoot.querySelectorAll("tfoot .ea-table__td");
       expect(tfootTds.length).toBe(2);
@@ -927,11 +900,9 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       const tfootTds = table.shadowRoot.querySelectorAll(
         "tfoot .ea-table__td[data-scope]"
@@ -947,15 +918,13 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       table.sort("id", "asc");
 
-      await waitForRender();
+      await table.updateComplete;
 
       const rows = table.shadowRoot.querySelectorAll("tbody .ea-table__tr");
       const firstId = rows[0].querySelector('.ea-table__td[data-scope="id"]');
@@ -968,15 +937,13 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       table.sort("id", "desc");
 
-      await waitForRender();
+      await table.updateComplete;
 
       const rows = table.shadowRoot.querySelectorAll("tbody .ea-table__tr");
       const firstId = rows[0].querySelector('.ea-table__td[data-scope="id"]');
@@ -989,11 +956,9 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       const handler = vi.fn();
       table.addEventListener("ea-sort-change", handler);
@@ -1011,15 +976,13 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       table.sort("id", "asc");
 
-      await waitForRender();
+      await table.updateComplete;
 
       let rows = table.shadowRoot.querySelectorAll("tbody .ea-table__tr");
       let firstId = rows[0].querySelector('.ea-table__td[data-scope="id"]');
@@ -1027,7 +990,7 @@ describe("EaTable Component", () => {
 
       table.sort("id", "desc");
 
-      await waitForRender();
+      await table.updateComplete;
 
       rows = table.shadowRoot.querySelectorAll("tbody .ea-table__tr");
       firstId = rows[0].querySelector('.ea-table__td[data-scope="id"]');
@@ -1035,7 +998,7 @@ describe("EaTable Component", () => {
 
       table.sort("id", "asc");
 
-      await waitForRender();
+      await table.updateComplete;
 
       rows = table.shadowRoot.querySelectorAll("tbody .ea-table__tr");
       firstId = rows[0].querySelector('.ea-table__td[data-scope="id"]');
@@ -1057,11 +1020,9 @@ describe("EaTable Component", () => {
       );
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(numericTestData);
-
-      await waitForRender(200);
+      await table.setData(numericTestData);
 
       const tfootTds = table.shadowRoot.querySelectorAll(
         "tfoot .ea-table__td[data-scope]"
@@ -1086,7 +1047,7 @@ describe("EaTable Component", () => {
       );
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
       table.summaryMethod = ({ columns, data }) => {
         const sums = [];
@@ -1108,9 +1069,7 @@ describe("EaTable Component", () => {
         return sums;
       };
 
-      table.setData(numericTestData);
-
-      await waitForRender(200);
+      await table.setData(numericTestData);
 
       const tfootTds = table.shadowRoot.querySelectorAll(
         "tfoot .ea-table__td[data-scope]"
@@ -1127,11 +1086,9 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(numericTestData);
-
-      await waitForRender(200);
+      await table.setData(numericTestData);
 
       const tfootTds = table.shadowRoot.querySelectorAll(
         "tfoot .ea-table__td[data-scope]"
@@ -1150,11 +1107,9 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       const checkboxes = table.shadowRoot.querySelectorAll(
         'tbody ea-checkbox[data-type="selection"]'
@@ -1169,11 +1124,9 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       const theadCheckbox = table.shadowRoot.querySelector(
         'thead ea-checkbox[data-type="selection"]'
@@ -1188,15 +1141,13 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       table.toggleRowSelection(testData[0], true);
 
-      await waitForRender();
+      await table.updateComplete;
 
       const checked = table.shadowRoot.querySelectorAll(
         'tbody ea-checkbox[data-type="selection"][checked]'
@@ -1211,20 +1162,18 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       table.toggleRowSelection(testData[0], true);
       table.toggleRowSelection(testData[1], true);
 
-      await waitForRender();
+      await table.updateComplete;
 
       table.clearSelection();
 
-      await waitForRender();
+      await table.updateComplete;
 
       const checked = table.shadowRoot.querySelectorAll(
         'tbody ea-checkbox[data-type="selection"][checked]'
@@ -1239,13 +1188,11 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
       table.selectable = row => row.id !== 2;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       const disabled = table.shadowRoot.querySelectorAll(
         'tbody ea-checkbox[data-type="selection"][disabled]'
@@ -1260,11 +1207,9 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       const handler = vi.fn();
       table.addEventListener("ea-selection-change", handler);
@@ -1283,13 +1228,11 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
       table.indexMethod = index => index;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       const indexEls = table.shadowRoot.querySelectorAll(
         'tbody .ea-table__index[data-type="index"]'
@@ -1307,13 +1250,11 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
       table.indexMethod = index => index + 1;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       const indexEls = table.shadowRoot.querySelectorAll(
         'tbody .ea-table__index[data-type="index"]'
@@ -1334,15 +1275,13 @@ describe("EaTable Component", () => {
       );
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       table.setCurrentRow(testData[0]);
 
-      await waitForRender();
+      await table.updateComplete;
 
       const currentRow = table.getCurrentRow();
       expect(currentRow.value).toEqual(testData[0]);
@@ -1362,11 +1301,9 @@ describe("EaTable Component", () => {
       );
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       table.setCurrentRow(testData[1]);
 
@@ -1383,19 +1320,17 @@ describe("EaTable Component", () => {
       );
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       table.setCurrentRow(testData[0]);
 
-      await waitForRender();
+      await table.updateComplete;
 
       table.setCurrentRow(null);
 
-      await waitForRender();
+      await table.updateComplete;
 
       const currentRow = table.getCurrentRow();
       expect(currentRow.value).toBeNull();
@@ -1415,15 +1350,13 @@ describe("EaTable Component", () => {
       );
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       table.setCurrentRow(testData[0]);
 
-      await waitForRender();
+      await table.updateComplete;
 
       const tr0 = table.shadowRoot.querySelector(
         'tbody .ea-table__tr[data-index="0"]'
@@ -1432,7 +1365,7 @@ describe("EaTable Component", () => {
 
       table.setCurrentRow(testData[1]);
 
-      await waitForRender();
+      await table.updateComplete;
 
       expect(tr0.classList.contains("is-current")).toBe(false);
 
@@ -1450,17 +1383,15 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       table.setRowStylePart(({ rowIndex }) =>
         rowIndex === 0 ? "custom-row" : ""
       );
 
-      await waitForRender();
+      await table.updateComplete;
 
       const rows = table.shadowRoot.querySelectorAll("tbody .ea-table__tr");
       const row0Part = rows[0].getAttribute("part") || "";
@@ -1475,15 +1406,13 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       table.setRowStylePart("highlight-row");
 
-      await waitForRender();
+      await table.updateComplete;
 
       const rows = table.shadowRoot.querySelectorAll("tbody .ea-table__tr");
       rows.forEach(row => {
@@ -1500,7 +1429,7 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
       const sortableTh = table.shadowRoot.querySelector(
         "thead .ea-table__th.is-sortable"
@@ -1517,7 +1446,7 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
       const sortableTh = table.shadowRoot.querySelector(
         "thead .ea-table__th.is-sortable"
@@ -1534,11 +1463,9 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       const fixedTds = table.shadowRoot.querySelectorAll(
         "tbody .ea-table__td.is-fixed.fixed-left"
@@ -1553,11 +1480,9 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       const fixedTds = table.shadowRoot.querySelectorAll(
         "tbody .ea-table__td.is-fixed.fixed-right"
@@ -1573,11 +1498,9 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       const tds = table.shadowRoot.querySelectorAll(
         'tbody .ea-table__td[data-scope="id"]'
@@ -1597,11 +1520,9 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       const tds = table.shadowRoot.querySelectorAll(
         "tbody .ea-table__td.ea-table__cell--align-center"
@@ -1615,11 +1536,9 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       const tds = table.shadowRoot.querySelectorAll(
         "tbody .ea-table__td.ea-table__cell--align-right"
@@ -1635,11 +1554,9 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       const rows = table.shadowRoot.querySelectorAll("tbody .ea-table__tr");
       expect(rows[0].getAttribute("data-index")).toBe("0");
@@ -1655,11 +1572,9 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       const handler = vi.fn();
       table.addEventListener("ea-row-click", handler);
@@ -1672,7 +1587,7 @@ describe("EaTable Component", () => {
       firstRow.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
       firstTd.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
 
-      await waitForRender();
+      await table.updateComplete;
 
       expect(handler).toHaveBeenCalled();
     });
@@ -1686,11 +1601,9 @@ describe("EaTable Component", () => {
       );
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       const handler = vi.fn();
       table.addEventListener("ea-current-change", handler);
@@ -1703,7 +1616,7 @@ describe("EaTable Component", () => {
       firstRow.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
       firstTd.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
 
-      await waitForRender();
+      await table.updateComplete;
 
       expect(handler).toHaveBeenCalled();
     });
@@ -1714,11 +1627,9 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       const handler = vi.fn();
       table.addEventListener("ea-cell-click", handler);
@@ -1731,7 +1642,7 @@ describe("EaTable Component", () => {
       firstRow.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
       firstTd.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
 
-      await waitForRender();
+      await table.updateComplete;
 
       expect(handler).toHaveBeenCalled();
     });
@@ -1742,11 +1653,9 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       const handler = vi.fn();
       table.addEventListener("ea-header-click", handler);
@@ -1754,7 +1663,7 @@ describe("EaTable Component", () => {
       const th = table.shadowRoot.querySelector("thead .ea-table__th");
       th.dispatchEvent(new MouseEvent("click", { bubbles: true }));
 
-      await waitForRender();
+      await table.updateComplete;
 
       expect(handler).toHaveBeenCalled();
     });
@@ -1769,11 +1678,9 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       const ths = table.shadowRoot.querySelectorAll("thead .ea-table__th");
       expect(ths.length).toBe(3);
@@ -1799,7 +1706,7 @@ describe("EaTable Component", () => {
       );
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
       expect(table.stripe).toBe(true);
     });
@@ -1814,7 +1721,7 @@ describe("EaTable Component", () => {
       );
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
       expect(table.border).toBe(true);
     });
@@ -1829,7 +1736,7 @@ describe("EaTable Component", () => {
       table.height = "200px";
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
       expect(table.height).toBe("200px");
     });
@@ -1847,11 +1754,9 @@ describe("EaTable Component", () => {
       const table = document.createElement("ea-table");
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       expect(table.shadowRoot.querySelector("table.ea-table")).toBeTruthy();
     });
@@ -1862,14 +1767,12 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
       const largeData = Array.from({ length: 100 }, (_, i) => ({
         id: i + 1,
       }));
-      table.setData(largeData);
-
-      await waitForRender(200);
+      await table.setData(largeData);
 
       const rows = table.shadowRoot.querySelectorAll("tbody .ea-table__tr");
       expect(rows.length).toBe(100);
@@ -1883,11 +1786,9 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(partialData);
-
-      await waitForRender(200);
+      await table.setData(partialData);
 
       const rows = table.shadowRoot.querySelectorAll("tbody .ea-table__tr");
       const firstRowNameTd = rows[0].querySelector(
@@ -1920,7 +1821,7 @@ describe("EaTable Component", () => {
       const table = document.createElement("ea-table");
       container.appendChild(table);
 
-      await waitForRender();
+      await table.updateComplete;
 
       table.remove();
 
@@ -1931,13 +1832,13 @@ describe("EaTable Component", () => {
       const table = document.createElement("ea-table");
       container.appendChild(table);
 
-      await waitForRender();
+      await table.updateComplete;
 
       const containerEl = table.shadowRoot.querySelector(".ea-table");
       expect(containerEl.classList.contains("is-stripe")).toBe(false);
 
       table.stripe = true;
-      await waitForRender();
+      await table.updateComplete;
 
       expect(containerEl.classList.contains("is-stripe")).toBe(true);
     });
@@ -1946,13 +1847,13 @@ describe("EaTable Component", () => {
       const table = document.createElement("ea-table");
       container.appendChild(table);
 
-      await waitForRender();
+      await table.updateComplete;
 
       const containerEl = table.shadowRoot.querySelector(".ea-table");
       expect(containerEl.classList.contains("is-border")).toBe(false);
 
       table.border = true;
-      await waitForRender();
+      await table.updateComplete;
 
       expect(containerEl.classList.contains("is-border")).toBe(true);
     });
@@ -1961,7 +1862,7 @@ describe("EaTable Component", () => {
       const table = document.createElement("ea-table");
       container.appendChild(table);
 
-      await waitForRender();
+      await table.updateComplete;
 
       table.height = "300px";
 
@@ -1974,11 +1875,9 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       let ths = table.shadowRoot.querySelectorAll("thead .ea-table__th");
       expect(ths.length).toBe(1);
@@ -1988,7 +1887,7 @@ describe("EaTable Component", () => {
       newColumn.prop = "name";
       table.appendChild(newColumn);
 
-      await waitForRender(200);
+      await newColumn.updateComplete;
 
       ths = table.shadowRoot.querySelectorAll("thead .ea-table__th");
       expect(ths.length).toBe(2);
@@ -2010,7 +1909,7 @@ describe("EaTable Component", () => {
       table.stripe = true;
       container.appendChild(table);
 
-      await waitForRender();
+      await table.updateComplete;
 
       const containerEl = table.shadowRoot.querySelector(".ea-table");
       expect(containerEl.classList.contains("is-stripe")).toBe(true);
@@ -2021,7 +1920,7 @@ describe("EaTable Component", () => {
       table.border = true;
       container.appendChild(table);
 
-      await waitForRender();
+      await table.updateComplete;
 
       const containerEl = table.shadowRoot.querySelector(".ea-table");
       expect(containerEl.classList.contains("is-border")).toBe(true);
@@ -2038,7 +1937,7 @@ describe("EaTable Component", () => {
       column.sortable = true;
       container.appendChild(column);
 
-      await waitForRender();
+      await column.updateComplete;
 
       const tree = column.getColumnTree;
       expect(tree).toBeDefined();
@@ -2055,7 +1954,7 @@ describe("EaTable Component", () => {
       column.prop = "id";
       container.appendChild(column);
 
-      await waitForRender();
+      await column.updateComplete;
 
       const tree = column.getColumnTree;
       expect(tree.colspan).toBe(1);
@@ -2067,7 +1966,7 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
       const column = table.querySelector("ea-table-column");
       const tree = column.getColumnTree;
@@ -2082,11 +1981,9 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData([]);
-
-      await waitForRender(200);
+      await table.setData([]);
 
       const emptySlot = table.shadowRoot.querySelector(".ea-table__empty");
       expect(emptySlot).toBeTruthy();
@@ -2099,11 +1996,9 @@ describe("EaTable Component", () => {
       `);
       container.appendChild(table);
 
-      await waitForRender(200);
+      await table.updateComplete;
 
-      table.setData(testData);
-
-      await waitForRender(200);
+      await table.setData(testData);
 
       const emptySlot = table.shadowRoot.querySelector(".ea-table__empty");
       expect(emptySlot).toBeTruthy();
@@ -2116,7 +2011,7 @@ describe("EaTable Component", () => {
       it("table 元素应该有 role=table", async () => {
         const table = document.createElement("ea-table");
         container.appendChild(table);
-        await waitForRender();
+        await table.updateComplete;
         const tableEl = table.shadowRoot.querySelector("table.ea-table");
         expect(tableEl.getAttribute("role")).toBe("table");
       });
@@ -2124,7 +2019,7 @@ describe("EaTable Component", () => {
       it("table 元素应该有 aria-label", async () => {
         const table = document.createElement("ea-table");
         container.appendChild(table);
-        await waitForRender();
+        await table.updateComplete;
         const tableEl = table.shadowRoot.querySelector("table.ea-table");
         expect(tableEl.getAttribute("aria-label")).toBeTruthy();
       });
@@ -2134,9 +2029,8 @@ describe("EaTable Component", () => {
           <ea-table-column label="ID" prop="id"></ea-table-column>
         `);
         container.appendChild(table);
-        await waitForRender(200);
-        table.setData(testData);
-        await waitForRender(200);
+        await table.updateComplete;
+        await table.setData(testData);
         const tableEl = table.shadowRoot.querySelector("table.ea-table");
         expect(tableEl.getAttribute("aria-rowcount")).toBe("4");
       });
@@ -2146,9 +2040,8 @@ describe("EaTable Component", () => {
           <ea-table-column label="ID" prop="id"></ea-table-column>
         `);
         container.appendChild(table);
-        await waitForRender(200);
-        table.setData(testData);
-        await waitForRender(200);
+        await table.updateComplete;
+        await table.setData(testData);
         const tableEl = table.shadowRoot.querySelector("table.ea-table");
         expect(tableEl.getAttribute("aria-colcount")).toBe("1");
       });
@@ -2158,10 +2051,11 @@ describe("EaTable Component", () => {
           <ea-table-column label="ID" prop="id"></ea-table-column>
         `);
         container.appendChild(table);
-        await waitForRender(200);
-        table.setData(testData);
-        await waitForRender(200);
-        const td = table.shadowRoot.querySelector("tbody .ea-table__td[data-scope]");
+        await table.updateComplete;
+        await table.setData(testData);
+        const td = table.shadowRoot.querySelector(
+          "tbody .ea-table__td[data-scope]"
+        );
         expect(td.getAttribute("role")).toBe("cell");
       });
 
@@ -2170,10 +2064,11 @@ describe("EaTable Component", () => {
           <ea-table-column label="ID" prop="id"></ea-table-column>
         `);
         container.appendChild(table);
-        await waitForRender(200);
-        table.setData(testData);
-        await waitForRender(200);
-        const td = table.shadowRoot.querySelector("tbody .ea-table__td[data-scope]");
+        await table.updateComplete;
+        await table.setData(testData);
+        const td = table.shadowRoot.querySelector(
+          "tbody .ea-table__td[data-scope]"
+        );
         expect(td.getAttribute("aria-colindex")).toBeTruthy();
       });
 
@@ -2182,9 +2077,8 @@ describe("EaTable Component", () => {
           <ea-table-column label="ID" prop="id"></ea-table-column>
         `);
         container.appendChild(table);
-        await waitForRender(200);
-        table.setData(testData);
-        await waitForRender(200);
+        await table.updateComplete;
+        await table.setData(testData);
         const tr = table.shadowRoot.querySelector("tbody .ea-table__tr");
         expect(tr.getAttribute("aria-rowindex")).toBeTruthy();
       });
@@ -2194,8 +2088,10 @@ describe("EaTable Component", () => {
           <ea-table-column label="ID" prop="id" sortable></ea-table-column>
         `);
         container.appendChild(table);
-        await waitForRender(200);
-        const th = table.shadowRoot.querySelector("thead .ea-table__th.is-sortable");
+        await table.updateComplete;
+        const th = table.shadowRoot.querySelector(
+          "thead .ea-table__th.is-sortable"
+        );
         expect(th.getAttribute("aria-sort")).toBeTruthy();
       });
 
@@ -2204,12 +2100,13 @@ describe("EaTable Component", () => {
           <ea-table-column label="ID" prop="id" sortable></ea-table-column>
         `);
         container.appendChild(table);
-        await waitForRender(200);
-        table.setData(testData);
-        await waitForRender(200);
-        const th = table.shadowRoot.querySelector("thead .ea-table__th.is-sortable");
+        await table.updateComplete;
+        await table.setData(testData);
+        const th = table.shadowRoot.querySelector(
+          "thead .ea-table__th.is-sortable"
+        );
         th.click();
-        await waitForRender();
+        await table.updateComplete;
         expect(th.getAttribute("aria-sort")).toBe("descending");
       });
     });
@@ -2217,7 +2114,7 @@ describe("EaTable Component", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-table");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });

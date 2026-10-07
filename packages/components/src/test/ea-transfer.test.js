@@ -78,7 +78,7 @@ describe("EaTransfer", () => {
         new Event("change", { bubbles: true, composed: true })
       );
     }
-    await waitForRender();
+    await panel.updateComplete;
   };
 
   const deselectPanelItem = async (panel, index) => {
@@ -95,7 +95,7 @@ describe("EaTransfer", () => {
         new Event("change", { bubbles: true, composed: true })
       );
     }
-    await waitForRender();
+    await panel.updateComplete;
   };
 
   const selectAllPanelItems = async (panel, checked) => {
@@ -108,7 +108,7 @@ describe("EaTransfer", () => {
         new Event("change", { bubbles: true, composed: true })
       );
     }
-    await waitForRender();
+    await panel.updateComplete;
   };
 
   describe("Basic Structure", () => {
@@ -123,7 +123,7 @@ describe("EaTransfer", () => {
     it("should contain all CSS Parts", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       const containerEl =
         transfer.shadowRoot.querySelector('[part="container"]');
@@ -179,7 +179,7 @@ describe("EaTransfer", () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       const rightBtn = transfer.shadowRoot.querySelector(
         '[part~="move-to-right-btn"]'
@@ -211,28 +211,28 @@ describe("EaTransfer", () => {
     it("disabled default should be false", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
       expect(transfer.disabled).toBe(false);
     });
 
     it("filterable default should be false", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
       expect(transfer.filterable).toBe(false);
     });
 
     it("filterPlaceholder default should be '请输入搜索内容'", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
       expect(transfer.filterPlaceholder).toBe("请输入搜索内容");
     });
 
     it("data default should be empty array", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
       expect(Array.isArray(transfer.data)).toBe(true);
       expect(transfer.data.length).toBe(0);
     });
@@ -240,7 +240,7 @@ describe("EaTransfer", () => {
     it("value default should be empty array", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
       expect(Array.isArray(transfer.value)).toBe(true);
       expect(transfer.value.length).toBe(0);
     });
@@ -248,7 +248,7 @@ describe("EaTransfer", () => {
     it("dataProps should have correct default mapping", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
       expect(transfer.dataProps).toEqual({
         key: "key",
         label: "label",
@@ -259,7 +259,7 @@ describe("EaTransfer", () => {
     it("titles default should be empty array", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
       expect(Array.isArray(transfer.titles)).toBe(true);
       expect(transfer.titles.length).toBe(0);
     });
@@ -267,7 +267,7 @@ describe("EaTransfer", () => {
     it("buttonTexts default should be empty array", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
       expect(Array.isArray(transfer.buttonTexts)).toBe(true);
       expect(transfer.buttonTexts.length).toBe(0);
     });
@@ -275,14 +275,14 @@ describe("EaTransfer", () => {
     it("filterMethod default should be null", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
       expect(transfer.filterMethod).toBeNull();
     });
 
     it("leftDefaultChecked default should be empty array", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
       expect(Array.isArray(transfer.leftDefaultChecked)).toBe(true);
       expect(transfer.leftDefaultChecked.length).toBe(0);
     });
@@ -290,7 +290,7 @@ describe("EaTransfer", () => {
     it("rightDefaultChecked default should be empty array", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
       expect(Array.isArray(transfer.rightDefaultChecked)).toBe(true);
       expect(transfer.rightDefaultChecked.length).toBe(0);
     });
@@ -301,7 +301,7 @@ describe("EaTransfer", () => {
       const transfer = document.createElement("ea-transfer");
       transfer.disabled = true;
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(transfer.disabled).toBe(true);
       const containerEl = transfer.shadowRoot.querySelector(".ea-transfer");
@@ -313,7 +313,7 @@ describe("EaTransfer", () => {
       transfer.data = generateTestData();
       transfer.filterable = true;
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(transfer.filterable).toBe(true);
       const sourcePanel = transfer.shadowRoot.querySelector(
@@ -331,7 +331,7 @@ describe("EaTransfer", () => {
       transfer.filterable = true;
       transfer.filterPlaceholder = "Search items...";
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(transfer.filterPlaceholder).toBe("Search items...");
     });
@@ -341,7 +341,7 @@ describe("EaTransfer", () => {
       const data = generateTestData();
       transfer.data = data;
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(transfer.data.length).toBe(10);
       const sourcePanel = transfer.shadowRoot.querySelector(
@@ -355,7 +355,7 @@ describe("EaTransfer", () => {
       transfer.data = generateTestData();
       transfer.value = [1, 2, 3];
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(transfer.value).toEqual([1, 2, 3]);
       const targetPanel = transfer.shadowRoot.querySelector(
@@ -376,7 +376,7 @@ describe("EaTransfer", () => {
         disabled: "isDisabled",
       };
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(transfer.dataProps).toEqual({
         key: "id",
@@ -390,7 +390,7 @@ describe("EaTransfer", () => {
       container.appendChild(transfer);
 
       transfer.titles = ["Source List", "Target List"];
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(transfer.titles).toEqual(["Source List", "Target List"]);
       const sourcePanel = transfer.shadowRoot.querySelector(
@@ -427,7 +427,7 @@ describe("EaTransfer", () => {
         item.label.toLowerCase().includes(query.toLowerCase());
       transfer.filterMethod = customFilter;
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(transfer.filterMethod).toBe(customFilter);
     });
@@ -482,13 +482,13 @@ describe("EaTransfer", () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       const changeHandler = vi.fn();
       transfer.addEventListener("change", changeHandler);
 
       transfer.value = [1, 2];
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(changeHandler).toHaveBeenCalled();
     });
@@ -497,13 +497,13 @@ describe("EaTransfer", () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       const changeHandler = vi.fn();
       transfer.addEventListener("change", changeHandler);
 
       transfer.value = [1, 2];
-      await waitForRender();
+      await transfer.updateComplete;
 
       const event = changeHandler.mock.calls[0][0];
       expect(event.detail.value).toEqual([1, 2]);
@@ -513,7 +513,7 @@ describe("EaTransfer", () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       const handler = vi.fn();
       transfer.addEventListener("ea-left-check-change", handler);
@@ -533,7 +533,7 @@ describe("EaTransfer", () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       const handler = vi.fn();
       transfer.addEventListener("ea-right-check-change", handler);
@@ -556,7 +556,7 @@ describe("EaTransfer", () => {
       transfer.data = generateTestData();
       transfer.value = [1, 2, 3];
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(transfer.value).toEqual([1, 2, 3]);
       const targetPanel = transfer.shadowRoot.querySelector(
@@ -573,7 +573,7 @@ describe("EaTransfer", () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       const sourcePanel = transfer.shadowRoot.querySelector(
         'ea-transfer-panel[type="source"]'
@@ -586,7 +586,7 @@ describe("EaTransfer", () => {
         '[part~="move-to-right-btn"]'
       );
       rightBtn.click();
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(transfer.value.length).toBe(1);
       expect(sourcePanel.data.length).toBe(initialSourceCount - 1);
@@ -601,7 +601,7 @@ describe("EaTransfer", () => {
       transfer.data = generateTestData();
       transfer.value = [1, 2, 3];
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       const targetPanel = transfer.shadowRoot.querySelector(
         'ea-transfer-panel[type="target"]'
@@ -614,7 +614,7 @@ describe("EaTransfer", () => {
         '[part~="move-to-left-btn"]'
       );
       leftBtn.click();
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(transfer.value.length).toBe(2);
       expect(targetPanel.data.length).toBe(initialTargetCount - 1);
@@ -624,7 +624,7 @@ describe("EaTransfer", () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       const changeHandler = vi.fn();
       transfer.addEventListener("change", changeHandler);
@@ -638,7 +638,7 @@ describe("EaTransfer", () => {
         '[part~="move-to-right-btn"]'
       );
       rightBtn.click();
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(changeHandler).toHaveBeenCalled();
     });
@@ -648,7 +648,7 @@ describe("EaTransfer", () => {
       transfer.data = generateTestData();
       transfer.value = [];
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       const sourcePanel = transfer.shadowRoot.querySelector(
         'ea-transfer-panel[type="source"]'
@@ -666,7 +666,7 @@ describe("EaTransfer", () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       const sourcePanel = transfer.shadowRoot.querySelector(
         'ea-transfer-panel[type="source"]'
@@ -683,7 +683,7 @@ describe("EaTransfer", () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       const sourcePanel = transfer.shadowRoot.querySelector(
         'ea-transfer-panel[type="source"]'
@@ -704,7 +704,7 @@ describe("EaTransfer", () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       const sourcePanel = transfer.shadowRoot.querySelector(
         'ea-transfer-panel[type="source"]'
@@ -720,7 +720,7 @@ describe("EaTransfer", () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = [{ key: 1, label: "Option 1", disabled: false }];
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       const sourcePanel = transfer.shadowRoot.querySelector(
         'ea-transfer-panel[type="source"]'
@@ -740,7 +740,7 @@ describe("EaTransfer", () => {
       const data = generateTestData().filter(item => !item.disabled);
       transfer.data = data;
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       const sourcePanel = transfer.shadowRoot.querySelector(
         'ea-transfer-panel[type="source"]'
@@ -755,7 +755,7 @@ describe("EaTransfer", () => {
       const data = generateTestData().filter(item => !item.disabled);
       transfer.data = data;
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       const sourcePanel = transfer.shadowRoot.querySelector(
         'ea-transfer-panel[type="source"]'
@@ -771,7 +771,7 @@ describe("EaTransfer", () => {
       const data = generateTestData().filter(item => !item.disabled);
       transfer.data = data;
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       const sourcePanel = transfer.shadowRoot.querySelector(
         'ea-transfer-panel[type="source"]'
@@ -789,7 +789,7 @@ describe("EaTransfer", () => {
       transfer.filterable = true;
       transfer.data = generateTestData();
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       const sourcePanel = transfer.shadowRoot.querySelector(
         'ea-transfer-panel[type="source"]'
@@ -816,7 +816,7 @@ describe("EaTransfer", () => {
 
       filterInput.value = "Option 1";
       filterInput.dispatchEvent(new Event("input"));
-      await waitForRender();
+      await sourcePanel.updateComplete;
 
       const visibleItems = sourcePanel.shadowRoot.querySelectorAll(
         ".ea-transfer-panel__item:not(.is-filtered-out)"
@@ -830,7 +830,7 @@ describe("EaTransfer", () => {
       transfer.filterable = true;
       transfer.data = generateTestData();
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       const sourcePanel = transfer.shadowRoot.querySelector(
         'ea-transfer-panel[type="source"]'
@@ -839,11 +839,11 @@ describe("EaTransfer", () => {
 
       filterInput.value = "Option";
       filterInput.dispatchEvent(new Event("input"));
-      await waitForRender();
+      await transfer.updateComplete;
 
       filterInput.value = "";
       filterInput.dispatchEvent(new Event("input"));
-      await waitForRender();
+      await transfer.updateComplete;
 
       const filteredOut =
         sourcePanel.shadowRoot.querySelectorAll(".is-filtered-out");
@@ -855,7 +855,7 @@ describe("EaTransfer", () => {
       transfer.filterable = true;
       transfer.data = generateTestData();
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       const sourcePanel = transfer.shadowRoot.querySelector(
         'ea-transfer-panel[type="source"]'
@@ -864,10 +864,10 @@ describe("EaTransfer", () => {
 
       filterInput.value = "xyz";
       filterInput.dispatchEvent(new Event("input"));
-      await waitForRender();
+      await transfer.updateComplete;
 
       transfer.clearQuery("left");
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(sourcePanel._filterInput.value).toBe("");
     });
@@ -890,7 +890,7 @@ describe("EaTransfer", () => {
 
       filterInput.value = "Apple";
       filterInput.dispatchEvent(new Event("input"));
-      await waitForRender();
+      await sourcePanel.updateComplete;
 
       await selectAllPanelItems(sourcePanel, true);
 
@@ -902,7 +902,7 @@ describe("EaTransfer", () => {
     it("checkValidity method should exist and be callable", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(typeof transfer.checkValidity).toBe("function");
     });
@@ -910,7 +910,7 @@ describe("EaTransfer", () => {
     it("reportValidity method should exist and be callable", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(typeof transfer.reportValidity).toBe("function");
     });
@@ -929,7 +929,7 @@ describe("EaTransfer", () => {
       transfer.filterable = true;
       transfer.data = generateTestData();
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       const sourcePanel = transfer.shadowRoot.querySelector(
         'ea-transfer-panel[type="source"]'
@@ -940,11 +940,11 @@ describe("EaTransfer", () => {
 
       sourcePanel._filterInput.value = "test1";
       targetPanel._filterInput.value = "test2";
-      await waitForRender();
+      await transfer.updateComplete;
 
       transfer.clearQuery("left");
       transfer.clearQuery("right");
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(sourcePanel._filterInput.value).toBe("");
       expect(targetPanel._filterInput.value).toBe("");
@@ -958,7 +958,7 @@ describe("EaTransfer", () => {
       transfer.data = generateTestData();
       transfer.value = [];
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(transfer.checkValidity()).toBe(false);
     });
@@ -969,7 +969,7 @@ describe("EaTransfer", () => {
       transfer.data = generateTestData();
       transfer.value = [1];
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(transfer.checkValidity()).toBe(true);
     });
@@ -979,7 +979,7 @@ describe("EaTransfer", () => {
       transfer.data = generateTestData();
       transfer.value = [];
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(transfer.checkValidity()).toBe(true);
     });
@@ -990,11 +990,11 @@ describe("EaTransfer", () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       const newData = [{ key: 100, label: "New Option", disabled: false }];
       transfer.data = newData;
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(transfer.data.length).toBe(1);
       expect(transfer.data[0].key).toBe(100);
@@ -1009,7 +1009,7 @@ describe("EaTransfer", () => {
       transfer.data = generateTestData();
       transfer.value = [1];
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       const targetPanel = transfer.shadowRoot.querySelector(
         'ea-transfer-panel[type="target"]'
@@ -1017,7 +1017,7 @@ describe("EaTransfer", () => {
       expect(targetPanel.data.length).toBe(1);
 
       transfer.value = [2, 3];
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(transfer.value).toEqual([2, 3]);
       expect(targetPanel.data.length).toBe(2);
@@ -1028,7 +1028,7 @@ describe("EaTransfer", () => {
       container.appendChild(transfer);
 
       transfer.titles = ["Old Src", "Old Tgt"];
-      await waitForRender();
+      await transfer.updateComplete;
 
       const sourcePanel = transfer.shadowRoot.querySelector(
         'ea-transfer-panel[type="source"]'
@@ -1040,7 +1040,7 @@ describe("EaTransfer", () => {
       expect(targetPanel.getAttribute("data-title")).toBe("Old Tgt");
 
       transfer.titles = ["New Src", "New Tgt"];
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(transfer.titles).toEqual(["New Src", "New Tgt"]);
       expect(sourcePanel.getAttribute("data-title")).toBe("New Src");
@@ -1050,19 +1050,19 @@ describe("EaTransfer", () => {
     it("dynamically modifying disabled should update state class", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(transfer.disabled).toBe(false);
 
       transfer.disabled = true;
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(transfer.disabled).toBe(true);
       const containerEl = transfer.shadowRoot.querySelector(".ea-transfer");
       expect(containerEl.classList.contains("is-disabled")).toBe(true);
 
       transfer.disabled = false;
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(transfer.disabled).toBe(false);
       expect(containerEl.classList.contains("is-disabled")).toBe(false);
@@ -1072,11 +1072,11 @@ describe("EaTransfer", () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(transfer.filterable).toBe(false);
       transfer.filterable = true;
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(transfer.filterable).toBe(true);
       const sourcePanel = transfer.shadowRoot.querySelector(
@@ -1100,7 +1100,7 @@ describe("EaTransfer", () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = [];
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(transfer.data).toEqual([]);
       expect(transfer.shadowRoot).toBeDefined();
@@ -1111,7 +1111,7 @@ describe("EaTransfer", () => {
       transfer.data = generateTestData();
       transfer.value = [];
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(transfer.value).toEqual([]);
       const sourcePanel = transfer.shadowRoot.querySelector(
@@ -1131,7 +1131,7 @@ describe("EaTransfer", () => {
 
       container.appendChild(t1);
       container.appendChild(t2);
-      await waitForRender();
+      await t2.updateComplete;
 
       expect(t1.value).toEqual([1, 2]);
       expect(t2.value).toEqual([3, 4]);
@@ -1146,7 +1146,7 @@ describe("EaTransfer", () => {
       ];
       transfer.data = data;
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       const sourcePanel = transfer.shadowRoot.querySelector(
         'ea-transfer-panel[type="source"]'
@@ -1164,7 +1164,7 @@ describe("EaTransfer", () => {
       ];
       transfer.data = data;
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       const sourcePanel = transfer.shadowRoot.querySelector(
         'ea-transfer-panel[type="source"]'
@@ -1183,7 +1183,7 @@ describe("EaTransfer", () => {
       transfer.dataProps = { key: "id", label: "name", disabled: "blocked" };
       transfer.value = ["a"];
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(transfer.value).toEqual(["a"]);
       const targetPanel = transfer.shadowRoot.querySelector(
@@ -1212,7 +1212,7 @@ describe("EaTransfer", () => {
       transfer.leftDefaultChecked = [1];
       transfer.rightDefaultChecked = [2];
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(transfer.data.length).toBe(10);
       expect(transfer.value).toEqual([1, 2]);
@@ -1227,7 +1227,7 @@ describe("EaTransfer", () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       const sourcePanel = transfer.shadowRoot.querySelector(
         'ea-transfer-panel[type="source"]'
@@ -1240,7 +1240,7 @@ describe("EaTransfer", () => {
         '[part~="move-to-right-btn"]'
       );
       rightBtn.click();
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(transfer.value.length).toBe(2);
 
@@ -1254,7 +1254,7 @@ describe("EaTransfer", () => {
         '[part~="move-to-left-btn"]'
       );
       leftBtn.click();
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(transfer.value.length).toBe(1);
     });
@@ -1266,7 +1266,7 @@ describe("EaTransfer", () => {
       transfer.data = generateTestData();
       transfer.disabled = true;
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       const sourcePanel = transfer.shadowRoot.querySelector(
         'ea-transfer-panel[type="source"]'
@@ -1283,7 +1283,7 @@ describe("EaTransfer", () => {
       transfer.data = generateTestData();
       transfer.disabled = true;
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       const sourcePanel = transfer.shadowRoot.querySelector(
         'ea-transfer-panel[type="source"]'
@@ -1296,7 +1296,7 @@ describe("EaTransfer", () => {
       transfer.data = generateTestData();
       transfer.disabled = true;
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       const sourcePanel = transfer.shadowRoot.querySelector(
         'ea-transfer-panel[type="source"]'
@@ -1309,7 +1309,7 @@ describe("EaTransfer", () => {
         '[part~="move-to-right-btn"]'
       );
       rightBtn.click();
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(transfer.value.length).toBe(0);
       expect(sourcePanel.data.length).toBe(initialSourceCount);
@@ -1320,7 +1320,7 @@ describe("EaTransfer", () => {
       transfer.data = generateTestData();
       transfer.disabled = true;
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       const sourcePanel = transfer.shadowRoot.querySelector(
         'ea-transfer-panel[type="source"]'
@@ -1339,7 +1339,7 @@ describe("EaTransfer", () => {
           new Event("change", { bubbles: true, composed: true })
         );
       }
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(sourcePanel._states.selectedKeys.size).toBe(0);
     });
@@ -1350,7 +1350,7 @@ describe("EaTransfer", () => {
       transfer.data = data;
       transfer.disabled = true;
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       const sourcePanel = transfer.shadowRoot.querySelector(
         'ea-transfer-panel[type="source"]'
@@ -1365,7 +1365,7 @@ describe("EaTransfer", () => {
           new Event("change", { bubbles: true, composed: true })
         );
       }
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(sourcePanel._states.selectedKeys.size).toBe(0);
     });
@@ -1374,7 +1374,7 @@ describe("EaTransfer", () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       const sourcePanel = transfer.shadowRoot.querySelector(
         'ea-transfer-panel[type="source"]'
@@ -1382,13 +1382,13 @@ describe("EaTransfer", () => {
       expect(sourcePanel.disabled).toBe(false);
 
       transfer.disabled = true;
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(sourcePanel.disabled).toBe(true);
       expect(sourcePanel._checkbox.disabled).toBe(true);
 
       transfer.disabled = false;
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(sourcePanel.disabled).toBe(false);
     });
@@ -1399,7 +1399,7 @@ describe("EaTransfer", () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
 
       expect(transfer.shadowRoot).toBeDefined();
       const sourcePanel = transfer.shadowRoot.querySelector(
@@ -1416,7 +1416,7 @@ describe("EaTransfer", () => {
     it("remove() should remove from DOM normally", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
-      await waitForRender();
+      await transfer.updateComplete;
       expect(container.contains(transfer)).toBe(true);
 
       transfer.remove();
@@ -1428,8 +1428,13 @@ describe("EaTransfer", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-transfer");
       container.appendChild(el);
-      await waitForRender();
-      const results = await runAxe(el, { rules: { "button-name": { enabled: false }, "nested-interactive": { enabled: false } } });
+      await el.updateComplete;
+      const results = await runAxe(el, {
+        rules: {
+          "button-name": { enabled: false },
+          "nested-interactive": { enabled: false },
+        },
+      });
       assertNoA11yViolations(results);
     });
 
@@ -1437,7 +1442,7 @@ describe("EaTransfer", () => {
       it("容器应该有 role='group'", async () => {
         const el = document.createElement("ea-transfer");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const containerEl = el.shadowRoot.querySelector('[part="container"]');
         expect(containerEl.getAttribute("role")).toBe("group");
       });
@@ -1445,7 +1450,7 @@ describe("EaTransfer", () => {
       it("容器应该有 aria-label='Transfer'", async () => {
         const el = document.createElement("ea-transfer");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const containerEl = el.shadowRoot.querySelector('[part="container"]');
         expect(containerEl.getAttribute("aria-label")).toBe("Transfer");
       });
@@ -1454,14 +1459,14 @@ describe("EaTransfer", () => {
         const el = document.createElement("ea-transfer");
         el.setAttribute("disabled", "");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-disabled")).toBe("true");
       });
 
       it("未 disabled 时宿主元素应该有 aria-disabled='false'", async () => {
         const el = document.createElement("ea-transfer");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-disabled")).toBe("false");
       });
     });

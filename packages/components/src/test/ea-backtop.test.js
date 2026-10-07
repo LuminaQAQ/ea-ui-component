@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 
 import "../components/ea-backtop/index";
-import { waitForRender } from "./utils/waitForRender";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 describe("EaBacktop", () => {
@@ -128,10 +127,10 @@ describe("EaBacktop", () => {
       const backtop = document.createElement("ea-backtop");
       container.appendChild(backtop);
 
-      await waitForRender();
+      await backtop.updateComplete;
 
       backtop.setAttribute("right", "80px");
-      await waitForRender(0);
+      await backtop.updateComplete;
 
       expect(backtop.style.getPropertyValue("--ea-backtop-right")).toBe("80px");
     });
@@ -157,10 +156,10 @@ describe("EaBacktop", () => {
       const backtop = document.createElement("ea-backtop");
       container.appendChild(backtop);
 
-      await waitForRender();
+      await backtop.updateComplete;
 
       backtop.setAttribute("bottom", "120px");
-      await waitForRender(0);
+      await backtop.updateComplete;
 
       expect(backtop.style.getPropertyValue("--ea-backtop-bottom")).toBe(
         "120px"
@@ -219,7 +218,7 @@ describe("EaBacktop", () => {
       const backtop = document.createElement("ea-backtop");
       container.appendChild(backtop);
 
-      await waitForRender();
+      await backtop.updateComplete;
 
       const clickEvent = new MouseEvent("click", { bubbles: true });
       backtop.dispatchEvent(clickEvent);
@@ -255,7 +254,7 @@ describe("EaBacktop", () => {
       const backtop = document.createElement("ea-backtop");
       container.appendChild(backtop);
 
-      await waitForRender();
+      await backtop.updateComplete;
 
       const containerEl = backtop.shadowRoot.querySelector(".ea-backtop");
       expect(containerEl.className).toContain("ea-backtop");
@@ -324,7 +323,7 @@ describe("EaBacktop", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-backtop");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });
@@ -349,7 +348,7 @@ describe("EaBacktop", () => {
       it("按下 Enter 键应该触发滚动到顶部", async () => {
         const el = document.createElement("ea-backtop");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const containerEl = el.shadowRoot.querySelector('[part="container"]');
         const scrollSpy = vi
           .spyOn(el, "_scrollToTop")
@@ -364,7 +363,7 @@ describe("EaBacktop", () => {
       it("按下 Space 键应该触发滚动到顶部", async () => {
         const el = document.createElement("ea-backtop");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const containerEl = el.shadowRoot.querySelector('[part="container"]');
         const scrollSpy = vi
           .spyOn(el, "_scrollToTop")

@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 
 import "../components/ea-avatar/index";
-import { waitForRender } from "./utils/waitForRender";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 describe("EaAvatar", () => {
@@ -49,7 +48,7 @@ describe("EaAvatar", () => {
       avatar.setAttribute("shape", "circle");
       container.appendChild(avatar);
 
-      await waitForRender();
+      await avatar.updateComplete;
 
       const containerEl = avatar.shadowRoot.querySelector(".ea-avatar");
       expect(containerEl.classList.contains("ea-avatar--circle")).toBe(true);
@@ -60,7 +59,7 @@ describe("EaAvatar", () => {
       avatar.setAttribute("shape", "square");
       container.appendChild(avatar);
 
-      await waitForRender();
+      await avatar.updateComplete;
 
       const containerEl = avatar.shadowRoot.querySelector(".ea-avatar");
       expect(containerEl.classList.contains("ea-avatar--square")).toBe(true);
@@ -70,7 +69,7 @@ describe("EaAvatar", () => {
       const avatar = document.createElement("ea-avatar");
       container.appendChild(avatar);
 
-      await waitForRender();
+      await avatar.updateComplete;
 
       expect(avatar.shape).toBe("circle");
 
@@ -83,13 +82,13 @@ describe("EaAvatar", () => {
       avatar.setAttribute("shape", "circle");
       container.appendChild(avatar);
 
-      await waitForRender();
+      await avatar.updateComplete;
 
       let containerEl = avatar.shadowRoot.querySelector(".ea-avatar");
       expect(containerEl.classList.contains("ea-avatar--circle")).toBe(true);
 
       avatar.setAttribute("shape", "square");
-      await waitForRender();
+      await avatar.updateComplete;
 
       containerEl = avatar.shadowRoot.querySelector(".ea-avatar");
       expect(containerEl.classList.contains("ea-avatar--square")).toBe(true);
@@ -155,7 +154,7 @@ describe("EaAvatar", () => {
       avatar.setAttribute("size", "not-a-valid-size-value-xyz");
       container.appendChild(avatar);
 
-      await waitForRender(0);
+      await avatar.updateComplete;
 
       if (consoleSpy.mock.calls.length > 0) {
         expect(consoleSpy).toHaveBeenCalled();
@@ -169,7 +168,7 @@ describe("EaAvatar", () => {
       avatar.setAttribute("size", "large");
       container.appendChild(avatar);
 
-      await waitForRender();
+      await avatar.updateComplete;
 
       const style = avatar.style.cssText;
       if (style) {
@@ -182,7 +181,7 @@ describe("EaAvatar", () => {
       avatar.setAttribute("size", "50px");
       container.appendChild(avatar);
 
-      await waitForRender();
+      await avatar.updateComplete;
 
       const style = avatar.style.cssText;
       if (style) {
@@ -197,7 +196,7 @@ describe("EaAvatar", () => {
       avatar.setAttribute("icon", "coffee");
       container.appendChild(avatar);
 
-      await waitForRender();
+      await avatar.updateComplete;
 
       const avatarContainer = avatar.shadowRoot.querySelector(".ea-avatar");
       expect(avatarContainer.innerHTML).toContain("ea-icon");
@@ -209,13 +208,13 @@ describe("EaAvatar", () => {
       avatar.setAttribute("icon", "coffee");
       container.appendChild(avatar);
 
-      await waitForRender();
+      await avatar.updateComplete;
 
       let avatarContainer = avatar.shadowRoot.querySelector(".ea-avatar");
       expect(avatarContainer.innerHTML).toContain("coffee");
 
       avatar.setAttribute("icon", "user");
-      await waitForRender();
+      await avatar.updateComplete;
 
       avatarContainer = avatar.shadowRoot.querySelector(".ea-avatar");
       expect(avatarContainer.innerHTML).toContain("user");
@@ -226,10 +225,10 @@ describe("EaAvatar", () => {
       avatar.setAttribute("icon", "coffee");
       container.appendChild(avatar);
 
-      await waitForRender();
+      await avatar.updateComplete;
 
       avatar.setAttribute("icon", "");
-      await waitForRender();
+      await avatar.updateComplete;
 
       const avatarContainer = avatar.shadowRoot.querySelector(".ea-avatar");
       expect(avatarContainer.innerHTML).toContain("<slot>");
@@ -278,10 +277,10 @@ describe("EaAvatar", () => {
       avatar.setAttribute("src", "https://example.com/avatar.jpg");
       container.appendChild(avatar);
 
-      await waitForRender();
+      await avatar.updateComplete;
 
       avatar.setAttribute("src", "");
-      await waitForRender();
+      await avatar.updateComplete;
 
       const slot = avatar.shadowRoot.querySelector("slot");
       expect(slot).not.toBeNull();
@@ -293,10 +292,10 @@ describe("EaAvatar", () => {
       avatar.setAttribute("src", "https://example.com/avatar.jpg");
       container.appendChild(avatar);
 
-      await waitForRender();
+      await avatar.updateComplete;
 
       avatar.setAttribute("src", "");
-      await waitForRender();
+      await avatar.updateComplete;
 
       const avatarContainer = avatar.shadowRoot.querySelector(".ea-avatar");
       expect(avatarContainer.innerHTML).toContain("ea-icon");
@@ -320,7 +319,7 @@ describe("EaAvatar", () => {
       avatar.setAttribute("src", dataUri);
       container.appendChild(avatar);
 
-      await waitForRender();
+      await avatar.updateComplete;
 
       const img = avatar.shadowRoot.querySelector(".ea-avatar__img");
       if (img) {
@@ -350,7 +349,7 @@ describe("EaAvatar", () => {
       avatar.srcSet = testSrc;
       container.appendChild(avatar);
 
-      await waitForRender();
+      await avatar.updateComplete;
 
       const img = avatar.shadowRoot.querySelector(".ea-avatar__img");
       if (img) {
@@ -385,7 +384,7 @@ describe("EaAvatar", () => {
       avatar.setAttribute("alt", "Test Alt");
       container.appendChild(avatar);
 
-      await waitForRender();
+      await avatar.updateComplete;
 
       const img = avatar.shadowRoot.querySelector(".ea-avatar__img");
       if (img) {
@@ -403,7 +402,7 @@ describe("EaAvatar", () => {
         avatar.setAttribute("fit", fit);
         container.appendChild(avatar);
 
-        await waitForRender();
+        await avatar.updateComplete;
 
         expect(avatar.fit).toBe(fit);
         expect(avatar.getAttribute("style")).toContain(
@@ -424,11 +423,11 @@ describe("EaAvatar", () => {
       avatar.setAttribute("fit", "fill");
       container.appendChild(avatar);
 
-      await waitForRender();
+      await avatar.updateComplete;
       expect(avatar.getAttribute("style")).toContain("--ea-avatar-fit: fill");
 
       avatar.setAttribute("fit", "contain");
-      await waitForRender();
+      await avatar.updateComplete;
 
       expect(avatar.getAttribute("style")).toContain(
         "--ea-avatar-fit: contain"
@@ -445,7 +444,7 @@ describe("EaAvatar", () => {
       const errorHandler = vi.fn();
       avatar.addEventListener("error", errorHandler);
 
-      await waitForRender();
+      await avatar.updateComplete;
 
       expect(errorHandler).not.toHaveBeenCalled();
     });
@@ -487,7 +486,7 @@ describe("EaAvatar", () => {
       avatar.setAttribute("icon", "coffee");
       container.appendChild(avatar);
 
-      await waitForRender();
+      await avatar.updateComplete;
 
       const avatarContainer = avatar.shadowRoot.querySelector(".ea-avatar");
       expect(avatarContainer.innerHTML).toContain("ea-icon");
@@ -548,7 +547,7 @@ describe("EaAvatar", () => {
       avatar.setAttribute("src", "https://example.com/avatar.jpg");
       container.appendChild(avatar);
 
-      await waitForRender(0);
+      await avatar.updateComplete;
 
       container.removeChild(avatar);
 
@@ -560,7 +559,7 @@ describe("EaAvatar", () => {
       avatar.setAttribute("shape", "square");
       container.appendChild(avatar);
 
-      await waitForRender();
+      await avatar.updateComplete;
 
       const containerEl = avatar.shadowRoot.querySelector(".ea-avatar");
       expect(containerEl.classList.contains("ea-avatar--square")).toBe(true);
@@ -576,7 +575,7 @@ describe("EaAvatar", () => {
       avatar.setAttribute("fit", "contain");
       container.appendChild(avatar);
 
-      await waitForRender();
+      await avatar.updateComplete;
 
       const containerEl = avatar.shadowRoot.querySelector(".ea-avatar");
       expect(containerEl.classList.contains("ea-avatar--square")).toBe(true);
@@ -597,7 +596,7 @@ describe("EaAvatar", () => {
       container.appendChild(avatar1);
       container.appendChild(avatar2);
 
-      await waitForRender();
+      await avatar2.updateComplete;
 
       const containerEl1 = avatar1.shadowRoot.querySelector(".ea-avatar");
       const containerEl2 = avatar2.shadowRoot.querySelector(".ea-avatar");
@@ -621,10 +620,10 @@ describe("EaAvatar", () => {
       avatar.setAttribute("src", "https://example.com/avatar.jpg");
       container.appendChild(avatar);
 
-      await waitForRender();
+      await avatar.updateComplete;
 
       avatar.setAttribute("src", "");
-      await waitForRender();
+      await avatar.updateComplete;
 
       const avatarContainer = avatar.shadowRoot.querySelector(".ea-avatar");
       expect(avatarContainer.innerHTML).toContain("ea-icon");
@@ -636,10 +635,10 @@ describe("EaAvatar", () => {
       avatar.setAttribute("src", "https://example.com/avatar.jpg");
       container.appendChild(avatar);
 
-      await waitForRender();
+      await avatar.updateComplete;
 
       avatar.setAttribute("src", "");
-      await waitForRender();
+      await avatar.updateComplete;
 
       const slot = avatar.shadowRoot.querySelector("slot");
       expect(slot).not.toBeNull();
@@ -650,11 +649,12 @@ describe("EaAvatar", () => {
     describe("ARIA Attributes", () => {
       it("有图片时 alt 应该传递给 img 元素", async () => {
         const el = document.createElement("ea-avatar");
-        const dataUri = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+        const dataUri =
+          "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
         el.setAttribute("src", dataUri);
         el.setAttribute("alt", "User Avatar");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const img = el.shadowRoot.querySelector(".ea-avatar__img");
         if (img) {
           expect(img.alt).toBe("User Avatar");
@@ -665,7 +665,7 @@ describe("EaAvatar", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-avatar");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });

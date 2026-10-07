@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { waitForRender } from "./utils/waitForRender.js";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 let observerInstances = [];
@@ -293,7 +292,7 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       el.status = "loading";
       expect(el.status).toBe("loading");
@@ -303,7 +302,7 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       el.setAttribute("status", "loading");
       expect(el.status).toBe("loading");
@@ -320,7 +319,7 @@ describe("EaInfiniteScroll", () => {
       el.setAttribute("status", "loading");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-infinite-scroll");
       expect(containerEl.classList.contains("is-loading")).toBe(true);
@@ -331,7 +330,7 @@ describe("EaInfiniteScroll", () => {
       el.setAttribute("status", "noMore");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-infinite-scroll");
       expect(containerEl.classList.contains("is-noMore")).toBe(true);
@@ -341,7 +340,7 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-infinite-scroll");
       expect(containerEl.classList.contains("is-loading")).toBe(false);
@@ -352,16 +351,16 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       el.setAttribute("status", "loading");
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-infinite-scroll");
       expect(containerEl.classList.contains("is-loading")).toBe(true);
 
       el.setAttribute("status", "noMore");
-      await waitForRender();
+      await el.updateComplete;
 
       expect(containerEl.classList.contains("is-loading")).toBe(false);
       expect(containerEl.classList.contains("is-noMore")).toBe(true);
@@ -372,13 +371,13 @@ describe("EaInfiniteScroll", () => {
       el.setAttribute("status", "loading");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const containerEl = el.shadowRoot.querySelector(".ea-infinite-scroll");
       expect(containerEl.classList.contains("is-loading")).toBe(true);
 
       el.setAttribute("status", "finished");
-      await waitForRender();
+      await el.updateComplete;
 
       expect(containerEl.classList.contains("is-loading")).toBe(false);
     });
@@ -404,7 +403,7 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       el.setAttribute("distance", "200");
       expect(el.distance).toBe(200);
@@ -431,7 +430,7 @@ describe("EaInfiniteScroll", () => {
       el.setAttribute("distance", "150");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const observer = observerInstances[observerInstances.length - 1];
       expect(observer).toBeTruthy();
@@ -442,7 +441,7 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const observer = observerInstances[observerInstances.length - 1];
       expect(observer).toBeTruthy();
@@ -453,12 +452,12 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const initialCount = observerInstances.length;
 
       el.setAttribute("distance", "200");
-      await waitForRender();
+      await el.updateComplete;
 
       expect(observerInstances.length).toBeGreaterThan(initialCount);
       const newObserver = observerInstances[observerInstances.length - 1];
@@ -471,7 +470,7 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       expect(observerInstances.length).toBeGreaterThan(0);
     });
@@ -480,7 +479,7 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const observer = observerInstances[observerInstances.length - 1];
       const placeholder = el.shadowRoot.querySelector(
@@ -493,7 +492,7 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const loadmoreHandler = vi.fn();
       el.addEventListener("ea-loadmore", loadmoreHandler);
@@ -511,7 +510,7 @@ describe("EaInfiniteScroll", () => {
     it("触发 ea-loadmore 时 status 应变为 loading", async () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
 
       expect(el.status).toBe("finished");
 
@@ -530,7 +529,7 @@ describe("EaInfiniteScroll", () => {
       el.setAttribute("status", "loading");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const loadmoreHandler = vi.fn();
       el.addEventListener("ea-loadmore", loadmoreHandler);
@@ -550,7 +549,7 @@ describe("EaInfiniteScroll", () => {
       el.setAttribute("status", "noMore");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const loadmoreHandler = vi.fn();
       el.addEventListener("ea-loadmore", loadmoreHandler);
@@ -569,7 +568,7 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const loadmoreHandler = vi.fn();
       el.addEventListener("ea-loadmore", loadmoreHandler);
@@ -588,7 +587,7 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const observer = observerInstances[observerInstances.length - 1];
       const placeholder = el.shadowRoot.querySelector(
@@ -606,7 +605,7 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const observer = observerInstances[observerInstances.length - 1];
       const placeholder = el.shadowRoot.querySelector(
@@ -616,7 +615,7 @@ describe("EaInfiniteScroll", () => {
       expect(observer.observing).toContain(placeholder);
 
       el.remove();
-      await waitForRender();
+      await el.updateComplete;
 
       expect(observer.observing.length).toBe(0);
     });
@@ -627,7 +626,7 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       let eventType = null;
       el.addEventListener("ea-loadmore", e => {
@@ -648,7 +647,7 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       let finishedCallback;
       el.addEventListener("ea-loadmore", e => {
@@ -669,7 +668,7 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       let noMoreCallback;
       el.addEventListener("ea-loadmore", e => {
@@ -690,7 +689,7 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       let finishedCallback;
       el.addEventListener("ea-loadmore", e => {
@@ -714,7 +713,7 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       let noMoreCallback;
       el.addEventListener("ea-loadmore", e => {
@@ -738,7 +737,7 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       let finishedCallback;
       el.addEventListener("ea-loadmore", e => {
@@ -755,7 +754,7 @@ describe("EaInfiniteScroll", () => {
       expect(observer.observing).not.toContain(placeholder);
 
       finishedCallback();
-      await waitForRender();
+      await el.updateComplete;
 
       expect(observer.observing).toContain(placeholder);
     });
@@ -764,7 +763,7 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       let noMoreCallback;
       el.addEventListener("ea-loadmore", e => {
@@ -781,7 +780,7 @@ describe("EaInfiniteScroll", () => {
       expect(observer.observing).not.toContain(placeholder);
 
       noMoreCallback();
-      await waitForRender();
+      await el.updateComplete;
 
       expect(observer.observing).toContain(placeholder);
     });
@@ -790,7 +789,7 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       let finishedCallback;
       const loadmoreHandler = vi.fn(e => {
@@ -807,7 +806,7 @@ describe("EaInfiniteScroll", () => {
       expect(loadmoreHandler).toHaveBeenCalledTimes(1);
 
       finishedCallback();
-      await waitForRender();
+      await el.updateComplete;
 
       observer.trigger([{ isIntersecting: true, target: placeholder }]);
       expect(loadmoreHandler).toHaveBeenCalledTimes(2);
@@ -817,7 +816,7 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       let noMoreCallback;
       const loadmoreHandler = vi.fn(e => {
@@ -834,7 +833,7 @@ describe("EaInfiniteScroll", () => {
       expect(loadmoreHandler).toHaveBeenCalledTimes(1);
 
       noMoreCallback();
-      await waitForRender();
+      await el.updateComplete;
 
       observer.trigger([{ isIntersecting: true, target: placeholder }]);
       expect(loadmoreHandler).toHaveBeenCalledTimes(1);
@@ -844,7 +843,7 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const observer = observerInstances[observerInstances.length - 1];
       const placeholder = el.shadowRoot.querySelector(
@@ -865,7 +864,7 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const observer = observerInstances[observerInstances.length - 1];
       const placeholder = el.shadowRoot.querySelector(
@@ -888,7 +887,7 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const slotchangeHandler = vi.fn();
       el.addEventListener("ea-infinite-scroll-slotchange", slotchangeHandler);
@@ -896,16 +895,16 @@ describe("EaInfiniteScroll", () => {
       const item = document.createElement("div");
       el.appendChild(item);
 
-      await waitForRender();
-
-      expect(slotchangeHandler).toHaveBeenCalled();
+      await vi.waitFor(() => {
+        expect(slotchangeHandler).toHaveBeenCalled();
+      });
     });
 
     it("ea-infinite-scroll-slotchange 事件应冒泡", async () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       let eventBubbles = false;
       el.addEventListener("ea-infinite-scroll-slotchange", e => {
@@ -914,16 +913,17 @@ describe("EaInfiniteScroll", () => {
 
       const item = document.createElement("div");
       el.appendChild(item);
-      await waitForRender();
 
-      expect(eventBubbles).toBe(true);
+      await vi.waitFor(() => {
+        expect(eventBubbles).toBe(true);
+      });
     });
 
     it("ea-infinite-scroll-slotchange 事件应穿透 shadow boundary", async () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       let eventComposed = false;
       el.addEventListener("ea-infinite-scroll-slotchange", e => {
@@ -932,9 +932,10 @@ describe("EaInfiniteScroll", () => {
 
       const item = document.createElement("div");
       el.appendChild(item);
-      await waitForRender();
 
-      expect(eventComposed).toBe(true);
+      await vi.waitFor(() => {
+        expect(eventComposed).toBe(true);
+      });
     });
   });
 
@@ -952,7 +953,7 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       el.remove();
 
@@ -973,10 +974,10 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       el.remove();
-      await waitForRender();
+      await el.updateComplete;
 
       container.appendChild(el);
       expect(el.shadowRoot).toBeTruthy();
@@ -987,15 +988,15 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const firstObserverCount = observerInstances.length;
 
       el.remove();
-      await waitForRender();
+      await el.updateComplete;
 
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
 
       expect(observerInstances.length).toBeGreaterThan(firstObserverCount);
     });
@@ -1013,7 +1014,7 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       el.setAttribute("status", "loading");
       expect(el.status).toBe("loading");
@@ -1032,7 +1033,7 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       for (let i = 0; i < 5; i++) {
         const item = document.createElement("div");
@@ -1048,7 +1049,7 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       for (let i = 0; i < 100; i++) {
         const item = document.createElement("div");
@@ -1074,7 +1075,7 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       el.setAttribute("status", "loading");
       el.setAttribute("status", "finished");
@@ -1086,7 +1087,7 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       el.setAttribute("distance", "10.5");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
 
       expect(el.distance).toBe(10.5);
     });
@@ -1095,7 +1096,7 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       el.setAttribute("distance", "");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
 
       expect(typeof el.distance).toBe("number");
     });
@@ -1113,7 +1114,7 @@ describe("EaInfiniteScroll", () => {
     it("完整的加载流程：finished → loading → finished", async () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
 
       expect(el.status).toBe("finished");
 
@@ -1131,14 +1132,14 @@ describe("EaInfiniteScroll", () => {
       expect(el.status).toBe("loading");
 
       finishedCallback();
-      await waitForRender();
+      await el.updateComplete;
       expect(el.status).toBe("finished");
     });
 
     it("完整的加载流程：finished → loading → noMore", async () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
 
       expect(el.status).toBe("finished");
 
@@ -1156,7 +1157,7 @@ describe("EaInfiniteScroll", () => {
       expect(el.status).toBe("loading");
 
       noMoreCallback();
-      await waitForRender();
+      await el.updateComplete;
       expect(el.status).toBe("noMore");
     });
 
@@ -1164,7 +1165,7 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const observer = observerInstances[observerInstances.length - 1];
       const placeholder = el.shadowRoot.querySelector(
@@ -1180,14 +1181,14 @@ describe("EaInfiniteScroll", () => {
       expect(el.status).toBe("loading");
 
       currentCallback.finished();
-      await waitForRender();
+      await el.updateComplete;
       expect(el.status).toBe("finished");
 
       observer.trigger([{ isIntersecting: true, target: placeholder }]);
       expect(el.status).toBe("loading");
 
       currentCallback.noMore();
-      await waitForRender();
+      await el.updateComplete;
       expect(el.status).toBe("noMore");
     });
 
@@ -1195,7 +1196,7 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const loadmoreHandler = vi.fn();
       el.addEventListener("ea-loadmore", loadmoreHandler);
@@ -1218,7 +1219,7 @@ describe("EaInfiniteScroll", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el, {
         rules: { "aria-required-children": { enabled: false } },
       });
@@ -1229,7 +1230,7 @@ describe("EaInfiniteScroll", () => {
       it("宿主元素应该有 role=feed", async () => {
         const el = document.createElement("ea-infinite-scroll");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("role")).toBe("feed");
       });
 
@@ -1237,14 +1238,14 @@ describe("EaInfiniteScroll", () => {
         const el = document.createElement("ea-infinite-scroll");
         el.status = "loading";
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-busy")).toBe("true");
       });
 
       it("status=finished 时宿主元素不应该有 aria-busy", async () => {
         const el = document.createElement("ea-infinite-scroll");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.hasAttribute("aria-busy")).toBe(false);
       });
 
@@ -1252,7 +1253,7 @@ describe("EaInfiniteScroll", () => {
         const el = document.createElement("ea-infinite-scroll");
         el.status = "noMore";
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.hasAttribute("aria-busy")).toBe(false);
       });
 
@@ -1260,14 +1261,14 @@ describe("EaInfiniteScroll", () => {
         const el = document.createElement("ea-infinite-scroll");
         el.setAttribute("label", "News feed");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-label")).toBe("News feed");
       });
 
       it("未设置 label 时宿主元素不应该有 aria-label", async () => {
         const el = document.createElement("ea-infinite-scroll");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.hasAttribute("aria-label")).toBe(false);
       });
 
@@ -1275,7 +1276,7 @@ describe("EaInfiniteScroll", () => {
         const el = document.createElement("ea-infinite-scroll");
         el.innerHTML = "<div>Item 1</div><div>Item 2</div>";
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const articles = el.querySelectorAll("[role='article']");
         expect(articles.length).toBe(2);
       });
@@ -1284,7 +1285,7 @@ describe("EaInfiniteScroll", () => {
         const el = document.createElement("ea-infinite-scroll");
         el.innerHTML = "<div>Item 1</div><div>Item 2</div><div>Item 3</div>";
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const articles = el.querySelectorAll("[role='article']");
         articles.forEach((article, i) => {
           expect(article.getAttribute("aria-posinset")).toBe(String(i + 1));
@@ -1295,7 +1296,7 @@ describe("EaInfiniteScroll", () => {
         const el = document.createElement("ea-infinite-scroll");
         el.innerHTML = "<div>Item 1</div><div>Item 2</div><div>Item 3</div>";
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const articles = el.querySelectorAll("[role='article']");
         articles.forEach(article => {
           expect(article.getAttribute("aria-setsize")).toBe("3");

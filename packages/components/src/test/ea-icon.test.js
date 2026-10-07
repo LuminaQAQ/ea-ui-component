@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import { waitForRender } from "./utils/waitForRender";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-icon/index";
@@ -71,7 +70,7 @@ describe("EaIcon", () => {
       icon.setAttribute("name", "coffee");
       container.appendChild(icon);
 
-      await waitForRender();
+      await icon.updateComplete;
 
       const iElement = icon.shadowRoot.querySelector("i.ea-icon");
       expect(iElement.classList.contains("fa-solid")).toBe(true);
@@ -83,7 +82,7 @@ describe("EaIcon", () => {
       icon.setAttribute("name", "fa-solid fa-coffee");
       container.appendChild(icon);
 
-      await waitForRender();
+      await icon.updateComplete;
 
       expect(icon.name).toBe("fa-solid fa-coffee");
       const iElement = icon.shadowRoot.querySelector("i.ea-icon");
@@ -95,7 +94,7 @@ describe("EaIcon", () => {
       const icon = document.createElement("ea-icon");
       container.appendChild(icon);
 
-      await waitForRender();
+      await icon.updateComplete;
 
       const iElement = icon.shadowRoot.querySelector("i.ea-icon");
       expect(iElement.className).toBe("ea-icon");
@@ -116,7 +115,7 @@ describe("EaIcon", () => {
       icon.setAttribute("family", "brands");
       container.appendChild(icon);
 
-      await waitForRender();
+      await icon.updateComplete;
 
       expect(icon.family).toBe("brands");
       const iElement = icon.shadowRoot.querySelector("i.ea-icon");
@@ -130,7 +129,7 @@ describe("EaIcon", () => {
       icon.setAttribute("family", "sharp");
       container.appendChild(icon);
 
-      await waitForRender();
+      await icon.updateComplete;
 
       expect(icon.family).toBe("sharp");
       const iElement = icon.shadowRoot.querySelector("i.ea-icon");
@@ -143,7 +142,7 @@ describe("EaIcon", () => {
       icon.setAttribute("family", "classic");
       container.appendChild(icon);
 
-      await waitForRender();
+      await icon.updateComplete;
 
       const iElement = icon.shadowRoot.querySelector("i.ea-icon");
       expect(iElement.classList.contains("fa-classic")).toBe(false);
@@ -165,7 +164,7 @@ describe("EaIcon", () => {
       icon.setAttribute("variant", "regular");
       container.appendChild(icon);
 
-      await waitForRender();
+      await icon.updateComplete;
 
       expect(icon.variant).toBe("regular");
       const iElement = icon.shadowRoot.querySelector("i.ea-icon");
@@ -178,7 +177,7 @@ describe("EaIcon", () => {
       icon.setAttribute("variant", "light");
       container.appendChild(icon);
 
-      await waitForRender();
+      await icon.updateComplete;
 
       const iElement = icon.shadowRoot.querySelector("i.ea-icon");
       expect(iElement.classList.contains("fa-light")).toBe(true);
@@ -190,7 +189,7 @@ describe("EaIcon", () => {
       icon.setAttribute("variant", "thin");
       container.appendChild(icon);
 
-      await waitForRender();
+      await icon.updateComplete;
 
       const iElement = icon.shadowRoot.querySelector("i.ea-icon");
       expect(iElement.classList.contains("fa-thin")).toBe(true);
@@ -202,7 +201,7 @@ describe("EaIcon", () => {
       icon.setAttribute("variant", "duotone");
       container.appendChild(icon);
 
-      await waitForRender();
+      await icon.updateComplete;
 
       const iElement = icon.shadowRoot.querySelector("i.ea-icon");
       expect(iElement.classList.contains("fa-duotone")).toBe(true);
@@ -230,7 +229,7 @@ describe("EaIcon", () => {
       icon.setAttribute("color", "#ff4757");
       container.appendChild(icon);
 
-      await waitForRender();
+      await icon.updateComplete;
 
       expect(icon.style.getPropertyValue("--ea-icon-color")).toBe("#ff4757");
     });
@@ -262,7 +261,7 @@ describe("EaIcon", () => {
       icon.setAttribute("size", "24");
       container.appendChild(icon);
 
-      await waitForRender();
+      await icon.updateComplete;
 
       expect(icon.size).toBe("24");
       expect(icon.style.getPropertyValue("--ea-icon-size")).toBe("24px");
@@ -273,7 +272,7 @@ describe("EaIcon", () => {
       icon.setAttribute("size", "large");
       container.appendChild(icon);
 
-      await waitForRender();
+      await icon.updateComplete;
 
       expect(icon.style.getPropertyValue("--ea-icon-size")).toBe("14px");
     });
@@ -283,7 +282,7 @@ describe("EaIcon", () => {
       icon.setAttribute("size", "medium");
       container.appendChild(icon);
 
-      await waitForRender();
+      await icon.updateComplete;
 
       expect(icon.style.getPropertyValue("--ea-icon-size")).toBe("12px");
     });
@@ -293,7 +292,7 @@ describe("EaIcon", () => {
       icon.setAttribute("size", "small");
       container.appendChild(icon);
 
-      await waitForRender();
+      await icon.updateComplete;
 
       expect(icon.style.getPropertyValue("--ea-icon-size")).toBe("10px");
     });
@@ -313,7 +312,7 @@ describe("EaIcon", () => {
       icon.setAttribute("spin", "");
       container.appendChild(icon);
 
-      await waitForRender();
+      await icon.updateComplete;
 
       expect(icon.spin).toBe(true);
       const iElement = icon.shadowRoot.querySelector("i.ea-icon");
@@ -325,7 +324,7 @@ describe("EaIcon", () => {
       icon.setAttribute("name", "coffee");
       container.appendChild(icon);
 
-      await waitForRender();
+      await icon.updateComplete;
 
       const iElement = icon.shadowRoot.querySelector("i.ea-icon");
       expect(iElement.classList.contains("fa-spin")).toBe(false);
@@ -355,7 +354,7 @@ describe("EaIcon", () => {
       icon.setAttribute("family", "brands");
       container.appendChild(icon);
 
-      await waitForRender();
+      await icon.updateComplete;
 
       const iElement = icon.shadowRoot.querySelector("i.ea-icon");
       expect(iElement.classList.contains("fa-brands")).toBe(true);
@@ -369,7 +368,7 @@ describe("EaIcon", () => {
       icon.setAttribute("variant", "solid");
       container.appendChild(icon);
 
-      await waitForRender();
+      await icon.updateComplete;
 
       const iElement = icon.shadowRoot.querySelector("i.ea-icon");
       expect(iElement.classList.contains("fa-sharp")).toBe(true);
@@ -384,7 +383,7 @@ describe("EaIcon", () => {
       icon.setAttribute("spin", "");
       container.appendChild(icon);
 
-      await waitForRender();
+      await icon.updateComplete;
 
       const iElement = icon.shadowRoot.querySelector("i.ea-icon");
       expect(iElement.classList.contains("fa-regular")).toBe(true);
@@ -399,10 +398,10 @@ describe("EaIcon", () => {
       icon.setAttribute("name", "coffee");
       container.appendChild(icon);
 
-      await waitForRender();
+      await icon.updateComplete;
 
       icon.setAttribute("name", "star");
-      await waitForRender();
+      await icon.updateComplete;
 
       expect(icon.name).toBe("star");
       const iElement = icon.shadowRoot.querySelector("i.ea-icon");
@@ -416,10 +415,10 @@ describe("EaIcon", () => {
       icon.setAttribute("family", "classic");
       container.appendChild(icon);
 
-      await waitForRender();
+      await icon.updateComplete;
 
       icon.setAttribute("family", "brands");
-      await waitForRender();
+      await icon.updateComplete;
 
       expect(icon.family).toBe("brands");
       const iElement = icon.shadowRoot.querySelector("i.ea-icon");
@@ -432,10 +431,10 @@ describe("EaIcon", () => {
       icon.setAttribute("variant", "solid");
       container.appendChild(icon);
 
-      await waitForRender();
+      await icon.updateComplete;
 
       icon.setAttribute("variant", "regular");
-      await waitForRender();
+      await icon.updateComplete;
 
       expect(icon.variant).toBe("regular");
       const iElement = icon.shadowRoot.querySelector("i.ea-icon");
@@ -448,12 +447,12 @@ describe("EaIcon", () => {
       icon.setAttribute("name", "spinner");
       container.appendChild(icon);
 
-      await waitForRender();
+      await icon.updateComplete;
 
       expect(icon.spin).toBe(false);
 
       icon.setAttribute("spin", "");
-      await waitForRender();
+      await icon.updateComplete;
 
       expect(icon.spin).toBe(true);
       const iElement = icon.shadowRoot.querySelector("i.ea-icon");
@@ -465,10 +464,10 @@ describe("EaIcon", () => {
       icon.setAttribute("color", "#ff4757");
       container.appendChild(icon);
 
-      await waitForRender();
+      await icon.updateComplete;
 
       icon.setAttribute("color", "#2ed573");
-      await waitForRender();
+      await icon.updateComplete;
 
       expect(icon.color).toBe("#2ed573");
       expect(icon.style.getPropertyValue("--ea-icon-color")).toBe("#2ed573");
@@ -479,10 +478,10 @@ describe("EaIcon", () => {
       icon.setAttribute("size", "24");
       container.appendChild(icon);
 
-      await waitForRender();
+      await icon.updateComplete;
 
       icon.setAttribute("size", "48");
-      await waitForRender();
+      await icon.updateComplete;
 
       expect(icon.size).toBe("48");
       expect(icon.style.getPropertyValue("--ea-icon-size")).toBe("48px");
@@ -494,7 +493,7 @@ describe("EaIcon", () => {
       const icon = document.createElement("ea-icon");
       container.appendChild(icon);
 
-      await waitForRender();
+      await icon.updateComplete;
 
       const iElement = icon.shadowRoot.querySelector("i.ea-icon");
       expect(iElement).toBeTruthy();
@@ -517,7 +516,7 @@ describe("EaIcon", () => {
       const icon = document.createElement("ea-icon");
       container.appendChild(icon);
 
-      await waitForRender();
+      await icon.updateComplete;
 
       icon.remove();
 
@@ -529,7 +528,7 @@ describe("EaIcon", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-icon");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });
@@ -539,7 +538,7 @@ describe("EaIcon", () => {
         const el = document.createElement("ea-icon");
         el.setAttribute("name", "star");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const iElement = el.shadowRoot.querySelector("i.ea-icon");
         expect(iElement.getAttribute("aria-hidden")).toBe("true");
       });
@@ -549,7 +548,7 @@ describe("EaIcon", () => {
         el.setAttribute("name", "star");
         el.setAttribute("aria-label", "Star icon");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const iElement = el.shadowRoot.querySelector("i.ea-icon");
         expect(iElement.getAttribute("aria-hidden")).toBe("false");
       });

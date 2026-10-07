@@ -1,6 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 
-import { waitForRender } from "./utils/waitForRender.js";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-text/index.ts";
@@ -124,10 +123,10 @@ describe("EaText", () => {
       text.textContent = "Variant Test";
       container.appendChild(text);
 
-      await waitForRender();
+      await text.updateComplete;
 
       text.setAttribute("variant", "danger");
-      await waitForRender();
+      await text.updateComplete;
 
       expect(text.variant).toBe("danger");
       const containerEl = text.shadowRoot.querySelector('[part="container"]');
@@ -179,10 +178,10 @@ describe("EaText", () => {
       text.textContent = "Size Test";
       container.appendChild(text);
 
-      await waitForRender();
+      await text.updateComplete;
 
       text.setAttribute("size", "large");
-      await waitForRender();
+      await text.updateComplete;
 
       expect(text.size).toBe("large");
       const containerEl = text.shadowRoot.querySelector('[part="container"]');
@@ -225,10 +224,10 @@ describe("EaText", () => {
       text.textContent = "Truncated Test";
       container.appendChild(text);
 
-      await waitForRender();
+      await text.updateComplete;
 
       text.setAttribute("truncated", "");
-      await waitForRender();
+      await text.updateComplete;
 
       expect(text.truncated).toBe(true);
       const containerEl = text.shadowRoot.querySelector('[part="container"]');
@@ -241,7 +240,7 @@ describe("EaText", () => {
       text.textContent = "Long text content";
       container.appendChild(text);
 
-      await waitForRender();
+      await text.updateComplete;
 
       const containerEl = text.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.title).toBe("Long text content");
@@ -252,7 +251,7 @@ describe("EaText", () => {
       text.textContent = "Normal text";
       container.appendChild(text);
 
-      await waitForRender();
+      await text.updateComplete;
 
       const containerEl = text.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.title).toBe("");
@@ -302,7 +301,7 @@ describe("EaText", () => {
       text.textContent = "Test text";
       container.appendChild(text);
 
-      await waitForRender();
+      await text.updateComplete;
 
       expect(text.style.getPropertyValue("--ea-text-line-clamp")).toBe("3");
     });
@@ -313,7 +312,7 @@ describe("EaText", () => {
       text.textContent = "Multi line text";
       container.appendChild(text);
 
-      await waitForRender();
+      await text.updateComplete;
 
       const containerEl = text.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.title).toBe("Multi line text");
@@ -324,10 +323,10 @@ describe("EaText", () => {
       text.textContent = "Line Clamp Test";
       container.appendChild(text);
 
-      await waitForRender();
+      await text.updateComplete;
 
       text.setAttribute("line-clamp", "3");
-      await waitForRender();
+      await text.updateComplete;
 
       expect(text.lineClamp).toBe(3);
       const containerEl = text.shadowRoot.querySelector('[part="container"]');
@@ -425,10 +424,10 @@ describe("EaText", () => {
       text.textContent = "Tag Test";
       container.appendChild(text);
 
-      await waitForRender();
+      await text.updateComplete;
 
       text.setAttribute("tag", "p");
-      await waitForRender();
+      await text.updateComplete;
 
       expect(text.tag).toBe("p");
       const containerEl = text.shadowRoot.querySelector('[part="container"]');
@@ -585,7 +584,7 @@ describe("EaText", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-text");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });

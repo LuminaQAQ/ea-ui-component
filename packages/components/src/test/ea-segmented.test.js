@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { waitForRender } from "./utils/waitForRender";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-segmented/index";
@@ -49,7 +48,7 @@ describe("EaSegmented Component", () => {
     it("应该包含所有必需的 CSS Parts", async () => {
       const segmented = createSegmented({ name: "test" }, ["Mon", "Tue"]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       expect(
         segmented.shadowRoot.querySelector('[part="container"]')
@@ -65,7 +64,7 @@ describe("EaSegmented Component", () => {
     it("应该渲染 indicator 元素", async () => {
       const segmented = createSegmented({ name: "test" }, ["Mon", "Tue"]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const indicator = segmented.shadowRoot.querySelector(
         ".ea-segmented__indicator"
@@ -77,7 +76,7 @@ describe("EaSegmented Component", () => {
     it("无 options 时不应渲染 item", async () => {
       const segmented = createSegmented({ name: "test" }, []);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const items = segmented.shadowRoot.querySelectorAll(
         ".ea-segmented__item"
@@ -96,7 +95,7 @@ describe("EaSegmented Component", () => {
         "Fri",
       ]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const items = segmented.shadowRoot.querySelectorAll(
         ".ea-segmented__item"
@@ -111,7 +110,7 @@ describe("EaSegmented Component", () => {
         { label: "Grape", value: "Grape" },
       ]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const items = segmented.shadowRoot.querySelectorAll(
         ".ea-segmented__item"
@@ -133,7 +132,7 @@ describe("EaSegmented Component", () => {
         "Wed",
       ]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const labels = segmented.shadowRoot.querySelectorAll(
         ".ea-segmented__label"
@@ -149,7 +148,7 @@ describe("EaSegmented Component", () => {
         { label: "樱桃", value: "cherry" },
       ]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const labels = segmented.shadowRoot.querySelectorAll(
         ".ea-segmented__label"
@@ -161,7 +160,7 @@ describe("EaSegmented Component", () => {
     it("每个选项应该渲染 label 和 input 子元素", async () => {
       const segmented = createSegmented({ name: "week" }, ["Mon", "Tue"]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const items = segmented.shadowRoot.querySelectorAll(
         ".ea-segmented__item"
@@ -175,7 +174,7 @@ describe("EaSegmented Component", () => {
     it("input 应该是 radio 类型", async () => {
       const segmented = createSegmented({ name: "week" }, ["Mon", "Tue"]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const inputs = segmented.shadowRoot.querySelectorAll(
         ".ea-segmented__original"
@@ -188,7 +187,7 @@ describe("EaSegmented Component", () => {
     it("input 的 name 应该等于组件的 name 属性", async () => {
       const segmented = createSegmented({ name: "myGroup" }, ["A", "B"]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const inputs = segmented.shadowRoot.querySelectorAll(
         ".ea-segmented__original"
@@ -203,7 +202,7 @@ describe("EaSegmented Component", () => {
       const segmented = document.createElement("ea-segmented");
       segmented.options = ["A", "B"];
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       expect(segmented.hasAttribute("name")).toBe(true);
       expect(warnSpy).toHaveBeenCalled();
@@ -219,7 +218,7 @@ describe("EaSegmented Component", () => {
     it("空 options 应该不渲染任何选项", async () => {
       const segmented = createSegmented({ name: "week" }, []);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const items = segmented.shadowRoot.querySelectorAll(
         ".ea-segmented__item"
@@ -230,14 +229,14 @@ describe("EaSegmented Component", () => {
     it("应该支持动态更新 options", async () => {
       const segmented = createSegmented({ name: "week" }, ["Mon", "Tue"]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       expect(
         segmented.shadowRoot.querySelectorAll(".ea-segmented__item").length
       ).toBe(2);
 
       segmented.options = ["Mon", "Tue", "Wed", "Thu"];
-      await waitForRender();
+      await segmented.updateComplete;
 
       expect(
         segmented.shadowRoot.querySelectorAll(".ea-segmented__item").length
@@ -247,10 +246,10 @@ describe("EaSegmented Component", () => {
     it("动态更新 options 后 label 应该正确", async () => {
       const segmented = createSegmented({ name: "week" }, ["Mon"]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       segmented.options = ["Tue", "Wed"];
-      await waitForRender();
+      await segmented.updateComplete;
 
       const labels = segmented.shadowRoot.querySelectorAll(
         ".ea-segmented__label"
@@ -266,7 +265,7 @@ describe("EaSegmented Component", () => {
         "Tue",
       ]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const items = segmented.shadowRoot.querySelectorAll(
         ".ea-segmented__item"
@@ -281,7 +280,7 @@ describe("EaSegmented Component", () => {
         "Option_3",
       ]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const labels = segmented.shadowRoot.querySelectorAll(
         ".ea-segmented__label"
@@ -297,7 +296,7 @@ describe("EaSegmented Component", () => {
         "This is a very long option text that should still render correctly",
       ]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const items = segmented.shadowRoot.querySelectorAll(
         ".ea-segmented__item"
@@ -308,7 +307,7 @@ describe("EaSegmented Component", () => {
     it("label 元素应该显示选项文本", async () => {
       const segmented = createSegmented({ name: "week" }, ["Mon", "Tue"]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const labels = segmented.shadowRoot.querySelectorAll(
         ".ea-segmented__label"
@@ -346,7 +345,7 @@ describe("EaSegmented Component", () => {
         "Wed",
       ]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const items = segmented.shadowRoot.querySelectorAll(
         ".ea-segmented__item"
@@ -363,7 +362,7 @@ describe("EaSegmented Component", () => {
         "Wed",
       ]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const inputs = segmented.shadowRoot.querySelectorAll(
         ".ea-segmented__original"
@@ -379,7 +378,7 @@ describe("EaSegmented Component", () => {
         "Wed",
       ]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       expect(segmented.value).toBe("Mon");
 
@@ -394,16 +393,18 @@ describe("EaSegmented Component", () => {
         "Wed",
       ]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       segmented.value = "Wed";
-      await waitForRender();
+      await segmented.updateComplete;
 
-      const items = segmented.shadowRoot.querySelectorAll(
-        ".ea-segmented__item"
-      );
-      expect(items[0].classList.contains("is-checked")).toBe(false);
-      expect(items[2].classList.contains("is-checked")).toBe(true);
+      await vi.waitFor(() => {
+        const items = segmented.shadowRoot.querySelectorAll(
+          ".ea-segmented__item"
+        );
+        expect(items[0].classList.contains("is-checked")).toBe(false);
+        expect(items[2].classList.contains("is-checked")).toBe(true);
+      });
     });
 
     it("对象选项的 value 应该使用 propsConfiguration.value 字段匹配", async () => {
@@ -412,7 +413,7 @@ describe("EaSegmented Component", () => {
         { label: "Cherry", value: "cherry" },
       ]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const items = segmented.shadowRoot.querySelectorAll(
         ".ea-segmented__item"
@@ -428,7 +429,7 @@ describe("EaSegmented Component", () => {
         { label: "Wed", value: "Wed" },
       ]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const items = segmented.shadowRoot.querySelectorAll(
         ".ea-segmented__item"
@@ -468,12 +469,12 @@ describe("EaSegmented Component", () => {
       const containerEl = segmented.shadowRoot.querySelector(".ea-segmented");
 
       segmented.setAttribute("size", "large");
-      await waitForRender();
+      await segmented.updateComplete;
 
       expect(containerEl.classList.contains("ea-segmented--large")).toBe(true);
 
       segmented.setAttribute("size", "small");
-      await waitForRender();
+      await segmented.updateComplete;
 
       expect(containerEl.classList.contains("ea-segmented--small")).toBe(true);
       expect(containerEl.classList.contains("ea-segmented--large")).toBe(false);
@@ -523,12 +524,12 @@ describe("EaSegmented Component", () => {
       const containerEl = segmented.shadowRoot.querySelector(".ea-segmented");
 
       segmented.setAttribute("direction", "horizontal");
-      await waitForRender();
+      await segmented.updateComplete;
 
       expect(containerEl.classList.contains("is-horizontal")).toBe(true);
 
       segmented.setAttribute("direction", "vertical");
-      await waitForRender();
+      await segmented.updateComplete;
 
       expect(containerEl.classList.contains("is-vertical")).toBe(true);
       expect(containerEl.classList.contains("is-horizontal")).toBe(false);
@@ -576,7 +577,7 @@ describe("EaSegmented Component", () => {
         "Wed",
       ]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const inputs = segmented.shadowRoot.querySelectorAll(
         ".ea-segmented__original"
@@ -593,7 +594,7 @@ describe("EaSegmented Component", () => {
         "Wed",
       ]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const items = segmented.shadowRoot.querySelectorAll(
         ".ea-segmented__item"
@@ -606,13 +607,13 @@ describe("EaSegmented Component", () => {
     it("disabled 不应该在容器上添加 is-disabled 类", async () => {
       const segmented = createSegmented({ name: "week" }, ["Mon", "Tue"]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const containerEl = segmented.shadowRoot.querySelector(".ea-segmented");
       expect(containerEl.classList.contains("is-disabled")).toBe(false);
 
       segmented.setAttribute("disabled", "");
-      await waitForRender();
+      await segmented.updateComplete;
 
       expect(containerEl.classList.contains("is-disabled")).toBe(false);
     });
@@ -624,7 +625,7 @@ describe("EaSegmented Component", () => {
         { label: "Wed", value: "Wed", disabled: true },
       ]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const items = segmented.shadowRoot.querySelectorAll(
         ".ea-segmented__item"
@@ -640,7 +641,7 @@ describe("EaSegmented Component", () => {
         { label: "Tue", value: "Tue" },
       ]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const inputs = segmented.shadowRoot.querySelectorAll(
         ".ea-segmented__original"
@@ -655,7 +656,7 @@ describe("EaSegmented Component", () => {
         { label: "Tue", value: "Tue" },
       ]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const inputs = segmented.shadowRoot.querySelectorAll(
         ".ea-segmented__original"
@@ -690,13 +691,13 @@ describe("EaSegmented Component", () => {
     it("block 变化时应该正确更新容器 class", async () => {
       const segmented = createSegmented({ name: "week" }, ["Mon", "Tue"]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const containerEl = segmented.shadowRoot.querySelector(".ea-segmented");
       expect(containerEl.classList.contains("is-block")).toBe(false);
 
       segmented.setAttribute("block", "");
-      await waitForRender();
+      await segmented.updateComplete;
 
       expect(containerEl.classList.contains("is-block")).toBe(true);
     });
@@ -730,7 +731,7 @@ describe("EaSegmented Component", () => {
     it("name 属性应该映射到 input 的 name", async () => {
       const segmented = createSegmented({ name: "radioGroup" }, ["A", "B"]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const inputs = segmented.shadowRoot.querySelectorAll(
         ".ea-segmented__original"
@@ -764,7 +765,7 @@ describe("EaSegmented Component", () => {
         { myLabel: "Tue", myValue: "Tue" },
       ];
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const labels = segmented.shadowRoot.querySelectorAll(
         ".ea-segmented__label"
@@ -785,7 +786,7 @@ describe("EaSegmented Component", () => {
         { text: "B", key: "b" },
       ];
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const items = segmented.shadowRoot.querySelectorAll(
         ".ea-segmented__item"
@@ -806,7 +807,7 @@ describe("EaSegmented Component", () => {
         { text: "B", key: "b" },
       ];
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const items = segmented.shadowRoot.querySelectorAll(
         ".ea-segmented__item"
@@ -820,7 +821,7 @@ describe("EaSegmented Component", () => {
     it("容器应该有 ea-segmented 基础类名", async () => {
       const segmented = createSegmented({ name: "week" }, ["Mon", "Tue"]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const containerEl = segmented.shadowRoot.querySelector(".ea-segmented");
       expect(containerEl.classList.contains("ea-segmented")).toBe(true);
@@ -832,7 +833,7 @@ describe("EaSegmented Component", () => {
         "Tue",
       ]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const containerEl = segmented.shadowRoot.querySelector(".ea-segmented");
       expect(containerEl.classList.contains("ea-segmented--large")).toBe(true);
@@ -844,7 +845,7 @@ describe("EaSegmented Component", () => {
         ["Mon", "Tue"]
       );
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const containerEl = segmented.shadowRoot.querySelector(".ea-segmented");
       expect(containerEl.classList.contains("is-vertical")).toBe(true);
@@ -856,7 +857,7 @@ describe("EaSegmented Component", () => {
         "Tue",
       ]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const containerEl = segmented.shadowRoot.querySelector(".ea-segmented");
       expect(containerEl.classList.contains("is-block")).toBe(true);
@@ -868,7 +869,7 @@ describe("EaSegmented Component", () => {
         "Tue",
       ]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const containerEl = segmented.shadowRoot.querySelector(".ea-segmented");
       expect(containerEl.classList.contains("is-disabled")).toBe(false);
@@ -887,7 +888,7 @@ describe("EaSegmented Component", () => {
         ["Mon", "Tue"]
       );
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const containerEl = segmented.shadowRoot.querySelector(".ea-segmented");
       expect(containerEl.classList.contains("ea-segmented--large")).toBe(true);
@@ -898,7 +899,7 @@ describe("EaSegmented Component", () => {
     it("item 应该有 ea-segmented__item 类名", async () => {
       const segmented = createSegmented({ name: "week" }, ["Mon", "Tue"]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const items = segmented.shadowRoot.querySelectorAll(
         ".ea-segmented__item"
@@ -911,7 +912,7 @@ describe("EaSegmented Component", () => {
     it("label 应该有 ea-segmented__label 类名", async () => {
       const segmented = createSegmented({ name: "week" }, ["Mon", "Tue"]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const labels = segmented.shadowRoot.querySelectorAll(
         ".ea-segmented__label"
@@ -924,7 +925,7 @@ describe("EaSegmented Component", () => {
     it("original input 应该有 ea-segmented__original 类名", async () => {
       const segmented = createSegmented({ name: "week" }, ["Mon", "Tue"]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const inputs = segmented.shadowRoot.querySelectorAll(
         ".ea-segmented__original"
@@ -937,7 +938,7 @@ describe("EaSegmented Component", () => {
     it("indicator 应该有 ea-segmented__indicator 类名", async () => {
       const segmented = createSegmented({ name: "week" }, ["Mon", "Tue"]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const indicator = segmented.shadowRoot.querySelector(
         ".ea-segmented__indicator"
@@ -956,14 +957,14 @@ describe("EaSegmented Component", () => {
         "Wed",
       ]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const changeHandler = vi.fn();
       segmented.addEventListener("change", changeHandler);
 
       const input = segmented.shadowRoot.querySelector('input[value="Tue"]');
       input.click();
-      await waitForRender();
+      await segmented.updateComplete;
 
       expect(changeHandler).toHaveBeenCalled();
     });
@@ -975,7 +976,7 @@ describe("EaSegmented Component", () => {
         "Wed",
       ]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       let eventDetail = null;
       segmented.addEventListener("change", e => {
@@ -995,7 +996,7 @@ describe("EaSegmented Component", () => {
         "Wed",
       ]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const input = segmented.shadowRoot.querySelector('input[value="Tue"]');
       input.click();
@@ -1009,17 +1010,19 @@ describe("EaSegmented Component", () => {
         "Wed",
       ]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const input = segmented.shadowRoot.querySelector('input[value="Wed"]');
       input.click();
-      await waitForRender();
+      await segmented.updateComplete;
 
-      const items = segmented.shadowRoot.querySelectorAll(
-        ".ea-segmented__item"
-      );
-      expect(items[0].classList.contains("is-checked")).toBe(false);
-      expect(items[2].classList.contains("is-checked")).toBe(true);
+      await vi.waitFor(() => {
+        const items = segmented.shadowRoot.querySelectorAll(
+          ".ea-segmented__item"
+        );
+        expect(items[0].classList.contains("is-checked")).toBe(false);
+        expect(items[2].classList.contains("is-checked")).toBe(true);
+      });
     });
 
     it("change 事件应该是 EaSegmentedChangeEvent 实例", async () => {
@@ -1029,7 +1032,7 @@ describe("EaSegmented Component", () => {
         "Wed",
       ]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       let receivedEvent = null;
       segmented.addEventListener("change", e => {
@@ -1051,16 +1054,16 @@ describe("EaSegmented Component", () => {
         "Wed",
       ]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const nativeChangeHandler = vi.fn();
-      segmented.addEventListener("change", (e) => {
+      segmented.addEventListener("change", e => {
         if (!e.detail) nativeChangeHandler();
       });
 
       const input = segmented.shadowRoot.querySelector('input[value="Tue"]');
       input.click();
-      await waitForRender();
+      await segmented.updateComplete;
 
       expect(nativeChangeHandler).not.toHaveBeenCalled();
     });
@@ -1073,7 +1076,11 @@ describe("EaSegmented Component", () => {
         "Tue",
       ]);
       container.appendChild(segmented);
-      await waitForRender(200);
+      await vi.waitFor(() => {
+        expect(
+          segmented.style.getPropertyValue("--ea-segmented-indicator-width")
+        ).toBeTruthy();
+      });
 
       const width = segmented.style.getPropertyValue(
         "--ea-segmented-indicator-width"
@@ -1101,10 +1108,16 @@ describe("EaSegmented Component", () => {
         "Wed",
       ]);
       container.appendChild(segmented);
-      await waitForRender(200);
+      await segmented.updateComplete;
 
       segmented.value = "Wed";
-      await waitForRender(200);
+      await vi.waitFor(() => {
+        expect(
+          segmented.style.getPropertyValue(
+            "--ea-segmented-indicator-position-x"
+          )
+        ).toBeTruthy();
+      });
 
       const posX = segmented.style.getPropertyValue(
         "--ea-segmented-indicator-position-x"
@@ -1118,7 +1131,7 @@ describe("EaSegmented Component", () => {
         "Tue",
       ]);
       container.appendChild(segmented);
-      await waitForRender(200);
+      await segmented.updateComplete;
 
       const width = segmented.style.getPropertyValue(
         "--ea-segmented-indicator-width"
@@ -1146,7 +1159,7 @@ describe("EaSegmented Component", () => {
         "Wed",
       ]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       segmented.remove();
 
@@ -1158,7 +1171,7 @@ describe("EaSegmented Component", () => {
       segmented.setAttribute("name", "week");
       segmented.options = ["Mon", "Tue", "Wed"];
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const items = segmented.shadowRoot.querySelectorAll(
         ".ea-segmented__item"
@@ -1178,10 +1191,10 @@ describe("EaSegmented Component", () => {
     it("多次设置 options 应该正确替换内容", async () => {
       const segmented = createSegmented({ name: "week" }, ["Mon", "Tue"]);
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       segmented.options = ["A", "B", "C"];
-      await waitForRender();
+      await segmented.updateComplete;
 
       const labels = segmented.shadowRoot.querySelectorAll(
         ".ea-segmented__label"
@@ -1200,7 +1213,7 @@ describe("EaSegmented Component", () => {
         ["Mon", "Tue"]
       );
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const containerEl = segmented.shadowRoot.querySelector(".ea-segmented");
       expect(containerEl.classList.contains("ea-segmented--large")).toBe(true);
@@ -1213,7 +1226,7 @@ describe("EaSegmented Component", () => {
         ["Mon", "Tue"]
       );
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const containerEl = segmented.shadowRoot.querySelector(".ea-segmented");
       expect(containerEl.classList.contains("ea-segmented--small")).toBe(true);
@@ -1232,7 +1245,7 @@ describe("EaSegmented Component", () => {
         ["Mon", "Tue"]
       );
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const containerEl = segmented.shadowRoot.querySelector(".ea-segmented");
       expect(containerEl.classList.contains("is-block")).toBe(true);
@@ -1245,7 +1258,7 @@ describe("EaSegmented Component", () => {
         ["Mon", "Tue"]
       );
       container.appendChild(segmented);
-      await waitForRender();
+      await segmented.updateComplete;
 
       const items = segmented.shadowRoot.querySelectorAll(
         ".ea-segmented__item"
@@ -1270,7 +1283,7 @@ describe("EaSegmented Component", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-segmented");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });
@@ -1279,14 +1292,14 @@ describe("EaSegmented Component", () => {
       it("宿主元素应该有 role='radiogroup'", async () => {
         const el = createSegmented({ name: "week" }, ["Mon", "Tue"]);
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("role")).toBe("radiogroup");
       });
 
       it("选项应该有 role='radio'", async () => {
         const el = createSegmented({ name: "week" }, ["Mon", "Tue"]);
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const items = el.shadowRoot.querySelectorAll(".ea-segmented__item");
         items.forEach(item => {
           expect(item.getAttribute("role")).toBe("radio");
@@ -1299,7 +1312,7 @@ describe("EaSegmented Component", () => {
           "Tue",
         ]);
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const items = el.shadowRoot.querySelectorAll(".ea-segmented__item");
         expect(items[0].getAttribute("aria-checked")).toBe("true");
         expect(items[1].getAttribute("aria-checked")).toBe("false");
@@ -1311,14 +1324,14 @@ describe("EaSegmented Component", () => {
           "Tue",
         ]);
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-disabled")).toBe("true");
       });
 
       it("未 disabled 时宿主元素应该有 aria-disabled='false'", async () => {
         const el = createSegmented({ name: "week" }, ["Mon", "Tue"]);
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-disabled")).toBe("false");
       });
     });
@@ -1331,7 +1344,7 @@ describe("EaSegmented Component", () => {
           "Wed",
         ]);
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         el.focus();
         el.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight" }));
         expect(el.value).toBe("Tue");
@@ -1344,7 +1357,7 @@ describe("EaSegmented Component", () => {
           "Wed",
         ]);
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         el.focus();
         el.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowLeft" }));
         expect(el.value).toBe("Mon");
@@ -1357,7 +1370,7 @@ describe("EaSegmented Component", () => {
           "Wed",
         ]);
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         el.focus();
         el.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight" }));
         expect(el.value).toBe("Mon");
@@ -1370,7 +1383,7 @@ describe("EaSegmented Component", () => {
           "Wed",
         ]);
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         el.focus();
         el.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowLeft" }));
         expect(el.value).toBe("Wed");

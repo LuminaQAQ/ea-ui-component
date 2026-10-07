@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import { waitForRender } from "./utils/waitForRender";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-breadcrumb/index.js";
@@ -46,7 +45,9 @@ describe("EaBreadcrumb Component", () => {
       const breadcrumb = document.createElement("ea-breadcrumb");
       container.appendChild(breadcrumb);
 
-      const slot = breadcrumb.shadowRoot.querySelector('slot[name="separator"]');
+      const slot = breadcrumb.shadowRoot.querySelector(
+        'slot[name="separator"]'
+      );
       expect(slot).toBeDefined();
     });
 
@@ -62,7 +63,9 @@ describe("EaBreadcrumb Component", () => {
       const item = document.createElement("ea-breadcrumb-item");
       container.appendChild(item);
 
-      const itemContainer = item.shadowRoot.querySelector(".ea-breadcrumb-item");
+      const itemContainer = item.shadowRoot.querySelector(
+        ".ea-breadcrumb-item"
+      );
       expect(itemContainer).toBeDefined();
     });
 
@@ -70,7 +73,9 @@ describe("EaBreadcrumb Component", () => {
       const item = document.createElement("ea-breadcrumb-item");
       container.appendChild(item);
 
-      const content = item.shadowRoot.querySelector(".ea-breadcrumb-item__content");
+      const content = item.shadowRoot.querySelector(
+        ".ea-breadcrumb-item__content"
+      );
       expect(content).toBeDefined();
     });
 
@@ -78,7 +83,9 @@ describe("EaBreadcrumb Component", () => {
       const item = document.createElement("ea-breadcrumb-item");
       container.appendChild(item);
 
-      const separator = item.shadowRoot.querySelector(".ea-breadcrumb-item__separator");
+      const separator = item.shadowRoot.querySelector(
+        ".ea-breadcrumb-item__separator"
+      );
       expect(separator).toBeDefined();
     });
   });
@@ -118,14 +125,14 @@ describe("EaBreadcrumb Component", () => {
       `;
       container.appendChild(breadcrumb);
 
-      await waitForRender();
+      await breadcrumb.updateComplete;
 
       const items = breadcrumb.querySelectorAll("ea-breadcrumb-item");
       const firstItemSeparator = items[0].querySelector("[slot='separator']");
       expect(firstItemSeparator).toBeDefined();
 
       breadcrumb.setAttribute("separator", ">");
-      await waitForRender();
+      await breadcrumb.updateComplete;
 
       const updatedSeparator = items[0].querySelector("[slot='separator']");
       expect(updatedSeparator).toBeDefined();
@@ -146,7 +153,9 @@ describe("EaBreadcrumb Component", () => {
       item.setAttribute("href", "https://example.com");
       container.appendChild(item);
 
-      const contentEl = item.shadowRoot.querySelector(".ea-breadcrumb-item__content");
+      const contentEl = item.shadowRoot.querySelector(
+        ".ea-breadcrumb-item__content"
+      );
       expect(contentEl.tagName.toLowerCase()).toBe("a");
     });
 
@@ -154,7 +163,9 @@ describe("EaBreadcrumb Component", () => {
       const item = document.createElement("ea-breadcrumb-item");
       container.appendChild(item);
 
-      const contentEl = item.shadowRoot.querySelector(".ea-breadcrumb-item__content");
+      const contentEl = item.shadowRoot.querySelector(
+        ".ea-breadcrumb-item__content"
+      );
       expect(contentEl.tagName.toLowerCase()).toBe("span");
     });
 
@@ -163,9 +174,11 @@ describe("EaBreadcrumb Component", () => {
       item.setAttribute("href", "https://example.com");
       container.appendChild(item);
 
-      await waitForRender(0);
+      await item.updateComplete;
 
-      const contentEl = item.shadowRoot.querySelector(".ea-breadcrumb-item__content");
+      const contentEl = item.shadowRoot.querySelector(
+        ".ea-breadcrumb-item__content"
+      );
       expect(contentEl.classList.contains("is-link")).toBe(true);
     });
 
@@ -173,9 +186,11 @@ describe("EaBreadcrumb Component", () => {
       const item = document.createElement("ea-breadcrumb-item");
       container.appendChild(item);
 
-      await waitForRender(0);
+      await item.updateComplete;
 
-      const contentEl = item.shadowRoot.querySelector(".ea-breadcrumb-item__content");
+      const contentEl = item.shadowRoot.querySelector(
+        ".ea-breadcrumb-item__content"
+      );
       expect(contentEl.classList.contains("is-link")).toBe(false);
     });
 
@@ -184,9 +199,11 @@ describe("EaBreadcrumb Component", () => {
       item.setAttribute("href", "https://example.com");
       container.appendChild(item);
 
-      await waitForRender(0);
+      await item.updateComplete;
 
-      const contentEl = item.shadowRoot.querySelector(".ea-breadcrumb-item__content");
+      const contentEl = item.shadowRoot.querySelector(
+        ".ea-breadcrumb-item__content"
+      );
       expect(contentEl.getAttribute("href")).toBe("https://example.com");
     });
 
@@ -206,11 +223,13 @@ describe("EaBreadcrumb Component", () => {
       item.setAttribute("href", "https://example.com");
       container.appendChild(item);
 
-      let contentEl = item.shadowRoot.querySelector(".ea-breadcrumb-item__content");
+      let contentEl = item.shadowRoot.querySelector(
+        ".ea-breadcrumb-item__content"
+      );
       expect(contentEl.tagName.toLowerCase()).toBe("a");
 
       item.removeAttribute("href");
-      await waitForRender();
+      await item.updateComplete;
 
       contentEl = item.shadowRoot.querySelector(".ea-breadcrumb-item__content");
       expect(contentEl.tagName.toLowerCase()).toBe("span");
@@ -222,7 +241,8 @@ describe("EaBreadcrumb Component", () => {
       const breadcrumb = document.createElement("ea-breadcrumb");
       container.appendChild(breadcrumb);
 
-      const containerEl = breadcrumb.shadowRoot.querySelector('[part="container"]');
+      const containerEl =
+        breadcrumb.shadowRoot.querySelector('[part="container"]');
       expect(containerEl).toBeDefined();
       expect(containerEl.tagName.toLowerCase()).toBe("ol");
     });
@@ -312,7 +332,7 @@ describe("EaBreadcrumb Component", () => {
       `;
       container.appendChild(breadcrumb);
 
-      await waitForRender();
+      await breadcrumb.updateComplete;
 
       const items = breadcrumb.querySelectorAll("ea-breadcrumb-item");
       const firstItemSeparator = items[0].querySelector("[slot='separator']");
@@ -328,7 +348,8 @@ describe("EaBreadcrumb Component", () => {
       container.appendChild(breadcrumb);
 
       const items = breadcrumb.querySelectorAll("ea-breadcrumb-item");
-      const lastItemSeparator = items[items.length - 1].querySelector("[slot='separator']");
+      const lastItemSeparator =
+        items[items.length - 1].querySelector("[slot='separator']");
       expect(lastItemSeparator).toBeNull();
     });
 
@@ -371,7 +392,7 @@ describe("EaBreadcrumb Component", () => {
       `;
       container.appendChild(breadcrumb);
 
-      await waitForRender(0);
+      await breadcrumb.updateComplete;
 
       container.removeChild(breadcrumb);
 
@@ -385,7 +406,7 @@ describe("EaBreadcrumb Component", () => {
       `;
       container.appendChild(breadcrumb);
 
-      await waitForRender();
+      await breadcrumb.updateComplete;
 
       const newItem = document.createElement("ea-breadcrumb-item");
       newItem.textContent = "Page";
@@ -474,7 +495,7 @@ describe("EaBreadcrumb Component", () => {
       `;
       container.appendChild(breadcrumb);
 
-      await waitForRender(0);
+      await breadcrumb.updateComplete;
 
       const items = breadcrumb.querySelectorAll("ea-breadcrumb-item");
       const separatorSlot = items[1].shadowRoot.querySelector(
@@ -487,7 +508,9 @@ describe("EaBreadcrumb Component", () => {
       const breadcrumb = document.createElement("ea-breadcrumb");
       container.appendChild(breadcrumb);
 
-      expect(breadcrumb.shadowRoot.querySelector("nav.ea-breadcrumb")).toBeDefined();
+      expect(
+        breadcrumb.shadowRoot.querySelector("nav.ea-breadcrumb")
+      ).toBeDefined();
     });
 
     it("单个面包屑项不应渲染分隔符", async () => {
@@ -497,7 +520,7 @@ describe("EaBreadcrumb Component", () => {
       `;
       container.appendChild(breadcrumb);
 
-      await waitForRender();
+      await breadcrumb.updateComplete;
 
       const items = breadcrumb.querySelectorAll("ea-breadcrumb-item");
       const separator = items[0].querySelector("[slot='separator']");
@@ -510,7 +533,7 @@ describe("EaBreadcrumb Component", () => {
       const breadcrumb = document.createElement("ea-breadcrumb");
       container.appendChild(breadcrumb);
 
-      await waitForRender(0);
+      await breadcrumb.updateComplete;
 
       const ol = breadcrumb.shadowRoot.querySelector("ol");
       expect(ol.classList.contains("ea-breadcrumb")).toBe(true);
@@ -520,7 +543,7 @@ describe("EaBreadcrumb Component", () => {
       const item = document.createElement("ea-breadcrumb-item");
       container.appendChild(item);
 
-      await waitForRender(0);
+      await item.updateComplete;
 
       const containerEl = item.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.classList.contains("ea-breadcrumb-item")).toBe(true);
@@ -530,20 +553,24 @@ describe("EaBreadcrumb Component", () => {
       const item = document.createElement("ea-breadcrumb-item");
       container.appendChild(item);
 
-      await waitForRender(0);
+      await item.updateComplete;
 
       const content = item.shadowRoot.querySelector('[part="content"]');
-      expect(content.classList.contains("ea-breadcrumb-item__content")).toBe(true);
+      expect(content.classList.contains("ea-breadcrumb-item__content")).toBe(
+        true
+      );
     });
 
     it("ea-breadcrumb-item separator 应该有正确的 BEM 元素类名", async () => {
       const item = document.createElement("ea-breadcrumb-item");
       container.appendChild(item);
 
-      await waitForRender(0);
+      await item.updateComplete;
 
       const separator = item.shadowRoot.querySelector('[part="separator"]');
-      expect(separator.classList.contains("ea-breadcrumb-item__separator")).toBe(true);
+      expect(
+        separator.classList.contains("ea-breadcrumb-item__separator")
+      ).toBe(true);
     });
   });
 
@@ -551,7 +578,7 @@ describe("EaBreadcrumb Component", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-breadcrumb");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });
@@ -560,7 +587,7 @@ describe("EaBreadcrumb Component", () => {
       it("应该包含 nav 元素且带有 aria-label=Breadcrumb", async () => {
         const breadcrumb = document.createElement("ea-breadcrumb");
         container.appendChild(breadcrumb);
-        await waitForRender(0);
+        await breadcrumb.updateComplete;
         const nav = breadcrumb.shadowRoot.querySelector("nav");
         expect(nav).toBeTruthy();
         expect(nav.getAttribute("aria-label")).toBe("Breadcrumb");
@@ -569,7 +596,7 @@ describe("EaBreadcrumb Component", () => {
       it("ol 容器应该有 role=list", async () => {
         const breadcrumb = document.createElement("ea-breadcrumb");
         container.appendChild(breadcrumb);
-        await waitForRender(0);
+        await breadcrumb.updateComplete;
         const ol = breadcrumb.shadowRoot.querySelector("ol.ea-breadcrumb");
         expect(ol.getAttribute("role")).toBe("list");
       });
@@ -577,7 +604,7 @@ describe("EaBreadcrumb Component", () => {
       it("ea-breadcrumb-item 容器应该有 role=listitem", async () => {
         const item = document.createElement("ea-breadcrumb-item");
         container.appendChild(item);
-        await waitForRender(0);
+        await item.updateComplete;
         const containerEl = item.shadowRoot.querySelector('[part="container"]');
         expect(containerEl.getAttribute("role")).toBe("listitem");
       });
@@ -590,7 +617,7 @@ describe("EaBreadcrumb Component", () => {
           <ea-breadcrumb-item>Detail</ea-breadcrumb-item>
         `;
         container.appendChild(breadcrumb);
-        await waitForRender();
+        await breadcrumb.updateComplete;
         const items = breadcrumb.querySelectorAll("ea-breadcrumb-item");
         expect(items[2].getAttribute("aria-current")).toBe("page");
       });
@@ -603,7 +630,7 @@ describe("EaBreadcrumb Component", () => {
           <ea-breadcrumb-item>Detail</ea-breadcrumb-item>
         `;
         container.appendChild(breadcrumb);
-        await waitForRender();
+        await breadcrumb.updateComplete;
         const items = breadcrumb.querySelectorAll("ea-breadcrumb-item");
         expect(items[0].hasAttribute("aria-current")).toBe(false);
         expect(items[1].hasAttribute("aria-current")).toBe(false);
@@ -612,7 +639,7 @@ describe("EaBreadcrumb Component", () => {
       it("separator 元素应该有 aria-hidden=true", async () => {
         const item = document.createElement("ea-breadcrumb-item");
         container.appendChild(item);
-        await waitForRender(0);
+        await item.updateComplete;
         const separator = item.shadowRoot.querySelector('[part="separator"]');
         expect(separator.getAttribute("aria-hidden")).toBe("true");
       });

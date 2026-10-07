@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { waitForRender } from "./utils/waitForRender";
 import { fireKeydown } from "./utils/keyboard";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
@@ -44,7 +43,7 @@ describe("EaMenu Component", () => {
     it("container 应该是 ul 元素且 role 为 menubar", async () => {
       const menu = document.createElement("ea-menu");
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
       const el = menu.shadowRoot.querySelector('[part="container"]');
       expect(el.tagName).toBe("UL");
       expect(el.getAttribute("role")).toBe("menubar");
@@ -53,7 +52,7 @@ describe("EaMenu Component", () => {
     it("updateContainerClasslist 应该返回正确的类名", async () => {
       const menu = document.createElement("ea-menu");
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
       const className = menu.updateContainerClasslist();
       expect(className).toContain("ea-menu--vertical");
     });
@@ -87,7 +86,7 @@ describe("EaMenu Component", () => {
       const menu = document.createElement("ea-menu");
       menu.setAttribute("mode", "horizontal");
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
       const el = menu.shadowRoot.querySelector('[part="container"]');
       expect(el.className).toContain("ea-menu--horizontal");
     });
@@ -96,7 +95,7 @@ describe("EaMenu Component", () => {
       const menu = document.createElement("ea-menu");
       menu.setAttribute("mode", "vertical");
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
       const el = menu.shadowRoot.querySelector('[part="container"]');
       expect(el.className).toContain("ea-menu--vertical");
     });
@@ -105,10 +104,10 @@ describe("EaMenu Component", () => {
       const menu = document.createElement("ea-menu");
       menu.setAttribute("mode", "vertical");
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       menu.setAttribute("mode", "horizontal");
-      await waitForRender();
+      await menu.updateComplete;
 
       const el = menu.shadowRoot.querySelector('[part="container"]');
       expect(el.className).toContain("ea-menu--horizontal");
@@ -122,12 +121,12 @@ describe("EaMenu Component", () => {
       subMenu.setAttribute("index", "1");
       menu.appendChild(subMenu);
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       expect(subMenu.getAttribute("mode")).toBe("horizontal");
 
       menu.setAttribute("mode", "vertical");
-      await waitForRender();
+      await menu.updateComplete;
       expect(subMenu.getAttribute("mode")).toBe("vertical");
     });
 
@@ -141,13 +140,13 @@ describe("EaMenu Component", () => {
       outer.appendChild(inner);
       menu.appendChild(outer);
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       expect(outer.getAttribute("mode")).toBe("horizontal");
       expect(inner.getAttribute("mode")).toBe("horizontal");
 
       menu.setAttribute("mode", "vertical");
-      await waitForRender();
+      await menu.updateComplete;
       expect(outer.getAttribute("mode")).toBe("vertical");
       expect(inner.getAttribute("mode")).toBe("vertical");
     });
@@ -161,7 +160,7 @@ describe("EaMenu Component", () => {
       const menu = document.createElement("ea-menu");
       menu.setAttribute("background-color", "#545c64");
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       const el = menu.shadowRoot.querySelector('[part="container"]');
       expect(el.style.getPropertyValue("--ea-menu-bg-color")).toBe("#545c64");
@@ -171,7 +170,7 @@ describe("EaMenu Component", () => {
       const menu = document.createElement("ea-menu");
       menu.setAttribute("text-color", "#fff");
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       const el = menu.shadowRoot.querySelector('[part="container"]');
       expect(el.style.getPropertyValue("--ea-menu-text-color")).toBe("#fff");
@@ -181,7 +180,7 @@ describe("EaMenu Component", () => {
       const menu = document.createElement("ea-menu");
       menu.setAttribute("active-text-color", "#ffd04b");
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       const el = menu.shadowRoot.querySelector('[part="container"]');
       expect(el.style.getPropertyValue("--ea-menu-active-text-color")).toBe(
@@ -202,10 +201,10 @@ describe("EaMenu Component", () => {
       const menu = document.createElement("ea-menu");
       menu.setAttribute("background-color", "#ffffff");
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       menu.setAttribute("background-color", "#000000");
-      await waitForRender();
+      await menu.updateComplete;
 
       const el = menu.shadowRoot.querySelector('[part="container"]');
       expect(el.style.getPropertyValue("--ea-menu-bg-color")).toBe("#000000");
@@ -220,7 +219,7 @@ describe("EaMenu Component", () => {
       const menu = document.createElement("ea-menu");
       menu.setAttribute("default-active", "1");
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
       expect(menu.getAttribute("default-active")).toBe("1");
     });
 
@@ -232,7 +231,7 @@ describe("EaMenu Component", () => {
       menuItem.textContent = "Item 1";
       menu.appendChild(menuItem);
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       expect(menuItem.hasAttribute("active")).toBe(true);
     });
@@ -244,7 +243,7 @@ describe("EaMenu Component", () => {
       menuItem.setAttribute("index", "1");
       menu.appendChild(menuItem);
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       expect(menuItem.hasAttribute("active")).toBe(false);
     });
@@ -263,7 +262,7 @@ describe("EaMenu Component", () => {
       });
 
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       expect(fired).toBe(true);
     });
@@ -277,7 +276,7 @@ describe("EaMenu Component", () => {
       const menu = document.createElement("ea-menu");
       menu.setAttribute("active", "1");
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
       expect(menu.getAttribute("active")).toBe("1");
     });
 
@@ -288,10 +287,10 @@ describe("EaMenu Component", () => {
       menuItem.textContent = "Item 1";
       menu.appendChild(menuItem);
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       menu.setAttribute("active", "1");
-      await waitForRender();
+      await menu.updateComplete;
       expect(menuItem.hasAttribute("active")).toBe(true);
     });
 
@@ -304,15 +303,15 @@ describe("EaMenu Component", () => {
       menu.appendChild(item1);
       menu.appendChild(item2);
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       menu.setAttribute("active", "1");
-      await waitForRender();
+      await menu.updateComplete;
       expect(item1.hasAttribute("active")).toBe(true);
       expect(item2.hasAttribute("active")).toBe(false);
 
       menu.setAttribute("active", "2");
-      await waitForRender();
+      await menu.updateComplete;
       expect(item1.hasAttribute("active")).toBe(false);
       expect(item2.hasAttribute("active")).toBe(true);
     });
@@ -327,10 +326,10 @@ describe("EaMenu Component", () => {
       subMenu.appendChild(menuItem);
       menu.appendChild(subMenu);
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       menu.setAttribute("active", "2-1");
-      await waitForRender();
+      await menu.updateComplete;
 
       expect(menuItem.hasAttribute("active")).toBe(true);
       expect(subMenu.hasAttribute("active")).toBe(true);
@@ -352,10 +351,10 @@ describe("EaMenu Component", () => {
       l1.appendChild(l2);
       menu.appendChild(l1);
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       menu.setAttribute("active", "1-1-1-1");
-      await waitForRender();
+      await menu.updateComplete;
 
       expect(menuItem.hasAttribute("active")).toBe(true);
       expect(l1.hasAttribute("active")).toBe(true);
@@ -369,10 +368,10 @@ describe("EaMenu Component", () => {
       menuItem.setAttribute("index", "1");
       menu.appendChild(menuItem);
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       menu.setAttribute("active", "");
-      await waitForRender();
+      await menuItem.updateComplete;
       expect(menuItem.hasAttribute("active")).toBe(false);
     });
 
@@ -382,12 +381,12 @@ describe("EaMenu Component", () => {
       menuItem.setAttribute("index", "1");
       menu.appendChild(menuItem);
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       menu.setAttribute("active", "1");
-      await waitForRender();
+      await menuItem.updateComplete;
       menu.setAttribute("active", "1");
-      await waitForRender();
+      await menuItem.updateComplete;
 
       expect(menuItem.hasAttribute("active")).toBe(true);
     });
@@ -422,7 +421,7 @@ describe("EaMenu Component", () => {
       menuItem.textContent = "Item 1";
       menu.appendChild(menuItem);
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       const selectPromise = new Promise(resolve => {
         menu.addEventListener("select", e => resolve(e.detail));
@@ -441,10 +440,10 @@ describe("EaMenu Component", () => {
       menuItem.textContent = "Item 1";
       menu.appendChild(menuItem);
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       menuItem.click();
-      await waitForRender();
+      await menu.updateComplete;
       expect(menuItem.hasAttribute("active")).toBe(true);
     });
 
@@ -457,14 +456,14 @@ describe("EaMenu Component", () => {
       menu.appendChild(item1);
       menu.appendChild(item2);
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       item1.click();
-      await waitForRender();
+      await menu.updateComplete;
       expect(item1.hasAttribute("active")).toBe(true);
 
       item2.click();
-      await waitForRender();
+      await menu.updateComplete;
       expect(item1.hasAttribute("active")).toBe(false);
       expect(item2.hasAttribute("active")).toBe(true);
     });
@@ -479,7 +478,7 @@ describe("EaMenu Component", () => {
       subMenu.appendChild(menuItem);
       menu.appendChild(subMenu);
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       const selectPromise = new Promise(resolve => {
         menu.addEventListener("select", e => resolve(e.detail));
@@ -504,7 +503,7 @@ describe("EaMenu Component", () => {
       outerSub.appendChild(innerSub);
       menu.appendChild(outerSub);
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       const selectPromise = new Promise(resolve => {
         menu.addEventListener("select", e => resolve(e.detail));
@@ -524,7 +523,7 @@ describe("EaMenu Component", () => {
       menuItem.textContent = "Disabled";
       menu.appendChild(menuItem);
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       let fired = false;
       menu.addEventListener("select", () => {
@@ -532,7 +531,7 @@ describe("EaMenu Component", () => {
       });
 
       menuItem.click();
-      await waitForRender();
+      await menuItem.updateComplete;
       expect(fired).toBe(false);
     });
 
@@ -548,14 +547,14 @@ describe("EaMenu Component", () => {
       menu.appendChild(item1);
       menu.appendChild(item2);
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       item1.click();
-      await waitForRender();
+      await menu.updateComplete;
       expect(item1.hasAttribute("active")).toBe(true);
 
       item2.click();
-      await waitForRender();
+      await item2.updateComplete;
       expect(item1.hasAttribute("active")).toBe(true);
     });
 
@@ -570,7 +569,7 @@ describe("EaMenu Component", () => {
       subMenu.appendChild(menuItem);
       menu.appendChild(subMenu);
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       let fired = false;
       menu.addEventListener("select", () => {
@@ -578,7 +577,7 @@ describe("EaMenu Component", () => {
       });
 
       menuItem.click();
-      await waitForRender();
+      await menuItem.updateComplete;
       expect(fired).toBe(false);
     });
 
@@ -598,15 +597,15 @@ describe("EaMenu Component", () => {
       menu.appendChild(item1);
       menu.appendChild(subMenu);
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       item1.click();
-      await waitForRender();
+      await menu.updateComplete;
       expect(item1.hasAttribute("active")).toBe(true);
 
       const titleEl = subMenu.shadowRoot.querySelector('[part="title"]');
       titleEl.click();
-      await waitForRender();
+      await subItem.updateComplete;
 
       expect(subMenu.open).toBe(true);
       expect(item1.hasAttribute("active")).toBe(true);
@@ -630,10 +629,10 @@ describe("EaMenu Component", () => {
       menuItem.setAttribute("index", "1");
       menu.appendChild(menuItem);
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       menu.remove();
-      await waitForRender();
+      await menuItem.updateComplete;
 
       let fired = false;
       menu.addEventListener("select", () => {
@@ -641,7 +640,7 @@ describe("EaMenu Component", () => {
       });
 
       menuItem.click();
-      await waitForRender();
+      await menuItem.updateComplete;
       expect(fired).toBe(false);
     });
 
@@ -677,7 +676,7 @@ describe("EaMenu Component", () => {
     it("container 应该是 li 元素且宿主元素 role 为 menuitem", async () => {
       const menuItem = document.createElement("ea-menu-item");
       container.appendChild(menuItem);
-      await waitForRender();
+      await menuItem.updateComplete;
       const el = menuItem.shadowRoot.querySelector('[part="container"]');
       expect(el.tagName).toBe("LI");
       expect(menuItem.getAttribute("role")).toBe("menuitem");
@@ -693,7 +692,7 @@ describe("EaMenu Component", () => {
     it("updateContainerClasslist 应该返回正确的类名", async () => {
       const menuItem = document.createElement("ea-menu-item");
       container.appendChild(menuItem);
-      await waitForRender();
+      await menuItem.updateComplete;
       const className = menuItem.updateContainerClasslist();
       expect(className).toBe("ea-menu-item");
     });
@@ -707,7 +706,7 @@ describe("EaMenu Component", () => {
       const menuItem = document.createElement("ea-menu-item");
       menuItem.setAttribute("index", "1");
       container.appendChild(menuItem);
-      await waitForRender();
+      await menuItem.updateComplete;
       expect(menuItem.getAttribute("index")).toBe("1");
     });
 
@@ -724,10 +723,10 @@ describe("EaMenu Component", () => {
       const menuItem = document.createElement("ea-menu-item");
       menuItem.setAttribute("index", "1");
       container.appendChild(menuItem);
-      await waitForRender();
+      await menuItem.updateComplete;
 
       menuItem.setAttribute("index", "2");
-      await waitForRender();
+      await menuItem.updateComplete;
       expect(menuItem.getAttribute("index")).toBe("2");
     });
   });
@@ -753,7 +752,7 @@ describe("EaMenu Component", () => {
       const menuItem = document.createElement("ea-menu-item");
       menuItem.setAttribute("disabled", "");
       container.appendChild(menuItem);
-      await waitForRender();
+      await menuItem.updateComplete;
       const el = menuItem.shadowRoot.querySelector('[part="container"]');
       expect(el.className).toContain("is-disabled");
     });
@@ -761,10 +760,10 @@ describe("EaMenu Component", () => {
     it("动态设置 disabled 应该更新 BEM 类", async () => {
       const menuItem = document.createElement("ea-menu-item");
       container.appendChild(menuItem);
-      await waitForRender();
+      await menuItem.updateComplete;
 
       menuItem.setAttribute("disabled", "");
-      await waitForRender();
+      await menuItem.updateComplete;
       const el = menuItem.shadowRoot.querySelector('[part="container"]');
       expect(el.className).toContain("is-disabled");
     });
@@ -773,10 +772,10 @@ describe("EaMenu Component", () => {
       const menuItem = document.createElement("ea-menu-item");
       menuItem.setAttribute("disabled", "");
       container.appendChild(menuItem);
-      await waitForRender();
+      await menuItem.updateComplete;
 
       menuItem.removeAttribute("disabled");
-      await waitForRender();
+      await menuItem.updateComplete;
       const el = menuItem.shadowRoot.querySelector('[part="container"]');
       expect(el.className).not.toContain("is-disabled");
     });
@@ -789,7 +788,7 @@ describe("EaMenu Component", () => {
     it("默认 active 应该是 false", async () => {
       const menuItem = document.createElement("ea-menu-item");
       container.appendChild(menuItem);
-      await waitForRender();
+      await menuItem.updateComplete;
       expect(menuItem.active).toBe(false);
     });
 
@@ -797,7 +796,7 @@ describe("EaMenu Component", () => {
       const menuItem = document.createElement("ea-menu-item");
       menuItem.setAttribute("active", "");
       container.appendChild(menuItem);
-      await waitForRender();
+      await menuItem.updateComplete;
       expect(menuItem.active).toBe(true);
     });
 
@@ -805,7 +804,7 @@ describe("EaMenu Component", () => {
       const menuItem = document.createElement("ea-menu-item");
       menuItem.setAttribute("active", "");
       container.appendChild(menuItem);
-      await waitForRender();
+      await menuItem.updateComplete;
       const el = menuItem.shadowRoot.querySelector('[part="container"]');
       expect(el.className).toContain("is-active");
     });
@@ -813,10 +812,10 @@ describe("EaMenu Component", () => {
     it("动态设置 active 应该更新 BEM 类", async () => {
       const menuItem = document.createElement("ea-menu-item");
       container.appendChild(menuItem);
-      await waitForRender();
+      await menuItem.updateComplete;
 
       menuItem.setAttribute("active", "");
-      await waitForRender();
+      await menuItem.updateComplete;
       const el = menuItem.shadowRoot.querySelector('[part="container"]');
       expect(el.className).toContain("is-active");
     });
@@ -825,10 +824,10 @@ describe("EaMenu Component", () => {
       const menuItem = document.createElement("ea-menu-item");
       menuItem.setAttribute("active", "");
       container.appendChild(menuItem);
-      await waitForRender();
+      await menuItem.updateComplete;
 
       menuItem.removeAttribute("active");
-      await waitForRender();
+      await menuItem.updateComplete;
       const el = menuItem.shadowRoot.querySelector('[part="container"]');
       expect(el.className).not.toContain("is-active");
     });
@@ -838,7 +837,7 @@ describe("EaMenu Component", () => {
       menuItem.setAttribute("disabled", "");
       menuItem.setAttribute("active", "");
       container.appendChild(menuItem);
-      await waitForRender();
+      await menuItem.updateComplete;
       const el = menuItem.shadowRoot.querySelector('[part="container"]');
       expect(el.className).toContain("is-disabled");
       expect(el.className).toContain("is-active");
@@ -895,7 +894,7 @@ describe("EaMenu Component", () => {
       const subMenu = document.createElement("ea-sub-menu");
       subMenu.innerHTML = "<ea-menu-item>Item</ea-menu-item>";
       container.appendChild(subMenu);
-      await waitForRender();
+      await subMenu.updateComplete;
       const defaultSlot = subMenu.shadowRoot.querySelector(
         "ul[part='content'] slot:not([name])"
       );
@@ -905,7 +904,7 @@ describe("EaMenu Component", () => {
     it("updateContainerClasslist 应该返回正确的类名", async () => {
       const subMenu = document.createElement("ea-sub-menu");
       container.appendChild(subMenu);
-      await waitForRender();
+      await subMenu.updateComplete;
       const className = subMenu.updateContainerClasslist();
       expect(className).toContain("ea-sub-menu--vertical");
     });
@@ -919,7 +918,7 @@ describe("EaMenu Component", () => {
       const subMenu = document.createElement("ea-sub-menu");
       subMenu.setAttribute("index", "2");
       container.appendChild(subMenu);
-      await waitForRender();
+      await subMenu.updateComplete;
       expect(subMenu.getAttribute("index")).toBe("2");
     });
 
@@ -927,10 +926,10 @@ describe("EaMenu Component", () => {
       const subMenu = document.createElement("ea-sub-menu");
       subMenu.setAttribute("index", "1");
       container.appendChild(subMenu);
-      await waitForRender();
+      await subMenu.updateComplete;
 
       subMenu.setAttribute("index", "2");
-      await waitForRender();
+      await subMenu.updateComplete;
       expect(subMenu.getAttribute("index")).toBe("2");
     });
   });
@@ -956,7 +955,7 @@ describe("EaMenu Component", () => {
       const subMenu = document.createElement("ea-sub-menu");
       subMenu.setAttribute("mode", "horizontal");
       container.appendChild(subMenu);
-      await waitForRender();
+      await subMenu.updateComplete;
       const el = subMenu.shadowRoot.querySelector('[part="container"]');
       expect(el.className).toContain("ea-sub-menu--horizontal");
     });
@@ -965,7 +964,7 @@ describe("EaMenu Component", () => {
       const subMenu = document.createElement("ea-sub-menu");
       subMenu.setAttribute("mode", "vertical");
       container.appendChild(subMenu);
-      await waitForRender();
+      await subMenu.updateComplete;
       const el = subMenu.shadowRoot.querySelector('[part="container"]');
       expect(el.className).toContain("ea-sub-menu--vertical");
     });
@@ -974,10 +973,10 @@ describe("EaMenu Component", () => {
       const subMenu = document.createElement("ea-sub-menu");
       subMenu.setAttribute("mode", "vertical");
       container.appendChild(subMenu);
-      await waitForRender();
+      await subMenu.updateComplete;
 
       subMenu.setAttribute("mode", "horizontal");
-      await waitForRender();
+      await subMenu.updateComplete;
       const el = subMenu.shadowRoot.querySelector('[part="container"]');
       expect(el.className).toContain("ea-sub-menu--horizontal");
       expect(el.className).not.toContain("ea-sub-menu--vertical");
@@ -1005,7 +1004,7 @@ describe("EaMenu Component", () => {
       const subMenu = document.createElement("ea-sub-menu");
       subMenu.setAttribute("disabled", "");
       container.appendChild(subMenu);
-      await waitForRender();
+      await subMenu.updateComplete;
       const el = subMenu.shadowRoot.querySelector('[part="container"]');
       expect(el.className).toContain("is-disabled");
     });
@@ -1014,10 +1013,10 @@ describe("EaMenu Component", () => {
       const subMenu = document.createElement("ea-sub-menu");
       subMenu.setAttribute("disabled", "");
       container.appendChild(subMenu);
-      await waitForRender();
+      await subMenu.updateComplete;
 
       subMenu.removeAttribute("disabled");
-      await waitForRender();
+      await subMenu.updateComplete;
       const el = subMenu.shadowRoot.querySelector('[part="container"]');
       expect(el.className).not.toContain("is-disabled");
     });
@@ -1026,11 +1025,11 @@ describe("EaMenu Component", () => {
       const subMenu = document.createElement("ea-sub-menu");
       subMenu.setAttribute("disabled", "");
       container.appendChild(subMenu);
-      await waitForRender();
+      await subMenu.updateComplete;
 
       const titleEl = subMenu.shadowRoot.querySelector('[part="title"]');
       titleEl.click();
-      await waitForRender();
+      await subMenu.updateComplete;
 
       expect(subMenu.open).toBe(false);
     });
@@ -1044,7 +1043,7 @@ describe("EaMenu Component", () => {
       menuItem.textContent = "Item";
       subMenu.appendChild(menuItem);
       container.appendChild(subMenu);
-      await waitForRender();
+      await subMenu.updateComplete;
 
       let fired = false;
       subMenu.addEventListener("ea-sub-menu-click", () => {
@@ -1052,7 +1051,7 @@ describe("EaMenu Component", () => {
       });
 
       menuItem.click();
-      await waitForRender();
+      await menuItem.updateComplete;
       expect(fired).toBe(false);
     });
   });
@@ -1064,7 +1063,7 @@ describe("EaMenu Component", () => {
     it("默认 active 应该是 false", async () => {
       const subMenu = document.createElement("ea-sub-menu");
       container.appendChild(subMenu);
-      await waitForRender();
+      await subMenu.updateComplete;
       expect(subMenu.active).toBe(false);
     });
 
@@ -1072,7 +1071,7 @@ describe("EaMenu Component", () => {
       const subMenu = document.createElement("ea-sub-menu");
       subMenu.setAttribute("active", "");
       container.appendChild(subMenu);
-      await waitForRender();
+      await subMenu.updateComplete;
       expect(subMenu.active).toBe(true);
     });
 
@@ -1080,7 +1079,7 @@ describe("EaMenu Component", () => {
       const subMenu = document.createElement("ea-sub-menu");
       subMenu.setAttribute("active", "");
       container.appendChild(subMenu);
-      await waitForRender();
+      await subMenu.updateComplete;
       const el = subMenu.shadowRoot.querySelector('[part="container"]');
       expect(el.className).toContain("is-active");
     });
@@ -1089,10 +1088,10 @@ describe("EaMenu Component", () => {
       const subMenu = document.createElement("ea-sub-menu");
       subMenu.setAttribute("active", "");
       container.appendChild(subMenu);
-      await waitForRender();
+      await subMenu.updateComplete;
 
       subMenu.removeAttribute("active");
-      await waitForRender();
+      await subMenu.updateComplete;
       const el = subMenu.shadowRoot.querySelector('[part="container"]');
       expect(el.className).not.toContain("is-active");
     });
@@ -1105,7 +1104,7 @@ describe("EaMenu Component", () => {
     it("默认 open 应该是 false", async () => {
       const subMenu = document.createElement("ea-sub-menu");
       container.appendChild(subMenu);
-      await waitForRender();
+      await subMenu.updateComplete;
       expect(subMenu.open).toBe(false);
     });
 
@@ -1113,17 +1112,17 @@ describe("EaMenu Component", () => {
       const subMenu = document.createElement("ea-sub-menu");
       subMenu.open = true;
       container.appendChild(subMenu);
-      await waitForRender();
+      await subMenu.updateComplete;
       expect(subMenu.open).toBe(true);
     });
 
     it("open 应该应用 BEM modifier 类 is-open", async () => {
       const subMenu = document.createElement("ea-sub-menu");
       container.appendChild(subMenu);
-      await waitForRender();
+      await subMenu.updateComplete;
 
       subMenu.open = true;
-      await waitForRender();
+      await subMenu.updateComplete;
       const el = subMenu.shadowRoot.querySelector('[part="container"]');
       expect(el.className).toContain("is-open");
     });
@@ -1132,15 +1131,15 @@ describe("EaMenu Component", () => {
       const subMenu = document.createElement("ea-sub-menu");
       subMenu.setAttribute("mode", "vertical");
       container.appendChild(subMenu);
-      await waitForRender();
+      await subMenu.updateComplete;
 
       const titleEl = subMenu.shadowRoot.querySelector('[part="title"]');
       titleEl.click();
-      await waitForRender();
+      await subMenu.updateComplete;
       expect(subMenu.open).toBe(true);
 
       titleEl.click();
-      await waitForRender();
+      await subMenu.updateComplete;
       expect(subMenu.open).toBe(false);
     });
 
@@ -1148,10 +1147,10 @@ describe("EaMenu Component", () => {
       const subMenu = document.createElement("ea-sub-menu");
       subMenu.setAttribute("mode", "horizontal");
       container.appendChild(subMenu);
-      await waitForRender();
+      await subMenu.updateComplete;
 
       subMenu.dispatchEvent(new MouseEvent("mouseenter", { bubbles: true }));
-      await waitForRender();
+      await subMenu.updateComplete;
       expect(subMenu.open).toBe(true);
     });
 
@@ -1159,14 +1158,14 @@ describe("EaMenu Component", () => {
       const subMenu = document.createElement("ea-sub-menu");
       subMenu.setAttribute("mode", "horizontal");
       container.appendChild(subMenu);
-      await waitForRender();
+      await subMenu.updateComplete;
 
       subMenu.dispatchEvent(new MouseEvent("mouseenter", { bubbles: true }));
-      await waitForRender();
+      await subMenu.updateComplete;
       expect(subMenu.open).toBe(true);
 
       subMenu.dispatchEvent(new MouseEvent("mouseleave", { bubbles: true }));
-      await waitForRender();
+      await subMenu.updateComplete;
       expect(subMenu.open).toBe(false);
     });
 
@@ -1174,22 +1173,22 @@ describe("EaMenu Component", () => {
       const subMenu = document.createElement("ea-sub-menu");
       subMenu.setAttribute("mode", "vertical");
       container.appendChild(subMenu);
-      await waitForRender();
+      await subMenu.updateComplete;
 
       const titleEl = subMenu.shadowRoot.querySelector('[part="title"]');
       titleEl.click();
-      await waitForRender();
+      await subMenu.updateComplete;
       expect(subMenu.open).toBe(true);
 
       subMenu.setAttribute("mode", "horizontal");
-      await waitForRender();
+      await subMenu.updateComplete;
 
       subMenu.dispatchEvent(new MouseEvent("mouseenter", { bubbles: true }));
-      await waitForRender();
+      await subMenu.updateComplete;
       expect(subMenu.open).toBe(true);
 
       subMenu.dispatchEvent(new MouseEvent("mouseleave", { bubbles: true }));
-      await waitForRender();
+      await subMenu.updateComplete;
       expect(subMenu.open).toBe(false);
     });
   });
@@ -1202,7 +1201,7 @@ describe("EaMenu Component", () => {
       const subMenu = document.createElement("ea-sub-menu");
       subMenu.setAttribute("label", "Test Label");
       container.appendChild(subMenu);
-      await waitForRender();
+      await subMenu.updateComplete;
       expect(subMenu.getAttribute("label")).toBe("Test Label");
     });
 
@@ -1210,7 +1209,7 @@ describe("EaMenu Component", () => {
       const subMenu = document.createElement("ea-sub-menu");
       subMenu.setAttribute("label", "Test Label");
       container.appendChild(subMenu);
-      await waitForRender();
+      await subMenu.updateComplete;
       const titleSlot = subMenu.shadowRoot.querySelector('slot[name="title"]');
       expect(titleSlot.textContent).toBe("Test Label");
     });
@@ -1219,10 +1218,10 @@ describe("EaMenu Component", () => {
       const subMenu = document.createElement("ea-sub-menu");
       subMenu.setAttribute("label", "Old Label");
       container.appendChild(subMenu);
-      await waitForRender();
+      await subMenu.updateComplete;
 
       subMenu.setAttribute("label", "New Label");
-      await waitForRender();
+      await subMenu.updateComplete;
       const titleSlot = subMenu.shadowRoot.querySelector('slot[name="title"]');
       expect(titleSlot.textContent).toBe("New Label");
     });
@@ -1236,7 +1235,7 @@ describe("EaMenu Component", () => {
       const subMenu = document.createElement("ea-sub-menu");
       subMenu.setAttribute("mode", "vertical");
       container.appendChild(subMenu);
-      await waitForRender();
+      await subMenu.updateComplete;
       const arrow = subMenu.shadowRoot.querySelector('[part="arrow"]');
       expect(arrow.getAttribute("name")).toBe("angle-down");
     });
@@ -1245,7 +1244,7 @@ describe("EaMenu Component", () => {
       const subMenu = document.createElement("ea-sub-menu");
       subMenu.setAttribute("mode", "horizontal");
       container.appendChild(subMenu);
-      await waitForRender();
+      await subMenu.updateComplete;
       const arrow = subMenu.shadowRoot.querySelector('[part="arrow"]');
       expect(arrow.getAttribute("name")).toBe("angle-down");
     });
@@ -1260,7 +1259,7 @@ describe("EaMenu Component", () => {
       outerSub.appendChild(innerSub);
       menu.appendChild(outerSub);
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       const innerArrow = innerSub.shadowRoot.querySelector('[part="arrow"]');
       expect(innerArrow.getAttribute("name")).toBe("angle-down");
@@ -1276,7 +1275,7 @@ describe("EaMenu Component", () => {
       outerSub.appendChild(innerSub);
       menu.appendChild(outerSub);
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       const innerArrow = innerSub.shadowRoot.querySelector('[part="arrow"]');
       expect(innerArrow.getAttribute("name")).toBe("angle-down");
@@ -1295,7 +1294,7 @@ describe("EaMenu Component", () => {
       menuItem.textContent = "Sub Item";
       subMenu.appendChild(menuItem);
       container.appendChild(subMenu);
-      await waitForRender();
+      await subMenu.updateComplete;
 
       const eventPromise = new Promise(resolve => {
         subMenu.addEventListener("ea-sub-menu-click", e => resolve(e.detail));
@@ -1316,10 +1315,10 @@ describe("EaMenu Component", () => {
       menuItem.textContent = "Sub Item";
       subMenu.appendChild(menuItem);
       container.appendChild(subMenu);
-      await waitForRender();
+      await subMenu.updateComplete;
 
       menuItem.click();
-      await waitForRender();
+      await menuItem.updateComplete;
 
       expect(subMenu.hasAttribute("active")).toBe(true);
       expect(menuItem.hasAttribute("active")).toBe(true);
@@ -1336,10 +1335,10 @@ describe("EaMenu Component", () => {
       innerSub.appendChild(menuItem);
       outerSub.appendChild(innerSub);
       container.appendChild(outerSub);
-      await waitForRender();
+      await outerSub.updateComplete;
 
       menuItem.click();
-      await waitForRender();
+      await menuItem.updateComplete;
 
       expect(outerSub.hasAttribute("active")).toBe(true);
       expect(innerSub.hasAttribute("active")).toBe(true);
@@ -1356,7 +1355,7 @@ describe("EaMenu Component", () => {
       subMenu.appendChild(menuItem);
       menu.appendChild(subMenu);
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       const eventPromise = new Promise(resolve => {
         menu.addEventListener("ea-sub-menu-click", e => resolve(e.detail));
@@ -1386,14 +1385,14 @@ describe("EaMenu Component", () => {
       const subMenu = document.createElement("ea-sub-menu");
       subMenu.setAttribute("mode", "vertical");
       container.appendChild(subMenu);
-      await waitForRender();
+      await subMenu.updateComplete;
 
       subMenu.remove();
-      await waitForRender();
+      await subMenu.updateComplete;
 
       const titleEl = subMenu.shadowRoot.querySelector('[part="title"]');
       titleEl.click();
-      await waitForRender();
+      await subMenu.updateComplete;
       expect(subMenu.open).toBe(false);
     });
   });
@@ -1435,7 +1434,7 @@ describe("EaMenu Component", () => {
       const menuGroup = document.createElement("ea-menu-item-group");
       menuGroup.innerHTML = "<ea-menu-item>Item</ea-menu-item>";
       container.appendChild(menuGroup);
-      await waitForRender();
+      await menuGroup.updateComplete;
       const defaultSlot = menuGroup.shadowRoot.querySelector(
         '[part="content"] slot'
       );
@@ -1451,7 +1450,7 @@ describe("EaMenu Component", () => {
       const menuGroup = document.createElement("ea-menu-item-group");
       menuGroup.setAttribute("group-title", "Group Title");
       container.appendChild(menuGroup);
-      await waitForRender();
+      await menuGroup.updateComplete;
       expect(menuGroup.getAttribute("group-title")).toBe("Group Title");
     });
 
@@ -1459,7 +1458,7 @@ describe("EaMenu Component", () => {
       const menuGroup = document.createElement("ea-menu-item-group");
       menuGroup.setAttribute("group-title", "Group Title");
       container.appendChild(menuGroup);
-      await waitForRender();
+      await menuGroup.updateComplete;
       const titleSlot =
         menuGroup.shadowRoot.querySelector('slot[name="title"]');
       expect(titleSlot.textContent).toBe("Group Title");
@@ -1469,10 +1468,10 @@ describe("EaMenu Component", () => {
       const menuGroup = document.createElement("ea-menu-item-group");
       menuGroup.setAttribute("group-title", "Old Title");
       container.appendChild(menuGroup);
-      await waitForRender();
+      await menuGroup.updateComplete;
 
       menuGroup.setAttribute("group-title", "New Title");
-      await waitForRender();
+      await menuGroup.updateComplete;
       const titleSlot =
         menuGroup.shadowRoot.querySelector('slot[name="title"]');
       expect(titleSlot.textContent).toBe("New Title");
@@ -1496,7 +1495,7 @@ describe("EaMenu Component", () => {
       menuItem.textContent = "Item 1";
       menu.appendChild(menuItem);
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       expect(menu.shadowRoot).toBeDefined();
       expect(menuItem.shadowRoot).toBeDefined();
@@ -1514,7 +1513,7 @@ describe("EaMenu Component", () => {
       subMenu.appendChild(menuItem);
       menu.appendChild(subMenu);
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       expect(subMenu.getAttribute("index")).toBe("2");
       expect(menuItem.getAttribute("index")).toBe("2-1");
@@ -1530,7 +1529,7 @@ describe("EaMenu Component", () => {
       menuGroup.appendChild(menuItem);
       menu.appendChild(menuGroup);
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       expect(menuGroup.getAttribute("group-title")).toBe("Group One");
       expect(menuItem.getAttribute("index")).toBe("1-1");
@@ -1551,7 +1550,7 @@ describe("EaMenu Component", () => {
       outerSubMenu.appendChild(innerSubMenu);
       menu.appendChild(outerSubMenu);
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       expect(outerSubMenu.getAttribute("index")).toBe("1");
       expect(innerSubMenu.getAttribute("index")).toBe("1-1");
@@ -1579,7 +1578,7 @@ describe("EaMenu Component", () => {
       menu.appendChild(menuItem1);
       menu.appendChild(subMenu);
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       expect(menu.mode).toBe("horizontal");
       expect(menu.getAttribute("default-active")).toBe("1");
@@ -1601,7 +1600,7 @@ describe("EaMenu Component", () => {
       subMenu.appendChild(menuGroup);
       menu.appendChild(subMenu);
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       expect(menuGroup.getAttribute("group-title")).toBe("Group One");
       expect(menuItem.getAttribute("index")).toBe("1-1");
@@ -1622,10 +1621,10 @@ describe("EaMenu Component", () => {
 
       container.appendChild(menu1);
       container.appendChild(menu2);
-      await waitForRender();
+      await menu2.updateComplete;
 
       item1.click();
-      await waitForRender();
+      await menu1.updateComplete;
 
       expect(item1.hasAttribute("active")).toBe(true);
       expect(item2.hasAttribute("active")).toBe(false);
@@ -1658,7 +1657,7 @@ describe("EaMenu Component", () => {
       subMenu1.appendChild(subMenu2);
       menu.appendChild(subMenu1);
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       expect(menuItem.getAttribute("index")).toBe("1-1-1-1");
     });
@@ -1667,10 +1666,10 @@ describe("EaMenu Component", () => {
       const menu = document.createElement("ea-menu");
       menu.setAttribute("background-color", "#ffffff");
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       menu.setAttribute("background-color", "#000000");
-      await waitForRender();
+      await menu.updateComplete;
       expect(menu.getAttribute("background-color")).toBe("#000000");
     });
 
@@ -1678,20 +1677,20 @@ describe("EaMenu Component", () => {
       const menuItem = document.createElement("ea-menu-item");
       menuItem.setAttribute("index", "1");
       container.appendChild(menuItem);
-      await waitForRender();
+      await menuItem.updateComplete;
 
       menuItem.setAttribute("index", "2");
-      await waitForRender();
+      await menuItem.updateComplete;
       expect(menuItem.getAttribute("index")).toBe("2");
     });
 
     it("动态修改 sub-menu disabled 应该更新 BEM 类", async () => {
       const subMenu = document.createElement("ea-sub-menu");
       container.appendChild(subMenu);
-      await waitForRender();
+      await subMenu.updateComplete;
 
       subMenu.setAttribute("disabled", "");
-      await waitForRender();
+      await subMenu.updateComplete;
       const el = subMenu.shadowRoot.querySelector('[part="container"]');
       expect(el.className).toContain("is-disabled");
     });
@@ -1699,10 +1698,10 @@ describe("EaMenu Component", () => {
     it("动态修改 sub-menu active 应该更新 BEM 类", async () => {
       const subMenu = document.createElement("ea-sub-menu");
       container.appendChild(subMenu);
-      await waitForRender();
+      await subMenu.updateComplete;
 
       subMenu.setAttribute("active", "");
-      await waitForRender();
+      await subMenu.updateComplete;
       const el = subMenu.shadowRoot.querySelector('[part="container"]');
       expect(el.className).toContain("is-active");
     });
@@ -1728,12 +1727,12 @@ describe("EaMenu Component", () => {
       menu.appendChild(item2);
       menu.appendChild(item3);
       container.appendChild(menu);
-      await waitForRender();
+      await menu.updateComplete;
 
       menu.setAttribute("active", "1");
       menu.setAttribute("active", "2");
       menu.setAttribute("active", "3");
-      await waitForRender();
+      await menu.updateComplete;
 
       expect(item3.hasAttribute("active")).toBe(true);
       expect(item1.hasAttribute("active")).toBe(false);
@@ -1744,7 +1743,7 @@ describe("EaMenu Component", () => {
       const subMenu = document.createElement("ea-sub-menu");
       subMenu.setAttribute("mode", "vertical");
       container.appendChild(subMenu);
-      await waitForRender();
+      await subMenu.updateComplete;
 
       const titleEl = subMenu.shadowRoot.querySelector('[part="title"]');
       expect(() => titleEl.click()).not.toThrow();
@@ -1757,8 +1756,8 @@ describe("EaMenu Component", () => {
         const menu = document.createElement("ea-menu");
         menu.innerHTML = `<ea-menu-item>Item</ea-menu-item>`;
         container.appendChild(menu);
-        await waitForRender();
-        await waitForRender();
+        await menu.updateComplete;
+        await menu.updateComplete;
         const item = menu.querySelector("ea-menu-item");
         expect(item.getAttribute("role")).toBe("menuitem");
       });
@@ -1767,8 +1766,8 @@ describe("EaMenu Component", () => {
         const menu = document.createElement("ea-menu");
         menu.innerHTML = `<ea-menu-item disabled>Item</ea-menu-item>`;
         container.appendChild(menu);
-        await waitForRender();
-        await waitForRender();
+        await menu.updateComplete;
+        await menu.updateComplete;
         const item = menu.querySelector("ea-menu-item");
         expect(item.getAttribute("aria-disabled")).toBe("true");
       });
@@ -1777,8 +1776,8 @@ describe("EaMenu Component", () => {
         const menu = document.createElement("ea-menu");
         menu.innerHTML = `<ea-sub-menu heading="Sub"><ea-menu-item>Item</ea-menu-item></ea-sub-menu>`;
         container.appendChild(menu);
-        await waitForRender();
-        await waitForRender();
+        await menu.updateComplete;
+        await menu.updateComplete;
         const subMenu = menu.querySelector("ea-sub-menu");
         const title = subMenu.shadowRoot.querySelector(".ea-sub-menu__title");
         expect(title.getAttribute("role")).toBe("menuitem");
@@ -1788,8 +1787,8 @@ describe("EaMenu Component", () => {
         const menu = document.createElement("ea-menu");
         menu.innerHTML = `<ea-sub-menu heading="Sub"><ea-menu-item>Item</ea-menu-item></ea-sub-menu>`;
         container.appendChild(menu);
-        await waitForRender();
-        await waitForRender();
+        await menu.updateComplete;
+        await menu.updateComplete;
         const subMenu = menu.querySelector("ea-sub-menu");
         const content = subMenu.shadowRoot.querySelector(
           ".ea-sub-menu__content"
@@ -1801,8 +1800,8 @@ describe("EaMenu Component", () => {
         const menu = document.createElement("ea-menu");
         menu.innerHTML = `<ea-sub-menu heading="Sub"><ea-menu-item>Item</ea-menu-item></ea-sub-menu>`;
         container.appendChild(menu);
-        await waitForRender();
-        await waitForRender();
+        await menu.updateComplete;
+        await menu.updateComplete;
         const subMenu = menu.querySelector("ea-sub-menu");
         const title = subMenu.shadowRoot.querySelector(".ea-sub-menu__title");
         expect(title.getAttribute("aria-haspopup")).toBe("menu");
@@ -1812,8 +1811,8 @@ describe("EaMenu Component", () => {
         const menu = document.createElement("ea-menu");
         menu.innerHTML = `<ea-sub-menu heading="Sub"><ea-menu-item>Item</ea-menu-item></ea-sub-menu>`;
         container.appendChild(menu);
-        await waitForRender();
-        await waitForRender();
+        await menu.updateComplete;
+        await menu.updateComplete;
         const subMenu = menu.querySelector("ea-sub-menu");
         const title = subMenu.shadowRoot.querySelector(".ea-sub-menu__title");
         expect(title.getAttribute("aria-expanded")).toBe("false");
@@ -1823,8 +1822,8 @@ describe("EaMenu Component", () => {
         const menu = document.createElement("ea-menu");
         menu.innerHTML = `<ea-sub-menu heading="Sub" disabled><ea-menu-item>Item</ea-menu-item></ea-sub-menu>`;
         container.appendChild(menu);
-        await waitForRender();
-        await waitForRender();
+        await menu.updateComplete;
+        await menu.updateComplete;
         const subMenu = menu.querySelector("ea-sub-menu");
         expect(subMenu.getAttribute("aria-disabled")).toBe("true");
       });
@@ -1833,7 +1832,7 @@ describe("EaMenu Component", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-menu");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });
@@ -1870,7 +1869,7 @@ describe("EaSubMenu Keyboard And Focus", () => {
   describe("Title Keyboard", () => {
     it("按 Enter 应该展开", async () => {
       const subMenu = createSubMenu();
-      await waitForRender();
+      await subMenu.updateComplete;
 
       const event = fireKeydown(getTitle(subMenu), "Enter");
 
@@ -1880,7 +1879,7 @@ describe("EaSubMenu Keyboard And Focus", () => {
 
     it("按空格应该切换展开状态", async () => {
       const subMenu = createSubMenu();
-      await waitForRender();
+      await subMenu.updateComplete;
 
       const title = getTitle(subMenu);
       fireKeydown(title, " ");
@@ -1892,7 +1891,7 @@ describe("EaSubMenu Keyboard And Focus", () => {
 
     it("disabled 状态下按 Enter 不应该展开", async () => {
       const subMenu = createSubMenu({ disabled: "" });
-      await waitForRender();
+      await subMenu.updateComplete;
 
       const event = fireKeydown(getTitle(subMenu), "Enter");
 
@@ -1902,12 +1901,12 @@ describe("EaSubMenu Keyboard And Focus", () => {
 
     it("按 ArrowDown 应该展开并聚焦第一个菜单项", async () => {
       const subMenu = createSubMenu();
-      await waitForRender();
+      await subMenu.updateComplete;
 
       fireKeydown(getTitle(subMenu), "ArrowDown");
       expect(subMenu.open).toBe(true);
 
-      await waitForRender();
+      await subMenu.updateComplete;
       expect(document.activeElement).toBe(
         subMenu.querySelectorAll("ea-menu-item")[0]
       );
@@ -1915,7 +1914,7 @@ describe("EaSubMenu Keyboard And Focus", () => {
 
     it("垂直模式下按 ArrowRight 不应该处理", async () => {
       const subMenu = createSubMenu();
-      await waitForRender();
+      await subMenu.updateComplete;
 
       const event = fireKeydown(getTitle(subMenu), "ArrowRight");
 
@@ -1925,12 +1924,12 @@ describe("EaSubMenu Keyboard And Focus", () => {
 
     it("水平模式下按 ArrowRight 应该展开并聚焦第一个菜单项", async () => {
       const subMenu = createSubMenu({ mode: "horizontal" });
-      await waitForRender();
+      await subMenu.updateComplete;
 
       fireKeydown(getTitle(subMenu), "ArrowRight");
       expect(subMenu.open).toBe(true);
 
-      await waitForRender();
+      await subMenu.updateComplete;
       expect(document.activeElement).toBe(
         subMenu.querySelectorAll("ea-menu-item")[0]
       );
@@ -1938,7 +1937,7 @@ describe("EaSubMenu Keyboard And Focus", () => {
 
     it("展开状态下按 Escape 应该收起", async () => {
       const subMenu = createSubMenu();
-      await waitForRender();
+      await subMenu.updateComplete;
       subMenu.open = true;
 
       fireKeydown(getTitle(subMenu), "Escape");
@@ -1948,7 +1947,7 @@ describe("EaSubMenu Keyboard And Focus", () => {
 
     it("收起状态下按 Escape 不应该处理", async () => {
       const subMenu = createSubMenu();
-      await waitForRender();
+      await subMenu.updateComplete;
 
       const event = fireKeydown(getTitle(subMenu), "Escape");
 
@@ -1957,7 +1956,7 @@ describe("EaSubMenu Keyboard And Focus", () => {
 
     it("没有菜单项时按 ArrowDown 不应该报错", async () => {
       const subMenu = createSubMenu({}, "");
-      await waitForRender();
+      await subMenu.updateComplete;
 
       expect(() => fireKeydown(getTitle(subMenu), "ArrowDown")).not.toThrow();
       expect(subMenu.open).toBe(true);
@@ -1967,7 +1966,7 @@ describe("EaSubMenu Keyboard And Focus", () => {
   describe("Content Keyboard", () => {
     it("按 ArrowDown 应该聚焦下一个菜单项", async () => {
       const subMenu = createSubMenu();
-      await waitForRender();
+      await subMenu.updateComplete;
       subMenu.open = true;
 
       const items = subMenu.querySelectorAll("ea-menu-item");
@@ -1978,7 +1977,7 @@ describe("EaSubMenu Keyboard And Focus", () => {
 
     it("按 ArrowUp 应该聚焦上一个菜单项", async () => {
       const subMenu = createSubMenu();
-      await waitForRender();
+      await subMenu.updateComplete;
       subMenu.open = true;
 
       const items = subMenu.querySelectorAll("ea-menu-item");
@@ -1989,7 +1988,7 @@ describe("EaSubMenu Keyboard And Focus", () => {
 
     it("第一个菜单项按 ArrowUp 应该聚焦标题", async () => {
       const subMenu = createSubMenu();
-      await waitForRender();
+      await subMenu.updateComplete;
       subMenu.open = true;
 
       const items = subMenu.querySelectorAll("ea-menu-item");
@@ -2000,7 +1999,7 @@ describe("EaSubMenu Keyboard And Focus", () => {
 
     it("最后一个菜单项按 ArrowDown 不应该循环", async () => {
       const subMenu = createSubMenu();
-      await waitForRender();
+      await subMenu.updateComplete;
       subMenu.open = true;
 
       const items = subMenu.querySelectorAll("ea-menu-item");
@@ -2012,7 +2011,7 @@ describe("EaSubMenu Keyboard And Focus", () => {
 
     it("按 Home 应该聚焦第一个菜单项", async () => {
       const subMenu = createSubMenu();
-      await waitForRender();
+      await subMenu.updateComplete;
       subMenu.open = true;
 
       const items = subMenu.querySelectorAll("ea-menu-item");
@@ -2024,7 +2023,7 @@ describe("EaSubMenu Keyboard And Focus", () => {
 
     it("按 End 应该聚焦最后一个菜单项", async () => {
       const subMenu = createSubMenu();
-      await waitForRender();
+      await subMenu.updateComplete;
       subMenu.open = true;
 
       const items = subMenu.querySelectorAll("ea-menu-item");
@@ -2035,7 +2034,7 @@ describe("EaSubMenu Keyboard And Focus", () => {
 
     it("垂直模式展开时按 ArrowLeft 应该收起并聚焦标题", async () => {
       const subMenu = createSubMenu();
-      await waitForRender();
+      await subMenu.updateComplete;
       subMenu.open = true;
 
       const items = subMenu.querySelectorAll("ea-menu-item");
@@ -2047,7 +2046,7 @@ describe("EaSubMenu Keyboard And Focus", () => {
 
     it("按 Escape 应该收起并聚焦标题", async () => {
       const subMenu = createSubMenu();
-      await waitForRender();
+      await subMenu.updateComplete;
       subMenu.open = true;
 
       const items = subMenu.querySelectorAll("ea-menu-item");
@@ -2059,7 +2058,7 @@ describe("EaSubMenu Keyboard And Focus", () => {
 
     it("水平模式下左右方向键应该在菜单项间移动焦点", async () => {
       const subMenu = createSubMenu({ mode: "horizontal" });
-      await waitForRender();
+      await subMenu.updateComplete;
       subMenu.open = true;
 
       const items = subMenu.querySelectorAll("ea-menu-item");
@@ -2075,7 +2074,7 @@ describe("EaSubMenu Keyboard And Focus", () => {
         {},
         `<ea-menu-item index="1">A</ea-menu-item><ea-menu-item index="2" disabled>B</ea-menu-item><ea-menu-item index="3">C</ea-menu-item>`
       );
-      await waitForRender();
+      await subMenu.updateComplete;
       subMenu.open = true;
 
       const items = subMenu.querySelectorAll("ea-menu-item");
@@ -2089,7 +2088,7 @@ describe("EaSubMenu Keyboard And Focus", () => {
         {},
         `<ea-menu-item index="1" disabled>A</ea-menu-item>`
       );
-      await waitForRender();
+      await subMenu.updateComplete;
       subMenu.open = true;
 
       const item = subMenu.querySelector("ea-menu-item");
@@ -2105,7 +2104,7 @@ describe("EaSubMenu Keyboard And Focus", () => {
   describe("Vertical Collapse Animation", () => {
     it("点击标题应该展开并在过渡结束后固定高度", async () => {
       const subMenu = createSubMenu();
-      await waitForRender();
+      await subMenu.updateComplete;
 
       const content = subMenu.shadowRoot.querySelector('[part="content"]');
       getTitle(subMenu).click();
@@ -2117,7 +2116,7 @@ describe("EaSubMenu Keyboard And Focus", () => {
 
     it("键盘展开后应该在过渡结束时固定高度", async () => {
       const subMenu = createSubMenu();
-      await waitForRender();
+      await subMenu.updateComplete;
 
       const content = subMenu.shadowRoot.querySelector('[part="content"]');
       fireKeydown(getTitle(subMenu), "Enter");
@@ -2131,46 +2130,48 @@ describe("EaSubMenu Keyboard And Focus", () => {
   describe("Focus Management", () => {
     it("焦点离开子菜单时应该自动收起", async () => {
       const subMenu = createSubMenu();
-      await waitForRender();
+      await subMenu.updateComplete;
       subMenu.open = true;
 
       subMenu.dispatchEvent(
         new FocusEvent("focusout", { bubbles: true, composed: true })
       );
-      await waitForRender();
+      await subMenu.updateComplete;
 
-      expect(subMenu.open).toBe(false);
+      await vi.waitFor(() => {
+        expect(subMenu.open).toBe(false);
+      });
     });
 
     it("焦点仍在子菜单内时不应该收起", async () => {
       const subMenu = createSubMenu();
-      await waitForRender();
+      await subMenu.updateComplete;
       subMenu.open = true;
       subMenu.querySelector("ea-menu-item").focus();
 
       subMenu.dispatchEvent(
         new FocusEvent("focusout", { bubbles: true, composed: true })
       );
-      await waitForRender();
+      await subMenu.updateComplete;
 
       expect(subMenu.open).toBe(true);
     });
 
     it("收起状态下焦点离开不应该有副作用", async () => {
       const subMenu = createSubMenu();
-      await waitForRender();
+      await subMenu.updateComplete;
 
       subMenu.dispatchEvent(
         new FocusEvent("focusout", { bubbles: true, composed: true })
       );
-      await waitForRender();
+      await subMenu.updateComplete;
 
       expect(subMenu.open).toBe(false);
     });
 
     it("焦点进入子菜单应该将焦点委托到标题", async () => {
       const subMenu = createSubMenu();
-      await waitForRender();
+      await subMenu.updateComplete;
 
       subMenu.dispatchEvent(
         new FocusEvent("focusin", { bubbles: true, composed: true })
@@ -2181,7 +2182,7 @@ describe("EaSubMenu Keyboard And Focus", () => {
 
     it("焦点进入时应该取消待执行的收起检查", async () => {
       const subMenu = createSubMenu();
-      await waitForRender();
+      await subMenu.updateComplete;
       subMenu.open = true;
 
       subMenu.dispatchEvent(
@@ -2190,7 +2191,7 @@ describe("EaSubMenu Keyboard And Focus", () => {
       subMenu.dispatchEvent(
         new FocusEvent("focusin", { bubbles: true, composed: true })
       );
-      await waitForRender();
+      await subMenu.updateComplete;
 
       expect(subMenu.open).toBe(true);
     });

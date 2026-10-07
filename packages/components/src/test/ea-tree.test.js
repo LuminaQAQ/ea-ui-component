@@ -126,7 +126,7 @@ describe("EaTree", () => {
       const tree = document.createElement("ea-tree");
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       expect(tree).toBeDefined();
       expect(tree.shadowRoot).toBeDefined();
@@ -136,7 +136,7 @@ describe("EaTree", () => {
       const tree = document.createElement("ea-tree");
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       expect(tree.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
@@ -146,7 +146,7 @@ describe("EaTree", () => {
       tree.data = [];
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       expect(tree.shadowRoot).toBeDefined();
       expect(tree.data).toEqual([]);
@@ -159,7 +159,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const rootNode1 = findNodeByPath(tree, "1$");
       const rootNode2 = findNodeByPath(tree, "2$");
@@ -175,7 +175,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       expect(findNodeByPath(tree, "1$-1")).toBeTruthy();
       expect(findNodeByPath(tree, "1$-1-1")).toBeTruthy();
@@ -188,7 +188,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const text1 = tree.shadowRoot.querySelector(".ea-tree__text");
       expect(text1).toBeTruthy();
@@ -200,7 +200,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const toggleIcon = findToggleIconByPath(tree, "1$");
       expect(toggleIcon).toBeTruthy();
@@ -211,7 +211,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const toggleIcon = findToggleIconByPath(tree, "1$-1-1");
       expect(toggleIcon).toBeFalsy();
@@ -222,7 +222,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const childrenEl = findChildrenByPath(tree, "1$");
       expect(childrenEl).toBeTruthy();
@@ -234,7 +234,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const childrenEl = findChildrenByPath(tree, "1$-1-1");
       expect(childrenEl).toBeFalsy();
@@ -246,7 +246,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const checkbox = findCheckboxByPath(tree, "1$");
       expect(checkbox).toBeTruthy();
@@ -257,7 +257,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const node = findNodeByPath(tree, "1$");
       expect(node.classList.contains("is-show-checkbox")).toBe(false);
@@ -269,7 +269,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const node = findNodeByPath(tree, "1$");
       expect(node.classList.contains("is-show-checkbox")).toBe(true);
@@ -280,7 +280,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const label = findLabelByPath(tree, "1$");
       expect(label).toBeTruthy();
@@ -321,7 +321,7 @@ describe("EaTree", () => {
       const tree = document.createElement("ea-tree");
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       expect(Array.isArray(tree.data)).toBe(true);
       expect(tree.data.length).toBe(0);
@@ -331,7 +331,7 @@ describe("EaTree", () => {
       const tree = document.createElement("ea-tree");
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       expect(tree.dataProps).toEqual({
         children: "children",
@@ -361,7 +361,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       expect(tree.data.length).toBe(2);
       expect(tree.data[0].label).toBe("Level one 1");
@@ -373,13 +373,13 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       expect(tree.data.length).toBe(2);
 
       tree.data = [{ label: "New Item" }];
 
-      await waitForRender();
+      await tree.updateComplete;
 
       expect(tree.data.length).toBe(1);
       expect(tree.data[0].label).toBe("New Item");
@@ -390,13 +390,13 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       expect(findNodeByPath(tree, "1$")).toBeTruthy();
 
       tree.data = [];
 
-      await waitForRender();
+      await tree.updateComplete;
 
       expect(findNodeByPath(tree, "1$")).toBeFalsy();
     });
@@ -418,7 +418,7 @@ describe("EaTree", () => {
       ];
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       expect(tree.dataProps).toEqual({
         children: "childNodes",
@@ -445,7 +445,7 @@ describe("EaTree", () => {
       ];
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const toggleIcon = findToggleIconByPath(tree, "1$");
       expect(toggleIcon).toBeTruthy();
@@ -461,7 +461,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       tree._expandPath("1$");
 
@@ -474,7 +474,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       tree._expandPath("1$");
       expect(findNodeByPath(tree, "1$").classList.contains("is-expanded")).toBe(
@@ -492,7 +492,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       tree._toggleExpand("1$");
       expect(findNodeByPath(tree, "1$").classList.contains("is-expanded")).toBe(
@@ -510,7 +510,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const handler = vi.fn();
       tree.addEventListener("ea-node-expand", handler);
@@ -527,7 +527,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       tree._expandPath("1$");
 
@@ -546,7 +546,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const handler = vi.fn();
       tree.addEventListener("ea-node-expand", handler);
@@ -563,11 +563,13 @@ describe("EaTree", () => {
       tree.defaultExpandedKeys = [1, 2];
       container.appendChild(tree);
 
-      await waitForRender(50);
-
-      const rootNode = findNodeByPath(tree, "1$");
+      const rootNode = await vi.waitFor(() => {
+        expect(
+          findNodeByPath(tree, "1$").classList.contains("is-expanded")
+        ).toBe(true);
+        return findNodeByPath(tree, "1$");
+      });
       const childNode = findNodeByPath(tree, "1$-1");
-
       expect(rootNode.classList.contains("is-expanded")).toBe(true);
       expect(childNode.classList.contains("is-expanded")).toBe(true);
     });
@@ -589,7 +591,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       tree._expandAncestorPaths("1$-1-1");
 
@@ -608,7 +610,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       tree._selectPath("1$");
 
@@ -621,7 +623,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       tree._selectPath("1$");
       expect(findNodeByPath(tree, "1$").classList.contains("is-selected")).toBe(
@@ -642,7 +644,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const handler = vi.fn();
       tree.addEventListener("ea-node-select", handler);
@@ -659,7 +661,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const handler = vi.fn();
       tree.addEventListener("ea-current-change", handler);
@@ -675,7 +677,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const handler = vi.fn();
       tree.addEventListener("ea-node-click", handler);
@@ -694,7 +696,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const labelEl = findLabelByPath(tree, "1$");
       labelEl.dispatchEvent(
@@ -711,7 +713,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const labelEl = findLabelByPath(tree, "1$");
       labelEl.dispatchEvent(
@@ -731,14 +733,14 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const node = findNodeByPath(tree, "1$");
       expect(node.classList.contains("is-show-checkbox")).toBe(true);
 
       tree.showCheckbox = false;
 
-      await waitForRender();
+      await tree.updateComplete;
 
       expect(
         findNodeByPath(tree, "1$").classList.contains("is-show-checkbox")
@@ -766,7 +768,7 @@ describe("EaTree", () => {
       ];
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       tree._handleCheckboxToggle("1$-1-1");
 
@@ -796,7 +798,7 @@ describe("EaTree", () => {
       ];
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       tree._handleCheckboxToggle("1$-1");
       tree._handleCheckboxToggle("1$-2");
@@ -821,7 +823,7 @@ describe("EaTree", () => {
       ];
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       tree._handleCheckboxToggle("1$-1");
       tree._handleCheckboxToggle("1$-2");
@@ -843,7 +845,7 @@ describe("EaTree", () => {
       tree.data = generateIdTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       tree._handleCheckboxToggle("1$");
 
@@ -862,7 +864,7 @@ describe("EaTree", () => {
       tree.data = generateIdTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       tree._handleCheckboxToggle("1$");
       expect(
@@ -889,7 +891,7 @@ describe("EaTree", () => {
       tree.data = generateIdTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       tree._handleCheckboxToggle("1$");
 
@@ -909,7 +911,7 @@ describe("EaTree", () => {
       tree.data = generateIdTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       tree._handleCheckboxToggle("1$-1-1");
 
@@ -939,7 +941,7 @@ describe("EaTree", () => {
       ];
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       tree._handleCheckboxToggle("1$-1");
 
@@ -962,7 +964,7 @@ describe("EaTree", () => {
       ];
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       tree._handleCheckboxToggle("1$");
 
@@ -981,10 +983,11 @@ describe("EaTree", () => {
       tree.data = generateIdTestData();
       container.appendChild(tree);
 
-      await waitForRender(50);
-
-      const grandchildNode = findNodeByPath(tree, "1$-1-1");
-      expect(grandchildNode.classList.contains("is-checked")).toBe(true);
+      await vi.waitFor(() => {
+        expect(
+          findNodeByPath(tree, "1$-1-1").classList.contains("is-checked")
+        ).toBe(true);
+      });
     });
 
     it("defaultCheckedKeys 不设置 nodeKey 时不生效", async () => {
@@ -1006,7 +1009,7 @@ describe("EaTree", () => {
       tree.data = generateIdTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const handler = vi.fn();
       tree.addEventListener("ea-check-change", handler);
@@ -1026,7 +1029,7 @@ describe("EaTree", () => {
       tree.data = generateIdTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const handler = vi.fn();
       tree.addEventListener("ea-check", handler);
@@ -1073,13 +1076,13 @@ describe("EaTree", () => {
       ];
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const grandchildA1 = findNodeByPath(tree, "1$-1-1");
       expect(grandchildA1).toBeTruthy();
       tree._handleCheckboxToggle("1$-1-1");
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const rootNode = findNodeByPath(tree, "1$");
       const childA = findNodeByPath(tree, "1$-1");
@@ -1094,7 +1097,7 @@ describe("EaTree", () => {
       expect(grandchildB1).toBeTruthy();
       tree._handleCheckboxToggle("1$-2-1");
 
-      await waitForRender();
+      await tree.updateComplete;
 
       expect(grandchildB1.classList.contains("is-checked")).toBe(true);
       expect(rootNode.classList.contains("is-indeterminate")).toBe(true);
@@ -1107,7 +1110,7 @@ describe("EaTree", () => {
       tree.data = generateIdTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       tree._handleCheckboxToggle("1$-1-1");
 
@@ -1130,7 +1133,7 @@ describe("EaTree", () => {
       ];
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       tree._handleCheckboxToggle("1$-1");
 
@@ -1145,7 +1148,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const labelEl = findLabelByPath(tree, "1$");
       labelEl.dispatchEvent(
@@ -1166,7 +1169,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const toggleIcon = findToggleIconByPath(tree, "1$");
       toggleIcon.dispatchEvent(
@@ -1187,7 +1190,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const textEl = tree.shadowRoot.querySelector(".ea-tree__text");
       textEl.dispatchEvent(
@@ -1206,7 +1209,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const handler = vi.fn();
       tree.addEventListener("ea-node-contextmenu", handler);
@@ -1240,7 +1243,7 @@ describe("EaTree", () => {
         tree.data = generateIdTestData();
         container.appendChild(tree);
 
-        await waitForRender();
+        await tree.updateComplete;
 
         tree._handleCheckboxToggle("1$-1-1");
 
@@ -1255,7 +1258,7 @@ describe("EaTree", () => {
         tree.data = generateIdTestData();
         container.appendChild(tree);
 
-        await waitForRender();
+        await tree.updateComplete;
 
         tree._handleCheckboxToggle("1$");
 
@@ -1274,7 +1277,7 @@ describe("EaTree", () => {
         tree.data = generateIdTestData();
         container.appendChild(tree);
 
-        await waitForRender();
+        await tree.updateComplete;
 
         tree._handleCheckboxToggle("1$-1-1");
 
@@ -1302,7 +1305,7 @@ describe("EaTree", () => {
         tree.data = generateTestData();
         container.appendChild(tree);
 
-        await waitForRender();
+        await tree.updateComplete;
 
         tree._handleCheckboxToggle("1$-1-1");
 
@@ -1316,7 +1319,7 @@ describe("EaTree", () => {
         tree.data = generateIdTestData();
         container.appendChild(tree);
 
-        await waitForRender();
+        await tree.updateComplete;
 
         tree._handleCheckboxToggle("1$-1-1");
 
@@ -1331,7 +1334,7 @@ describe("EaTree", () => {
         tree.data = generateIdTestData();
         container.appendChild(tree);
 
-        await waitForRender();
+        await tree.updateComplete;
 
         tree._handleCheckboxToggle("1$");
 
@@ -1368,7 +1371,7 @@ describe("EaTree", () => {
         tree.data = generateIdTestData();
         container.appendChild(tree);
 
-        await waitForRender();
+        await tree.updateComplete;
 
         tree.setCheckedKeys([3]);
 
@@ -1383,7 +1386,7 @@ describe("EaTree", () => {
         tree.data = generateIdTestData();
         container.appendChild(tree);
 
-        await waitForRender();
+        await tree.updateComplete;
 
         tree.setCheckedKeys([1], true);
 
@@ -1417,7 +1420,7 @@ describe("EaTree", () => {
         tree.data = generateIdTestData();
         container.appendChild(tree);
 
-        await waitForRender();
+        await tree.updateComplete;
 
         tree.setChecked(3, true);
 
@@ -1465,7 +1468,7 @@ describe("EaTree", () => {
         tree.data = generateIdTestData();
         container.appendChild(tree);
 
-        await waitForRender();
+        await tree.updateComplete;
 
         const result = tree.setChecked(tree.data[0], true);
         expect(result).toBe(true);
@@ -1500,7 +1503,7 @@ describe("EaTree", () => {
         tree.data = generateIdTestData();
         container.appendChild(tree);
 
-        await waitForRender();
+        await tree.updateComplete;
 
         tree.setCheckedNodes([tree.data[0]]);
 
@@ -1516,7 +1519,7 @@ describe("EaTree", () => {
         tree.data = generateTestData();
         container.appendChild(tree);
 
-        await waitForRender();
+        await tree.updateComplete;
 
         tree._selectPath("1$");
 
@@ -1538,7 +1541,7 @@ describe("EaTree", () => {
         tree.data = generateIdTestData();
         container.appendChild(tree);
 
-        await waitForRender();
+        await tree.updateComplete;
 
         tree._selectPath("1$");
 
@@ -1560,7 +1563,7 @@ describe("EaTree", () => {
         tree.data = generateTestData();
         container.appendChild(tree);
 
-        await waitForRender();
+        await tree.updateComplete;
 
         tree._selectPath("1$");
 
@@ -1603,7 +1606,7 @@ describe("EaTree", () => {
         tree.data = generateIdTestData();
         container.appendChild(tree);
 
-        await waitForRender();
+        await tree.updateComplete;
 
         tree.setCurrentKey(1);
 
@@ -1619,7 +1622,7 @@ describe("EaTree", () => {
         tree.data = generateIdTestData();
         container.appendChild(tree);
 
-        await waitForRender();
+        await tree.updateComplete;
 
         tree.setCurrentKey(1);
         expect(
@@ -1639,7 +1642,7 @@ describe("EaTree", () => {
         tree.data = generateIdTestData();
         container.appendChild(tree);
 
-        await waitForRender();
+        await tree.updateComplete;
 
         tree.setCurrentKey(3, true);
 
@@ -1657,7 +1660,7 @@ describe("EaTree", () => {
         tree.data = generateIdTestData();
         container.appendChild(tree);
 
-        await waitForRender();
+        await tree.updateComplete;
 
         tree.setCurrentKey(3, false);
 
@@ -1673,7 +1676,7 @@ describe("EaTree", () => {
         tree.data = generateIdTestData();
         container.appendChild(tree);
 
-        await waitForRender();
+        await tree.updateComplete;
 
         expect(tree.setCurrentNode(tree.data[0])).toBe(false);
       });
@@ -1695,7 +1698,7 @@ describe("EaTree", () => {
         tree.data = generateIdTestData();
         container.appendChild(tree);
 
-        await waitForRender();
+        await tree.updateComplete;
 
         tree.setCurrentNode(tree.data[0]);
 
@@ -1710,7 +1713,7 @@ describe("EaTree", () => {
         tree.data = generateIdTestData();
         container.appendChild(tree);
 
-        await waitForRender();
+        await tree.updateComplete;
 
         tree.setCurrentNode(tree.data[0]);
         expect(
@@ -1729,7 +1732,7 @@ describe("EaTree", () => {
         tree.data = generateIdTestData();
         container.appendChild(tree);
 
-        await waitForRender();
+        await tree.updateComplete;
 
         tree.setCurrentNode(tree.data[0].children[0], true);
 
@@ -1745,7 +1748,7 @@ describe("EaTree", () => {
         tree.data = generateIdTestData();
         container.appendChild(tree);
 
-        await waitForRender();
+        await tree.updateComplete;
 
         expect(tree.getNode(1)).toBe(null);
       });
@@ -1756,7 +1759,7 @@ describe("EaTree", () => {
         tree.data = generateIdTestData();
         container.appendChild(tree);
 
-        await waitForRender();
+        await tree.updateComplete;
 
         expect(tree.getNode(999)).toBe(null);
       });
@@ -1767,7 +1770,7 @@ describe("EaTree", () => {
         tree.data = generateIdTestData();
         container.appendChild(tree);
 
-        await waitForRender();
+        await tree.updateComplete;
 
         const nodeInfo = tree.getNode(1);
         expect(nodeInfo).toBeDefined();
@@ -1783,7 +1786,7 @@ describe("EaTree", () => {
         tree.data = generateIdTestData();
         container.appendChild(tree);
 
-        await waitForRender();
+        await tree.updateComplete;
 
         const nodeInfo = tree.getNode(tree.data[0]);
         expect(nodeInfo).toBeDefined();
@@ -1796,7 +1799,7 @@ describe("EaTree", () => {
         tree.data = generateIdTestData();
         container.appendChild(tree);
 
-        await waitForRender();
+        await tree.updateComplete;
 
         const nodeInfo = tree.getNode(1);
         expect(nodeInfo.child).toBeDefined();
@@ -1808,7 +1811,7 @@ describe("EaTree", () => {
         tree.data = generateIdTestData();
         container.appendChild(tree);
 
-        await waitForRender();
+        await tree.updateComplete;
 
         const nodeInfo = tree.getNode(3);
         expect(nodeInfo.child).toBeNull();
@@ -1839,7 +1842,7 @@ describe("EaTree", () => {
         ];
         container.appendChild(tree);
 
-        await waitForRender();
+        await tree.updateComplete;
 
         tree._handleCheckboxToggle("1$-1");
 
@@ -1863,7 +1866,7 @@ describe("EaTree", () => {
         tree.data = generateTestData();
         container.appendChild(tree);
 
-        await waitForRender();
+        await tree.updateComplete;
 
         tree._handleCheckboxToggle("1$-1-1");
 
@@ -1886,7 +1889,7 @@ describe("EaTree", () => {
         ];
         container.appendChild(tree);
 
-        await waitForRender();
+        await tree.updateComplete;
 
         tree._handleCheckboxToggle("1$-1");
 
@@ -1929,7 +1932,7 @@ describe("EaTree", () => {
         tree.data = generateIdTestData();
         container.appendChild(tree);
 
-        await waitForRender();
+        await tree.updateComplete;
 
         const newChildren = [
           { id: 10, label: "New Child 1" },
@@ -1952,13 +1955,13 @@ describe("EaTree", () => {
         tree.data = generateIdTestData();
         container.appendChild(tree);
 
-        await waitForRender();
+        await tree.updateComplete;
 
         expect(findNodeByPath(tree, "1$-1")).toBeTruthy();
 
         tree.updateKeyChildren(1, [{ id: 10, label: "New Child" }]);
 
-        await waitForRender();
+        await tree.updateComplete;
 
         expect(findNodeByPath(tree, "1$-1")).toBeTruthy();
       });
@@ -1971,7 +1974,7 @@ describe("EaTree", () => {
       tree.data = [{ label: "Leaf 1" }, { label: "Leaf 2" }];
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       expect(tree.data.length).toBe(2);
       expect(findNodeByPath(tree, "1$")).toBeTruthy();
@@ -1999,7 +2002,7 @@ describe("EaTree", () => {
       ];
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       expect(findNodeByPath(tree, "1$")).toBeTruthy();
       expect(findNodeByPath(tree, "1$-1")).toBeTruthy();
@@ -2017,7 +2020,7 @@ describe("EaTree", () => {
       container.appendChild(tree1);
       container.appendChild(tree2);
 
-      await waitForRender();
+      await tree2.updateComplete;
 
       expect(tree1.data.length).toBe(2);
       expect(tree2.data.length).toBe(1);
@@ -2032,7 +2035,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       expect(
         findNodeByPath(tree, "1$").classList.contains("is-show-checkbox")
@@ -2040,7 +2043,7 @@ describe("EaTree", () => {
 
       tree.showCheckbox = true;
 
-      await waitForRender();
+      await tree.updateComplete;
 
       expect(
         findNodeByPath(tree, "1$").classList.contains("is-show-checkbox")
@@ -2053,13 +2056,13 @@ describe("EaTree", () => {
       tree.data = generateIdTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       expect(tree.checkStrictly).toBe(false);
 
       tree.checkStrictly = true;
 
-      await waitForRender();
+      await tree.updateComplete;
 
       expect(tree.checkStrictly).toBe(true);
     });
@@ -2069,13 +2072,13 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       expect(tree.nodeKey).toBe("");
 
       tree.nodeKey = "id";
 
-      await waitForRender();
+      await tree.updateComplete;
 
       expect(tree.nodeKey).toBe("id");
     });
@@ -2085,13 +2088,13 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       expect(tree.expandOnIconClick).toBe(false);
 
       tree.expandOnIconClick = true;
 
-      await waitForRender();
+      await tree.updateComplete;
 
       expect(tree.expandOnIconClick).toBe(true);
     });
@@ -2102,7 +2105,7 @@ describe("EaTree", () => {
       tree.data = generateDisabledTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       expect(tree.data[0].children[0].disabled).toBe(true);
     });
@@ -2113,7 +2116,7 @@ describe("EaTree", () => {
       tree.data = generateIdTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       tree._handleCheckboxToggle("1$-1-1", true);
 
@@ -2134,7 +2137,7 @@ describe("EaTree", () => {
       tree.data = generateIdTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       expect(tree.showCheckbox).toBe(true);
       expect(tree.checkStrictly).toBe(true);
@@ -2150,7 +2153,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       expect(tree.shadowRoot).toBeDefined();
       expect(tree.data.length).toBe(2);
@@ -2160,7 +2163,7 @@ describe("EaTree", () => {
       const tree = document.createElement("ea-tree");
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       tree.remove();
 
@@ -2174,7 +2177,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const handler = vi.fn();
       tree.addEventListener("ea-node-expand", handler);
@@ -2194,7 +2197,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       tree._expandPath("1$");
 
@@ -2216,7 +2219,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const handler = vi.fn();
       tree.addEventListener("ea-node-select", handler);
@@ -2236,7 +2239,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const handler = vi.fn();
       tree.addEventListener("ea-node-click", handler);
@@ -2260,7 +2263,7 @@ describe("EaTree", () => {
       tree.data = generateIdTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const handler = vi.fn();
       tree.addEventListener("ea-check-change", handler);
@@ -2282,7 +2285,7 @@ describe("EaTree", () => {
       tree.data = generateIdTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const handler = vi.fn();
       tree.addEventListener("ea-check", handler);
@@ -2302,7 +2305,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const handler = vi.fn();
       tree.addEventListener("ea-current-change", handler);
@@ -2322,7 +2325,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const handler = vi.fn();
       tree.addEventListener("ea-node-contextmenu", handler);
@@ -2349,7 +2352,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const handler = vi.fn();
       tree.addEventListener("ea-node-expand", handler);
@@ -2368,7 +2371,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       tree._expandPath("1$");
 
@@ -2389,7 +2392,7 @@ describe("EaTree", () => {
       tree.data = generateIdTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const handler = vi.fn();
       tree.addEventListener("ea-check-change", handler);
@@ -2406,7 +2409,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const handler = vi.fn();
       tree.addEventListener("ea-current-change", handler);
@@ -2424,7 +2427,7 @@ describe("EaTree", () => {
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const handler = vi.fn();
       tree.addEventListener("ea-node-click", handler);
@@ -2446,7 +2449,7 @@ describe("EaTree", () => {
       tree.data = generateIdTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const handler = vi.fn();
       tree.addEventListener("ea-check", handler);
@@ -2472,7 +2475,7 @@ describe("EaTree", () => {
       tree.data = generateDisabledTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const handler = vi.fn();
       tree.addEventListener("ea-node-click", handler);
@@ -2490,7 +2493,7 @@ describe("EaTree", () => {
       tree.data = generateDisabledTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const labelEl = findLabelByPath(tree, "1$-1");
       labelEl.dispatchEvent(
@@ -2508,7 +2511,7 @@ describe("EaTree", () => {
       tree.data = generateDisabledTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       tree._handleCheckboxToggle("1$-1");
 
@@ -2522,7 +2525,7 @@ describe("EaTree", () => {
       tree.data = generateDisabledTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const checkbox = findCheckboxByPath(tree, "1$-1");
       expect(checkbox).toBeTruthy();
@@ -2537,7 +2540,7 @@ describe("EaTree", () => {
       tree.data = generateIdTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const checkbox = findCheckboxByPath(tree, "1$-1-1");
       checkbox.dispatchEvent(
@@ -2548,7 +2551,7 @@ describe("EaTree", () => {
         })
       );
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const node = findNodeByPath(tree, "1$-1-1");
       expect(node.classList.contains("is-checked")).toBe(true);
@@ -2560,7 +2563,7 @@ describe("EaTree", () => {
       tree.data = generateIdTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const handler = vi.fn();
       tree.addEventListener("ea-check-change", handler);
@@ -2583,7 +2586,7 @@ describe("EaTree", () => {
       tree.data = generateDisabledTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const checkbox = findCheckboxByPath(tree, "1$-1");
       checkbox.dispatchEvent(
@@ -2605,7 +2608,7 @@ describe("EaTree", () => {
       tree.data = [{ label: "Empty Children", children: [] }];
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const toggleIcon = findToggleIconByPath(tree, "1$");
       expect(toggleIcon).toBeFalsy();
@@ -2619,7 +2622,7 @@ describe("EaTree", () => {
       tree.data = [{ label: "Simple" }];
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const text = tree.shadowRoot.querySelector(".ea-tree__text");
       expect(text).toBeTruthy();
@@ -2631,7 +2634,7 @@ describe("EaTree", () => {
       tree.data = null;
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       expect(tree.shadowRoot).toBeDefined();
     });
@@ -2641,7 +2644,7 @@ describe("EaTree", () => {
       tree.data = undefined;
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       expect(tree.shadowRoot).toBeDefined();
     });
@@ -2651,7 +2654,7 @@ describe("EaTree", () => {
       tree.data = [{ label: "" }];
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const text = tree.shadowRoot.querySelector(".ea-tree__text");
       expect(text).toBeTruthy();
@@ -2664,7 +2667,7 @@ describe("EaTree", () => {
       tree.data = generateIdTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       const newChildren = [
         { id: 10, label: "New Child 1" },
@@ -2690,7 +2693,7 @@ describe("EaTree", () => {
       tree.data = generateIdTestData();
       container.appendChild(tree);
 
-      await waitForRender();
+      await tree.updateComplete;
 
       tree._handleCheckboxToggle("1$");
       expect(findNodeByPath(tree, "1$").classList.contains("is-checked")).toBe(
@@ -2715,7 +2718,7 @@ describe("EaTree", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-tree");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });
@@ -2725,7 +2728,7 @@ describe("EaTree", () => {
         const tree = document.createElement("ea-tree");
         tree.data = generateTestData();
         container.appendChild(tree);
-        await waitForRender();
+        await tree.updateComplete;
         const containerEl = tree.shadowRoot.querySelector(".ea-tree");
         expect(containerEl.getAttribute("role")).toBe("tree");
       });
@@ -2735,7 +2738,7 @@ describe("EaTree", () => {
         tree.data = generateTestData();
         tree.setAttribute("label", "File Tree");
         container.appendChild(tree);
-        await waitForRender();
+        await tree.updateComplete;
         const containerEl = tree.shadowRoot.querySelector(".ea-tree");
         expect(containerEl.getAttribute("aria-label")).toBe("File Tree");
       });
@@ -2745,7 +2748,7 @@ describe("EaTree", () => {
         tree.showCheckbox = true;
         tree.data = generateTestData();
         container.appendChild(tree);
-        await waitForRender();
+        await tree.updateComplete;
         const containerEl = tree.shadowRoot.querySelector(".ea-tree");
         expect(containerEl.getAttribute("aria-multiselectable")).toBe("true");
       });
@@ -2754,7 +2757,7 @@ describe("EaTree", () => {
         const tree = document.createElement("ea-tree");
         tree.data = generateTestData();
         container.appendChild(tree);
-        await waitForRender();
+        await tree.updateComplete;
         const containerEl = tree.shadowRoot.querySelector(".ea-tree");
         expect(containerEl.hasAttribute("aria-multiselectable")).toBe(false);
       });
@@ -2763,7 +2766,7 @@ describe("EaTree", () => {
         const tree = document.createElement("ea-tree");
         tree.data = generateTestData();
         container.appendChild(tree);
-        await waitForRender();
+        await tree.updateComplete;
         const node = findNodeByPath(tree, "1$");
         expect(node.getAttribute("role")).toBe("treeitem");
       });
@@ -2772,7 +2775,7 @@ describe("EaTree", () => {
         const tree = document.createElement("ea-tree");
         tree.data = generateTestData();
         container.appendChild(tree);
-        await waitForRender();
+        await tree.updateComplete;
         const node = findNodeByPath(tree, "1$");
         expect(node.getAttribute("aria-label")).toBe("Level one 1");
       });
@@ -2781,7 +2784,7 @@ describe("EaTree", () => {
         const tree = document.createElement("ea-tree");
         tree.data = generateTestData();
         container.appendChild(tree);
-        await waitForRender();
+        await tree.updateComplete;
         tree._expandPath("1$");
         const node = findNodeByPath(tree, "1$");
         expect(node.getAttribute("aria-expanded")).toBe("true");
@@ -2791,7 +2794,7 @@ describe("EaTree", () => {
         const tree = document.createElement("ea-tree");
         tree.data = generateTestData();
         container.appendChild(tree);
-        await waitForRender();
+        await tree.updateComplete;
         const node = findNodeByPath(tree, "1$");
         expect(node.getAttribute("aria-expanded")).toBe("false");
       });
@@ -2800,7 +2803,7 @@ describe("EaTree", () => {
         const tree = document.createElement("ea-tree");
         tree.data = generateTestData();
         container.appendChild(tree);
-        await waitForRender();
+        await tree.updateComplete;
         tree._selectPath("1$");
         const node = findNodeByPath(tree, "1$");
         expect(node.getAttribute("aria-selected")).toBe("true");
@@ -2810,7 +2813,7 @@ describe("EaTree", () => {
         const tree = document.createElement("ea-tree");
         tree.data = generateTestData();
         container.appendChild(tree);
-        await waitForRender();
+        await tree.updateComplete;
         const node = findNodeByPath(tree, "1$");
         expect(node.getAttribute("aria-selected")).toBe("false");
       });
@@ -2820,7 +2823,7 @@ describe("EaTree", () => {
         tree.showCheckbox = true;
         tree.data = generateIdTestData();
         container.appendChild(tree);
-        await waitForRender();
+        await tree.updateComplete;
         tree._handleCheckboxToggle("1$-1-1");
         const node = findNodeByPath(tree, "1$-1-1");
         expect(node.getAttribute("aria-checked")).toBe("true");
@@ -2840,7 +2843,7 @@ describe("EaTree", () => {
           },
         ];
         container.appendChild(tree);
-        await waitForRender();
+        await tree.updateComplete;
         tree._handleCheckboxToggle("1$-1");
         const parentNode = findNodeByPath(tree, "1$");
         expect(parentNode.getAttribute("aria-checked")).toBe("mixed");
@@ -2850,7 +2853,7 @@ describe("EaTree", () => {
         const tree = document.createElement("ea-tree");
         tree.data = generateTestData();
         container.appendChild(tree);
-        await waitForRender();
+        await tree.updateComplete;
         tree._expandPath("1$");
         const childrenEl = findChildrenByPath(tree, "1$");
         expect(childrenEl.getAttribute("role")).toBe("group");
@@ -2862,12 +2865,12 @@ describe("EaTree", () => {
         const tree = document.createElement("ea-tree");
         tree.data = generateTestData();
         container.appendChild(tree);
-        await waitForRender();
+        await tree.updateComplete;
         const firstLabel = findLabelByPath(tree, "1$");
         firstLabel.dispatchEvent(
           new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true })
         );
-        await waitForRender();
+        await tree.updateComplete;
         const secondLabel = findLabelByPath(tree, "2$");
         expect(secondLabel.getAttribute("tabindex")).toBe("0");
       });
@@ -2876,12 +2879,12 @@ describe("EaTree", () => {
         const tree = document.createElement("ea-tree");
         tree.data = generateTestData();
         container.appendChild(tree);
-        await waitForRender();
+        await tree.updateComplete;
         const secondLabel = findLabelByPath(tree, "2$");
         secondLabel.dispatchEvent(
           new KeyboardEvent("keydown", { key: "ArrowUp", bubbles: true })
         );
-        await waitForRender();
+        await tree.updateComplete;
         const firstLabel = findLabelByPath(tree, "1$");
         expect(firstLabel.getAttribute("tabindex")).toBe("0");
       });
@@ -2890,12 +2893,12 @@ describe("EaTree", () => {
         const tree = document.createElement("ea-tree");
         tree.data = [{ label: "Leaf 1" }, { label: "Leaf 2" }];
         container.appendChild(tree);
-        await waitForRender();
+        await tree.updateComplete;
         const labelEl = findLabelByPath(tree, "1$");
         labelEl.dispatchEvent(
           new KeyboardEvent("keydown", { key: "Enter", bubbles: true })
         );
-        await waitForRender();
+        await tree.updateComplete;
         expect(
           findNodeByPath(tree, "1$").classList.contains("is-selected")
         ).toBe(true);
@@ -2905,12 +2908,12 @@ describe("EaTree", () => {
         const tree = document.createElement("ea-tree");
         tree.data = generateTestData();
         container.appendChild(tree);
-        await waitForRender();
+        await tree.updateComplete;
         const labelEl = findLabelByPath(tree, "1$");
         labelEl.dispatchEvent(
           new KeyboardEvent("keydown", { key: " ", bubbles: true })
         );
-        await waitForRender();
+        await tree.updateComplete;
         expect(
           findNodeByPath(tree, "1$").classList.contains("is-selected")
         ).toBe(true);

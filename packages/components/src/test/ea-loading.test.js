@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { waitForRender } from "./utils/waitForRender";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-loading/index";
@@ -158,7 +157,7 @@ describe("EaLoading", () => {
       expect(containerEl.classList.contains("is-loading")).toBe(false);
 
       loading.setAttribute("loading", "");
-      await waitForRender();
+      await loading.updateComplete;
 
       expect(containerEl.classList.contains("is-loading")).toBe(true);
     });
@@ -172,7 +171,7 @@ describe("EaLoading", () => {
       expect(containerEl.classList.contains("is-loading")).toBe(true);
 
       loading.loading = false;
-      await waitForRender();
+      await loading.updateComplete;
 
       expect(containerEl.classList.contains("is-loading")).toBe(false);
     });
@@ -211,7 +210,7 @@ describe("EaLoading", () => {
       expect(spinner.getAttribute("name")).toBe("spinner");
 
       loading.setAttribute("spinner", "gear");
-      await waitForRender();
+      await loading.updateComplete;
 
       expect(spinner.getAttribute("name")).toBe("gear");
     });
@@ -230,7 +229,7 @@ describe("EaLoading", () => {
       loading.setAttribute("spinner-size", "32");
       container.appendChild(loading);
 
-      await waitForRender();
+      await loading.updateComplete;
 
       expect(loading.style.getPropertyValue("--ea-loading-spinner-size")).toBe(
         "32px"
@@ -241,7 +240,7 @@ describe("EaLoading", () => {
       const loading = document.createElement("ea-loading");
       container.appendChild(loading);
 
-      await waitForRender();
+      await loading.updateComplete;
 
       expect(loading.style.getPropertyValue("--ea-loading-spinner-size")).toBe(
         ""
@@ -253,14 +252,14 @@ describe("EaLoading", () => {
       loading.setAttribute("spinner-size", "24");
       container.appendChild(loading);
 
-      await waitForRender();
+      await loading.updateComplete;
 
       expect(loading.style.getPropertyValue("--ea-loading-spinner-size")).toBe(
         "24px"
       );
 
       loading.setAttribute("spinner-size", "48");
-      await waitForRender();
+      await loading.updateComplete;
 
       expect(loading.style.getPropertyValue("--ea-loading-spinner-size")).toBe(
         "48px"
@@ -272,14 +271,14 @@ describe("EaLoading", () => {
       loading.setAttribute("spinner-size", "32");
       container.appendChild(loading);
 
-      await waitForRender();
+      await loading.updateComplete;
 
       expect(loading.style.getPropertyValue("--ea-loading-spinner-size")).toBe(
         "32px"
       );
 
       loading.setAttribute("spinner-size", "0");
-      await waitForRender();
+      await loading.updateComplete;
 
       expect(loading.style.getPropertyValue("--ea-loading-spinner-size")).toBe(
         ""
@@ -300,7 +299,7 @@ describe("EaLoading", () => {
       loading.setAttribute("background", "rgba(0, 0, 0, 0.5)");
       container.appendChild(loading);
 
-      await waitForRender();
+      await loading.updateComplete;
 
       expect(loading.style.getPropertyValue("--ea-loading-background")).toBe(
         "rgba(0, 0, 0, 0.5)"
@@ -312,7 +311,7 @@ describe("EaLoading", () => {
       container.appendChild(loading);
 
       loading.setAttribute("background", "rgba(0, 0, 0, 0.8)");
-      await waitForRender();
+      await loading.updateComplete;
 
       expect(loading.style.getPropertyValue("--ea-loading-background")).toBe(
         "rgba(0, 0, 0, 0.8)"
@@ -346,7 +345,7 @@ describe("EaLoading", () => {
       expect(textEl.textContent).toBe("加载中");
 
       loading.setAttribute("text", "请稍候");
-      await waitForRender();
+      await loading.updateComplete;
 
       expect(textEl.textContent).toBe("请稍候");
     });
@@ -355,7 +354,7 @@ describe("EaLoading", () => {
       const loading = document.createElement("ea-loading");
       container.appendChild(loading);
 
-      await waitForRender();
+      await loading.updateComplete;
 
       const textEl = loading.shadowRoot.querySelector(".ea-loading__text");
       expect(textEl.style.display).toBe("none");
@@ -366,7 +365,7 @@ describe("EaLoading", () => {
       loading.setAttribute("text", "加载中");
       container.appendChild(loading);
 
-      await waitForRender();
+      await loading.updateComplete;
 
       const textEl = loading.shadowRoot.querySelector(".ea-loading__text");
       expect(textEl.style.display).toBe("");
@@ -377,13 +376,13 @@ describe("EaLoading", () => {
       loading.setAttribute("text", "加载中");
       container.appendChild(loading);
 
-      await waitForRender();
+      await loading.updateComplete;
 
       const textEl = loading.shadowRoot.querySelector(".ea-loading__text");
       expect(textEl.style.display).toBe("");
 
       loading.setAttribute("text", "");
-      await waitForRender();
+      await loading.updateComplete;
 
       expect(textEl.style.display).toBe("none");
     });
@@ -392,13 +391,13 @@ describe("EaLoading", () => {
       const loading = document.createElement("ea-loading");
       container.appendChild(loading);
 
-      await waitForRender();
+      await loading.updateComplete;
 
       const textEl = loading.shadowRoot.querySelector(".ea-loading__text");
       expect(textEl.style.display).toBe("none");
 
       loading.setAttribute("text", "加载中");
-      await waitForRender();
+      await loading.updateComplete;
 
       expect(textEl.style.display).toBe("");
     });
@@ -447,7 +446,7 @@ describe("EaLoading", () => {
       );
 
       loading.loading = false;
-      await waitForRender();
+      await loading.updateComplete;
 
       expect(containerEl.classList.contains("ea-loading--fullscreen")).toBe(
         false
@@ -465,7 +464,7 @@ describe("EaLoading", () => {
       );
 
       loading.loading = true;
-      await waitForRender();
+      await loading.updateComplete;
 
       expect(containerEl.classList.contains("ea-loading--fullscreen")).toBe(
         true
@@ -488,7 +487,7 @@ describe("EaLoading", () => {
       loading.setAttribute("loading", "");
       container.appendChild(loading);
 
-      await waitForRender();
+      await loading.updateComplete;
 
       expect(document.body.style.overflow).toBe("hidden");
     });
@@ -499,7 +498,7 @@ describe("EaLoading", () => {
       loading.setAttribute("loading", "");
       container.appendChild(loading);
 
-      await waitForRender();
+      await loading.updateComplete;
 
       expect(document.body.style.overflow).toBe("");
     });
@@ -510,7 +509,7 @@ describe("EaLoading", () => {
       loading.setAttribute("lock", "");
       container.appendChild(loading);
 
-      await waitForRender();
+      await loading.updateComplete;
 
       expect(document.body.style.overflow).toBe("");
     });
@@ -522,12 +521,12 @@ describe("EaLoading", () => {
       loading.setAttribute("loading", "");
       container.appendChild(loading);
 
-      await waitForRender();
+      await loading.updateComplete;
 
       expect(document.body.style.overflow).toBe("hidden");
 
       loading.loading = false;
-      await waitForRender();
+      await loading.updateComplete;
 
       expect(document.body.style.overflow).toBe("");
     });
@@ -539,12 +538,12 @@ describe("EaLoading", () => {
       loading.setAttribute("loading", "");
       container.appendChild(loading);
 
-      await waitForRender();
+      await loading.updateComplete;
 
       expect(document.body.style.overflow).toBe("hidden");
 
       loading.remove();
-      await waitForRender();
+      await loading.updateComplete;
 
       expect(document.body.style.overflow).toBe("");
     });
@@ -556,12 +555,12 @@ describe("EaLoading", () => {
       loading.setAttribute("loading", "");
       container.appendChild(loading);
 
-      await waitForRender();
+      await loading.updateComplete;
 
       expect(document.body.style.overflow).toBe("hidden");
 
       loading.lock = false;
-      await waitForRender();
+      await loading.updateComplete;
 
       expect(document.body.style.overflow).toBe("");
     });
@@ -573,7 +572,7 @@ describe("EaLoading", () => {
       loading.setAttribute("loading", "");
       container.appendChild(loading);
 
-      await waitForRender();
+      await loading.updateComplete;
 
       expect(loading.loading).toBe(true);
 
@@ -587,13 +586,13 @@ describe("EaLoading", () => {
       loading.setAttribute("loading", "");
       container.appendChild(loading);
 
-      await waitForRender();
+      await loading.updateComplete;
 
       const handler = vi.fn();
       loading.addEventListener("ea-close", handler);
 
       loading.close();
-      await waitForRender();
+      await loading.updateComplete;
 
       expect(handler).toHaveBeenCalled();
     });
@@ -603,13 +602,13 @@ describe("EaLoading", () => {
       loading.setAttribute("loading", "");
       container.appendChild(loading);
 
-      await waitForRender();
+      await loading.updateComplete;
 
       const containerEl = loading.shadowRoot.querySelector(".ea-loading");
       expect(containerEl.classList.contains("is-loading")).toBe(true);
 
       loading.close();
-      await waitForRender();
+      await loading.updateComplete;
 
       expect(containerEl.classList.contains("is-loading")).toBe(false);
     });
@@ -621,12 +620,12 @@ describe("EaLoading", () => {
       loading.setAttribute("loading", "");
       container.appendChild(loading);
 
-      await waitForRender();
+      await loading.updateComplete;
 
       expect(document.body.style.overflow).toBe("hidden");
 
       loading.close();
-      await waitForRender();
+      await loading.updateComplete;
 
       expect(document.body.style.overflow).toBe("");
     });
@@ -837,7 +836,7 @@ describe("EaLoading", () => {
     it("$loading() 应该支持 lock 选项", async () => {
       const loadingInstance = window.$loading({ lock: true });
 
-      await waitForRender();
+      await loadingInstance.instance.updateComplete;
 
       expect(loadingInstance.instance.lock).toBe(true);
       expect(document.body.style.overflow).toBe("hidden");
@@ -937,7 +936,7 @@ describe("EaLoading", () => {
       loading.setAttribute("background", "rgba(0,0,0,0.5)");
       container.appendChild(loading);
 
-      await waitForRender();
+      await loading.updateComplete;
 
       expect(loading.loading).toBe(true);
       expect(loading.fullscreen).toBe(true);
@@ -965,7 +964,7 @@ describe("EaLoading", () => {
 
       loading.setAttribute("loading", "");
       loading.setAttribute("fullscreen", "");
-      await waitForRender();
+      await loading.updateComplete;
 
       expect(containerEl.classList.contains("is-loading")).toBe(true);
       expect(containerEl.classList.contains("ea-loading--fullscreen")).toBe(
@@ -1013,12 +1012,12 @@ describe("EaLoading", () => {
       loading.setAttribute("loading", "");
       container.appendChild(loading);
 
-      await waitForRender();
+      await loading.updateComplete;
 
       expect(document.body.style.overflow).toBe("hidden");
 
       loading.remove();
-      await waitForRender();
+      await loading.updateComplete;
 
       expect(document.body.style.overflow).toBe("");
     });
@@ -1028,10 +1027,10 @@ describe("EaLoading", () => {
       loading.setAttribute("loading", "");
       container.appendChild(loading);
 
-      await waitForRender();
+      await loading.updateComplete;
 
       loading.remove();
-      await waitForRender();
+      await loading.updateComplete;
 
       container.appendChild(loading);
 
@@ -1045,7 +1044,7 @@ describe("EaLoading", () => {
       loading.setAttribute("text", "<script>alert('xss')</script>");
       container.appendChild(loading);
 
-      await waitForRender();
+      await loading.updateComplete;
 
       const textEl = loading.shadowRoot.querySelector(".ea-loading__text");
       expect(textEl.querySelector("script")).toBeNull();
@@ -1058,7 +1057,7 @@ describe("EaLoading", () => {
       loading.setAttribute("loading", "");
       loading.loading = false;
       loading.setAttribute("loading", "");
-      await waitForRender();
+      await loading.updateComplete;
 
       const containerEl = loading.shadowRoot.querySelector(".ea-loading");
       expect(containerEl.classList.contains("is-loading")).toBe(true);
@@ -1071,7 +1070,7 @@ describe("EaLoading", () => {
       loading.setAttribute("spinner", "circle-notch");
       loading.setAttribute("spinner", "gear");
       loading.setAttribute("spinner", "spinner");
-      await waitForRender();
+      await loading.updateComplete;
 
       const spinner = loading.shadowRoot.querySelector(".ea-loading__spinner");
       expect(spinner.getAttribute("name")).toBe("spinner");
@@ -1082,7 +1081,7 @@ describe("EaLoading", () => {
       loading.setAttribute("spinner-size", "-10");
       container.appendChild(loading);
 
-      await waitForRender();
+      await loading.updateComplete;
 
       expect(loading.style.getPropertyValue("--ea-loading-spinner-size")).toBe(
         ""
@@ -1093,7 +1092,7 @@ describe("EaLoading", () => {
       const loading = document.createElement("ea-loading");
       container.appendChild(loading);
 
-      await waitForRender();
+      await loading.updateComplete;
 
       expect(loading.style.getPropertyValue("--ea-loading-background")).toBe(
         ""
@@ -1105,7 +1104,7 @@ describe("EaLoading", () => {
       loading.setAttribute("background", "rgba(0,0,0,0.5)");
       container.appendChild(loading);
 
-      await waitForRender();
+      await loading.updateComplete;
 
       expect(loading.style.getPropertyValue("--ea-loading-background")).toBe(
         "rgba(0,0,0,0.5)"
@@ -1170,7 +1169,7 @@ describe("EaLoading", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-loading");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });
@@ -1180,7 +1179,7 @@ describe("EaLoading", () => {
         const loading = document.createElement("ea-loading");
         loading.loading = true;
         container.appendChild(loading);
-        await waitForRender();
+        await loading.updateComplete;
         const content = loading.shadowRoot.querySelector(
           ".ea-loading__content"
         );
@@ -1190,7 +1189,7 @@ describe("EaLoading", () => {
       it("loading=false 时内容区域不应该有 inert 属性", async () => {
         const loading = document.createElement("ea-loading");
         container.appendChild(loading);
-        await waitForRender();
+        await loading.updateComplete;
         const content = loading.shadowRoot.querySelector(
           ".ea-loading__content"
         );
@@ -1200,13 +1199,13 @@ describe("EaLoading", () => {
       it("动态设置 loading=true 应该添加 inert 属性", async () => {
         const loading = document.createElement("ea-loading");
         container.appendChild(loading);
-        await waitForRender();
+        await loading.updateComplete;
         const content = loading.shadowRoot.querySelector(
           ".ea-loading__content"
         );
         expect(content.hasAttribute("inert")).toBe(false);
         loading.loading = true;
-        await waitForRender();
+        await loading.updateComplete;
         expect(content.hasAttribute("inert")).toBe(true);
       });
 
@@ -1214,13 +1213,13 @@ describe("EaLoading", () => {
         const loading = document.createElement("ea-loading");
         loading.loading = true;
         container.appendChild(loading);
-        await waitForRender();
+        await loading.updateComplete;
         const content = loading.shadowRoot.querySelector(
           ".ea-loading__content"
         );
         expect(content.hasAttribute("inert")).toBe(true);
         loading.loading = false;
-        await waitForRender();
+        await loading.updateComplete;
         expect(content.hasAttribute("inert")).toBe(false);
       });
     });

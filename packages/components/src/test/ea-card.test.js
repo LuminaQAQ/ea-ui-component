@@ -1,5 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import { waitForRender } from "./utils/waitForRender.js";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-card/index";
@@ -73,7 +72,7 @@ describe("EaCard", () => {
     it("默认应该应用 always-shadow 状态类", async () => {
       const card = document.createElement("ea-card");
       container.appendChild(card);
-      await waitForRender();
+      await card.updateComplete;
 
       const containerEl = card.shadowRoot.querySelector(".ea-card");
       expect(containerEl.classList.contains("is-always-shadow")).toBe(true);
@@ -83,7 +82,7 @@ describe("EaCard", () => {
       const card = document.createElement("ea-card");
       card.setAttribute("shadow", "always");
       container.appendChild(card);
-      await waitForRender();
+      await card.updateComplete;
 
       const containerEl = card.shadowRoot.querySelector(".ea-card");
       expect(containerEl.classList.contains("is-always-shadow")).toBe(true);
@@ -93,7 +92,7 @@ describe("EaCard", () => {
       const card = document.createElement("ea-card");
       card.setAttribute("shadow", "hover");
       container.appendChild(card);
-      await waitForRender();
+      await card.updateComplete;
 
       const containerEl = card.shadowRoot.querySelector(".ea-card");
       expect(containerEl.classList.contains("is-hover-shadow")).toBe(true);
@@ -103,7 +102,7 @@ describe("EaCard", () => {
       const card = document.createElement("ea-card");
       card.setAttribute("shadow", "never");
       container.appendChild(card);
-      await waitForRender();
+      await card.updateComplete;
 
       const containerEl = card.shadowRoot.querySelector(".ea-card");
       expect(containerEl.classList.contains("is-always-shadow")).toBe(false);
@@ -114,10 +113,10 @@ describe("EaCard", () => {
     it("动态修改 shadow 属性应该更新阴影状态类", async () => {
       const card = document.createElement("ea-card");
       container.appendChild(card);
-      await waitForRender();
+      await card.updateComplete;
 
       card.setAttribute("shadow", "hover");
-      await waitForRender();
+      await card.updateComplete;
 
       const containerEl = card.shadowRoot.querySelector(".ea-card");
       expect(containerEl.classList.contains("is-hover-shadow")).toBe(true);
@@ -135,7 +134,7 @@ describe("EaCard", () => {
     it("没有 header 内容时应该隐藏 header 区域", async () => {
       const card = document.createElement("ea-card");
       container.appendChild(card);
-      await waitForRender();
+      await card.updateComplete;
 
       const containerEl = card.shadowRoot.querySelector(".ea-card");
       expect(containerEl.classList.contains("is-header-empty")).toBe(true);
@@ -148,7 +147,7 @@ describe("EaCard", () => {
         <p>Content</p>
       `;
       container.appendChild(card);
-      await waitForRender();
+      await card.updateComplete;
 
       const containerEl = card.shadowRoot.querySelector(".ea-card");
       expect(containerEl.classList.contains("is-header-empty")).toBe(false);
@@ -176,7 +175,7 @@ describe("EaCard", () => {
     it("没有 footer 内容时应该隐藏 footer 区域", async () => {
       const card = document.createElement("ea-card");
       container.appendChild(card);
-      await waitForRender();
+      await card.updateComplete;
 
       const containerEl = card.shadowRoot.querySelector(".ea-card");
       expect(containerEl.classList.contains("is-footer-empty")).toBe(true);
@@ -189,7 +188,7 @@ describe("EaCard", () => {
         <div slot="footer">Footer content</div>
       `;
       container.appendChild(card);
-      await waitForRender();
+      await card.updateComplete;
 
       const containerEl = card.shadowRoot.querySelector(".ea-card");
       expect(containerEl.classList.contains("is-footer-empty")).toBe(false);
@@ -249,7 +248,7 @@ describe("EaCard", () => {
       const card = document.createElement("ea-card");
       card.setAttribute("header", "Card Title");
       container.appendChild(card);
-      await waitForRender();
+      await card.updateComplete;
 
       const headerSlot = card.shadowRoot.querySelector('slot[name="header"]');
       expect(headerSlot.innerText).toBe("Card Title");
@@ -259,7 +258,7 @@ describe("EaCard", () => {
       const card = document.createElement("ea-card");
       card.setAttribute("footer", "Footer Text");
       container.appendChild(card);
-      await waitForRender();
+      await card.updateComplete;
 
       const footerSlot = card.shadowRoot.querySelector('slot[name="footer"]');
       expect(footerSlot.innerText).toBe("Footer Text");
@@ -269,7 +268,7 @@ describe("EaCard", () => {
       const card = document.createElement("ea-card");
       card.setAttribute("header", "Card Title");
       container.appendChild(card);
-      await waitForRender();
+      await card.updateComplete;
 
       const containerEl = card.shadowRoot.querySelector(".ea-card");
       expect(containerEl.classList.contains("is-header-empty")).toBe(false);
@@ -279,7 +278,7 @@ describe("EaCard", () => {
       const card = document.createElement("ea-card");
       card.setAttribute("footer", "Footer Text");
       container.appendChild(card);
-      await waitForRender();
+      await card.updateComplete;
 
       const containerEl = card.shadowRoot.querySelector(".ea-card");
       expect(containerEl.classList.contains("is-footer-empty")).toBe(false);
@@ -288,10 +287,10 @@ describe("EaCard", () => {
     it("动态修改 header 属性应该更新标题", async () => {
       const card = document.createElement("ea-card");
       container.appendChild(card);
-      await waitForRender();
+      await card.updateComplete;
 
       card.setAttribute("header", "New Title");
-      await waitForRender();
+      await card.updateComplete;
 
       const headerSlot = card.shadowRoot.querySelector('slot[name="header"]');
       expect(headerSlot.innerText).toBe("New Title");
@@ -300,10 +299,10 @@ describe("EaCard", () => {
     it("动态修改 footer 属性应该更新页脚", async () => {
       const card = document.createElement("ea-card");
       container.appendChild(card);
-      await waitForRender();
+      await card.updateComplete;
 
       card.setAttribute("footer", "New Footer");
-      await waitForRender();
+      await card.updateComplete;
 
       const footerSlot = card.shadowRoot.querySelector('slot[name="footer"]');
       expect(footerSlot.innerText).toBe("New Footer");
@@ -336,7 +335,7 @@ describe("EaCard", () => {
         </div>
       `;
       container.appendChild(card);
-      await waitForRender();
+      await card.updateComplete;
 
       const containerEl = card.shadowRoot.querySelector(".ea-card");
       const headerEl = card.shadowRoot.querySelector(".ea-card__header");
@@ -361,7 +360,7 @@ describe("EaCard", () => {
         <p class="ea-card-content">content4</p>
       `;
       container.appendChild(card);
-      await waitForRender();
+      await card.updateComplete;
 
       const containerEl = card.shadowRoot.querySelector(".ea-card");
       const contentSlot = card.shadowRoot.querySelector("slot:not([name])");
@@ -387,7 +386,7 @@ describe("EaCard", () => {
       const card = document.createElement("ea-card");
       card.innerHTML = `<p>Content</p>`;
       container.appendChild(card);
-      await waitForRender();
+      await card.updateComplete;
 
       let containerEl = card.shadowRoot.querySelector(".ea-card");
       expect(containerEl.classList.contains("is-header-empty")).toBe(true);
@@ -396,10 +395,11 @@ describe("EaCard", () => {
       headerDiv.setAttribute("slot", "header");
       headerDiv.textContent = "Dynamic Header";
       card.appendChild(headerDiv);
-      await waitForRender();
 
-      containerEl = card.shadowRoot.querySelector(".ea-card");
-      expect(containerEl.classList.contains("is-header-empty")).toBe(false);
+      await vi.waitFor(() => {
+        containerEl = card.shadowRoot.querySelector(".ea-card");
+        expect(containerEl.classList.contains("is-header-empty")).toBe(false);
+      });
     });
 
     it("动态移除 header 内容后应该隐藏 header", async () => {
@@ -409,7 +409,7 @@ describe("EaCard", () => {
         <p>Content</p>
       `;
       container.appendChild(card);
-      await waitForRender();
+      await card.updateComplete;
 
       let containerEl = card.shadowRoot.querySelector(".ea-card");
       expect(containerEl.classList.contains("is-header-empty")).toBe(false);
@@ -419,10 +419,10 @@ describe("EaCard", () => {
       if (assignedElements.length > 0) {
         assignedElements[0].remove();
       }
-      await waitForRender();
+      await card.updateComplete;
 
       headerSlot.dispatchEvent(new Event("slotchange"));
-      await waitForRender();
+      await card.updateComplete;
 
       containerEl = card.shadowRoot.querySelector(".ea-card");
       expect(containerEl.classList.contains("is-header-empty")).toBe(true);
@@ -432,7 +432,7 @@ describe("EaCard", () => {
       const card = document.createElement("ea-card");
       card.innerHTML = `<p>Content</p>`;
       container.appendChild(card);
-      await waitForRender();
+      await card.updateComplete;
 
       let containerEl = card.shadowRoot.querySelector(".ea-card");
       expect(containerEl.classList.contains("is-footer-empty")).toBe(true);
@@ -441,10 +441,11 @@ describe("EaCard", () => {
       footerDiv.setAttribute("slot", "footer");
       footerDiv.textContent = "Dynamic Footer";
       card.appendChild(footerDiv);
-      await waitForRender();
 
-      containerEl = card.shadowRoot.querySelector(".ea-card");
-      expect(containerEl.classList.contains("is-footer-empty")).toBe(false);
+      await vi.waitFor(() => {
+        containerEl = card.shadowRoot.querySelector(".ea-card");
+        expect(containerEl.classList.contains("is-footer-empty")).toBe(false);
+      });
     });
 
     it("动态移除 footer 内容后应该隐藏 footer", async () => {
@@ -454,7 +455,7 @@ describe("EaCard", () => {
         <div slot="footer">Footer Content</div>
       `;
       container.appendChild(card);
-      await waitForRender();
+      await card.updateComplete;
 
       let containerEl = card.shadowRoot.querySelector(".ea-card");
       expect(containerEl.classList.contains("is-footer-empty")).toBe(false);
@@ -464,10 +465,10 @@ describe("EaCard", () => {
       if (assignedElements.length > 0) {
         assignedElements[0].remove();
       }
-      await waitForRender();
+      await card.updateComplete;
 
       footerSlot.dispatchEvent(new Event("slotchange"));
-      await waitForRender();
+      await card.updateComplete;
 
       containerEl = card.shadowRoot.querySelector(".ea-card");
       expect(containerEl.classList.contains("is-footer-empty")).toBe(true);
@@ -502,7 +503,7 @@ describe("EaCard", () => {
     it("组件断开连接后应该清理资源", async () => {
       const card = document.createElement("ea-card");
       container.appendChild(card);
-      await waitForRender();
+      await card.updateComplete;
 
       card.remove();
 
@@ -517,7 +518,7 @@ describe("EaCard", () => {
       card.setAttribute("footer", "Footer");
       card.setAttribute("shadow", "hover");
       container.appendChild(card);
-      await waitForRender();
+      await card.updateComplete;
 
       const containerEl = card.shadowRoot.querySelector(".ea-card");
       expect(containerEl.classList.contains("is-hover-shadow")).toBe(true);
@@ -530,7 +531,7 @@ describe("EaCard", () => {
       card.innerHTML = `<div slot="header">Slot Header</div>`;
       card.setAttribute("header", "Attr Header");
       container.appendChild(card);
-      await waitForRender();
+      await card.updateComplete;
 
       const headerSlot = card.shadowRoot.querySelector('slot[name="header"]');
       expect(headerSlot.innerText).toBe("Attr Header");
@@ -541,7 +542,7 @@ describe("EaCard", () => {
       card.setAttribute("header", "Card Title");
       card.innerHTML = `<p>Content only</p>`;
       container.appendChild(card);
-      await waitForRender();
+      await card.updateComplete;
 
       const containerEl = card.shadowRoot.querySelector(".ea-card");
       expect(containerEl.classList.contains("is-header-empty")).toBe(false);
@@ -552,7 +553,7 @@ describe("EaCard", () => {
       card.setAttribute("footer", "Card Footer");
       card.innerHTML = `<p>Content only</p>`;
       container.appendChild(card);
-      await waitForRender();
+      await card.updateComplete;
 
       const containerEl = card.shadowRoot.querySelector(".ea-card");
       expect(containerEl.classList.contains("is-footer-empty")).toBe(false);
@@ -564,7 +565,7 @@ describe("EaCard", () => {
       card.setAttribute("footer", "Footer");
       card.innerHTML = `<section slot="footer">Slot Footer</section><p>Content</p>`;
       container.appendChild(card);
-      await waitForRender();
+      await card.updateComplete;
 
       const containerEl = card.shadowRoot.querySelector(".ea-card");
       expect(containerEl.classList.contains("is-header-empty")).toBe(false);
@@ -577,7 +578,7 @@ describe("EaCard", () => {
       it("作为展示组件不需要特定 ARIA 属性", async () => {
         const el = document.createElement("ea-card");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("role")).toBeNull();
       });
     });
@@ -585,7 +586,7 @@ describe("EaCard", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-card");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });

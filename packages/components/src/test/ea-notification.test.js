@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { waitForRender } from "./utils/waitForRender";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-notification/index";
@@ -185,7 +184,7 @@ describe("EaNotification Component", () => {
       notification.variant = "success";
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const icon = notification.shadowRoot.querySelector(
         ".ea-notification__icon"
@@ -198,7 +197,7 @@ describe("EaNotification Component", () => {
       notification.variant = "error";
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const icon = notification.shadowRoot.querySelector(
         ".ea-notification__icon"
@@ -211,7 +210,7 @@ describe("EaNotification Component", () => {
       notification.variant = "warning";
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const icon = notification.shadowRoot.querySelector(
         ".ea-notification__icon"
@@ -224,7 +223,7 @@ describe("EaNotification Component", () => {
       notification.variant = "info";
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const icon = notification.shadowRoot.querySelector(
         ".ea-notification__icon"
@@ -237,7 +236,7 @@ describe("EaNotification Component", () => {
       notification.variant = "primary";
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const icon = notification.shadowRoot.querySelector(
         ".ea-notification__icon"
@@ -250,7 +249,7 @@ describe("EaNotification Component", () => {
       notification.variant = "success";
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const containerEl =
         notification.shadowRoot.querySelector(".ea-notification");
@@ -265,7 +264,7 @@ describe("EaNotification Component", () => {
 
       notification.variant = "warning";
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const containerEl =
         notification.shadowRoot.querySelector(".ea-notification");
@@ -309,7 +308,7 @@ describe("EaNotification Component", () => {
       notification.heading = "Test Heading";
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const title = notification.shadowRoot.querySelector(
         ".ea-notification__title"
@@ -331,7 +330,7 @@ describe("EaNotification Component", () => {
 
       notification.heading = "Updated Title";
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const title = notification.shadowRoot.querySelector(
         ".ea-notification__title"
@@ -363,7 +362,7 @@ describe("EaNotification Component", () => {
       notification.message = "Hello World";
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const main = notification.shadowRoot.querySelector(
         ".ea-notification__main"
@@ -376,7 +375,7 @@ describe("EaNotification Component", () => {
       notification.message = "<strong>Bold</strong>";
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const main = notification.shadowRoot.querySelector(
         ".ea-notification__main"
@@ -391,7 +390,7 @@ describe("EaNotification Component", () => {
       notification.message = "<strong>Bold</strong>";
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const main = notification.shadowRoot.querySelector(
         ".ea-notification__main"
@@ -413,7 +412,7 @@ describe("EaNotification Component", () => {
 
       notification.message = "Updated Message";
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const main = notification.shadowRoot.querySelector(
         ".ea-notification__main"
@@ -436,7 +435,7 @@ describe("EaNotification Component", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       notification.visible = true;
 
@@ -447,11 +446,11 @@ describe("EaNotification Component", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       notification.visible = true;
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const containerEl =
         notification.shadowRoot.querySelector(".ea-notification");
@@ -462,11 +461,11 @@ describe("EaNotification Component", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       notification.visible = true;
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const containerEl =
         notification.shadowRoot.querySelector(".ea-notification");
@@ -477,7 +476,7 @@ describe("EaNotification Component", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const containerEl =
         notification.shadowRoot.querySelector(".ea-notification");
@@ -488,13 +487,13 @@ describe("EaNotification Component", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       notification.visible = true;
-      await waitForRender();
+      await notification.updateComplete;
 
       notification.visible = false;
-      await waitForRender();
+      await notification.updateComplete;
 
       const containerEl =
         notification.shadowRoot.querySelector(".ea-notification");
@@ -525,7 +524,7 @@ describe("EaNotification Component", () => {
       notification.showClose = true;
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const containerEl =
         notification.shadowRoot.querySelector(".ea-notification");
@@ -536,7 +535,7 @@ describe("EaNotification Component", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const containerEl =
         notification.shadowRoot.querySelector(".ea-notification");
@@ -559,7 +558,7 @@ describe("EaNotification Component", () => {
       notification.showClose = true;
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const closeIcon = notification.shadowRoot.querySelector(
         ".ea-notification__close-icon"
@@ -572,14 +571,14 @@ describe("EaNotification Component", () => {
       container.appendChild(notification);
 
       notification.showClose = true;
-      await waitForRender();
+      await notification.updateComplete;
 
       const containerEl =
         notification.shadowRoot.querySelector(".ea-notification");
       expect(containerEl.classList.contains("is-show-close")).toBe(true);
 
       notification.showClose = false;
-      await waitForRender();
+      await notification.updateComplete;
 
       expect(containerEl.classList.contains("is-show-close")).toBe(false);
     });
@@ -610,7 +609,7 @@ describe("EaNotification Component", () => {
       notification.closeIcon = "times";
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const closeIcon = notification.shadowRoot.querySelector(
         ".ea-notification__close-icon"
@@ -667,7 +666,7 @@ describe("EaNotification Component", () => {
       notification.placement = "top-right";
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const containerEl =
         notification.shadowRoot.querySelector(".ea-notification");
@@ -681,7 +680,7 @@ describe("EaNotification Component", () => {
       notification.placement = "top-left";
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const containerEl =
         notification.shadowRoot.querySelector(".ea-notification");
@@ -695,7 +694,7 @@ describe("EaNotification Component", () => {
       notification.placement = "bottom-right";
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const containerEl =
         notification.shadowRoot.querySelector(".ea-notification");
@@ -709,7 +708,7 @@ describe("EaNotification Component", () => {
       notification.placement = "bottom-left";
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const containerEl =
         notification.shadowRoot.querySelector(".ea-notification");
@@ -732,7 +731,7 @@ describe("EaNotification Component", () => {
 
       notification.placement = "bottom-left";
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const containerEl =
         notification.shadowRoot.querySelector(".ea-notification");
@@ -768,7 +767,7 @@ describe("EaNotification Component", () => {
       notification.zIndex = 2000;
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const containerEl =
         notification.shadowRoot.querySelector(".ea-notification");
@@ -808,7 +807,7 @@ describe("EaNotification Component", () => {
       notification.icon = "custom-icon";
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const icon = notification.shadowRoot.querySelector(
         ".ea-notification__icon"
@@ -821,7 +820,7 @@ describe("EaNotification Component", () => {
       notification.variant = "error";
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const icon = notification.shadowRoot.querySelector(
         ".ea-notification__icon"
@@ -835,7 +834,7 @@ describe("EaNotification Component", () => {
 
       notification.icon = "star";
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const icon = notification.shadowRoot.querySelector(
         ".ea-notification__icon"
@@ -851,7 +850,7 @@ describe("EaNotification Component", () => {
 
       notification.icon = "";
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const icon = notification.shadowRoot.querySelector(
         ".ea-notification__icon"
@@ -867,14 +866,14 @@ describe("EaNotification Component", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const showHandler = vi.fn();
       notification.addEventListener("ea-show", showHandler);
 
       notification.visible = true;
 
-      await waitForRender();
+      await notification.updateComplete;
 
       expect(showHandler).toHaveBeenCalledTimes(1);
     });
@@ -883,20 +882,20 @@ describe("EaNotification Component", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const shownHandler = vi.fn();
       notification.addEventListener("ea-shown", shownHandler);
 
       notification.visible = true;
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const containerEl =
         notification.shadowRoot.querySelector(".ea-notification");
       containerEl.dispatchEvent(new Event("transitionend", { bubbles: true }));
 
-      await waitForRender();
+      await notification.updateComplete;
 
       expect(shownHandler).toHaveBeenCalledTimes(1);
     });
@@ -905,17 +904,17 @@ describe("EaNotification Component", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       notification.visible = true;
-      await waitForRender();
+      await notification.updateComplete;
 
       const hideHandler = vi.fn();
       notification.addEventListener("ea-hide", hideHandler);
 
       notification.visible = false;
 
-      await waitForRender();
+      await notification.updateComplete;
 
       expect(hideHandler).toHaveBeenCalledTimes(1);
     });
@@ -924,22 +923,22 @@ describe("EaNotification Component", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       notification.visible = true;
-      await waitForRender();
+      await notification.updateComplete;
 
       const hiddenHandler = vi.fn();
       notification.addEventListener("ea-hidden", hiddenHandler);
 
       notification.visible = false;
-      await waitForRender();
+      await notification.updateComplete;
 
       const containerEl =
         notification.shadowRoot.querySelector(".ea-notification");
       containerEl.dispatchEvent(new Event("transitionend", { bubbles: true }));
 
-      await waitForRender();
+      await notification.updateComplete;
 
       expect(hiddenHandler).toHaveBeenCalledTimes(1);
     });
@@ -948,7 +947,7 @@ describe("EaNotification Component", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const closeHandler = vi.fn();
       notification.addEventListener("ea-close", closeHandler);
@@ -963,7 +962,7 @@ describe("EaNotification Component", () => {
       notification.visible = true;
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       notification.close();
 
@@ -975,7 +974,7 @@ describe("EaNotification Component", () => {
       notification.showClose = true;
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const closeHandler = vi.fn();
       notification.addEventListener("ea-close", closeHandler);
@@ -985,7 +984,7 @@ describe("EaNotification Component", () => {
       );
       closeIcon.click();
 
-      await waitForRender();
+      await notification.updateComplete;
 
       expect(closeHandler).toHaveBeenCalledTimes(1);
     });
@@ -994,7 +993,7 @@ describe("EaNotification Component", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const closeHandler = vi.fn();
       notification.addEventListener("ea-close", closeHandler);
@@ -1004,7 +1003,7 @@ describe("EaNotification Component", () => {
       );
       closeIcon.click();
 
-      await waitForRender();
+      await notification.updateComplete;
 
       expect(closeHandler).not.toHaveBeenCalled();
     });
@@ -1018,7 +1017,7 @@ describe("EaNotification Component", () => {
       notification.visible = true;
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       expect(notification.visible).toBe(true);
 
@@ -1031,7 +1030,7 @@ describe("EaNotification Component", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const closeHandler = vi.fn();
       notification.addEventListener("ea-close", closeHandler);
@@ -1062,7 +1061,7 @@ describe("EaNotification Component", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const containerEl =
         notification.shadowRoot.querySelector(".ea-notification");
@@ -1073,7 +1072,7 @@ describe("EaNotification Component", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const containerEl =
         notification.shadowRoot.querySelector(".ea-notification");
@@ -1086,7 +1085,7 @@ describe("EaNotification Component", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const containerEl =
         notification.shadowRoot.querySelector(".ea-notification");
@@ -1099,11 +1098,11 @@ describe("EaNotification Component", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       notification.visible = true;
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const containerEl =
         notification.shadowRoot.querySelector(".ea-notification");
@@ -1115,7 +1114,7 @@ describe("EaNotification Component", () => {
       notification.showClose = true;
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const containerEl =
         notification.shadowRoot.querySelector(".ea-notification");
@@ -1130,7 +1129,7 @@ describe("EaNotification Component", () => {
       notification.visible = true;
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const containerEl =
         notification.shadowRoot.querySelector(".ea-notification");
@@ -1155,7 +1154,7 @@ describe("EaNotification Component", () => {
         duration: 0,
       });
 
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       expect(instance).toBeTruthy();
       expect(instance.instance).toBeTruthy();
@@ -1171,7 +1170,7 @@ describe("EaNotification Component", () => {
         duration: 0,
       });
 
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       expect(instance.instance.visible).toBe(true);
 
@@ -1185,7 +1184,7 @@ describe("EaNotification Component", () => {
         duration: 0,
       });
 
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       expect(instance.instance.variant).toBe("success");
 
@@ -1199,7 +1198,7 @@ describe("EaNotification Component", () => {
         duration: 0,
       });
 
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       expect(instance.instance.variant).toBe("warning");
 
@@ -1213,7 +1212,7 @@ describe("EaNotification Component", () => {
         duration: 0,
       });
 
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       expect(instance.instance.variant).toBe("error");
 
@@ -1227,7 +1226,7 @@ describe("EaNotification Component", () => {
         duration: 0,
       });
 
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       expect(instance.instance.variant).toBe("info");
 
@@ -1241,7 +1240,7 @@ describe("EaNotification Component", () => {
         duration: 0,
       });
 
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       expect(instance.instance.variant).toBe("primary");
 
@@ -1256,7 +1255,7 @@ describe("EaNotification Component", () => {
         duration: 0,
       });
 
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       expect(instance.instance.placement).toBe("top-left");
 
@@ -1271,7 +1270,7 @@ describe("EaNotification Component", () => {
         duration: 0,
       });
 
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       expect(instance.instance.showClose).toBe(true);
 
@@ -1286,7 +1285,7 @@ describe("EaNotification Component", () => {
         duration: 0,
       });
 
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       expect(instance.instance.icon).toBe("custom-icon");
 
@@ -1301,7 +1300,7 @@ describe("EaNotification Component", () => {
         duration: 0,
       });
 
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       expect(instance.instance.dangerouslyUseHTMLString).toBe(true);
 
@@ -1317,7 +1316,7 @@ describe("EaNotification Component", () => {
         duration: 0,
       });
 
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       expect(instance.instance.closeIcon).toBe("times");
 
@@ -1332,7 +1331,7 @@ describe("EaNotification Component", () => {
         duration: 0,
       });
 
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       expect(instance.instance.zIndex).toBe(1000);
 
@@ -1350,7 +1349,7 @@ describe("EaNotification Component", () => {
         duration: 0,
       });
 
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       expect(customContainer.querySelector("ea-notification")).toBeTruthy();
 
@@ -1370,7 +1369,7 @@ describe("EaNotification Component", () => {
         duration: 0,
       });
 
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       expect(customContainer.querySelector("ea-notification")).toBeTruthy();
 
@@ -1386,7 +1385,7 @@ describe("EaNotification Component", () => {
         duration: 0,
       });
 
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       expect(document.body.querySelector("ea-notification")).toBeTruthy();
 
@@ -1403,15 +1402,17 @@ describe("EaNotification Component", () => {
         onClose: onCloseFn,
       });
 
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       instance.close();
 
-      await waitForRender();
+      await instance.instance.updateComplete;
 
-      instance.instance.dispatchEvent(new Event("ea-hidden", { bubbles: true }));
+      instance.instance.dispatchEvent(
+        new Event("ea-hidden", { bubbles: true })
+      );
 
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       expect(onCloseFn).toHaveBeenCalled();
     });
@@ -1425,10 +1426,10 @@ describe("EaNotification Component", () => {
         duration: 0,
       });
 
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       vi.advanceTimersByTime(5000);
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       expect(instance.instance.visible).toBe(true);
 
@@ -1444,12 +1445,12 @@ describe("EaNotification Component", () => {
         duration: 3000,
       });
 
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       expect(instance.instance.visible).toBe(true);
 
       vi.advanceTimersByTime(3000);
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       expect(instance.instance.visible).toBe(false);
     });
@@ -1461,14 +1462,14 @@ describe("EaNotification Component", () => {
         duration: 0,
       });
 
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       const el = instance.instance;
       expect(el.isConnected).toBe(true);
 
       instance.close();
 
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       el.dispatchEvent(new Event("ea-hidden", { bubbles: true }));
 
@@ -1482,7 +1483,7 @@ describe("EaNotification Component", () => {
         duration: 0,
       });
 
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       const closeSpy = vi.spyOn(instance.instance, "close");
 
@@ -1526,7 +1527,7 @@ describe("EaNotification Component", () => {
         duration: 0,
       });
 
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       expect(document.querySelector("ea-notification")).toBeTruthy();
 
@@ -1540,7 +1541,7 @@ describe("EaNotification Component", () => {
         duration: 0,
       });
 
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       expect(instance.instance.variant).toBe("success");
 
@@ -1554,7 +1555,7 @@ describe("EaNotification Component", () => {
         duration: 0,
       });
 
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       expect(instance.instance.variant).toBe("error");
 
@@ -1568,7 +1569,7 @@ describe("EaNotification Component", () => {
         duration: 0,
       });
 
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       expect(instance.instance.visible).toBe(true);
 
@@ -1582,7 +1583,7 @@ describe("EaNotification Component", () => {
         duration: 0,
       });
 
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       expect(instance.instance.message).toBe("Hello from $notify");
 
@@ -1597,7 +1598,7 @@ describe("EaNotification Component", () => {
         duration: 0,
       });
 
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       expect(instance.instance.placement).toBe("bottom-left");
 
@@ -1612,7 +1613,7 @@ describe("EaNotification Component", () => {
         duration: 0,
       });
 
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       expect(instance.instance.showClose).toBe(true);
 
@@ -1627,7 +1628,7 @@ describe("EaNotification Component", () => {
         duration: 0,
       });
 
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       expect(instance.instance.icon).toBe("star");
 
@@ -1642,7 +1643,7 @@ describe("EaNotification Component", () => {
         duration: 0,
       });
 
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       expect(instance.instance.dangerouslyUseHTMLString).toBe(true);
 
@@ -1660,7 +1661,7 @@ describe("EaNotification Component", () => {
         duration: 0,
       });
 
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       expect(customContainer.querySelector("ea-notification")).toBeTruthy();
 
@@ -1680,7 +1681,7 @@ describe("EaNotification Component", () => {
         duration: 0,
       });
 
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       expect(customContainer.querySelector("ea-notification")).toBeTruthy();
 
@@ -1697,10 +1698,10 @@ describe("EaNotification Component", () => {
         duration: 0,
       });
 
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       vi.advanceTimersByTime(10000);
-      await waitForRender();
+      await instance.instance.updateComplete;
 
       expect(instance.instance.visible).toBe(true);
 
@@ -1725,14 +1726,14 @@ describe("EaNotification Component", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       notification.visible = true;
-      await waitForRender();
+      await notification.updateComplete;
       expect(notification.visible).toBe(true);
 
       notification.visible = false;
-      await waitForRender();
+      await notification.updateComplete;
       expect(notification.visible).toBe(false);
 
       notification.visible = true;
@@ -1756,7 +1757,7 @@ describe("EaNotification Component", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       notification.visible = true;
       notification.visible = false;
@@ -1793,7 +1794,7 @@ describe("EaNotification Component", () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
-      await waitForRender();
+      await notification.updateComplete;
 
       const containerEl =
         notification.shadowRoot.querySelector(".ea-notification");
@@ -1811,7 +1812,7 @@ describe("EaNotification Component", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-notification");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el, {
         rules: { "aria-prohibited-attr": { enabled: false } },
       });
@@ -1822,7 +1823,7 @@ describe("EaNotification Component", () => {
       it("容器应该有 role='alert'", async () => {
         const el = document.createElement("ea-notification");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const containerEl = el.shadowRoot.querySelector('[part="container"]');
         expect(containerEl.getAttribute("role")).toBe("alert");
       });
@@ -1830,7 +1831,7 @@ describe("EaNotification Component", () => {
       it("容器应该有 aria-live='polite'", async () => {
         const el = document.createElement("ea-notification");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const containerEl = el.shadowRoot.querySelector('[part="container"]');
         expect(containerEl.getAttribute("aria-live")).toBe("polite");
       });
@@ -1838,7 +1839,7 @@ describe("EaNotification Component", () => {
       it("关闭图标应该有 aria-label='close'", async () => {
         const el = document.createElement("ea-notification");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         const closeIcon = el.shadowRoot.querySelector('[part="close-icon"]');
         expect(closeIcon.getAttribute("aria-label")).toBe("close");
       });

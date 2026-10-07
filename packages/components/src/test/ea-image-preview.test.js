@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { waitForRender } from "./utils/waitForRender.js";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 class MockIntersectionObserver {
@@ -119,7 +118,7 @@ describe("EaImagePreview Component", () => {
 
     it("内置图标应该有正确的 data-action 属性", async () => {
       const preview = createPreview();
-      await waitForRender();
+      await preview.updateComplete;
 
       const actionMap = {
         ".ea-image-preview__prev-icon": "switch-prev",
@@ -226,10 +225,10 @@ describe("EaImagePreview Component", () => {
 
     it("设置 initialIndex 应该同步设置 index", async () => {
       const preview = createPreview();
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.initialIndex = 2;
-      await waitForRender();
+      await preview.updateComplete;
 
       expect(preview.index).toBe(2);
     });
@@ -243,7 +242,7 @@ describe("EaImagePreview Component", () => {
 
     it("设置 index 应该触发图片渲染", async () => {
       const preview = createPreview({ urlList: ["a.jpg", "b.jpg", "c.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.index = 1;
       expect(
@@ -256,10 +255,10 @@ describe("EaImagePreview Component", () => {
         urlList: ["a.jpg", "b.jpg"],
         infinite: true,
       });
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.index = 2;
-      await waitForRender();
+      await preview.updateComplete;
 
       expect(preview.index).toBe(0);
     });
@@ -269,10 +268,10 @@ describe("EaImagePreview Component", () => {
         urlList: ["a.jpg", "b.jpg"],
         infinite: true,
       });
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.index = -1;
-      await waitForRender();
+      await preview.updateComplete;
 
       expect(preview.index).toBe(1);
     });
@@ -282,10 +281,10 @@ describe("EaImagePreview Component", () => {
         urlList: ["a.jpg", "b.jpg"],
         infinite: false,
       });
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.index = 5;
-      await waitForRender();
+      await preview.updateComplete;
 
       expect(preview.index).toBeLessThanOrEqual(1);
     });
@@ -295,17 +294,17 @@ describe("EaImagePreview Component", () => {
         urlList: ["a.jpg", "b.jpg"],
         infinite: false,
       });
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.index = -1;
-      await waitForRender();
+      await preview.updateComplete;
 
       expect(preview.index).toBeGreaterThanOrEqual(0);
     });
 
     it("设置 index 应该触发 _renderImage", async () => {
       const preview = createPreview({ urlList: ["a.jpg", "b.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.index = 1;
       const img = preview.shadowRoot.querySelector(".ea-image-preview__img");
@@ -322,7 +321,7 @@ describe("EaImagePreview Component", () => {
     it("应该支持关闭无限循环", async () => {
       const preview = document.createElement("ea-image-preview");
       container.appendChild(preview);
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.infinite = false;
       expect(preview.infinite).toBe(false);
@@ -351,7 +350,7 @@ describe("EaImagePreview Component", () => {
 
     it("应该支持设置 zoom", async () => {
       const preview = createPreview();
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.setAttribute("zoom", "2");
       expect(preview.zoom).toBe(2);
@@ -366,10 +365,10 @@ describe("EaImagePreview Component", () => {
 
     it("设置 scale 应该设置 CSS 变量", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.scale = 2;
-      await waitForRender();
+      await preview.updateComplete;
 
       const content = preview.shadowRoot.querySelector(".ea-overlay__content");
       expect(content.style.getPropertyValue("--ea-image-preview-scale")).toBe(
@@ -379,7 +378,7 @@ describe("EaImagePreview Component", () => {
 
     it("scale 在 minScale~maxScale 范围内应该正常设置", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.scale = 2;
       expect(preview.scale).toBe(2);
@@ -387,26 +386,26 @@ describe("EaImagePreview Component", () => {
 
     it("scale 超过 maxScale 应该被拒绝", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.scale = 5;
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.scale = 100;
-      await waitForRender();
+      await preview.updateComplete;
 
       expect(preview.scale).toBe(5);
     });
 
     it("scale 低于 minScale 应该被拒绝", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.scale = 0.5;
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.scale = 0.01;
-      await waitForRender();
+      await preview.updateComplete;
 
       expect(preview.scale).toBe(0.5);
     });
@@ -438,10 +437,10 @@ describe("EaImagePreview Component", () => {
     it("设置 showProgress 应该添加对应 CSS 状态类", async () => {
       const preview = document.createElement("ea-image-preview");
       container.appendChild(preview);
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.setAttribute("show-progress", "");
-      await waitForRender();
+      await preview.updateComplete;
 
       const overlayEl = preview.shadowRoot.querySelector(".ea-overlay");
       expect(overlayEl.classList.contains("is-show-progress")).toBe(true);
@@ -449,7 +448,7 @@ describe("EaImagePreview Component", () => {
 
     it("showProgress 为 false 时不应包含 show-progress 类名", async () => {
       const preview = createPreview({ showProgress: false });
-      await waitForRender();
+      await preview.updateComplete;
 
       const overlayEl = preview.shadowRoot.querySelector(".ea-overlay");
       expect(
@@ -466,10 +465,10 @@ describe("EaImagePreview Component", () => {
 
     it("设置 urlList 应该触发图片渲染", async () => {
       const preview = createPreview();
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.urlList = ["a.jpg", "b.jpg"];
-      await waitForRender();
+      await preview.updateComplete;
 
       expect(
         preview.shadowRoot.querySelector(".ea-image-preview__img")
@@ -478,7 +477,7 @@ describe("EaImagePreview Component", () => {
 
     it("设置 urlList 后 index 应该重置为 initialIndex", async () => {
       const preview = createPreview({ initialIndex: 1 });
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.urlList = ["a.jpg", "b.jpg", "c.jpg"];
       expect(preview.index).toBe(1);
@@ -500,7 +499,7 @@ describe("EaImagePreview Component", () => {
 
     it("应该支持设置 status", async () => {
       const preview = createPreview();
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.status = "success";
       expect(preview.status).toBe("success");
@@ -508,7 +507,7 @@ describe("EaImagePreview Component", () => {
 
     it("应该支持设置 status 为 error", async () => {
       const preview = createPreview();
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.status = "error";
       expect(preview.status).toBe("error");
@@ -544,10 +543,10 @@ describe("EaImagePreview Component", () => {
   describe("Close Icon Click", () => {
     it("点击关闭图标应该设置 visible 为 false", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.visible = true;
-      await waitForRender();
+      await preview.updateComplete;
 
       const closeIcon = preview.shadowRoot.querySelector(
         ".ea-image-preview__close-icon"
@@ -558,7 +557,7 @@ describe("EaImagePreview Component", () => {
 
     it("点击关闭图标应该调用 hide 方法", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       const hideSpy = vi.spyOn(preview, "hide");
 
@@ -566,7 +565,7 @@ describe("EaImagePreview Component", () => {
         ".ea-image-preview__close-icon"
       );
       closeIcon.click();
-      await waitForRender();
+      await preview.updateComplete;
 
       expect(hideSpy).toHaveBeenCalled();
       hideSpy.mockRestore();
@@ -576,10 +575,10 @@ describe("EaImagePreview Component", () => {
   describe("Event Delegation - Main (Prev/Next)", () => {
     it("点击 prev 图标应该减少 index", async () => {
       const preview = createPreview({ urlList: ["a.jpg", "b.jpg", "c.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.index = 1;
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.shadowRoot.querySelector(".ea-image-preview__prev-icon").click();
       expect(preview.index).toBe(0);
@@ -587,10 +586,10 @@ describe("EaImagePreview Component", () => {
 
     it("点击 next 图标应该增加 index", async () => {
       const preview = createPreview({ urlList: ["a.jpg", "b.jpg", "c.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.index = 0;
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.shadowRoot.querySelector(".ea-image-preview__next-icon").click();
       expect(preview.index).toBe(1);
@@ -598,10 +597,10 @@ describe("EaImagePreview Component", () => {
 
     it("点击 main 区域无 data-action 的元素不应该触发任何操作", async () => {
       const preview = createPreview({ urlList: ["a.jpg", "b.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.index = 1;
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.shadowRoot.querySelector(".ea-image-preview__main").click();
       expect(preview.index).toBe(1);
@@ -611,10 +610,10 @@ describe("EaImagePreview Component", () => {
   describe("Event Delegation - Toolbar (Zoom/Rotate)", () => {
     it("点击 zoom-out 图标应该缩小", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.scale = 2;
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.shadowRoot
         .querySelector(".ea-image-preview__zoom-out-icon")
@@ -624,7 +623,7 @@ describe("EaImagePreview Component", () => {
 
     it("点击 zoom-in 图标应该放大", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.shadowRoot
         .querySelector(".ea-image-preview__zoom-in-icon")
@@ -634,12 +633,12 @@ describe("EaImagePreview Component", () => {
 
     it("点击 rotate-left 图标应该逆时针旋转", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.shadowRoot
         .querySelector(".ea-image-preview__rotate-left-icon")
         .click();
-      await waitForRender();
+      await preview.updateComplete;
 
       const content = preview.shadowRoot.querySelector(".ea-overlay__content");
       expect(content.style.getPropertyValue("--ea-image-preview-rotate")).toBe(
@@ -649,12 +648,12 @@ describe("EaImagePreview Component", () => {
 
     it("点击 rotate-right 图标应该顺时针旋转", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.shadowRoot
         .querySelector(".ea-image-preview__rotate-right-icon")
         .click();
-      await waitForRender();
+      await preview.updateComplete;
 
       const content = preview.shadowRoot.querySelector(".ea-overlay__content");
       expect(content.style.getPropertyValue("--ea-image-preview-rotate")).toBe(
@@ -664,7 +663,7 @@ describe("EaImagePreview Component", () => {
 
     it("点击 toolbar 区域无 data-action 的元素不应该触发任何操作", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       const scaleBefore = preview.scale;
       preview.shadowRoot.querySelector(".ea-image-preview__toolbar").click();
@@ -676,7 +675,7 @@ describe("EaImagePreview Component", () => {
     it("zoom-in 应该按 zoomRate 倍放大", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
       preview.zoomRate = 1.2;
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.scale = 1;
       preview.shadowRoot
@@ -688,7 +687,7 @@ describe("EaImagePreview Component", () => {
     it("zoom-out 应该按 1/zoomRate 倍缩小", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
       preview.zoomRate = 1.2;
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.scale = 1.2;
       preview.shadowRoot
@@ -700,7 +699,7 @@ describe("EaImagePreview Component", () => {
     it("连续 zoom-in 应该累加缩放", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
       preview.zoomRate = 1.2;
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.scale = 1;
       const zoomInIcon = preview.shadowRoot.querySelector(
@@ -708,7 +707,7 @@ describe("EaImagePreview Component", () => {
       );
 
       zoomInIcon.click();
-      await waitForRender();
+      await preview.updateComplete;
 
       zoomInIcon.click();
       expect(preview.scale).toBeCloseTo(1.44, 2);
@@ -718,13 +717,13 @@ describe("EaImagePreview Component", () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
       preview.maxScale = 3;
       preview.zoomRate = 2;
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.scale = 2;
       preview.shadowRoot
         .querySelector(".ea-image-preview__zoom-in-icon")
         .click();
-      await waitForRender();
+      await preview.updateComplete;
 
       expect(preview.scale).toBeLessThanOrEqual(3);
     });
@@ -733,13 +732,13 @@ describe("EaImagePreview Component", () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
       preview.minScale = 0.5;
       preview.zoomRate = 2;
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.scale = 0.5;
       preview.shadowRoot
         .querySelector(".ea-image-preview__zoom-out-icon")
         .click();
-      await waitForRender();
+      await preview.updateComplete;
 
       expect(preview.scale).toBeGreaterThanOrEqual(0.5);
     });
@@ -748,15 +747,15 @@ describe("EaImagePreview Component", () => {
   describe("Rotate Logic", () => {
     it("连续旋转应该累加角度", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       const rotateRightIcon = preview.shadowRoot.querySelector(
         ".ea-image-preview__rotate-right-icon"
       );
       rotateRightIcon.click();
-      await waitForRender();
+      await preview.updateComplete;
       rotateRightIcon.click();
-      await waitForRender();
+      await preview.updateComplete;
 
       const content = preview.shadowRoot.querySelector(".ea-overlay__content");
       expect(content.style.getPropertyValue("--ea-image-preview-rotate")).toBe(
@@ -766,16 +765,16 @@ describe("EaImagePreview Component", () => {
 
     it("交替左右旋转应该正确计算", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.shadowRoot
         .querySelector(".ea-image-preview__rotate-right-icon")
         .click();
-      await waitForRender();
+      await preview.updateComplete;
       preview.shadowRoot
         .querySelector(".ea-image-preview__rotate-left-icon")
         .click();
-      await waitForRender();
+      await preview.updateComplete;
 
       const content = preview.shadowRoot.querySelector(".ea-overlay__content");
       expect(content.style.getPropertyValue("--ea-image-preview-rotate")).toBe(
@@ -785,7 +784,7 @@ describe("EaImagePreview Component", () => {
 
     it("旋转应该触发 rotate 事件", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       const rotateSpy = vi.fn();
       preview.addEventListener("ea-rotate", rotateSpy);
@@ -793,14 +792,14 @@ describe("EaImagePreview Component", () => {
       preview.shadowRoot
         .querySelector(".ea-image-preview__rotate-right-icon")
         .click();
-      await waitForRender();
+      await preview.updateComplete;
 
       expect(rotateSpy).toHaveBeenCalled();
     });
 
     it("rotate 事件应该包含 oldVal 和 rotate detail", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       let capturedEvent = null;
       preview.addEventListener("ea-rotate", e => {
@@ -820,10 +819,10 @@ describe("EaImagePreview Component", () => {
   describe("Progress Rendering", () => {
     it("默认 progress 应该显示 active / total 格式", async () => {
       const preview = createPreview({ urlList: ["a.jpg", "b.jpg", "c.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.index = 0;
-      await waitForRender();
+      await preview.updateComplete;
 
       const progressEl = preview.shadowRoot.querySelector(
         ".ea-image-preview__progress"
@@ -834,10 +833,10 @@ describe("EaImagePreview Component", () => {
 
     it("切换图片后 progress 应该更新", async () => {
       const preview = createPreview({ urlList: ["a.jpg", "b.jpg", "c.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.index = 2;
-      await waitForRender();
+      await preview.updateComplete;
 
       const progressEl = preview.shadowRoot.querySelector(
         ".ea-image-preview__progress"
@@ -847,7 +846,7 @@ describe("EaImagePreview Component", () => {
 
     it("showProgress 为 false 时 progress 应该隐藏", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       const containerEl = preview.shadowRoot.querySelector(".ea-image-preview");
       expect(containerEl.classList.contains("is-show-progress")).toBe(false);
@@ -855,7 +854,7 @@ describe("EaImagePreview Component", () => {
 
     it("showProgress 为 true 时 progress 应该显示", async () => {
       const preview = createPreview({ urlList: ["a.jpg"], showProgress: true });
-      await waitForRender();
+      await preview.updateComplete;
 
       const containerEl = preview.shadowRoot.querySelector(".ea-image-preview");
       expect(containerEl.classList.contains("is-show-progress")).toBe(true);
@@ -866,10 +865,10 @@ describe("EaImagePreview Component", () => {
     it("自定义 progress slot 应该渲染 data-active 和 data-total", async () => {
       const preview = createPreview({ urlList: ["a.jpg", "b.jpg"] });
       preview.innerHTML = `<section slot="progress"><span data-active></span> / <span data-total></span></section>`;
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.index = 0;
-      await waitForRender();
+      await preview.updateComplete;
 
       expect(preview.querySelector("[data-active]").textContent).toBe("1");
       expect(preview.querySelector("[data-total]").textContent).toBe("2");
@@ -878,10 +877,10 @@ describe("EaImagePreview Component", () => {
     it("切换图片后自定义 progress 应该更新", async () => {
       const preview = createPreview({ urlList: ["a.jpg", "b.jpg", "c.jpg"] });
       preview.innerHTML = `<section slot="progress"><span data-active></span> / <span data-total></span></section>`;
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.index = 2;
-      await waitForRender();
+      await preview.updateComplete;
 
       expect(preview.querySelector("[data-active]").textContent).toBe("3");
       expect(preview.querySelector("[data-total]").textContent).toBe("3");
@@ -892,10 +891,10 @@ describe("EaImagePreview Component", () => {
     it("自定义 toolbar slot 的 data-action 元素应该触发对应操作", async () => {
       const preview = createPreview({ urlList: ["a.jpg", "b.jpg"] });
       preview.innerHTML = `<section slot="toolbar"><button data-action="switch-next">Next</button></section>`;
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.index = 0;
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.querySelector('[data-action="switch-next"]').click();
       expect(preview.index).toBe(1);
@@ -904,7 +903,7 @@ describe("EaImagePreview Component", () => {
     it("自定义 toolbar slot 的 zoom-in data-action 应该触发缩放", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
       preview.innerHTML = `<section slot="toolbar"><button data-action="zoom-in">Zoom In</button></section>`;
-      await waitForRender();
+      await preview.updateComplete;
 
       const scaleBefore = preview.scale;
       preview.querySelector('[data-action="zoom-in"]').click();
@@ -914,10 +913,10 @@ describe("EaImagePreview Component", () => {
     it("自定义 toolbar slot 的 rotate-anticlockwise 应该触发逆时针旋转", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
       preview.innerHTML = `<section slot="toolbar"><button data-action="rotate-anticlockwise">Rotate Left</button></section>`;
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.querySelector('[data-action="rotate-anticlockwise"]').click();
-      await waitForRender();
+      await preview.updateComplete;
 
       const content = preview.shadowRoot.querySelector(".ea-overlay__content");
       expect(content.style.getPropertyValue("--ea-image-preview-rotate")).toBe(
@@ -928,10 +927,10 @@ describe("EaImagePreview Component", () => {
     it("自定义 toolbar slot 的 rotate-clockwise 应该触发顺时针旋转", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
       preview.innerHTML = `<section slot="toolbar"><button data-action="rotate-clockwise">Rotate Right</button></section>`;
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.querySelector('[data-action="rotate-clockwise"]').click();
-      await waitForRender();
+      await preview.updateComplete;
 
       const content = preview.shadowRoot.querySelector(".ea-overlay__content");
       expect(content.style.getPropertyValue("--ea-image-preview-rotate")).toBe(
@@ -942,10 +941,10 @@ describe("EaImagePreview Component", () => {
     it("自定义 toolbar slot 的 zoom-out data-action 应该触发缩小", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
       preview.innerHTML = `<section slot="toolbar"><button data-action="zoom-out">Zoom Out</button></section>`;
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.scale = 2;
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.querySelector('[data-action="zoom-out"]').click();
       expect(preview.scale).toBeLessThan(2);
@@ -954,10 +953,10 @@ describe("EaImagePreview Component", () => {
     it("自定义 toolbar slot 的 switch-prev 应该切换到上一张", async () => {
       const preview = createPreview({ urlList: ["a.jpg", "b.jpg", "c.jpg"] });
       preview.innerHTML = `<section slot="toolbar"><button data-action="switch-prev">Prev</button></section>`;
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.index = 1;
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.querySelector('[data-action="switch-prev"]').click();
       expect(preview.index).toBe(0);
@@ -967,7 +966,7 @@ describe("EaImagePreview Component", () => {
   describe("Image Rendering", () => {
     it("设置 urlList 后应该渲染 ea-image 元素", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       const img = preview.shadowRoot.querySelector(".ea-image-preview__img");
       expect(img).toBeTruthy();
@@ -976,7 +975,7 @@ describe("EaImagePreview Component", () => {
 
     it("渲染的 ea-image 应该有正确的 src", async () => {
       const preview = createPreview({ urlList: ["test.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       const img = preview.shadowRoot.querySelector(".ea-image-preview__img");
       expect(img.getAttribute("src")).toBe("test.jpg");
@@ -984,7 +983,7 @@ describe("EaImagePreview Component", () => {
 
     it("渲染的 ea-image 应该设置 fit 为 contain", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       const img = preview.shadowRoot.querySelector(".ea-image-preview__img");
       expect(img.getAttribute("fit")).toBe("contain");
@@ -992,16 +991,16 @@ describe("EaImagePreview Component", () => {
 
     it("切换 index 应该替换当前图片", async () => {
       const preview = createPreview({ urlList: ["a.jpg", "b.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.index = 0;
-      await waitForRender();
+      await preview.updateComplete;
 
       let img = preview.shadowRoot.querySelector(".ea-image-preview__img");
       expect(img.getAttribute("src")).toBe("a.jpg");
 
       preview.index = 1;
-      await waitForRender();
+      await preview.updateComplete;
 
       img = preview.shadowRoot.querySelector(".ea-image-preview__img");
       expect(img.getAttribute("src")).toBe("b.jpg");
@@ -1011,26 +1010,26 @@ describe("EaImagePreview Component", () => {
   describe("switch Event", () => {
     it("切换图片时应该触发 switch 事件", async () => {
       const preview = createPreview({ urlList: ["a.jpg", "b.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.visible = true;
-      await waitForRender();
+      await preview.updateComplete;
 
       const switchSpy = vi.fn();
       preview.addEventListener("ea-switch", switchSpy);
 
       preview.index = 1;
-      await waitForRender();
+      await preview.updateComplete;
 
       expect(switchSpy).toHaveBeenCalled();
     });
 
     it("switch 事件应该包含 index 和 url detail", async () => {
       const preview = createPreview({ urlList: ["a.jpg", "b.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.visible = true;
-      await waitForRender();
+      await preview.updateComplete;
 
       let capturedEvent = null;
       preview.addEventListener("ea-switch", e => {
@@ -1038,7 +1037,7 @@ describe("EaImagePreview Component", () => {
       });
 
       preview.index = 1;
-      await waitForRender();
+      await preview.updateComplete;
 
       expect(capturedEvent).toBeTruthy();
       expect(capturedEvent.detail.index).toBe(1);
@@ -1049,7 +1048,7 @@ describe("EaImagePreview Component", () => {
   describe("Wheel Zoom", () => {
     it("滚轮向上应该放大", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       const overlay = preview.shadowRoot.querySelector(".ea-overlay");
       const wheelEvent = new WheelEvent("wheel", {
@@ -1064,10 +1063,10 @@ describe("EaImagePreview Component", () => {
 
     it("滚轮向下应该缩小", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.scale = 2;
-      await waitForRender();
+      await preview.updateComplete;
 
       const overlay = preview.shadowRoot.querySelector(".ea-overlay");
       const wheelEvent = new WheelEvent("wheel", {
@@ -1084,7 +1083,7 @@ describe("EaImagePreview Component", () => {
   describe("Mouse Drag Move", () => {
     it("mousedown 在 content 上应该开始拖拽", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       const content = preview.shadowRoot.querySelector(".ea-overlay__content");
       const mousedownEvent = new MouseEvent("mousedown", {
@@ -1101,7 +1100,7 @@ describe("EaImagePreview Component", () => {
   describe("setActiveItem Method", () => {
     it("setActiveItem 应该设置 index", async () => {
       const preview = createPreview({ urlList: ["a.jpg", "b.jpg", "c.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.setActiveItem(2);
       expect(preview.index).toBe(2);
@@ -1109,7 +1108,7 @@ describe("EaImagePreview Component", () => {
 
     it("setActiveItem 等同于直接设置 index", async () => {
       const preview = createPreview({ urlList: ["a.jpg", "b.jpg", "c.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.setActiveItem(1);
       expect(preview.index).toBe(1);
@@ -1119,10 +1118,10 @@ describe("EaImagePreview Component", () => {
   describe("reset Method", () => {
     it("reset 应该重置 scale 为 1", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.scale = 3;
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.reset();
       expect(preview.scale).toBe(1);
@@ -1133,10 +1132,10 @@ describe("EaImagePreview Component", () => {
         urlList: ["a.jpg", "b.jpg", "c.jpg"],
         initialIndex: 1,
       });
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.index = 2;
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.reset();
       expect(preview.index).toBe(1);
@@ -1144,15 +1143,15 @@ describe("EaImagePreview Component", () => {
 
     it("reset 应该重置旋转角度为 0", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.shadowRoot
         .querySelector(".ea-image-preview__rotate-right-icon")
         .click();
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.reset();
-      await waitForRender();
+      await preview.updateComplete;
 
       const content = preview.shadowRoot.querySelector(".ea-overlay__content");
       expect(content.style.getPropertyValue("--ea-image-preview-rotate")).toBe(
@@ -1162,10 +1161,10 @@ describe("EaImagePreview Component", () => {
 
     it("reset 应该重置移动位置为 0", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.reset();
-      await waitForRender();
+      await preview.updateComplete;
 
       const content = preview.shadowRoot.querySelector(".ea-overlay__content");
       expect(
@@ -1180,10 +1179,10 @@ describe("EaImagePreview Component", () => {
   describe("ea-closed Event Auto Reset", () => {
     it("ea-closed 事件应该触发 reset", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.scale = 3;
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.reset();
       expect(preview.scale).toBe(1);
@@ -1191,10 +1190,10 @@ describe("EaImagePreview Component", () => {
 
     it("_handleClosed 方法应该检查 e.target 是否为组件自身", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.scale = 3;
-      await waitForRender();
+      await preview.updateComplete;
 
       const fakeEvent = new CustomEvent("ea-closed", {
         bubbles: true,
@@ -1210,10 +1209,10 @@ describe("EaImagePreview Component", () => {
 
     it("_handleClosed 方法在 e.target 为组件自身时应该调用 reset", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.scale = 3;
-      await waitForRender();
+      await preview.updateComplete;
 
       const realEvent = new CustomEvent("ea-closed", {
         bubbles: true,
@@ -1231,10 +1230,10 @@ describe("EaImagePreview Component", () => {
   describe("CSS Variables", () => {
     it("应该设置 --ea-image-preview-scale CSS 变量", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.scale = 2;
-      await waitForRender();
+      await preview.updateComplete;
 
       const content = preview.shadowRoot.querySelector(".ea-overlay__content");
       expect(content.style.getPropertyValue("--ea-image-preview-scale")).toBe(
@@ -1244,12 +1243,12 @@ describe("EaImagePreview Component", () => {
 
     it("应该设置 --ea-image-preview-rotate CSS 变量", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.shadowRoot
         .querySelector(".ea-image-preview__rotate-right-icon")
         .click();
-      await waitForRender();
+      await preview.updateComplete;
 
       const content = preview.shadowRoot.querySelector(".ea-overlay__content");
       expect(content.style.getPropertyValue("--ea-image-preview-rotate")).toBe(
@@ -1259,7 +1258,7 @@ describe("EaImagePreview Component", () => {
 
     it("应该支持 --ea-image-preview-img-move-x/y CSS 变量", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
-      await waitForRender();
+      await preview.updateComplete;
 
       const content = preview.shadowRoot.querySelector(".ea-overlay__content");
       expect(
@@ -1280,7 +1279,7 @@ describe("EaImagePreview Component", () => {
 
     it("组件移除时应该清理资源", async () => {
       const preview = createPreview();
-      await waitForRender();
+      await preview.updateComplete;
 
       preview.remove();
       expect(preview.isConnected).toBe(false);
@@ -1291,7 +1290,7 @@ describe("EaImagePreview Component", () => {
     it("应有 role='dialog'", async () => {
       const preview = document.createElement("ea-image-preview");
       container.appendChild(preview);
-      await waitForRender();
+      await preview.updateComplete;
 
       expect(preview.getAttribute("role")).toBe("dialog");
     });
@@ -1299,7 +1298,7 @@ describe("EaImagePreview Component", () => {
     it("应有 aria-modal='true'", async () => {
       const preview = document.createElement("ea-image-preview");
       container.appendChild(preview);
-      await waitForRender();
+      await preview.updateComplete;
 
       expect(preview.getAttribute("aria-modal")).toBe("true");
     });
@@ -1307,7 +1306,7 @@ describe("EaImagePreview Component", () => {
     it("应有 aria-label='Image Preview'", async () => {
       const preview = document.createElement("ea-image-preview");
       container.appendChild(preview);
-      await waitForRender();
+      await preview.updateComplete;
 
       expect(preview.getAttribute("aria-label")).toBe("Image Preview");
     });
@@ -1315,7 +1314,7 @@ describe("EaImagePreview Component", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-image-preview");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });

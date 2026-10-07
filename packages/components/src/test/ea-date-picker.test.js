@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { waitForRender } from "./utils/waitForRender.js";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 import "../components/ea-date-picker/index";
@@ -162,7 +161,7 @@ describe("EaDatePicker", () => {
       datePicker.setAttribute("value", "2026-01-15");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const input = datePicker.shadowRoot.querySelector("ea-input");
       expect(input.value).toBe("2026-01-15");
@@ -173,10 +172,10 @@ describe("EaDatePicker", () => {
       datePicker.setAttribute("value", "2026-06-15");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleOpen();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const calendar = datePicker.shadowRoot.querySelector("ea-calendar");
       expect(calendar.getAttribute("value")).toBe("2026-06-15");
@@ -197,7 +196,7 @@ describe("EaDatePicker", () => {
 
 
       datePicker.value = "2026-08-20";
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const yearBtn = datePicker.shadowRoot.querySelector(
         ".ea-date-picker__header-year"
@@ -231,7 +230,7 @@ describe("EaDatePicker", () => {
       datePicker.setAttribute("placeholder", "请选择日期");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const input = datePicker.shadowRoot.querySelector("ea-input");
       expect(input.getAttribute("placeholder")).toBe("请选择日期");
@@ -274,7 +273,7 @@ describe("EaDatePicker", () => {
       datePicker.disabled = true;
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const containerEl =
         datePicker.shadowRoot.querySelector(".ea-date-picker");
@@ -286,11 +285,11 @@ describe("EaDatePicker", () => {
       datePicker.disabled = true;
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleOpen();
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const containerEl =
         datePicker.shadowRoot.querySelector(".ea-date-picker");
@@ -314,7 +313,7 @@ describe("EaDatePicker", () => {
       datePicker.disabled = true;
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const input = datePicker.shadowRoot.querySelector("ea-input");
       expect(input.hasAttribute("disabled")).toBe(true);
@@ -364,11 +363,11 @@ describe("EaDatePicker", () => {
       datePicker.setAttribute("variant", "year");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleOpen();
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const containerEl =
         datePicker.shadowRoot.querySelector(".ea-date-picker");
@@ -380,11 +379,11 @@ describe("EaDatePicker", () => {
       datePicker.setAttribute("variant", "month");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleOpen();
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const containerEl =
         datePicker.shadowRoot.querySelector(".ea-date-picker");
@@ -396,11 +395,11 @@ describe("EaDatePicker", () => {
       datePicker.setAttribute("variant", "date");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleOpen();
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const containerEl =
         datePicker.shadowRoot.querySelector(".ea-date-picker");
@@ -434,7 +433,7 @@ describe("EaDatePicker", () => {
       datePicker.setAttribute("value", "2026");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const input = datePicker.shadowRoot.querySelector("ea-input");
       expect(input.value).toBe("2026");
@@ -446,7 +445,7 @@ describe("EaDatePicker", () => {
       datePicker.setAttribute("value", "2026-05");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const input = datePicker.shadowRoot.querySelector("ea-input");
       expect(input.value).toBe("2026-05");
@@ -460,17 +459,17 @@ describe("EaDatePicker", () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleOpen();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const yearBtn = datePicker.shadowRoot.querySelector(
         ".ea-date-picker__header-year"
       );
       yearBtn.click();
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const containerEl =
         datePicker.shadowRoot.querySelector(".ea-date-picker");
@@ -481,17 +480,17 @@ describe("EaDatePicker", () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleOpen();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const monthBtn = datePicker.shadowRoot.querySelector(
         ".ea-date-picker__header-month"
       );
       monthBtn.click();
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const containerEl =
         datePicker.shadowRoot.querySelector(".ea-date-picker");
@@ -502,23 +501,23 @@ describe("EaDatePicker", () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleOpen();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const yearBtn = datePicker.shadowRoot.querySelector(
         ".ea-date-picker__header-year"
       );
       yearBtn.click();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const yearItems = datePicker.shadowRoot.querySelectorAll(
         ".ea-date-picker__year-item"
       );
       expect(yearItems.length).toBeGreaterThan(0);
       yearItems[5].click();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const containerEl =
         datePicker.shadowRoot.querySelector(".ea-date-picker");
@@ -529,16 +528,16 @@ describe("EaDatePicker", () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleOpen();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const yearBtn = datePicker.shadowRoot.querySelector(
         ".ea-date-picker__header-year"
       );
       yearBtn.click();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const yearItems = datePicker.shadowRoot.querySelectorAll(
         ".ea-date-picker__year-item"
@@ -550,16 +549,16 @@ describe("EaDatePicker", () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleOpen();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const monthBtn = datePicker.shadowRoot.querySelector(
         ".ea-date-picker__header-month"
       );
       monthBtn.click();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const monthItems = datePicker.shadowRoot.querySelectorAll(
         ".ea-date-picker__month-item"
@@ -571,10 +570,10 @@ describe("EaDatePicker", () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleOpen();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const handler = vi.fn();
       datePicker.addEventListener("ea-panel-change", handler);
@@ -584,7 +583,7 @@ describe("EaDatePicker", () => {
       );
       yearBtn.click();
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       expect(handler).toHaveBeenCalled();
       expect(handler.mock.calls[0][0].detail.view).toBe("year-panel");
@@ -599,16 +598,16 @@ describe("EaDatePicker", () => {
       datePicker.setAttribute("value", "2026-06-15");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleOpen();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const yearBtn = datePicker.shadowRoot.querySelector(
         ".ea-date-picker__header-year"
       );
       yearBtn.click();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const selected = datePicker.shadowRoot.querySelector(
         ".ea-date-picker__year-item.is-selected"
@@ -623,10 +622,10 @@ describe("EaDatePicker", () => {
       datePicker.setAttribute("value", "2026");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleOpen();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const changeHandler = vi.fn();
       datePicker.addEventListener("ea-change", changeHandler);
@@ -636,7 +635,7 @@ describe("EaDatePicker", () => {
       );
       yearItems[3].click();
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       expect(changeHandler).toHaveBeenCalled();
     });
@@ -650,16 +649,16 @@ describe("EaDatePicker", () => {
       datePicker.setAttribute("value", "2026-06-15");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleOpen();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const monthBtn = datePicker.shadowRoot.querySelector(
         ".ea-date-picker__header-month"
       );
       monthBtn.click();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const selected = datePicker.shadowRoot.querySelector(
         ".ea-date-picker__month-item.is-selected"
@@ -673,10 +672,10 @@ describe("EaDatePicker", () => {
       datePicker.variant = "month";
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleOpen();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const changeHandler = vi.fn();
       datePicker.addEventListener("ea-change", changeHandler);
@@ -686,7 +685,7 @@ describe("EaDatePicker", () => {
       );
       monthItems[0].click();
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       expect(changeHandler).toHaveBeenCalled();
     });
@@ -726,7 +725,7 @@ describe("EaDatePicker", () => {
       datePicker.setAttribute("size", "small");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const containerEl =
         datePicker.shadowRoot.querySelector(".ea-date-picker");
@@ -740,7 +739,7 @@ describe("EaDatePicker", () => {
       datePicker.setAttribute("size", "large");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const containerEl =
         datePicker.shadowRoot.querySelector(".ea-date-picker");
@@ -754,7 +753,7 @@ describe("EaDatePicker", () => {
       datePicker.setAttribute("size", "small");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const prevYear = datePicker.shadowRoot.querySelector(
         ".ea-date-picker__btn-prev-year"
@@ -771,7 +770,7 @@ describe("EaDatePicker", () => {
       datePicker.setAttribute("size", "large");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const input = datePicker.shadowRoot.querySelector("ea-input");
       expect(input.getAttribute("size")).toBe("large");
@@ -782,7 +781,7 @@ describe("EaDatePicker", () => {
       datePicker.setAttribute("size", "small");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const containerEl =
         datePicker.shadowRoot.querySelector(".ea-date-picker");
@@ -791,7 +790,7 @@ describe("EaDatePicker", () => {
       );
 
       datePicker.size = "large";
-      await waitForRender();
+      await datePicker.updateComplete;
 
       expect(containerEl.classList.contains("ea-date-picker--large")).toBe(
         true
@@ -836,7 +835,7 @@ describe("EaDatePicker", () => {
       datePicker.setAttribute("align", "center");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const containerEl =
         datePicker.shadowRoot.querySelector(".ea-date-picker");
@@ -849,7 +848,7 @@ describe("EaDatePicker", () => {
 
 
       datePicker.align = "right";
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const containerEl =
         datePicker.shadowRoot.querySelector(".ea-date-picker");
@@ -894,7 +893,7 @@ describe("EaDatePicker", () => {
       datePicker.setAttribute("value", "2026-06-15");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const input = datePicker.shadowRoot.querySelector("ea-input");
       expect(input.value).toBe("2026/06/15");
@@ -968,7 +967,7 @@ describe("EaDatePicker", () => {
       datePicker.setAttribute("label", "出生日期");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const input = datePicker.shadowRoot.querySelector("ea-input");
       expect(input.label).toBe("出生日期");
@@ -1011,7 +1010,7 @@ describe("EaDatePicker", () => {
       datePicker.required = true;
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const input = datePicker.shadowRoot.querySelector("ea-input");
       expect(input.hasAttribute("required")).toBe(true);
@@ -1022,7 +1021,7 @@ describe("EaDatePicker", () => {
       datePicker.required = true;
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       try {
         const isValid = datePicker.checkValidity();
@@ -1058,7 +1057,7 @@ describe("EaDatePicker", () => {
       datePicker.setAttribute("width", "400px");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const containerEl =
         datePicker.shadowRoot.querySelector(".ea-date-picker");
@@ -1077,10 +1076,10 @@ describe("EaDatePicker", () => {
       datePicker.setAttribute("value", "2026-06-15");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleOpen();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const prevYearBtn = datePicker.shadowRoot.querySelector(
         ".ea-date-picker__btn-prev-year"
@@ -1091,7 +1090,7 @@ describe("EaDatePicker", () => {
       const oldYear = yearBtn.textContent;
 
       prevYearBtn.click();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       expect(yearBtn.textContent).not.toBe(oldYear);
     });
@@ -1101,10 +1100,10 @@ describe("EaDatePicker", () => {
       datePicker.setAttribute("value", "2026-06-15");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleOpen();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const nextYearBtn = datePicker.shadowRoot.querySelector(
         ".ea-date-picker__btn-next-year"
@@ -1115,7 +1114,7 @@ describe("EaDatePicker", () => {
       const oldYear = yearBtn.textContent;
 
       nextYearBtn.click();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       expect(yearBtn.textContent).not.toBe(oldYear);
     });
@@ -1125,10 +1124,10 @@ describe("EaDatePicker", () => {
       datePicker.setAttribute("value", "2026-06-15");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleOpen();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const prevMonthBtn = datePicker.shadowRoot.querySelector(
         ".ea-date-picker__btn-prev-month"
@@ -1139,7 +1138,7 @@ describe("EaDatePicker", () => {
       const oldMonth = monthBtn.textContent;
 
       prevMonthBtn.click();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       expect(monthBtn.textContent).not.toBe(oldMonth);
     });
@@ -1149,10 +1148,10 @@ describe("EaDatePicker", () => {
       datePicker.setAttribute("value", "2026-06-15");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleOpen();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const nextMonthBtn = datePicker.shadowRoot.querySelector(
         ".ea-date-picker__btn-next-month"
@@ -1163,7 +1162,7 @@ describe("EaDatePicker", () => {
       const oldMonth = monthBtn.textContent;
 
       nextMonthBtn.click();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       expect(monthBtn.textContent).not.toBe(oldMonth);
     });
@@ -1173,16 +1172,16 @@ describe("EaDatePicker", () => {
       datePicker.setAttribute("value", "2026-06-15");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleOpen();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const yearBtn = datePicker.shadowRoot.querySelector(
         ".ea-date-picker__header-year"
       );
       yearBtn.click();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const prevYearBtn = datePicker.shadowRoot.querySelector(
         ".ea-date-picker__btn-prev-year"
@@ -1190,7 +1189,7 @@ describe("EaDatePicker", () => {
       const oldDisplay = yearBtn.textContent;
 
       prevYearBtn.click();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       expect(yearBtn.textContent).not.toBe(oldDisplay);
     });
@@ -1203,11 +1202,11 @@ describe("EaDatePicker", () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleOpen();
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const containerEl =
         datePicker.shadowRoot.querySelector(".ea-date-picker");
@@ -1218,13 +1217,13 @@ describe("EaDatePicker", () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleOpen();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleClose();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const containerEl =
         datePicker.shadowRoot.querySelector(".ea-date-picker");
@@ -1235,16 +1234,16 @@ describe("EaDatePicker", () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleOpen();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleClose();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleOpen();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const containerEl =
         datePicker.shadowRoot.querySelector(".ea-date-picker");
@@ -1255,14 +1254,14 @@ describe("EaDatePicker", () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const handler = vi.fn();
       datePicker.addEventListener("ea-visible-change", handler);
 
       datePicker.handleOpen();
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       expect(handler).toHaveBeenCalled();
       expect(handler.mock.calls[0][0].detail.visible).toBe(true);
@@ -1272,17 +1271,17 @@ describe("EaDatePicker", () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleOpen();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const handler = vi.fn();
       datePicker.addEventListener("ea-visible-change", handler);
 
       datePicker.handleClose();
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       expect(handler).toHaveBeenCalled();
       expect(handler.mock.calls[0][0].detail.visible).toBe(false);
@@ -1292,16 +1291,16 @@ describe("EaDatePicker", () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleOpen();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const handler = vi.fn();
       datePicker.addEventListener("ea-visible-change", handler);
 
       datePicker.handleOpen();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       expect(handler).not.toHaveBeenCalled();
     });
@@ -1314,10 +1313,10 @@ describe("EaDatePicker", () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleOpen();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const changeHandler = vi.fn();
       datePicker.addEventListener("ea-change", changeHandler);
@@ -1330,7 +1329,7 @@ describe("EaDatePicker", () => {
         })
       );
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       expect(changeHandler).toHaveBeenCalled();
     });
@@ -1339,10 +1338,10 @@ describe("EaDatePicker", () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleOpen();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const calendar = datePicker.shadowRoot.querySelector("ea-calendar");
       calendar.dispatchEvent(
@@ -1352,7 +1351,7 @@ describe("EaDatePicker", () => {
         })
       );
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const containerEl =
         datePicker.shadowRoot.querySelector(".ea-date-picker");
@@ -1363,10 +1362,10 @@ describe("EaDatePicker", () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleOpen();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const calendar = datePicker.shadowRoot.querySelector("ea-calendar");
       calendar.dispatchEvent(
@@ -1376,7 +1375,7 @@ describe("EaDatePicker", () => {
         })
       );
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const input = datePicker.shadowRoot.querySelector("ea-input");
       expect(input.value).toContain("2026");
@@ -1386,10 +1385,10 @@ describe("EaDatePicker", () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleOpen();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const changeHandler = vi.fn();
       datePicker.addEventListener("ea-change", changeHandler);
@@ -1402,7 +1401,7 @@ describe("EaDatePicker", () => {
         })
       );
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       expect(changeHandler).toHaveBeenCalled();
       const detail = changeHandler.mock.calls[0][0].detail;
@@ -1415,10 +1414,10 @@ describe("EaDatePicker", () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleOpen();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const changeHandler = vi.fn();
       datePicker.addEventListener("ea-change", changeHandler);
@@ -1431,7 +1430,7 @@ describe("EaDatePicker", () => {
         })
       );
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       expect(changeHandler).toHaveBeenCalled();
       const event = changeHandler.mock.calls[0][0];
@@ -1446,7 +1445,7 @@ describe("EaDatePicker", () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const changeHandler = vi.fn();
       datePicker.addEventListener("ea-change", changeHandler);
@@ -1474,14 +1473,14 @@ describe("EaDatePicker", () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const handler = vi.fn();
       datePicker.addEventListener("ea-panel-change", handler);
 
       datePicker.handleOpen();
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       expect(handler).toHaveBeenCalled();
     });
@@ -1490,14 +1489,14 @@ describe("EaDatePicker", () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const handler = vi.fn();
       datePicker.addEventListener("ea-panel-change", handler);
 
       datePicker.handleOpen();
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const detail = handler.mock.calls[0][0].detail;
       expect(detail.mode).toBeDefined();
@@ -1508,13 +1507,13 @@ describe("EaDatePicker", () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const handler = vi.fn();
       datePicker.addEventListener("ea-visible-change", handler);
 
       datePicker.handleOpen();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       expect(handler).toHaveBeenCalled();
       const event = handler.mock.calls[0][0];
@@ -1547,7 +1546,7 @@ describe("EaDatePicker", () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       expect(typeof datePicker.handleOpen).toBe("function");
       expect(() => datePicker.handleOpen()).not.toThrow();
@@ -1557,7 +1556,7 @@ describe("EaDatePicker", () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       expect(typeof datePicker.handleClose).toBe("function");
       expect(() => datePicker.handleClose()).not.toThrow();
@@ -1617,7 +1616,7 @@ describe("EaDatePicker", () => {
       datePicker.setAttribute("value", "2026-01-01");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       try {
         const isValid = datePicker.checkValidity();
@@ -1631,7 +1630,7 @@ describe("EaDatePicker", () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       try {
         expect(() => datePicker.reportValidity()).not.toThrow();
@@ -1648,14 +1647,14 @@ describe("EaDatePicker", () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleOpen();
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.$updateLocalization("en");
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const monthItems = datePicker.shadowRoot.querySelectorAll(
         ".ea-date-picker__month-item"
@@ -1667,11 +1666,11 @@ describe("EaDatePicker", () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.$updateLocalization("zh-CN");
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const monthItems = datePicker.shadowRoot.querySelectorAll(
         ".ea-date-picker__month-item"
@@ -1801,7 +1800,7 @@ describe("EaDatePicker", () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const containerEl =
         datePicker.shadowRoot.querySelector(".ea-date-picker");
@@ -1813,7 +1812,7 @@ describe("EaDatePicker", () => {
       datePicker.setAttribute("size", "small");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const containerEl =
         datePicker.shadowRoot.querySelector(".ea-date-picker");
@@ -1827,7 +1826,7 @@ describe("EaDatePicker", () => {
       datePicker.setAttribute("size", "large");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const containerEl =
         datePicker.shadowRoot.querySelector(".ea-date-picker");
@@ -1840,7 +1839,7 @@ describe("EaDatePicker", () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const containerEl =
         datePicker.shadowRoot.querySelector(".ea-date-picker");
@@ -1854,7 +1853,7 @@ describe("EaDatePicker", () => {
       datePicker.disabled = true;
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const containerEl =
         datePicker.shadowRoot.querySelector(".ea-date-picker");
@@ -1866,7 +1865,7 @@ describe("EaDatePicker", () => {
       datePicker.setAttribute("align", "center");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const containerEl =
         datePicker.shadowRoot.querySelector(".ea-date-picker");
@@ -1878,7 +1877,7 @@ describe("EaDatePicker", () => {
       datePicker.align = "right";
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const containerEl =
         datePicker.shadowRoot.querySelector(".ea-date-picker");
@@ -1889,7 +1888,7 @@ describe("EaDatePicker", () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const containerEl =
         datePicker.shadowRoot.querySelector(".ea-date-picker");
@@ -1900,11 +1899,11 @@ describe("EaDatePicker", () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleOpen();
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const containerEl =
         datePicker.shadowRoot.querySelector(".ea-date-picker");
@@ -1916,11 +1915,11 @@ describe("EaDatePicker", () => {
       datePicker.variant = "date";
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleOpen();
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const containerEl =
         datePicker.shadowRoot.querySelector(".ea-date-picker");
@@ -1932,11 +1931,11 @@ describe("EaDatePicker", () => {
       datePicker.variant = "month";
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleOpen();
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const containerEl =
         datePicker.shadowRoot.querySelector(".ea-date-picker");
@@ -1948,11 +1947,11 @@ describe("EaDatePicker", () => {
       datePicker.variant = "year";
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleOpen();
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const containerEl =
         datePicker.shadowRoot.querySelector(".ea-date-picker");
@@ -1963,7 +1962,7 @@ describe("EaDatePicker", () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const containerEl =
         datePicker.shadowRoot.querySelector(".ea-date-picker");
@@ -1996,13 +1995,13 @@ describe("EaDatePicker", () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       for (let i = 0; i < 5; i++) {
         datePicker.handleOpen();
-        await waitForRender();
+        await datePicker.updateComplete;
         datePicker.handleClose();
-        await waitForRender();
+        await datePicker.updateComplete;
       }
 
       expect(datePicker.shadowRoot).toBeTruthy();
@@ -2013,11 +2012,11 @@ describe("EaDatePicker", () => {
       datePicker.disabled = true;
       container.appendChild(datePicker);
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       datePicker.handleOpen();
 
-      await waitForRender();
+      await datePicker.updateComplete;
 
       const containerEl =
         datePicker.shadowRoot.querySelector(".ea-date-picker");
@@ -2072,21 +2071,21 @@ describe("EaDatePicker", () => {
       it("ArrowDown 应该打开日期面板", async () => {
         const el = document.createElement("ea-date-picker");
         container.appendChild(el);
-        await waitForRender();
-        await waitForRender();
+        await el.updateComplete;
+        await el.updateComplete;
         el.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true }));
-        await waitForRender();
+        await el.updateComplete;
       });
 
       it("Escape 应该关闭日期面板", async () => {
         const el = document.createElement("ea-date-picker");
         container.appendChild(el);
-        await waitForRender();
-        await waitForRender();
+        await el.updateComplete;
+        await el.updateComplete;
         el.handleOpen();
-        await waitForRender();
+        await el.updateComplete;
         el.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
-        await waitForRender();
+        await el.updateComplete;
         expect(el._container.classList.contains("is-open")).toBe(false);
       });
     });
@@ -2095,7 +2094,7 @@ describe("EaDatePicker", () => {
       const el = document.createElement("ea-date-picker");
       el.setAttribute("label", "Date");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });
@@ -2104,7 +2103,7 @@ describe("EaDatePicker", () => {
       it("输入框应该有 role=combobox", async () => {
         const datePicker = document.createElement("ea-date-picker");
         container.appendChild(datePicker);
-        await waitForRender();
+        await datePicker.updateComplete;
         const input = datePicker.shadowRoot.querySelector("ea-input");
         expect(input.getAttribute("role")).toBe("combobox");
       });
@@ -2112,7 +2111,7 @@ describe("EaDatePicker", () => {
       it("输入框应该有 aria-haspopup=dialog", async () => {
         const datePicker = document.createElement("ea-date-picker");
         container.appendChild(datePicker);
-        await waitForRender();
+        await datePicker.updateComplete;
         const input = datePicker.shadowRoot.querySelector("ea-input");
         expect(input.getAttribute("aria-haspopup")).toBe("dialog");
       });
@@ -2120,7 +2119,7 @@ describe("EaDatePicker", () => {
       it("输入框应该有 aria-autocomplete=none", async () => {
         const datePicker = document.createElement("ea-date-picker");
         container.appendChild(datePicker);
-        await waitForRender();
+        await datePicker.updateComplete;
         const input = datePicker.shadowRoot.querySelector("ea-input");
         expect(input.getAttribute("aria-autocomplete")).toBe("none");
       });
@@ -2128,7 +2127,7 @@ describe("EaDatePicker", () => {
       it("输入框应该有 aria-controls 指向 dialog", async () => {
         const datePicker = document.createElement("ea-date-picker");
         container.appendChild(datePicker);
-        await waitForRender();
+        await datePicker.updateComplete;
         const input = datePicker.shadowRoot.querySelector("ea-input");
         const dropdownWrap = datePicker.shadowRoot.querySelector(
           ".ea-date-picker__dropdown-wrap"
@@ -2139,7 +2138,7 @@ describe("EaDatePicker", () => {
       it("关闭时输入框 aria-expanded 应该为 false", async () => {
         const datePicker = document.createElement("ea-date-picker");
         container.appendChild(datePicker);
-        await waitForRender();
+        await datePicker.updateComplete;
         const input = datePicker.shadowRoot.querySelector("ea-input");
         expect(input.getAttribute("aria-expanded")).toBe("false");
       });
@@ -2147,9 +2146,9 @@ describe("EaDatePicker", () => {
       it("打开时输入框 aria-expanded 应该为 true", async () => {
         const datePicker = document.createElement("ea-date-picker");
         container.appendChild(datePicker);
-        await waitForRender();
+        await datePicker.updateComplete;
         datePicker.handleOpen();
-        await waitForRender();
+        await datePicker.updateComplete;
         const input = datePicker.shadowRoot.querySelector("ea-input");
         expect(input.getAttribute("aria-expanded")).toBe("true");
       });
@@ -2157,7 +2156,7 @@ describe("EaDatePicker", () => {
       it("下拉面板应该有 role=dialog", async () => {
         const datePicker = document.createElement("ea-date-picker");
         container.appendChild(datePicker);
-        await waitForRender();
+        await datePicker.updateComplete;
         const dropdownWrap = datePicker.shadowRoot.querySelector(
           ".ea-date-picker__dropdown-wrap"
         );
@@ -2167,7 +2166,7 @@ describe("EaDatePicker", () => {
       it("下拉面板应该有 aria-modal=true", async () => {
         const datePicker = document.createElement("ea-date-picker");
         container.appendChild(datePicker);
-        await waitForRender();
+        await datePicker.updateComplete;
         const dropdownWrap = datePicker.shadowRoot.querySelector(
           ".ea-date-picker__dropdown-wrap"
         );
@@ -2177,7 +2176,7 @@ describe("EaDatePicker", () => {
       it("下拉面板应该有 aria-labelledby 指向头部标签", async () => {
         const datePicker = document.createElement("ea-date-picker");
         container.appendChild(datePicker);
-        await waitForRender();
+        await datePicker.updateComplete;
         const dropdownWrap = datePicker.shadowRoot.querySelector(
           ".ea-date-picker__dropdown-wrap"
         );
@@ -2193,21 +2192,21 @@ describe("EaDatePicker", () => {
         const datePicker = document.createElement("ea-date-picker");
         datePicker.disabled = true;
         container.appendChild(datePicker);
-        await waitForRender();
+        await datePicker.updateComplete;
         expect(datePicker.getAttribute("aria-disabled")).toBe("true");
       });
 
       it("宿主元素非 disabled 时 aria-disabled 应该为 false", async () => {
         const datePicker = document.createElement("ea-date-picker");
         container.appendChild(datePicker);
-        await waitForRender();
+        await datePicker.updateComplete;
         expect(datePicker.getAttribute("aria-disabled")).toBe("false");
       });
 
       it("年份面板应该有 role=listbox", async () => {
         const datePicker = document.createElement("ea-date-picker");
         container.appendChild(datePicker);
-        await waitForRender();
+        await datePicker.updateComplete;
         const yearPanel = datePicker.shadowRoot.querySelector(
           ".ea-date-picker__year-panel"
         );
@@ -2217,7 +2216,7 @@ describe("EaDatePicker", () => {
       it("年份面板应该有 aria-label", async () => {
         const datePicker = document.createElement("ea-date-picker");
         container.appendChild(datePicker);
-        await waitForRender();
+        await datePicker.updateComplete;
         const yearPanel = datePicker.shadowRoot.querySelector(
           ".ea-date-picker__year-panel"
         );
@@ -2228,14 +2227,14 @@ describe("EaDatePicker", () => {
         const datePicker = document.createElement("ea-date-picker");
         datePicker.setAttribute("value", "2026-06-15");
         container.appendChild(datePicker);
-        await waitForRender();
+        await datePicker.updateComplete;
         datePicker.handleOpen();
-        await waitForRender();
+        await datePicker.updateComplete;
         const yearBtn = datePicker.shadowRoot.querySelector(
           ".ea-date-picker__header-year"
         );
         yearBtn.click();
-        await waitForRender();
+        await datePicker.updateComplete;
         const yearItems = datePicker.shadowRoot.querySelectorAll(
           ".ea-date-picker__year-item"
         );
@@ -2249,7 +2248,7 @@ describe("EaDatePicker", () => {
       it("月份面板应该有 role=listbox", async () => {
         const datePicker = document.createElement("ea-date-picker");
         container.appendChild(datePicker);
-        await waitForRender();
+        await datePicker.updateComplete;
         const monthPanel = datePicker.shadowRoot.querySelector(
           ".ea-date-picker__month-panel"
         );
@@ -2259,7 +2258,7 @@ describe("EaDatePicker", () => {
       it("月份面板应该有 aria-label", async () => {
         const datePicker = document.createElement("ea-date-picker");
         container.appendChild(datePicker);
-        await waitForRender();
+        await datePicker.updateComplete;
         const monthPanel = datePicker.shadowRoot.querySelector(
           ".ea-date-picker__month-panel"
         );
@@ -2269,7 +2268,7 @@ describe("EaDatePicker", () => {
       it("月份项应该有 role=option 和 aria-selected", async () => {
         const datePicker = document.createElement("ea-date-picker");
         container.appendChild(datePicker);
-        await waitForRender();
+        await datePicker.updateComplete;
         const monthItems = datePicker.shadowRoot.querySelectorAll(
           ".ea-date-picker__month-item"
         );
@@ -2283,7 +2282,7 @@ describe("EaDatePicker", () => {
       it("头部中心应该有 aria-live=polite", async () => {
         const datePicker = document.createElement("ea-date-picker");
         container.appendChild(datePicker);
-        await waitForRender();
+        await datePicker.updateComplete;
         const headerCenter = datePicker.shadowRoot.querySelector(
           ".ea-date-picker__header-center"
         );
@@ -2293,7 +2292,7 @@ describe("EaDatePicker", () => {
       it("头部中心应该有 aria-atomic=true", async () => {
         const datePicker = document.createElement("ea-date-picker");
         container.appendChild(datePicker);
-        await waitForRender();
+        await datePicker.updateComplete;
         const headerCenter = datePicker.shadowRoot.querySelector(
           ".ea-date-picker__header-center"
         );
@@ -2303,7 +2302,7 @@ describe("EaDatePicker", () => {
       it("导航按钮应该有 aria-label", async () => {
         const datePicker = document.createElement("ea-date-picker");
         container.appendChild(datePicker);
-        await waitForRender();
+        await datePicker.updateComplete;
         const prevYearBtn = datePicker.shadowRoot.querySelector(
           ".ea-date-picker__btn-prev-year"
         );

@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { waitForRender } from "./utils/waitForRender.js";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 import "../components/ea-switch/index.ts";
@@ -21,7 +20,7 @@ describe("EaSwitch Component", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl).toBeDefined();
       expect(switchEl.shadowRoot).toBeDefined();
@@ -56,7 +55,7 @@ describe("EaSwitch Component", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       const inputElement = switchEl.shadowRoot.querySelector(
         ".ea-switch__original"
@@ -83,7 +82,7 @@ describe("EaSwitch Component", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       const wrapper = switchEl.shadowRoot.querySelector("label.ea-switch");
       expect(wrapper).toBeTruthy();
@@ -94,9 +93,11 @@ describe("EaSwitch Component", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
-      const contentEl = switchEl.shadowRoot.querySelector(".ea-switch__content");
+      const contentEl = switchEl.shadowRoot.querySelector(
+        ".ea-switch__content"
+      );
       expect(contentEl).toBeTruthy();
       expect(contentEl.tagName).toBe("SPAN");
     });
@@ -105,7 +106,7 @@ describe("EaSwitch Component", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       const inner = switchEl.shadowRoot.querySelector(".ea-switch__inner");
       expect(inner).toBeTruthy();
@@ -118,7 +119,7 @@ describe("EaSwitch Component", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.label).toBe("");
       expect(switchEl.getAttribute("label")).toBe(null);
@@ -129,7 +130,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("label", "Switch Label");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.label).toBe("Switch Label");
       expect(switchEl.getAttribute("label")).toBe("Switch Label");
@@ -140,7 +141,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("label", "Enable Feature");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       const labelElement = switchEl.shadowRoot.querySelector(
         ".ea-switch__form-label"
@@ -154,10 +155,10 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("label", "Old Label");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       switchEl.setAttribute("label", "New Label");
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.label).toBe("New Label");
       const labelElement = switchEl.shadowRoot.querySelector(
@@ -182,7 +183,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("name", "test-switch");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.name).toBe("test-switch");
       expect(switchEl.getAttribute("name")).toBe("test-switch");
@@ -192,7 +193,7 @@ describe("EaSwitch Component", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.getAttribute("name")).toBeTruthy();
       expect(switchEl.name.length).toBeGreaterThan(0);
@@ -203,7 +204,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("name", "my-switch");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
       expect(input.getAttribute("name")).toBe("my-switch");
@@ -214,7 +215,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("name", "my-switch");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
       expect(input.getAttribute("id")).toBe("my-switch");
@@ -225,7 +226,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("name", "my-switch");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       const containerEl = switchEl.shadowRoot.querySelector(".ea-switch");
       expect(containerEl.getAttribute("for")).toBe("my-switch");
@@ -236,10 +237,10 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("name", "old-name");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       switchEl.setAttribute("name", "new-name");
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.name).toBe("new-name");
       const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
@@ -252,7 +253,7 @@ describe("EaSwitch Component", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.value).toBe(false);
       expect(switchEl.getAttribute("value")).toBe(null);
@@ -263,7 +264,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("value", "true");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.getAttribute("value")).toBe("true");
     });
@@ -273,7 +274,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("value", "false");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.getAttribute("value")).toBe("false");
     });
@@ -283,7 +284,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("value", "true");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
       expect(input.checked).toBe(true);
@@ -294,7 +295,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("value", "false");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
       expect(input.checked).toBe(false);
@@ -305,10 +306,10 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("value", "false");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       switchEl.setAttribute("value", "true");
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.getAttribute("value")).toBe("true");
       const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
@@ -320,7 +321,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("value", "");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.value).toBe(true);
     });
@@ -346,7 +347,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("active-value", "on");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.getAttribute("active-value")).toBe("on");
     });
@@ -356,7 +357,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("inactive-value", "off");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.getAttribute("inactive-value")).toBe("off");
     });
@@ -366,7 +367,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("active-value", "100");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.getAttribute("active-value")).toBe("100");
     });
@@ -376,7 +377,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("inactive-value", "0");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.getAttribute("inactive-value")).toBe("0");
     });
@@ -388,7 +389,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("value", "100");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
       expect(input.checked).toBe(true);
@@ -401,7 +402,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("value", "0");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
       expect(input.checked).toBe(false);
@@ -414,7 +415,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("value", "maybe");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
       expect(input.checked).toBe(false);
@@ -427,13 +428,13 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("value", "yes");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
       expect(input.checked).toBe(true);
 
       switchEl.setAttribute("active-value", "on");
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(input.checked).toBe(false);
     });
@@ -445,7 +446,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("value", "0");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
       expect(input.checked).toBe(true);
@@ -465,7 +466,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("size", "large");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.size).toBe("large");
       expect(switchEl.getAttribute("size")).toBe("large");
@@ -484,7 +485,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("size", "small");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.size).toBe("small");
       expect(switchEl.getAttribute("size")).toBe("small");
@@ -495,7 +496,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("size", "large");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       const containerEl = switchEl.shadowRoot.querySelector(".ea-switch");
       expect(containerEl.classList.contains("ea-switch--large")).toBe(true);
@@ -506,10 +507,10 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("size", "default");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       switchEl.setAttribute("size", "large");
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.size).toBe("large");
       const containerEl = switchEl.shadowRoot.querySelector(".ea-switch");
@@ -547,7 +548,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("active-text", "Open");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.activeText).toBe("Open");
       expect(switchEl.getAttribute("active-text")).toBe("Open");
@@ -558,7 +559,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("inactive-text", "Close");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.inactiveText).toBe("Close");
       expect(switchEl.getAttribute("inactive-text")).toBe("Close");
@@ -569,7 +570,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("active-text", "Pay by month");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.activeText).toBe("Pay by month");
       expect(switchEl.getAttribute("active-text")).toBe("Pay by month");
@@ -580,7 +581,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("inactive-text", "Pay by year");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.inactiveText).toBe("Pay by year");
       expect(switchEl.getAttribute("inactive-text")).toBe("Pay by year");
@@ -601,10 +602,10 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("active-text", "Old");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       switchEl.setAttribute("active-text", "New");
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.activeText).toBe("New");
       expect(switchEl.getAttribute("active-text")).toBe("New");
@@ -615,10 +616,10 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("inactive-text", "Old");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       switchEl.setAttribute("inactive-text", "New");
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.inactiveText).toBe("New");
       expect(switchEl.getAttribute("inactive-text")).toBe("New");
@@ -679,7 +680,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("active-color", "#13ce66");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       const cssValue = switchEl.style.getPropertyValue(
         "--ea-switch-active-bg-color"
@@ -692,7 +693,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("inactive-color", "#ff4949");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       const cssValue = switchEl.style.getPropertyValue(
         "--ea-switch-inactive-bg-color"
@@ -705,10 +706,10 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("active-color", "#13ce66");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       switchEl.setAttribute("active-color", "#409eff");
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.activeColor).toBe("#409eff");
       const cssValue = switchEl.style.getPropertyValue(
@@ -722,10 +723,10 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("inactive-color", "#ff4949");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       switchEl.setAttribute("inactive-color", "#c0c4cc");
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.inactiveColor).toBe("#c0c4cc");
     });
@@ -754,7 +755,7 @@ describe("EaSwitch Component", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.disabled).toBe(false);
       expect(switchEl.hasAttribute("disabled")).toBe(false);
@@ -765,7 +766,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("disabled", "");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.disabled).toBe(true);
       expect(switchEl.hasAttribute("disabled")).toBe(true);
@@ -776,7 +777,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("disabled", "");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
       expect(input.disabled).toBe(true);
@@ -787,7 +788,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("disabled", "");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       const containerEl = switchEl.shadowRoot.querySelector(".ea-switch");
       expect(containerEl.classList.contains("is-disabled")).toBe(true);
@@ -797,17 +798,17 @@ describe("EaSwitch Component", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       switchEl.disabled = true;
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.disabled).toBe(true);
       const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
       expect(input.disabled).toBe(true);
 
       switchEl.disabled = false;
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.disabled).toBe(false);
       expect(input.disabled).toBe(false);
@@ -819,7 +820,7 @@ describe("EaSwitch Component", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.required).toBe(false);
       expect(switchEl.hasAttribute("required")).toBe(false);
@@ -830,7 +831,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("required", "");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.required).toBe(true);
       expect(switchEl.hasAttribute("required")).toBe(true);
@@ -841,7 +842,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("required", "");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
       expect(input.hasAttribute("required")).toBe(true);
@@ -851,15 +852,15 @@ describe("EaSwitch Component", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       switchEl.required = true;
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.required).toBe(true);
 
       switchEl.required = false;
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.required).toBe(false);
     });
@@ -871,7 +872,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("value", "true");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       const containerEl = switchEl.shadowRoot.querySelector(".ea-switch");
       expect(containerEl.classList.contains("is-checked")).toBe(true);
@@ -882,7 +883,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("value", "false");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       const containerEl = switchEl.shadowRoot.querySelector(".ea-switch");
       expect(containerEl.classList.contains("is-checked")).toBe(false);
@@ -893,13 +894,13 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("value", "false");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       let containerEl = switchEl.shadowRoot.querySelector(".ea-switch");
       expect(containerEl.classList.contains("is-checked")).toBe(false);
 
       switchEl.setAttribute("value", "true");
-      await waitForRender();
+      await switchEl.updateComplete;
 
       containerEl = switchEl.shadowRoot.querySelector(".ea-switch");
       expect(containerEl.classList.contains("is-checked")).toBe(true);
@@ -911,7 +912,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("disabled", "");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       const containerEl = switchEl.shadowRoot.querySelector(".ea-switch");
       expect(containerEl.classList.contains("is-checked")).toBe(true);
@@ -925,13 +926,13 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("value", "false");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
       input.checked = true;
       input.dispatchEvent(new CustomEvent("change", { bubbles: true }));
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.getAttribute("value")).toBe("true");
     });
@@ -941,12 +942,12 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("value", "false");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
       input.click();
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.getAttribute("value")).toBe("true");
     });
@@ -958,13 +959,13 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("value", "off");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
       input.checked = true;
       input.dispatchEvent(new CustomEvent("change", { bubbles: true }));
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.getAttribute("value")).toBe("on");
     });
@@ -976,13 +977,13 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("value", "on");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
       input.checked = false;
       input.dispatchEvent(new CustomEvent("change", { bubbles: true }));
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.getAttribute("value")).toBe("off");
     });
@@ -992,13 +993,13 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("value", "false");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
       input.checked = true;
       input.dispatchEvent(new CustomEvent("change", { bubbles: true }));
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       const containerEl = switchEl.shadowRoot.querySelector(".ea-switch");
       expect(containerEl.classList.contains("is-checked")).toBe(true);
@@ -1028,14 +1029,14 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("value", "false");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       switchEl.beforeChange = () => Promise.resolve(true);
 
       const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
       input.dispatchEvent(new Event("click", { bubbles: true }));
 
-      await waitForRender(200);
+      await switchEl.updateComplete;
 
       expect(switchEl.getAttribute("value")).toBe("true");
     });
@@ -1045,14 +1046,14 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("value", "false");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       switchEl.beforeChange = () => Promise.reject(new Error("rejected"));
 
       const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
       input.dispatchEvent(new Event("click", { bubbles: true }));
 
-      await waitForRender(200);
+      await switchEl.updateComplete;
 
       expect(switchEl.getAttribute("value")).toBe("false");
     });
@@ -1101,7 +1102,7 @@ describe("EaSwitch Component", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       try {
         const result = switchEl.checkValidity();
@@ -1117,7 +1118,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("value", "false");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       try {
         const result = switchEl.checkValidity();
@@ -1133,7 +1134,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("value", "true");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       try {
         const result = switchEl.checkValidity();
@@ -1147,7 +1148,7 @@ describe("EaSwitch Component", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(typeof switchEl.reportValidity).toBe("function");
     });
@@ -1156,7 +1157,7 @@ describe("EaSwitch Component", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(typeof switchEl.checkValidity).toBe("function");
     });
@@ -1185,7 +1186,7 @@ describe("EaSwitch Component", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.getAttribute("name")).toBeTruthy();
     });
@@ -1195,7 +1196,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("name", "my-name");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.getAttribute("name")).toBe("my-name");
     });
@@ -1211,7 +1212,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("inactive-text", "Off");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.name).toBe("test");
       expect(switchEl.getAttribute("value")).toBe("true");
@@ -1232,7 +1233,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("inactive-color", "#ff4949");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.name).toBe("payment");
       expect(switchEl.getAttribute("active-value")).toBe("100");
@@ -1250,7 +1251,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("value", "true");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.disabled).toBe(true);
       expect(switchEl.required).toBe(true);
@@ -1269,7 +1270,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("value", "");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.value).toBe(true);
     });
@@ -1279,13 +1280,13 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("value", "false");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       switchEl.setAttribute("value", "true");
       switchEl.setAttribute("value", "false");
       switchEl.setAttribute("value", "true");
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.getAttribute("value")).toBe("true");
     });
@@ -1299,7 +1300,7 @@ describe("EaSwitch Component", () => {
 
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.getAttribute("value")).toBe("true");
       expect(switchEl.size).toBe("large");
@@ -1312,12 +1313,12 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("disabled", "");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.disabled).toBe(true);
 
       switchEl.removeAttribute("disabled");
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.disabled).toBe(false);
     });
@@ -1329,10 +1330,10 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("value", "false");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       let eventDetail = null;
-      switchEl.addEventListener("change", (e) => {
+      switchEl.addEventListener("change", e => {
         eventDetail = e.detail;
       });
 
@@ -1340,7 +1341,7 @@ describe("EaSwitch Component", () => {
       input.checked = true;
       input.dispatchEvent(new CustomEvent("change", { bubbles: true }));
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(eventDetail).toBeTruthy();
       expect(eventDetail.value).toBe(true);
@@ -1351,10 +1352,10 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("value", "false");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       let capturedEvent = null;
-      switchEl.addEventListener("change", (e) => {
+      switchEl.addEventListener("change", e => {
         capturedEvent = e;
       });
 
@@ -1362,7 +1363,7 @@ describe("EaSwitch Component", () => {
       input.checked = true;
       input.dispatchEvent(new CustomEvent("change", { bubbles: true }));
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(capturedEvent).toBeTruthy();
       expect(capturedEvent.bubbles).toBe(true);
@@ -1377,10 +1378,10 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("value", "on");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       let eventDetail = null;
-      switchEl.addEventListener("change", (e) => {
+      switchEl.addEventListener("change", e => {
         eventDetail = e.detail;
       });
 
@@ -1388,7 +1389,7 @@ describe("EaSwitch Component", () => {
       input.checked = false;
       input.dispatchEvent(new CustomEvent("change", { bubbles: true }));
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(eventDetail).toBeTruthy();
       expect(eventDetail.value).toBe("off");
@@ -1399,11 +1400,13 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("value", "false");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       let nativeChangeCaptured = false;
-      switchEl.shadowRoot.addEventListener("change", (e) => {
-        if (e.target === switchEl.shadowRoot.querySelector(".ea-switch__original")) {
+      switchEl.shadowRoot.addEventListener("change", e => {
+        if (
+          e.target === switchEl.shadowRoot.querySelector(".ea-switch__original")
+        ) {
           nativeChangeCaptured = true;
         }
       });
@@ -1412,7 +1415,7 @@ describe("EaSwitch Component", () => {
       input.checked = true;
       input.dispatchEvent(new CustomEvent("change", { bubbles: true }));
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(nativeChangeCaptured).toBe(false);
     });
@@ -1423,12 +1426,14 @@ describe("EaSwitch Component", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       switchEl.setAttribute("inactive-text", "Close");
-      await waitForRender();
+      await switchEl.updateComplete;
 
-      const labelLeft = switchEl.shadowRoot.querySelector(".ea-switch__label-left");
+      const labelLeft = switchEl.shadowRoot.querySelector(
+        ".ea-switch__label-left"
+      );
       expect(labelLeft.textContent).toBe("Close");
     });
 
@@ -1436,12 +1441,14 @@ describe("EaSwitch Component", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       switchEl.setAttribute("active-text", "Open");
-      await waitForRender();
+      await switchEl.updateComplete;
 
-      const labelRight = switchEl.shadowRoot.querySelector(".ea-switch__label-right");
+      const labelRight = switchEl.shadowRoot.querySelector(
+        ".ea-switch__label-right"
+      );
       expect(labelRight.textContent).toBe("Open");
     });
 
@@ -1449,15 +1456,17 @@ describe("EaSwitch Component", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       switchEl.setAttribute("inactive-text", "Old");
-      await waitForRender();
+      await switchEl.updateComplete;
 
       switchEl.setAttribute("inactive-text", "New");
-      await waitForRender();
+      await switchEl.updateComplete;
 
-      const labelLeft = switchEl.shadowRoot.querySelector(".ea-switch__label-left");
+      const labelLeft = switchEl.shadowRoot.querySelector(
+        ".ea-switch__label-left"
+      );
       expect(labelLeft.textContent).toBe("New");
     });
 
@@ -1465,15 +1474,17 @@ describe("EaSwitch Component", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       switchEl.setAttribute("active-text", "Old");
-      await waitForRender();
+      await switchEl.updateComplete;
 
       switchEl.setAttribute("active-text", "New");
-      await waitForRender();
+      await switchEl.updateComplete;
 
-      const labelRight = switchEl.shadowRoot.querySelector(".ea-switch__label-right");
+      const labelRight = switchEl.shadowRoot.querySelector(
+        ".ea-switch__label-right"
+      );
       expect(labelRight.textContent).toBe("New");
     });
   });
@@ -1531,10 +1542,10 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("value", "true");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       switchEl.formResetCallback();
-      await waitForRender();
+      await switchEl.updateComplete;
 
       expect(switchEl.value).toBe(false);
     });
@@ -1544,10 +1555,10 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("value", "true");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       switchEl.formResetCallback();
-      await waitForRender();
+      await switchEl.updateComplete;
 
       const wrapperEl = switchEl.shadowRoot.querySelector("label.ea-switch");
       expect(wrapperEl.classList.contains("is-checked")).toBe(false);
@@ -1558,10 +1569,10 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("value", "true");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       switchEl.formResetCallback();
-      await waitForRender();
+      await switchEl.updateComplete;
 
       const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
       expect(input.checked).toBe(false);
@@ -1574,7 +1585,7 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("name", "test-name");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
       const wrapper = switchEl.shadowRoot.querySelector("label.ea-switch");
       const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
@@ -1586,9 +1597,11 @@ describe("EaSwitch Component", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
-      const formLabel = switchEl.shadowRoot.querySelector(".ea-switch__form-label");
+      const formLabel = switchEl.shadowRoot.querySelector(
+        ".ea-switch__form-label"
+      );
       expect(formLabel).toBeTruthy();
       expect(formLabel.textContent).toBe("");
     });
@@ -1598,9 +1611,11 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("label", "Test Label");
       container.appendChild(switchEl);
 
-      await waitForRender();
+      await switchEl.updateComplete;
 
-      const formLabel = switchEl.shadowRoot.querySelector(".ea-switch__form-label");
+      const formLabel = switchEl.shadowRoot.querySelector(
+        ".ea-switch__form-label"
+      );
       expect(formLabel.textContent).toBe("Test Label");
     });
 
@@ -1621,8 +1636,10 @@ describe("EaSwitch Component", () => {
       const el = document.createElement("ea-switch");
       el.setAttribute("label", "Switch");
       container.appendChild(el);
-      await waitForRender();
-      const results = await runAxe(el, { rules: { "nested-interactive": { enabled: false } } });
+      await el.updateComplete;
+      const results = await runAxe(el, {
+        rules: { "nested-interactive": { enabled: false } },
+      });
       assertNoA11yViolations(results);
     });
 
@@ -1631,8 +1648,10 @@ describe("EaSwitch Component", () => {
       el.setAttribute("label", "Switch");
       el.setAttribute("disabled", "");
       container.appendChild(el);
-      await waitForRender();
-      const results = await runAxe(el, { rules: { "nested-interactive": { enabled: false } } });
+      await el.updateComplete;
+      const results = await runAxe(el, {
+        rules: { "nested-interactive": { enabled: false } },
+      });
       assertNoA11yViolations(results);
     });
 
@@ -1640,7 +1659,7 @@ describe("EaSwitch Component", () => {
       it("宿主元素应该有 role=switch", async () => {
         const el = document.createElement("ea-switch");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("role")).toBe("switch");
       });
 
@@ -1648,7 +1667,7 @@ describe("EaSwitch Component", () => {
         const el = document.createElement("ea-switch");
         el.setAttribute("value", "false");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-checked")).toBe("false");
       });
 
@@ -1656,7 +1675,7 @@ describe("EaSwitch Component", () => {
         const el = document.createElement("ea-switch");
         el.setAttribute("value", "true");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-checked")).toBe("true");
       });
 
@@ -1664,11 +1683,11 @@ describe("EaSwitch Component", () => {
         const el = document.createElement("ea-switch");
         el.setAttribute("value", "false");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-checked")).toBe("false");
 
         el.setAttribute("value", "true");
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-checked")).toBe("true");
       });
 
@@ -1676,14 +1695,14 @@ describe("EaSwitch Component", () => {
         const el = document.createElement("ea-switch");
         el.setAttribute("disabled", "");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-disabled")).toBe("true");
       });
 
       it("非 disabled 时 aria-disabled 应该为 false", async () => {
         const el = document.createElement("ea-switch");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-disabled")).toBe("false");
       });
 
@@ -1691,11 +1710,11 @@ describe("EaSwitch Component", () => {
         const el = document.createElement("ea-switch");
         el.setAttribute("disabled", "");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-disabled")).toBe("true");
 
         el.removeAttribute("disabled");
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-disabled")).toBe("false");
       });
     });
@@ -1704,20 +1723,20 @@ describe("EaSwitch Component", () => {
       it("Space 键应该切换开关状态", async () => {
         const el = document.createElement("ea-switch");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
 
         el.dispatchEvent(new KeyboardEvent("keydown", { key: " " }));
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("value")).toBe("true");
       });
 
       it("Enter 键应该切换开关状态", async () => {
         const el = document.createElement("ea-switch");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
 
         el.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter" }));
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("value")).toBe("true");
       });
 
@@ -1725,24 +1744,24 @@ describe("EaSwitch Component", () => {
         const el = document.createElement("ea-switch");
         el.setAttribute("disabled", "");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
 
         el.dispatchEvent(new KeyboardEvent("keydown", { key: " " }));
-        await waitForRender();
+        await el.updateComplete;
         expect(el.value).toBe(false);
       });
 
       it("连续按 Space 应该交替切换状态", async () => {
         const el = document.createElement("ea-switch");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
 
         el.dispatchEvent(new KeyboardEvent("keydown", { key: " " }));
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("value")).toBe("true");
 
         el.dispatchEvent(new KeyboardEvent("keydown", { key: " " }));
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("value")).toBe("false");
       });
     });

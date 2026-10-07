@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { waitForRender } from "./utils/waitForRender";
 
 import "../components/ea-watermark/index";
 
@@ -102,7 +101,7 @@ describe("EaWatermark", () => {
       const el = document.createElement("ea-watermark");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const content = el.shadowRoot.querySelector('[part="content"]');
       expect(content.style.backgroundImage).toContain("data:image/png");
@@ -130,7 +129,7 @@ describe("EaWatermark", () => {
       el.setAttribute("height", "96");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       expect(el.width).toBe(96);
       expect(el.height).toBe(96);
@@ -143,10 +142,10 @@ describe("EaWatermark", () => {
       const el = document.createElement("ea-watermark");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       el.setAttribute("width", "200");
-      await waitForRender();
+      await el.updateComplete;
 
       const content = el.shadowRoot.querySelector('[part="content"]');
       expect(content.style.backgroundSize).toBe("200px 64px");
@@ -182,7 +181,7 @@ describe("EaWatermark", () => {
       const el = document.createElement("ea-watermark");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const content = el.shadowRoot.querySelector('[part="content"]');
       expect(content.style.zIndex).toBe("9");
@@ -192,10 +191,10 @@ describe("EaWatermark", () => {
       const el = document.createElement("ea-watermark");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       el.setAttribute("z-index", "100");
-      await waitForRender();
+      await el.updateComplete;
 
       const content = el.shadowRoot.querySelector('[part="content"]');
       expect(content.style.zIndex).toBe("100");
@@ -222,13 +221,13 @@ describe("EaWatermark", () => {
       const el = document.createElement("ea-watermark");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const contentEl = el.shadowRoot.querySelector('[part="content"]');
       expect(contentEl.style.backgroundImage).toContain("data:image/png");
 
       el.content = "Secret";
-      await waitForRender();
+      await el.updateComplete;
 
       expect(contentEl.style.backgroundImage).toContain("data:image/png");
     });
@@ -249,7 +248,7 @@ describe("EaWatermark", () => {
       el.setAttribute("height", "96");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const content = el.shadowRoot.querySelector('[part="content"]');
       expect(content.style.backgroundImage).toContain("data:image/png");
@@ -264,7 +263,7 @@ describe("EaWatermark", () => {
       el.setAttribute("image", "https://example.com/watermark.png");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const results = HTMLCanvasElement.prototype.getContext.mock.results;
       const lastCtx = results[results.length - 1].value;
@@ -276,13 +275,13 @@ describe("EaWatermark", () => {
       const el = document.createElement("ea-watermark");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const content = el.shadowRoot.querySelector('[part="content"]');
       expect(content.style.backgroundImage).toContain("data:image/png");
 
       el.setAttribute("image", "https://example.com/new.png");
-      await waitForRender();
+      await el.updateComplete;
 
       const lastImage = MockImage.instances[MockImage.instances.length - 1];
       expect(lastImage.src).toBe("https://example.com/new.png");
@@ -311,10 +310,10 @@ describe("EaWatermark", () => {
       const el = document.createElement("ea-watermark");
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       el.font = { color: "rgba(0, 100, 200, 0.25)", fontSize: 20 };
-      await waitForRender();
+      await el.updateComplete;
 
       const content = el.shadowRoot.querySelector('[part="content"]');
       expect(content.style.backgroundImage).toContain("data:image/png");
@@ -341,7 +340,7 @@ describe("EaWatermark", () => {
       el.gap = [200, 200];
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const content = el.shadowRoot.querySelector('[part="content"]');
       expect(content.style.backgroundPosition).toBe("100px 100px");
@@ -352,7 +351,7 @@ describe("EaWatermark", () => {
       el.offset = [30, 40];
       container.appendChild(el);
 
-      await waitForRender();
+      await el.updateComplete;
 
       const content = el.shadowRoot.querySelector('[part="content"]');
       expect(content.style.backgroundPosition).toBe("30px 40px");

@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { waitForRender } from "./utils/waitForRender.js";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 import "../components/ea-layout/index.ts";
@@ -105,7 +104,7 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       row.setAttribute("gutter", "20");
       container.appendChild(row);
 
-      await waitForRender();
+      await row.updateComplete;
 
       expect(row.style.getPropertyValue("--ea-row-gutter")).toBe("10px");
     });
@@ -176,7 +175,7 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       row.setAttribute("justify", "center");
       container.appendChild(row);
 
-      await waitForRender();
+      await row.updateComplete;
 
       expect(row.style.getPropertyValue("--ea-row-justify")).toBe("center");
     });
@@ -223,7 +222,7 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       row.setAttribute("align", "middle");
       container.appendChild(row);
 
-      await waitForRender();
+      await row.updateComplete;
 
       expect(row.style.getPropertyValue("--ea-row-align")).toBe("middle");
     });
@@ -283,7 +282,7 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       col.setAttribute("span", "8");
       container.appendChild(col);
 
-      await waitForRender();
+      await col.updateComplete;
 
       expect(col.style.getPropertyValue("--ea-col-span")).toBe("8");
     });
@@ -322,7 +321,7 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       col.setAttribute("offset", "6");
       container.appendChild(col);
 
-      await waitForRender();
+      await col.updateComplete;
 
       expect(col.style.getPropertyValue("--ea-col-offset")).toBe("6");
     });
@@ -361,7 +360,7 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       col.setAttribute("push", "4");
       container.appendChild(col);
 
-      await waitForRender();
+      await col.updateComplete;
 
       expect(col.style.getPropertyValue("--ea-col-push")).toBe("4");
     });
@@ -400,7 +399,7 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       col.setAttribute("pull", "4");
       container.appendChild(col);
 
-      await waitForRender();
+      await col.updateComplete;
 
       expect(col.style.getPropertyValue("--ea-col-pull")).toBe("4");
     });
@@ -448,7 +447,7 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       row.appendChild(col);
       container.appendChild(row);
 
-      await waitForRender();
+      await row.updateComplete;
 
       expect(row.shadowRoot).toBeDefined();
       expect(col.shadowRoot).toBeDefined();
@@ -475,7 +474,7 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       row.appendChild(col3);
       container.appendChild(row);
 
-      await waitForRender();
+      await row.updateComplete;
 
       expect(col1.span).toBe(8);
       expect(col2.span).toBe(8);
@@ -621,7 +620,7 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       outerRow.appendChild(outerCol);
       container.appendChild(outerRow);
 
-      await waitForRender();
+      await outerRow.updateComplete;
 
       expect(outerRow.shadowRoot).toBeDefined();
       expect(outerCol.shadowRoot).toBeDefined();
@@ -638,7 +637,7 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       row.setAttribute("align", "middle");
       container.appendChild(row);
 
-      await waitForRender();
+      await row.updateComplete;
 
       expect(row.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
       expect(row.gutter).toBe(20);
@@ -655,7 +654,7 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       col.setAttribute("offset", "6");
       container.appendChild(col);
 
-      await waitForRender();
+      await col.updateComplete;
 
       expect(col.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
       expect(col.span).toBe(12);
@@ -759,7 +758,7 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       const row = document.createElement("ea-row");
       container.appendChild(row);
 
-      await waitForRender();
+      await row.updateComplete;
 
       expect(row.style.getPropertyValue("--ea-row-gutter")).toBe("0px");
       expect(row.style.getPropertyValue("--ea-row-justify")).toBe("start");
@@ -770,7 +769,7 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       const col = document.createElement("ea-col");
       container.appendChild(col);
 
-      await waitForRender();
+      await col.updateComplete;
 
       expect(col.style.getPropertyValue("--ea-col-span")).toBe("24");
       expect(col.style.getPropertyValue("--ea-col-offset")).toBe("0");
@@ -782,12 +781,12 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       const row = document.createElement("ea-row");
       container.appendChild(row);
 
-      await waitForRender();
+      await row.updateComplete;
 
       row.setAttribute("gutter", "40");
       row.setAttribute("justify", "space-between");
       row.setAttribute("align", "bottom");
-      await waitForRender();
+      await row.updateComplete;
 
       expect(row.style.getPropertyValue("--ea-row-gutter")).toBe("20px");
       expect(row.style.getPropertyValue("--ea-row-justify")).toBe("space-between");
@@ -800,7 +799,7 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       it("作为布局组件不需要特定 ARIA 属性", async () => {
         const el = document.createElement("ea-row");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("role")).toBeNull();
       });
     });
@@ -808,7 +807,7 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-row");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });

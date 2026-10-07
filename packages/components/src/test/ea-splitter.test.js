@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { waitForRender } from "./utils/waitForRender.js";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 import "../components/ea-splitter/index";
@@ -49,7 +48,7 @@ describe("EaSplitter", () => {
       `;
       container.appendChild(splitter);
 
-      await waitForRender();
+      await splitter.updateComplete;
 
       const bars = splitter.querySelectorAll("ea-splitter-bar");
       expect(bars.length).toBe(2);
@@ -62,7 +61,7 @@ describe("EaSplitter", () => {
       `;
       container.appendChild(splitter);
 
-      await waitForRender();
+      await splitter.updateComplete;
 
       const bars = splitter.querySelectorAll("ea-splitter-bar");
       expect(bars.length).toBe(0);
@@ -78,7 +77,7 @@ describe("EaSplitter", () => {
       `;
       container.appendChild(splitter);
 
-      await waitForRender();
+      await splitter.updateComplete;
 
       const bars = splitter.querySelectorAll("ea-splitter-bar");
       expect(bars.length).toBe(3);
@@ -119,7 +118,7 @@ describe("EaSplitter", () => {
       );
 
       splitter.setAttribute("layout", "vertical");
-      await waitForRender();
+      await splitter.updateComplete;
 
       expect(containerEl.classList.contains("ea-splitter--vertical")).toBe(
         true
@@ -134,7 +133,7 @@ describe("EaSplitter", () => {
       `;
       container.appendChild(splitter);
 
-      await waitForRender();
+      await splitter.updateComplete;
 
       const panels = splitter.querySelectorAll("ea-splitter-panel");
       panels.forEach(panel => {
@@ -152,7 +151,7 @@ describe("EaSplitter", () => {
       `;
       container.appendChild(splitter);
 
-      await waitForRender();
+      await splitter.updateComplete;
 
       const resizeStartHandler = vi.fn();
       splitter.addEventListener("ea-panel-resize-start", resizeStartHandler);
@@ -160,7 +159,7 @@ describe("EaSplitter", () => {
       const bar = splitter.querySelector("ea-splitter-bar");
       bar.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
 
-      await waitForRender(50);
+      await splitter.updateComplete;
 
       expect(resizeStartHandler).toHaveBeenCalled();
     });
@@ -173,7 +172,7 @@ describe("EaSplitter", () => {
       `;
       container.appendChild(splitter);
 
-      await waitForRender();
+      await splitter.updateComplete;
 
       const resizeStartHandler = vi.fn();
       splitter.addEventListener("ea-panel-resize-start", resizeStartHandler);
@@ -181,7 +180,7 @@ describe("EaSplitter", () => {
       const bar = splitter.querySelector("ea-splitter-bar");
       bar.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
 
-      await waitForRender(50);
+      await splitter.updateComplete;
 
       if (resizeStartHandler.mock.calls.length > 0) {
         const eventDetail = resizeStartHandler.mock.calls[0][0].detail;
@@ -198,7 +197,7 @@ describe("EaSplitter", () => {
       `;
       container.appendChild(splitter);
 
-      await waitForRender();
+      await splitter.updateComplete;
 
       const resizeEndHandler = vi.fn();
       splitter.addEventListener("ea-panel-resize-end", resizeEndHandler);
@@ -208,7 +207,7 @@ describe("EaSplitter", () => {
 
       window.dispatchEvent(new MouseEvent("mouseup"));
 
-      await waitForRender(50);
+      await splitter.updateComplete;
 
       expect(resizeEndHandler).toHaveBeenCalled();
     });
@@ -221,7 +220,7 @@ describe("EaSplitter", () => {
       `;
       container.appendChild(splitter);
 
-      await waitForRender();
+      await splitter.updateComplete;
 
       const resizeStartHandler = vi.fn();
       splitter.addEventListener("ea-panel-resize-start", resizeStartHandler);
@@ -229,7 +228,7 @@ describe("EaSplitter", () => {
       const panel = splitter.querySelector("ea-splitter-panel");
       panel.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
 
-      await waitForRender(50);
+      await splitter.updateComplete;
 
       expect(resizeStartHandler).not.toHaveBeenCalled();
     });
@@ -285,7 +284,7 @@ describe("EaSplitterPanel", () => {
       `;
       container.appendChild(splitter);
 
-      await waitForRender();
+      await splitter.updateComplete;
 
       const panel = splitter.querySelector("ea-splitter-panel");
       expect(panel.shadowRoot).toBeTruthy();
@@ -299,7 +298,7 @@ describe("EaSplitterPanel", () => {
       `;
       container.appendChild(splitter);
 
-      await waitForRender();
+      await splitter.updateComplete;
 
       const panel = splitter.querySelector("ea-splitter-panel");
       expect(panel.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
@@ -314,7 +313,7 @@ describe("EaSplitterPanel", () => {
       `;
       container.appendChild(splitter);
 
-      await waitForRender();
+      await splitter.updateComplete;
 
       const panel = splitter.querySelector("ea-splitter-panel");
       expect(panel.size).toBe("");
@@ -327,7 +326,7 @@ describe("EaSplitterPanel", () => {
       `;
       container.appendChild(splitter);
 
-      await waitForRender();
+      await splitter.updateComplete;
 
       const panel = splitter.querySelector("ea-splitter-panel");
       expect(panel.size).toBe("200px");
@@ -340,7 +339,7 @@ describe("EaSplitterPanel", () => {
       `;
       container.appendChild(splitter);
 
-      await waitForRender();
+      await splitter.updateComplete;
 
       const panel = splitter.querySelector("ea-splitter-panel");
       expect(panel.size).toBe("30%");
@@ -353,12 +352,12 @@ describe("EaSplitterPanel", () => {
       `;
       container.appendChild(splitter);
 
-      await waitForRender();
+      await splitter.updateComplete;
 
       const panel = splitter.querySelector("ea-splitter-panel");
       panel.setAttribute("size", "50%");
 
-      await waitForRender();
+      await splitter.updateComplete;
 
       expect(panel.size).toBe("50%");
     });
@@ -372,7 +371,7 @@ describe("EaSplitterPanel", () => {
       `;
       container.appendChild(splitter);
 
-      await waitForRender();
+      await splitter.updateComplete;
 
       const panel = splitter.querySelector("ea-splitter-panel");
       expect(panel.min).toBe("");
@@ -385,7 +384,7 @@ describe("EaSplitterPanel", () => {
       `;
       container.appendChild(splitter);
 
-      await waitForRender();
+      await splitter.updateComplete;
 
       const panel = splitter.querySelector("ea-splitter-panel");
       expect(panel.min).toBe("100px");
@@ -398,7 +397,7 @@ describe("EaSplitterPanel", () => {
       `;
       container.appendChild(splitter);
 
-      await waitForRender();
+      await splitter.updateComplete;
 
       const panel = splitter.querySelector("ea-splitter-panel");
       expect(panel.min).toBe("20%");
@@ -411,12 +410,12 @@ describe("EaSplitterPanel", () => {
       `;
       container.appendChild(splitter);
 
-      await waitForRender();
+      await splitter.updateComplete;
 
       const panel = splitter.querySelector("ea-splitter-panel");
       panel.setAttribute("min", "30%");
 
-      await waitForRender();
+      await splitter.updateComplete;
 
       expect(panel.min).toBe("30%");
     });
@@ -430,7 +429,7 @@ describe("EaSplitterPanel", () => {
       `;
       container.appendChild(splitter);
 
-      await waitForRender();
+      await splitter.updateComplete;
 
       const panel = splitter.querySelector("ea-splitter-panel");
       expect(panel.layout).toBe("horizontal");
@@ -444,7 +443,7 @@ describe("EaSplitterPanel", () => {
       `;
       container.appendChild(splitter);
 
-      await waitForRender();
+      await splitter.updateComplete;
 
       const panel = splitter.querySelector("ea-splitter-panel");
       expect(panel.layout).toBe("vertical");
@@ -461,7 +460,7 @@ describe("EaSplitterPanel", () => {
       `;
       container.appendChild(splitter);
 
-      await waitForRender();
+      await splitter.updateComplete;
 
       const panel = splitter.querySelector("ea-splitter-panel");
       const slot = panel.shadowRoot.querySelector("slot");
@@ -477,7 +476,7 @@ describe("EaSplitterPanel", () => {
       `;
       container.appendChild(splitter);
 
-      await waitForRender();
+      await splitter.updateComplete;
 
       const panel = splitter.querySelector("ea-splitter-panel");
       expect(panel.shadowRoot).toBeTruthy();
@@ -510,7 +509,7 @@ describe("EaSplitterBar", () => {
       `;
       container.appendChild(splitter);
 
-      await waitForRender();
+      await splitter.updateComplete;
 
       const bar = splitter.querySelector("ea-splitter-bar");
       expect(bar.shadowRoot).toBeTruthy();
@@ -525,7 +524,7 @@ describe("EaSplitterBar", () => {
       `;
       container.appendChild(splitter);
 
-      await waitForRender();
+      await splitter.updateComplete;
 
       const bar = splitter.querySelector("ea-splitter-bar");
       expect(bar.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
@@ -541,7 +540,7 @@ describe("EaSplitterBar", () => {
       `;
       container.appendChild(splitter);
 
-      await waitForRender();
+      await splitter.updateComplete;
 
       const bar = splitter.querySelector("ea-splitter-bar");
       expect(bar.layout).toBe("horizontal");
@@ -556,7 +555,7 @@ describe("EaSplitterBar", () => {
       `;
       container.appendChild(splitter);
 
-      await waitForRender();
+      await splitter.updateComplete;
 
       const bar = splitter.querySelector("ea-splitter-bar");
       expect(bar.layout).toBe("vertical");
@@ -573,7 +572,7 @@ describe("EaSplitterBar", () => {
       `;
       container.appendChild(splitter);
 
-      await waitForRender();
+      await splitter.updateComplete;
 
       const bars = splitter.querySelectorAll("ea-splitter-bar");
       expect(bars[0].getAttribute("data-index")).toBeTruthy();
@@ -585,7 +584,7 @@ describe("EaSplitterBar", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-splitter-bar");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });
@@ -594,7 +593,7 @@ describe("EaSplitterBar", () => {
       it("ea-splitter-bar 宿主元素应该有 role=separator", async () => {
         const el = document.createElement("ea-splitter-bar");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("role")).toBe("separator");
       });
 
@@ -602,7 +601,7 @@ describe("EaSplitterBar", () => {
         const el = document.createElement("ea-splitter-bar");
         el.layout = "horizontal";
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-orientation")).toBe("vertical");
       });
 
@@ -610,28 +609,28 @@ describe("EaSplitterBar", () => {
         const el = document.createElement("ea-splitter-bar");
         el.layout = "vertical";
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-orientation")).toBe("horizontal");
       });
 
       it("ea-splitter-bar 应该有 aria-valuenow", async () => {
         const el = document.createElement("ea-splitter-bar");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-valuenow")).toBeTruthy();
       });
 
       it("ea-splitter-bar 应该有 aria-valuemin", async () => {
         const el = document.createElement("ea-splitter-bar");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-valuemin")).toBeTruthy();
       });
 
       it("ea-splitter-bar 应该有 aria-valuemax", async () => {
         const el = document.createElement("ea-splitter-bar");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-valuemax")).toBeTruthy();
       });
 
@@ -639,7 +638,7 @@ describe("EaSplitterBar", () => {
         const el = document.createElement("ea-splitter-bar");
         el.label = "Resize panel";
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("aria-label")).toBe("Resize panel");
       });
     });

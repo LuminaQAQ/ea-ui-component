@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import { waitForRender } from "./utils/waitForRender.js";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 if (!window.CSS) {
@@ -104,7 +103,7 @@ describe("EaSpace", () => {
       space.setAttribute("direction", "vertical");
       container.appendChild(space);
 
-      await waitForRender();
+      await space.updateComplete;
 
       const containerEl = space.shadowRoot.querySelector(".ea-space");
       expect(containerEl.classList.contains("ea-space--vertical")).toBe(true);
@@ -115,7 +114,7 @@ describe("EaSpace", () => {
       space.setAttribute("direction", "horizontal");
       container.appendChild(space);
 
-      await waitForRender();
+      await space.updateComplete;
 
       const containerEl = space.shadowRoot.querySelector(".ea-space");
       expect(containerEl.classList.contains("ea-space--vertical")).toBe(false);
@@ -159,7 +158,7 @@ describe("EaSpace", () => {
       space.setAttribute("size", "small");
       container.appendChild(space);
 
-      await waitForRender();
+      await space.updateComplete;
 
       const containerEl = space.shadowRoot.querySelector(".ea-space");
       expect(containerEl.classList.contains("ea-space--small")).toBe(true);
@@ -170,7 +169,7 @@ describe("EaSpace", () => {
       space.setAttribute("size", "large");
       container.appendChild(space);
 
-      await waitForRender();
+      await space.updateComplete;
 
       const containerEl = space.shadowRoot.querySelector(".ea-space");
       expect(containerEl.classList.contains("ea-space--large")).toBe(true);
@@ -181,7 +180,7 @@ describe("EaSpace", () => {
       space.setAttribute("size", "default");
       container.appendChild(space);
 
-      await waitForRender();
+      await space.updateComplete;
 
       const containerEl = space.shadowRoot.querySelector(".ea-space");
       expect(containerEl.classList.contains("ea-space--default")).toBe(true);
@@ -192,7 +191,7 @@ describe("EaSpace", () => {
       space.setAttribute("size", "30px");
       container.appendChild(space);
 
-      await waitForRender();
+      await space.updateComplete;
 
       const containerEl = space.shadowRoot.querySelector(".ea-space");
       expect(containerEl.classList.contains("ea-space--small")).toBe(false);
@@ -221,7 +220,7 @@ describe("EaSpace", () => {
       space.setAttribute("size", "30px");
       container.appendChild(space);
 
-      await waitForRender();
+      await space.updateComplete;
 
       expect(space.style.getPropertyValue("--ea-space-gap")).toBe("30px");
     });
@@ -248,7 +247,7 @@ describe("EaSpace", () => {
       space.setAttribute("wrap", "");
       container.appendChild(space);
 
-      await waitForRender();
+      await space.updateComplete;
 
       const containerEl = space.shadowRoot.querySelector(".ea-space");
       expect(containerEl.classList.contains("is-wrap")).toBe(true);
@@ -258,7 +257,7 @@ describe("EaSpace", () => {
       const space = document.createElement("ea-space");
       container.appendChild(space);
 
-      await waitForRender();
+      await space.updateComplete;
 
       const containerEl = space.shadowRoot.querySelector(".ea-space");
       expect(containerEl.classList.contains("is-wrap")).toBe(false);
@@ -326,7 +325,7 @@ describe("EaSpace", () => {
       space.setAttribute("alignment", "flex-start");
       container.appendChild(space);
 
-      await waitForRender();
+      await space.updateComplete;
 
       expect(space.style.getPropertyValue("--ea-space-alignment")).toBe(
         "flex-start"
@@ -366,7 +365,7 @@ describe("EaSpace", () => {
       const space = document.createElement("ea-space");
       container.appendChild(space);
 
-      await waitForRender();
+      await space.updateComplete;
 
       space.innerHTML = `
         <div>Item 1</div>
@@ -376,7 +375,7 @@ describe("EaSpace", () => {
 
       space.setAttribute("spacer", "|");
 
-      await waitForRender();
+      await space.updateComplete;
 
       const spacers = space.querySelectorAll('[part="spacer"]');
       expect(spacers.length).toBe(2);
@@ -388,7 +387,7 @@ describe("EaSpace", () => {
       const space = document.createElement("ea-space");
       container.appendChild(space);
 
-      await waitForRender();
+      await space.updateComplete;
 
       space.innerHTML = `
         <div>Item 1</div>
@@ -396,13 +395,13 @@ describe("EaSpace", () => {
       `;
       space.setAttribute("spacer", "|");
 
-      await waitForRender();
+      await space.updateComplete;
 
       expect(space.querySelectorAll('[part="spacer"]').length).toBe(1);
 
       space.setAttribute("spacer", "");
 
-      await waitForRender();
+      await space.updateComplete;
 
       expect(space.querySelectorAll('[part="spacer"]').length).toBe(0);
     });
@@ -411,12 +410,12 @@ describe("EaSpace", () => {
       const space = document.createElement("ea-space");
       container.appendChild(space);
 
-      await waitForRender();
+      await space.updateComplete;
 
       space.innerHTML = `<div>Item 1</div>`;
       space.setAttribute("spacer", "|");
 
-      await waitForRender();
+      await space.updateComplete;
 
       const spacers = space.querySelectorAll('[part="spacer"]');
       expect(spacers.length).toBe(0);
@@ -428,7 +427,7 @@ describe("EaSpace", () => {
       const space = document.createElement("ea-space");
       container.appendChild(space);
 
-      await waitForRender();
+      await space.updateComplete;
 
       expect(space.fill).toBe(false);
     });
@@ -438,7 +437,7 @@ describe("EaSpace", () => {
       space.setAttribute("fill", "");
       container.appendChild(space);
 
-      await waitForRender();
+      await space.updateComplete;
 
       expect(space.fill).toBe(true);
     });
@@ -448,7 +447,7 @@ describe("EaSpace", () => {
       space.setAttribute("fill", "");
       container.appendChild(space);
 
-      await waitForRender();
+      await space.updateComplete;
 
       const containerEl = space.shadowRoot.querySelector(".ea-space");
       expect(containerEl.classList.contains("ea-space--fill")).toBe(true);
@@ -458,7 +457,7 @@ describe("EaSpace", () => {
       const space = document.createElement("ea-space");
       container.appendChild(space);
 
-      await waitForRender();
+      await space.updateComplete;
 
       const containerEl = space.shadowRoot.querySelector(".ea-space");
       expect(containerEl.classList.contains("ea-space--fill")).toBe(false);
@@ -486,7 +485,7 @@ describe("EaSpace", () => {
       space.setAttribute("fill-ratio", "50");
       container.appendChild(space);
 
-      await waitForRender();
+      await space.updateComplete;
 
       expect(space.fill).toBe(true);
     });
@@ -496,7 +495,7 @@ describe("EaSpace", () => {
       space.setAttribute("fill-ratio", "50");
       container.appendChild(space);
 
-      await waitForRender();
+      await space.updateComplete;
 
       expect(space.style.getPropertyValue("--ea-space-fill-ratio")).toBe("50%");
     });
@@ -507,7 +506,7 @@ describe("EaSpace", () => {
       const space = document.createElement("ea-space");
       container.appendChild(space);
 
-      await waitForRender();
+      await space.updateComplete;
 
       const containerEl = space.shadowRoot.querySelector(".ea-space");
       expect(containerEl.classList.contains("ea-space")).toBe(true);
@@ -525,7 +524,7 @@ describe("EaSpace", () => {
       space.setAttribute("fill", "");
       container.appendChild(space);
 
-      await waitForRender();
+      await space.updateComplete;
 
       const containerEl = space.shadowRoot.querySelector(".ea-space");
       expect(containerEl.classList.contains("ea-space")).toBe(true);
@@ -551,7 +550,7 @@ describe("EaSpace", () => {
       space.innerHTML = `<div>Only Item</div>`;
       container.appendChild(space);
 
-      await waitForRender();
+      await space.updateComplete;
 
       expect(space.querySelector("div").textContent).toBe("Only Item");
     });
@@ -575,7 +574,7 @@ describe("EaSpace", () => {
       space.innerHTML = `<div>Item 1</div>`;
       container.appendChild(space);
 
-      await waitForRender();
+      await space.updateComplete;
 
       const newItem = document.createElement("div");
       newItem.textContent = "Item 2";
@@ -627,7 +626,7 @@ describe("EaSpace", () => {
       it("作为布局组件不需要特定 ARIA 属性", async () => {
         const el = document.createElement("ea-space");
         container.appendChild(el);
-        await waitForRender();
+        await el.updateComplete;
         expect(el.getAttribute("role")).toBeNull();
       });
     });
@@ -635,7 +634,7 @@ describe("EaSpace", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-space");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });

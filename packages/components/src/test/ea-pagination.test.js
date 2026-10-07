@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { waitForRender } from "./utils/waitForRender.js";
 import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 import "../components/ea-pagination/index.ts";
@@ -152,7 +151,7 @@ describe("EaPagination", () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       expect(pagination.shadowRoot.querySelector('[part="page"]')).toBeTruthy();
     });
@@ -203,7 +202,7 @@ describe("EaPagination", () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       let totalEl = pagination.shadowRoot.querySelector(
         ".ea-pagination__total"
@@ -211,7 +210,7 @@ describe("EaPagination", () => {
       expect(totalEl.textContent).toBe("Total 100");
 
       pagination.setAttribute("total", "200");
-      await waitForRender();
+      await pagination.updateComplete;
 
       totalEl = pagination.shadowRoot.querySelector(".ea-pagination__total");
       expect(totalEl.textContent).toBe("Total 200");
@@ -221,7 +220,7 @@ describe("EaPagination", () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "0");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       expect(pagination.total).toBe(0);
       const totalEl = pagination.shadowRoot.querySelector(
@@ -259,7 +258,7 @@ describe("EaPagination", () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       expect(pagination.defaultPageSize).toBe(10);
 
@@ -288,13 +287,13 @@ describe("EaPagination", () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       const sizeChangeHandler = vi.fn();
       pagination.addEventListener("ea-size-change", sizeChangeHandler);
 
       pagination.pageSize = 20;
-      await waitForRender();
+      await pagination.updateComplete;
 
       expect(sizeChangeHandler).toHaveBeenCalled();
       expect(sizeChangeHandler.mock.calls[0][0].detail.pageSize).toBe(20);
@@ -338,7 +337,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "1000");
       pagination.setAttribute("pager-count", "5");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       const moreItems = pagination.shadowRoot.querySelectorAll(
         ".ea-pagination__more"
@@ -367,13 +366,13 @@ describe("EaPagination", () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       const handler = vi.fn();
       pagination.addEventListener("ea-current-change", handler);
 
       pagination.currentPage = 2;
-      await waitForRender();
+      await pagination.updateComplete;
 
       expect(handler).toHaveBeenCalled();
       expect(handler.mock.calls[0][0].detail.value).toBe(2);
@@ -383,10 +382,10 @@ describe("EaPagination", () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       pagination.currentPage = 3;
-      await waitForRender();
+      await pagination.updateComplete;
 
       const activePage = pagination.shadowRoot.querySelector(
         '.ea-pagination__page.is-active[data-page="3"]'
@@ -398,7 +397,7 @@ describe("EaPagination", () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       expect(pagination.currentPage).toBe(1);
 
@@ -428,7 +427,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "100");
       pagination.setAttribute("background", "");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       const containerEl = pagination.shadowRoot.querySelector(".ea-pagination");
       expect(containerEl.classList.contains("ea-pagination--background")).toBe(
@@ -440,7 +439,7 @@ describe("EaPagination", () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       const containerEl = pagination.shadowRoot.querySelector(".ea-pagination");
       expect(containerEl.classList.contains("ea-pagination--background")).toBe(
@@ -452,7 +451,7 @@ describe("EaPagination", () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       const containerEl = pagination.shadowRoot.querySelector(".ea-pagination");
       expect(containerEl.classList.contains("ea-pagination--background")).toBe(
@@ -460,14 +459,14 @@ describe("EaPagination", () => {
       );
 
       pagination.setAttribute("background", "");
-      await waitForRender();
+      await pagination.updateComplete;
 
       expect(containerEl.classList.contains("ea-pagination--background")).toBe(
         true
       );
 
       pagination.removeAttribute("background");
-      await waitForRender();
+      await pagination.updateComplete;
 
       expect(containerEl.classList.contains("ea-pagination--background")).toBe(
         false
@@ -512,7 +511,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "100");
       pagination.setAttribute("size", "small");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       const containerEl = pagination.shadowRoot.querySelector(".ea-pagination");
       expect(containerEl.classList.contains("ea-pagination--size-small")).toBe(
@@ -524,7 +523,7 @@ describe("EaPagination", () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       const containerEl = pagination.shadowRoot.querySelector(".ea-pagination");
       expect(containerEl.classList.contains("ea-pagination--size-small")).toBe(
@@ -540,7 +539,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "100");
       pagination.setAttribute("size", "small");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       const containerEl = pagination.shadowRoot.querySelector(".ea-pagination");
       expect(containerEl.classList.contains("ea-pagination--size-small")).toBe(
@@ -548,7 +547,7 @@ describe("EaPagination", () => {
       );
 
       pagination.setAttribute("size", "large");
-      await waitForRender();
+      await pagination.updateComplete;
 
       expect(containerEl.classList.contains("ea-pagination--size-small")).toBe(
         false
@@ -580,7 +579,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "5");
       pagination.setAttribute("hide-on-single-page", "");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       const containerEl = pagination.shadowRoot.querySelector(".ea-pagination");
       expect(containerEl.classList.contains("is-hide")).toBe(true);
@@ -591,7 +590,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "100");
       pagination.setAttribute("hide-on-single-page", "");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       const containerEl = pagination.shadowRoot.querySelector(".ea-pagination");
       expect(containerEl.classList.contains("is-hide")).toBe(false);
@@ -603,7 +602,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("hide-on-single-page", "");
       pagination.layout = ["prev", "next", "total"];
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       const containerEl = pagination.shadowRoot.querySelector(".ea-pagination");
       expect(containerEl.classList.contains("is-hide")).toBe(true);
@@ -631,7 +630,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "100");
       pagination.setAttribute("disabled", "");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       const containerEl = pagination.shadowRoot.querySelector(".ea-pagination");
       expect(containerEl.classList.contains("is-disabled")).toBe(true);
@@ -641,10 +640,10 @@ describe("EaPagination", () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       pagination.setAttribute("disabled", "");
-      await waitForRender();
+      await pagination.updateComplete;
 
       const jumperInput =
         pagination.shadowRoot.querySelector('[part="jumper"]');
@@ -656,10 +655,10 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "100");
       pagination.layout = ["sizes", "prev", "pager", "next"];
       container.appendChild(pagination);
-      await waitForRender(300);
+      await pagination.updateComplete;
 
       pagination.setAttribute("disabled", "");
-      await waitForRender(300);
+      await pagination.updateComplete;
 
       const sizes = pagination.shadowRoot.querySelector('[part="sizes"]');
       expect(sizes.disabled).toBe(true);
@@ -757,7 +756,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "100");
       pagination.setAttribute("current-page", "3");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       const prevIcon = pagination.shadowRoot.querySelector(
         ".ea-pagination__icon--prev"
@@ -770,7 +769,7 @@ describe("EaPagination", () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       const nextIcon = pagination.shadowRoot.querySelector(
         ".ea-pagination__icon--next"
@@ -784,7 +783,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "100");
       pagination.setAttribute("current-page", "3");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       const handler = vi.fn();
       pagination.addEventListener("ea-prev-click", handler);
@@ -793,7 +792,7 @@ describe("EaPagination", () => {
         ".ea-pagination__icon--prev"
       );
       prevIcon.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      await waitForRender();
+      await pagination.updateComplete;
 
       expect(handler).toHaveBeenCalled();
     });
@@ -802,7 +801,7 @@ describe("EaPagination", () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       const handler = vi.fn();
       pagination.addEventListener("ea-next-click", handler);
@@ -811,7 +810,7 @@ describe("EaPagination", () => {
         ".ea-pagination__icon--next"
       );
       nextIcon.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      await waitForRender();
+      await pagination.updateComplete;
 
       expect(handler).toHaveBeenCalled();
     });
@@ -820,7 +819,7 @@ describe("EaPagination", () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       const prevIcon = pagination.shadowRoot.querySelector(
         ".ea-pagination__icon--prev"
@@ -833,7 +832,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "100");
       pagination.setAttribute("current-page", "10");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       const nextIcon = pagination.shadowRoot.querySelector(
         ".ea-pagination__icon--next"
@@ -847,7 +846,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("current-page", "3");
       pagination.setAttribute("disabled", "");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       const prevIcon = pagination.shadowRoot.querySelector(
         ".ea-pagination__icon--prev"
@@ -861,7 +860,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "100");
       pagination.setAttribute("disabled", "");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       const nextIcon = pagination.shadowRoot.querySelector(
         ".ea-pagination__icon--next"
@@ -876,7 +875,7 @@ describe("EaPagination", () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       const page5 = pagination.shadowRoot.querySelector(
         '.ea-pagination__page[data-page="5"]'
@@ -889,7 +888,7 @@ describe("EaPagination", () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       const handler = vi.fn();
       pagination.addEventListener("ea-current-change", handler);
@@ -898,7 +897,7 @@ describe("EaPagination", () => {
         '.ea-pagination__page[data-page="3"]'
       );
       page3.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      await waitForRender();
+      await pagination.updateComplete;
 
       expect(handler).toHaveBeenCalled();
       expect(handler.mock.calls[0][0].detail.value).toBe(3);
@@ -909,7 +908,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "1000");
       pagination.setAttribute("pager-count", "5");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       const moreItem = pagination.shadowRoot.querySelector(
         ".ea-pagination__more"
@@ -923,7 +922,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "100");
       pagination.setAttribute("current-page", "3");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       const activePage = pagination.shadowRoot.querySelector(
         '.ea-pagination__page.is-active[data-page="3"]'
@@ -936,7 +935,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "100");
       pagination.setAttribute("current-page", "3");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       const page5 = pagination.shadowRoot.querySelector(
         '.ea-pagination__page[data-page="5"]'
@@ -951,7 +950,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "100");
       pagination.setAttribute("current-page", "5");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       const jumperInput =
         pagination.shadowRoot.querySelector('[part="jumper"]');
@@ -962,7 +961,7 @@ describe("EaPagination", () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       const jumperInput =
         pagination.shadowRoot.querySelector('[part="jumper"]');
@@ -980,10 +979,10 @@ describe("EaPagination", () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       pagination.currentPage = 5;
-      await waitForRender();
+      await pagination.updateComplete;
 
       const jumperInput =
         pagination.shadowRoot.querySelector('[part="jumper"]');
@@ -994,7 +993,7 @@ describe("EaPagination", () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       const jumperInput =
         pagination.shadowRoot.querySelector('[part="jumper"]');
@@ -1017,7 +1016,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "100");
       pagination.layout = ["sizes", "prev", "pager", "next"];
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       const sizes = pagination.shadowRoot.querySelector('[part="sizes"]');
       const options = sizes.querySelectorAll("ea-option");
@@ -1030,7 +1029,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("page-size", "20");
       pagination.layout = ["sizes", "prev", "pager", "next"];
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       const sizes = pagination.shadowRoot.querySelector('[part="sizes"]');
       expect(sizes.value).toBe(20);
@@ -1041,7 +1040,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "100");
       pagination.layout = ["sizes", "prev", "pager", "next"];
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       const handler = vi.fn();
       pagination.addEventListener("ea-size-change", handler);
@@ -1049,7 +1048,7 @@ describe("EaPagination", () => {
       const sizes = pagination.shadowRoot.querySelector('[part="sizes"]');
       sizes.value = 50;
       sizes.dispatchEvent(new Event("change", { bubbles: true }));
-      await waitForRender();
+      await pagination.updateComplete;
 
       expect(handler).toHaveBeenCalled();
       expect(handler.mock.calls[0][0].detail.pageSize).toBe(50);
@@ -1061,7 +1060,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("current-page", "10");
       pagination.layout = ["sizes", "prev", "pager", "next"];
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       const sizes = pagination.shadowRoot.querySelector('[part="sizes"]');
       sizes.value = 50;
@@ -1082,7 +1081,7 @@ describe("EaPagination", () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "0");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       const prevIcon = pagination.shadowRoot.querySelector(
         ".ea-pagination__icon--prev"
@@ -1099,7 +1098,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "5");
       pagination.setAttribute("page-size", "100");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       const pages = pagination.shadowRoot.querySelectorAll(
         ".ea-pagination__page"
@@ -1121,7 +1120,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("page-size", "7");
       pagination.layout = ["sizes", "prev", "pager", "next"];
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       expect(pagination.pageSize).toBe(10);
     });
@@ -1130,7 +1129,7 @@ describe("EaPagination", () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       const initialPages = pagination.shadowRoot.querySelectorAll(
         ".ea-pagination__page"
@@ -1148,14 +1147,14 @@ describe("EaPagination", () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       expect(
         pagination.shadowRoot.querySelector('[part="total"]')
       ).toBeTruthy();
 
       pagination.layout = ["prev", "pager", "next"];
-      await waitForRender();
+      await pagination.updateComplete;
 
       expect(pagination.shadowRoot.querySelector('[part="total"]')).toBeFalsy();
     });
@@ -1164,7 +1163,7 @@ describe("EaPagination", () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100000");
       container.appendChild(pagination);
-      await waitForRender();
+      await pagination.updateComplete;
 
       expect(pagination.shadowRoot).toBeDefined();
       const totalEl = pagination.shadowRoot.querySelector(
@@ -1180,8 +1179,7 @@ describe("EaPagination", () => {
         const el = document.createElement("ea-pagination");
         el.setAttribute("total", "100");
         container.appendChild(el);
-        await waitForRender();
-        await waitForRender();
+        await el.updateComplete;
         const prevCurrent = el.currentPage;
         el.dispatchEvent(
           new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true })
@@ -1193,8 +1191,7 @@ describe("EaPagination", () => {
         el.setAttribute("total", "100");
         el.setAttribute("current-page", "2");
         container.appendChild(el);
-        await waitForRender();
-        await waitForRender();
+        await el.updateComplete;
         el.dispatchEvent(
           new KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true })
         );
@@ -1205,8 +1202,7 @@ describe("EaPagination", () => {
         el.setAttribute("total", "100");
         el.setAttribute("current-page", "5");
         container.appendChild(el);
-        await waitForRender();
-        await waitForRender();
+        await el.updateComplete;
         el.dispatchEvent(
           new KeyboardEvent("keydown", { key: "Home", bubbles: true })
         );
@@ -1216,8 +1212,7 @@ describe("EaPagination", () => {
         const el = document.createElement("ea-pagination");
         el.setAttribute("total", "100");
         container.appendChild(el);
-        await waitForRender();
-        await waitForRender();
+        await el.updateComplete;
         el.dispatchEvent(
           new KeyboardEvent("keydown", { key: "End", bubbles: true })
         );
@@ -1227,7 +1222,7 @@ describe("EaPagination", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-pagination");
       container.appendChild(el);
-      await waitForRender();
+      await el.updateComplete;
       const results = await runAxe(el, {
         rules: {
           "aria-prohibited-attr": { enabled: false },
@@ -1242,7 +1237,7 @@ describe("EaPagination", () => {
         const pagination = document.createElement("ea-pagination");
         pagination.setAttribute("total", "100");
         container.appendChild(pagination);
-        await waitForRender();
+        await pagination.updateComplete;
         const nav = pagination.shadowRoot.querySelector("nav");
         expect(nav).toBeTruthy();
         expect(nav.getAttribute("aria-label")).toBe("Pagination");
@@ -1252,7 +1247,7 @@ describe("EaPagination", () => {
         const pagination = document.createElement("ea-pagination");
         pagination.setAttribute("total", "100");
         container.appendChild(pagination);
-        await waitForRender();
+        await pagination.updateComplete;
         const prevIcon = pagination.shadowRoot.querySelector(
           ".ea-pagination__icon--prev"
         );
@@ -1263,7 +1258,7 @@ describe("EaPagination", () => {
         const pagination = document.createElement("ea-pagination");
         pagination.setAttribute("total", "100");
         container.appendChild(pagination);
-        await waitForRender();
+        await pagination.updateComplete;
         const nextIcon = pagination.shadowRoot.querySelector(
           ".ea-pagination__icon--next"
         );
@@ -1274,7 +1269,7 @@ describe("EaPagination", () => {
         const pagination = document.createElement("ea-pagination");
         pagination.setAttribute("total", "100");
         container.appendChild(pagination);
-        await waitForRender();
+        await pagination.updateComplete;
         const prevIcon = pagination.shadowRoot.querySelector(
           ".ea-pagination__icon--prev"
         );
@@ -1286,7 +1281,7 @@ describe("EaPagination", () => {
         pagination.setAttribute("total", "100");
         pagination.setAttribute("current-page", "3");
         container.appendChild(pagination);
-        await waitForRender();
+        await pagination.updateComplete;
         const prevIcon = pagination.shadowRoot.querySelector(
           ".ea-pagination__icon--prev"
         );
@@ -1298,7 +1293,7 @@ describe("EaPagination", () => {
         pagination.setAttribute("total", "100");
         pagination.setAttribute("current-page", "10");
         container.appendChild(pagination);
-        await waitForRender();
+        await pagination.updateComplete;
         const nextIcon = pagination.shadowRoot.querySelector(
           ".ea-pagination__icon--next"
         );
@@ -1310,7 +1305,7 @@ describe("EaPagination", () => {
         pagination.setAttribute("total", "100");
         pagination.setAttribute("current-page", "3");
         container.appendChild(pagination);
-        await waitForRender();
+        await pagination.updateComplete;
         const activePage = pagination.shadowRoot.querySelector(
           ".ea-pagination__page.is-active"
         );
@@ -1323,7 +1318,7 @@ describe("EaPagination", () => {
         pagination.setAttribute("total", "100");
         pagination.setAttribute("disabled", "");
         container.appendChild(pagination);
-        await waitForRender();
+        await pagination.updateComplete;
         expect(pagination.getAttribute("aria-disabled")).toBe("true");
       });
     });
