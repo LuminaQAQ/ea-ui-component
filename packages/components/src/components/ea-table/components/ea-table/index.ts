@@ -175,9 +175,9 @@ export class EaTable extends EaBase {
   @property({
     type: Array,
     default: [],
-    observer(this: EaTable, newVal: unknown[]) {
+    async observer(this: EaTable, newVal: unknown[]) {
       this._states.originData = newVal;
-      this.setData(newVal);
+      await this.setData(newVal);
     },
   })
   data: unknown[] = [];
