@@ -3,19 +3,16 @@ import path from "node:path";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import dtsPlugin from "vite-plugin-dts";
+import {
+  createEsbuildOptions,
+  createScssOptions,
+} from "../../internal/vite-config/index";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const srcDir = resolve(__dirname, "src");
 
 export default defineConfig({
-  esbuild: {
-    target: "es2020",
-    tsconfigRaw: {
-      compilerOptions: {
-        experimentalDecorators: true,
-      },
-    },
-  },
+  esbuild: createEsbuildOptions({ target: "es2020" }),
   plugins: [dtsPlugin({ outDir: "dist/types" })],
   build: {
     lib: {
@@ -35,14 +32,7 @@ export default defineConfig({
   },
   css: {
     preprocessorOptions: {
-      scss: {
-        api: "modern-compiler",
-        loadPaths: [resolve(srcDir, "styles")],
-        additionalData: `
-          @use "namespace" as *;
-          @use "mixins" as *;
-        `,
-      },
+      scss: createScssOptions(resolve(srcDir, "styles")),
     },
   },
 });

@@ -1,19 +1,13 @@
 import { defineConfig } from "vitest/config";
+import {
+  createEsbuildOptions,
+  createTestDefaults,
+} from "../../internal/vite-config/index";
 
 export default defineConfig({
   test: {
-    environment: "jsdom",
-    globals: true,
+    ...createTestDefaults({ maxWorkers: 4 }),
     include: ["src/**/*.test.{js,ts}"],
-    pool: "forks",
   },
-  esbuild: {
-    target: "es2022",
-    tsconfigRaw: {
-      compilerOptions: {
-        experimentalDecorators: true,
-        useDefineForClassFields: false,
-      },
-    },
-  },
+  esbuild: createEsbuildOptions({ target: "es2022" }),
 });

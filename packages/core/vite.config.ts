@@ -4,6 +4,12 @@ import { readdirSync, statSync } from "node:fs";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import dtsPlugin from "vite-plugin-dts";
+import {
+  RESOLVE_EXTENSIONS,
+  coreSourceAliases,
+  createEsbuildOptions,
+  createScssOptions,
+} from "../../internal/vite-config/index";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const srcDir = resolve(__dirname, "src");
@@ -22,14 +28,7 @@ sourceDirs.forEach(dir => {
 });
 
 export default defineConfig({
-  esbuild: {
-    target: "es2020",
-    tsconfigRaw: {
-      compilerOptions: {
-        experimentalDecorators: true,
-      },
-    },
-  },
+  esbuild: createEsbuildOptions({ target: "es2020" }),
   plugins: [dtsPlugin({ outDir: "dist/types" })],
   build: {
     lib: {
@@ -44,23 +43,11 @@ export default defineConfig({
   },
   css: {
     preprocessorOptions: {
-      scss: {
-        api: "modern-compiler",
-        loadPaths: [resolve(__dirname, "../themes/src/styles")],
-        additionalData: `
-          @use "namespace" as *;
-          @use "mixins" as *;
-        `,
-      },
+      scss: createScssOptions(resolve(__dirname, "../themes/src/styles")),
     },
   },
   resolve: {
-    extensions: [".mjs", ".js", ".mts", ".ts", ".jsx", ".tsx", ".json"],
-    alias: {
-      "@core": resolve(srcDir, "core"),
-      "@decorator": resolve(srcDir, "decorator"),
-      "@utils": resolve(srcDir, "utils"),
-      "@stores": resolve(srcDir, "stores"),
-    },
+    extensions: RESOLVE_EXTENSIONS,
+    alias: coreSourceAliases(srcDir),
   },
 });

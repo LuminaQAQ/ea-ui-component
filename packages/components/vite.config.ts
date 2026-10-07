@@ -1,22 +1,21 @@
 import { defineConfig, normalizePath } from "vite";
 import { visualizer } from "rollup-plugin-visualizer";
-import entryConfigs from "./configs/entryConfig.ts";
+import entryConfigs from "./configs/entryConfig";
 import path, { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import dtsPlugin from "vite-plugin-dts";
+import {
+  RESOLVE_EXTENSIONS,
+  componentsSourceAliases,
+  createEsbuildOptions,
+  createScssOptions,
+} from "../../internal/vite-config/index";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const themesSrcDir = resolve(__dirname, "../themes/src");
 
 export default defineConfig({
-  esbuild: {
-    target: "es2020",
-    tsconfigRaw: {
-      compilerOptions: {
-        experimentalDecorators: true,
-      },
-    },
-  },
+  esbuild: createEsbuildOptions({ target: "es2020" }),
   plugins: [
     ...(process.env.REPORT
       ? [
@@ -131,23 +130,11 @@ export default defineConfig({
   },
   css: {
     preprocessorOptions: {
-      scss: {
-        api: "modern-compiler",
-        loadPaths: [resolve(themesSrcDir, "styles")],
-        additionalData: `
-          @use "namespace" as *;
-          @use "mixins" as *;
-        `,
-      },
+      scss: createScssOptions(resolve(themesSrcDir, "styles")),
     },
   },
   resolve: {
-    extensions: [".mjs", ".js", ".mts", ".ts", ".jsx", ".tsx", ".json"],
-    alias: {
-      "@": resolve(__dirname, "src/"),
-      "@components": resolve(__dirname, "src/components"),
-      "@common": resolve(__dirname, "src/common"),
-      "@constants": resolve(__dirname, "src/constants"),
-    },
+    extensions: RESOLVE_EXTENSIONS,
+    alias: componentsSourceAliases(resolve(__dirname, "src")),
   },
 });
