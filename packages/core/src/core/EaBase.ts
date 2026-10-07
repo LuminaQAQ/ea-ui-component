@@ -18,6 +18,19 @@ export default class EaBase extends HTMLElement implements EaElement {
   private _isInitialized: boolean = false;
   private _rendered!: (value: void | PromiseLike<void>) => void;
 
+  private _pendingUpdateCount: number = 0;
+  private _pendingUpdatePromise: Promise<void> | null = null;
+  private _pendingUpdateResolve: (() => void) | null = null;
+
+  /**
+   * 更新完成信号
+   * 等待组件渲染（$mount/$mounted）与属性 observer 执行完成
+   * @returns 更新完成 Promise
+   */
+  get updateComplete(): Promise<void> {
+    return this._pendingUpdatePromise ?? Promise.resolve();
+  }
+
   /**
    * 语言设置
    * @default "en-US"
@@ -53,12 +66,21 @@ export default class EaBase extends HTMLElement implements EaElement {
       this.tabIndex = Number(tabindexAttr);
     }
 
-    requestAnimationFrame(() => {
-      this.$mount();
-      this._rendered?.();
-      this.$mounted();
+    this._beginUpdate();
 
-      this._isInitialized = true;
+    requestAnimationFrame(async () => {
+      try {
+        const mountResult = this.$mount() as unknown as
+          Promise<void> | undefined;
+
+        this._rendered?.();
+        this._isInitialized = true;
+
+        await mountResult;
+        await (this.$mounted() as unknown as Promise<void> | undefined);
+      } finally {
+        this._endUpdate();
+      }
     });
   }
 
@@ -81,6 +103,31 @@ export default class EaBase extends HTMLElement implements EaElement {
     await this._isRendered;
 
     this.$updated({ key: name, newVal, oldVal });
+  }
+
+  // ==================== 更新信号 ====================
+
+  /** 标记一次更新开始 */
+  _beginUpdate(): void {
+    this._pendingUpdateCount += 1;
+
+    if (!this._pendingUpdatePromise) {
+      this._pendingUpdatePromise = new Promise<void>(resolve => {
+        this._pendingUpdateResolve = resolve;
+      });
+    }
+  }
+
+  /** 标记一次更新结束，全部完成后触发 updateComplete */
+  _endUpdate(): void {
+    if (this._pendingUpdateCount > 0) this._pendingUpdateCount -= 1;
+
+    if (this._pendingUpdateCount === 0 && this._pendingUpdateResolve) {
+      const resolve = this._pendingUpdateResolve;
+      this._pendingUpdatePromise = null;
+      this._pendingUpdateResolve = null;
+      resolve();
+    }
   }
 
   // ==================== 子类可覆盖方法 ====================

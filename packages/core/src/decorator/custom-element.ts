@@ -190,13 +190,33 @@ function createPropertySetter(
     const oldVal = this[storageKey];
     this[storageKey] = newVal;
 
-    if (observer) {
-      observer.call(this, newVal, oldVal);
+    this._beginUpdate?.();
+
+    let observerResult: unknown;
+
+    try {
+      if (observer) {
+        observerResult = observer.call(this, newVal, oldVal);
+      }
+
+      if (a11y) {
+        syncA11yAttribute(this, a11y, newVal);
+      }
+    } catch (e) {
+      this._endUpdate?.();
+      throw e;
     }
 
-    if (a11y) {
-      syncA11yAttribute(this, a11y, newVal);
+    if (
+      observerResult &&
+      typeof (observerResult as Promise<void>).then === "function"
+    ) {
+      return (observerResult as Promise<void>).finally(() =>
+        this._endUpdate?.()
+      );
     }
+
+    this._endUpdate?.();
   };
 }
 
@@ -516,6 +536,8 @@ function CustomElement(
         oldVal: string | null,
         newVal: string | null
       ): Promise<void> {
+        (this as any)._beginUpdate?.();
+
         try {
           const parentProto: any = CustomElementClass.prototype;
           let found = false;
@@ -557,7 +579,7 @@ function CustomElement(
               );
             }
 
-            option.observer?.call(this, newValue, oldValue);
+            await option.observer?.call(this, newValue, oldValue);
 
             if (option.a11y) {
               syncA11yAttribute(this, option.a11y, newValue);
@@ -582,6 +604,8 @@ function CustomElement(
           if (process.env.NODE_ENV === "development") {
             console.error(e, this);
           }
+        } finally {
+          (this as any)._endUpdate?.();
         }
       }
     }
