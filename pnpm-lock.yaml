@@ -90,6 +90,9 @@ importers:
       tsx:
         specifier: ^4.22.3
         version: 4.23.15
+      typescript:
+        specifier: ^5.8.3
+        version: 5.9.3
       vite:
         specifier: ^6.3.5
         version: 6.4.3(@types/node@24.19.0)(jiti@2.6.1)(sass@1.105.0)(tsx@4.23.15)(yaml@2.9.1)
