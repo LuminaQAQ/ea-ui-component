@@ -19,6 +19,6 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm run typecheck
       - run: pnpm -r typecheck
-      - run: pnpm run test:run
+      - run: pnpm test
       - run: pnpm --filter easy-component-ui exec playwright install --with-deps chromium
       - run: pnpm test:browser
