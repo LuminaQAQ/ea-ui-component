@@ -27,7 +27,15 @@ export default defineConfig({
           }),
         ]
       : []),
-    dtsPlugin({ outDir: "dist/types" }),
+    dtsPlugin({
+      outDir: "dist/types",
+      exclude: [
+        "**/node_modules/**",
+        "src/test/**",
+        "src/**/*.test.js",
+        "src/**/*.test.ts",
+      ],
+    }),
   ],
   build: {
     lib: {

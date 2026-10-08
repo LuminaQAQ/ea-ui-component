@@ -15,6 +15,7 @@ export default defineConfig([
       "docs/.vitepress/public/",
       "src/test/",
       "packages/components/src/test/",
+      "packages/components/src/**/*.test.js",
       "vite.config.js.timestamp-*",
       "upload-server/uploads/",
       "upload-server/logs/",

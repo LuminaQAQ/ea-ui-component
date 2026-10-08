@@ -1,0 +1,1594 @@
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { waitForRender } from "../../test/utils/waitForRender";
+import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y";
+
+import "./index";
+
+function createCarousel(itemCount = 3, attrs = {}) {
+  const carousel = document.createElement("ea-carousel");
+  for (let i = 0; i < itemCount; i++) {
+    const item = document.createElement("ea-carousel-item");
+    item.textContent = `Item ${i + 1}`;
+    carousel.appendChild(item);
+  }
+  Object.entries(attrs).forEach(([key, value]) => {
+    if (value === false) {
+      carousel.removeAttribute(key);
+    } else if (typeof value === "boolean") {
+      carousel.toggleAttribute(key, value);
+    } else {
+      carousel.setAttribute(key, String(value));
+    }
+  });
+  return carousel;
+}
+
+function getContent(carousel) {
+  return carousel.shadowRoot.querySelector(".ea-carousel__content");
+}
+
+function getIndicators(carousel) {
+  return carousel.shadowRoot.querySelectorAll(".ea-carousel__indicator");
+}
+
+function getContainer(carousel) {
+  return carousel.shadowRoot.querySelector(".ea-carousel");
+}
+
+async function simulateTransitionEnd(carousel) {
+  const content = getContent(carousel);
+  content.dispatchEvent(new Event("transitionend"));
+  await waitForRender();
+}
+
+describe("EaCarousel", () => {
+  let container;
+
+  beforeEach(() => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+  });
+
+  afterEach(() => {
+    container.remove();
+  });
+
+  describe("Basic Rendering", () => {
+    it("should render ea-carousel with shadow DOM", () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      expect(carousel.shadowRoot).toBeDefined();
+      expect(carousel.shadowRoot.querySelector(".ea-carousel")).toBeTruthy();
+    });
+
+    it("should render ea-carousel-item with shadow DOM", () => {
+      const item = document.createElement("ea-carousel-item");
+      container.appendChild(item);
+      expect(item.shadowRoot).toBeDefined();
+      expect(item.shadowRoot.querySelector(".ea-carousel-item")).toBeTruthy();
+    });
+
+    it("should contain a default slot in ea-carousel-item", () => {
+      const item = document.createElement("ea-carousel-item");
+      container.appendChild(item);
+      const slot = item.shadowRoot.querySelector("slot");
+      expect(slot).toBeTruthy();
+    });
+
+    it("should contain required CSS parts", () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      expect(
+        carousel.shadowRoot.querySelector('[part="container"]')
+      ).toBeTruthy();
+      expect(
+        carousel.shadowRoot.querySelector('[part="content"]')
+      ).toBeTruthy();
+      expect(
+        carousel.shadowRoot.querySelector('[part="indicator-wrap"]')
+      ).toBeTruthy();
+      expect(
+        carousel.shadowRoot.querySelector('[part="arrow-left"]')
+      ).toBeTruthy();
+      expect(
+        carousel.shadowRoot.querySelector('[part="arrow-right"]')
+      ).toBeTruthy();
+    });
+
+    it("should contain left and right arrow buttons", () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      expect(carousel.shadowRoot.querySelector(".arrow-left")).toBeTruthy();
+      expect(carousel.shadowRoot.querySelector(".arrow-right")).toBeTruthy();
+    });
+
+    it("should contain indicator wrap element", () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      expect(
+        carousel.shadowRoot.querySelector(".ea-carousel__indicator-wrap")
+      ).toBeTruthy();
+    });
+
+    it("should contain clone slots in content", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const content = getContent(carousel);
+      expect(content.querySelector('slot[name="clone-first"]')).toBeTruthy();
+      expect(content.querySelector('slot[name="clone-last"]')).toBeTruthy();
+      expect(content.querySelector("slot:not([name])")).toBeTruthy();
+    });
+  });
+
+  describe("Height Attribute", () => {
+    it("should default to '100%'", () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      expect(carousel.height).toBe("100%");
+      expect(carousel.getAttribute("height") || "100%").toBe("100%");
+    });
+
+    it("should set --ea-carousel-height CSS property", async () => {
+      const carousel = createCarousel(3, { height: "300px" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      expect(carousel.style.getPropertyValue("--ea-carousel-height")).toBe(
+        "300px"
+      );
+    });
+
+    it("should update --ea-carousel-height when height changes", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      carousel.setAttribute("height", "500px");
+      await carousel.updateComplete;
+
+      expect(carousel.style.getPropertyValue("--ea-carousel-height")).toBe(
+        "500px"
+      );
+    });
+
+    it("should accept percentage values", async () => {
+      const carousel = createCarousel(3, { height: "50%" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      expect(carousel.style.getPropertyValue("--ea-carousel-height")).toBe(
+        "50%"
+      );
+    });
+
+    it("should accept vh values", async () => {
+      const carousel = createCarousel(3, { height: "80vh" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      expect(carousel.style.getPropertyValue("--ea-carousel-height")).toBe(
+        "80vh"
+      );
+    });
+  });
+
+  describe("Direction Attribute", () => {
+    it("should default to 'horizontal'", () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      expect(carousel.direction).toBe("horizontal");
+      expect(carousel.getAttribute("direction") || "horizontal").toBe(
+        "horizontal"
+      );
+    });
+
+    it("should apply horizontal class by default", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const containerEl = getContainer(carousel);
+      expect(containerEl.classList.contains("ea-carousel--horizontal")).toBe(
+        true
+      );
+    });
+
+    it("should apply vertical class when direction='vertical'", async () => {
+      const carousel = createCarousel(3, { direction: "vertical" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const containerEl = getContainer(carousel);
+      expect(containerEl.classList.contains("ea-carousel--vertical")).toBe(
+        true
+      );
+      expect(containerEl.classList.contains("ea-carousel--horizontal")).toBe(
+        false
+      );
+    });
+
+    it("should switch class when direction changes dynamically", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      carousel.setAttribute("direction", "vertical");
+      await carousel.updateComplete;
+
+      const containerEl = getContainer(carousel);
+      expect(containerEl.classList.contains("ea-carousel--vertical")).toBe(
+        true
+      );
+      expect(containerEl.classList.contains("ea-carousel--horizontal")).toBe(
+        false
+      );
+    });
+
+    it("should hide arrows in vertical direction", async () => {
+      const carousel = createCarousel(3, { direction: "vertical" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      carousel.next();
+      expect(carousel.getAttribute("index")).toBe("1");
+    });
+  });
+
+  describe("Index Attribute", () => {
+    it("should default to 0", () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      expect(carousel.index).toBe(0);
+      expect(carousel.getAttribute("index") || "0").toBe("0");
+    });
+
+    it("should set index via attribute", () => {
+      const carousel = createCarousel(3, { index: "1" });
+      container.appendChild(carousel);
+      expect(carousel.index).toBe(1);
+      expect(carousel.getAttribute("index")).toBe("1");
+    });
+
+    it("should update position when index changes", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      carousel.setAttribute("index", "2");
+      await carousel.updateComplete;
+
+      const transform = carousel.style.getPropertyValue(
+        "--ea-carousel-transform"
+      );
+      expect(transform).toBeTruthy();
+      expect(transform).not.toBe("translateX(0px)");
+    });
+
+    it("should emit 'ea-change' event when index changes", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      const changeHandler = vi.fn();
+      carousel.addEventListener("ea-change", changeHandler);
+
+      carousel.setAttribute("index", "1");
+      await carousel.updateComplete;
+
+      expect(changeHandler).toHaveBeenCalledTimes(1);
+      expect(changeHandler.mock.calls[0][0].detail).toEqual({
+        current: 1,
+        prev: 0,
+      });
+    });
+
+    it("should emit 'ea-change' event with correct prev and current", async () => {
+      const carousel = createCarousel(3, { index: "1" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const changeHandler = vi.fn();
+      carousel.addEventListener("ea-change", changeHandler);
+
+      carousel.setAttribute("index", "2");
+      await carousel.updateComplete;
+
+      expect(changeHandler).toHaveBeenCalledTimes(1);
+      expect(changeHandler.mock.calls[0][0].detail).toEqual({
+        current: 2,
+        prev: 1,
+      });
+    });
+
+    it("should emit 'ea-change' event when looping forward", async () => {
+      const carousel = createCarousel(3, { index: "2" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const changeHandler = vi.fn();
+      carousel.addEventListener("ea-change", changeHandler);
+
+      carousel.next();
+      await carousel.updateComplete;
+
+      expect(changeHandler).toHaveBeenCalledTimes(1);
+      expect(changeHandler.mock.calls[0][0].detail).toEqual({
+        current: 0,
+        prev: 2,
+      });
+    });
+
+    it("should emit 'ea-change' event when looping backward", async () => {
+      const carousel = createCarousel(3, { index: "0" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const changeHandler = vi.fn();
+      carousel.addEventListener("ea-change", changeHandler);
+
+      carousel.prev();
+      await carousel.updateComplete;
+
+      expect(changeHandler).toHaveBeenCalledTimes(1);
+      expect(changeHandler.mock.calls[0][0].detail).toEqual({
+        current: 2,
+        prev: 0,
+      });
+    });
+  });
+
+  describe("Trigger Attribute", () => {
+    it("should default to 'hover'", () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      expect(carousel.trigger).toBe("hover");
+      expect(carousel.getAttribute("trigger") || "hover").toBe("hover");
+    });
+
+    it("should accept 'click' value", () => {
+      const carousel = createCarousel(3, { trigger: "click" });
+      container.appendChild(carousel);
+      expect(carousel.trigger).toBe("click");
+      expect(carousel.getAttribute("trigger")).toBe("click");
+    });
+
+    it("should switch trigger dynamically", () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      carousel.setAttribute("trigger", "click");
+      expect(carousel.trigger).toBe("click");
+    });
+  });
+
+  describe("Interval Attribute", () => {
+    it("should default to 3000", () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      expect(carousel.interval).toBe(3000);
+    });
+
+    it("should accept custom interval", () => {
+      const carousel = createCarousel(3, { interval: "5000" });
+      container.appendChild(carousel);
+      expect(carousel.interval).toBe(5000);
+    });
+
+    it("should update interval dynamically", () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      carousel.setAttribute("interval", "2000");
+      expect(carousel.interval).toBe(2000);
+    });
+  });
+
+  describe("Arrow Attribute", () => {
+    it("should default to 'hover'", () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      expect(carousel.arrow).toBe("hover");
+      expect(carousel.getAttribute("arrow") || "hover").toBe("hover");
+    });
+
+    it("should apply arrow-always class when arrow='always'", async () => {
+      const carousel = createCarousel(3, { arrow: "always" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const containerEl = getContainer(carousel);
+      expect(containerEl.classList.contains("is-arrow-always")).toBe(true);
+    });
+
+    it("should apply arrow-never class when arrow='never'", async () => {
+      const carousel = createCarousel(3, { arrow: "never" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const containerEl = getContainer(carousel);
+      expect(containerEl.classList.contains("is-arrow-never")).toBe(true);
+    });
+
+    it("should show arrows on mouseenter when arrow='hover'", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const containerEl = getContainer(carousel);
+      containerEl.dispatchEvent(
+        new MouseEvent("mouseenter", { bubbles: true })
+      );
+      await carousel.updateComplete;
+
+      expect(containerEl.classList.contains("is-arrow-hover")).toBe(true);
+    });
+
+    it("should hide arrows on mouseleave when arrow='hover'", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const containerEl = getContainer(carousel);
+      containerEl.dispatchEvent(
+        new MouseEvent("mouseenter", { bubbles: true })
+      );
+      await carousel.updateComplete;
+      expect(containerEl.classList.contains("is-arrow-hover")).toBe(true);
+
+      containerEl.dispatchEvent(
+        new MouseEvent("mouseleave", { bubbles: true })
+      );
+      await carousel.updateComplete;
+      expect(containerEl.classList.contains("is-arrow-hover")).toBe(false);
+    });
+
+    it("should switch arrow class dynamically", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      carousel.setAttribute("arrow", "always");
+      await carousel.updateComplete;
+
+      const containerEl = getContainer(carousel);
+      expect(containerEl.classList.contains("is-arrow-always")).toBe(true);
+    });
+  });
+
+  describe("Autoplay Attribute", () => {
+    it("should default to true", () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      expect(carousel.autoplay).toBe(true);
+    });
+
+    it("should accept false value", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      carousel.autoplay = false;
+      expect(carousel.autoplay).toBe(false);
+    });
+
+    it("should toggle autoplay dynamically", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      carousel.autoplay = false;
+      expect(carousel.autoplay).toBe(false);
+    });
+  });
+
+  describe("Loop Attribute", () => {
+    it("should default to true", () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      expect(carousel.loop).toBe(true);
+    });
+
+    it("should accept false value", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      carousel.loop = false;
+      expect(carousel.loop).toBe(false);
+    });
+
+    it("should toggle loop dynamically", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      carousel.loop = false;
+      expect(carousel.loop).toBe(false);
+    });
+  });
+
+  describe("PauseOnHover Attribute", () => {
+    it("should default to true", () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      expect(carousel.pauseOnHover).toBe(true);
+    });
+
+    it("should accept false value", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      carousel.pauseOnHover = false;
+      expect(carousel.pauseOnHover).toBe(false);
+    });
+  });
+
+  describe("IndicatorPosition Attribute", () => {
+    it("should default to empty string (inside)", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      expect(carousel.indicatorPosition).toBe("");
+      const containerEl = getContainer(carousel);
+      expect(containerEl.classList.contains("is-none-indicator")).toBe(false);
+      expect(containerEl.classList.contains("is-outside-indicator")).toBe(
+        false
+      );
+    });
+
+    it("should hide indicators when indicator-position='none'", async () => {
+      const carousel = createCarousel(3, { "indicator-position": "none" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const containerEl = getContainer(carousel);
+      expect(containerEl.classList.contains("is-none-indicator")).toBe(true);
+    });
+
+    it("should show outside indicators when indicator-position='outside'", async () => {
+      const carousel = createCarousel(3, { "indicator-position": "outside" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const containerEl = getContainer(carousel);
+      expect(containerEl.classList.contains("is-outside-indicator")).toBe(true);
+    });
+
+    it("should switch indicator position dynamically", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      carousel.setAttribute("indicator-position", "outside");
+      await carousel.updateComplete;
+
+      const containerEl = getContainer(carousel);
+      expect(containerEl.classList.contains("is-outside-indicator")).toBe(true);
+    });
+  });
+
+  describe("Navigation - next()", () => {
+    it("should move to next item", async () => {
+      const carousel = createCarousel(3, { index: "0" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      carousel.next();
+      expect(carousel.getAttribute("index")).toBe("1");
+    });
+
+    it("should set pause state during transition", async () => {
+      const carousel = createCarousel(3, { index: "0" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      carousel.next();
+      expect(carousel.getAttribute("index")).toBe("1");
+
+      carousel.next();
+      expect(carousel.getAttribute("index")).toBe("1");
+    });
+
+    it("should allow next after transitionend", async () => {
+      const carousel = createCarousel(3, { index: "0" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      carousel.next();
+      expect(carousel.getAttribute("index")).toBe("1");
+
+      await simulateTransitionEnd(carousel);
+
+      carousel.next();
+      expect(carousel.getAttribute("index")).toBe("2");
+    });
+
+    it("should go to clone-first when on last item (loop)", async () => {
+      const carousel = createCarousel(3, { index: "2" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      carousel.next();
+      expect(carousel.getAttribute("index")).toBe("3");
+    });
+
+    it("should reset to first item after transitionend on clone-first", async () => {
+      const carousel = createCarousel(3, { index: "2" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      carousel.next();
+      expect(carousel.getAttribute("index")).toBe("3");
+
+      await simulateTransitionEnd(carousel);
+
+      expect(carousel.getAttribute("index")).toBe("0");
+    });
+  });
+
+  describe("Navigation - prev()", () => {
+    it("should move to previous item", async () => {
+      const carousel = createCarousel(3, { index: "2" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      carousel.prev();
+      expect(carousel.getAttribute("index")).toBe("1");
+    });
+
+    it("should set pause state during transition", async () => {
+      const carousel = createCarousel(3, { index: "2" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      carousel.prev();
+      expect(carousel.getAttribute("index")).toBe("1");
+
+      carousel.prev();
+      expect(carousel.getAttribute("index")).toBe("1");
+    });
+
+    it("should allow prev after transitionend", async () => {
+      const carousel = createCarousel(3, { index: "2" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      carousel.prev();
+      expect(carousel.getAttribute("index")).toBe("1");
+
+      await simulateTransitionEnd(carousel);
+
+      carousel.prev();
+      expect(carousel.getAttribute("index")).toBe("0");
+    });
+
+    it("should go to clone-last when on first item (loop)", async () => {
+      const carousel = createCarousel(3, { index: "0" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      carousel.prev();
+      expect(carousel.getAttribute("index")).toBe("-1");
+    });
+
+    it("should reset to last item after transitionend on clone-last", async () => {
+      const carousel = createCarousel(3, { index: "0" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      carousel.prev();
+      expect(carousel.getAttribute("index")).toBe("-1");
+
+      await simulateTransitionEnd(carousel);
+
+      expect(carousel.getAttribute("index")).toBe("2");
+    });
+  });
+
+  describe("Arrow Click Navigation", () => {
+    it("should call prev() on left arrow click", async () => {
+      const carousel = createCarousel(3, { index: "1" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const leftArrow = carousel.shadowRoot.querySelector(".arrow-left");
+      leftArrow.click();
+
+      expect(carousel.getAttribute("index")).toBe("0");
+    });
+
+    it("should call next() on right arrow click", async () => {
+      const carousel = createCarousel(3, { index: "1" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const rightArrow = carousel.shadowRoot.querySelector(".arrow-right");
+      rightArrow.click();
+
+      expect(carousel.getAttribute("index")).toBe("2");
+    });
+
+    it("should ignore arrow clicks when arrow='never'", async () => {
+      const carousel = createCarousel(3, { index: "1", arrow: "never" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const rightArrow = carousel.shadowRoot.querySelector(".arrow-right");
+      rightArrow.click();
+
+      expect(carousel.getAttribute("index")).toBe("1");
+    });
+
+    it("should ignore arrow clicks when direction='vertical'", async () => {
+      const carousel = createCarousel(3, { index: "1", direction: "vertical" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const rightArrow = carousel.shadowRoot.querySelector(".arrow-right");
+      rightArrow.click();
+
+      expect(carousel.getAttribute("index")).toBe("1");
+    });
+  });
+
+  describe("Indicators", () => {
+    it("should generate indicators based on item count", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const indicators = getIndicators(carousel);
+      expect(indicators.length).toBe(3);
+    });
+
+    it("should generate correct number of indicators for different counts", async () => {
+      const carousel = createCarousel(5);
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const indicators = getIndicators(carousel);
+      expect(indicators.length).toBe(5);
+    });
+
+    it("should mark first indicator as active by default", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const indicators = getIndicators(carousel);
+      expect(indicators[0].classList.contains("is-active")).toBe(true);
+    });
+
+    it("should update active indicator when index changes", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      carousel.setAttribute("index", "1");
+      await carousel.updateComplete;
+
+      const indicators = getIndicators(carousel);
+      expect(indicators[0].classList.contains("is-active")).toBe(false);
+      expect(indicators[1].classList.contains("is-active")).toBe(true);
+    });
+
+    it("should navigate to item on indicator click", async () => {
+      const carousel = createCarousel(3, { trigger: "click" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const indicators = getIndicators(carousel);
+      indicators[2].dispatchEvent(new Event("click", { bubbles: true }));
+      expect(carousel.getAttribute("index")).toBe("2");
+    });
+
+    it("should navigate to item on indicator hover when trigger='hover'", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const indicators = getIndicators(carousel);
+      indicators[1].dispatchEvent(
+        new MouseEvent("mouseover", { bubbles: true })
+      );
+      expect(carousel.getAttribute("index")).toBe("1");
+    });
+
+    it("should have correct data-index attributes", () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      const indicators = getIndicators(carousel);
+      indicators.forEach((indicator, i) => {
+        expect(indicator.getAttribute("data-index")).toBe(String(i));
+      });
+    });
+
+    it("should update indicators when items are added dynamically", async () => {
+      const carousel = createCarousel(2);
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      let indicators = getIndicators(carousel);
+      expect(indicators.length).toBe(2);
+
+      const newItem = document.createElement("ea-carousel-item");
+      newItem.textContent = "Item 3";
+      carousel.appendChild(newItem);
+      carousel.$mount();
+      await newItem.updateComplete;
+
+      indicators = getIndicators(carousel);
+      expect(indicators.length).toBe(3);
+    });
+
+    it("should update indicators when items are removed", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      let indicators = getIndicators(carousel);
+      expect(indicators.length).toBe(3);
+
+      const items = carousel.querySelectorAll("ea-carousel-item:not([slot])");
+      items[2].remove();
+      carousel.$mount();
+      await carousel.updateComplete;
+
+      indicators = getIndicators(carousel);
+      expect(indicators.length).toBe(2);
+    });
+  });
+
+  describe("Clone Items", () => {
+    it("should create clone-first and clone-last items", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const cloneFirst = carousel.querySelector(
+        'ea-carousel-item[slot="clone-first"]'
+      );
+      const cloneLast = carousel.querySelector(
+        'ea-carousel-item[slot="clone-last"]'
+      );
+      expect(cloneFirst).toBeTruthy();
+      expect(cloneLast).toBeTruthy();
+    });
+
+    it("should clone content of first item for clone-first", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const cloneFirst = carousel.querySelector(
+        'ea-carousel-item[slot="clone-first"]'
+      );
+      const firstItem = carousel.querySelector("ea-carousel-item:not([slot])");
+      expect(cloneFirst.textContent).toBe(firstItem.textContent);
+    });
+
+    it("should clone content of last item for clone-last", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const cloneLast = carousel.querySelector(
+        'ea-carousel-item[slot="clone-last"]'
+      );
+      const items = carousel.querySelectorAll("ea-carousel-item:not([slot])");
+      const lastItem = items[items.length - 1];
+      expect(cloneLast.textContent).toBe(lastItem.textContent);
+    });
+
+    it("should sync clone content when original item changes", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const firstItem = carousel.querySelector("ea-carousel-item:not([slot])");
+      firstItem.textContent = "Updated First";
+      await vi.waitFor(() => {
+        expect(
+          carousel.querySelector('ea-carousel-item[slot="clone-first"]')
+            .textContent
+        ).toBe("Updated First");
+      });
+    });
+
+    it("should remove old clones before creating new ones on remount", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      carousel.$mount();
+      await carousel.updateComplete;
+
+      const clones = carousel.querySelectorAll(
+        'ea-carousel-item[slot^="clone-"]'
+      );
+      expect(clones.length).toBe(2);
+    });
+  });
+
+  describe("Transition Handling", () => {
+    it("should disable transition during loop reset", async () => {
+      const carousel = createCarousel(3, { index: "2" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      carousel.next();
+      expect(carousel.getAttribute("index")).toBe("3");
+
+      await simulateTransitionEnd(carousel);
+
+      expect(carousel.getAttribute("index")).toBe("0");
+    });
+
+    it("should re-enable transition after loop reset", async () => {
+      const carousel = createCarousel(3, { index: "2" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      carousel.next();
+      await simulateTransitionEnd(carousel);
+
+      carousel.next();
+      expect(carousel.getAttribute("index")).toBe("1");
+    });
+
+    it("should handle backward loop transition correctly", async () => {
+      const carousel = createCarousel(3, { index: "0" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      carousel.prev();
+      expect(carousel.getAttribute("index")).toBe("-1");
+
+      await simulateTransitionEnd(carousel);
+
+      expect(carousel.getAttribute("index")).toBe("2");
+    });
+
+    it("should allow navigation after full loop cycle", async () => {
+      const carousel = createCarousel(3, { index: "2" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      carousel.next();
+      await simulateTransitionEnd(carousel);
+      expect(carousel.getAttribute("index")).toBe("0");
+
+      carousel.next();
+      await simulateTransitionEnd(carousel);
+      expect(carousel.getAttribute("index")).toBe("1");
+
+      carousel.next();
+      await simulateTransitionEnd(carousel);
+      expect(carousel.getAttribute("index")).toBe("2");
+    });
+  });
+
+  describe("Autoplay Behavior", () => {
+    it("should start autoplay on mount by default", async () => {
+      const carousel = createCarousel(3, { interval: "50" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      expect(carousel.getAttribute("index")).toBe("1");
+    });
+
+    it("should not autoplay when autoplay is false", async () => {
+      const carousel = createCarousel(3, { interval: "500" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      carousel.autoplay = false;
+      await carousel.updateComplete;
+
+      await new Promise(resolve => setTimeout(resolve, 600));
+      expect(carousel.getAttribute("index") || "0").toBe("0");
+    });
+
+    it("should respect custom interval", async () => {
+      const carousel = createCarousel(3, { interval: "500" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      await new Promise(resolve => setTimeout(resolve, 200));
+      expect(carousel.getAttribute("index") || "0").toBe("0");
+
+      await new Promise(resolve => setTimeout(resolve, 500));
+      expect(carousel.getAttribute("index")).toBe("1");
+    });
+
+    it("should pause autoplay on mouseenter when pauseOnHover is true", async () => {
+      const carousel = createCarousel(3, { interval: "500" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const containerEl = getContainer(carousel);
+      containerEl.dispatchEvent(
+        new MouseEvent("mouseenter", { bubbles: true })
+      );
+      await carousel.updateComplete;
+
+      await new Promise(resolve => setTimeout(resolve, 600));
+      expect(carousel.getAttribute("index") || "0").toBe("0");
+    });
+
+    it("should resume autoplay on mouseleave when pauseOnHover is true", async () => {
+      const carousel = createCarousel(3, { interval: "50" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const containerEl = getContainer(carousel);
+      containerEl.dispatchEvent(
+        new MouseEvent("mouseenter", { bubbles: true })
+      );
+      await carousel.updateComplete;
+
+      containerEl.dispatchEvent(
+        new MouseEvent("mouseleave", { bubbles: true })
+      );
+      await carousel.updateComplete;
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      expect(carousel.getAttribute("index")).toBe("1");
+    });
+
+    it("should not pause on hover when pauseOnHover is false", async () => {
+      const carousel = createCarousel(3, { interval: "50" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      carousel.pauseOnHover = false;
+      await carousel.updateComplete;
+
+      const containerEl = getContainer(carousel);
+      containerEl.dispatchEvent(
+        new MouseEvent("mouseenter", { bubbles: true })
+      );
+      await carousel.updateComplete;
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      expect(carousel.getAttribute("index")).toBe("1");
+    });
+
+    it("should restart autoplay after manual navigation and transitionend", async () => {
+      const carousel = createCarousel(3, { index: "0", interval: "50" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      carousel.next();
+      await simulateTransitionEnd(carousel);
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      expect(carousel.getAttribute("index")).toBe("2");
+    });
+  });
+
+  describe("Events", () => {
+    it("should emit 'ea-change' event with bubbles and composed", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      const changeHandler = vi.fn();
+      container.addEventListener("ea-change", changeHandler);
+
+      carousel.setAttribute("index", "1");
+      await carousel.updateComplete;
+
+      expect(changeHandler).toHaveBeenCalledTimes(1);
+    });
+
+    it("should emit 'ea-change' event with correct detail on loop forward", async () => {
+      const carousel = createCarousel(3, { index: "2" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const changeHandler = vi.fn();
+      carousel.addEventListener("ea-change", changeHandler);
+
+      carousel.next();
+      await carousel.updateComplete;
+
+      expect(changeHandler).toHaveBeenCalledTimes(1);
+      expect(changeHandler.mock.calls[0][0].detail.current).toBe(0);
+      expect(changeHandler.mock.calls[0][0].detail.prev).toBe(2);
+    });
+
+    it("should emit 'ea-change' event with correct detail on loop backward", async () => {
+      const carousel = createCarousel(3, { index: "0" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const changeHandler = vi.fn();
+      carousel.addEventListener("ea-change", changeHandler);
+
+      carousel.prev();
+      await carousel.updateComplete;
+
+      expect(changeHandler).toHaveBeenCalledTimes(1);
+      expect(changeHandler.mock.calls[0][0].detail.current).toBe(2);
+      expect(changeHandler.mock.calls[0][0].detail.prev).toBe(0);
+    });
+
+    it("should emit 'ea-change' event when index attribute is set", async () => {
+      const changeHandler = vi.fn();
+      const carousel = createCarousel(3);
+      carousel.addEventListener("ea-change", changeHandler);
+      container.appendChild(carousel);
+      changeHandler.mockClear();
+
+      carousel.setAttribute("index", "0");
+      await carousel.updateComplete;
+
+      expect(changeHandler).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe("CSS Classes", () => {
+    it("should apply correct direction class", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const containerEl = getContainer(carousel);
+      expect(containerEl.classList.contains("ea-carousel--horizontal")).toBe(
+        true
+      );
+    });
+
+    it("should apply arrow class on mouseenter", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const containerEl = getContainer(carousel);
+      containerEl.dispatchEvent(
+        new MouseEvent("mouseenter", { bubbles: true })
+      );
+      await carousel.updateComplete;
+
+      expect(containerEl.classList.contains("is-arrow-hover")).toBe(true);
+    });
+
+    it("should apply none-indicator class", async () => {
+      const carousel = createCarousel(3, { "indicator-position": "none" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const containerEl = getContainer(carousel);
+      expect(containerEl.classList.contains("is-none-indicator")).toBe(true);
+    });
+
+    it("should apply outside-indicator class", async () => {
+      const carousel = createCarousel(3, { "indicator-position": "outside" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const containerEl = getContainer(carousel);
+      expect(containerEl.classList.contains("is-outside-indicator")).toBe(true);
+    });
+
+    it("should combine multiple classes correctly", async () => {
+      const carousel = createCarousel(3, {
+        direction: "vertical",
+        arrow: "always",
+        "indicator-position": "outside",
+      });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const containerEl = getContainer(carousel);
+      expect(containerEl.classList.contains("ea-carousel--vertical")).toBe(
+        true
+      );
+      expect(containerEl.classList.contains("is-arrow-always")).toBe(true);
+      expect(containerEl.classList.contains("is-outside-indicator")).toBe(true);
+    });
+  });
+
+  describe("Resize Handling", () => {
+    it("should update position on window resize", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const initialTransform = carousel.style.getPropertyValue(
+        "--ea-carousel-transform"
+      );
+
+      window.dispatchEvent(new Event("resize"));
+      await vi.waitFor(() => {
+        expect(
+          carousel.style.getPropertyValue("--ea-carousel-transform")
+        ).toBeTruthy();
+      });
+    });
+  });
+
+  describe("Slot Change", () => {
+    it("should reinitialize on slot change", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const indicators = getIndicators(carousel);
+      expect(indicators.length).toBe(3);
+
+      const newItem = document.createElement("ea-carousel-item");
+      newItem.textContent = "New Item";
+      carousel.appendChild(newItem);
+
+      const slot = getContent(carousel).querySelector("slot:not([name])");
+      slot.dispatchEvent(new Event("slotchange"));
+      await newItem.updateComplete;
+
+      const updatedIndicators = getIndicators(carousel);
+      expect(updatedIndicators.length).toBe(4);
+    });
+
+    it("should reset index to 0 on slot change", async () => {
+      const carousel = createCarousel(3, { index: "2" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      expect(carousel.getAttribute("index")).toBe("2");
+
+      const newItem = document.createElement("ea-carousel-item");
+      newItem.textContent = "New Item";
+      carousel.appendChild(newItem);
+
+      const slot = getContent(carousel).querySelector("slot:not([name])");
+      slot.dispatchEvent(new Event("slotchange"));
+      expect(carousel.getAttribute("index")).toBe("0");
+    });
+  });
+
+  describe("Lifecycle", () => {
+    it("should initialize correctly on mount", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      expect(carousel.shadowRoot.querySelector(".ea-carousel")).toBeTruthy();
+      expect(getContent(carousel)).toBeTruthy();
+      expect(getIndicators(carousel).length).toBe(3);
+    });
+
+    it("should clean up on unmount", () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      expect(() => {
+        carousel.$beforeUnmount();
+      }).not.toThrow();
+    });
+
+    it("should clean up abort controllers on unmount", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      carousel.$beforeUnmount();
+      carousel.remove();
+
+      expect(carousel.isConnected).toBe(false);
+    });
+
+    it("should support remount after unmount", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      carousel.remove();
+      await carousel.updateComplete;
+
+      container.appendChild(carousel);
+      expect(carousel.shadowRoot.querySelector(".ea-carousel")).toBeTruthy();
+    });
+  });
+
+  describe("Edge Cases", () => {
+    it("should handle no carousel items gracefully", async () => {
+      const carousel = document.createElement("ea-carousel");
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const items = carousel.querySelectorAll("ea-carousel-item:not([slot])");
+      expect(items.length).toBe(0);
+
+      const indicators = getIndicators(carousel);
+      expect(indicators.length).toBe(0);
+    });
+
+    it("should handle single carousel item", async () => {
+      const carousel = createCarousel(1);
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const items = carousel.querySelectorAll("ea-carousel-item:not([slot])");
+      expect(items.length).toBe(1);
+
+      const indicators = getIndicators(carousel);
+      expect(indicators.length).toBe(1);
+    });
+
+    it("should handle single item navigation", async () => {
+      const carousel = createCarousel(1);
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      carousel.next();
+      expect(carousel.getAttribute("index")).toBe("1");
+
+      await simulateTransitionEnd(carousel);
+      expect(carousel.getAttribute("index")).toBe("0");
+    });
+
+    it("should handle rapid navigation blocked by pause state", async () => {
+      const carousel = createCarousel(3, { index: "0" });
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      carousel.next();
+      carousel.next();
+      carousel.next();
+
+      expect(carousel.getAttribute("index")).toBe("1");
+    });
+
+    it("should handle setting index to same value", () => {
+      const carousel = createCarousel(3, { index: "1" });
+      container.appendChild(carousel);
+      carousel.setAttribute("index", "1");
+      expect(carousel.getAttribute("index")).toBe("1");
+    });
+
+    it("should handle large number of items", async () => {
+      const carousel = createCarousel(20);
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const indicators = getIndicators(carousel);
+      expect(indicators.length).toBe(20);
+    });
+
+    it("should handle dynamic item content update via MutationObserver", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const firstItem = carousel.querySelector("ea-carousel-item:not([slot])");
+      const span = document.createElement("span");
+      span.textContent = "Updated";
+      firstItem.appendChild(span);
+      await vi.waitFor(() => {
+        expect(
+          carousel.querySelector('ea-carousel-item[slot="clone-first"]')
+            .innerHTML
+        ).toBe(firstItem.innerHTML);
+      });
+    });
+
+    it("should handle removing all items", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      const items = carousel.querySelectorAll("ea-carousel-item:not([slot])");
+      items.forEach(item => item.remove());
+      carousel.$mount();
+      await carousel.updateComplete;
+
+      const indicators = getIndicators(carousel);
+      expect(indicators.length).toBe(0);
+    });
+
+    it("should handle setting index via property", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      carousel.index = 2;
+      expect(carousel.getAttribute("index")).toBe("2");
+    });
+
+    it("should handle setting direction via property", async () => {
+      const carousel = createCarousel(3);
+      container.appendChild(carousel);
+      await carousel.updateComplete;
+
+      carousel.direction = "vertical";
+      await carousel.updateComplete;
+
+      expect(carousel.getAttribute("direction")).toBe("vertical");
+      const containerEl = getContainer(carousel);
+      expect(containerEl.classList.contains("ea-carousel--vertical")).toBe(
+        true
+      );
+    });
+  });
+
+  describe("Accessibility", () => {
+    describe("Keyboard Interaction", () => {
+      it("ArrowRight 应该切换到下一个轮播项", async () => {
+        const el = document.createElement("ea-carousel");
+        el.setAttribute("autoplay", "false");
+        el.innerHTML = `<ea-carousel-item>1</ea-carousel-item><ea-carousel-item>2</ea-carousel-item><ea-carousel-item>3</ea-carousel-item>`;
+        container.appendChild(el);
+        await el.updateComplete;
+        const indicatorWrap = el.shadowRoot.querySelector(
+          ".ea-carousel__indicator-wrap"
+        );
+        if (indicatorWrap) {
+          indicatorWrap.dispatchEvent(
+            new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true })
+          );
+        }
+      });
+
+      it("ArrowLeft 应该切换到上一个轮播项", async () => {
+        const el = document.createElement("ea-carousel");
+        el.setAttribute("autoplay", "false");
+        el.innerHTML = `<ea-carousel-item>1</ea-carousel-item><ea-carousel-item>2</ea-carousel-item><ea-carousel-item>3</ea-carousel-item>`;
+        container.appendChild(el);
+        await el.updateComplete;
+        const indicatorWrap = el.shadowRoot.querySelector(
+          ".ea-carousel__indicator-wrap"
+        );
+        if (indicatorWrap) {
+          indicatorWrap.dispatchEvent(
+            new KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true })
+          );
+        }
+      });
+
+      it("Home 应该切换到第一个轮播项", async () => {
+        const el = document.createElement("ea-carousel");
+        el.setAttribute("autoplay", "false");
+        el.innerHTML = `<ea-carousel-item>1</ea-carousel-item><ea-carousel-item>2</ea-carousel-item><ea-carousel-item>3</ea-carousel-item>`;
+        container.appendChild(el);
+        await el.updateComplete;
+        const indicatorWrap = el.shadowRoot.querySelector(
+          ".ea-carousel__indicator-wrap"
+        );
+        if (indicatorWrap) {
+          indicatorWrap.dispatchEvent(
+            new KeyboardEvent("keydown", { key: "Home", bubbles: true })
+          );
+        }
+      });
+
+      it("End 应该切换到最后一个轮播项", async () => {
+        const el = document.createElement("ea-carousel");
+        el.setAttribute("autoplay", "false");
+        el.innerHTML = `<ea-carousel-item>1</ea-carousel-item><ea-carousel-item>2</ea-carousel-item><ea-carousel-item>3</ea-carousel-item>`;
+        container.appendChild(el);
+        await el.updateComplete;
+        const indicatorWrap = el.shadowRoot.querySelector(
+          ".ea-carousel__indicator-wrap"
+        );
+        if (indicatorWrap) {
+          indicatorWrap.dispatchEvent(
+            new KeyboardEvent("keydown", { key: "End", bubbles: true })
+          );
+        }
+      });
+    });
+
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-carousel");
+      container.appendChild(el);
+      await el.updateComplete;
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("容器应该有 role=region", async () => {
+        const carousel = createCarousel(3);
+        container.appendChild(carousel);
+        await carousel.updateComplete;
+        const containerEl = getContainer(carousel);
+        expect(containerEl.getAttribute("role")).toBe("region");
+      });
+
+      it("容器应该有 aria-roledescription=carousel", async () => {
+        const carousel = createCarousel(3);
+        container.appendChild(carousel);
+        await carousel.updateComplete;
+        const containerEl = getContainer(carousel);
+        expect(containerEl.getAttribute("aria-roledescription")).toBe(
+          "carousel"
+        );
+      });
+
+      it("容器应该有 aria-label=Carousel", async () => {
+        const carousel = createCarousel(3);
+        container.appendChild(carousel);
+        await carousel.updateComplete;
+        const containerEl = getContainer(carousel);
+        expect(containerEl.getAttribute("aria-label")).toBe("Carousel");
+      });
+
+      it("content 区域应该有 aria-live=off（自动播放时）", async () => {
+        const carousel = createCarousel(3);
+        container.appendChild(carousel);
+        await carousel.updateComplete;
+        const content = getContent(carousel);
+        expect(content.getAttribute("aria-live")).toBe("off");
+      });
+
+      it("indicator-wrap 应该有 role=tablist", async () => {
+        const carousel = createCarousel(3);
+        container.appendChild(carousel);
+        await carousel.updateComplete;
+        const indicatorWrap = carousel.shadowRoot.querySelector(
+          ".ea-carousel__indicator-wrap"
+        );
+        expect(indicatorWrap.getAttribute("role")).toBe("tablist");
+      });
+
+      it("indicator 应该有 role=tab", async () => {
+        const carousel = createCarousel(3);
+        container.appendChild(carousel);
+        await carousel.updateComplete;
+        const indicators = getIndicators(carousel);
+        expect(indicators[0].getAttribute("role")).toBe("tab");
+      });
+
+      it("激活的 indicator 应该有 aria-selected=true", async () => {
+        const carousel = createCarousel(3);
+        container.appendChild(carousel);
+        await carousel.updateComplete;
+        const indicators = getIndicators(carousel);
+        expect(indicators[0].getAttribute("aria-selected")).toBe("true");
+      });
+
+      it("非激活的 indicator 应该有 aria-selected=false", async () => {
+        const carousel = createCarousel(3);
+        container.appendChild(carousel);
+        await carousel.updateComplete;
+        const indicators = getIndicators(carousel);
+        expect(indicators[1].getAttribute("aria-selected")).toBe("false");
+      });
+
+      it("indicator 应该有 aria-controls 属性", async () => {
+        const carousel = createCarousel(3);
+        container.appendChild(carousel);
+        await carousel.updateComplete;
+        const indicators = getIndicators(carousel);
+        expect(indicators[0].getAttribute("aria-controls")).toBeTruthy();
+      });
+
+      it("箭头按钮应该有 aria-label", async () => {
+        const carousel = createCarousel(3);
+        container.appendChild(carousel);
+        await carousel.updateComplete;
+        const leftArrow = carousel.shadowRoot.querySelector(".arrow-left");
+        const rightArrow = carousel.shadowRoot.querySelector(".arrow-right");
+        expect(leftArrow.getAttribute("aria-label")).toBeTruthy();
+        expect(rightArrow.getAttribute("aria-label")).toBeTruthy();
+      });
+
+      it("箭头按钮应该有 aria-controls=carousel-content", async () => {
+        const carousel = createCarousel(3);
+        container.appendChild(carousel);
+        await carousel.updateComplete;
+        const leftArrow = carousel.shadowRoot.querySelector(".arrow-left");
+        const rightArrow = carousel.shadowRoot.querySelector(".arrow-right");
+        expect(leftArrow.getAttribute("aria-controls")).toBe(
+          "carousel-content"
+        );
+        expect(rightArrow.getAttribute("aria-controls")).toBe(
+          "carousel-content"
+        );
+      });
+
+      it("ea-carousel-item 容器应该有 role=group", async () => {
+        const item = document.createElement("ea-carousel-item");
+        container.appendChild(item);
+        await item.updateComplete;
+        const containerEl = item.shadowRoot.querySelector(".ea-carousel-item");
+        expect(containerEl.getAttribute("role")).toBe("group");
+      });
+
+      it("ea-carousel-item 容器应该有 aria-roledescription=slide", async () => {
+        const item = document.createElement("ea-carousel-item");
+        container.appendChild(item);
+        await item.updateComplete;
+        const containerEl = item.shadowRoot.querySelector(".ea-carousel-item");
+        expect(containerEl.getAttribute("aria-roledescription")).toBe("slide");
+      });
+    });
+  });
+});
