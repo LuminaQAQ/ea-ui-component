@@ -1,7 +1,7 @@
 # ea-ui-component 项目开发规范
 
-> **版本**: 3.7.0
-> **最后更新**: 2026-06-04
+> **版本**: 3.8.0
+> **最后更新**: 2026-10-08
 > **更新日志**: 见文末
 
 本项目是基于 Web Components 的组件库，使用 TypeScript 和装饰器模式实现，开发时必须遵循以下规范。
@@ -16,11 +16,12 @@ src/
 │   ├── ea-alert/       # 单个组件
 │   │   ├── index.ts    # 组件入口
 │   │   ├── index.scss  # 组件样式
+│   │   ├── ea-alert.test.js # 组件测试（与组件同目录，必填）
 │   │   ├── types.d.ts  # 类型声明（可选）
 │   │   └── events/     # 自定义事件类（可选）
 ├── common/             # 公共子组件
-│   ├── ea-overlay/     # 遮罩层
-│   └── ea-popper/      # 弹出定位
+│   ├── ea-overlay/     # 遮罩层（含同名测试）
+│   └── ea-popper/      # 弹出定位（含同名测试）
 ├── core/               # 核心基础类
 │   ├── EaBase.ts       # 组件基类
 │   └── EaFormAssociatedBase.ts  # 表单关联基类
@@ -48,9 +49,16 @@ src/
 │   ├── namespace.scss  # BEM mixin 定义
 │   ├── light.scss      # 浅色主题
 │   └── dark.scss       # 深色主题
-└── test/               # 测试文件
-    └── utils/          # 测试工具
-        └── waitForRender.js
+└── test/               # 共享测试区（仅限下列内容）
+    ├── setup.ts        # 测试全局 setup
+    ├── utils/          # 测试工具
+    │   ├── waitForRender.js
+    │   ├── keyboard.js
+    │   └── a11y.ts
+    ├── integration/    # 跨组件集成测试
+    │   └── ea-form-integration.test.js
+    ├── ea-form-associated-base.test.js # 基类行为测试
+    └── browser/        # 浏览器端测试（*.browser.test.js）
 ```
 
 ### 核心变更（重构后）
@@ -593,10 +601,18 @@ API 部分的标题使用 **PascalCase 组件名**，不使用 `ea-` 前缀的 k
 
 > 详见 `test` 技能模块
 
+### 测试文件存放规范
+
+1. **单组件单测必须与组件同目录**，命名为 `<组件名>.test.js`（与 `index.ts` 同级平铺，不使用 `__tests__/` 子目录）
+2. **`src/test/` 只允许存放**：共享测试工具（`utils/`）、全局 setup（`setup.ts`）、跨组件集成测试（`integration/`）、基类行为测试、浏览器端测试（`browser/`）
+3. **禁止**在 `src/test/` 下新建任何 `ea-<组件名>.test.js` 单组件测试文件（白名单：`ea-form-associated-base.test.js`）
+4. `src/components/*/` 与 `src/common/*/` 下凡存在 `index.ts` 的目录，**必须**存在同名 `*.test.js`
+5. 组件目录内的测试引用共享工具使用 `../../test/utils/*` 相对路径（common 目录下同理）
+
 ### 统一等待工具函数
 
 ```javascript
-import { waitForRender } from "./utils/waitForRender";
+import { waitForRender } from "../../test/utils/waitForRender";
 
 await waitForRender(); // 等待渲染完成（默认 100ms）
 await waitForRender(0); // 只等一帧（单 rAF）
@@ -658,6 +674,13 @@ $mount(): void {
 ---
 
 ## 更新日志
+
+### v3.8.0 (2026-10-08)
+
+- **测试文件同目录迁移**：单组件单测从 `src/test/` 迁移至各组件目录（67 个组件测试 + 2 个 common 子组件测试），使组件目录成为自包含单元
+- **测试文件存放规范**：新增存放规范章节，定义 `<组件名>.test.js` 与组件同级平铺规则，及 `src/test/` 职责收缩为共享测试区
+- **目录结构更新**：组件目录新增测试文件条目；`test/` 收缩为 setup、utils、integration、基类测试、browser 测试
+- **集成测试归位**：`ea-form-integration.test.js` 移入 `src/test/integration/`
 
 ### v3.7.0 (2026-06-04)
 

@@ -24,6 +24,7 @@ HTMLElement
 ## 使用场景
 
 当组件需要：
+
 - 参与表单提交
 - 支持表单验证
 - 与 `<form>` 元素交互
@@ -70,7 +71,7 @@ export class EaInput extends EaFormAssociatedBase {
   html(): string {
     return `
       <div class="${bem()}" part="container">
-        <input class="${bem.e('inner')}" part="inner" />
+        <input class="${bem.e("inner")}" part="inner" />
       </div>
     `;
   }
@@ -83,11 +84,12 @@ export class EaInput extends EaFormAssociatedBase {
 
 ## 表单集成测试
 
-项目提供了表单集成测试文件 `src/test/ea-form-integration.test.js`，验证表单组件与 `<form>` 元素的交互行为。
+项目提供了表单集成测试文件 `src/test/integration/ea-form-integration.test.js`，验证表单组件与 `<form>` 元素的交互行为。
 
 ## 常见表单组件
 
 以下组件继承自 `EaFormAssociatedBase`：
+
 - `ea-input` - 输入框
 - `ea-select` - 选择器
 - `ea-checkbox` - 复选框
