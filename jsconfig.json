@@ -1,15 +1,15 @@
 {
+  "extends": "./internal/tsconfig/base.json",
   "compilerOptions": {
-    "baseUrl": ".",
+    "allowJs": true,
+    "noEmit": true,
     "paths": {
-      "@/*": ["packages/components/src/*"],
-      "@components/*": ["packages/components/src/components/*"],
-      "@common/*": ["packages/components/src/common/*"],
-      "@constants/*": ["packages/components/src/constants/*"],
-      "@easy-component-ui/core/*": ["packages/core/src/*"],
-      "@easy-component-ui/themes/*.scss": ["packages/themes/src/styles/*.scss"],
-      "@easy-component-ui/themes/*": ["packages/themes/src/*"]
+      "@/*": ["./packages/components/src/*"],
+      "@components/*": ["./packages/components/src/components/*"],
+      "@common/*": ["./packages/components/src/common/*"],
+      "@constants/*": ["./packages/components/src/constants/*"]
     }
   },
-  "include": ["packages/components/src"]
+  "include": ["packages/components/src"],
+  "exclude": ["node_modules", "dist"]
 }

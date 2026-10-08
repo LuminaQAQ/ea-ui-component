@@ -12,9 +12,18 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
+    "allowJs": true,
     "typeRoots": ["node_modules/@types"],
     "types": ["node"]
   },
-  "include": ["scripts/**/*"],
+  "include": [
+    "scripts/**/*",
+    "vite.config.js",
+    "internal/**/*.ts",
+    "packages/*/vite.config.ts",
+    "packages/*/vitest.config.ts",
+    "packages/*/vitest.browser.config.ts",
+    "packages/*/configs/**/*.ts"
+  ],
   "exclude": ["node_modules"]
 }

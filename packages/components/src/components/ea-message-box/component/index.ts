@@ -15,15 +15,15 @@ const TAG_NAME = "ea-message-box" as const;
 const bem = createBEM(TAG_NAME);
 const bemMain = createBEM("ea-message-box-main");
 
-const BOX_TYPES = Enum(["alert", "confirm", "prompt", "personalized"] as const);
-const MESSAGE_VARIANT_TYPES = Enum([
+const BOX_TYPES: any[] = Enum(["alert", "confirm", "prompt", "personalized"] as const);
+const MESSAGE_VARIANT_TYPES: any[] = Enum([
   "primary",
   "success",
   "info",
   "warning",
   "error",
 ] as const);
-const BUTTON_SIZES = Enum(["small", "medium", "large"] as const);
+const BUTTON_SIZES: any[] = Enum(["small", "medium", "large"] as const);
 
 type BoxType = (typeof BOX_TYPES)[number];
 type MessageVariantType = (typeof MESSAGE_VARIANT_TYPES)[number];
