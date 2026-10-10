@@ -1,4 +1,4 @@
-import { EaMessageElement } from "./components/index";
+import { EaMessageElement } from "./components/ea-message";
 import { EaMessage } from "./utils/EaMessageInstance";
 
 (window as any).$message = EaMessage;

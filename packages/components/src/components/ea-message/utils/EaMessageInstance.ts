@@ -1,5 +1,5 @@
 import { timeout } from "@easy-component-ui/core/utils/timeout";
-import type { EaMessageElement } from "../components/index";
+import type { EaMessageElement } from "../components/ea-message/index";
 
 export interface EaMessageOptions {
   message?: string;

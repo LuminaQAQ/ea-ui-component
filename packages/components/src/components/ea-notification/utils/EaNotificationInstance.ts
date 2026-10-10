@@ -1,5 +1,5 @@
 import { timeout } from "@easy-component-ui/core/utils/timeout";
-import type { EaNotificationElement, NotificationVariantType } from "../components/index";
+import type { EaNotificationElement, NotificationVariantType } from "../components/ea-notification/index";
 
 export interface EaNotificationOptions {
   heading?: string;
