@@ -1,4 +1,4 @@
-import { EaMessageBoxElement } from "./component/index.js";
+import { EaMessageBoxElement } from "./components/ea-message-box/index.js";
 import { EaMessageBox } from "./utils/EaMessageBoxInstance.js";
 
 declare global {

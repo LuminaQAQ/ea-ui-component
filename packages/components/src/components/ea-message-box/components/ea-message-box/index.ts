@@ -1,13 +1,13 @@
-﻿import { EaOverlay } from "@common/ea-overlay";
+import { EaOverlay } from "@common/ea-overlay";
 import "@/components/ea-input/index";
 import { CustomElement, attribute, property, query, listen } from "@easy-component-ui/core/decorator";
 import { createBEM } from "@easy-component-ui/core/utils/bem";
 import { html } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { VARIANT_ICON_MAP } from "@constants/variant";
-import { EaMessageBoxConfirmEvent } from "../events/EaMessageBoxConfirmEvent";
-import { EaMessageBoxCancelEvent } from "../events/EaMessageBoxCancelEvent";
-import { EaMessageBoxMessageCloseEvent } from "../events/EaMessageBoxMessageCloseEvent";
+import { EaMessageBoxConfirmEvent } from "../../events/EaMessageBoxConfirmEvent";
+import { EaMessageBoxCancelEvent } from "../../events/EaMessageBoxCancelEvent";
+import { EaMessageBoxMessageCloseEvent } from "../../events/EaMessageBoxMessageCloseEvent";
 import stylesheet from "./index.scss?inline";
 import "@/components/ea-icon/index";
 
