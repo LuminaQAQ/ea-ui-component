@@ -1,3 +1,12 @@
-import "./components/ea-loading/index";
+import { EaLoading } from "./components/ea-loading/index";
+import { EaLoadingService } from "./utils/EaLoadingInstance";
 
-export { EaLoading, EaLoadingService } from "./components/ea-loading/index";
+declare global {
+  interface Window {
+    $loading: typeof EaLoadingService;
+  }
+}
+
+window.$loading = EaLoadingService;
+
+export { EaLoading, EaLoadingService };

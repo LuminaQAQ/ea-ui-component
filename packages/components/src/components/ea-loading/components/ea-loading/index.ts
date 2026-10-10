@@ -3,7 +3,6 @@ import { CustomElement, attribute, query } from "@easy-component-ui/core/decorat
 import { html } from "@easy-component-ui/core/utils/html";
 import stylesheet from "./index.scss?inline";
 import "@/components/ea-icon/index";
-import { EaLoadingService } from "../../utils/EaLoadingInstance";
 
 const TAG_NAME = "ea-loading" as const;
 const bem = createBEM(TAG_NAME);
@@ -196,13 +195,3 @@ export class EaLoading extends EaBase {
     }
   }
 }
-
-declare global {
-  interface Window {
-    $loading: typeof EaLoadingService;
-  }
-}
-
-window.$loading = EaLoadingService;
-
-export { EaLoadingService };
