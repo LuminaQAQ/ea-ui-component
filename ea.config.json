@@ -25,6 +25,13 @@
         "ea-checkbox": ["EaCheckbox", "EaCheckboxGroup"],
         "ea-collapse": ["EaCollapse", "EaCollapseItem"],
         "ea-color-picker": ["EaColorPicker", "EaColorPickerPanel"],
+        "ea-container": [
+          "EaContainer",
+          "EaHeader",
+          "EaMain",
+          "EaFooter",
+          "EaAside"
+        ],
         "ea-countdown": ["EaCountdown"],
         "ea-date-picker": ["EaDatePicker"],
         "ea-descriptions": ["EaDescriptions", "EaDescriptionsItem"],

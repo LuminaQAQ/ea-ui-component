@@ -83,6 +83,7 @@ export type { EaCarousel, EaCarouselItem } from "./ea-carousel";
 export type { EaCheckbox, EaCheckboxGroup } from "./ea-checkbox";
 export type { EaCollapse, EaCollapseItem } from "./ea-collapse";
 export type { EaColorPicker, EaColorPickerPanel } from "./ea-color-picker";
+export type { EaContainer, EaHeader, EaMain, EaFooter, EaAside } from "./ea-container";
 export type { EaCountdown } from "./ea-countdown";
 export type { EaDatePicker } from "./ea-date-picker";
 export type { EaDescriptions, EaDescriptionsItem } from "./ea-descriptions";

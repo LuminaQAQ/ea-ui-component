@@ -1,5 +1,7 @@
-import "./components/ea-container/index.js";
-import "./components/ea-header/index.js";
-import "./components/ea-main/index.js";
-import "./components/ea-footer/index.js";
-import "./components/ea-aside/index.js";
+import { EaContainer } from "./components/ea-container";
+import { EaHeader } from "./components/ea-header";
+import { EaMain } from "./components/ea-main";
+import { EaFooter } from "./components/ea-footer";
+import { EaAside } from "./components/ea-aside";
+
+export { EaContainer, EaHeader, EaMain, EaFooter, EaAside };

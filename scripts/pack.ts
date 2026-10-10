@@ -8,7 +8,7 @@ interface EntryConfigs {
   [key: string]: string;
 }
 
-/** 组件目录 → 公开类型导出名（用于生成类型入口；ea-container 无公开导出，跳过） */
+/** 组件目录 → 公开类型导出名（用于生成类型入口） */
 const COMPONENT_TYPE_EXPORTS: Record<string, string[]> = {
   "ea-affix": ["EaAffix"],
   "ea-alert": ["EaAlert"],
@@ -24,6 +24,7 @@ const COMPONENT_TYPE_EXPORTS: Record<string, string[]> = {
   "ea-checkbox": ["EaCheckbox", "EaCheckboxGroup"],
   "ea-collapse": ["EaCollapse", "EaCollapseItem"],
   "ea-color-picker": ["EaColorPicker", "EaColorPickerPanel"],
+  "ea-container": ["EaContainer", "EaHeader", "EaMain", "EaFooter", "EaAside"],
   "ea-countdown": ["EaCountdown"],
   "ea-date-picker": ["EaDatePicker"],
   "ea-descriptions": ["EaDescriptions", "EaDescriptionsItem"],
