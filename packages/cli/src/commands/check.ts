@@ -1,10 +1,9 @@
+import fs from "node:fs";
+import path from "node:path";
+
 import { loadConfig, type IgnoreEntry } from "../lib/config";
-import {
-  scanScope,
-  scanTestRootFiles,
-  type ComponentDirInfo,
-} from "../lib/scan";
-import { EA_NAME_RE } from "../lib/naming";
+import { scanComponentDirs, scanTestRootFiles } from "../lib/scan";
+import { createNameRe } from "../lib/naming";
 
 interface Violation {
   rule: string;
@@ -17,8 +16,7 @@ type RuleName =
   | "test-root-violation"
   | "orphan-test"
   | "naming"
-  | "type-exports-missing"
-  | "type-exports-stale";
+  | "missing-type-declaration";
 
 /** 豁免判定：config ignore 条目（rules 缺省 = 全豁免）叠加 CLI --ignore（全规则豁免） */
 function isIgnored(
@@ -42,11 +40,10 @@ export function runCheck(options: CheckOptions = {}): void {
   const cliIgnore = options.ignore ?? [];
   const violations: Violation[] = [];
 
-  const components = scanScope(cfg, "components");
-  const common = scanScope(cfg, "common");
-  const all: ComponentDirInfo[] = [...components, ...common];
+  const all = scanComponentDirs(cfg);
+  const publicDirs = all.filter(d => !d.internal);
 
-  // R1/R2: 含 index.ts 的组件目录必须存在同名测试
+  // R1: 含 index.ts 的组件目录必须存在同名测试
   for (const d of all) {
     if (
       d.hasIndex &&
@@ -61,9 +58,16 @@ export function runCheck(options: CheckOptions = {}): void {
     }
   }
 
-  // R3: 共享测试区根目录不得出现单组件测试（白名单除外）
+  // R3: 共享测试区根目录不得出现单组件测试（白名单除外）。
+  // 已配置 prefix ⇒ `${prefix}-` 开头即组件测试；未配置 ⇒ 文件名精确等于某组件完整名才算
+  const componentNames = new Set(all.map(d => d.name));
   for (const file of scanTestRootFiles(cfg)) {
-    if (!cfg.check.rootTestWhitelist.includes(file)) {
+    if (cfg.check.rootTestWhitelist.includes(file)) continue;
+    const stem = file.replace(/\.test\.js$/, "");
+    const isComponentTest = cfg.project.prefix
+      ? stem.startsWith(`${cfg.project.prefix}-`)
+      : componentNames.has(stem);
+    if (isComponentTest) {
       violations.push({
         rule: "test-root-violation",
         level: "error",
@@ -72,7 +76,7 @@ export function runCheck(options: CheckOptions = {}): void {
     }
   }
 
-  // R4: 孤儿测试——测试存在但 index.ts 缺失
+  // R2: 孤儿测试——测试存在但 index.ts 缺失
   for (const d of all) {
     if (
       d.testFile &&
@@ -87,40 +91,16 @@ export function runCheck(options: CheckOptions = {}): void {
     }
   }
 
-  // R5: 组件名格式 = ea- 前缀 + kebab-case
+  // R4: 组件名格式 = ${prefix}- 前缀 + kebab-case；未配置 prefix ⇒ 纯 WC 全名校验
+  const nameRe = createNameRe(cfg.project.prefix);
   for (const d of all) {
-    if (d.hasIndex && !EA_NAME_RE.test(d.name)) {
+    if (d.hasIndex && !nameRe.test(d.name)) {
       violations.push({
         rule: "naming",
         level: "error",
-        message: `${d.dir} 组件名不符合规范（ea- 前缀 + kebab-case）`,
-      });
-    }
-  }
-
-  // R6: typeExports 映射与目录一致性（映射仅覆盖 components，common 子组件不参与）
-  const typeExports = cfg.project.aggregateEntry.typeExports;
-  const indexedNames = new Set(
-    components.filter(d => d.hasIndex).map(d => d.name)
-  );
-  for (const name of indexedNames) {
-    if (
-      !(name in typeExports) &&
-      !isIgnored(cfg.check.ignore, name, "type-exports-missing", cliIgnore)
-    ) {
-      violations.push({
-        rule: "type-exports-missing",
-        level: "warning",
-        message: `${name} 未在 ea.config.json typeExports 中登记（确认无公开类型导出则可忽略）`,
-      });
-    }
-  }
-  for (const name of Object.keys(typeExports)) {
-    if (!indexedNames.has(name)) {
-      violations.push({
-        rule: "type-exports-stale",
-        level: "error",
-        message: `typeExports 中的 ${name} 对应目录不存在（过期条目，请清理）`,
+        message: cfg.project.prefix
+          ? `${d.dir} 组件名不符合规范（${cfg.project.prefix}- 前缀 + kebab-case）`
+          : `${d.dir} 组件名不符合 WC 全名规范（kebab-case，含连字符）`,
       });
     }
   }
@@ -132,8 +112,7 @@ export function runCheck(options: CheckOptions = {}): void {
   for (const v of warnings) console.log(`⚠ [${v.rule}] ${v.message}`);
 
   const activeIgnores = cfg.check.ignore.filter(
-    e =>
-      cliIgnore.includes(e.name) || !e.rules || e.rules.includes("missing-test")
+    e => cliIgnore.includes(e.name) || !e.rules || e.rules.length > 0
   );
   if (activeIgnores.length) {
     for (const e of activeIgnores) {

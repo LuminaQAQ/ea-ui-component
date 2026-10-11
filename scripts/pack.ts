@@ -1,84 +1,13 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { loadConfig, regenerateAggregateEntry } from "@easy-component-ui/cli";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 interface EntryConfigs {
   [key: string]: string;
 }
-
-/** 组件目录 → 公开类型导出名（用于生成类型入口） */
-const COMPONENT_TYPE_EXPORTS: Record<string, string[]> = {
-  "ea-affix": ["EaAffix"],
-  "ea-alert": ["EaAlert"],
-  "ea-avatar": ["EaAvatar"],
-  "ea-backtop": ["EaBacktop"],
-  "ea-badge": ["EaBadge"],
-  "ea-border-beam": ["EaBorderBeam"],
-  "ea-breadcrumb": ["EaBreadcrumb", "EaBreadcrumbItem"],
-  "ea-button": ["EaButton", "EaButtonGroup"],
-  "ea-calendar": ["EaCalendar"],
-  "ea-card": ["EaCard"],
-  "ea-carousel": ["EaCarousel", "EaCarouselItem"],
-  "ea-checkbox": ["EaCheckbox", "EaCheckboxGroup"],
-  "ea-collapse": ["EaCollapse", "EaCollapseItem"],
-  "ea-color-picker": ["EaColorPicker", "EaColorPickerPanel"],
-  "ea-container": ["EaContainer", "EaHeader", "EaMain", "EaFooter", "EaAside"],
-  "ea-countdown": ["EaCountdown"],
-  "ea-date-picker": ["EaDatePicker"],
-  "ea-descriptions": ["EaDescriptions", "EaDescriptionsItem"],
-  "ea-dialog": ["EaDialog"],
-  "ea-divider": ["EaDivider"],
-  "ea-drawer": ["EaDrawer"],
-  "ea-dropdown": ["EaDropdown", "EaDropdownItem", "EaDropdownMenu"],
-  "ea-effects": ["EaEffects"],
-  "ea-empty": ["EaEmpty"],
-  "ea-icon": ["EaIcon"],
-  "ea-image": ["EaImage"],
-  "ea-image-preview": ["EaImagePreview"],
-  "ea-infinite-scroll": ["EaInfiniteScroll"],
-  "ea-input": ["EaInput"],
-  "ea-input-number": ["EaInputNumber"],
-  "ea-layout": ["EaRow", "EaCol"],
-  "ea-link": ["EaLink"],
-  "ea-loading": ["EaLoading", "EaLoadingService"],
-  "ea-menu": ["EaMenu", "EaMenuItem", "EaMenuItemGroup", "EaSubMenu"],
-  "ea-message": ["EaMessageElement", "EaMessage"],
-  "ea-message-box": ["EaMessageBox", "EaMessageBoxElement"],
-  "ea-notification": ["EaNotificationElement", "EaNotification"],
-  "ea-page-header": ["EaPageHeader"],
-  "ea-pagination": ["EaPagination"],
-  "ea-popconfirm": ["EaPopconfirm"],
-  "ea-popover": ["EaPopover"],
-  "ea-progress": ["EaProgress"],
-  "ea-radio": ["EaRadio", "EaRadioGroup"],
-  "ea-rate": ["EaRate"],
-  "ea-result": ["EaResult"],
-  "ea-scrollbar": ["EaScrollbar"],
-  "ea-segmented": ["EaSegmented"],
-  "ea-select": ["EaSelect", "EaOption"],
-  "ea-skeleton": ["EaSkeleton", "EaSkeletonItem"],
-  "ea-slider": ["EaSlider"],
-  "ea-space": ["EaSpace"],
-  "ea-splitter": ["EaSplitter", "EaSplitterPanel", "EaSplitterBar"],
-  "ea-statistic": ["EaStatistic"],
-  "ea-steps": ["EaStep", "EaSteps"],
-  "ea-switch": ["EaSwitch"],
-  "ea-table": ["EaTable", "EaTableColumn"],
-  "ea-tabs": ["EaTab", "EaTabs", "EaTabPanel"],
-  "ea-tag": ["EaTag", "EaCheckTag"],
-  "ea-text": ["EaText"],
-  "ea-theme-toggle": ["EaThemeToggle"],
-  "ea-time-picker": ["EaTimePicker"],
-  "ea-timeline": ["EaTimeline", "EaTimelineItem"],
-  "ea-tooltip": ["EaTooltip"],
-  "ea-tour": ["EaTour", "EaTourStep"],
-  "ea-transfer": ["EaTransfer"],
-  "ea-tree": ["EaTree"],
-  "ea-upload": ["EaUpload"],
-  "ea-watermark": ["EaWatermark"],
-};
 
 interface ExportsConfig {
   [key: string]:
@@ -87,38 +16,7 @@ interface ExportsConfig {
 }
 
 export const handleImportModules = (): void => {
-  const dir = path.join(ROOT, "packages/components/src/components");
-  const entryPath = path.join(
-    ROOT,
-    "packages/components/src/components/index.ts"
-  );
-  fs.writeFileSync(entryPath, "");
-
-  fs.readdirSync(dir).forEach((file: string) => {
-    const filePath = path.join(dir, file);
-    const isDir = fs.statSync(filePath).isDirectory();
-
-    if (isDir) {
-      const indexPath = path.join(filePath, "index.ts");
-      if (fs.existsSync(indexPath)) {
-        fs.appendFileSync(entryPath, `import './${file}/index';\n`);
-      }
-    }
-  });
-
-  fs.appendFileSync(entryPath, `import './ea-icon/index.scss';\n`);
-  fs.appendFileSync(
-    entryPath,
-    `import { initTheme } from "@easy-component-ui/themes/controller";\n`
-  );
-  fs.appendFileSync(entryPath, `initTheme();\n`);
-
-  for (const [dir, names] of Object.entries(COMPONENT_TYPE_EXPORTS)) {
-    fs.appendFileSync(
-      entryPath,
-      `export type { ${names.join(", ")} } from "./${dir}";\n`
-    );
-  }
+  regenerateAggregateEntry(loadConfig(ROOT));
 };
 
 export const handlePackageExport = (): void => {
@@ -167,9 +65,18 @@ export const handlePackageExport = (): void => {
     }
   });
 
-  entryConfigs["themes/source"] = path.resolve(themesDir, "entries/source.entry.ts");
-  entryConfigs["themes/light"] = path.resolve(themesDir, "entries/light.entry.ts");
-  entryConfigs["themes/dark"] = path.resolve(themesDir, "entries/dark.entry.ts");
+  entryConfigs["themes/source"] = path.resolve(
+    themesDir,
+    "entries/source.entry.ts"
+  );
+  entryConfigs["themes/light"] = path.resolve(
+    themesDir,
+    "entries/light.entry.ts"
+  );
+  entryConfigs["themes/dark"] = path.resolve(
+    themesDir,
+    "entries/dark.entry.ts"
+  );
   entryConfigs["theme"] = path.resolve(themesDir, "controller.ts");
 
   const pkgPath = path.resolve(ROOT, "packages/components/package.json");

@@ -1,4 +1,14 @@
-export { loadConfig, type EaConfig, type IgnoreEntry } from "./lib/config";
-export { scanScope, scanTestRootFiles, type ComponentDirInfo, type Scope } from "./lib/scan";
-export { toPascalCase, EA_NAME_RE } from "./lib/naming";
+export {
+  loadConfig,
+  type EaConfig,
+  type IgnoreEntry,
+  type ComponentDirConfig,
+} from "./lib/config";
+export { regenerateAggregateEntry } from "./lib/aggregate";
+export {
+  scanComponentDirs,
+  scanTestRootFiles,
+  type ComponentDirInfo,
+} from "./lib/scan";
+export { toPascalCase, createNameRe } from "./lib/naming";
 export { runCheck, type CheckOptions } from "./commands/check";

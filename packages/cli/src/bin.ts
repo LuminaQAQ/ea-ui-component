@@ -12,4 +12,9 @@ program
   .option("--ignore <name...>", "临时豁免的组件名（可传多个）")
   .action(runCheck);
 
-program.parse();
+try {
+  program.parse();
+} catch (error) {
+  console.error(error instanceof Error ? error.message : error);
+  process.exit(1);
+}
