@@ -3,6 +3,7 @@ import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y.js";
 
 import "./index.ts";
 import { Color } from "../../utils/Color.ts";
+import { EaColorPickerChangeEvent } from "./events/EaColorPickerChangeEvent.ts";
 
 describe("EaColorPicker Component", () => {
   let container;
@@ -563,10 +564,9 @@ describe("EaColorPicker Component", () => {
 
       const panel = picker.shadowRoot.querySelector("ea-color-picker-panel");
       panel.dispatchEvent(
-        new CustomEvent("change", {
-          detail: { value: "#67c23a" },
-          bubbles: true,
-          composed: true,
+        new EaColorPickerChangeEvent({
+          value: "#67c23a",
+          color: new Color("#67c23a"),
         })
       );
 
@@ -622,7 +622,11 @@ describe("EaColorPicker Component", () => {
 
       await picker.updateComplete;
 
-      expect(changeHandler).toHaveBeenCalled();
+      expect(changeHandler).toHaveBeenCalledTimes(1);
+      const event = changeHandler.mock.calls[0][0];
+      expect(event).toBeInstanceOf(EaColorPickerChangeEvent);
+      expect(event.detail.value).toBe("");
+      expect(event.detail.color).toBeInstanceOf(Color);
     });
   });
 
@@ -1284,6 +1288,29 @@ describe("EaColorPickerPanel Component", () => {
 
       const colorInput = panel.shadowRoot.querySelector("ea-input");
       expect(colorInput.getAttribute("value")).toBe("#409eff");
+    });
+
+    it("颜色输入 change 应派发类型化 EaColorPickerChangeEvent", async () => {
+      const panel = document.createElement("ea-color-picker-panel");
+      container.appendChild(panel);
+
+      await panel.updateComplete;
+
+      const handler = vi.fn();
+      panel.addEventListener("change", handler);
+
+      const colorInput = panel.shadowRoot.querySelector("ea-input");
+      colorInput.setAttribute("value", "#409eff");
+      await panel.updateComplete;
+
+      colorInput.dispatchEvent(new Event("change", { bubbles: true }));
+      await panel.updateComplete;
+
+      expect(handler).toHaveBeenCalled();
+      const event = handler.mock.calls[0][0];
+      expect(event).toBeInstanceOf(EaColorPickerChangeEvent);
+      expect(event.detail.value.toLowerCase()).toBe("#409eff");
+      expect(event.detail.color).toBeInstanceOf(Color);
     });
   });
 

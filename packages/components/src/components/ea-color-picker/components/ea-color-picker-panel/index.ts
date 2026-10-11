@@ -1,10 +1,17 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, property, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  property,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { html } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { Color, type ColorFormat as ColorUtilFormat } from "@/utils/Color";
 import { cssLengthToNumber } from "@easy-component-ui/core/utils/css-length";
 import { EaColorPickerActiveChangeEvent } from "../../events/EaColorPickerActiveChangeEvent";
+import { EaColorPickerChangeEvent } from "../../events/EaColorPickerChangeEvent";
 import { EaColorPickerPanelInvalidColorEvent } from "../../events/EaColorPickerPanelInvalidColorEvent";
 import "@components/ea-input/index";
 import stylesheet from "./index.scss?inline";
@@ -458,7 +465,8 @@ export class EaColorPickerPanel extends EaBase {
     dimension: "width" | "height"
   ): number {
     const rect = element.getBoundingClientRect();
-    const cssSize = cssLengthToNumber(this.style.getPropertyValue(cssVar)) || fallback;
+    const cssSize =
+      cssLengthToNumber(this.style.getPropertyValue(cssVar)) || fallback;
     return Math.max(0, Math.min(rect[dimension], cssSize), cssSize);
   }
 
@@ -547,24 +555,26 @@ export class EaColorPickerPanel extends EaBase {
     }
 
     if (this._hue) {
-      this._hue.setAttribute("aria-valuenow", String(Math.round(this._states.hue)));
+      this._hue.setAttribute(
+        "aria-valuenow",
+        String(Math.round(this._states.hue))
+      );
     }
 
     if (this._alpha) {
-      this._alpha.setAttribute("aria-valuenow", String(Math.round(this._states.alpha * 100)));
+      this._alpha.setAttribute(
+        "aria-valuenow",
+        String(Math.round(this._states.alpha * 100))
+      );
     }
   }
 
   /** 触发颜色变化事件 */
   private _emitChangeEvent() {
     this.dispatchEvent(
-      new CustomEvent("change", {
-        detail: {
-          value: this.value,
-          color: this._states.color,
-        },
-        bubbles: true,
-        composed: true,
+      new EaColorPickerChangeEvent({
+        value: this.value,
+        color: this._states.color,
       })
     );
 

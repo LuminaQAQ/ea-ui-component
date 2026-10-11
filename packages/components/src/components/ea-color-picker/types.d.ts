@@ -5,6 +5,8 @@ declare global {
   }
 }
 
+import type { EaColorPickerChangeEvent } from "./events/EaColorPickerChangeEvent";
+
 export interface EaColorPickerElement extends HTMLElement {
   label: string;
   value: string;
@@ -87,7 +89,7 @@ export interface EaColorPickerPanelVueProps {
 }
 
 export interface EaColorPickerVueEvents {
-  change: (event: CustomEvent) => void;
+  change: (event: EaColorPickerChangeEvent) => void;
   "ea-clear": (event: CustomEvent) => void;
   "ea-active-change": (event: CustomEvent) => void;
 }
@@ -161,7 +163,7 @@ export interface EaColorPickerReactProps extends HTMLAttributes<HTMLElement> {
     | "right-start"
     | "right-end";
   predefine?: string[];
-  onChange?: (event: CustomEvent) => void;
+  onChange?: (event: EaColorPickerChangeEvent) => void;
   onEaClear?: (event: CustomEvent) => void;
   onEaActiveChange?: (event: CustomEvent) => void;
   children?: ReactNode;

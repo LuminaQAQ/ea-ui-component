@@ -1,9 +1,16 @@
 import EaFormAssociatedBase from "@easy-component-ui/core/core/EaFormAssociatedBase";
 import { createBEM } from "@easy-component-ui/core/utils/bem";
-import { CustomElement, attribute, property, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  property,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { html } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { Color } from "@/utils/Color";
+import { EaColorPickerChangeEvent } from "../../events/EaColorPickerChangeEvent";
 import { EaColorPickerClearEvent } from "../../events/EaColorPickerClearEvent";
 import "../ea-color-picker-panel/index";
 import "@/common/ea-popper/index";
@@ -45,7 +52,7 @@ type Placement = (typeof PLACEMENTS)[number];
  *
  * @slot default - 默认插槽（未使用）。
  *
- * @event change - 颜色值改变时触发，detail: `{ value: string }`。
+ * @event change - 颜色值改变时触发，detail: `{ value: string, color: Color }`。
  * @event ea-clear - 清空颜色值时触发。
  * @event ea-active-change - 颜色激活值改变时触发，detail: `{ value: string }`。
  *
@@ -319,12 +326,18 @@ export class EaColorPicker extends EaFormAssociatedBase {
     }
   }
 
+  /** 处理面板颜色变化，拦截内部 change 事件并从宿主派发类型化 change 事件 */
   @listen("change", bem.ce("panel"))
-  private _handlePanelChange(e: CustomEvent) {
-    const { value } = e.detail;
+  private _handlePanelChange(e: Event) {
+    e.stopPropagation();
+    if (!(e instanceof EaColorPickerChangeEvent)) return;
+
+    const { value, color } = e.detail;
     this.value = value;
     this._updateTriggerColor();
     this._updateStatusIcon();
+
+    this.dispatchEvent(new EaColorPickerChangeEvent({ value, color }));
   }
 
   @listen("click", bem.ce("clear-btn"))
@@ -340,7 +353,9 @@ export class EaColorPicker extends EaFormAssociatedBase {
     this._updateTriggerColor();
     this._updateStatusIcon();
 
-    this.emit("change", { detail: { value: "" } });
+    this.dispatchEvent(
+      new EaColorPickerChangeEvent({ value: "", color: new Color("") })
+    );
     this.dispatchEvent(new EaColorPickerClearEvent());
 
     this._states.previousValue = "";
