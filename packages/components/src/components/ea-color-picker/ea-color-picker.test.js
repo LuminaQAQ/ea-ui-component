@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y.js";
 
 import "./index.ts";
-import { Color } from "./utils/Color.ts";
+import { Color } from "../../utils/Color.ts";
 
 describe("EaColorPicker Component", () => {
   let container;

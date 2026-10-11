@@ -85,7 +85,7 @@ export { EaCard } from "./ea-card";
 export { EaCarousel, EaCarouselItem } from "./ea-carousel";
 export { EaCheckbox, EaCheckboxGroup } from "./ea-checkbox";
 export { EaCollapse, EaCollapseItem } from "./ea-collapse";
-export { EaColorPicker, EaColorPickerPanel, Color } from "./ea-color-picker";
+export { EaColorPicker, EaColorPickerPanel } from "./ea-color-picker";
 export { EaContainer, EaHeader, EaMain, EaFooter, EaAside } from "./ea-container";
 export { EaCountdown } from "./ea-countdown";
 export { EaDatePicker } from "./ea-date-picker";

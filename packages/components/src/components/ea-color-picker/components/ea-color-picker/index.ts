@@ -3,7 +3,7 @@ import { createBEM } from "@easy-component-ui/core/utils/bem";
 import { CustomElement, attribute, property, query, listen } from "@easy-component-ui/core/decorator";
 import { html } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
-import { Color } from "../../utils/Color";
+import { Color } from "@/utils/Color";
 import { EaColorPickerClearEvent } from "../../events/EaColorPickerClearEvent";
 import "../ea-color-picker-panel/index";
 import "@/common/ea-popper/index";
