@@ -1,14 +1,12 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { EaConfig } from "./config";
+import type { ResolvedEaConfig } from "./config";
 
-const IMPORTS_START = "// @ea-generated:imports start";
-const IMPORTS_END = "// @ea-generated:imports end";
-const TYPES_START = "// @ea-generated:types start";
-const TYPES_END = "// @ea-generated:types end";
+const GENERATED_START = "// @ea-generated:start";
+const GENERATED_END = "// @ea-generated:end";
 
 /**
- * 解析组件 index.ts 的具名值导出名单（§4.1.1 机械投影）：
+ * 解析组件 index.ts 的具名值导出名单：
  * 支持平铺 export {}、直出 export class、from 再导出、行内 type 修饰；
  * 排除 export type / interface / default；其余形态（export * / const 等）
  * 中止报错并打印文件与行号，禁止静默跳过
@@ -53,53 +51,37 @@ function parseIndexExports(src: string, filePath: string): string[] {
  * 标记区定位失败时抛出，报错含行号；extra 描述具体冲突形态
  */
 function markerError(lines: string[], detail: string): Error {
-  const positions = [IMPORTS_START, IMPORTS_END, TYPES_START, TYPES_END]
+  const positions = [GENERATED_START, GENERATED_END]
     .map(m => {
       const no = lines.indexOf(m) + 1;
       return no > 0 ? `${m} @ L${no}` : `${m} 缺失`;
     })
     .join("，");
   return new Error(
-    `聚合入口哨兵标记${detail}（${positions}）。请修正标记后重试，标记格式见 ea.config.json 同级文档或 ea init`
+    `聚合入口哨兵标记${detail}（${positions}）。请修正标记后重试，标记格式：${GENERATED_START} 与 ${GENERATED_END} 各一行，生成内容置于两标记之间`
   );
 }
 
 /**
- * 定位四个哨兵标记的行下标；无任何标记返回 null，重复/部分缺失/交错时抛错
+ * 定位两个哨兵标记的行下标；无任何标记返回 null，重复/部分缺失/交错时抛错
  */
-function locateMarkers(lines: string[]): {
-  importsStart: number;
-  importsEnd: number;
-  typesStart: number;
-  typesEnd: number;
-} | null {
-  const found = [IMPORTS_START, IMPORTS_END, TYPES_START, TYPES_END].map(m => {
-    const first = lines.indexOf(m);
-    const dup = lines.indexOf(m, first + 1);
-    return { marker: m, first, dup };
-  });
-  for (const { marker, first, dup } of found) {
-    if (dup !== -1) {
-      throw new Error(
-        `聚合入口哨兵标记重复：${marker} 出现于 L${first + 1} 与 L${dup + 1}，请保留一处后重试`
-      );
-    }
+function locateMarkers(lines: string[]): { start: number; end: number } | null {
+  const firstStart = lines.indexOf(GENERATED_START);
+  const firstEnd = lines.indexOf(GENERATED_END);
+  const dupStart = lines.indexOf(GENERATED_START, firstStart + 1);
+  const dupEnd = lines.indexOf(GENERATED_END, firstEnd + 1);
+  if (dupStart !== -1 || dupEnd !== -1) {
+    const dup = dupStart !== -1 ? GENERATED_START : GENERATED_END;
+    throw new Error(`聚合入口哨兵标记重复：${dup} 出现多处，请保留一处后重试`);
   }
-  if (found.every(({ first }) => first === -1)) return null;
-  if (found.some(({ first }) => first === -1)) {
+  if (firstStart === -1 && firstEnd === -1) return null;
+  if (firstStart === -1 || firstEnd === -1) {
     throw markerError(lines, "部分缺失");
   }
-  const [importsStart, importsEnd, typesStart, typesEnd] = found.map(
-    ({ first }) => first
-  );
-  if (!(
-    importsStart < importsEnd &&
-    importsEnd < typesStart &&
-    typesStart < typesEnd
-  )) {
+  if (firstStart >= firstEnd) {
     throw markerError(lines, "交错或顺序错误");
   }
-  return { importsStart, importsEnd, typesStart, typesEnd };
+  return { start: firstStart, end: firstEnd };
 }
 
 /**
@@ -128,31 +110,23 @@ function guardNoSentinel(
       [
         `聚合入口 ${entryPath} 无哨兵标记，且存在 ${extra.length} 行生成产物之外的内容（疑似手工内容），已中止以避免重建销毁：`,
         ...extra.slice(0, 10).map(e => `  L${e.no}: ${e.line}`),
-        `请手工植入哨兵标记（${IMPORTS_START} 至 ${TYPES_END}，手工内容置于两标记区之间）后重试`,
+        `请手工植入哨兵标记（${GENERATED_START} 至 ${GENERATED_END}，生成内容置于两标记之间，手工内容置于标记区之外）后重试`,
       ].join("\n")
     );
   }
 }
 
 /**
- * 扫描 componentsDirs 公开目录（跳过 internal）并机械投影各 index.ts 的具名值导出，
- * 在哨兵分区内重建聚合入口；分区之间的手工内容原位保留。
+ * 扫描 componentDirs 公开目录（跳过 internal）并机械投影各 index.ts 的具名值导出，
+ * 在哨兵分区内重建聚合出口的再导出清单；分区之外的行（手工内容）原位保留。
  * 无哨兵时执行 diff 防御：含多余行则中止报错，纯生成形态则全量重建并提示。
  */
-export function regenerateAggregateEntry(config: EaConfig): void {
-  const entryPath = config.project.aggregateEntry.path;
-
-  const publicRoots = config.project.componentsDirs
-    .map(d =>
-      typeof d === "string"
-        ? { path: d, internal: false }
-        : { path: d.path, internal: !!d.internal }
-    )
-    .filter(d => !d.internal);
+export function regenerateAggregateEntry(config: ResolvedEaConfig): void {
+  const entryPath = config.project.entry;
 
   const dirs: { name: string; root: string }[] = [];
-  for (const root of publicRoots) {
-    if (!fs.existsSync(root.path)) continue;
+  for (const root of config.project.componentDirs) {
+    if (root.internal || !fs.existsSync(root.path)) continue;
     const subDirs = fs
       .readdirSync(root.path)
       .filter(f => fs.statSync(path.join(root.path, f)).isDirectory())
@@ -161,26 +135,17 @@ export function regenerateAggregateEntry(config: EaConfig): void {
     for (const name of subDirs) dirs.push({ name, root: root.path });
   }
 
-  const importLines = dirs.map(({ name }) => `import './${name}/index';`);
-
-  const typeLines: string[] = [];
+  const exportLines: string[] = [];
   for (const { name, root } of dirs) {
     const filePath = path.join(root, name, "index.ts");
     const src = fs.readFileSync(filePath, "utf-8");
     const names = parseIndexExports(src, filePath);
     if (names.length > 0) {
-      typeLines.push(`export { ${names.join(", ")} } from "./${name}";`);
+      exportLines.push(`export { ${names.join(", ")} } from "./${name}";`);
     }
   }
 
-  const generated = [
-    IMPORTS_START,
-    ...importLines,
-    IMPORTS_END,
-    TYPES_START,
-    ...typeLines,
-    TYPES_END,
-  ];
+  const generated = [GENERATED_START, ...exportLines, GENERATED_END];
 
   if (!fs.existsSync(entryPath)) {
     fs.writeFileSync(entryPath, generated.join("\n") + "\n");
@@ -194,15 +159,11 @@ export function regenerateAggregateEntry(config: EaConfig): void {
   let result: string[];
   if (markers) {
     result = [
-      ...lines.slice(0, markers.importsStart),
-      IMPORTS_START,
-      ...importLines,
-      IMPORTS_END,
-      ...lines.slice(markers.importsEnd + 1, markers.typesStart),
-      TYPES_START,
-      ...typeLines,
-      TYPES_END,
-      ...lines.slice(markers.typesEnd + 1),
+      ...lines.slice(0, markers.start),
+      GENERATED_START,
+      ...exportLines,
+      GENERATED_END,
+      ...lines.slice(markers.end + 1),
     ];
   } else {
     guardNoSentinel(lines, entryPath, generated);

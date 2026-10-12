@@ -1,6 +1,8 @@
 export {
   loadConfig,
   type EaConfig,
+  type ResolvedEaConfig,
+  type ResolvedComponentDir,
   type IgnoreEntry,
   type ComponentDirConfig,
 } from "./lib/config";

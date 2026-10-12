@@ -41,9 +41,8 @@ export function runCheck(options: CheckOptions = {}): void {
   const violations: Violation[] = [];
 
   const all = scanComponentDirs(cfg);
-  const publicDirs = all.filter(d => !d.internal);
 
-  // R1: 含 index.ts 的组件目录必须存在同名测试
+  // 含 index.ts 的组件目录必须存在同名测试
   for (const d of all) {
     if (
       d.hasIndex &&
@@ -58,7 +57,7 @@ export function runCheck(options: CheckOptions = {}): void {
     }
   }
 
-  // R3: 共享测试区根目录不得出现单组件测试（白名单除外）。
+  // 共享测试区根目录不得出现单组件测试（白名单除外）。
   // 已配置 prefix ⇒ `${prefix}-` 开头即组件测试；未配置 ⇒ 文件名精确等于某组件完整名才算
   const componentNames = new Set(all.map(d => d.name));
   for (const file of scanTestRootFiles(cfg)) {
@@ -76,7 +75,7 @@ export function runCheck(options: CheckOptions = {}): void {
     }
   }
 
-  // R2: 孤儿测试——测试存在但 index.ts 缺失
+  // 孤儿测试——测试存在但 index.ts 缺失
   for (const d of all) {
     if (
       d.testFile &&
@@ -91,7 +90,7 @@ export function runCheck(options: CheckOptions = {}): void {
     }
   }
 
-  // R4: 组件名格式 = ${prefix}- 前缀 + kebab-case；未配置 prefix ⇒ 纯 WC 全名校验
+  // 组件名格式 = ${prefix}- 前缀 + kebab-case；未配置 prefix ⇒ 纯 WC 全名校验
   const nameRe = createNameRe(cfg.project.prefix);
   for (const d of all) {
     if (d.hasIndex && !nameRe.test(d.name)) {

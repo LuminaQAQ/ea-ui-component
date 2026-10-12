@@ -1,14 +1,12 @@
 {
   "project": {
     "prefix": "ea",
-    "componentsDirs": [
+    "componentDirs": [
       "packages/components/src/components",
       { "path": "packages/components/src/common", "internal": true }
     ],
     "testDir": "packages/components/src/test",
-    "aggregateEntry": {
-      "path": "packages/components/src/components/index.ts"
-    }
+    "entry": "packages/components/src/components/index.ts"
   },
   "templates": ".vscode/ea-ts.code-snippets",
   "check": {
