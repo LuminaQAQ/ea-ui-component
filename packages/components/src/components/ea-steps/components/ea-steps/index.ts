@@ -157,7 +157,7 @@ export class EaSteps extends EaBase {
           const arrow = document.createElement("ea-icon");
           arrow.setAttribute("slot", "simple-arrow");
           arrow.setAttribute("name", "angle-right");
-          arrow.part = "simple-arrow";
+          arrow.setAttribute("part", "simple-arrow");
           item.appendChild(arrow);
         } catch {
           /* empty */
