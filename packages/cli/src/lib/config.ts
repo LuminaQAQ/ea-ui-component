@@ -17,6 +17,10 @@ export interface EaConfig {
   project: {
     /** 组件命名空间前缀；未配置时 check R4 退化为纯 WC 格式校验，ea add 前置报错 */
     prefix?: string;
+    /**
+     * 组件目录清单。config 原始书写支持单字符串简写（单包正统目录，等价单元素数组），
+     * loadConfig 归一化为数组后供下游消费
+     */
     componentsDirs: ComponentDirConfig[];
     testDir: string;
     aggregateEntry: {
@@ -32,43 +36,57 @@ export interface EaConfig {
   };
 }
 
+/** ea.config.json 原始形态（componentsDirs 允许单字符串简写，归一化前） */
+type RawEaConfig = Omit<Partial<EaConfig>, "project"> & {
+  project?: Partial<Omit<EaConfig["project"], "componentsDirs">> & {
+    componentsDirs?: string | ComponentDirConfig[];
+  };
+};
+
 /** prefix 本身格式：单段小写字母开头 */
 const PREFIX_RE = /^[a-z][a-z0-9]*$/;
 
-/** 路径未配置时打印的注释版最小 config 骨架（monorepo 多包 / 单包两种写法） */
+/** 路径未配置时打印的注释版最小 config 骨架（单包最简形态在前，monorepo 扩展写法注释跟进） */
 const CONFIG_SKELETON = `\
 // ea.config.json 最小骨架（注释仅供阅读，保存时请移除注释）
 {
   "project": {
     // 可选：组件命名空间前缀，如 "ea"
     // "prefix": "ea",
-    "componentsDirs": [
-      // 单包写法：
-      "src/components",
-      // monorepo 多包写法（internal 目录不进聚合、不生成独立 exports）：
-      // "packages/components/src/components",
-      // { "path": "packages/components/src/common", "internal": true }
-    ],
+    "componentsDirs": "src/components",
     "testDir": "src/test",
     "aggregateEntry": { "path": "src/components/index.ts" }
   },
   "check": { "rootTestWhitelist": [], "ignore": [] }
-}`;
+}
+// componentsDirs 扩展写法：单字符串简写等价单元素数组；数组元素可为字符串
+// （正统组件目录，进聚合、生成独立 exports）或对象 { "path": "...", "internal": true }
+// （内部组件目录，不进聚合、不生成独立 exports）。monorepo 多包示例：
+//   "componentsDirs": [
+//     "packages/components/src/components",
+//     { "path": "packages/components/src/common", "internal": true }
+//   ]
+`;
 
 /**
  * 加载 ea.config.json（相对路径基于 cwd 解析）。
  * 路径字段（componentsDirs/testDir/aggregateEntry.path）未配置时报错并打印最小骨架；
- * prefix 可选，配置时校验格式；不内置任何本仓库路径默认值（三方项目零假设）。
+ * componentsDirs 支持单字符串简写（归一化为数组）；prefix 可选，配置时校验格式；
+ * 不内置任何本仓库路径默认值（三方项目零假设）。
  */
 export function loadConfig(cwd = process.cwd()): EaConfig {
   const file = path.join(cwd, "ea.config.json");
   const raw = fs.existsSync(file)
-    ? (JSON.parse(fs.readFileSync(file, "utf8")) as Partial<EaConfig>)
+    ? (JSON.parse(fs.readFileSync(file, "utf8")) as RawEaConfig)
     : {};
 
-  const project: Partial<EaConfig["project"]> = raw.project ?? {};
+  const project: RawEaConfig["project"] = raw.project ?? {};
   const missing: string[] = [];
-  if (!project.componentsDirs || project.componentsDirs.length === 0) {
+  if (
+    !project.componentsDirs ||
+    (Array.isArray(project.componentsDirs) &&
+      project.componentsDirs.length === 0)
+  ) {
     missing.push("project.componentsDirs");
   }
   if (!project.testDir) missing.push("project.testDir");
@@ -86,10 +104,15 @@ export function loadConfig(cwd = process.cwd()): EaConfig {
     );
   }
 
+  const rawDirs = project.componentsDirs!;
+  const dirs = (
+    typeof rawDirs === "string" ? [rawDirs] : rawDirs
+  ) as ComponentDirConfig[];
+
   return {
     project: {
       prefix: project.prefix,
-      componentsDirs: project.componentsDirs!.map(d =>
+      componentsDirs: dirs.map(d =>
         typeof d === "string"
           ? path.resolve(cwd, d)
           : { path: path.resolve(cwd, d.path), internal: !!d.internal }
