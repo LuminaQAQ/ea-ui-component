@@ -18,31 +18,27 @@ if (
   Object.defineProperty(Element.prototype, "part", {
     get() {
       if (!this.__partTokenList) {
-        const self = this;
         this.__partTokenList = {
-          contains(token) {
-            return (self.getAttribute("part") || "")
-              .split(/\s+/)
-              .includes(token);
-          },
-          add(...tokens) {
-            const current = (self.getAttribute("part") || "")
+          contains: token =>
+            (this.getAttribute("part") || "").split(/\s+/).includes(token),
+          add: (...tokens) => {
+            const current = (this.getAttribute("part") || "")
               .split(/\s+/)
               .filter(Boolean);
             tokens.forEach(t => {
               if (!current.includes(t)) current.push(t);
             });
-            self.setAttribute("part", current.join(" "));
+            this.setAttribute("part", current.join(" "));
           },
-          remove(...tokens) {
-            const current = (self.getAttribute("part") || "")
+          remove: (...tokens) => {
+            const current = (this.getAttribute("part") || "")
               .split(/\s+/)
               .filter(Boolean);
             tokens.forEach(t => {
               const idx = current.indexOf(t);
               if (idx !== -1) current.splice(idx, 1);
             });
-            self.setAttribute("part", current.join(" "));
+            this.setAttribute("part", current.join(" "));
           },
           toggle(token, force) {
             if (force !== undefined) {

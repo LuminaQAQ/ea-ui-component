@@ -1,16 +1,16 @@
 {
   "project": {
     "prefix": "ea",
+    "entry": "packages/components/src/components/index.ts",
     "componentDirs": [
       "packages/components/src/components",
       { "path": "packages/components/src/common", "internal": true }
     ],
-    "testDir": "packages/components/src/test",
-    "entry": "packages/components/src/components/index.ts"
+    "testDir": "packages/components/src/test"
   },
   "templates": ".vscode/ea-ts.code-snippets",
   "check": {
-    "rootTestWhitelist": ["ea-form-associated-base.test.js"],
+    "rootTestWhitelist": ["ea-form-associated-base.test.ts"],
     "ignore": [
       {
         "name": "ea-anchor",

@@ -44,9 +44,9 @@ export interface ResolvedComponentDir {
 export interface ResolvedEaConfig extends Omit<EaConfig, "project"> {
   project: {
     prefix?: string;
+    entry: string;
     componentDirs: ResolvedComponentDir[];
     testDir: string;
-    entry: string;
   };
 }
 

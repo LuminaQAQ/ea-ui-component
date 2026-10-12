@@ -24,7 +24,7 @@ export default defineConfig({
       provider: "v8",
       reporter: ["text", "json", "html"],
       include: ["src/components/**/*.{js,ts}"],
-      exclude: ["node_modules/", "src/**/*.test.js"],
+      exclude: ["node_modules/", "src/**/*.test.{js,ts}"],
     },
   },
   esbuild: createEsbuildOptions({ target: "es2022" }),

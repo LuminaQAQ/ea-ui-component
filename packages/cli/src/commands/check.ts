@@ -52,7 +52,7 @@ export function runCheck(options: CheckOptions = {}): void {
       violations.push({
         rule: "missing-test",
         level: "error",
-        message: `${d.dir} 缺少同名测试文件 ${d.name}.test.js`,
+        message: `${d.dir} 缺少同名测试文件 ${d.name}.test.ts`,
       });
     }
   }

@@ -18,7 +18,7 @@ const themesSrc = resolve(__dirname, "../themes/src");
 export default defineConfig({
   test: {
     globals: true,
-    include: ["src/test/browser/**/*.browser.test.js"],
+    include: ["src/test/browser/**/*.browser.test.ts"],
     ...TEST_TIMEOUTS,
     browser: {
       enabled: true,
