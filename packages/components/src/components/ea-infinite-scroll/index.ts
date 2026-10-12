@@ -218,3 +218,9 @@ export class EaInfiniteScroll extends EaBase {
 }
 
 export default EaInfiniteScroll;
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-infinite-scroll": EaInfiniteScroll;
+  }
+}

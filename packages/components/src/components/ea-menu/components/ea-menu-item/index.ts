@@ -99,3 +99,9 @@ export class EaMenuItem extends EaBase {
 }
 
 export default EaMenuItem;
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-menu-item": EaMenuItem;
+  }
+}

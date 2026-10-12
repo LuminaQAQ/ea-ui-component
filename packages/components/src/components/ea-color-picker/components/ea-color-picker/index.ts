@@ -506,3 +506,9 @@ export class EaColorPicker extends EaFormAssociatedBase {
     this._panel.predefine = this.predefine;
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-color-picker": EaColorPicker;
+  }
+}

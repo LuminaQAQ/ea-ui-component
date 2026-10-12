@@ -53,3 +53,9 @@ export class EaHeader extends EaBase {
     `;
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-header": EaHeader;
+  }
+}

@@ -1,4 +1,4 @@
-﻿import { EaFormAssociatedBase } from "@easy-component-ui/core/core/EaFormAssociatedBase";
+import { EaFormAssociatedBase } from "@easy-component-ui/core/core/EaFormAssociatedBase";
 import { createBEM } from "@easy-component-ui/core/utils/bem";
 
 import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
@@ -864,5 +864,11 @@ export class EaDatePicker extends EaFormAssociatedBase {
   $beforeUnmount(): void {
     this._abortController?.abort();
     this._abortController = null;
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-date-picker": EaDatePicker;
   }
 }

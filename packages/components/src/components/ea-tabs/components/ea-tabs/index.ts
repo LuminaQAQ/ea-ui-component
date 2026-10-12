@@ -1,11 +1,16 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { RovingTabindex } from "@easy-component-ui/core/utils/roving-tabindex";
 import { EaTabClickEvent } from "./events/EaTabClickEvent";
 import { EaTabRemoveEvent } from "./events/EaTabRemoveEvent";
 import { EaTabsChangeEvent } from "./events/EaTabsChangeEvent";
-import type { EaTabElement } from "../../types";
+import type { EaTab } from "../ea-tab/index";
 
 import stylesheet from "./index.scss?inline";
 import "@/components/ea-icon/index";
@@ -104,7 +109,8 @@ export class EaTabs extends EaBase {
     default: "top",
     a11y: {
       ariaAttr: "aria-orientation",
-      map: (v: TabPosition) => (v === "left" || v === "right" ? "vertical" : "horizontal"),
+      map: (v: TabPosition) =>
+        v === "left" || v === "right" ? "vertical" : "horizontal",
     },
     observer(this: EaTabs, newVal: TabPosition) {
       this.updateContainerClasslist();
@@ -382,7 +388,7 @@ export class EaTabs extends EaBase {
 
     const tabEls = [...this.querySelectorAll("ea-tab")];
     const tab = customEvent.target as HTMLElement;
-    const index = tabEls.indexOf(tab as EaTabElement);
+    const index = tabEls.indexOf(tab as EaTab);
     const panel = this.querySelector(
       `ea-tab-panel[name="${panelId}"]`
     ) as HTMLElement;
@@ -462,7 +468,9 @@ export class EaTabs extends EaBase {
   private _syncRovingTabindex(activeName: string): void {
     if (!this._rovingTabindex || !activeName) return;
     const tabEls = [...this.querySelectorAll("ea-tab")] as HTMLElement[];
-    const activeIndex = tabEls.findIndex(tab => tab.getAttribute("panel") === activeName);
+    const activeIndex = tabEls.findIndex(
+      tab => tab.getAttribute("panel") === activeName
+    );
     if (activeIndex >= 0) {
       this._rovingTabindex.setCurrentIndex(activeIndex);
     }

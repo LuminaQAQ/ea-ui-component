@@ -265,3 +265,9 @@ export class EaAvatar extends EaBase {
     this._srcController?.abort();
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-avatar": EaAvatar;
+  }
+}

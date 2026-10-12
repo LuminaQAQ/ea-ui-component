@@ -493,3 +493,9 @@ export class EaSubMenu extends EaBase {
 }
 
 export default EaSubMenu;
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-sub-menu": EaSubMenu;
+  }
+}

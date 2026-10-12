@@ -199,3 +199,9 @@ export class EaIcon extends EaBase {
 }
 
 export default EaIcon;
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-icon": EaIcon;
+  }
+}

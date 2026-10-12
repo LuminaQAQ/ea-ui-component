@@ -148,3 +148,9 @@ export class EaPageHeader extends EaBase {
     this._updateIcon();
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-page-header": EaPageHeader;
+  }
+}

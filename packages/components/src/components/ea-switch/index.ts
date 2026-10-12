@@ -383,3 +383,9 @@ export class EaSwitch extends EaFormAssociatedBase {
     return this.internals?.reportValidity() ?? true;
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-switch": EaSwitch;
+  }
+}

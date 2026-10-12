@@ -80,3 +80,9 @@ export class EaCol extends EaBase {
     this.style.setProperty("--ea-col-pull", String(this.pull));
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-col": EaCol;
+  }
+}

@@ -307,3 +307,9 @@ export class EaCheckbox extends EaFormAssociatedBase {
     return this.internals?.reportValidity() ?? true;
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-checkbox": EaCheckbox;
+  }
+}

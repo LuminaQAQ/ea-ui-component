@@ -74,3 +74,9 @@ export class EaContainer extends EaBase {
     this.updateContainerClasslist();
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-container": EaContainer;
+  }
+}

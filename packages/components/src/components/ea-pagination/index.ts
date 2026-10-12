@@ -1,4 +1,4 @@
-﻿import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
+import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
 import { CustomElement, attribute, property, query, listen } from "@easy-component-ui/core/decorator";
 import { html } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
@@ -720,6 +720,12 @@ export class EaPagination extends EaBase {
     this._jumperAbortController = null;
     this._sizesAbortController?.abort();
     this._sizesAbortController = null;
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-pagination": EaPagination;
   }
 }
 

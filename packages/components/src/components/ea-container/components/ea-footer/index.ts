@@ -53,3 +53,9 @@ export class EaFooter extends EaBase {
     `;
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-footer": EaFooter;
+  }
+}

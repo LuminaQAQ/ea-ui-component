@@ -545,3 +545,9 @@ export class EaImagePreview extends EaOverlay {
     this._imgMoveAbortController?.abort();
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-image-preview": EaImagePreview;
+  }
+}

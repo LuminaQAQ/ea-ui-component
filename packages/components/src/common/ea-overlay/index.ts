@@ -395,3 +395,9 @@ export class EaOverlay extends EaBase {
     this._transitionAbortController?.abort();
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-overlay": EaOverlay;
+  }
+}

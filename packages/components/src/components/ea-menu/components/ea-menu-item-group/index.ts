@@ -74,3 +74,9 @@ export class EaMenuItemGroup extends EaBase {
 }
 
 export default EaMenuItemGroup;
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-menu-item-group": EaMenuItemGroup;
+  }
+}

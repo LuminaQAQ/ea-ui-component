@@ -1,4 +1,4 @@
-﻿import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
+import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
 import { CustomElement, attribute, query } from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import {
@@ -131,5 +131,11 @@ export class EaResult extends EaBase {
 
   $mount(): void {
     this.updateContainerClasslist();
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-result": EaResult;
   }
 }

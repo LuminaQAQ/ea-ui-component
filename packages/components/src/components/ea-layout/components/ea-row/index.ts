@@ -83,3 +83,9 @@ export class EaRow extends EaBase {
     this.style.setProperty("--ea-row-align", this.align);
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-row": EaRow;
+  }
+}

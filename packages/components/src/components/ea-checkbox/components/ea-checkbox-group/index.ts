@@ -269,3 +269,9 @@ export class EaCheckboxGroup extends EaFormAssociatedBase {
     return this.internals?.reportValidity() ?? true;
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-checkbox-group": EaCheckboxGroup;
+  }
+}

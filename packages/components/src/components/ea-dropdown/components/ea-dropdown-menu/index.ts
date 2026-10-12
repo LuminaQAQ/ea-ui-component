@@ -29,3 +29,9 @@ export class EaDropdownMenu extends EaBase {
     this.setAttribute("aria-label", "Menu");
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-dropdown-menu": EaDropdownMenu;
+  }
+}

@@ -124,3 +124,9 @@ export class EaEmpty extends EaBase {
 }
 
 export default EaEmpty;
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-empty": EaEmpty;
+  }
+}

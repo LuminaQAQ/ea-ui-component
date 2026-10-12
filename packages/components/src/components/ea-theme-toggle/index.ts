@@ -95,3 +95,17 @@ export class EaThemeToggle extends EaBase {
     }
   }
 }
+
+export interface EaThemeToggleEventDetail {
+  mode: "light" | "dark";
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-theme-toggle": EaThemeToggle;
+  }
+
+  interface GlobalEventHandlersEventMap {
+    "ea-theme-toggle-change": CustomEvent<EaThemeToggleEventDetail>;
+  }
+}

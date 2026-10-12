@@ -363,3 +363,9 @@ export class EaScrollbar extends EaBase {
     }
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-scrollbar": EaScrollbar;
+  }
+}

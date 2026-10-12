@@ -1,4 +1,4 @@
-﻿import { EaFormAssociatedBase } from "@easy-component-ui/core/core/EaFormAssociatedBase";
+import { EaFormAssociatedBase } from "@easy-component-ui/core/core/EaFormAssociatedBase";
 import { createBEM } from "@easy-component-ui/core/utils/bem";
 
 import { CustomElement, attribute, property, query, listen } from "@easy-component-ui/core/decorator";
@@ -382,3 +382,9 @@ export class EaRate extends EaFormAssociatedBase {
 }
 
 export default EaRate;
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-rate": EaRate;
+  }
+}

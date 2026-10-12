@@ -376,3 +376,9 @@ export class EaProgress extends EaBase {
 }
 
 export default EaProgress;
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-progress": EaProgress;
+  }
+}

@@ -113,3 +113,9 @@ export class EaDropdownItem extends EaBase {
     this.updateContainerClasslist();
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-dropdown-item": EaDropdownItem;
+  }
+}

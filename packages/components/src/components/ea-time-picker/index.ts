@@ -765,3 +765,9 @@ export class EaTimePicker extends EaFormAssociatedBase {
 }
 
 export default EaTimePicker;
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-time-picker": EaTimePicker;
+  }
+}

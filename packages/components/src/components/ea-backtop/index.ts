@@ -192,3 +192,9 @@ export class EaBacktop extends EaBase {
     this._targetScrollAbortController?.abort();
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-backtop": EaBacktop;
+  }
+}

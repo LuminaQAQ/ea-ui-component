@@ -16,3 +16,9 @@ window.$prompt = EaMessageBox.prompt;
 window.$msgbox = EaMessageBox;
 
 export { EaMessageBox, EaMessageBoxElement };
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-message-box": EaMessageBoxElement;
+  }
+}

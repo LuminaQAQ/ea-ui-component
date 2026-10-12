@@ -7,3 +7,11 @@ export type { SplitterLayoutType } from "./components/ea-splitter-panel";
 export { EaSplitterPanelResizeStartEvent } from "./components/ea-splitter/events/EaSplitterPanelResizeStartEvent";
 export { EaSplitterPanelResizeEvent } from "./components/ea-splitter/events/EaSplitterPanelResizeEvent";
 export { EaSplitterPanelResizeEndEvent } from "./components/ea-splitter/events/EaSplitterPanelResizeEndEvent";
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-splitter": EaSplitter;
+    "ea-splitter-panel": EaSplitterPanel;
+    "ea-splitter-bar": EaSplitterBar;
+  }
+}

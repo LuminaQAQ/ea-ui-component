@@ -883,3 +883,9 @@ export class EaUpload extends EaFormAssociatedBase {
     `;
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-upload": EaUpload;
+  }
+}

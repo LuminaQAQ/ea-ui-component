@@ -685,3 +685,9 @@ export class EaColorPickerPanel extends EaBase {
     this._updateCursorPosition();
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-color-picker-panel": EaColorPickerPanel;
+  }
+}

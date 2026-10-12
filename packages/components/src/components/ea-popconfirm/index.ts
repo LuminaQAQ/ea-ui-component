@@ -448,3 +448,9 @@ export class EaPopconfirm extends EaPopper {
     this._popoverAbortController?.abort();
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-popconfirm": EaPopconfirm;
+  }
+}

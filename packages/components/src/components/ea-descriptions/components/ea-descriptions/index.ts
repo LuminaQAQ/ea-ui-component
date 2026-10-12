@@ -1,9 +1,15 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { html } from "@easy-component-ui/core/utils/html";
 import { h } from "@easy-component-ui/core/utils/h";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import stylesheet from "./index.scss?inline";
+import type { EaDescriptionsItem } from "../ea-descriptions-item/index";
 
 const TAG_NAME = "ea-descriptions" as const;
 const bem = createBEM(TAG_NAME);
@@ -160,7 +166,7 @@ export class EaDescriptions extends EaBase {
    * @returns 行列描述二维数组
    */
   private _handleChildrenDivide(
-    children: EaDescriptionsItemElement[],
+    children: EaDescriptionsItem[],
     column: number
   ): DescriptionsItemOption[][] {
     const rows: DescriptionsItemOption[][] = [];
@@ -463,9 +469,7 @@ export class EaDescriptions extends EaBase {
   /** 渲染默认插槽内容 */
   private _render(): void {
     const children = [
-      ...this.querySelectorAll<EaDescriptionsItemElement>(
-        "ea-descriptions-item"
-      ),
+      ...this.querySelectorAll<EaDescriptionsItem>("ea-descriptions-item"),
     ];
 
     this._tbody.innerHTML = this._handleChildrenDivide(children, this.column)
@@ -490,22 +494,9 @@ export class EaDescriptions extends EaBase {
   }
 }
 
-export interface EaDescriptionsItemElement extends HTMLElement {
-  label: string;
-  colspan: number;
-  rowspan: number;
-  align: string;
-  labelAlign: string;
-  width: string;
-  labelWidth: string;
-  labelPart: string;
-  contentPart: string;
-  innerHTML: string;
-}
-
 declare global {
   interface HTMLElementTagNameMap {
     "ea-descriptions": EaDescriptions;
-    "ea-descriptions-item": EaDescriptionsItemElement;
+    "ea-descriptions-item": EaDescriptionsItem;
   }
 }

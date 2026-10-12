@@ -650,3 +650,9 @@ export class EaInputNumber extends EaFormAssociatedBase {
     this._stopRepeat();
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-input-number": EaInputNumber;
+  }
+}

@@ -75,3 +75,9 @@ export class EaStatistic extends EaBase {
 }
 
 export default EaStatistic;
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-statistic": EaStatistic;
+  }
+}

@@ -240,3 +240,9 @@ export class EaCollapse extends EaBase {
     this._initCollapseStatus();
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-collapse": EaCollapse;
+  }
+}

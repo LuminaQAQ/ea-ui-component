@@ -267,3 +267,9 @@ export class EaCountdown extends EaBase {
 }
 
 export default EaCountdown;
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-countdown": EaCountdown;
+  }
+}

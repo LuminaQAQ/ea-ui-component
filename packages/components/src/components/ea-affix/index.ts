@@ -240,3 +240,9 @@ export class EaAffix extends EaBase {
     this._resizeObserver?.disconnect();
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-affix": EaAffix;
+  }
+}

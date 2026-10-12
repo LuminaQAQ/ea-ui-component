@@ -254,3 +254,9 @@ export class EaCollapseItem extends EaBase {
     }
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-collapse-item": EaCollapseItem;
+  }
+}

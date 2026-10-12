@@ -113,3 +113,9 @@ export class EaDivider extends EaBase {
     this.updateContainerClasslist();
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-divider": EaDivider;
+  }
+}

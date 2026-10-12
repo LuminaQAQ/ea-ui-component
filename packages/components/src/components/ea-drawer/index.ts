@@ -244,3 +244,9 @@ export class EaDrawer extends EaOverlay {
     super.$beforeUnmount?.();
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-drawer": EaDrawer;
+  }
+}

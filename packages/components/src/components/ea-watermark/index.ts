@@ -308,3 +308,9 @@ export class EaWatermark extends EaBase {
     img.src = this.image;
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-watermark": EaWatermark;
+  }
+}

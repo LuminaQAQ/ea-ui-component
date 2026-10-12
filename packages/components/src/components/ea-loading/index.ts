@@ -10,3 +10,9 @@ declare global {
 window.$loading = EaLoadingService;
 
 export { EaLoading, EaLoadingService };
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-loading": EaLoading;
+  }
+}

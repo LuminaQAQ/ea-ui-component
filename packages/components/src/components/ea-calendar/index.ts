@@ -695,3 +695,9 @@ export class EaCalendar extends EaBase {
 }
 
 export default EaCalendar;
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-calendar": EaCalendar;
+  }
+}

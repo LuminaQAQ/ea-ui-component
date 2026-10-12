@@ -1304,3 +1304,9 @@ export class EaTree extends EaBase {
 }
 
 export default EaTree;
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-tree": EaTree;
+  }
+}

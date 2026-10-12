@@ -1,4 +1,4 @@
-﻿import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
+import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
 import { CustomElement, attribute, query } from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { VARIANT_TYPES } from "@constants/variant";
@@ -176,3 +176,9 @@ export class EaText extends EaBase {
 }
 
 export default EaText;
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-text": EaText;
+  }
+}

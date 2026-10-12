@@ -168,3 +168,9 @@ export class EaSpace extends EaBase {
 
 export type { DirectionType, SizeType, AlignmentType };
 export { DIRECTION_TYPES, SIZE_TYPES, ALIGNMENT_TYPES };
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-space": EaSpace;
+  }
+}

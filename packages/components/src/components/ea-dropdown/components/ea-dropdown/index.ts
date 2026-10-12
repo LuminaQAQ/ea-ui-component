@@ -277,3 +277,9 @@ export class EaDropdown extends EaPopper {
     this._clearHoverHideTimer();
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-dropdown": EaDropdown;
+  }
+}

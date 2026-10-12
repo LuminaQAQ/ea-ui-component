@@ -1,5 +1,10 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query, queryAll } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+  queryAll,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import stylesheet from "./index.scss?inline";
 
@@ -170,5 +175,11 @@ export class EaBorderBeam extends EaBase {
         `${(100 / count) * index}%`
       );
     });
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-border-beam": EaBorderBeam;
   }
 }

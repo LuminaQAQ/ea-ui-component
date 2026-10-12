@@ -690,3 +690,9 @@ export class EaSlider extends EaFormAssociatedBase {
     this._inputAbortController?.abort();
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-slider": EaSlider;
+  }
+}

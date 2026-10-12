@@ -46,3 +46,9 @@ export class EaAside extends EaBase {
     `;
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-aside": EaAside;
+  }
+}

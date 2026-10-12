@@ -451,3 +451,9 @@ export class EaPopover extends EaPopper {
     this._popoverAbortController?.abort();
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-popover": EaPopover;
+  }
+}

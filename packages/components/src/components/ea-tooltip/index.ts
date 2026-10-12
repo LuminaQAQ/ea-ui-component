@@ -315,3 +315,9 @@ export class EaTooltip extends EaPopper {
     this._contextmenuAbortController?.abort();
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-tooltip": EaTooltip;
+  }
+}

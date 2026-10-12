@@ -37,3 +37,9 @@ export class EaMain extends EaBase {
     `;
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-main": EaMain;
+  }
+}

@@ -341,3 +341,9 @@ export class EaEffects extends EaBase {
     this._endController = null;
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-effects": EaEffects;
+  }
+}

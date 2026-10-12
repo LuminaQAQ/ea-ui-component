@@ -1,10 +1,17 @@
-﻿import EaFormAssociatedBase from "@easy-component-ui/core/core/EaFormAssociatedBase";
+import EaFormAssociatedBase from "@easy-component-ui/core/core/EaFormAssociatedBase";
 import { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, property, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  property,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { i18nManager } from "@/utils/I18nManager";
 import { EaTransferLeftCheckChangeEvent } from "./events/EaTransferLeftCheckChangeEvent";
 import { EaTransferRightCheckChangeEvent } from "./events/EaTransferRightCheckChangeEvent";
 import "./components/panel/index";
+import type { EaTransferPanel } from "./components/panel/index";
 import "@components/ea-checkbox/index.js";
 import "@components/ea-button/index.js";
 import "@components/ea-icon/index.js";
@@ -837,5 +844,12 @@ export class EaTransfer extends EaFormAssociatedBase {
   reportValidity(): boolean {
     this.updateValidity();
     return this.internals.reportValidity();
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-transfer": EaTransfer;
+    "ea-transfer-panel": EaTransferPanel;
   }
 }

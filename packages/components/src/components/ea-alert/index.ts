@@ -1,4 +1,4 @@
-﻿import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
+import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
 import { CustomElement, attribute, query, listen, property } from "@easy-component-ui/core/decorator";
 import { html } from "@easy-component-ui/core/utils/html";
 import { timeout } from "@easy-component-ui/core/utils/timeout";
@@ -349,5 +349,11 @@ export class EaAlert extends EaBase {
     clearTimeout(this._showAfterTimer);
     clearTimeout(this._autoCloseTimer);
     clearTimeout(this._hideAfterTimer);
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-alert": EaAlert;
   }
 }

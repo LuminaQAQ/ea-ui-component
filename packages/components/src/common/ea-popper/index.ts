@@ -326,3 +326,9 @@ export class EaPopper extends EaBase {
     this._visibleAbortController?.abort();
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-popper": EaPopper;
+  }
+}

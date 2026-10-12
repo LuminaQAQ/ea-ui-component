@@ -134,3 +134,9 @@ export class EaCard extends EaBase {
     this.updateContainerClasslist();
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-card": EaCard;
+  }
+}

@@ -332,3 +332,9 @@ export class EaDialog extends EaOverlay {
     this.hide();
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-dialog": EaDialog;
+  }
+}

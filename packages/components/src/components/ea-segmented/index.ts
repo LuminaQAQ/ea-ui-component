@@ -1,5 +1,11 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, property, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  property,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { h } from "@easy-component-ui/core/utils/h";
 import { html } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
@@ -228,22 +234,17 @@ export class EaSegmented extends EaBase {
           labelAttrs["aria-disabled"] = "true";
         }
 
-        return h(
-          "label",
-          itemClassName,
-          labelAttrs,
-          [
-            h("input", bem.e("original"), inputProps, ""),
-            h(
-              "span",
-              bem.e("label"),
-              {
-                part: "label",
-              },
-              label || itemValue
-            ),
-          ]
-        );
+        return h("label", itemClassName, labelAttrs, [
+          h("input", bem.e("original"), inputProps, ""),
+          h(
+            "span",
+            bem.e("label"),
+            {
+              part: "label",
+            },
+            label || itemValue
+          ),
+        ]);
       })
       .join("");
 
@@ -321,9 +322,7 @@ export class EaSegmented extends EaBase {
       ) as HTMLInputElement;
       if (input) {
         this.value = input.value;
-        this.dispatchEvent(
-          new EaSegmentedChangeEvent({ value: input.value })
-        );
+        this.dispatchEvent(new EaSegmentedChangeEvent({ value: input.value }));
       }
     }
   }
@@ -416,3 +415,9 @@ export class EaSegmented extends EaBase {
 }
 
 export default EaSegmented;
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-segmented": EaSegmented;
+  }
+}
