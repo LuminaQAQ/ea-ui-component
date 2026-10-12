@@ -331,31 +331,6 @@ describe("EaPopconfirm", () => {
   // ==================== iconColor 属性 ====================
 
   describe("IconColor Attribute", () => {
-    let originalSupports;
-
-    beforeEach(() => {
-      if (!globalThis.CSS) {
-        globalThis.CSS = {};
-      }
-      originalSupports = globalThis.CSS.supports;
-      globalThis.CSS.supports = (prop, value) => {
-        if (prop === "color") {
-          return /^(#|rgb|hsl|rgba|hsla|\b(red|blue|green|white|black|yellow|orange|purple|pink|gray|grey|brown|cyan|magenta|teal|navy|maroon|olive|silver|lime|aqua|fuchsia|gold|indigo|ivory|khaki|lavender|plum|salmon|tan|tomato|violet|wheat)\b)/i.test(
-            value
-          );
-        }
-        return false;
-      };
-    });
-
-    afterEach(() => {
-      if (originalSupports) {
-        globalThis.CSS.supports = originalSupports;
-      } else {
-        delete globalThis.CSS.supports;
-      }
-    });
-
     it("默认 iconColor 应该是 rgb(255, 153, 0)", () => {
       const popconfirm = createPopconfirm({}, withReference());
       container.appendChild(popconfirm);

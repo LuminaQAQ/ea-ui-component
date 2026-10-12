@@ -1,13 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 
-if (typeof CSS === "undefined") {
-  global.CSS = {
-    supports: () => true,
-  };
-} else if (!CSS.supports) {
-  CSS.supports = () => true;
-}
-
 import "./index.js";
 import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y";
 

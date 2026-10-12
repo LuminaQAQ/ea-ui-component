@@ -270,9 +270,7 @@ describe("EaTag", () => {
       expect(tag.color).toBe("#ff0000");
     });
 
-    it("无效 color 值在支持 CSS.supports 的环境中应该输出警告", async () => {
-      if (typeof CSS === "undefined" || !CSS.supports) return;
-
+    it("无效 color 值应该输出警告", async () => {
       const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
       const tag = document.createElement("ea-tag");

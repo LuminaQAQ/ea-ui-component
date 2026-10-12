@@ -1,24 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y";
 
-if (typeof CSS === "undefined") {
-  global.CSS = {
-    supports: (prop, value) => {
-      if (!value) return false;
-      const testEl = document.createElement("div");
-      testEl.style.setProperty(prop, value);
-      return testEl.style.getPropertyValue(prop) === value;
-    },
-  };
-} else if (!CSS.supports) {
-  CSS.supports = (prop, value) => {
-    if (!value) return false;
-    const testEl = document.createElement("div");
-    testEl.style.setProperty(prop, value);
-    return testEl.style.getPropertyValue(prop) === value;
-  };
-}
-
 import "./index.js";
 
 describe("EaEmpty", () => {

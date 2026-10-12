@@ -18,22 +18,14 @@ if (typeof window !== "undefined" && !window.IntersectionObserver) {
   window.IntersectionObserver = MockIntersectionObserver;
 }
 
-import "./index.ts";
+import "./index";
 
 describe("EaImage Component", () => {
   let container;
-  let originalCSSSupports;
 
   beforeEach(() => {
     if (!window.IntersectionObserver) {
       window.IntersectionObserver = MockIntersectionObserver;
-    }
-
-    if (typeof CSS === "undefined") {
-      window.CSS = { supports: vi.fn().mockReturnValue(true) };
-    } else if (!CSS.supports) {
-      originalCSSSupports = undefined;
-      CSS.supports = vi.fn().mockReturnValue(true);
     }
 
     if (!document.activeElement || document.activeElement === document.body) {

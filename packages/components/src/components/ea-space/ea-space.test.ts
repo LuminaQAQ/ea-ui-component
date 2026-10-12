@@ -1,38 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y.js";
 
-if (!window.CSS) {
-  window.CSS = {};
-}
-if (!window.CSS.supports) {
-  window.CSS.supports = (prop, value) => {
-    const validAlignItems = [
-      "center",
-      "flex-start",
-      "flex-end",
-      "baseline",
-      "stretch",
-      "",
-    ];
-    const validProps = ["gap", "width"];
-
-    if (prop === "align-items") {
-      return validAlignItems.includes(value);
-    }
-
-    if (validProps.includes(prop)) return true;
-    if (prop.includes(":")) {
-      const [p, v] = prop.split(":").map(s => s.trim());
-      if (p === "align-items") {
-        return validAlignItems.includes(v);
-      }
-      return true;
-    }
-    return false;
-  };
-}
-
-import "./index.ts";
+import "./index";
 
 describe("EaSpace", () => {
   let container;

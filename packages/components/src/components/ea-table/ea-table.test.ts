@@ -3,67 +3,6 @@ import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y";
 
 import "./index";
 
-if (typeof CSS === "undefined") {
-  global.CSS = {
-    supports: () => true,
-  };
-} else if (!CSS.supports) {
-  CSS.supports = () => true;
-}
-
-if (
-  !Element.prototype.hasOwnProperty("part") ||
-  typeof Element.prototype.part !== "object"
-) {
-  Object.defineProperty(Element.prototype, "part", {
-    get() {
-      if (!this.__partTokenList) {
-        this.__partTokenList = {
-          contains: token =>
-            (this.getAttribute("part") || "").split(/\s+/).includes(token),
-          add: (...tokens) => {
-            const current = (this.getAttribute("part") || "")
-              .split(/\s+/)
-              .filter(Boolean);
-            tokens.forEach(t => {
-              if (!current.includes(t)) current.push(t);
-            });
-            this.setAttribute("part", current.join(" "));
-          },
-          remove: (...tokens) => {
-            const current = (this.getAttribute("part") || "")
-              .split(/\s+/)
-              .filter(Boolean);
-            tokens.forEach(t => {
-              const idx = current.indexOf(t);
-              if (idx !== -1) current.splice(idx, 1);
-            });
-            this.setAttribute("part", current.join(" "));
-          },
-          toggle(token, force) {
-            if (force !== undefined) {
-              if (force) {
-                this.add(token);
-              } else {
-                this.remove(token);
-              }
-              return force;
-            }
-            if (this.contains(token)) {
-              this.remove(token);
-              return false;
-            } else {
-              this.add(token);
-              return true;
-            }
-          },
-        };
-      }
-      return this.__partTokenList;
-    },
-  });
-}
-
 const testData = [
   {
     id: 1,

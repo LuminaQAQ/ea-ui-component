@@ -1,29 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y";
 
-if (!window.CSS) {
-  window.CSS = {};
-}
-if (!window.CSS.supports) {
-  window.CSS.supports = (prop, value) => {
-    if (typeof value !== "string") return false;
-    if (
-      /^\d+(\.\d+)?(px|rem|em|vh|vw|%|cm|mm|in|pt|pc|ch|ex|vmin|vmax)$/.test(
-        value
-      )
-    )
-      return true;
-    if (
-      /^(auto|inherit|initial|unset|none|max-content|min-content|fit-content)$/.test(
-        value
-      )
-    )
-      return true;
-    return false;
-  };
-}
-
-import "./index.ts";
+import "./index";
 
 describe("EaProgress Component", () => {
   let container;
