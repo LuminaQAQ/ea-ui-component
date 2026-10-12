@@ -1,50 +1,103 @@
 import fs from "node:fs";
 import path from "node:path";
+import * as ts from "typescript";
 import type { ResolvedEaConfig } from "./config";
 
 const GENERATED_START = "// @ea-generated:start";
 const GENERATED_END = "// @ea-generated:end";
 
+/** 判断声明节点是否带 export 修饰符 */
+function hasExportModifier(st: ts.Node): boolean {
+  const modifiers = ts.canHaveModifiers(st) ? ts.getModifiers(st) : undefined;
+  return modifiers?.some(m => m.kind === ts.SyntaxKind.ExportKeyword) ?? false;
+}
+
 /**
- * 解析组件 index.ts 的具名值导出名单：
- * 支持平铺 export {}、直出 export class、from 再导出、行内 type 修饰；
- * 排除 export type / interface / default；其余形态（export * / const 等）
- * 中止报错并打印文件与行号，禁止静默跳过
+ * 提取源码的具名值导出名单（AST 解析）：
+ * 收录 class / const / function / enum 的具名值导出与 from 再导出；
+ * 跳过 export type / interface / type alias / default；
+ * export * 与别名再导出（as）中止报错并打印行号，禁止静默跳过
  */
-function parseIndexExports(src: string, filePath: string): string[] {
+function parseValueExports(src: string, filePath: string): string[] {
+  const sf = ts.createSourceFile(filePath, src, ts.ScriptTarget.Latest, true);
+  const lineOf = (node: ts.Node) =>
+    sf.getLineAndCharacterOfPosition(node.getStart(sf)).line + 1;
   const names: string[] = [];
-  const lines = src.split(/\r?\n/);
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    const no = i + 1;
-    const m = line.match(/^export\s+(.+)$/);
-    if (!m) continue;
-    const rest = m[1];
-    if (/^(type|interface|default)\b/.test(rest)) continue;
-    const brace = rest.match(/^\{(.*)\}\s*(?:from\s+.*)?;?\s*$/);
-    if (brace) {
-      for (const raw of brace[1].split(",")) {
-        const item = raw.trim();
-        if (item === "" || /^type\s/.test(item)) continue;
-        if (/\bas\b/.test(item)) {
+
+  for (const st of sf.statements) {
+    if (ts.isExportDeclaration(st)) {
+      if (st.isTypeOnly) continue;
+      if (!st.exportClause || !ts.isNamedExports(st.exportClause)) {
+        throw new Error(
+          `export * 无法机械投影为具名名单（${filePath}:L${lineOf(st)}）。请改为具名再导出`
+        );
+      }
+      for (const el of st.exportClause.elements) {
+        if (el.isTypeOnly) continue;
+        if (el.propertyName) {
           throw new Error(
-            `export 别名形态不支持（${filePath}:L${no}）：${item}。请改用直接导出或扩展 CLI 解析白名单`
+            `export 别名再导出（as）无法机械投影（${filePath}:L${lineOf(el)}）：${el.getText(sf).trim()}。请以原名导出`
           );
         }
-        names.push(item);
+        names.push(el.name.text);
       }
       continue;
     }
-    const cls = rest.match(/^(?:abstract\s+)?class\s+(\w+)/);
-    if (cls) {
-      names.push(cls[1]);
+    if (ts.isExportAssignment(st)) continue;
+    if (!hasExportModifier(st)) continue;
+    if (
+      ts.isClassDeclaration(st) ||
+      ts.isFunctionDeclaration(st) ||
+      ts.isEnumDeclaration(st)
+    ) {
+      if (st.name) names.push(st.name.text);
       continue;
     }
+    if (ts.isVariableStatement(st)) {
+      for (const d of st.declarationList.declarations) {
+        if (ts.isIdentifier(d.name)) {
+          names.push(d.name.text);
+        } else {
+          throw new Error(
+            `解构导出形态无法机械投影（${filePath}:L${lineOf(d)}）`
+          );
+        }
+      }
+      continue;
+    }
+    if (ts.isInterfaceDeclaration(st) || ts.isTypeAliasDeclaration(st))
+      continue;
     throw new Error(
-      `组件 index.ts 出现未识别的 export 形态（${filePath}:L${no}）：${line.trim()}。机械投影仅支持平铺/直出/from 再导出，请调整导出形态或扩展 CLI 解析白名单`
+      `未识别的 export 形态（${filePath}:L${lineOf(st)}）：${st.getText(sf).slice(0, 80)}。请调整导出形态或扩展 CLI 解析白名单`
     );
   }
   return names;
+}
+
+/**
+ * 手工区（标记区之外）导出与生成名单求交集，非空则中止——
+ * 防止 regenerate 后同一名字双处导出（TS2300 重复导出构建红）
+ */
+function assertNoManualConflict(
+  manualLines: string[],
+  generatedNames: string[],
+  entryPath: string
+): void {
+  let manual: string[];
+  try {
+    manual = parseValueExports(manualLines.join("\n"), entryPath);
+  } catch (e) {
+    throw new Error(
+      `聚合入口手工区导出解析失败，无法校验与生成名单的冲突：\n${(e as Error).message}`
+    );
+  }
+  const generated = new Set(generatedNames);
+  const dup = [...new Set(manual)].filter(n => generated.has(n));
+  if (dup.length > 0) {
+    throw new Error(
+      `聚合入口手工区存在与生成名单重复的导出：${dup.join("、")}。请删除手工区的重复导出（机械投影已从组件 index.ts 收录同名导出）`
+    );
+  }
 }
 
 /**
@@ -118,8 +171,9 @@ function guardNoSentinel(
 
 /**
  * 扫描 componentDirs 公开目录（跳过 internal）并机械投影各 index.ts 的具名值导出，
- * 在哨兵分区内重建聚合出口的再导出清单；分区之外的行（手工内容）原位保留。
- * 无哨兵时执行 diff 防御：含多余行则中止报错，纯生成形态则全量重建并提示。
+ * 在哨兵分区内重建聚合出口的再导出清单；分区之外的行（手工内容）原位保留，
+ * 且手工区导出不得与生成名单重复。无哨兵时执行 diff 防御：含多余行则中止报错，
+ * 纯生成形态则全量重建并提示。
  */
 export function regenerateAggregateEntry(config: ResolvedEaConfig): void {
   const entryPath = config.project.entry;
@@ -136,12 +190,14 @@ export function regenerateAggregateEntry(config: ResolvedEaConfig): void {
   }
 
   const exportLines: string[] = [];
+  const exportNames: string[] = [];
   for (const { name, root } of dirs) {
     const filePath = path.join(root, name, "index.ts");
     const src = fs.readFileSync(filePath, "utf-8");
-    const names = parseIndexExports(src, filePath);
+    const names = parseValueExports(src, filePath);
     if (names.length > 0) {
       exportLines.push(`export { ${names.join(", ")} } from "./${name}";`);
+      exportNames.push(...names);
     }
   }
 
@@ -158,6 +214,11 @@ export function regenerateAggregateEntry(config: ResolvedEaConfig): void {
 
   let result: string[];
   if (markers) {
+    assertNoManualConflict(
+      [...lines.slice(0, markers.start), ...lines.slice(markers.end + 1)],
+      exportNames,
+      entryPath
+    );
     result = [
       ...lines.slice(0, markers.start),
       GENERATED_START,
