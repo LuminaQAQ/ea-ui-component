@@ -62,7 +62,7 @@ export function runCheck(options: CheckOptions = {}): void {
   const componentNames = new Set(all.map(d => d.name));
   for (const file of scanTestRootFiles(cfg)) {
     if (cfg.check.rootTestWhitelist.includes(file)) continue;
-    const stem = file.replace(/\.test\.js$/, "");
+    const stem = file.replace(/\.test\.(js|ts)$/, "");
     const isComponentTest = cfg.project.prefix
       ? stem.startsWith(`${cfg.project.prefix}-`)
       : componentNames.has(stem);

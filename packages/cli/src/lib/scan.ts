@@ -25,21 +25,27 @@ export function scanComponentDirs(cfg: ResolvedEaConfig): ComponentDirInfo[] {
     for (const name of subDirs) {
       const dir = path.join(root.path, name);
       const hasIndex = fs.existsSync(path.join(dir, "index.ts"));
-      const testPath = path.join(dir, `${name}.test.ts`);
-      const testFile = fs.existsSync(testPath) ? testPath : null;
+      // 同名测试检测宽松接受 .ts/.js 双后缀，.test.ts 为规范形态优先命中
+      const tsTestPath = path.join(dir, `${name}.test.ts`);
+      const jsTestPath = path.join(dir, `${name}.test.js`);
+      const testFile = fs.existsSync(tsTestPath)
+        ? tsTestPath
+        : fs.existsSync(jsTestPath)
+          ? jsTestPath
+          : null;
       result.push({ name, dir, hasIndex, testFile, internal: root.internal });
     }
   }
   return result;
 }
 
-/** 共享测试区根目录下的 *.test.ts 文件名列表（不含子目录）；组件测试判定由调用方执行 */
+/** 共享测试区根目录下的 *.test.ts / *.test.js 文件名列表（不含子目录）；组件测试判定由调用方执行 */
 export function scanTestRootFiles(cfg: ResolvedEaConfig): string[] {
   const { testDir } = cfg.project;
   if (!fs.existsSync(testDir)) return [];
   return fs
     .readdirSync(testDir, { withFileTypes: true })
-    .filter(e => e.isFile() && e.name.endsWith(".test.ts"))
+    .filter(e => e.isFile() && /\.test\.(js|ts)$/.test(e.name))
     .map(e => e.name)
     .sort();
 }
