@@ -6,7 +6,7 @@ import "./index.ts";
 import "../ea-button/index.ts";
 
 describe("EaPopover Component", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -24,7 +24,7 @@ describe("EaPopover Component", () => {
       container.appendChild(popover);
 
       expect(popover.shadowRoot).toBeTruthy();
-      expect(popover.shadowRoot.querySelector(".ea-popper")).toBeTruthy();
+      expect(popover.shadowRoot!.querySelector(".ea-popper")).toBeTruthy();
     });
 
     it("应该支持 CSS Parts", () => {
@@ -33,16 +33,18 @@ describe("EaPopover Component", () => {
       container.appendChild(popover);
 
       expect(
-        popover.shadowRoot.querySelector('[part="container"]')
+        popover.shadowRoot!.querySelector('[part="container"]')
       ).toBeTruthy();
       expect(
-        popover.shadowRoot.querySelector('[part="reference"]')
+        popover.shadowRoot!.querySelector('[part="reference"]')
       ).toBeTruthy();
       expect(
-        popover.shadowRoot.querySelector('[part="original"]')
+        popover.shadowRoot!.querySelector('[part="original"]')
       ).toBeTruthy();
-      expect(popover.shadowRoot.querySelector('[part="title"]')).toBeTruthy();
-      expect(popover.shadowRoot.querySelector('[part="content"]')).toBeTruthy();
+      expect(popover.shadowRoot!.querySelector('[part="title"]')).toBeTruthy();
+      expect(
+        popover.shadowRoot!.querySelector('[part="content"]')
+      ).toBeTruthy();
     });
 
     it("应该渲染 reference slot", () => {
@@ -50,7 +52,7 @@ describe("EaPopover Component", () => {
       popover.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popover);
 
-      const referenceSlot = popover.shadowRoot.querySelector(
+      const referenceSlot = popover.shadowRoot!.querySelector(
         'slot[name="reference"]'
       );
       expect(referenceSlot).toBeTruthy();
@@ -61,7 +63,7 @@ describe("EaPopover Component", () => {
       popover.innerHTML = `<span>Content</span><button slot="reference">Trigger</button>`;
       container.appendChild(popover);
 
-      const defaultSlot = popover.shadowRoot.querySelector("slot:not([name])");
+      const defaultSlot = popover.shadowRoot!.querySelector("slot:not([name])");
       expect(defaultSlot).toBeTruthy();
     });
 
@@ -71,10 +73,10 @@ describe("EaPopover Component", () => {
       container.appendChild(popover);
 
       expect(
-        popover.shadowRoot.querySelector(".ea-popover__title")
+        popover.shadowRoot!.querySelector(".ea-popover__title")
       ).toBeTruthy();
       expect(
-        popover.shadowRoot.querySelector(".ea-popover__content")
+        popover.shadowRoot!.querySelector(".ea-popover__content")
       ).toBeTruthy();
     });
   });
@@ -178,9 +180,9 @@ describe("EaPopover Component", () => {
 
       await popover.updateComplete;
 
-      const titleEl = popover.shadowRoot.querySelector(".ea-popover__title");
+      const titleEl = popover.shadowRoot!.querySelector(".ea-popover__title");
       expect(titleEl).toBeTruthy();
-      expect(titleEl.textContent).toBe("Test Title");
+      expect(titleEl!.textContent).toBe("Test Title");
     });
 
     it("heading 设置后应该添加 is-has-heading 状态类", () => {
@@ -189,8 +191,8 @@ describe("EaPopover Component", () => {
       popover.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popover);
 
-      const containerEl = popover.shadowRoot.querySelector(".ea-popper");
-      expect(containerEl.classList.contains("is-has-heading")).toBe(true);
+      const containerEl = popover.shadowRoot!.querySelector(".ea-popper");
+      expect(containerEl!.classList.contains("is-has-heading")).toBe(true);
     });
 
     it("heading 为空时不应该添加 is-has-heading 状态类", () => {
@@ -198,8 +200,8 @@ describe("EaPopover Component", () => {
       popover.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popover);
 
-      const containerEl = popover.shadowRoot.querySelector(".ea-popper");
-      expect(containerEl.classList.contains("is-has-heading")).toBe(false);
+      const containerEl = popover.shadowRoot!.querySelector(".ea-popper");
+      expect(containerEl!.classList.contains("is-has-heading")).toBe(false);
     });
 
     it("动态设置 heading 应该更新文本和状态类", async () => {
@@ -212,11 +214,11 @@ describe("EaPopover Component", () => {
       popover.setAttribute("heading", "Dynamic Title");
       await popover.updateComplete;
 
-      const titleEl = popover.shadowRoot.querySelector(".ea-popover__title");
-      expect(titleEl.textContent).toBe("Dynamic Title");
+      const titleEl = popover.shadowRoot!.querySelector(".ea-popover__title");
+      expect(titleEl!.textContent).toBe("Dynamic Title");
 
-      const containerEl = popover.shadowRoot.querySelector(".ea-popper");
-      expect(containerEl.classList.contains("is-has-heading")).toBe(true);
+      const containerEl = popover.shadowRoot!.querySelector(".ea-popper");
+      expect(containerEl!.classList.contains("is-has-heading")).toBe(true);
     });
 
     it("动态清除 heading 应该移除状态类", async () => {
@@ -230,8 +232,8 @@ describe("EaPopover Component", () => {
       popover.setAttribute("heading", "");
       await popover.updateComplete;
 
-      const containerEl = popover.shadowRoot.querySelector(".ea-popper");
-      expect(containerEl.classList.contains("is-has-heading")).toBe(false);
+      const containerEl = popover.shadowRoot!.querySelector(".ea-popper");
+      expect(containerEl!.classList.contains("is-has-heading")).toBe(false);
     });
   });
 
@@ -253,11 +255,11 @@ describe("EaPopover Component", () => {
 
       await popover.updateComplete;
 
-      const contentEl = popover.shadowRoot.querySelector(
+      const contentEl = popover.shadowRoot!.querySelector(
         ".ea-popover__content"
       );
       expect(contentEl).toBeTruthy();
-      expect(contentEl.textContent).toBe("Test Content");
+      expect(contentEl!.textContent).toBe("Test Content");
     });
 
     it("content 设置后应该添加 is-has-content 状态类", () => {
@@ -266,8 +268,8 @@ describe("EaPopover Component", () => {
       popover.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popover);
 
-      const containerEl = popover.shadowRoot.querySelector(".ea-popper");
-      expect(containerEl.classList.contains("is-has-content")).toBe(true);
+      const containerEl = popover.shadowRoot!.querySelector(".ea-popper");
+      expect(containerEl!.classList.contains("is-has-content")).toBe(true);
     });
 
     it("content 为空时不应该添加 is-has-content 状态类", () => {
@@ -275,8 +277,8 @@ describe("EaPopover Component", () => {
       popover.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popover);
 
-      const containerEl = popover.shadowRoot.querySelector(".ea-popper");
-      expect(containerEl.classList.contains("is-has-content")).toBe(false);
+      const containerEl = popover.shadowRoot!.querySelector(".ea-popper");
+      expect(containerEl!.classList.contains("is-has-content")).toBe(false);
     });
 
     it("content 设置后默认 slot 应该被隐藏", () => {
@@ -285,7 +287,7 @@ describe("EaPopover Component", () => {
       popover.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popover);
 
-      const defaultSlot = popover.shadowRoot.querySelector(
+      const defaultSlot = popover.shadowRoot!.querySelector(
         ".ea-popper__original slot:not([name])"
       );
       expect(defaultSlot).toBeTruthy();
@@ -301,13 +303,13 @@ describe("EaPopover Component", () => {
       popover.setAttribute("content", "Dynamic Content");
       await popover.updateComplete;
 
-      const contentEl = popover.shadowRoot.querySelector(
+      const contentEl = popover.shadowRoot!.querySelector(
         ".ea-popover__content"
       );
-      expect(contentEl.textContent).toBe("Dynamic Content");
+      expect(contentEl!.textContent).toBe("Dynamic Content");
 
-      const containerEl = popover.shadowRoot.querySelector(".ea-popper");
-      expect(containerEl.classList.contains("is-has-content")).toBe(true);
+      const containerEl = popover.shadowRoot!.querySelector(".ea-popper");
+      expect(containerEl!.classList.contains("is-has-content")).toBe(true);
     });
 
     it("动态清除 content 应该移除状态类", async () => {
@@ -321,8 +323,8 @@ describe("EaPopover Component", () => {
       popover.setAttribute("content", "");
       await popover.updateComplete;
 
-      const containerEl = popover.shadowRoot.querySelector(".ea-popper");
-      expect(containerEl.classList.contains("is-has-content")).toBe(false);
+      const containerEl = popover.shadowRoot!.querySelector(".ea-popper");
+      expect(containerEl!.classList.contains("is-has-content")).toBe(false);
     });
   });
 
@@ -767,7 +769,7 @@ describe("EaPopover Component", () => {
         container.appendChild(el);
         await el.updateComplete;
         const trigger = el.querySelector('[slot="reference"]');
-        expect(trigger.getAttribute("aria-haspopup")).toBe("dialog");
+        expect(trigger!.getAttribute("aria-haspopup")).toBe("dialog");
       });
 
       it("弹出层应该有 role='dialog'", async () => {
@@ -776,8 +778,8 @@ describe("EaPopover Component", () => {
         el.innerHTML = `<button slot="reference">Trigger</button>`;
         container.appendChild(el);
         await el.updateComplete;
-        const popper = el.shadowRoot.querySelector('[part="original"]');
-        expect(popper.getAttribute("role")).toBe("dialog");
+        const popper = el.shadowRoot!.querySelector('[part="original"]');
+        expect(popper!.getAttribute("role")).toBe("dialog");
       });
 
       it("设置 heading 时弹出层应该有 aria-labelledby", async () => {
@@ -786,8 +788,8 @@ describe("EaPopover Component", () => {
         el.innerHTML = `<button slot="reference">Trigger</button>`;
         container.appendChild(el);
         await el.updateComplete;
-        const popper = el.shadowRoot.querySelector('[part="original"]');
-        expect(popper.getAttribute("aria-labelledby")).toBeTruthy();
+        const popper = el.shadowRoot!.querySelector('[part="original"]');
+        expect(popper!.getAttribute("aria-labelledby")).toBeTruthy();
       });
 
       it("触发元素应该有 aria-expanded 属性", async () => {
@@ -797,14 +799,14 @@ describe("EaPopover Component", () => {
         container.appendChild(el);
         await el.updateComplete;
         const trigger = el.querySelector('[slot="reference"]');
-        expect(trigger.hasAttribute("aria-expanded")).toBe(true);
+        expect(trigger!.hasAttribute("aria-expanded")).toBe(true);
       });
     });
   });
 });
 
 describe("EaPopover Interaction And Focus", () => {
-  let container;
+  let container: HTMLDivElement;
 
   const createPopover = (trigger = "hover", contentHtml = "") => {
     const popover = document.createElement("ea-popover");
@@ -876,7 +878,10 @@ describe("EaPopover Interaction And Focus", () => {
       fireKeydown(trigger, "Enter");
 
       expect(popover.visible).toBe(false);
-      expect(popover._keyboardActivated).toBe(true);
+      expect(
+        (popover as unknown as { _keyboardActivated: boolean })
+          ._keyboardActivated
+      ).toBe(true);
     });
 
     it("触发元素上的其他按键不应该有影响", async () => {
@@ -911,11 +916,11 @@ describe("EaPopover Interaction And Focus", () => {
       const trigger = popover.querySelector('[slot="reference"]');
       const clickInit = { bubbles: true, composed: true, detail: 1 };
 
-      trigger.dispatchEvent(new MouseEvent("click", clickInit));
+      trigger!.dispatchEvent(new MouseEvent("click", clickInit));
       await popover.updateComplete;
       expect(popover.visible).toBe(true);
 
-      trigger.dispatchEvent(new MouseEvent("click", clickInit));
+      trigger!.dispatchEvent(new MouseEvent("click", clickInit));
       await popover.updateComplete;
       expect(popover.visible).toBe(false);
     });
@@ -925,7 +930,7 @@ describe("EaPopover Interaction And Focus", () => {
       await popover.updateComplete;
 
       const trigger = popover.querySelector('[slot="reference"]');
-      trigger.dispatchEvent(
+      trigger!.dispatchEvent(
         new MouseEvent("click", { bubbles: true, composed: true, detail: 0 })
       );
 
@@ -936,7 +941,7 @@ describe("EaPopover Interaction And Focus", () => {
       const popover = createPopover("focus");
       await popover.updateComplete;
 
-      popover.querySelector('[slot="reference"]').focus();
+      popover.querySelector<HTMLElement>('[slot="reference"]')!.focus();
       await popover.updateComplete;
 
       expect(popover.visible).toBe(true);
@@ -970,8 +975,8 @@ describe("EaPopover Interaction And Focus", () => {
       await popover.updateComplete;
 
       const trigger = popover.querySelector('[slot="reference"]');
-      expect(trigger.getAttribute("tabindex")).toBe("0");
-      expect(trigger.getAttribute("role")).toBe("button");
+      expect(trigger!.getAttribute("tabindex")).toBe("0");
+      expect(trigger!.getAttribute("role")).toBe("button");
     });
 
     it("自带 tabindex 的触发元素不应该补充 role", async () => {
@@ -981,7 +986,7 @@ describe("EaPopover Interaction And Focus", () => {
       await popover.updateComplete;
 
       const trigger = popover.querySelector('[slot="reference"]');
-      expect(trigger.hasAttribute("role")).toBe(false);
+      expect(trigger!.hasAttribute("role")).toBe(false);
     });
   });
 
@@ -1123,12 +1128,13 @@ describe("EaPopover Interaction And Focus", () => {
       fireKeydown(trigger, "Enter");
       await popover.updateComplete;
 
-      const original = popover.shadowRoot.querySelector('[part="original"]');
+      const original =
+        popover.shadowRoot!.querySelector<HTMLElement>('[part="original"]');
 
       await vi.waitFor(() => {
         const focused =
-          popover.shadowRoot.activeElement ?? document.activeElement;
-        expect(original.tabIndex).toBe(0);
+          popover.shadowRoot!.activeElement ?? document.activeElement;
+        expect(original!.tabIndex).toBe(0);
         expect([popover, original]).toContain(focused);
       });
     });
@@ -1145,11 +1151,12 @@ describe("EaPopover Interaction And Focus", () => {
       await popover.updateComplete;
 
       const btn = popover.querySelector(".btn");
-      const inner = btn.shadowRoot.querySelector("button");
+      const inner = btn!.shadowRoot!.querySelector("button");
       expect(inner).toBeTruthy();
 
       await vi.waitFor(() => {
-        const focused = btn.shadowRoot.activeElement ?? document.activeElement;
+        const focused =
+          btn!.shadowRoot!.activeElement ?? document.activeElement;
         expect([btn, inner]).toContain(focused);
       });
     });
@@ -1199,7 +1206,7 @@ describe("EaPopover Interaction And Focus", () => {
       popover.show();
       await popover.updateComplete;
 
-      popover.querySelector(".inner").focus();
+      popover.querySelector<HTMLElement>(".inner")!.focus();
       popover.dispatchEvent(
         new FocusEvent("focusout", { bubbles: true, composed: true })
       );

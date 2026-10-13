@@ -5,7 +5,7 @@ import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y";
 import "./index.ts";
 
 describe("EaText", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -31,7 +31,7 @@ describe("EaText", () => {
       text.textContent = "Hello World";
       container.appendChild(text);
 
-      expect(text.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(text.shadowRoot!.querySelector('[part="container"]')).toBeTruthy();
     });
 
     it("应该包含默认插槽", () => {
@@ -39,7 +39,7 @@ describe("EaText", () => {
       text.textContent = "Slot Content";
       container.appendChild(text);
 
-      const slot = text.shadowRoot.querySelector("slot");
+      const slot = text.shadowRoot!.querySelector("slot");
       expect(slot).toBeTruthy();
     });
 
@@ -48,8 +48,8 @@ describe("EaText", () => {
       text.textContent = "Default Tag";
       container.appendChild(text);
 
-      const containerEl = text.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.tagName.toLowerCase()).toBe("span");
+      const containerEl = text.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.tagName.toLowerCase()).toBe("span");
     });
   });
 
@@ -113,8 +113,8 @@ describe("EaText", () => {
       text.textContent = "Primary";
       container.appendChild(text);
 
-      const containerEl = text.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-text--primary")).toBe(true);
+      const containerEl = text.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-text--primary")).toBe(true);
     });
 
     it("动态修改 variant 应该生效", async () => {
@@ -129,9 +129,9 @@ describe("EaText", () => {
       await text.updateComplete;
 
       expect(text.variant).toBe("danger");
-      const containerEl = text.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-text--danger")).toBe(true);
-      expect(containerEl.classList.contains("ea-text--normal")).toBe(false);
+      const containerEl = text.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-text--danger")).toBe(true);
+      expect(containerEl!.classList.contains("ea-text--normal")).toBe(false);
     });
   });
 
@@ -168,8 +168,8 @@ describe("EaText", () => {
       text.textContent = "Large";
       container.appendChild(text);
 
-      const containerEl = text.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-text--large")).toBe(true);
+      const containerEl = text.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-text--large")).toBe(true);
     });
 
     it("动态修改 size 应该生效", async () => {
@@ -184,9 +184,9 @@ describe("EaText", () => {
       await text.updateComplete;
 
       expect(text.size).toBe("large");
-      const containerEl = text.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-text--large")).toBe(true);
-      expect(containerEl.classList.contains("ea-text--medium")).toBe(false);
+      const containerEl = text.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-text--large")).toBe(true);
+      expect(containerEl!.classList.contains("ea-text--medium")).toBe(false);
     });
   });
 
@@ -206,8 +206,8 @@ describe("EaText", () => {
       container.appendChild(text);
 
       expect(text.truncated).toBe(true);
-      const containerEl = text.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-text--truncated")).toBe(true);
+      const containerEl = text.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-text--truncated")).toBe(true);
     });
 
     it("truncated 为 false 时不应有截断修饰符类", () => {
@@ -215,8 +215,8 @@ describe("EaText", () => {
       text.textContent = "Test text";
       container.appendChild(text);
 
-      const containerEl = text.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-text--truncated")).toBe(false);
+      const containerEl = text.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-text--truncated")).toBe(false);
     });
 
     it("动态设置 truncated 应该生效", async () => {
@@ -230,8 +230,8 @@ describe("EaText", () => {
       await text.updateComplete;
 
       expect(text.truncated).toBe(true);
-      const containerEl = text.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-text--truncated")).toBe(true);
+      const containerEl = text.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-text--truncated")).toBe(true);
     });
 
     it("truncated 启用时应自动设置容器 title", async () => {
@@ -242,8 +242,9 @@ describe("EaText", () => {
 
       await text.updateComplete;
 
-      const containerEl = text.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.title).toBe("Long text content");
+      const containerEl =
+        text.shadowRoot!.querySelector<HTMLElement>('[part="container"]');
+      expect(containerEl!.title).toBe("Long text content");
     });
 
     it("truncated 未启用时不应自动设置容器 title", async () => {
@@ -253,8 +254,9 @@ describe("EaText", () => {
 
       await text.updateComplete;
 
-      const containerEl = text.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.title).toBe("");
+      const containerEl =
+        text.shadowRoot!.querySelector<HTMLElement>('[part="container"]');
+      expect(containerEl!.title).toBe("");
     });
   });
 
@@ -282,8 +284,8 @@ describe("EaText", () => {
       text.textContent = "Test text";
       container.appendChild(text);
 
-      const containerEl = text.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-text--line-clamp")).toBe(true);
+      const containerEl = text.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-text--line-clamp")).toBe(true);
     });
 
     it("lineClamp 为 0 时不应有 line-clamp 修饰符类", () => {
@@ -291,8 +293,10 @@ describe("EaText", () => {
       text.textContent = "Test text";
       container.appendChild(text);
 
-      const containerEl = text.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-text--line-clamp")).toBe(false);
+      const containerEl = text.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-text--line-clamp")).toBe(
+        false
+      );
     });
 
     it("lineClamp 大于 0 时应该设置 CSS 自定义属性", async () => {
@@ -314,8 +318,9 @@ describe("EaText", () => {
 
       await text.updateComplete;
 
-      const containerEl = text.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.title).toBe("Multi line text");
+      const containerEl =
+        text.shadowRoot!.querySelector<HTMLElement>('[part="container"]');
+      expect(containerEl!.title).toBe("Multi line text");
     });
 
     it("动态设置 lineClamp 应该生效", async () => {
@@ -329,8 +334,8 @@ describe("EaText", () => {
       await text.updateComplete;
 
       expect(text.lineClamp).toBe(3);
-      const containerEl = text.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-text--line-clamp")).toBe(true);
+      const containerEl = text.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-text--line-clamp")).toBe(true);
     });
   });
 
@@ -350,8 +355,8 @@ describe("EaText", () => {
       container.appendChild(text);
 
       expect(text.tag).toBe("p");
-      const containerEl = text.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.tagName.toLowerCase()).toBe("p");
+      const containerEl = text.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.tagName.toLowerCase()).toBe("p");
     });
 
     it("应该支持 tag='b'", () => {
@@ -361,8 +366,8 @@ describe("EaText", () => {
       container.appendChild(text);
 
       expect(text.tag).toBe("b");
-      const containerEl = text.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.tagName.toLowerCase()).toBe("b");
+      const containerEl = text.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.tagName.toLowerCase()).toBe("b");
     });
 
     it("应该支持 tag='i'", () => {
@@ -430,8 +435,8 @@ describe("EaText", () => {
       await text.updateComplete;
 
       expect(text.tag).toBe("p");
-      const containerEl = text.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.tagName.toLowerCase()).toBe("p");
+      const containerEl = text.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.tagName.toLowerCase()).toBe("p");
     });
   });
 
@@ -445,9 +450,9 @@ describe("EaText", () => {
 
       expect(text.variant).toBe("primary");
       expect(text.size).toBe("large");
-      const containerEl = text.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-text--primary")).toBe(true);
-      expect(containerEl.classList.contains("ea-text--large")).toBe(true);
+      const containerEl = text.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-text--primary")).toBe(true);
+      expect(containerEl!.classList.contains("ea-text--large")).toBe(true);
     });
 
     it("应该同时支持 truncated 和 tag 属性", () => {
@@ -459,9 +464,9 @@ describe("EaText", () => {
 
       expect(text.truncated).toBe(true);
       expect(text.tag).toBe("p");
-      const containerEl = text.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-text--truncated")).toBe(true);
-      expect(containerEl.tagName.toLowerCase()).toBe("p");
+      const containerEl = text.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-text--truncated")).toBe(true);
+      expect(containerEl!.tagName.toLowerCase()).toBe("p");
     });
 
     it("应该同时支持 lineClamp 和 tag 属性", () => {
@@ -483,10 +488,10 @@ describe("EaText", () => {
       text.textContent = "Combined";
       container.appendChild(text);
 
-      const containerEl = text.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-text--danger")).toBe(true);
-      expect(containerEl.classList.contains("ea-text--small")).toBe(true);
-      expect(containerEl.classList.contains("ea-text--truncated")).toBe(true);
+      const containerEl = text.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-text--danger")).toBe(true);
+      expect(containerEl!.classList.contains("ea-text--small")).toBe(true);
+      expect(containerEl!.classList.contains("ea-text--truncated")).toBe(true);
     });
   });
 
@@ -558,7 +563,7 @@ describe("EaText", () => {
       container.appendChild(text);
 
       expect(text.shadowRoot).toBeDefined();
-      expect(text.shadowRoot.querySelector(".ea-text")).toBeTruthy();
+      expect(text.shadowRoot!.querySelector(".ea-text")).toBeTruthy();
     });
 
     it("组件断开连接后应该正常移除", () => {

@@ -4,7 +4,7 @@ import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y";
 import "./index.js";
 
 describe("EaEmpty", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -29,23 +29,23 @@ describe("EaEmpty", () => {
       container.appendChild(empty);
 
       expect(empty.shadowRoot).toBeDefined();
-      expect(empty.shadowRoot.mode).toBe("open");
+      expect(empty.shadowRoot!.mode).toBe("open");
     });
 
     it("应该渲染容器元素并带有正确的 BEM 类名", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
 
-      const containerEl = empty.shadowRoot.querySelector(".ea-empty");
+      const containerEl = empty.shadowRoot!.querySelector(".ea-empty");
       expect(containerEl).toBeDefined();
-      expect(containerEl.tagName.toLowerCase()).toBe("div");
+      expect(containerEl!.tagName.toLowerCase()).toBe("div");
     });
 
     it("应该渲染 placeholder 元素并带有正确的 BEM 类名", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
 
-      const placeholder = empty.shadowRoot.querySelector(
+      const placeholder = empty.shadowRoot!.querySelector(
         ".ea-empty__placeholder"
       );
       expect(placeholder).toBeDefined();
@@ -55,7 +55,7 @@ describe("EaEmpty", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
 
-      const description = empty.shadowRoot.querySelector(
+      const description = empty.shadowRoot!.querySelector(
         ".ea-empty__description"
       );
       expect(description).toBeDefined();
@@ -65,7 +65,7 @@ describe("EaEmpty", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
 
-      const bottom = empty.shadowRoot.querySelector(".ea-empty__bottom");
+      const bottom = empty.shadowRoot!.querySelector(".ea-empty__bottom");
       expect(bottom).toBeDefined();
     });
 
@@ -73,11 +73,11 @@ describe("EaEmpty", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
 
-      const defaultSvg = empty.shadowRoot.querySelector(".ea-empty__default");
+      const defaultSvg = empty.shadowRoot!.querySelector(".ea-empty__default");
       expect(defaultSvg).toBeDefined();
-      expect(defaultSvg.tagName.toLowerCase()).toBe("section");
+      expect(defaultSvg!.tagName.toLowerCase()).toBe("section");
 
-      const svg = defaultSvg.querySelector("svg");
+      const svg = defaultSvg!.querySelector("svg");
       expect(svg).toBeDefined();
     });
 
@@ -85,18 +85,18 @@ describe("EaEmpty", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
 
-      const svg = empty.shadowRoot.querySelector(".ea-empty__default svg");
-      expect(svg.getAttribute("viewBox")).toBe("25 30 50 50");
+      const svg = empty.shadowRoot!.querySelector(".ea-empty__default svg");
+      expect(svg!.getAttribute("viewBox")).toBe("25 30 50 50");
     });
 
     it("默认 SVG 应该包含 front 和 border 路径", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
 
-      const frontPath = empty.shadowRoot.querySelector(
+      const frontPath = empty.shadowRoot!.querySelector(
         ".ea-empty__default svg .front"
       );
-      const borderPath = empty.shadowRoot.querySelector(
+      const borderPath = empty.shadowRoot!.querySelector(
         ".ea-empty__default svg .border"
       );
       expect(frontPath).toBeDefined();
@@ -109,43 +109,43 @@ describe("EaEmpty", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
 
-      const el = empty.shadowRoot.querySelector('[part="container"]');
+      const el = empty.shadowRoot!.querySelector('[part="container"]');
       expect(el).toBeDefined();
-      expect(el.classList.contains("ea-empty")).toBe(true);
+      expect(el!.classList.contains("ea-empty")).toBe(true);
     });
 
     it("应该暴露 placeholder part", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
 
-      const el = empty.shadowRoot.querySelector('[part="placeholder"]');
+      const el = empty.shadowRoot!.querySelector('[part="placeholder"]');
       expect(el).toBeDefined();
-      expect(el.classList.contains("ea-empty__placeholder")).toBe(true);
+      expect(el!.classList.contains("ea-empty__placeholder")).toBe(true);
     });
 
     it("应该暴露 description part", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
 
-      const el = empty.shadowRoot.querySelector('[part="description"]');
+      const el = empty.shadowRoot!.querySelector('[part="description"]');
       expect(el).toBeDefined();
-      expect(el.classList.contains("ea-empty__description")).toBe(true);
+      expect(el!.classList.contains("ea-empty__description")).toBe(true);
     });
 
     it("应该暴露 bottom part", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
 
-      const el = empty.shadowRoot.querySelector('[part="bottom"]');
+      const el = empty.shadowRoot!.querySelector('[part="bottom"]');
       expect(el).toBeDefined();
-      expect(el.classList.contains("ea-empty__bottom")).toBe(true);
+      expect(el!.classList.contains("ea-empty__bottom")).toBe(true);
     });
 
     it("默认 SVG 应该暴露 default-image-front part", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
 
-      const el = empty.shadowRoot.querySelector('[part="default-image-front"]');
+      const el = empty.shadowRoot!.querySelector('[part="default-image-front"]');
       expect(el).toBeDefined();
     });
 
@@ -153,7 +153,7 @@ describe("EaEmpty", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
 
-      const el = empty.shadowRoot.querySelector(
+      const el = empty.shadowRoot!.querySelector(
         '[part="default-image-border"]'
       );
       expect(el).toBeDefined();
@@ -165,7 +165,7 @@ describe("EaEmpty", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
 
-      const defaultSlot = empty.shadowRoot.querySelector(
+      const defaultSlot = empty.shadowRoot!.querySelector(
         ".ea-empty__bottom slot:not([name])"
       );
       expect(defaultSlot).toBeDefined();
@@ -175,7 +175,7 @@ describe("EaEmpty", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
 
-      const imageSlot = empty.shadowRoot.querySelector(
+      const imageSlot = empty.shadowRoot!.querySelector(
         '.ea-empty__placeholder slot[name="image"]'
       );
       expect(imageSlot).toBeDefined();
@@ -185,7 +185,7 @@ describe("EaEmpty", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
 
-      const descSlot = empty.shadowRoot.querySelector(
+      const descSlot = empty.shadowRoot!.querySelector(
         '.ea-empty__description slot[name="description"]'
       );
       expect(descSlot).toBeDefined();
@@ -195,10 +195,10 @@ describe("EaEmpty", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
 
-      const imageSlot = empty.shadowRoot.querySelector(
+      const imageSlot = empty.shadowRoot!.querySelector(
         '.ea-empty__placeholder slot[name="image"]'
       );
-      const defaultSection = imageSlot.querySelector(".ea-empty__default");
+      const defaultSection = imageSlot!.querySelector(".ea-empty__default");
       expect(defaultSection).toBeDefined();
     });
 
@@ -206,10 +206,10 @@ describe("EaEmpty", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
 
-      const descSlot = empty.shadowRoot.querySelector(
+      const descSlot = empty.shadowRoot!.querySelector(
         '.ea-empty__description slot[name="description"]'
       );
-      expect(descSlot.textContent.trim()).toBe("No Data");
+      expect(descSlot!.textContent.trim()).toBe("No Data");
     });
 
     it("默认插槽应该渲染用户传入的底部内容", () => {
@@ -217,7 +217,7 @@ describe("EaEmpty", () => {
       empty.innerHTML = '<span slot="">Action Button</span>';
       container.appendChild(empty);
 
-      const bottomSlot = empty.shadowRoot.querySelector(
+      const bottomSlot = empty.shadowRoot!.querySelector(
         ".ea-empty__bottom slot:not([name])"
       );
       expect(bottomSlot).toBeDefined();
@@ -228,7 +228,7 @@ describe("EaEmpty", () => {
       empty.innerHTML = '<div slot="image">Custom Image Content</div>';
       container.appendChild(empty);
 
-      const imageSlot = empty.shadowRoot.querySelector(
+      const imageSlot = empty.shadowRoot!.querySelector(
         '.ea-empty__placeholder slot[name="image"]'
       );
       expect(imageSlot).toBeDefined();
@@ -239,7 +239,7 @@ describe("EaEmpty", () => {
       empty.innerHTML = '<span slot="description">Custom Description</span>';
       container.appendChild(empty);
 
-      const descSlot = empty.shadowRoot.querySelector(
+      const descSlot = empty.shadowRoot!.querySelector(
         '.ea-empty__description slot[name="description"]'
       );
       expect(descSlot).toBeDefined();
@@ -254,7 +254,7 @@ describe("EaEmpty", () => {
       `;
       container.appendChild(empty);
 
-      const slots = empty.shadowRoot.querySelectorAll("slot");
+      const slots = empty.shadowRoot!.querySelectorAll("slot");
       expect(slots.length).toBe(3);
     });
   });
@@ -273,8 +273,8 @@ describe("EaEmpty", () => {
 
       await empty.updateComplete;
 
-      const defaultSvg = empty.shadowRoot.querySelector(".ea-empty__default");
-      const imgEl = empty.shadowRoot.querySelector(".ea-empty__image");
+      const defaultSvg = empty.shadowRoot!.querySelector(".ea-empty__default");
+      const imgEl = empty.shadowRoot!.querySelector(".ea-empty__image");
       expect(defaultSvg).toBeDefined();
       expect(imgEl).toBeNull();
     });
@@ -294,11 +294,11 @@ describe("EaEmpty", () => {
 
       await empty.updateComplete;
 
-      const defaultSvg = empty.shadowRoot.querySelector(".ea-empty__default");
-      const imgEl = empty.shadowRoot.querySelector(".ea-empty__image");
+      const defaultSvg = empty.shadowRoot!.querySelector(".ea-empty__default");
+      const imgEl = empty.shadowRoot!.querySelector(".ea-empty__image");
       expect(defaultSvg).toBeNull();
       expect(imgEl).toBeDefined();
-      expect(imgEl.tagName.toLowerCase()).toBe("img");
+      expect(imgEl!.tagName.toLowerCase()).toBe("img");
     });
 
     it("img 标签应该有正确的 src 属性", async () => {
@@ -308,8 +308,8 @@ describe("EaEmpty", () => {
 
       await empty.updateComplete;
 
-      const imgEl = empty.shadowRoot.querySelector(".ea-empty__image");
-      expect(imgEl.getAttribute("src")).toBe("https://example.com/custom.png");
+      const imgEl = empty.shadowRoot!.querySelector(".ea-empty__image");
+      expect(imgEl!.getAttribute("src")).toBe("https://example.com/custom.png");
     });
 
     it("img 标签应该有正确的 alt 属性", async () => {
@@ -319,8 +319,8 @@ describe("EaEmpty", () => {
 
       await empty.updateComplete;
 
-      const imgEl = empty.shadowRoot.querySelector(".ea-empty__image");
-      expect(imgEl.getAttribute("alt")).toBe("empty image");
+      const imgEl = empty.shadowRoot!.querySelector(".ea-empty__image");
+      expect(imgEl!.getAttribute("alt")).toBe("empty image");
     });
 
     it("img 标签应该暴露 image part", async () => {
@@ -330,9 +330,9 @@ describe("EaEmpty", () => {
 
       await empty.updateComplete;
 
-      const imgEl = empty.shadowRoot.querySelector('[part="image"]');
+      const imgEl = empty.shadowRoot!.querySelector('[part="image"]');
       expect(imgEl).toBeDefined();
-      expect(imgEl.tagName.toLowerCase()).toBe("img");
+      expect(imgEl!.tagName.toLowerCase()).toBe("img");
     });
 
     it("image 设置为空字符串后应该恢复默认 SVG", async () => {
@@ -345,8 +345,8 @@ describe("EaEmpty", () => {
       empty.setAttribute("image", "");
       await empty.updateComplete;
 
-      const defaultSvg = empty.shadowRoot.querySelector(".ea-empty__default");
-      const imgEl = empty.shadowRoot.querySelector(".ea-empty__image");
+      const defaultSvg = empty.shadowRoot!.querySelector(".ea-empty__default");
+      const imgEl = empty.shadowRoot!.querySelector(".ea-empty__image");
       expect(defaultSvg).toBeDefined();
       expect(imgEl).toBeNull();
     });
@@ -358,14 +358,14 @@ describe("EaEmpty", () => {
 
       await empty.updateComplete;
 
-      let imgEl = empty.shadowRoot.querySelector(".ea-empty__image");
-      expect(imgEl.getAttribute("src")).toBe("https://example.com/first.png");
+      let imgEl = empty.shadowRoot!.querySelector(".ea-empty__image");
+      expect(imgEl!.getAttribute("src")).toBe("https://example.com/first.png");
 
       empty.setAttribute("image", "https://example.com/second.png");
       await empty.updateComplete;
 
-      imgEl = empty.shadowRoot.querySelector(".ea-empty__image");
-      expect(imgEl.getAttribute("src")).toBe("https://example.com/second.png");
+      imgEl = empty.shadowRoot!.querySelector(".ea-empty__image");
+      expect(imgEl!.getAttribute("src")).toBe("https://example.com/second.png");
     });
 
     it("应该支持通过 JS 属性直接设置 image", async () => {
@@ -377,9 +377,9 @@ describe("EaEmpty", () => {
       empty.image = "https://example.com/js-property.png";
       await empty.updateComplete;
 
-      const imgEl = empty.shadowRoot.querySelector(".ea-empty__image");
+      const imgEl = empty.shadowRoot!.querySelector(".ea-empty__image");
       expect(imgEl).toBeDefined();
-      expect(imgEl.getAttribute("src")).toBe(
+      expect(imgEl!.getAttribute("src")).toBe(
         "https://example.com/js-property.png"
       );
     });
@@ -396,7 +396,7 @@ describe("EaEmpty", () => {
 
       expect(empty.image).toBe("");
       expect(
-        empty.shadowRoot.querySelector(".ea-empty__default")
+        empty.shadowRoot!.querySelector(".ea-empty__default")
       ).toBeDefined();
     });
   });
@@ -544,10 +544,10 @@ describe("EaEmpty", () => {
 
       await empty.updateComplete;
 
-      const descSlot = empty.shadowRoot.querySelector(
+      const descSlot = empty.shadowRoot!.querySelector(
         '.ea-empty__description slot[name="description"]'
       );
-      expect(descSlot.textContent.trim()).toBe("No Data");
+      expect(descSlot!.textContent.trim()).toBe("No Data");
     });
 
     it("应该通过 HTML attribute 设置 description", () => {
@@ -565,10 +565,10 @@ describe("EaEmpty", () => {
 
       await empty.updateComplete;
 
-      const descSlot = empty.shadowRoot.querySelector(
+      const descSlot = empty.shadowRoot!.querySelector(
         '.ea-empty__description slot[name="description"]'
       );
-      expect(descSlot.textContent).toBe("Custom Description Text");
+      expect(descSlot!.textContent).toBe("Custom Description Text");
     });
 
     it("description 设置为空字符串后应恢复 'No Data'", async () => {
@@ -581,10 +581,10 @@ describe("EaEmpty", () => {
       empty.setAttribute("description", "");
       await empty.updateComplete;
 
-      const descSlot = empty.shadowRoot.querySelector(
+      const descSlot = empty.shadowRoot!.querySelector(
         '.ea-empty__description slot[name="description"]'
       );
-      expect(descSlot.textContent.trim()).toBe("No Data");
+      expect(descSlot!.textContent.trim()).toBe("No Data");
     });
 
     it("应该支持通过 JS 属性直接设置 description", async () => {
@@ -597,10 +597,10 @@ describe("EaEmpty", () => {
       await empty.updateComplete;
 
       expect(empty.description).toBe("JS Property Description");
-      const descSlot = empty.shadowRoot.querySelector(
+      const descSlot = empty.shadowRoot!.querySelector(
         '.ea-empty__description slot[name="description"]'
       );
-      expect(descSlot.textContent).toBe("JS Property Description");
+      expect(descSlot!.textContent).toBe("JS Property Description");
     });
 
     it("应该支持动态修改 description", async () => {
@@ -610,18 +610,18 @@ describe("EaEmpty", () => {
 
       await empty.updateComplete;
 
-      let descSlot = empty.shadowRoot.querySelector(
+      let descSlot = empty.shadowRoot!.querySelector(
         '.ea-empty__description slot[name="description"]'
       );
-      expect(descSlot.textContent).toBe("First Text");
+      expect(descSlot!.textContent).toBe("First Text");
 
       empty.setAttribute("description", "Second Text");
       await empty.updateComplete;
 
-      descSlot = empty.shadowRoot.querySelector(
+      descSlot = empty.shadowRoot!.querySelector(
         '.ea-empty__description slot[name="description"]'
       );
-      expect(descSlot.textContent).toBe("Second Text");
+      expect(descSlot!.textContent).toBe("Second Text");
     });
 
     it("应该支持中文 description", () => {
@@ -704,10 +704,10 @@ describe("EaEmpty", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
 
-      const containerEl = empty.shadowRoot.querySelector(".ea-empty");
-      const placeholder = containerEl.querySelector(".ea-empty__placeholder");
-      const description = containerEl.querySelector(".ea-empty__description");
-      const bottom = containerEl.querySelector(".ea-empty__bottom");
+      const containerEl = empty.shadowRoot!.querySelector(".ea-empty");
+      const placeholder = containerEl!.querySelector(".ea-empty__placeholder");
+      const description = containerEl!.querySelector(".ea-empty__description");
+      const bottom = containerEl!.querySelector(".ea-empty__bottom");
 
       expect(placeholder).toBeDefined();
       expect(description).toBeDefined();
@@ -718,8 +718,8 @@ describe("EaEmpty", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
 
-      const containerEl = empty.shadowRoot.querySelector(".ea-empty");
-      const children = Array.from(containerEl.children);
+      const containerEl = empty.shadowRoot!.querySelector(".ea-empty");
+      const children = Array.from(containerEl!.children);
       const placeholderIndex = children.findIndex(c =>
         c.classList.contains("ea-empty__placeholder")
       );
@@ -734,8 +734,8 @@ describe("EaEmpty", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
 
-      const containerEl = empty.shadowRoot.querySelector(".ea-empty");
-      const children = Array.from(containerEl.children);
+      const containerEl = empty.shadowRoot!.querySelector(".ea-empty");
+      const children = Array.from(containerEl!.children);
       const descriptionIndex = children.findIndex(c =>
         c.classList.contains("ea-empty__description")
       );
@@ -750,8 +750,8 @@ describe("EaEmpty", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
 
-      const containerEl = empty.shadowRoot.querySelector(".ea-empty");
-      expect(containerEl.children.length).toBe(3);
+      const containerEl = empty.shadowRoot!.querySelector(".ea-empty");
+      expect(containerEl!.children.length).toBe(3);
     });
   });
 
@@ -760,14 +760,14 @@ describe("EaEmpty", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
 
-      expect(empty.shadowRoot.querySelector(".ea-empty")).toBeDefined();
+      expect(empty.shadowRoot!.querySelector(".ea-empty")).toBeDefined();
       expect(
-        empty.shadowRoot.querySelector(".ea-empty__placeholder")
+        empty.shadowRoot!.querySelector(".ea-empty__placeholder")
       ).toBeDefined();
       expect(
-        empty.shadowRoot.querySelector(".ea-empty__description")
+        empty.shadowRoot!.querySelector(".ea-empty__description")
       ).toBeDefined();
-      expect(empty.shadowRoot.querySelector(".ea-empty__bottom")).toBeDefined();
+      expect(empty.shadowRoot!.querySelector(".ea-empty__bottom")).toBeDefined();
     });
 
     it("组件从 DOM 移除后应该不再存在于父容器", () => {
@@ -786,7 +786,7 @@ describe("EaEmpty", () => {
       empty.remove();
       container.appendChild(empty);
 
-      expect(empty.shadowRoot.querySelector(".ea-empty")).toBeDefined();
+      expect(empty.shadowRoot!.querySelector(".ea-empty")).toBeDefined();
     });
 
     it("挂载前设置属性应该在挂载后生效", () => {
@@ -822,7 +822,7 @@ describe("EaEmpty", () => {
       expect(empty.imageSize).toBe("");
       expect(empty.description).toBe("");
       expect(
-        empty.shadowRoot.querySelector(".ea-empty__default")
+        empty.shadowRoot!.querySelector(".ea-empty__default")
       ).toBeDefined();
     });
 
@@ -836,7 +836,7 @@ describe("EaEmpty", () => {
 
       expect(empty.image).toBe("https://example.com/img.png");
       expect(empty.imageSize).toBe("200px");
-      const imgEl = empty.shadowRoot.querySelector(".ea-empty__image");
+      const imgEl = empty.shadowRoot!.querySelector(".ea-empty__image");
       expect(imgEl).toBeDefined();
     });
 
@@ -858,7 +858,7 @@ describe("EaEmpty", () => {
       empty.innerHTML = '<div slot="image">Slot Image</div>';
       container.appendChild(empty);
 
-      const imageSlot = empty.shadowRoot.querySelector(
+      const imageSlot = empty.shadowRoot!.querySelector(
         '.ea-empty__placeholder slot[name="image"]'
       );
       expect(imageSlot).toBeDefined();
@@ -870,7 +870,7 @@ describe("EaEmpty", () => {
       empty.innerHTML = '<div slot="description">Slot Description</div>';
       container.appendChild(empty);
 
-      const descSlot = empty.shadowRoot.querySelector(
+      const descSlot = empty.shadowRoot!.querySelector(
         '.ea-empty__description slot[name="description"]'
       );
       expect(descSlot).toBeDefined();
@@ -888,8 +888,8 @@ describe("EaEmpty", () => {
 
       await empty.updateComplete;
 
-      const imgEl = empty.shadowRoot.querySelector(".ea-empty__image");
-      expect(imgEl.getAttribute("src")).toBe("https://example.com/3.png");
+      const imgEl = empty.shadowRoot!.querySelector(".ea-empty__image");
+      expect(imgEl!.getAttribute("src")).toBe("https://example.com/3.png");
     });
 
     it("快速连续修改 description 属性应该正确显示最终值", async () => {
@@ -904,10 +904,10 @@ describe("EaEmpty", () => {
 
       await empty.updateComplete;
 
-      const descSlot = empty.shadowRoot.querySelector(
+      const descSlot = empty.shadowRoot!.querySelector(
         '.ea-empty__description slot[name="description"]'
       );
-      expect(descSlot.textContent).toBe("C");
+      expect(descSlot!.textContent).toBe("C");
     });
 
     it("image 属性使用相对路径应该正常工作", async () => {
@@ -917,8 +917,8 @@ describe("EaEmpty", () => {
 
       await empty.updateComplete;
 
-      const imgEl = empty.shadowRoot.querySelector(".ea-empty__image");
-      expect(imgEl.getAttribute("src")).toBe("./assets/empty.png");
+      const imgEl = empty.shadowRoot!.querySelector(".ea-empty__image");
+      expect(imgEl!.getAttribute("src")).toBe("./assets/empty.png");
     });
 
     it("image 属性使用 data URI 应该正常工作", async () => {
@@ -928,8 +928,8 @@ describe("EaEmpty", () => {
 
       await empty.updateComplete;
 
-      const imgEl = empty.shadowRoot.querySelector(".ea-empty__image");
-      expect(imgEl.getAttribute("src")).toBe("data:image/svg+xml,...");
+      const imgEl = empty.shadowRoot!.querySelector(".ea-empty__image");
+      expect(imgEl!.getAttribute("src")).toBe("data:image/svg+xml,...");
     });
   });
 
@@ -948,10 +948,10 @@ describe("EaEmpty", () => {
       expect(empty.imageSize).toBe("160px");
       expect(empty.description).toBe("没有找到相关内容");
 
-      const imgEl = empty.shadowRoot.querySelector(".ea-empty__image");
+      const imgEl = empty.shadowRoot!.querySelector(".ea-empty__image");
       expect(imgEl).toBeDefined();
 
-      const bottomSlot = empty.shadowRoot.querySelector(
+      const bottomSlot = empty.shadowRoot!.querySelector(
         ".ea-empty__bottom slot:not([name])"
       );
       expect(bottomSlot).toBeDefined();
@@ -965,19 +965,19 @@ describe("EaEmpty", () => {
 
       await empty.updateComplete;
 
-      expect(empty.shadowRoot.querySelector(".ea-empty__image")).toBeDefined();
+      expect(empty.shadowRoot!.querySelector(".ea-empty__image")).toBeDefined();
 
       empty.setAttribute("image", "");
       empty.setAttribute("description", "");
       await empty.updateComplete;
 
       expect(
-        empty.shadowRoot.querySelector(".ea-empty__default")
+        empty.shadowRoot!.querySelector(".ea-empty__default")
       ).toBeDefined();
-      const descSlot = empty.shadowRoot.querySelector(
+      const descSlot = empty.shadowRoot!.querySelector(
         '.ea-empty__description slot[name="description"]'
       );
-      expect(descSlot.textContent.trim()).toBe("No Data");
+      expect(descSlot!.textContent.trim()).toBe("No Data");
     });
 
     it("仅设置 description 不设置 image 应该保留默认 SVG", async () => {
@@ -988,9 +988,9 @@ describe("EaEmpty", () => {
       await empty.updateComplete;
 
       expect(
-        empty.shadowRoot.querySelector(".ea-empty__default")
+        empty.shadowRoot!.querySelector(".ea-empty__default")
       ).toBeDefined();
-      expect(empty.shadowRoot.querySelector(".ea-empty__image")).toBeNull();
+      expect(empty.shadowRoot!.querySelector(".ea-empty__image")).toBeNull();
       expect(empty.description).toBe("Only Description");
     });
 
@@ -1002,7 +1002,7 @@ describe("EaEmpty", () => {
       await empty.updateComplete;
 
       expect(
-        empty.shadowRoot.querySelector(".ea-empty__default")
+        empty.shadowRoot!.querySelector(".ea-empty__default")
       ).toBeDefined();
       expect(empty.imageSize).toBe("200px");
     });
@@ -1039,8 +1039,8 @@ describe("EaEmpty", () => {
         const empty = document.createElement("ea-empty");
         container.appendChild(empty);
 
-        const containerEl = empty.shadowRoot.querySelector(".ea-empty");
-        expect(containerEl.getAttribute("role")).toBe("status");
+        const containerEl = empty.shadowRoot!.querySelector(".ea-empty");
+        expect(containerEl!.getAttribute("role")).toBe("status");
       });
 
       it("设置 description 后容器仍然有 role='status'", () => {
@@ -1048,8 +1048,8 @@ describe("EaEmpty", () => {
         empty.setAttribute("description", "暂无数据");
         container.appendChild(empty);
 
-        const containerEl = empty.shadowRoot.querySelector(".ea-empty");
-        expect(containerEl.getAttribute("role")).toBe("status");
+        const containerEl = empty.shadowRoot!.querySelector(".ea-empty");
+        expect(containerEl!.getAttribute("role")).toBe("status");
       });
 
       it("设置 image 后容器仍然有 role='status'", () => {
@@ -1057,8 +1057,8 @@ describe("EaEmpty", () => {
         empty.setAttribute("image", "https://example.com/empty.png");
         container.appendChild(empty);
 
-        const containerEl = empty.shadowRoot.querySelector(".ea-empty");
-        expect(containerEl.getAttribute("role")).toBe("status");
+        const containerEl = empty.shadowRoot!.querySelector(".ea-empty");
+        expect(containerEl!.getAttribute("role")).toBe("status");
       });
     });
   });

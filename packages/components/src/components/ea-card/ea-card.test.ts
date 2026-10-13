@@ -4,7 +4,7 @@ import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y";
 import "./index";
 
 describe("EaCard", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -28,10 +28,10 @@ describe("EaCard", () => {
       const card = document.createElement("ea-card");
       container.appendChild(card);
 
-      const containerEl = card.shadowRoot.querySelector('[part="container"]');
-      const headerEl = card.shadowRoot.querySelector('[part="header"]');
-      const contentEl = card.shadowRoot.querySelector('[part="content"]');
-      const footerEl = card.shadowRoot.querySelector('[part="footer"]');
+      const containerEl = card.shadowRoot!.querySelector('[part="container"]');
+      const headerEl = card.shadowRoot!.querySelector('[part="header"]');
+      const contentEl = card.shadowRoot!.querySelector('[part="content"]');
+      const footerEl = card.shadowRoot!.querySelector('[part="footer"]');
 
       expect(containerEl).toBeTruthy();
       expect(headerEl).toBeTruthy();
@@ -43,9 +43,14 @@ describe("EaCard", () => {
       const card = document.createElement("ea-card");
       container.appendChild(card);
 
-      const defaultSlot = card.shadowRoot.querySelector("slot:not([name])");
-      const headerSlot = card.shadowRoot.querySelector('slot[name="header"]');
-      const footerSlot = card.shadowRoot.querySelector('slot[name="footer"]');
+      const defaultSlot =
+        card.shadowRoot!.querySelector<HTMLSlotElement>("slot:not([name])");
+      const headerSlot = card.shadowRoot!.querySelector<HTMLSlotElement>(
+        'slot[name="header"]'
+      );
+      const footerSlot = card.shadowRoot!.querySelector<HTMLSlotElement>(
+        'slot[name="footer"]'
+      );
 
       expect(defaultSlot).toBeTruthy();
       expect(headerSlot).toBeTruthy();
@@ -56,10 +61,10 @@ describe("EaCard", () => {
       const card = document.createElement("ea-card");
       container.appendChild(card);
 
-      const containerEl = card.shadowRoot.querySelector(".ea-card");
-      const headerEl = card.shadowRoot.querySelector(".ea-card__header");
-      const contentEl = card.shadowRoot.querySelector(".ea-card__content");
-      const footerEl = card.shadowRoot.querySelector(".ea-card__footer");
+      const containerEl = card.shadowRoot!.querySelector(".ea-card");
+      const headerEl = card.shadowRoot!.querySelector(".ea-card__header");
+      const contentEl = card.shadowRoot!.querySelector(".ea-card__content");
+      const footerEl = card.shadowRoot!.querySelector(".ea-card__footer");
 
       expect(containerEl).toBeTruthy();
       expect(headerEl).toBeTruthy();
@@ -74,8 +79,8 @@ describe("EaCard", () => {
       container.appendChild(card);
       await card.updateComplete;
 
-      const containerEl = card.shadowRoot.querySelector(".ea-card");
-      expect(containerEl.classList.contains("is-always-shadow")).toBe(true);
+      const containerEl = card.shadowRoot!.querySelector(".ea-card");
+      expect(containerEl!.classList.contains("is-always-shadow")).toBe(true);
     });
 
     it("设置 shadow='always' 应该应用 is-always-shadow 状态类", async () => {
@@ -84,8 +89,8 @@ describe("EaCard", () => {
       container.appendChild(card);
       await card.updateComplete;
 
-      const containerEl = card.shadowRoot.querySelector(".ea-card");
-      expect(containerEl.classList.contains("is-always-shadow")).toBe(true);
+      const containerEl = card.shadowRoot!.querySelector(".ea-card");
+      expect(containerEl!.classList.contains("is-always-shadow")).toBe(true);
     });
 
     it("设置 shadow='hover' 应该应用 is-hover-shadow 状态类", async () => {
@@ -94,8 +99,8 @@ describe("EaCard", () => {
       container.appendChild(card);
       await card.updateComplete;
 
-      const containerEl = card.shadowRoot.querySelector(".ea-card");
-      expect(containerEl.classList.contains("is-hover-shadow")).toBe(true);
+      const containerEl = card.shadowRoot!.querySelector(".ea-card");
+      expect(containerEl!.classList.contains("is-hover-shadow")).toBe(true);
     });
 
     it("设置 shadow='never' 不应该应用任何阴影状态类", async () => {
@@ -104,10 +109,10 @@ describe("EaCard", () => {
       container.appendChild(card);
       await card.updateComplete;
 
-      const containerEl = card.shadowRoot.querySelector(".ea-card");
-      expect(containerEl.classList.contains("is-always-shadow")).toBe(false);
-      expect(containerEl.classList.contains("is-hover-shadow")).toBe(false);
-      expect(containerEl.classList.contains("is-never-shadow")).toBe(false);
+      const containerEl = card.shadowRoot!.querySelector(".ea-card");
+      expect(containerEl!.classList.contains("is-always-shadow")).toBe(false);
+      expect(containerEl!.classList.contains("is-hover-shadow")).toBe(false);
+      expect(containerEl!.classList.contains("is-never-shadow")).toBe(false);
     });
 
     it("动态修改 shadow 属性应该更新阴影状态类", async () => {
@@ -118,9 +123,9 @@ describe("EaCard", () => {
       card.setAttribute("shadow", "hover");
       await card.updateComplete;
 
-      const containerEl = card.shadowRoot.querySelector(".ea-card");
-      expect(containerEl.classList.contains("is-hover-shadow")).toBe(true);
-      expect(containerEl.classList.contains("is-always-shadow")).toBe(false);
+      const containerEl = card.shadowRoot!.querySelector(".ea-card");
+      expect(containerEl!.classList.contains("is-hover-shadow")).toBe(true);
+      expect(containerEl!.classList.contains("is-always-shadow")).toBe(false);
     });
 
     it("shadow 属性默认值应为 always", () => {
@@ -136,8 +141,8 @@ describe("EaCard", () => {
       container.appendChild(card);
       await card.updateComplete;
 
-      const containerEl = card.shadowRoot.querySelector(".ea-card");
-      expect(containerEl.classList.contains("is-header-empty")).toBe(true);
+      const containerEl = card.shadowRoot!.querySelector(".ea-card");
+      expect(containerEl!.classList.contains("is-header-empty")).toBe(true);
     });
 
     it("通过 slot='header' 传入内容应该显示 header", async () => {
@@ -149,8 +154,8 @@ describe("EaCard", () => {
       container.appendChild(card);
       await card.updateComplete;
 
-      const containerEl = card.shadowRoot.querySelector(".ea-card");
-      expect(containerEl.classList.contains("is-header-empty")).toBe(false);
+      const containerEl = card.shadowRoot!.querySelector(".ea-card");
+      expect(containerEl!.classList.contains("is-header-empty")).toBe(false);
     });
 
     it("header 插槽应该正确渲染传入的 DOM 内容", () => {
@@ -163,8 +168,10 @@ describe("EaCard", () => {
         <p>Content</p>
       `;
       container.appendChild(card);
-      const headerSlot = card.shadowRoot.querySelector('slot[name="header"]');
-      const assignedElements = headerSlot.assignedElements();
+      const headerSlot = card.shadowRoot!.querySelector<HTMLSlotElement>(
+        'slot[name="header"]'
+      );
+      const assignedElements = headerSlot!.assignedElements();
       expect(assignedElements.length).toBeGreaterThan(0);
       expect(assignedElements[0].querySelector(".title")).toBeTruthy();
       expect(assignedElements[0].querySelector(".action")).toBeTruthy();
@@ -177,8 +184,8 @@ describe("EaCard", () => {
       container.appendChild(card);
       await card.updateComplete;
 
-      const containerEl = card.shadowRoot.querySelector(".ea-card");
-      expect(containerEl.classList.contains("is-footer-empty")).toBe(true);
+      const containerEl = card.shadowRoot!.querySelector(".ea-card");
+      expect(containerEl!.classList.contains("is-footer-empty")).toBe(true);
     });
 
     it("通过 slot='footer' 传入内容应该显示 footer", async () => {
@@ -190,8 +197,8 @@ describe("EaCard", () => {
       container.appendChild(card);
       await card.updateComplete;
 
-      const containerEl = card.shadowRoot.querySelector(".ea-card");
-      expect(containerEl.classList.contains("is-footer-empty")).toBe(false);
+      const containerEl = card.shadowRoot!.querySelector(".ea-card");
+      expect(containerEl!.classList.contains("is-footer-empty")).toBe(false);
     });
 
     it("footer 插槽应该正确渲染传入的 DOM 内容", () => {
@@ -204,8 +211,10 @@ describe("EaCard", () => {
         </div>
       `;
       container.appendChild(card);
-      const footerSlot = card.shadowRoot.querySelector('slot[name="footer"]');
-      const assignedElements = footerSlot.assignedElements();
+      const footerSlot = card.shadowRoot!.querySelector<HTMLSlotElement>(
+        'slot[name="footer"]'
+      );
+      const assignedElements = footerSlot!.assignedElements();
       expect(assignedElements.length).toBeGreaterThan(0);
       expect(assignedElements[0].querySelector("a")).toBeTruthy();
     });
@@ -221,8 +230,9 @@ describe("EaCard", () => {
       `;
       container.appendChild(card);
 
-      const contentSlot = card.shadowRoot.querySelector("slot:not([name])");
-      const assignedElements = contentSlot.assignedElements();
+      const contentSlot =
+        card.shadowRoot!.querySelector<HTMLSlotElement>("slot:not([name])");
+      const assignedElements = contentSlot!.assignedElements();
       expect(assignedElements.length).toBe(3);
       expect(assignedElements[0].textContent).toBe("content1");
       expect(assignedElements[1].textContent).toBe("content2");
@@ -236,8 +246,9 @@ describe("EaCard", () => {
       `;
       container.appendChild(card);
 
-      const contentSlot = card.shadowRoot.querySelector("slot:not([name])");
-      const assignedElements = contentSlot.assignedElements();
+      const contentSlot =
+        card.shadowRoot!.querySelector<HTMLSlotElement>("slot:not([name])");
+      const assignedElements = contentSlot!.assignedElements();
       expect(assignedElements[0].tagName.toLowerCase()).toBe("img");
       expect(assignedElements[0].getAttribute("src")).toBe("test-image.jpg");
     });
@@ -250,8 +261,10 @@ describe("EaCard", () => {
       container.appendChild(card);
       await card.updateComplete;
 
-      const headerSlot = card.shadowRoot.querySelector('slot[name="header"]');
-      expect(headerSlot.innerText).toBe("Card Title");
+      const headerSlot = card.shadowRoot!.querySelector<HTMLSlotElement>(
+        'slot[name="header"]'
+      );
+      expect(headerSlot!.innerText).toBe("Card Title");
     });
 
     it("通过 footer 属性设置页脚文本", async () => {
@@ -260,8 +273,10 @@ describe("EaCard", () => {
       container.appendChild(card);
       await card.updateComplete;
 
-      const footerSlot = card.shadowRoot.querySelector('slot[name="footer"]');
-      expect(footerSlot.innerText).toBe("Footer Text");
+      const footerSlot = card.shadowRoot!.querySelector<HTMLSlotElement>(
+        'slot[name="footer"]'
+      );
+      expect(footerSlot!.innerText).toBe("Footer Text");
     });
 
     it("设置 header 属性后应该显示 header 区域", async () => {
@@ -270,8 +285,8 @@ describe("EaCard", () => {
       container.appendChild(card);
       await card.updateComplete;
 
-      const containerEl = card.shadowRoot.querySelector(".ea-card");
-      expect(containerEl.classList.contains("is-header-empty")).toBe(false);
+      const containerEl = card.shadowRoot!.querySelector(".ea-card");
+      expect(containerEl!.classList.contains("is-header-empty")).toBe(false);
     });
 
     it("设置 footer 属性后应该显示 footer 区域", async () => {
@@ -280,8 +295,8 @@ describe("EaCard", () => {
       container.appendChild(card);
       await card.updateComplete;
 
-      const containerEl = card.shadowRoot.querySelector(".ea-card");
-      expect(containerEl.classList.contains("is-footer-empty")).toBe(false);
+      const containerEl = card.shadowRoot!.querySelector(".ea-card");
+      expect(containerEl!.classList.contains("is-footer-empty")).toBe(false);
     });
 
     it("动态修改 header 属性应该更新标题", async () => {
@@ -292,8 +307,10 @@ describe("EaCard", () => {
       card.setAttribute("header", "New Title");
       await card.updateComplete;
 
-      const headerSlot = card.shadowRoot.querySelector('slot[name="header"]');
-      expect(headerSlot.innerText).toBe("New Title");
+      const headerSlot = card.shadowRoot!.querySelector<HTMLSlotElement>(
+        'slot[name="header"]'
+      );
+      expect(headerSlot!.innerText).toBe("New Title");
     });
 
     it("动态修改 footer 属性应该更新页脚", async () => {
@@ -304,8 +321,10 @@ describe("EaCard", () => {
       card.setAttribute("footer", "New Footer");
       await card.updateComplete;
 
-      const footerSlot = card.shadowRoot.querySelector('slot[name="footer"]');
-      expect(footerSlot.innerText).toBe("New Footer");
+      const footerSlot = card.shadowRoot!.querySelector<HTMLSlotElement>(
+        'slot[name="footer"]'
+      );
+      expect(footerSlot!.innerText).toBe("New Footer");
     });
 
     it("header 属性默认值应为空字符串", () => {
@@ -337,18 +356,18 @@ describe("EaCard", () => {
       container.appendChild(card);
       await card.updateComplete;
 
-      const containerEl = card.shadowRoot.querySelector(".ea-card");
-      const headerEl = card.shadowRoot.querySelector(".ea-card__header");
-      const contentEl = card.shadowRoot.querySelector(".ea-card__content");
-      const footerEl = card.shadowRoot.querySelector(".ea-card__footer");
+      const containerEl = card.shadowRoot!.querySelector(".ea-card");
+      const headerEl = card.shadowRoot!.querySelector(".ea-card__header");
+      const contentEl = card.shadowRoot!.querySelector(".ea-card__content");
+      const footerEl = card.shadowRoot!.querySelector(".ea-card__footer");
 
       expect(containerEl).toBeTruthy();
       expect(headerEl).toBeTruthy();
       expect(contentEl).toBeTruthy();
       expect(footerEl).toBeTruthy();
 
-      expect(containerEl.classList.contains("is-header-empty")).toBe(false);
-      expect(containerEl.classList.contains("is-footer-empty")).toBe(false);
+      expect(containerEl!.classList.contains("is-header-empty")).toBe(false);
+      expect(containerEl!.classList.contains("is-footer-empty")).toBe(false);
     });
 
     it("简单卡片（只有内容区域）应该正确渲染", async () => {
@@ -362,12 +381,13 @@ describe("EaCard", () => {
       container.appendChild(card);
       await card.updateComplete;
 
-      const containerEl = card.shadowRoot.querySelector(".ea-card");
-      const contentSlot = card.shadowRoot.querySelector("slot:not([name])");
+      const containerEl = card.shadowRoot!.querySelector(".ea-card");
+      const contentSlot =
+        card.shadowRoot!.querySelector<HTMLSlotElement>("slot:not([name])");
 
-      expect(containerEl.classList.contains("is-header-empty")).toBe(true);
-      expect(containerEl.classList.contains("is-footer-empty")).toBe(true);
-      expect(contentSlot.assignedElements().length).toBe(4);
+      expect(containerEl!.classList.contains("is-header-empty")).toBe(true);
+      expect(containerEl!.classList.contains("is-footer-empty")).toBe(true);
+      expect(contentSlot!.assignedElements().length).toBe(4);
     });
   });
 
@@ -375,11 +395,12 @@ describe("EaCard", () => {
     it("空卡片应该正确渲染", () => {
       const card = document.createElement("ea-card");
       container.appendChild(card);
-      const containerEl = card.shadowRoot.querySelector(".ea-card");
-      const contentSlot = card.shadowRoot.querySelector("slot:not([name])");
+      const containerEl = card.shadowRoot!.querySelector(".ea-card");
+      const contentSlot =
+        card.shadowRoot!.querySelector<HTMLSlotElement>("slot:not([name])");
 
       expect(containerEl).toBeTruthy();
-      expect(contentSlot.assignedElements().length).toBe(0);
+      expect(contentSlot!.assignedElements().length).toBe(0);
     });
 
     it("动态添加 header 内容后应该更新显示", async () => {
@@ -388,8 +409,8 @@ describe("EaCard", () => {
       container.appendChild(card);
       await card.updateComplete;
 
-      let containerEl = card.shadowRoot.querySelector(".ea-card");
-      expect(containerEl.classList.contains("is-header-empty")).toBe(true);
+      let containerEl = card.shadowRoot!.querySelector(".ea-card");
+      expect(containerEl!.classList.contains("is-header-empty")).toBe(true);
 
       const headerDiv = document.createElement("div");
       headerDiv.setAttribute("slot", "header");
@@ -397,8 +418,8 @@ describe("EaCard", () => {
       card.appendChild(headerDiv);
 
       await vi.waitFor(() => {
-        containerEl = card.shadowRoot.querySelector(".ea-card");
-        expect(containerEl.classList.contains("is-header-empty")).toBe(false);
+        containerEl = card.shadowRoot!.querySelector(".ea-card");
+        expect(containerEl!.classList.contains("is-header-empty")).toBe(false);
       });
     });
 
@@ -411,21 +432,23 @@ describe("EaCard", () => {
       container.appendChild(card);
       await card.updateComplete;
 
-      let containerEl = card.shadowRoot.querySelector(".ea-card");
-      expect(containerEl.classList.contains("is-header-empty")).toBe(false);
+      let containerEl = card.shadowRoot!.querySelector(".ea-card");
+      expect(containerEl!.classList.contains("is-header-empty")).toBe(false);
 
-      const headerSlot = card.shadowRoot.querySelector('slot[name="header"]');
-      const assignedElements = headerSlot.assignedElements();
+      const headerSlot = card.shadowRoot!.querySelector<HTMLSlotElement>(
+        'slot[name="header"]'
+      );
+      const assignedElements = headerSlot!.assignedElements();
       if (assignedElements.length > 0) {
         assignedElements[0].remove();
       }
       await card.updateComplete;
 
-      headerSlot.dispatchEvent(new Event("slotchange"));
+      headerSlot!.dispatchEvent(new Event("slotchange"));
       await card.updateComplete;
 
-      containerEl = card.shadowRoot.querySelector(".ea-card");
-      expect(containerEl.classList.contains("is-header-empty")).toBe(true);
+      containerEl = card.shadowRoot!.querySelector(".ea-card");
+      expect(containerEl!.classList.contains("is-header-empty")).toBe(true);
     });
 
     it("动态添加 footer 内容后应该更新显示", async () => {
@@ -434,8 +457,8 @@ describe("EaCard", () => {
       container.appendChild(card);
       await card.updateComplete;
 
-      let containerEl = card.shadowRoot.querySelector(".ea-card");
-      expect(containerEl.classList.contains("is-footer-empty")).toBe(true);
+      let containerEl = card.shadowRoot!.querySelector(".ea-card");
+      expect(containerEl!.classList.contains("is-footer-empty")).toBe(true);
 
       const footerDiv = document.createElement("div");
       footerDiv.setAttribute("slot", "footer");
@@ -443,8 +466,8 @@ describe("EaCard", () => {
       card.appendChild(footerDiv);
 
       await vi.waitFor(() => {
-        containerEl = card.shadowRoot.querySelector(".ea-card");
-        expect(containerEl.classList.contains("is-footer-empty")).toBe(false);
+        containerEl = card.shadowRoot!.querySelector(".ea-card");
+        expect(containerEl!.classList.contains("is-footer-empty")).toBe(false);
       });
     });
 
@@ -457,21 +480,23 @@ describe("EaCard", () => {
       container.appendChild(card);
       await card.updateComplete;
 
-      let containerEl = card.shadowRoot.querySelector(".ea-card");
-      expect(containerEl.classList.contains("is-footer-empty")).toBe(false);
+      let containerEl = card.shadowRoot!.querySelector(".ea-card");
+      expect(containerEl!.classList.contains("is-footer-empty")).toBe(false);
 
-      const footerSlot = card.shadowRoot.querySelector('slot[name="footer"]');
-      const assignedElements = footerSlot.assignedElements();
+      const footerSlot = card.shadowRoot!.querySelector<HTMLSlotElement>(
+        'slot[name="footer"]'
+      );
+      const assignedElements = footerSlot!.assignedElements();
       if (assignedElements.length > 0) {
         assignedElements[0].remove();
       }
       await card.updateComplete;
 
-      footerSlot.dispatchEvent(new Event("slotchange"));
+      footerSlot!.dispatchEvent(new Event("slotchange"));
       await card.updateComplete;
 
-      containerEl = card.shadowRoot.querySelector(".ea-card");
-      expect(containerEl.classList.contains("is-footer-empty")).toBe(true);
+      containerEl = card.shadowRoot!.querySelector(".ea-card");
+      expect(containerEl!.classList.contains("is-footer-empty")).toBe(true);
     });
   });
 
@@ -497,7 +522,7 @@ describe("EaCard", () => {
       const card = document.createElement("ea-card");
       container.appendChild(card);
       expect(card.shadowRoot).toBeDefined();
-      expect(card.shadowRoot.querySelector(".ea-card")).toBeTruthy();
+      expect(card.shadowRoot!.querySelector(".ea-card")).toBeTruthy();
     });
 
     it("组件断开连接后应该清理资源", async () => {
@@ -520,10 +545,10 @@ describe("EaCard", () => {
       container.appendChild(card);
       await card.updateComplete;
 
-      const containerEl = card.shadowRoot.querySelector(".ea-card");
-      expect(containerEl.classList.contains("is-hover-shadow")).toBe(true);
-      expect(containerEl.classList.contains("is-header-empty")).toBe(false);
-      expect(containerEl.classList.contains("is-footer-empty")).toBe(false);
+      const containerEl = card.shadowRoot!.querySelector(".ea-card");
+      expect(containerEl!.classList.contains("is-hover-shadow")).toBe(true);
+      expect(containerEl!.classList.contains("is-header-empty")).toBe(false);
+      expect(containerEl!.classList.contains("is-footer-empty")).toBe(false);
     });
 
     it("header 属性与 slot 同时存在时 header 属性应覆盖 slot 内容", async () => {
@@ -533,8 +558,10 @@ describe("EaCard", () => {
       container.appendChild(card);
       await card.updateComplete;
 
-      const headerSlot = card.shadowRoot.querySelector('slot[name="header"]');
-      expect(headerSlot.innerText).toBe("Attr Header");
+      const headerSlot = card.shadowRoot!.querySelector<HTMLSlotElement>(
+        'slot[name="header"]'
+      );
+      expect(headerSlot!.innerText).toBe("Attr Header");
     });
 
     it("设置 header 属性但没有 slot 内容时不应显示 is-header-empty", async () => {
@@ -544,8 +571,8 @@ describe("EaCard", () => {
       container.appendChild(card);
       await card.updateComplete;
 
-      const containerEl = card.shadowRoot.querySelector(".ea-card");
-      expect(containerEl.classList.contains("is-header-empty")).toBe(false);
+      const containerEl = card.shadowRoot!.querySelector(".ea-card");
+      expect(containerEl!.classList.contains("is-header-empty")).toBe(false);
     });
 
     it("设置 footer 属性但没有 slot 内容时不应显示 is-footer-empty", async () => {
@@ -555,8 +582,8 @@ describe("EaCard", () => {
       container.appendChild(card);
       await card.updateComplete;
 
-      const containerEl = card.shadowRoot.querySelector(".ea-card");
-      expect(containerEl.classList.contains("is-footer-empty")).toBe(false);
+      const containerEl = card.shadowRoot!.querySelector(".ea-card");
+      expect(containerEl!.classList.contains("is-footer-empty")).toBe(false);
     });
 
     it("同时设置 header 和 footer 属性且有其他 slot 内容时状态正确", async () => {
@@ -567,9 +594,9 @@ describe("EaCard", () => {
       container.appendChild(card);
       await card.updateComplete;
 
-      const containerEl = card.shadowRoot.querySelector(".ea-card");
-      expect(containerEl.classList.contains("is-header-empty")).toBe(false);
-      expect(containerEl.classList.contains("is-footer-empty")).toBe(false);
+      const containerEl = card.shadowRoot!.querySelector(".ea-card");
+      expect(containerEl!.classList.contains("is-header-empty")).toBe(false);
+      expect(containerEl!.classList.contains("is-footer-empty")).toBe(false);
     });
   });
 

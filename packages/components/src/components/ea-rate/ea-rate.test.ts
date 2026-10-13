@@ -4,7 +4,7 @@ import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y";
 import "./index";
 
 describe("EaRate", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -42,18 +42,18 @@ describe("EaRate", () => {
       const rate = createRate();
       container.appendChild(rate);
 
-      const containerEl = rate.shadowRoot.querySelector(".ea-rate");
+      const containerEl = rate.shadowRoot!.querySelector(".ea-rate");
       expect(containerEl).toBeTruthy();
-      expect(containerEl.getAttribute("part")).toBe("container");
+      expect(containerEl!.getAttribute("part")).toBe("container");
     });
 
     it("应该渲染 label 元素", () => {
       const rate = createRate();
       container.appendChild(rate);
 
-      const label = rate.shadowRoot.querySelector(".ea-rate__label");
+      const label = rate.shadowRoot!.querySelector(".ea-rate__label");
       expect(label).toBeTruthy();
-      expect(label.getAttribute("part")).toBe("label");
+      expect(label!.getAttribute("part")).toBe("label");
     });
 
     it("默认应该渲染 5 个评分项", async () => {
@@ -62,7 +62,7 @@ describe("EaRate", () => {
 
       await rate.updateComplete;
 
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       expect(symbols.length).toBe(5);
     });
 
@@ -72,7 +72,7 @@ describe("EaRate", () => {
 
       await rate.updateComplete;
 
-      const symbols = rate.shadowRoot.querySelectorAll('[part="symbol-wrap"]');
+      const symbols = rate.shadowRoot!.querySelectorAll('[part="symbol-wrap"]');
       expect(symbols.length).toBe(5);
     });
 
@@ -82,7 +82,7 @@ describe("EaRate", () => {
 
       await rate.updateComplete;
 
-      const icons = rate.shadowRoot.querySelectorAll(
+      const icons = rate.shadowRoot!.querySelectorAll(
         ".ea-rate__symbol ea-icon"
       );
       expect(icons.length).toBe(5);
@@ -94,8 +94,8 @@ describe("EaRate", () => {
 
       await rate.updateComplete;
 
-      const label = rate.shadowRoot.querySelector(".ea-rate__label");
-      expect(label.textContent).toBe("");
+      const label = rate.shadowRoot!.querySelector(".ea-rate__label");
+      expect(label!.textContent).toBe("");
     });
   });
 
@@ -134,7 +134,7 @@ describe("EaRate", () => {
 
       await rate.updateComplete;
 
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       expect(symbols[0].classList.contains("is-selected")).toBe(true);
       expect(symbols[1].classList.contains("is-selected")).toBe(true);
       expect(symbols[2].classList.contains("is-selected")).toBe(true);
@@ -148,7 +148,7 @@ describe("EaRate", () => {
 
       await rate.updateComplete;
 
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       symbols.forEach(symbol => {
         expect(symbol.classList.contains("is-selected")).toBe(false);
       });
@@ -160,7 +160,7 @@ describe("EaRate", () => {
 
       await rate.updateComplete;
 
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       expect(symbols[0].classList.contains("is-selected")).toBe(true);
       symbols.forEach((symbol, i) => {
         if (i > 0) {
@@ -181,7 +181,7 @@ describe("EaRate", () => {
 
       expect(rate.value).toBe(4);
 
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       expect(symbols[0].classList.contains("is-selected")).toBe(true);
       expect(symbols[3].classList.contains("is-selected")).toBe(true);
       expect(symbols[4].classList.contains("is-selected")).toBe(false);
@@ -195,7 +195,7 @@ describe("EaRate", () => {
 
       await rate.updateComplete;
 
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       symbols.forEach(symbol => {
         expect(symbol.classList.contains("is-selected")).toBe(false);
       });
@@ -219,7 +219,7 @@ describe("EaRate", () => {
       await rate.updateComplete;
 
       expect(rate.max).toBe(3);
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       expect(symbols.length).toBe(3);
     });
 
@@ -230,7 +230,7 @@ describe("EaRate", () => {
       await rate.updateComplete;
 
       expect(rate.max).toBe(10);
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       expect(symbols.length).toBe(10);
     });
 
@@ -241,7 +241,7 @@ describe("EaRate", () => {
       await rate.updateComplete;
 
       expect(rate.max).toBe(1);
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       expect(symbols.length).toBe(1);
     });
 
@@ -251,7 +251,7 @@ describe("EaRate", () => {
 
       await rate.updateComplete;
 
-      expect(rate.shadowRoot.querySelectorAll(".ea-rate__symbol").length).toBe(
+      expect(rate.shadowRoot!.querySelectorAll(".ea-rate__symbol").length).toBe(
         5
       );
 
@@ -260,7 +260,7 @@ describe("EaRate", () => {
       await rate.updateComplete;
 
       expect(rate.max).toBe(3);
-      expect(rate.shadowRoot.querySelectorAll(".ea-rate__symbol").length).toBe(
+      expect(rate.shadowRoot!.querySelectorAll(".ea-rate__symbol").length).toBe(
         3
       );
     });
@@ -273,7 +273,7 @@ describe("EaRate", () => {
 
       await rate.updateComplete;
 
-      expect(rate.shadowRoot.querySelectorAll(".ea-rate__symbol").length).toBe(
+      expect(rate.shadowRoot!.querySelectorAll(".ea-rate__symbol").length).toBe(
         7
       );
     });
@@ -286,7 +286,7 @@ describe("EaRate", () => {
 
       await rate.updateComplete;
 
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       expect(symbols[0].classList.contains("is-selected")).toBe(true);
       expect(symbols[2].classList.contains("is-selected")).toBe(true);
     });
@@ -309,8 +309,8 @@ describe("EaRate", () => {
       await rate.updateComplete;
 
       expect(rate.size).toBe("large");
-      const containerEl = rate.shadowRoot.querySelector(".ea-rate");
-      expect(containerEl.classList.contains("ea-rate--large")).toBe(true);
+      const containerEl = rate.shadowRoot!.querySelector(".ea-rate");
+      expect(containerEl!.classList.contains("ea-rate--large")).toBe(true);
     });
 
     it("设置 size=small 应该添加 ea-rate--small 修饰类", async () => {
@@ -320,8 +320,8 @@ describe("EaRate", () => {
       await rate.updateComplete;
 
       expect(rate.size).toBe("small");
-      const containerEl = rate.shadowRoot.querySelector(".ea-rate");
-      expect(containerEl.classList.contains("ea-rate--small")).toBe(true);
+      const containerEl = rate.shadowRoot!.querySelector(".ea-rate");
+      expect(containerEl!.classList.contains("ea-rate--small")).toBe(true);
     });
 
     it("设置 size=default 应该添加 ea-rate--default 修饰类", async () => {
@@ -331,8 +331,8 @@ describe("EaRate", () => {
       await rate.updateComplete;
 
       expect(rate.size).toBe("default");
-      const containerEl = rate.shadowRoot.querySelector(".ea-rate");
-      expect(containerEl.classList.contains("ea-rate--default")).toBe(true);
+      const containerEl = rate.shadowRoot!.querySelector(".ea-rate");
+      expect(containerEl!.classList.contains("ea-rate--default")).toBe(true);
     });
 
     it("size 动态变化应该正确更新容器 class", async () => {
@@ -341,15 +341,15 @@ describe("EaRate", () => {
 
       await rate.updateComplete;
 
-      const containerEl = rate.shadowRoot.querySelector(".ea-rate");
-      expect(containerEl.classList.contains("ea-rate--small")).toBe(true);
+      const containerEl = rate.shadowRoot!.querySelector(".ea-rate");
+      expect(containerEl!.classList.contains("ea-rate--small")).toBe(true);
 
       rate.setAttribute("size", "large");
 
       await rate.updateComplete;
 
-      expect(containerEl.classList.contains("ea-rate--large")).toBe(true);
-      expect(containerEl.classList.contains("ea-rate--small")).toBe(false);
+      expect(containerEl!.classList.contains("ea-rate--large")).toBe(true);
+      expect(containerEl!.classList.contains("ea-rate--small")).toBe(false);
     });
 
     it("移除 size 属性应该清除修饰类", async () => {
@@ -360,8 +360,8 @@ describe("EaRate", () => {
 
       await rate.updateComplete;
 
-      const containerEl = rate.shadowRoot.querySelector(".ea-rate");
-      expect(containerEl.classList.contains("ea-rate--large")).toBe(false);
+      const containerEl = rate.shadowRoot!.querySelector(".ea-rate");
+      expect(containerEl!.classList.contains("ea-rate--large")).toBe(false);
     });
   });
 
@@ -382,8 +382,8 @@ describe("EaRate", () => {
       await rate.updateComplete;
 
       expect(rate.label).toBe("评分");
-      const labelEl = rate.shadowRoot.querySelector(".ea-rate__label");
-      expect(labelEl.textContent).toBe("评分");
+      const labelEl = rate.shadowRoot!.querySelector(".ea-rate__label");
+      expect(labelEl!.textContent).toBe("评分");
     });
 
     it("label 动态变化应该更新文本", async () => {
@@ -394,8 +394,8 @@ describe("EaRate", () => {
 
       await rate.updateComplete;
 
-      const labelEl = rate.shadowRoot.querySelector(".ea-rate__label");
-      expect(labelEl.textContent).toBe("更新后");
+      const labelEl = rate.shadowRoot!.querySelector(".ea-rate__label");
+      expect(labelEl!.textContent).toBe("更新后");
     });
   });
 
@@ -422,7 +422,7 @@ describe("EaRate", () => {
 
       await rate.updateComplete;
 
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       symbols[3].dispatchEvent(new Event("click", { bubbles: true }));
 
       expect(rate.value).toBe(2);
@@ -434,10 +434,10 @@ describe("EaRate", () => {
 
       await rate.updateComplete;
 
-      const containerEl = rate.shadowRoot.querySelector(".ea-rate");
-      containerEl.dispatchEvent(new Event("mouseover", { bubbles: true }));
+      const containerEl = rate.shadowRoot!.querySelector(".ea-rate");
+      containerEl!.dispatchEvent(new Event("mouseover", { bubbles: true }));
 
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       symbols[2].dispatchEvent(new Event("mousemove", { bubbles: true }));
 
       await rate.updateComplete;
@@ -484,8 +484,8 @@ describe("EaRate", () => {
 
       await rate.updateComplete;
 
-      const containerEl = rate.shadowRoot.querySelector(".ea-rate");
-      expect(containerEl.classList.contains("is-disabled")).toBe(true);
+      const containerEl = rate.shadowRoot!.querySelector(".ea-rate");
+      expect(containerEl!.classList.contains("is-disabled")).toBe(true);
     });
 
     it("disabled 时点击不应该改变 value", async () => {
@@ -494,7 +494,7 @@ describe("EaRate", () => {
 
       await rate.updateComplete;
 
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       symbols[3].dispatchEvent(new Event("click", { bubbles: true }));
 
       expect(rate.value).toBe(2);
@@ -506,10 +506,10 @@ describe("EaRate", () => {
 
       await rate.updateComplete;
 
-      const containerEl = rate.shadowRoot.querySelector(".ea-rate");
-      containerEl.dispatchEvent(new Event("mouseover", { bubbles: true }));
+      const containerEl = rate.shadowRoot!.querySelector(".ea-rate");
+      containerEl!.dispatchEvent(new Event("mouseover", { bubbles: true }));
 
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       symbols[2].dispatchEvent(new Event("mousemove", { bubbles: true }));
 
       await rate.updateComplete;
@@ -527,15 +527,15 @@ describe("EaRate", () => {
 
       expect(rate.disabled).toBe(true);
 
-      const containerEl = rate.shadowRoot.querySelector(".ea-rate");
-      expect(containerEl.classList.contains("is-disabled")).toBe(true);
+      const containerEl = rate.shadowRoot!.querySelector(".ea-rate");
+      expect(containerEl!.classList.contains("is-disabled")).toBe(true);
 
       rate.removeAttribute("disabled");
 
       await rate.updateComplete;
 
       expect(rate.disabled === false || rate.disabled === null).toBe(true);
-      expect(containerEl.classList.contains("is-disabled")).toBe(false);
+      expect(containerEl!.classList.contains("is-disabled")).toBe(false);
     });
   });
 
@@ -559,7 +559,7 @@ describe("EaRate", () => {
 
       await rate.updateComplete;
 
-      const customIcons = rate.shadowRoot.querySelectorAll(".custom-icon");
+      const customIcons = rate.shadowRoot!.querySelectorAll(".custom-icon");
       expect(customIcons.length).toBe(5);
     });
 
@@ -590,13 +590,17 @@ describe("EaRate", () => {
       await rate.updateComplete;
 
       const symbolsBefore =
-        rate.shadowRoot.querySelectorAll(".ea-rate__symbol").length;
+        rate.shadowRoot!.querySelectorAll(".ea-rate__symbol").length;
 
-      rate.getSymbol = null;
+      rate.getSymbol = null as unknown as (
+        value?: number,
+        isSelected?: number
+      ) => string;
 
       await rate.updateComplete;
 
-      const symbolsAfter = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbolsAfter =
+        rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       expect(symbolsAfter.length).toBe(symbolsBefore);
     });
 
@@ -610,14 +614,14 @@ describe("EaRate", () => {
 
       await rate.updateComplete;
 
-      expect(rate.shadowRoot.querySelectorAll(".icon-a").length).toBe(5);
+      expect(rate.shadowRoot!.querySelectorAll(".icon-a").length).toBe(5);
 
       rate.getSymbol = () => `<span class="icon-b">B</span>`;
 
       await rate.updateComplete;
 
-      expect(rate.shadowRoot.querySelectorAll(".icon-a").length).toBe(0);
-      expect(rate.shadowRoot.querySelectorAll(".icon-b").length).toBe(5);
+      expect(rate.shadowRoot!.querySelectorAll(".icon-a").length).toBe(0);
+      expect(rate.shadowRoot!.querySelectorAll(".icon-b").length).toBe(5);
     });
   });
 
@@ -630,7 +634,7 @@ describe("EaRate", () => {
 
       await rate.updateComplete;
 
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       symbols[3].dispatchEvent(new Event("click", { bubbles: true }));
 
       expect(rate.value).toBe(4);
@@ -644,7 +648,7 @@ describe("EaRate", () => {
 
       expect(rate.value).toBe(3);
 
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       symbols[2].dispatchEvent(new Event("click", { bubbles: true }));
 
       expect(rate.value).toBe(0);
@@ -656,7 +660,7 @@ describe("EaRate", () => {
 
       await rate.updateComplete;
 
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       symbols[4].dispatchEvent(new Event("click", { bubbles: true }));
 
       expect(rate.value).toBe(5);
@@ -668,7 +672,7 @@ describe("EaRate", () => {
 
       await rate.updateComplete;
 
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       symbols[0].dispatchEvent(new Event("click", { bubbles: true }));
 
       expect(rate.value).toBe(1);
@@ -680,10 +684,10 @@ describe("EaRate", () => {
 
       await rate.updateComplete;
 
-      const containerEl = rate.shadowRoot.querySelector(".ea-rate");
-      containerEl.dispatchEvent(new Event("mouseover", { bubbles: true }));
+      const containerEl = rate.shadowRoot!.querySelector(".ea-rate");
+      containerEl!.dispatchEvent(new Event("mouseover", { bubbles: true }));
 
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       symbols[2].dispatchEvent(new Event("mousemove", { bubbles: true }));
 
       await rate.updateComplete;
@@ -697,17 +701,17 @@ describe("EaRate", () => {
 
       await rate.updateComplete;
 
-      const containerEl = rate.shadowRoot.querySelector(".ea-rate");
-      containerEl.dispatchEvent(new Event("mouseover", { bubbles: true }));
+      const containerEl = rate.shadowRoot!.querySelector(".ea-rate");
+      containerEl!.dispatchEvent(new Event("mouseover", { bubbles: true }));
 
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       symbols[3].dispatchEvent(new Event("mousemove", { bubbles: true }));
 
       await rate.updateComplete;
 
       expect(symbols[3].classList.contains("is-selected")).toBe(true);
 
-      containerEl.dispatchEvent(new Event("mouseout", { bubbles: true }));
+      containerEl!.dispatchEvent(new Event("mouseout", { bubbles: true }));
 
       await rate.updateComplete;
 
@@ -721,15 +725,15 @@ describe("EaRate", () => {
 
       await rate.updateComplete;
 
-      const containerEl = rate.shadowRoot.querySelector(".ea-rate");
-      containerEl.dispatchEvent(new Event("mouseover", { bubbles: true }));
+      const containerEl = rate.shadowRoot!.querySelector(".ea-rate");
+      containerEl!.dispatchEvent(new Event("mouseover", { bubbles: true }));
 
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       symbols[2].dispatchEvent(new Event("mousemove", { bubbles: true }));
 
       await rate.updateComplete;
 
-      containerEl.dispatchEvent(new Event("mouseout", { bubbles: true }));
+      containerEl!.dispatchEvent(new Event("mouseout", { bubbles: true }));
 
       await rate.updateComplete;
 
@@ -751,7 +755,7 @@ describe("EaRate", () => {
       const changeHandler = vi.fn();
       rate.addEventListener("change", changeHandler);
 
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       symbols[2].dispatchEvent(new Event("click", { bubbles: true }));
 
       await rate.updateComplete;
@@ -770,13 +774,13 @@ describe("EaRate", () => {
         caughtEvent = e;
       });
 
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       symbols[2].dispatchEvent(new Event("click", { bubbles: true }));
 
       expect(caughtEvent).toBeTruthy();
-      expect(caughtEvent.type).toBe("change");
-      expect(caughtEvent.detail).toBeTruthy();
-      expect(caughtEvent.detail.value).toBe(3);
+      expect(caughtEvent!.type).toBe("change");
+      expect(caughtEvent!.detail).toBeTruthy();
+      expect(caughtEvent!.detail.value).toBe(3);
     });
 
     it("取消选中时 change 事件 value 应为点击的评分显示值", async () => {
@@ -787,13 +791,13 @@ describe("EaRate", () => {
 
       let eventDetail = null;
       rate.addEventListener("change", e => {
-        eventDetail = e.detail;
+        eventDetail = (e as CustomEvent).detail;
       });
 
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       symbols[2].dispatchEvent(new Event("click", { bubbles: true }));
 
-      expect(eventDetail.value).toBe(3);
+      expect(eventDetail!.value).toBe(3);
       expect(rate.value).toBe(0);
     });
 
@@ -806,7 +810,7 @@ describe("EaRate", () => {
       const changeHandler = vi.fn();
       rate.addEventListener("change", changeHandler);
 
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       symbols[2].dispatchEvent(new Event("click", { bubbles: true }));
 
       await rate.updateComplete;
@@ -823,7 +827,7 @@ describe("EaRate", () => {
       const changeHandler = vi.fn();
       rate.addEventListener("change", changeHandler);
 
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       symbols[2].dispatchEvent(new Event("click", { bubbles: true }));
 
       await rate.updateComplete;
@@ -844,10 +848,10 @@ describe("EaRate", () => {
       const hoverHandler = vi.fn();
       rate.addEventListener("ea-hover", hoverHandler);
 
-      const containerEl = rate.shadowRoot.querySelector(".ea-rate");
-      containerEl.dispatchEvent(new Event("mouseover", { bubbles: true }));
+      const containerEl = rate.shadowRoot!.querySelector(".ea-rate");
+      containerEl!.dispatchEvent(new Event("mouseover", { bubbles: true }));
 
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       symbols[2].dispatchEvent(new Event("mousemove", { bubbles: true }));
 
       await rate.updateComplete;
@@ -866,17 +870,17 @@ describe("EaRate", () => {
         caughtEvent = e;
       });
 
-      const containerEl = rate.shadowRoot.querySelector(".ea-rate");
-      containerEl.dispatchEvent(new Event("mouseover", { bubbles: true }));
+      const containerEl = rate.shadowRoot!.querySelector(".ea-rate");
+      containerEl!.dispatchEvent(new Event("mouseover", { bubbles: true }));
 
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       symbols[2].dispatchEvent(new Event("mousemove", { bubbles: true }));
 
       expect(caughtEvent).toBeTruthy();
-      expect(caughtEvent.type).toBe("ea-hover");
-      expect(caughtEvent.detail).toBeTruthy();
-      expect(caughtEvent.detail.value).toBe(2);
-      expect(caughtEvent.detail.target).toBeTruthy();
+      expect(caughtEvent!.type).toBe("ea-hover");
+      expect(caughtEvent!.detail).toBeTruthy();
+      expect(caughtEvent!.detail.value).toBe(2);
+      expect(caughtEvent!.detail.target).toBeTruthy();
     });
 
     it("ea-hover 事件的 value 应该是 0-based 下标", async () => {
@@ -890,13 +894,13 @@ describe("EaRate", () => {
         eventDetail = e.detail;
       });
 
-      const containerEl = rate.shadowRoot.querySelector(".ea-rate");
-      containerEl.dispatchEvent(new Event("mouseover", { bubbles: true }));
+      const containerEl = rate.shadowRoot!.querySelector(".ea-rate");
+      containerEl!.dispatchEvent(new Event("mouseover", { bubbles: true }));
 
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       symbols[0].dispatchEvent(new Event("mousemove", { bubbles: true }));
 
-      expect(eventDetail.value).toBe(0);
+      expect(eventDetail!.value).toBe(0);
     });
 
     it("同一评分项上重复 mousemove 不应该重复触发 ea-hover", async () => {
@@ -908,10 +912,10 @@ describe("EaRate", () => {
       const hoverHandler = vi.fn();
       rate.addEventListener("ea-hover", hoverHandler);
 
-      const containerEl = rate.shadowRoot.querySelector(".ea-rate");
-      containerEl.dispatchEvent(new Event("mouseover", { bubbles: true }));
+      const containerEl = rate.shadowRoot!.querySelector(".ea-rate");
+      containerEl!.dispatchEvent(new Event("mouseover", { bubbles: true }));
 
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       symbols[2].dispatchEvent(new Event("mousemove", { bubbles: true }));
       symbols[2].dispatchEvent(new Event("mousemove", { bubbles: true }));
       symbols[2].dispatchEvent(new Event("mousemove", { bubbles: true }));
@@ -932,18 +936,18 @@ describe("EaRate", () => {
         eventDetail = e.detail;
       });
 
-      const containerEl = rate.shadowRoot.querySelector(".ea-rate");
-      containerEl.dispatchEvent(new Event("mouseover", { bubbles: true }));
+      const containerEl = rate.shadowRoot!.querySelector(".ea-rate");
+      containerEl!.dispatchEvent(new Event("mouseover", { bubbles: true }));
 
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       symbols[3].dispatchEvent(new Event("mousemove", { bubbles: true }));
 
       await rate.updateComplete;
 
-      containerEl.dispatchEvent(new Event("mouseout", { bubbles: true }));
+      containerEl!.dispatchEvent(new Event("mouseout", { bubbles: true }));
 
-      expect(eventDetail.value).toBe(1);
-      expect(eventDetail.target).toBeTruthy();
+      expect(eventDetail!.value).toBe(1);
+      expect(eventDetail!.target).toBeTruthy();
     });
 
     it("mouseout 且 value=0 时 ea-hover 事件 value 应为 null", async () => {
@@ -957,18 +961,18 @@ describe("EaRate", () => {
         eventDetail = e.detail;
       });
 
-      const containerEl = rate.shadowRoot.querySelector(".ea-rate");
-      containerEl.dispatchEvent(new Event("mouseover", { bubbles: true }));
+      const containerEl = rate.shadowRoot!.querySelector(".ea-rate");
+      containerEl!.dispatchEvent(new Event("mouseover", { bubbles: true }));
 
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       symbols[2].dispatchEvent(new Event("mousemove", { bubbles: true }));
 
       await rate.updateComplete;
 
-      containerEl.dispatchEvent(new Event("mouseout", { bubbles: true }));
+      containerEl!.dispatchEvent(new Event("mouseout", { bubbles: true }));
 
-      expect(eventDetail.value).toBe(null);
-      expect(eventDetail.target).toBe(null);
+      expect(eventDetail!.value).toBe(null);
+      expect(eventDetail!.target).toBe(null);
     });
 
     it("readonly 时不应该触发 ea-hover 事件", async () => {
@@ -980,10 +984,10 @@ describe("EaRate", () => {
       const hoverHandler = vi.fn();
       rate.addEventListener("ea-hover", hoverHandler);
 
-      const containerEl = rate.shadowRoot.querySelector(".ea-rate");
-      containerEl.dispatchEvent(new Event("mouseover", { bubbles: true }));
+      const containerEl = rate.shadowRoot!.querySelector(".ea-rate");
+      containerEl!.dispatchEvent(new Event("mouseover", { bubbles: true }));
 
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       symbols[2].dispatchEvent(new Event("mousemove", { bubbles: true }));
 
       await rate.updateComplete;
@@ -1000,10 +1004,10 @@ describe("EaRate", () => {
       const hoverHandler = vi.fn();
       rate.addEventListener("ea-hover", hoverHandler);
 
-      const containerEl = rate.shadowRoot.querySelector(".ea-rate");
-      containerEl.dispatchEvent(new Event("mouseover", { bubbles: true }));
+      const containerEl = rate.shadowRoot!.querySelector(".ea-rate");
+      containerEl!.dispatchEvent(new Event("mouseover", { bubbles: true }));
 
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       symbols[2].dispatchEvent(new Event("mousemove", { bubbles: true }));
 
       await rate.updateComplete;
@@ -1020,19 +1024,19 @@ describe("EaRate", () => {
       const hoverHandler = vi.fn();
       rate.addEventListener("ea-hover", hoverHandler);
 
-      const containerEl = rate.shadowRoot.querySelector(".ea-rate");
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const containerEl = rate.shadowRoot!.querySelector(".ea-rate");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
 
-      containerEl.dispatchEvent(new Event("mouseover", { bubbles: true }));
+      containerEl!.dispatchEvent(new Event("mouseover", { bubbles: true }));
       symbols[1].dispatchEvent(new Event("mousemove", { bubbles: true }));
 
       await rate.updateComplete;
 
-      containerEl.dispatchEvent(new Event("mouseout", { bubbles: true }));
+      containerEl!.dispatchEvent(new Event("mouseout", { bubbles: true }));
 
       await rate.updateComplete;
 
-      containerEl.dispatchEvent(new Event("mouseover", { bubbles: true }));
+      containerEl!.dispatchEvent(new Event("mouseover", { bubbles: true }));
       symbols[1].dispatchEvent(new Event("mousemove", { bubbles: true }));
 
       await rate.updateComplete;
@@ -1087,7 +1091,7 @@ describe("EaRate", () => {
 
       expect(rate.shadowRoot).toBeTruthy();
       expect(rate.value).toBe(3);
-      expect(rate.shadowRoot.querySelectorAll(".ea-rate__symbol").length).toBe(
+      expect(rate.shadowRoot!.querySelectorAll(".ea-rate__symbol").length).toBe(
         5
       );
     });
@@ -1109,9 +1113,9 @@ describe("EaRate", () => {
 
       await rate.updateComplete;
 
-      const containerEl = rate.shadowRoot.querySelector(".ea-rate");
-      expect(containerEl.classList.contains("ea-rate--large")).toBe(true);
-      expect(containerEl.classList.contains("is-disabled")).toBe(true);
+      const containerEl = rate.shadowRoot!.querySelector(".ea-rate");
+      expect(containerEl!.classList.contains("ea-rate--large")).toBe(true);
+      expect(containerEl!.classList.contains("is-disabled")).toBe(true);
     });
 
     it("$beforeUnmount 应该清理 hover 监听", async () => {
@@ -1120,15 +1124,15 @@ describe("EaRate", () => {
 
       await rate.updateComplete;
 
-      const containerEl = rate.shadowRoot.querySelector(".ea-rate");
-      containerEl.dispatchEvent(new Event("mouseover", { bubbles: true }));
+      const containerEl = rate.shadowRoot!.querySelector(".ea-rate");
+      containerEl!.dispatchEvent(new Event("mouseover", { bubbles: true }));
 
       rate.remove();
 
       const hoverHandler = vi.fn();
       rate.addEventListener("ea-hover", hoverHandler);
 
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       symbols[2].dispatchEvent(new Event("mousemove", { bubbles: true }));
 
       await rate.updateComplete;
@@ -1146,7 +1150,7 @@ describe("EaRate", () => {
 
       await rate.updateComplete;
 
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       expect(symbols.length).toBe(0);
     });
 
@@ -1159,7 +1163,7 @@ describe("EaRate", () => {
       expect(rate.value).toBe(5);
       expect(rate.max).toBe(3);
 
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       expect(symbols.length).toBe(3);
       expect(symbols[0].classList.contains("is-selected")).toBe(true);
       expect(symbols[1].classList.contains("is-selected")).toBe(true);
@@ -1174,7 +1178,7 @@ describe("EaRate", () => {
 
       expect(rate.value).toBe(-1);
 
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       symbols.forEach(symbol => {
         expect(symbol.classList.contains("is-selected")).toBe(false);
       });
@@ -1204,7 +1208,7 @@ describe("EaRate", () => {
 
       expect(rate.value).toBe(5);
 
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       expect(symbols[4].classList.contains("is-selected")).toBe(true);
       expect(symbols[0].classList.contains("is-selected")).toBe(true);
     });
@@ -1217,7 +1221,7 @@ describe("EaRate", () => {
 
       expect(rate.value).toBe(2.7);
 
-      const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
+      const symbols = rate.shadowRoot!.querySelectorAll(".ea-rate__symbol");
       expect(symbols[1].classList.contains("is-selected")).toBe(true);
     });
 
@@ -1227,8 +1231,8 @@ describe("EaRate", () => {
 
       await rate.updateComplete;
 
-      const containerEl = rate.shadowRoot.querySelector(".ea-rate");
-      expect(containerEl.classList.contains("ea-rate--x-large")).toBe(false);
+      const containerEl = rate.shadowRoot!.querySelector(".ea-rate");
+      expect(containerEl!.classList.contains("ea-rate--x-large")).toBe(false);
     });
   });
 
@@ -1262,7 +1266,7 @@ describe("EaRate", () => {
         const el = document.createElement("ea-rate");
         container.appendChild(el);
         await el.updateComplete;
-        const symbols = el.shadowRoot.querySelectorAll(".ea-rate__symbol");
+        const symbols = el.shadowRoot!.querySelectorAll(".ea-rate__symbol");
         symbols.forEach(symbol => {
           expect(symbol.getAttribute("role")).toBe("radio");
         });
@@ -1273,7 +1277,7 @@ describe("EaRate", () => {
         el.value = 3;
         container.appendChild(el);
         await el.updateComplete;
-        const symbols = el.shadowRoot.querySelectorAll(".ea-rate__symbol");
+        const symbols = el.shadowRoot!.querySelectorAll(".ea-rate__symbol");
         expect(symbols[2].getAttribute("aria-checked")).toBe("true");
       });
 
@@ -1282,7 +1286,7 @@ describe("EaRate", () => {
         el.value = 3;
         container.appendChild(el);
         await el.updateComplete;
-        const symbols = el.shadowRoot.querySelectorAll(".ea-rate__symbol");
+        const symbols = el.shadowRoot!.querySelectorAll(".ea-rate__symbol");
         expect(symbols[0].getAttribute("aria-checked")).toBe("false");
         expect(symbols[3].getAttribute("aria-checked")).toBe("false");
       });
@@ -1299,7 +1303,7 @@ describe("EaRate", () => {
         const el = document.createElement("ea-rate");
         container.appendChild(el);
         await el.updateComplete;
-        const symbols = el.shadowRoot.querySelectorAll(".ea-rate__symbol");
+        const symbols = el.shadowRoot!.querySelectorAll(".ea-rate__symbol");
         symbols.forEach(symbol => {
           expect(symbol.getAttribute("aria-label")).toBeTruthy();
         });
@@ -1312,7 +1316,7 @@ describe("EaRate", () => {
         await el.updateComplete;
         el.value = 4;
         await el.updateComplete;
-        const symbols = el.shadowRoot.querySelectorAll(".ea-rate__symbol");
+        const symbols = el.shadowRoot!.querySelectorAll(".ea-rate__symbol");
         expect(symbols[3].getAttribute("aria-checked")).toBe("true");
         expect(symbols[1].getAttribute("aria-checked")).toBe("false");
       });
@@ -1324,8 +1328,10 @@ describe("EaRate", () => {
         el.value = 2;
         container.appendChild(el);
         await el.updateComplete;
-        const symbols = el.shadowRoot.querySelectorAll(".ea-rate__symbol");
-        symbols[1].dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
+        const symbols = el.shadowRoot!.querySelectorAll(".ea-rate__symbol");
+        symbols[1].dispatchEvent(
+          new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true })
+        );
         expect(el.value).toBe(3);
       });
 
@@ -1334,8 +1340,10 @@ describe("EaRate", () => {
         el.value = 3;
         container.appendChild(el);
         await el.updateComplete;
-        const symbols = el.shadowRoot.querySelectorAll(".ea-rate__symbol");
-        symbols[2].dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true }));
+        const symbols = el.shadowRoot!.querySelectorAll(".ea-rate__symbol");
+        symbols[2].dispatchEvent(
+          new KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true })
+        );
         expect(el.value).toBe(2);
       });
 
@@ -1344,8 +1352,10 @@ describe("EaRate", () => {
         el.value = 0;
         container.appendChild(el);
         await el.updateComplete;
-        const symbols = el.shadowRoot.querySelectorAll(".ea-rate__symbol");
-        symbols[2].dispatchEvent(new KeyboardEvent("keydown", { key: " ", bubbles: true }));
+        const symbols = el.shadowRoot!.querySelectorAll(".ea-rate__symbol");
+        symbols[2].dispatchEvent(
+          new KeyboardEvent("keydown", { key: " ", bubbles: true })
+        );
         expect(el.value).toBe(3);
       });
 
@@ -1355,8 +1365,10 @@ describe("EaRate", () => {
         el.disabled = true;
         container.appendChild(el);
         await el.updateComplete;
-        const symbols = el.shadowRoot.querySelectorAll(".ea-rate__symbol");
-        symbols[1].dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
+        const symbols = el.shadowRoot!.querySelectorAll(".ea-rate__symbol");
+        symbols[1].dispatchEvent(
+          new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true })
+        );
         expect(el.value).toBe(2);
       });
 
@@ -1366,8 +1378,10 @@ describe("EaRate", () => {
         el.readonly = true;
         container.appendChild(el);
         await el.updateComplete;
-        const symbols = el.shadowRoot.querySelectorAll(".ea-rate__symbol");
-        symbols[1].dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
+        const symbols = el.shadowRoot!.querySelectorAll(".ea-rate__symbol");
+        symbols[1].dispatchEvent(
+          new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true })
+        );
         expect(el.value).toBe(2);
       });
     });

@@ -47,7 +47,7 @@ function createTableWithColumns(columnsHTML = "", attrs = "") {
 }
 
 describe("EaTable Component", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -71,7 +71,7 @@ describe("EaTable Component", () => {
       const table = document.createElement("ea-table");
       container.appendChild(table);
 
-      const tableEl = table.shadowRoot.querySelector("table.ea-table");
+      const tableEl = table.shadowRoot!.querySelector("table.ea-table");
       expect(tableEl).toBeTruthy();
     });
 
@@ -79,7 +79,7 @@ describe("EaTable Component", () => {
       const table = document.createElement("ea-table");
       container.appendChild(table);
 
-      const colgroup = table.shadowRoot.querySelector(".ea-table__colgroup");
+      const colgroup = table.shadowRoot!.querySelector(".ea-table__colgroup");
       expect(colgroup).toBeTruthy();
     });
 
@@ -87,7 +87,7 @@ describe("EaTable Component", () => {
       const table = document.createElement("ea-table");
       container.appendChild(table);
 
-      const thead = table.shadowRoot.querySelector(".ea-table__thead");
+      const thead = table.shadowRoot!.querySelector(".ea-table__thead");
       expect(thead).toBeTruthy();
     });
 
@@ -95,7 +95,7 @@ describe("EaTable Component", () => {
       const table = document.createElement("ea-table");
       container.appendChild(table);
 
-      const tbody = table.shadowRoot.querySelector(".ea-table__tbody");
+      const tbody = table.shadowRoot!.querySelector(".ea-table__tbody");
       expect(tbody).toBeTruthy();
     });
 
@@ -103,7 +103,7 @@ describe("EaTable Component", () => {
       const table = document.createElement("ea-table");
       container.appendChild(table);
 
-      const tfoot = table.shadowRoot.querySelector(".ea-table__tfoot");
+      const tfoot = table.shadowRoot!.querySelector(".ea-table__tfoot");
       expect(tfoot).toBeTruthy();
     });
 
@@ -111,7 +111,7 @@ describe("EaTable Component", () => {
       const table = document.createElement("ea-table");
       container.appendChild(table);
 
-      const slot = table.shadowRoot.querySelector("#defaultSlot");
+      const slot = table.shadowRoot!.querySelector("#defaultSlot");
       expect(slot).toBeTruthy();
     });
 
@@ -119,7 +119,7 @@ describe("EaTable Component", () => {
       const table = document.createElement("ea-table");
       container.appendChild(table);
 
-      const emptySlot = table.shadowRoot.querySelector('slot[name="empty"]');
+      const emptySlot = table.shadowRoot!.querySelector('slot[name="empty"]');
       expect(emptySlot).toBeTruthy();
     });
   });
@@ -129,35 +129,37 @@ describe("EaTable Component", () => {
       const table = document.createElement("ea-table");
       container.appendChild(table);
 
-      expect(table.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(
+        table.shadowRoot!.querySelector('[part="container"]')
+      ).toBeTruthy();
     });
 
     it("应该包含 colgroup part", () => {
       const table = document.createElement("ea-table");
       container.appendChild(table);
 
-      expect(table.shadowRoot.querySelector('[part="colgroup"]')).toBeTruthy();
+      expect(table.shadowRoot!.querySelector('[part="colgroup"]')).toBeTruthy();
     });
 
     it("应该包含 thead part", () => {
       const table = document.createElement("ea-table");
       container.appendChild(table);
 
-      expect(table.shadowRoot.querySelector('[part="thead"]')).toBeTruthy();
+      expect(table.shadowRoot!.querySelector('[part="thead"]')).toBeTruthy();
     });
 
     it("应该包含 tbody part", () => {
       const table = document.createElement("ea-table");
       container.appendChild(table);
 
-      expect(table.shadowRoot.querySelector('[part="tbody"]')).toBeTruthy();
+      expect(table.shadowRoot!.querySelector('[part="tbody"]')).toBeTruthy();
     });
 
     it("应该包含 tfoot part", () => {
       const table = document.createElement("ea-table");
       container.appendChild(table);
 
-      expect(table.shadowRoot.querySelector('[part="tfoot"]')).toBeTruthy();
+      expect(table.shadowRoot!.querySelector('[part="tfoot"]')).toBeTruthy();
     });
 
     it("应该包含 default-slot part", () => {
@@ -165,7 +167,7 @@ describe("EaTable Component", () => {
       container.appendChild(table);
 
       expect(
-        table.shadowRoot.querySelector('[part="default-slot"]')
+        table.shadowRoot!.querySelector('[part="default-slot"]')
       ).toBeTruthy();
     });
   });
@@ -184,7 +186,7 @@ describe("EaTable Component", () => {
       container.appendChild(column);
 
       expect(
-        column.shadowRoot.querySelector('[part="container"]')
+        column.shadowRoot!.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
@@ -192,21 +194,21 @@ describe("EaTable Component", () => {
       const column = document.createElement("ea-table-column");
       container.appendChild(column);
 
-      expect(column.shadowRoot.querySelector('[part="label"]')).toBeTruthy();
+      expect(column.shadowRoot!.querySelector('[part="label"]')).toBeTruthy();
     });
 
     it("应该包含 content part", () => {
       const column = document.createElement("ea-table-column");
       container.appendChild(column);
 
-      expect(column.shadowRoot.querySelector('[part="content"]')).toBeTruthy();
+      expect(column.shadowRoot!.querySelector('[part="content"]')).toBeTruthy();
     });
 
     it("应该包含 header slot", () => {
       const column = document.createElement("ea-table-column");
       container.appendChild(column);
 
-      const slot = column.shadowRoot.querySelector('slot[name="header"]');
+      const slot = column.shadowRoot!.querySelector('slot[name="header"]');
       expect(slot).toBeTruthy();
     });
 
@@ -214,7 +216,7 @@ describe("EaTable Component", () => {
       const column = document.createElement("ea-table-column");
       container.appendChild(column);
 
-      const slot = column.shadowRoot.querySelector("#defaultSlot");
+      const slot = column.shadowRoot!.querySelector("#defaultSlot");
       expect(slot).toBeTruthy();
     });
   });
@@ -242,8 +244,8 @@ describe("EaTable Component", () => {
 
       await table.updateComplete;
 
-      const containerEl = table.shadowRoot.querySelector(".ea-table");
-      expect(containerEl.classList.contains("is-stripe")).toBe(true);
+      const containerEl = table.shadowRoot!.querySelector(".ea-table");
+      expect(containerEl!.classList.contains("is-stripe")).toBe(true);
     });
 
     it("动态修改 stripe 应该生效", async () => {
@@ -252,13 +254,13 @@ describe("EaTable Component", () => {
 
       await table.updateComplete;
 
-      const containerEl = table.shadowRoot.querySelector(".ea-table");
-      expect(containerEl.classList.contains("is-stripe")).toBe(false);
+      const containerEl = table.shadowRoot!.querySelector(".ea-table");
+      expect(containerEl!.classList.contains("is-stripe")).toBe(false);
 
       table.stripe = true;
       await table.updateComplete;
 
-      expect(containerEl.classList.contains("is-stripe")).toBe(true);
+      expect(containerEl!.classList.contains("is-stripe")).toBe(true);
     });
   });
 
@@ -285,8 +287,8 @@ describe("EaTable Component", () => {
 
       await table.updateComplete;
 
-      const containerEl = table.shadowRoot.querySelector(".ea-table");
-      expect(containerEl.classList.contains("is-border")).toBe(true);
+      const containerEl = table.shadowRoot!.querySelector(".ea-table");
+      expect(containerEl!.classList.contains("is-border")).toBe(true);
     });
 
     it("动态修改 border 应该生效", async () => {
@@ -295,13 +297,13 @@ describe("EaTable Component", () => {
 
       await table.updateComplete;
 
-      const containerEl = table.shadowRoot.querySelector(".ea-table");
-      expect(containerEl.classList.contains("is-border")).toBe(false);
+      const containerEl = table.shadowRoot!.querySelector(".ea-table");
+      expect(containerEl!.classList.contains("is-border")).toBe(false);
 
       table.border = true;
       await table.updateComplete;
 
-      expect(containerEl.classList.contains("is-border")).toBe(true);
+      expect(containerEl!.classList.contains("is-border")).toBe(true);
     });
   });
 
@@ -432,15 +434,15 @@ describe("EaTable Component", () => {
 
       await column.updateComplete;
 
-      const labelEl = column.shadowRoot.querySelector(
+      const labelEl = column.shadowRoot!.querySelector(
         ".ea-table-column__label"
       );
-      expect(labelEl.textContent).toContain("Old");
+      expect(labelEl!.textContent).toContain("Old");
 
       column.label = "New";
       await column.updateComplete;
 
-      expect(labelEl.textContent).toContain("New");
+      expect(labelEl!.textContent).toContain("New");
     });
   });
 
@@ -647,7 +649,7 @@ describe("EaTable Component", () => {
 
       await table.setData(testData);
 
-      const rows = table.shadowRoot.querySelectorAll("tbody .ea-table__tr");
+      const rows = table.shadowRoot!.querySelectorAll("tbody .ea-table__tr");
       expect(rows.length).toBe(3);
     });
 
@@ -662,7 +664,7 @@ describe("EaTable Component", () => {
 
       await table.setData(testData);
 
-      const firstRowTds = table.shadowRoot.querySelectorAll(
+      const firstRowTds = table.shadowRoot!.querySelectorAll(
         'tbody .ea-table__tr[data-index="0"] .ea-table__td[data-scope]'
       );
       expect(firstRowTds.length).toBe(2);
@@ -681,7 +683,7 @@ describe("EaTable Component", () => {
 
       await table.setData(testData);
 
-      const cols = table.shadowRoot.querySelectorAll("colgroup col");
+      const cols = table.shadowRoot!.querySelectorAll("colgroup col");
       expect(cols.length).toBe(2);
     });
 
@@ -714,7 +716,7 @@ describe("EaTable Component", () => {
       const newData = [{ id: 10 }, { id: 20 }];
       await table.setData(newData);
 
-      const rows = table.shadowRoot.querySelectorAll("tbody .ea-table__tr");
+      const rows = table.shadowRoot!.querySelectorAll("tbody .ea-table__tr");
       expect(rows.length).toBe(2);
     });
 
@@ -730,16 +732,16 @@ describe("EaTable Component", () => {
 
       await table.setData(partialData);
 
-      const rows = table.shadowRoot.querySelectorAll("tbody .ea-table__tr");
+      const rows = table.shadowRoot!.querySelectorAll("tbody .ea-table__tr");
       const firstRowNameTd = rows[0].querySelector(
         '.ea-table__td[data-scope="name"]'
       );
-      expect(firstRowNameTd.textContent).toBe("");
+      expect(firstRowNameTd!.textContent).toBe("");
 
       const secondRowNameTd = rows[1].querySelector(
         '.ea-table__td[data-scope="name"]'
       );
-      expect(secondRowNameTd.textContent).toBe("John");
+      expect(secondRowNameTd!.textContent).toBe("John");
     });
   });
 
@@ -757,7 +759,7 @@ describe("EaTable Component", () => {
 
       await table.updateComplete;
 
-      const rows = table.shadowRoot.querySelectorAll("tbody .ea-table__tr");
+      const rows = table.shadowRoot!.querySelectorAll("tbody .ea-table__tr");
       expect(rows.length).toBe(3);
     });
   });
@@ -774,7 +776,7 @@ describe("EaTable Component", () => {
 
       await table.setData(testData);
 
-      const ths = table.shadowRoot.querySelectorAll("thead .ea-table__th");
+      const ths = table.shadowRoot!.querySelectorAll("thead .ea-table__th");
       expect(ths.length).toBe(2);
       expect(ths[0].textContent.trim()).toContain("Date");
       expect(ths[1].textContent.trim()).toContain("Name");
@@ -790,8 +792,8 @@ describe("EaTable Component", () => {
 
       await table.setData(testData);
 
-      const th = table.shadowRoot.querySelector("thead .ea-table__th");
-      expect(th.getAttribute("data-prop")).toBe("date");
+      const th = table.shadowRoot!.querySelector("thead .ea-table__th");
+      expect(th!.getAttribute("data-prop")).toBe("date");
     });
 
     it("selection 类型列 thead 应该渲染 checkbox", async () => {
@@ -805,7 +807,7 @@ describe("EaTable Component", () => {
 
       await table.setData(testData);
 
-      const theadCheckbox = table.shadowRoot.querySelector(
+      const theadCheckbox = table.shadowRoot!.querySelector(
         'thead ea-checkbox[data-type="selection"]'
       );
       expect(theadCheckbox).toBeTruthy();
@@ -824,7 +826,9 @@ describe("EaTable Component", () => {
 
       await table.setData(testData);
 
-      const tfootTds = table.shadowRoot.querySelectorAll("tfoot .ea-table__td");
+      const tfootTds = table.shadowRoot!.querySelectorAll(
+        "tfoot .ea-table__td"
+      );
       expect(tfootTds.length).toBe(2);
     });
 
@@ -839,7 +843,7 @@ describe("EaTable Component", () => {
 
       await table.setData(testData);
 
-      const tfootTds = table.shadowRoot.querySelectorAll(
+      const tfootTds = table.shadowRoot!.querySelectorAll(
         "tfoot .ea-table__td[data-scope]"
       );
       expect(tfootTds.length).toBe(2);
@@ -861,9 +865,9 @@ describe("EaTable Component", () => {
 
       await table.updateComplete;
 
-      const rows = table.shadowRoot.querySelectorAll("tbody .ea-table__tr");
+      const rows = table.shadowRoot!.querySelectorAll("tbody .ea-table__tr");
       const firstId = rows[0].querySelector('.ea-table__td[data-scope="id"]');
-      expect(firstId.textContent).toBe("1");
+      expect(firstId!.textContent).toBe("1");
     });
 
     it("sort 方法应该按降序排序", async () => {
@@ -880,9 +884,9 @@ describe("EaTable Component", () => {
 
       await table.updateComplete;
 
-      const rows = table.shadowRoot.querySelectorAll("tbody .ea-table__tr");
+      const rows = table.shadowRoot!.querySelectorAll("tbody .ea-table__tr");
       const firstId = rows[0].querySelector('.ea-table__td[data-scope="id"]');
-      expect(firstId.textContent).toBe("3");
+      expect(firstId!.textContent).toBe("3");
     });
 
     it("sort 方法应该触发 ea-sort-change 事件", async () => {
@@ -919,25 +923,25 @@ describe("EaTable Component", () => {
 
       await table.updateComplete;
 
-      let rows = table.shadowRoot.querySelectorAll("tbody .ea-table__tr");
+      let rows = table.shadowRoot!.querySelectorAll("tbody .ea-table__tr");
       let firstId = rows[0].querySelector('.ea-table__td[data-scope="id"]');
-      expect(firstId.textContent).toBe("1");
+      expect(firstId!.textContent).toBe("1");
 
       table.sort("id", "desc");
 
       await table.updateComplete;
 
-      rows = table.shadowRoot.querySelectorAll("tbody .ea-table__tr");
+      rows = table.shadowRoot!.querySelectorAll("tbody .ea-table__tr");
       firstId = rows[0].querySelector('.ea-table__td[data-scope="id"]');
-      expect(firstId.textContent).toBe("3");
+      expect(firstId!.textContent).toBe("3");
 
       table.sort("id", "asc");
 
       await table.updateComplete;
 
-      rows = table.shadowRoot.querySelectorAll("tbody .ea-table__tr");
+      rows = table.shadowRoot!.querySelectorAll("tbody .ea-table__tr");
       firstId = rows[0].querySelector('.ea-table__td[data-scope="id"]');
-      expect(firstId.textContent).toBe("1");
+      expect(firstId!.textContent).toBe("1");
     });
   });
 
@@ -959,7 +963,7 @@ describe("EaTable Component", () => {
 
       await table.setData(numericTestData);
 
-      const tfootTds = table.shadowRoot.querySelectorAll(
+      const tfootTds = table.shadowRoot!.querySelectorAll(
         "tfoot .ea-table__td[data-scope]"
       );
       expect(tfootTds.length).toBe(5);
@@ -985,13 +989,15 @@ describe("EaTable Component", () => {
       await table.updateComplete;
 
       table.summaryMethod = ({ columns, data }) => {
-        const sums = [];
+        const sums: (string | number)[] = [];
         columns.forEach((column, index) => {
           if (index === 0) {
             sums[index] = "Total";
             return;
           }
-          const values = data.map(item => Number(item[column.prop]));
+          const values = data.map(item =>
+            Number((item as Record<string, unknown>)[column.prop!])
+          );
           if (!values.every(value => Number.isNaN(value))) {
             sums[index] = `$${values.reduce((prev, curr) => {
               const value = Number(curr);
@@ -1006,7 +1012,7 @@ describe("EaTable Component", () => {
 
       await table.setData(numericTestData);
 
-      const tfootTds = table.shadowRoot.querySelectorAll(
+      const tfootTds = table.shadowRoot!.querySelectorAll(
         "tfoot .ea-table__td[data-scope]"
       );
       expect(tfootTds[0].textContent).toBe("Total");
@@ -1025,7 +1031,7 @@ describe("EaTable Component", () => {
 
       await table.setData(numericTestData);
 
-      const tfootTds = table.shadowRoot.querySelectorAll(
+      const tfootTds = table.shadowRoot!.querySelectorAll(
         "tfoot .ea-table__td[data-scope]"
       );
       tfootTds.forEach(td => {
@@ -1046,7 +1052,7 @@ describe("EaTable Component", () => {
 
       await table.setData(testData);
 
-      const checkboxes = table.shadowRoot.querySelectorAll(
+      const checkboxes = table.shadowRoot!.querySelectorAll(
         'tbody ea-checkbox[data-type="selection"]'
       );
       expect(checkboxes.length).toBe(3);
@@ -1063,7 +1069,7 @@ describe("EaTable Component", () => {
 
       await table.setData(testData);
 
-      const theadCheckbox = table.shadowRoot.querySelector(
+      const theadCheckbox = table.shadowRoot!.querySelector(
         'thead ea-checkbox[data-type="selection"]'
       );
       expect(theadCheckbox).toBeTruthy();
@@ -1084,7 +1090,7 @@ describe("EaTable Component", () => {
 
       await table.updateComplete;
 
-      const checked = table.shadowRoot.querySelectorAll(
+      const checked = table.shadowRoot!.querySelectorAll(
         'tbody ea-checkbox[data-type="selection"][checked]'
       );
       expect(checked.length).toBe(1);
@@ -1110,7 +1116,7 @@ describe("EaTable Component", () => {
 
       await table.updateComplete;
 
-      const checked = table.shadowRoot.querySelectorAll(
+      const checked = table.shadowRoot!.querySelectorAll(
         'tbody ea-checkbox[data-type="selection"][checked]'
       );
       expect(checked.length).toBe(0);
@@ -1125,11 +1131,11 @@ describe("EaTable Component", () => {
 
       await table.updateComplete;
 
-      table.selectable = row => row.id !== 2;
+      table.selectable = row => (row as { id: number }).id !== 2;
 
       await table.setData(testData);
 
-      const disabled = table.shadowRoot.querySelectorAll(
+      const disabled = table.shadowRoot!.querySelectorAll(
         'tbody ea-checkbox[data-type="selection"][disabled]'
       );
       expect(disabled.length).toBe(1);
@@ -1169,7 +1175,7 @@ describe("EaTable Component", () => {
 
       await table.setData(testData);
 
-      const indexEls = table.shadowRoot.querySelectorAll(
+      const indexEls = table.shadowRoot!.querySelectorAll(
         'tbody .ea-table__index[data-type="index"]'
       );
       expect(indexEls.length).toBe(3);
@@ -1191,7 +1197,7 @@ describe("EaTable Component", () => {
 
       await table.setData(testData);
 
-      const indexEls = table.shadowRoot.querySelectorAll(
+      const indexEls = table.shadowRoot!.querySelectorAll(
         'tbody .ea-table__index[data-type="index"]'
       );
       expect(indexEls[0].textContent).toBe("1");
@@ -1221,10 +1227,10 @@ describe("EaTable Component", () => {
       const currentRow = table.getCurrentRow();
       expect(currentRow.value).toEqual(testData[0]);
 
-      const tr = table.shadowRoot.querySelector(
+      const tr = table.shadowRoot!.querySelector(
         'tbody .ea-table__tr[data-index="0"]'
       );
-      expect(tr.classList.contains("is-current")).toBe(true);
+      expect(tr!.classList.contains("is-current")).toBe(true);
     });
 
     it("getCurrentRow 应该返回当前行数据", async () => {
@@ -1270,10 +1276,10 @@ describe("EaTable Component", () => {
       const currentRow = table.getCurrentRow();
       expect(currentRow.value).toBeNull();
 
-      const tr = table.shadowRoot.querySelector(
+      const tr = table.shadowRoot!.querySelector(
         'tbody .ea-table__tr[data-index="0"]'
       );
-      expect(tr.classList.contains("is-current")).toBe(false);
+      expect(tr!.classList.contains("is-current")).toBe(false);
     });
 
     it("切换高亮行时旧行应该取消高亮", async () => {
@@ -1293,21 +1299,21 @@ describe("EaTable Component", () => {
 
       await table.updateComplete;
 
-      const tr0 = table.shadowRoot.querySelector(
+      const tr0 = table.shadowRoot!.querySelector(
         'tbody .ea-table__tr[data-index="0"]'
       );
-      expect(tr0.classList.contains("is-current")).toBe(true);
+      expect(tr0!.classList.contains("is-current")).toBe(true);
 
       table.setCurrentRow(testData[1]);
 
       await table.updateComplete;
 
-      expect(tr0.classList.contains("is-current")).toBe(false);
+      expect(tr0!.classList.contains("is-current")).toBe(false);
 
-      const tr1 = table.shadowRoot.querySelector(
+      const tr1 = table.shadowRoot!.querySelector(
         'tbody .ea-table__tr[data-index="1"]'
       );
-      expect(tr1.classList.contains("is-current")).toBe(true);
+      expect(tr1!.classList.contains("is-current")).toBe(true);
     });
   });
 
@@ -1328,7 +1334,7 @@ describe("EaTable Component", () => {
 
       await table.updateComplete;
 
-      const rows = table.shadowRoot.querySelectorAll("tbody .ea-table__tr");
+      const rows = table.shadowRoot!.querySelectorAll("tbody .ea-table__tr");
       const row0Part = rows[0].getAttribute("part") || "";
       const row1Part = rows[1].getAttribute("part") || "";
       expect(row0Part).toContain("custom-row");
@@ -1349,7 +1355,7 @@ describe("EaTable Component", () => {
 
       await table.updateComplete;
 
-      const rows = table.shadowRoot.querySelectorAll("tbody .ea-table__tr");
+      const rows = table.shadowRoot!.querySelectorAll("tbody .ea-table__tr");
       rows.forEach(row => {
         const part = row.getAttribute("part") || "";
         expect(part).toContain("highlight-row");
@@ -1366,12 +1372,12 @@ describe("EaTable Component", () => {
 
       await table.updateComplete;
 
-      const sortableTh = table.shadowRoot.querySelector(
+      const sortableTh = table.shadowRoot!.querySelector(
         "thead .ea-table__th.is-sortable"
       );
       expect(sortableTh).toBeTruthy();
 
-      const sortIcons = sortableTh.querySelectorAll(".ea-table__sort-icon");
+      const sortIcons = sortableTh!.querySelectorAll(".ea-table__sort-icon");
       expect(sortIcons.length).toBe(2);
     });
 
@@ -1383,10 +1389,10 @@ describe("EaTable Component", () => {
 
       await table.updateComplete;
 
-      const sortableTh = table.shadowRoot.querySelector(
+      const sortableTh = table.shadowRoot!.querySelector(
         "thead .ea-table__th.is-sortable"
       );
-      expect(sortableTh.getAttribute("data-order")).toBe("asc");
+      expect(sortableTh!.getAttribute("data-order")).toBe("asc");
     });
   });
 
@@ -1402,7 +1408,7 @@ describe("EaTable Component", () => {
 
       await table.setData(testData);
 
-      const fixedTds = table.shadowRoot.querySelectorAll(
+      const fixedTds = table.shadowRoot!.querySelectorAll(
         "tbody .ea-table__td.is-fixed.fixed-left"
       );
       expect(fixedTds.length).toBe(3);
@@ -1419,7 +1425,7 @@ describe("EaTable Component", () => {
 
       await table.setData(testData);
 
-      const fixedTds = table.shadowRoot.querySelectorAll(
+      const fixedTds = table.shadowRoot!.querySelectorAll(
         "tbody .ea-table__td.is-fixed.fixed-right"
       );
       expect(fixedTds.length).toBe(3);
@@ -1437,7 +1443,7 @@ describe("EaTable Component", () => {
 
       await table.setData(testData);
 
-      const tds = table.shadowRoot.querySelectorAll(
+      const tds = table.shadowRoot!.querySelectorAll<HTMLElement>(
         'tbody .ea-table__td[data-scope="id"]'
       );
       tds.forEach(td => {
@@ -1459,7 +1465,7 @@ describe("EaTable Component", () => {
 
       await table.setData(testData);
 
-      const tds = table.shadowRoot.querySelectorAll(
+      const tds = table.shadowRoot!.querySelectorAll(
         "tbody .ea-table__td.ea-table__cell--align-center"
       );
       expect(tds.length).toBe(3);
@@ -1475,7 +1481,7 @@ describe("EaTable Component", () => {
 
       await table.setData(testData);
 
-      const tds = table.shadowRoot.querySelectorAll(
+      const tds = table.shadowRoot!.querySelectorAll(
         "tbody .ea-table__td.ea-table__cell--align-right"
       );
       expect(tds.length).toBe(3);
@@ -1493,7 +1499,7 @@ describe("EaTable Component", () => {
 
       await table.setData(testData);
 
-      const rows = table.shadowRoot.querySelectorAll("tbody .ea-table__tr");
+      const rows = table.shadowRoot!.querySelectorAll("tbody .ea-table__tr");
       expect(rows[0].getAttribute("data-index")).toBe("0");
       expect(rows[1].getAttribute("data-index")).toBe("1");
       expect(rows[2].getAttribute("data-index")).toBe("2");
@@ -1514,13 +1520,13 @@ describe("EaTable Component", () => {
       const handler = vi.fn();
       table.addEventListener("ea-row-click", handler);
 
-      const firstRow = table.shadowRoot.querySelector(
+      const firstRow = table.shadowRoot!.querySelector(
         'tbody .ea-table__tr[data-index="0"]'
       );
-      const firstTd = firstRow.querySelector("td");
+      const firstTd = firstRow!.querySelector("td");
 
-      firstRow.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
-      firstTd.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
+      firstRow!.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+      firstTd!.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
 
       await table.updateComplete;
 
@@ -1543,13 +1549,13 @@ describe("EaTable Component", () => {
       const handler = vi.fn();
       table.addEventListener("ea-current-change", handler);
 
-      const firstRow = table.shadowRoot.querySelector(
+      const firstRow = table.shadowRoot!.querySelector(
         'tbody .ea-table__tr[data-index="0"]'
       );
-      const firstTd = firstRow.querySelector("td");
+      const firstTd = firstRow!.querySelector("td");
 
-      firstRow.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
-      firstTd.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
+      firstRow!.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+      firstTd!.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
 
       await table.updateComplete;
 
@@ -1569,13 +1575,13 @@ describe("EaTable Component", () => {
       const handler = vi.fn();
       table.addEventListener("ea-cell-click", handler);
 
-      const firstRow = table.shadowRoot.querySelector(
+      const firstRow = table.shadowRoot!.querySelector(
         'tbody .ea-table__tr[data-index="0"]'
       );
-      const firstTd = firstRow.querySelector("td");
+      const firstTd = firstRow!.querySelector("td");
 
-      firstRow.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
-      firstTd.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
+      firstRow!.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+      firstTd!.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
 
       await table.updateComplete;
 
@@ -1595,8 +1601,8 @@ describe("EaTable Component", () => {
       const handler = vi.fn();
       table.addEventListener("ea-header-click", handler);
 
-      const th = table.shadowRoot.querySelector("thead .ea-table__th");
-      th.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      const th = table.shadowRoot!.querySelector("thead .ea-table__th");
+      th!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
 
       await table.updateComplete;
 
@@ -1617,10 +1623,10 @@ describe("EaTable Component", () => {
 
       await table.setData(testData);
 
-      const ths = table.shadowRoot.querySelectorAll("thead .ea-table__th");
+      const ths = table.shadowRoot!.querySelectorAll("thead .ea-table__th");
       expect(ths.length).toBe(3);
 
-      const rows = table.shadowRoot.querySelectorAll("tbody .ea-table__tr");
+      const rows = table.shadowRoot!.querySelectorAll("tbody .ea-table__tr");
       expect(rows.length).toBe(3);
 
       const firstRow = rows[0];
@@ -1682,7 +1688,7 @@ describe("EaTable Component", () => {
       const table = document.createElement("ea-table");
       container.appendChild(table);
 
-      expect(table.shadowRoot.querySelector("table.ea-table")).toBeTruthy();
+      expect(table.shadowRoot!.querySelector("table.ea-table")).toBeTruthy();
     });
 
     it("没有 column 的 table 调用 setData 应该正常", async () => {
@@ -1693,7 +1699,7 @@ describe("EaTable Component", () => {
 
       await table.setData(testData);
 
-      expect(table.shadowRoot.querySelector("table.ea-table")).toBeTruthy();
+      expect(table.shadowRoot!.querySelector("table.ea-table")).toBeTruthy();
     });
 
     it("大量数据应该正确处理", async () => {
@@ -1709,7 +1715,7 @@ describe("EaTable Component", () => {
       }));
       await table.setData(largeData);
 
-      const rows = table.shadowRoot.querySelectorAll("tbody .ea-table__tr");
+      const rows = table.shadowRoot!.querySelectorAll("tbody .ea-table__tr");
       expect(rows.length).toBe(100);
     });
 
@@ -1725,11 +1731,11 @@ describe("EaTable Component", () => {
 
       await table.setData(partialData);
 
-      const rows = table.shadowRoot.querySelectorAll("tbody .ea-table__tr");
+      const rows = table.shadowRoot!.querySelectorAll("tbody .ea-table__tr");
       const firstRowNameTd = rows[0].querySelector(
         '.ea-table__td[data-scope="name"]'
       );
-      expect(firstRowNameTd.textContent).toBe("");
+      expect(firstRowNameTd!.textContent).toBe("");
     });
   });
 
@@ -1739,7 +1745,7 @@ describe("EaTable Component", () => {
       container.appendChild(table);
 
       expect(table.shadowRoot).toBeDefined();
-      expect(table.shadowRoot.querySelector("table.ea-table")).toBeTruthy();
+      expect(table.shadowRoot!.querySelector("table.ea-table")).toBeTruthy();
     });
 
     it("column 组件连接后应该正确初始化", () => {
@@ -1769,13 +1775,13 @@ describe("EaTable Component", () => {
 
       await table.updateComplete;
 
-      const containerEl = table.shadowRoot.querySelector(".ea-table");
-      expect(containerEl.classList.contains("is-stripe")).toBe(false);
+      const containerEl = table.shadowRoot!.querySelector(".ea-table");
+      expect(containerEl!.classList.contains("is-stripe")).toBe(false);
 
       table.stripe = true;
       await table.updateComplete;
 
-      expect(containerEl.classList.contains("is-stripe")).toBe(true);
+      expect(containerEl!.classList.contains("is-stripe")).toBe(true);
     });
 
     it("动态修改 border 应该生效", async () => {
@@ -1784,13 +1790,13 @@ describe("EaTable Component", () => {
 
       await table.updateComplete;
 
-      const containerEl = table.shadowRoot.querySelector(".ea-table");
-      expect(containerEl.classList.contains("is-border")).toBe(false);
+      const containerEl = table.shadowRoot!.querySelector(".ea-table");
+      expect(containerEl!.classList.contains("is-border")).toBe(false);
 
       table.border = true;
       await table.updateComplete;
 
-      expect(containerEl.classList.contains("is-border")).toBe(true);
+      expect(containerEl!.classList.contains("is-border")).toBe(true);
     });
 
     it("动态修改 height 应该生效", async () => {
@@ -1814,7 +1820,7 @@ describe("EaTable Component", () => {
 
       await table.setData(testData);
 
-      let ths = table.shadowRoot.querySelectorAll("thead .ea-table__th");
+      let ths = table.shadowRoot!.querySelectorAll("thead .ea-table__th");
       expect(ths.length).toBe(1);
 
       const newColumn = document.createElement("ea-table-column");
@@ -1824,7 +1830,7 @@ describe("EaTable Component", () => {
 
       await newColumn.updateComplete;
 
-      ths = table.shadowRoot.querySelectorAll("thead .ea-table__th");
+      ths = table.shadowRoot!.querySelectorAll("thead .ea-table__th");
       expect(ths.length).toBe(2);
     });
   });
@@ -1834,9 +1840,9 @@ describe("EaTable Component", () => {
       const table = document.createElement("ea-table");
       container.appendChild(table);
 
-      const containerEl = table.shadowRoot.querySelector(".ea-table");
+      const containerEl = table.shadowRoot!.querySelector(".ea-table");
       expect(containerEl).toBeTruthy();
-      expect(containerEl.classList.contains("ea-table")).toBe(true);
+      expect(containerEl!.classList.contains("ea-table")).toBe(true);
     });
 
     it("stripe 应该添加 is-stripe 状态 class", async () => {
@@ -1846,8 +1852,8 @@ describe("EaTable Component", () => {
 
       await table.updateComplete;
 
-      const containerEl = table.shadowRoot.querySelector(".ea-table");
-      expect(containerEl.classList.contains("is-stripe")).toBe(true);
+      const containerEl = table.shadowRoot!.querySelector(".ea-table");
+      expect(containerEl!.classList.contains("is-stripe")).toBe(true);
     });
 
     it("border 应该添加 is-border 状态 class", async () => {
@@ -1857,8 +1863,8 @@ describe("EaTable Component", () => {
 
       await table.updateComplete;
 
-      const containerEl = table.shadowRoot.querySelector(".ea-table");
-      expect(containerEl.classList.contains("is-border")).toBe(true);
+      const containerEl = table.shadowRoot!.querySelector(".ea-table");
+      expect(containerEl!.classList.contains("is-border")).toBe(true);
     });
   });
 
@@ -1904,7 +1910,7 @@ describe("EaTable Component", () => {
       await table.updateComplete;
 
       const column = table.querySelector("ea-table-column");
-      const tree = column.getColumnTree;
+      const tree = column!.getColumnTree;
       expect(tree.rowspan).toBeGreaterThanOrEqual(1);
     });
   });
@@ -1920,9 +1926,9 @@ describe("EaTable Component", () => {
 
       await table.setData([]);
 
-      const emptySlot = table.shadowRoot.querySelector(".ea-table__empty");
+      const emptySlot = table.shadowRoot!.querySelector(".ea-table__empty");
       expect(emptySlot).toBeTruthy();
-      expect(emptySlot.classList.contains("is-data")).toBe(false);
+      expect(emptySlot!.classList.contains("is-data")).toBe(false);
     });
 
     it("有数据时空状态应该有 is-data class", async () => {
@@ -1935,9 +1941,9 @@ describe("EaTable Component", () => {
 
       await table.setData(testData);
 
-      const emptySlot = table.shadowRoot.querySelector(".ea-table__empty");
+      const emptySlot = table.shadowRoot!.querySelector(".ea-table__empty");
       expect(emptySlot).toBeTruthy();
-      expect(emptySlot.classList.contains("is-data")).toBe(true);
+      expect(emptySlot!.classList.contains("is-data")).toBe(true);
     });
   });
 
@@ -1947,16 +1953,16 @@ describe("EaTable Component", () => {
         const table = document.createElement("ea-table");
         container.appendChild(table);
         await table.updateComplete;
-        const tableEl = table.shadowRoot.querySelector("table.ea-table");
-        expect(tableEl.getAttribute("role")).toBe("table");
+        const tableEl = table.shadowRoot!.querySelector("table.ea-table");
+        expect(tableEl!.getAttribute("role")).toBe("table");
       });
 
       it("table 元素应该有 aria-label", async () => {
         const table = document.createElement("ea-table");
         container.appendChild(table);
         await table.updateComplete;
-        const tableEl = table.shadowRoot.querySelector("table.ea-table");
-        expect(tableEl.getAttribute("aria-label")).toBeTruthy();
+        const tableEl = table.shadowRoot!.querySelector("table.ea-table");
+        expect(tableEl!.getAttribute("aria-label")).toBeTruthy();
       });
 
       it("setData 后 table 元素应该有 aria-rowcount", async () => {
@@ -1966,8 +1972,8 @@ describe("EaTable Component", () => {
         container.appendChild(table);
         await table.updateComplete;
         await table.setData(testData);
-        const tableEl = table.shadowRoot.querySelector("table.ea-table");
-        expect(tableEl.getAttribute("aria-rowcount")).toBe("4");
+        const tableEl = table.shadowRoot!.querySelector("table.ea-table");
+        expect(tableEl!.getAttribute("aria-rowcount")).toBe("4");
       });
 
       it("setData 后 table 元素应该有 aria-colcount", async () => {
@@ -1977,8 +1983,8 @@ describe("EaTable Component", () => {
         container.appendChild(table);
         await table.updateComplete;
         await table.setData(testData);
-        const tableEl = table.shadowRoot.querySelector("table.ea-table");
-        expect(tableEl.getAttribute("aria-colcount")).toBe("1");
+        const tableEl = table.shadowRoot!.querySelector("table.ea-table");
+        expect(tableEl!.getAttribute("aria-colcount")).toBe("1");
       });
 
       it("tbody td 应该有 role=cell", async () => {
@@ -1988,10 +1994,10 @@ describe("EaTable Component", () => {
         container.appendChild(table);
         await table.updateComplete;
         await table.setData(testData);
-        const td = table.shadowRoot.querySelector(
+        const td = table.shadowRoot!.querySelector(
           "tbody .ea-table__td[data-scope]"
         );
-        expect(td.getAttribute("role")).toBe("cell");
+        expect(td!.getAttribute("role")).toBe("cell");
       });
 
       it("tbody td 应该有 aria-colindex", async () => {
@@ -2001,10 +2007,10 @@ describe("EaTable Component", () => {
         container.appendChild(table);
         await table.updateComplete;
         await table.setData(testData);
-        const td = table.shadowRoot.querySelector(
+        const td = table.shadowRoot!.querySelector(
           "tbody .ea-table__td[data-scope]"
         );
-        expect(td.getAttribute("aria-colindex")).toBeTruthy();
+        expect(td!.getAttribute("aria-colindex")).toBeTruthy();
       });
 
       it("tbody tr 应该有 aria-rowindex", async () => {
@@ -2014,8 +2020,8 @@ describe("EaTable Component", () => {
         container.appendChild(table);
         await table.updateComplete;
         await table.setData(testData);
-        const tr = table.shadowRoot.querySelector("tbody .ea-table__tr");
-        expect(tr.getAttribute("aria-rowindex")).toBeTruthy();
+        const tr = table.shadowRoot!.querySelector("tbody .ea-table__tr");
+        expect(tr!.getAttribute("aria-rowindex")).toBeTruthy();
       });
 
       it("sortable 列的 th 应该有 aria-sort", async () => {
@@ -2024,10 +2030,10 @@ describe("EaTable Component", () => {
         `);
         container.appendChild(table);
         await table.updateComplete;
-        const th = table.shadowRoot.querySelector(
+        const th = table.shadowRoot!.querySelector(
           "thead .ea-table__th.is-sortable"
         );
-        expect(th.getAttribute("aria-sort")).toBeTruthy();
+        expect(th!.getAttribute("aria-sort")).toBeTruthy();
       });
 
       it("排序后 aria-sort 应该更新", async () => {
@@ -2037,12 +2043,12 @@ describe("EaTable Component", () => {
         container.appendChild(table);
         await table.updateComplete;
         await table.setData(testData);
-        const th = table.shadowRoot.querySelector(
+        const th = table.shadowRoot!.querySelector<HTMLElement>(
           "thead .ea-table__th.is-sortable"
         );
-        th.click();
+        th!.click();
         await table.updateComplete;
-        expect(th.getAttribute("aria-sort")).toBe("descending");
+        expect(th!.getAttribute("aria-sort")).toBe("descending");
       });
     });
 

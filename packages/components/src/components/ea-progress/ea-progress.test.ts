@@ -4,7 +4,7 @@ import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y";
 import "./index";
 
 describe("EaProgress Component", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -27,9 +27,10 @@ describe("EaProgress Component", () => {
       const progress = document.createElement("ea-progress");
       container.appendChild(progress);
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
       expect(containerEl).toBeTruthy();
-      expect(containerEl.tagName.toLowerCase()).toBe("div");
+      expect(containerEl!.tagName.toLowerCase()).toBe("div");
     });
 
     it("应该支持 CSS Parts（container, track, path, percentage）", () => {
@@ -39,7 +40,7 @@ describe("EaProgress Component", () => {
       const parts = ["container", "track", "path", "percentage"];
       parts.forEach(part => {
         expect(
-          progress.shadowRoot.querySelector(`[part="${part}"]`)
+          progress.shadowRoot!.querySelector(`[part="${part}"]`)
         ).toBeTruthy();
       });
     });
@@ -52,7 +53,7 @@ describe("EaProgress Component", () => {
       progress.appendChild(span);
       container.appendChild(progress);
 
-      const slot = progress.shadowRoot.querySelector("slot");
+      const slot = progress.shadowRoot!.querySelector("slot");
       expect(slot).toBeTruthy();
     });
 
@@ -64,8 +65,9 @@ describe("EaProgress Component", () => {
       const progress = document.createElement("ea-progress");
       container.appendChild(progress);
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
-      expect(containerEl.getAttribute("part")).toBe("container");
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
+      expect(containerEl!.getAttribute("part")).toBe("container");
     });
   });
 
@@ -81,10 +83,10 @@ describe("EaProgress Component", () => {
       const progress = document.createElement("ea-progress");
       container.appendChild(progress);
 
-      const track = progress.shadowRoot.querySelector(
+      const track = progress.shadowRoot!.querySelector(
         "section.ea-progress__track"
       );
-      const path = progress.shadowRoot.querySelector(
+      const path = progress.shadowRoot!.querySelector(
         "section.ea-progress__path"
       );
       expect(track).toBeTruthy();
@@ -95,10 +97,10 @@ describe("EaProgress Component", () => {
       const progress = document.createElement("ea-progress");
       container.appendChild(progress);
 
-      const wrapper = progress.shadowRoot.querySelector(
+      const wrapper = progress.shadowRoot!.querySelector(
         ".ea-progress__percentage-wrapper"
       );
-      const slot = progress.shadowRoot.querySelector(
+      const slot = progress.shadowRoot!.querySelector(
         "slot.ea-progress__percentage"
       );
       expect(wrapper).toBeTruthy();
@@ -118,9 +120,9 @@ describe("EaProgress Component", () => {
       progress.setAttribute("variant", "circle");
       container.appendChild(progress);
 
-      const svg = progress.shadowRoot.querySelector("svg");
+      const svg = progress.shadowRoot!.querySelector("svg");
       expect(svg).toBeTruthy();
-      expect(svg.getAttribute("viewBox")).toBe("0 0 100 100");
+      expect(svg!.getAttribute("viewBox")).toBe("0 0 100 100");
     });
 
     it("circle 变体应该包含 track 和 path circle 元素", () => {
@@ -128,10 +130,10 @@ describe("EaProgress Component", () => {
       progress.setAttribute("variant", "circle");
       container.appendChild(progress);
 
-      const trackCircle = progress.shadowRoot.querySelector(
+      const trackCircle = progress.shadowRoot!.querySelector<SVGCircleElement>(
         "circle.ea-progress__track"
       );
-      const pathCircle = progress.shadowRoot.querySelector(
+      const pathCircle = progress.shadowRoot!.querySelector<SVGCircleElement>(
         "circle.ea-progress__path"
       );
       expect(trackCircle).toBeTruthy();
@@ -143,7 +145,7 @@ describe("EaProgress Component", () => {
       progress.setAttribute("variant", "circle");
       container.appendChild(progress);
 
-      const circles = progress.shadowRoot.querySelectorAll("circle");
+      const circles = progress.shadowRoot!.querySelectorAll("circle");
       circles.forEach(circle => {
         expect(circle.getAttribute("cx")).toBe("50");
         expect(circle.getAttribute("cy")).toBe("50");
@@ -156,14 +158,14 @@ describe("EaProgress Component", () => {
       progress.setAttribute("variant", "circle");
       container.appendChild(progress);
 
-      const trackCircle = progress.shadowRoot.querySelector(
+      const trackCircle = progress.shadowRoot!.querySelector<SVGCircleElement>(
         "circle.ea-progress__track"
       );
-      const pathCircle = progress.shadowRoot.querySelector(
+      const pathCircle = progress.shadowRoot!.querySelector<SVGCircleElement>(
         "circle.ea-progress__path"
       );
-      expect(trackCircle.getAttribute("part")).toBe("track");
-      expect(pathCircle.getAttribute("part")).toBe("path");
+      expect(trackCircle!.getAttribute("part")).toBe("track");
+      expect(pathCircle!.getAttribute("part")).toBe("path");
     });
 
     it("circle 变体应该包含 percentage-wrapper 和 slot", () => {
@@ -171,10 +173,10 @@ describe("EaProgress Component", () => {
       progress.setAttribute("variant", "circle");
       container.appendChild(progress);
 
-      const wrapper = progress.shadowRoot.querySelector(
+      const wrapper = progress.shadowRoot!.querySelector(
         ".ea-progress__percentage-wrapper"
       );
-      const slot = progress.shadowRoot.querySelector(
+      const slot = progress.shadowRoot!.querySelector(
         "slot.ea-progress__percentage"
       );
       expect(wrapper).toBeTruthy();
@@ -194,7 +196,7 @@ describe("EaProgress Component", () => {
       progress.setAttribute("variant", "dashboard");
       container.appendChild(progress);
 
-      const svg = progress.shadowRoot.querySelector("svg");
+      const svg = progress.shadowRoot!.querySelector("svg");
       expect(svg).toBeTruthy();
     });
 
@@ -203,8 +205,8 @@ describe("EaProgress Component", () => {
       progress.setAttribute("variant", "dashboard");
       container.appendChild(progress);
 
-      const mask = progress.shadowRoot.querySelector("mask#myMask");
-      const clipPath = progress.shadowRoot.querySelector("clipPath#myClip");
+      const mask = progress.shadowRoot!.querySelector("mask#myMask");
+      const clipPath = progress.shadowRoot!.querySelector("clipPath#myClip");
       expect(mask).toBeTruthy();
       expect(clipPath).toBeTruthy();
     });
@@ -214,14 +216,14 @@ describe("EaProgress Component", () => {
       progress.setAttribute("variant", "dashboard");
       container.appendChild(progress);
 
-      const trackCircle = progress.shadowRoot.querySelector(
+      const trackCircle = progress.shadowRoot!.querySelector<SVGCircleElement>(
         "circle.ea-progress__track"
       );
-      const pathCircle = progress.shadowRoot.querySelector(
+      const pathCircle = progress.shadowRoot!.querySelector<SVGCircleElement>(
         "circle.ea-progress__path"
       );
-      expect(trackCircle.getAttribute("clip-path")).toBe("url(#myClip)");
-      expect(pathCircle.getAttribute("clip-path")).toBe("url(#myClip)");
+      expect(trackCircle!.getAttribute("clip-path")).toBe("url(#myClip)");
+      expect(pathCircle!.getAttribute("clip-path")).toBe("url(#myClip)");
     });
 
     it("dashboard 变体应该包含 percentage-wrapper 和 slot", () => {
@@ -229,10 +231,10 @@ describe("EaProgress Component", () => {
       progress.setAttribute("variant", "dashboard");
       container.appendChild(progress);
 
-      const wrapper = progress.shadowRoot.querySelector(
+      const wrapper = progress.shadowRoot!.querySelector(
         ".ea-progress__percentage-wrapper"
       );
-      const slot = progress.shadowRoot.querySelector(
+      const slot = progress.shadowRoot!.querySelector(
         "slot.ea-progress__percentage"
       );
       expect(wrapper).toBeTruthy();
@@ -245,14 +247,14 @@ describe("EaProgress Component", () => {
 
       expect(progress.variant).toBe("line");
       expect(
-        progress.shadowRoot.querySelector("section.ea-progress__track")
+        progress.shadowRoot!.querySelector("section.ea-progress__track")
       ).toBeTruthy();
 
       progress.setAttribute("variant", "circle");
       await progress.updateComplete;
 
       expect(progress.variant).toBe("circle");
-      expect(progress.shadowRoot.querySelector("svg")).toBeTruthy();
+      expect(progress.shadowRoot!.querySelector("svg")).toBeTruthy();
     });
 
     it("从 circle 切换到 dashboard 应该重新渲染", async () => {
@@ -261,13 +263,13 @@ describe("EaProgress Component", () => {
       container.appendChild(progress);
 
       expect(progress.variant).toBe("circle");
-      expect(progress.shadowRoot.querySelector("mask#myMask")).toBeFalsy();
+      expect(progress.shadowRoot!.querySelector("mask#myMask")).toBeFalsy();
 
       progress.setAttribute("variant", "dashboard");
       await progress.updateComplete;
 
       expect(progress.variant).toBe("dashboard");
-      expect(progress.shadowRoot.querySelector("mask#myMask")).toBeTruthy();
+      expect(progress.shadowRoot!.querySelector("mask#myMask")).toBeTruthy();
     });
 
     it("无效的 variant 值应该使用默认值 line", () => {
@@ -283,16 +285,16 @@ describe("EaProgress Component", () => {
       container.appendChild(progress);
 
       expect(
-        progress.shadowRoot.querySelector("section.ea-progress__track")
+        progress.shadowRoot!.querySelector("section.ea-progress__track")
       ).toBeTruthy();
 
       progress.setAttribute("variant", "circle");
       await progress.updateComplete;
 
       expect(
-        progress.shadowRoot.querySelector("section.ea-progress__track")
+        progress.shadowRoot!.querySelector("section.ea-progress__track")
       ).toBeFalsy();
-      expect(progress.shadowRoot.querySelector("svg")).toBeTruthy();
+      expect(progress.shadowRoot!.querySelector("svg")).toBeTruthy();
     });
   });
 
@@ -363,9 +365,10 @@ describe("EaProgress Component", () => {
 
       await progress.updateComplete;
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
       expect(
-        containerEl.style.getPropertyValue("--ea-progress-percentage")
+        containerEl!.style.getPropertyValue("--ea-progress-percentage")
       ).toBe("50%");
     });
 
@@ -376,9 +379,10 @@ describe("EaProgress Component", () => {
       progress.setAttribute("percentage", "75");
       await progress.updateComplete;
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
       expect(
-        containerEl.style.getPropertyValue("--ea-progress-percentage")
+        containerEl!.style.getPropertyValue("--ea-progress-percentage")
       ).toBe("75%");
     });
 
@@ -390,8 +394,9 @@ describe("EaProgress Component", () => {
 
       await progress.updateComplete;
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
-      const cssVar = containerEl.style.getPropertyValue(
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
+      const cssVar = containerEl!.style.getPropertyValue(
         "--ea-progress-percentage"
       );
       expect(cssVar).toBeTruthy();
@@ -406,9 +411,10 @@ describe("EaProgress Component", () => {
 
       await progress.updateComplete;
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
       expect(
-        containerEl.style.getPropertyValue("--ea-progress-percentage")
+        containerEl!.style.getPropertyValue("--ea-progress-percentage")
       ).toBe("302px");
     });
 
@@ -420,9 +426,10 @@ describe("EaProgress Component", () => {
 
       await progress.updateComplete;
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
       expect(
-        containerEl.style.getPropertyValue("--ea-progress-percentage")
+        containerEl!.style.getPropertyValue("--ea-progress-percentage")
       ).toBe("0px");
     });
 
@@ -434,9 +441,10 @@ describe("EaProgress Component", () => {
 
       await progress.updateComplete;
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
       expect(
-        containerEl.style.getPropertyValue("--ea-progress-percentage")
+        containerEl!.style.getPropertyValue("--ea-progress-percentage")
       ).toBe("151px");
     });
 
@@ -448,16 +456,16 @@ describe("EaProgress Component", () => {
 
       await progress.updateComplete;
 
-      const pathCircle = progress.shadowRoot.querySelector(
+      const pathCircle = progress.shadowRoot!.querySelector<SVGCircleElement>(
         "circle.ea-progress__path"
       );
-      const trackCircle = progress.shadowRoot.querySelector(
+      const trackCircle = progress.shadowRoot!.querySelector<SVGCircleElement>(
         "circle.ea-progress__track"
       );
       expect(pathCircle).toBeTruthy();
       expect(trackCircle).toBeTruthy();
-      expect(pathCircle.style.strokeDasharray).toBeTruthy();
-      expect(trackCircle.style.strokeDasharray).toBeTruthy();
+      expect(pathCircle!.style.strokeDasharray).toBeTruthy();
+      expect(trackCircle!.style.strokeDasharray).toBeTruthy();
     });
 
     it("dashboard 变体 percentage 为 0 时 CSS 变量应该有值", async () => {
@@ -468,8 +476,9 @@ describe("EaProgress Component", () => {
 
       await progress.updateComplete;
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
-      const cssVar = containerEl.style.getPropertyValue(
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
+      const cssVar = containerEl!.style.getPropertyValue(
         "--ea-progress-percentage"
       );
       expect(cssVar).toBeTruthy();
@@ -527,8 +536,11 @@ describe("EaProgress Component", () => {
       progress.setAttribute("status", "success");
       container.appendChild(progress);
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
-      expect(containerEl.classList.contains("ea-progress--success")).toBe(true);
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
+      expect(containerEl!.classList.contains("ea-progress--success")).toBe(
+        true
+      );
     });
 
     it("warning 状态应该添加 ea-progress--warning 修饰类", () => {
@@ -536,8 +548,11 @@ describe("EaProgress Component", () => {
       progress.setAttribute("status", "warning");
       container.appendChild(progress);
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
-      expect(containerEl.classList.contains("ea-progress--warning")).toBe(true);
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
+      expect(containerEl!.classList.contains("ea-progress--warning")).toBe(
+        true
+      );
     });
 
     it("exception 状态应该添加 ea-progress--exception 修饰类", () => {
@@ -545,8 +560,9 @@ describe("EaProgress Component", () => {
       progress.setAttribute("status", "exception");
       container.appendChild(progress);
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
-      expect(containerEl.classList.contains("ea-progress--exception")).toBe(
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
+      expect(containerEl!.classList.contains("ea-progress--exception")).toBe(
         true
       );
     });
@@ -559,11 +575,11 @@ describe("EaProgress Component", () => {
 
       await progress.updateComplete;
 
-      const icon = progress.shadowRoot.querySelector(
+      const icon = progress.shadowRoot!.querySelector(
         "ea-icon.ea-progress__status"
       );
       expect(icon).toBeTruthy();
-      expect(icon.getAttribute("name")).toBe("circle-check");
+      expect(icon!.getAttribute("name")).toBe("circle-check");
     });
 
     it("warning 状态应该显示 triangle-exclamation 图标", async () => {
@@ -574,11 +590,11 @@ describe("EaProgress Component", () => {
 
       await progress.updateComplete;
 
-      const icon = progress.shadowRoot.querySelector(
+      const icon = progress.shadowRoot!.querySelector(
         "ea-icon.ea-progress__status"
       );
       expect(icon).toBeTruthy();
-      expect(icon.getAttribute("name")).toBe("triangle-exclamation");
+      expect(icon!.getAttribute("name")).toBe("triangle-exclamation");
     });
 
     it("exception 状态应该显示 circle-xmark 图标", async () => {
@@ -589,11 +605,11 @@ describe("EaProgress Component", () => {
 
       await progress.updateComplete;
 
-      const icon = progress.shadowRoot.querySelector(
+      const icon = progress.shadowRoot!.querySelector(
         "ea-icon.ea-progress__status"
       );
       expect(icon).toBeTruthy();
-      expect(icon.getAttribute("name")).toBe("circle-xmark");
+      expect(icon!.getAttribute("name")).toBe("circle-xmark");
     });
 
     it("无状态时应该显示百分比文字", async () => {
@@ -603,10 +619,10 @@ describe("EaProgress Component", () => {
 
       await progress.updateComplete;
 
-      const text = progress.shadowRoot.querySelector(
+      const text = progress.shadowRoot!.querySelector(
         ".ea-progress__percentage"
       );
-      expect(text.textContent).toBe("50%");
+      expect(text!.textContent).toBe("50%");
     });
 
     it("状态图标应该有 status-icon CSS Part", async () => {
@@ -617,7 +633,7 @@ describe("EaProgress Component", () => {
 
       await progress.updateComplete;
 
-      const icon = progress.shadowRoot.querySelector('[part="status-icon"]');
+      const icon = progress.shadowRoot!.querySelector('[part="status-icon"]');
       expect(icon).toBeTruthy();
     });
 
@@ -630,15 +646,15 @@ describe("EaProgress Component", () => {
 
       await progress.updateComplete;
 
-      const icon = progress.shadowRoot.querySelector(
+      const icon = progress.shadowRoot!.querySelector(
         "ea-icon.ea-progress__status"
       );
       expect(icon).toBeFalsy();
 
-      const text = progress.shadowRoot.querySelector(
+      const text = progress.shadowRoot!.querySelector(
         ".ea-progress__percentage"
       );
-      expect(text.textContent).toBe("50%");
+      expect(text!.textContent).toBe("50%");
     });
 
     it("动态切换 status 应该更新类名", async () => {
@@ -646,16 +662,21 @@ describe("EaProgress Component", () => {
       progress.setAttribute("status", "success");
       container.appendChild(progress);
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
-      expect(containerEl.classList.contains("ea-progress--success")).toBe(true);
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
+      expect(containerEl!.classList.contains("ea-progress--success")).toBe(
+        true
+      );
 
       progress.setAttribute("status", "warning");
       await progress.updateComplete;
 
-      expect(containerEl.classList.contains("ea-progress--success")).toBe(
+      expect(containerEl!.classList.contains("ea-progress--success")).toBe(
         false
       );
-      expect(containerEl.classList.contains("ea-progress--warning")).toBe(true);
+      expect(containerEl!.classList.contains("ea-progress--warning")).toBe(
+        true
+      );
     });
 
     it("动态移除 status 应该移除修饰类", async () => {
@@ -663,13 +684,16 @@ describe("EaProgress Component", () => {
       progress.setAttribute("status", "success");
       container.appendChild(progress);
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
-      expect(containerEl.classList.contains("ea-progress--success")).toBe(true);
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
+      expect(containerEl!.classList.contains("ea-progress--success")).toBe(
+        true
+      );
 
       progress.removeAttribute("status");
       await progress.updateComplete;
 
-      expect(containerEl.classList.contains("ea-progress--success")).toBe(
+      expect(containerEl!.classList.contains("ea-progress--success")).toBe(
         false
       );
     });
@@ -706,9 +730,10 @@ describe("EaProgress Component", () => {
 
       await progress.updateComplete;
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
       expect(
-        containerEl.style.getPropertyValue("--ea-progress-stroke-width")
+        containerEl!.style.getPropertyValue("--ea-progress-stroke-width")
       ).toBe("16px");
     });
 
@@ -719,9 +744,10 @@ describe("EaProgress Component", () => {
       progress.setAttribute("stroke-width", "24px");
       await progress.updateComplete;
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
       expect(
-        containerEl.style.getPropertyValue("--ea-progress-stroke-width")
+        containerEl!.style.getPropertyValue("--ea-progress-stroke-width")
       ).toBe("24px");
     });
 
@@ -760,10 +786,10 @@ describe("EaProgress Component", () => {
 
       await progress.updateComplete;
 
-      const pathCircle = progress.shadowRoot.querySelector(
+      const pathCircle = progress.shadowRoot!.querySelector<SVGCircleElement>(
         "circle.ea-progress__path"
       );
-      expect(pathCircle.style.strokeDasharray).toBeTruthy();
+      expect(pathCircle!.style.strokeDasharray).toBeTruthy();
     });
   });
 
@@ -788,8 +814,9 @@ describe("EaProgress Component", () => {
       progress.setAttribute("text-inside", "");
       container.appendChild(progress);
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
-      expect(containerEl.classList.contains("ea-progress--text-inside")).toBe(
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
+      expect(containerEl!.classList.contains("ea-progress--text-inside")).toBe(
         true
       );
     });
@@ -798,8 +825,9 @@ describe("EaProgress Component", () => {
       const progress = document.createElement("ea-progress");
       container.appendChild(progress);
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
-      expect(containerEl.classList.contains("ea-progress--text-inside")).toBe(
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
+      expect(containerEl!.classList.contains("ea-progress--text-inside")).toBe(
         false
       );
     });
@@ -811,49 +839,51 @@ describe("EaProgress Component", () => {
 
       await progress.updateComplete;
 
-      const path = progress.shadowRoot.querySelector(".ea-progress__path");
-      const text = progress.shadowRoot.querySelector(
+      const path =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress__path");
+      const text = progress.shadowRoot!.querySelector(
         ".ea-progress__percentage"
       );
-      expect(path.contains(text)).toBe(true);
+      expect(path!.contains(text)).toBe(true);
     });
 
     it("textInside 为 false 时文字应该在 percentage-wrapper 内", () => {
       const progress = document.createElement("ea-progress");
       container.appendChild(progress);
 
-      const wrapper = progress.shadowRoot.querySelector(
+      const wrapper = progress.shadowRoot!.querySelector(
         ".ea-progress__percentage-wrapper"
       );
-      const text = progress.shadowRoot.querySelector(
+      const text = progress.shadowRoot!.querySelector(
         ".ea-progress__percentage"
       );
-      expect(wrapper.contains(text)).toBe(true);
+      expect(wrapper!.contains(text)).toBe(true);
     });
 
     it("动态切换 textInside 应该移动文字位置", async () => {
       const progress = document.createElement("ea-progress");
       container.appendChild(progress);
 
-      const wrapper = progress.shadowRoot.querySelector(
+      const wrapper = progress.shadowRoot!.querySelector(
         ".ea-progress__percentage-wrapper"
       );
-      const path = progress.shadowRoot.querySelector(".ea-progress__path");
-      const text = progress.shadowRoot.querySelector(
+      const path =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress__path");
+      const text = progress.shadowRoot!.querySelector(
         ".ea-progress__percentage"
       );
 
-      expect(wrapper.contains(text)).toBe(true);
+      expect(wrapper!.contains(text)).toBe(true);
 
       progress.setAttribute("text-inside", "");
       await progress.updateComplete;
 
-      expect(path.contains(text)).toBe(true);
+      expect(path!.contains(text)).toBe(true);
 
       progress.removeAttribute("text-inside");
       await progress.updateComplete;
 
-      expect(wrapper.contains(text)).toBe(true);
+      expect(wrapper!.contains(text)).toBe(true);
     });
   });
 
@@ -878,8 +908,9 @@ describe("EaProgress Component", () => {
       progress.setAttribute("indeterminate", "");
       container.appendChild(progress);
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
-      expect(containerEl.classList.contains("is-indeterminate")).toBe(true);
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
+      expect(containerEl!.classList.contains("is-indeterminate")).toBe(true);
     });
 
     it("circle 变体 indeterminate 不应该添加 is-indeterminate 状态类", () => {
@@ -888,8 +919,9 @@ describe("EaProgress Component", () => {
       progress.setAttribute("indeterminate", "");
       container.appendChild(progress);
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
-      expect(containerEl.classList.contains("is-indeterminate")).toBe(false);
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
+      expect(containerEl!.classList.contains("is-indeterminate")).toBe(false);
     });
 
     it("dashboard 变体 indeterminate 不应该添加 is-indeterminate 状态类", () => {
@@ -898,8 +930,9 @@ describe("EaProgress Component", () => {
       progress.setAttribute("indeterminate", "");
       container.appendChild(progress);
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
-      expect(containerEl.classList.contains("is-indeterminate")).toBe(false);
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
+      expect(containerEl!.classList.contains("is-indeterminate")).toBe(false);
     });
 
     it("动态移除 indeterminate 应该移除 is-indeterminate 类", async () => {
@@ -907,13 +940,14 @@ describe("EaProgress Component", () => {
       progress.setAttribute("indeterminate", "");
       container.appendChild(progress);
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
-      expect(containerEl.classList.contains("is-indeterminate")).toBe(true);
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
+      expect(containerEl!.classList.contains("is-indeterminate")).toBe(true);
 
       progress.removeAttribute("indeterminate");
       await progress.updateComplete;
 
-      expect(containerEl.classList.contains("is-indeterminate")).toBe(false);
+      expect(containerEl!.classList.contains("is-indeterminate")).toBe(false);
     });
   });
 
@@ -940,9 +974,10 @@ describe("EaProgress Component", () => {
 
       await progress.updateComplete;
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
       expect(
-        containerEl.style.getPropertyValue("--ea-progress-animation-duration")
+        containerEl!.style.getPropertyValue("--ea-progress-animation-duration")
       ).toBe("5s");
     });
 
@@ -953,9 +988,10 @@ describe("EaProgress Component", () => {
       progress.setAttribute("duration", "10");
       await progress.updateComplete;
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
       expect(
-        containerEl.style.getPropertyValue("--ea-progress-animation-duration")
+        containerEl!.style.getPropertyValue("--ea-progress-animation-duration")
       ).toBe("10s");
     });
 
@@ -966,9 +1002,10 @@ describe("EaProgress Component", () => {
 
       await progress.updateComplete;
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
       expect(
-        containerEl.style.getPropertyValue("--ea-progress-animation-duration")
+        containerEl!.style.getPropertyValue("--ea-progress-animation-duration")
       ).toBe("2.5s");
     });
   });
@@ -994,16 +1031,20 @@ describe("EaProgress Component", () => {
       progress.setAttribute("striped", "");
       container.appendChild(progress);
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
-      expect(containerEl.classList.contains("ea-progress--striped")).toBe(true);
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
+      expect(containerEl!.classList.contains("ea-progress--striped")).toBe(
+        true
+      );
     });
 
     it("striped 为 false 时不应该有 ea-progress--striped 类", () => {
       const progress = document.createElement("ea-progress");
       container.appendChild(progress);
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
-      expect(containerEl.classList.contains("ea-progress--striped")).toBe(
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
+      expect(containerEl!.classList.contains("ea-progress--striped")).toBe(
         false
       );
     });
@@ -1012,20 +1053,23 @@ describe("EaProgress Component", () => {
       const progress = document.createElement("ea-progress");
       container.appendChild(progress);
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
-      expect(containerEl.classList.contains("ea-progress--striped")).toBe(
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
+      expect(containerEl!.classList.contains("ea-progress--striped")).toBe(
         false
       );
 
       progress.setAttribute("striped", "");
       await progress.updateComplete;
 
-      expect(containerEl.classList.contains("ea-progress--striped")).toBe(true);
+      expect(containerEl!.classList.contains("ea-progress--striped")).toBe(
+        true
+      );
 
       progress.removeAttribute("striped");
       await progress.updateComplete;
 
-      expect(containerEl.classList.contains("ea-progress--striped")).toBe(
+      expect(containerEl!.classList.contains("ea-progress--striped")).toBe(
         false
       );
     });
@@ -1052,16 +1096,18 @@ describe("EaProgress Component", () => {
       progress.setAttribute("striped-flow", "");
       container.appendChild(progress);
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
-      expect(containerEl.classList.contains("is-striped-flow")).toBe(true);
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
+      expect(containerEl!.classList.contains("is-striped-flow")).toBe(true);
     });
 
     it("stripedFlow 为 false 时不应该有 is-striped-flow 类", () => {
       const progress = document.createElement("ea-progress");
       container.appendChild(progress);
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
-      expect(containerEl.classList.contains("is-striped-flow")).toBe(false);
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
+      expect(containerEl!.classList.contains("is-striped-flow")).toBe(false);
     });
   });
 
@@ -1089,8 +1135,9 @@ describe("EaProgress Component", () => {
 
       await progress.updateComplete;
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
-      expect(containerEl.style.getPropertyValue("--ea-progress-size")).toBe(
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
+      expect(containerEl!.style.getPropertyValue("--ea-progress-size")).toBe(
         "200px"
       );
     });
@@ -1103,8 +1150,9 @@ describe("EaProgress Component", () => {
 
       await progress.updateComplete;
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
-      expect(containerEl.style.getPropertyValue("--ea-progress-size")).toBe(
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
+      expect(containerEl!.style.getPropertyValue("--ea-progress-size")).toBe(
         "180px"
       );
     });
@@ -1116,8 +1164,11 @@ describe("EaProgress Component", () => {
 
       await progress.updateComplete;
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
-      expect(containerEl.style.getPropertyValue("--ea-progress-size")).toBe("");
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
+      expect(containerEl!.style.getPropertyValue("--ea-progress-size")).toBe(
+        ""
+      );
     });
 
     it("动态更新 size 应该更新 CSS 变量", async () => {
@@ -1128,8 +1179,9 @@ describe("EaProgress Component", () => {
       progress.setAttribute("size", "250px");
       await progress.updateComplete;
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
-      expect(containerEl.style.getPropertyValue("--ea-progress-size")).toBe(
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
+      expect(containerEl!.style.getPropertyValue("--ea-progress-size")).toBe(
         "250px"
       );
     });
@@ -1147,8 +1199,9 @@ describe("EaProgress Component", () => {
       const progress = document.createElement("ea-progress");
       container.appendChild(progress);
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
-      expect(containerEl.classList.contains("is-show-text")).toBe(true);
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
+      expect(containerEl!.classList.contains("is-show-text")).toBe(true);
     });
 
     it("应该支持 showText 设置为 false", () => {
@@ -1164,26 +1217,28 @@ describe("EaProgress Component", () => {
       progress.setAttribute("show-text", "false");
       container.appendChild(progress);
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
-      expect(containerEl.classList.contains("is-show-text")).toBe(false);
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
+      expect(containerEl!.classList.contains("is-show-text")).toBe(false);
     });
 
     it("动态切换 showText 应该更新类名", async () => {
       const progress = document.createElement("ea-progress");
       container.appendChild(progress);
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
-      expect(containerEl.classList.contains("is-show-text")).toBe(true);
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
+      expect(containerEl!.classList.contains("is-show-text")).toBe(true);
 
       progress.setAttribute("show-text", "false");
       await progress.updateComplete;
 
-      expect(containerEl.classList.contains("is-show-text")).toBe(false);
+      expect(containerEl!.classList.contains("is-show-text")).toBe(false);
 
       progress.showText = true;
       await progress.updateComplete;
 
-      expect(containerEl.classList.contains("is-show-text")).toBe(true);
+      expect(containerEl!.classList.contains("is-show-text")).toBe(true);
     });
   });
 
@@ -1210,8 +1265,9 @@ describe("EaProgress Component", () => {
 
       progress.color = "#6f7ad3";
 
-      const pathEl = progress.shadowRoot.querySelector(".ea-progress__path");
-      expect(pathEl.style.getPropertyValue("--ea-progress-path-color")).toBe(
+      const pathEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress__path");
+      expect(pathEl!.style.getPropertyValue("--ea-progress-path-color")).toBe(
         "#6f7ad3"
       );
     });
@@ -1241,8 +1297,9 @@ describe("EaProgress Component", () => {
 
       await progress.updateComplete;
 
-      const pathEl = progress.shadowRoot.querySelector(".ea-progress__path");
-      expect(pathEl.style.getPropertyValue("--ea-progress-path-color")).toBe(
+      const pathEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress__path");
+      expect(pathEl!.style.getPropertyValue("--ea-progress-path-color")).toBe(
         "#e6a23c"
       );
     });
@@ -1258,8 +1315,9 @@ describe("EaProgress Component", () => {
 
       await progress.updateComplete;
 
-      const pathEl = progress.shadowRoot.querySelector(".ea-progress__path");
-      expect(pathEl.style.getPropertyValue("--ea-progress-path-color")).toBe(
+      const pathEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress__path");
+      expect(pathEl!.style.getPropertyValue("--ea-progress-path-color")).toBe(
         "#f56c6c"
       );
     });
@@ -1275,8 +1333,9 @@ describe("EaProgress Component", () => {
 
       await progress.updateComplete;
 
-      const pathEl = progress.shadowRoot.querySelector(".ea-progress__path");
-      expect(pathEl.style.getPropertyValue("--ea-progress-path-color")).toBe(
+      const pathEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress__path");
+      expect(pathEl!.style.getPropertyValue("--ea-progress-path-color")).toBe(
         "#f56c6c"
       );
     });
@@ -1292,14 +1351,15 @@ describe("EaProgress Component", () => {
 
       await progress.updateComplete;
 
-      const pathEl = progress.shadowRoot.querySelector(".ea-progress__path");
-      expect(pathEl.style.getPropertyValue("--ea-progress-path-color")).toBe(
+      const pathEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress__path");
+      expect(pathEl!.style.getPropertyValue("--ea-progress-path-color")).toBe(
         "#f56c6c"
       );
     });
 
     it("应该支持函数 color", () => {
-      const colorFn = percentage => {
+      const colorFn = (percentage: number) => {
         if (percentage < 30) return "#909399";
         if (percentage < 70) return "#e6a23c";
         return "#67c23a";
@@ -1326,8 +1386,9 @@ describe("EaProgress Component", () => {
       await progress.updateComplete;
 
       expect(colorFn).toHaveBeenCalledWith(50);
-      const pathEl = progress.shadowRoot.querySelector(".ea-progress__path");
-      expect(pathEl.style.getPropertyValue("--ea-progress-path-color")).toBe(
+      const pathEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress__path");
+      expect(pathEl!.style.getPropertyValue("--ea-progress-path-color")).toBe(
         "#e6a23c"
       );
     });
@@ -1338,8 +1399,9 @@ describe("EaProgress Component", () => {
 
       await progress.updateComplete;
 
-      const pathEl = progress.shadowRoot.querySelector(".ea-progress__path");
-      expect(pathEl.style.getPropertyValue("--ea-progress-path-color")).toBe(
+      const pathEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress__path");
+      expect(pathEl!.style.getPropertyValue("--ea-progress-path-color")).toBe(
         ""
       );
     });
@@ -1351,11 +1413,12 @@ describe("EaProgress Component", () => {
 
       await progress.updateComplete;
 
-      progress.color = undefined;
+      progress.color = undefined as unknown as string;
       await progress.updateComplete;
 
-      const pathEl = progress.shadowRoot.querySelector(".ea-progress__path");
-      expect(pathEl.style.getPropertyValue("--ea-progress-path-color")).toBe(
+      const pathEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress__path");
+      expect(pathEl!.style.getPropertyValue("--ea-progress-path-color")).toBe(
         ""
       );
     });
@@ -1390,8 +1453,9 @@ describe("EaProgress Component", () => {
 
       progress.color = "#6f7ad3";
 
-      const pathEl = progress.shadowRoot.querySelector(".ea-progress__path");
-      expect(pathEl.style.getPropertyValue("--ea-progress-path-color")).toBe(
+      const pathEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress__path");
+      expect(pathEl!.style.getPropertyValue("--ea-progress-path-color")).toBe(
         "#6f7ad3"
       );
     });
@@ -1404,8 +1468,9 @@ describe("EaProgress Component", () => {
 
       progress.color = "#6f7ad3";
 
-      const pathEl = progress.shadowRoot.querySelector(".ea-progress__path");
-      expect(pathEl.style.getPropertyValue("--ea-progress-path-color")).toBe(
+      const pathEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress__path");
+      expect(pathEl!.style.getPropertyValue("--ea-progress-path-color")).toBe(
         "#6f7ad3"
       );
     });
@@ -1418,8 +1483,9 @@ describe("EaProgress Component", () => {
 
       progress.color = "#6f7ad3";
 
-      const pathEl = progress.shadowRoot.querySelector(".ea-progress__path");
-      expect(pathEl.style.getPropertyValue("--ea-progress-path-color")).toBe(
+      const pathEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress__path");
+      expect(pathEl!.style.getPropertyValue("--ea-progress-path-color")).toBe(
         "#6f7ad3"
       );
     });
@@ -1447,14 +1513,14 @@ describe("EaProgress Component", () => {
 
       let eventDetail = null;
       progress.addEventListener("change", e => {
-        eventDetail = e.detail;
+        eventDetail = (e as CustomEvent).detail;
       });
 
       progress.setAttribute("percentage", "75");
       await progress.updateComplete;
 
       expect(eventDetail).toBeTruthy();
-      expect(eventDetail.percentage).toBe(75);
+      expect(eventDetail!.percentage).toBe(75);
     });
 
     it("多次更新 percentage 应该触发多次 change 事件", async () => {
@@ -1685,7 +1751,7 @@ describe("EaProgress Component", () => {
       await progress.updateComplete;
 
       expect(progress.variant).toBe("circle");
-      expect(progress.shadowRoot.querySelector("svg")).toBeTruthy();
+      expect(progress.shadowRoot!.querySelector("svg")).toBeTruthy();
     });
 
     it("$mount 时应该读取 color attribute 并设置 color property", async () => {
@@ -1714,9 +1780,12 @@ describe("EaProgress Component", () => {
       progress.setAttribute("percentage", "50");
       container.appendChild(progress);
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
-      expect(containerEl.classList.contains("ea-progress--success")).toBe(true);
-      expect(containerEl.classList.contains("ea-progress--text-inside")).toBe(
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
+      expect(containerEl!.classList.contains("ea-progress--success")).toBe(
+        true
+      );
+      expect(containerEl!.classList.contains("ea-progress--text-inside")).toBe(
         true
       );
     });
@@ -1730,7 +1799,7 @@ describe("EaProgress Component", () => {
 
       await progress.updateComplete;
 
-      const icon = progress.shadowRoot.querySelector(
+      const icon = progress.shadowRoot!.querySelector(
         "ea-icon.ea-progress__status"
       );
       expect(icon).toBeFalsy();
@@ -1742,9 +1811,12 @@ describe("EaProgress Component", () => {
       progress.setAttribute("striped-flow", "");
       container.appendChild(progress);
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
-      expect(containerEl.classList.contains("ea-progress--striped")).toBe(true);
-      expect(containerEl.classList.contains("is-striped-flow")).toBe(true);
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
+      expect(containerEl!.classList.contains("ea-progress--striped")).toBe(
+        true
+      );
+      expect(containerEl!.classList.contains("is-striped-flow")).toBe(true);
     });
 
     it("应该支持 indeterminate + stripedFlow 组合", () => {
@@ -1753,9 +1825,10 @@ describe("EaProgress Component", () => {
       progress.setAttribute("striped-flow", "");
       container.appendChild(progress);
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
-      expect(containerEl.classList.contains("is-indeterminate")).toBe(true);
-      expect(containerEl.classList.contains("is-striped-flow")).toBe(true);
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
+      expect(containerEl!.classList.contains("is-indeterminate")).toBe(true);
+      expect(containerEl!.classList.contains("is-striped-flow")).toBe(true);
     });
 
     it("应该支持 circle 变体 + status 组合", () => {
@@ -1765,9 +1838,12 @@ describe("EaProgress Component", () => {
       progress.setAttribute("percentage", "50");
       container.appendChild(progress);
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
-      expect(containerEl.classList.contains("ea-progress--success")).toBe(true);
-      expect(containerEl.classList.contains("is-circle")).toBe(true);
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
+      expect(containerEl!.classList.contains("ea-progress--success")).toBe(
+        true
+      );
+      expect(containerEl!.classList.contains("is-circle")).toBe(true);
     });
 
     it("应该支持 dashboard 变体 + status 组合", () => {
@@ -1777,11 +1853,12 @@ describe("EaProgress Component", () => {
       progress.setAttribute("percentage", "50");
       container.appendChild(progress);
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
-      expect(containerEl.classList.contains("ea-progress--exception")).toBe(
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
+      expect(containerEl!.classList.contains("ea-progress--exception")).toBe(
         true
       );
-      expect(containerEl.classList.contains("is-dashboard")).toBe(true);
+      expect(containerEl!.classList.contains("is-dashboard")).toBe(true);
     });
 
     it("应该支持字符串 color + status 组合（color 优先）", () => {
@@ -1792,8 +1869,9 @@ describe("EaProgress Component", () => {
 
       progress.color = "#6f7ad3";
 
-      const pathEl = progress.shadowRoot.querySelector(".ea-progress__path");
-      expect(pathEl.style.getPropertyValue("--ea-progress-path-color")).toBe(
+      const pathEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress__path");
+      expect(pathEl!.style.getPropertyValue("--ea-progress-path-color")).toBe(
         "#6f7ad3"
       );
     });
@@ -1831,14 +1909,14 @@ describe("EaProgress Component", () => {
       progress.setAttribute("variant", "circle");
       container.appendChild(progress);
 
-      expect(progress.shadowRoot.querySelector("svg")).toBeTruthy();
+      expect(progress.shadowRoot!.querySelector("svg")).toBeTruthy();
 
       progress.setAttribute("variant", "line");
       await progress.updateComplete;
 
       expect(progress.variant).toBe("line");
       expect(
-        progress.shadowRoot.querySelector("section.ea-progress__track")
+        progress.shadowRoot!.querySelector("section.ea-progress__track")
       ).toBeTruthy();
     });
 
@@ -1847,25 +1925,30 @@ describe("EaProgress Component", () => {
       progress.setAttribute("percentage", "50");
       container.appendChild(progress);
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
 
       progress.setAttribute("status", "success");
       await progress.updateComplete;
-      expect(containerEl.classList.contains("ea-progress--success")).toBe(true);
+      expect(containerEl!.classList.contains("ea-progress--success")).toBe(
+        true
+      );
 
       progress.setAttribute("status", "warning");
       await progress.updateComplete;
-      expect(containerEl.classList.contains("ea-progress--success")).toBe(
+      expect(containerEl!.classList.contains("ea-progress--success")).toBe(
         false
       );
-      expect(containerEl.classList.contains("ea-progress--warning")).toBe(true);
+      expect(containerEl!.classList.contains("ea-progress--warning")).toBe(
+        true
+      );
 
       progress.setAttribute("status", "exception");
       await progress.updateComplete;
-      expect(containerEl.classList.contains("ea-progress--warning")).toBe(
+      expect(containerEl!.classList.contains("ea-progress--warning")).toBe(
         false
       );
-      expect(containerEl.classList.contains("ea-progress--exception")).toBe(
+      expect(containerEl!.classList.contains("ea-progress--exception")).toBe(
         true
       );
     });
@@ -1899,10 +1982,13 @@ describe("EaProgress Component", () => {
       progress.setAttribute("striped-flow", "");
       container.appendChild(progress);
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
-      expect(containerEl.classList.contains("is-indeterminate")).toBe(true);
-      expect(containerEl.classList.contains("ea-progress--striped")).toBe(true);
-      expect(containerEl.classList.contains("is-striped-flow")).toBe(true);
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
+      expect(containerEl!.classList.contains("is-indeterminate")).toBe(true);
+      expect(containerEl!.classList.contains("ea-progress--striped")).toBe(
+        true
+      );
+      expect(containerEl!.classList.contains("is-striped-flow")).toBe(true);
     });
 
     it("应该支持 circle 变体 + status + color 组合", () => {
@@ -1914,12 +2000,16 @@ describe("EaProgress Component", () => {
 
       progress.color = "#6f7ad3";
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
-      expect(containerEl.classList.contains("ea-progress--success")).toBe(true);
-      expect(containerEl.classList.contains("is-circle")).toBe(true);
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
+      expect(containerEl!.classList.contains("ea-progress--success")).toBe(
+        true
+      );
+      expect(containerEl!.classList.contains("is-circle")).toBe(true);
 
-      const pathEl = progress.shadowRoot.querySelector(".ea-progress__path");
-      expect(pathEl.style.getPropertyValue("--ea-progress-path-color")).toBe(
+      const pathEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress__path");
+      expect(pathEl!.style.getPropertyValue("--ea-progress-path-color")).toBe(
         "#6f7ad3"
       );
     });
@@ -1933,14 +2023,14 @@ describe("EaProgress Component", () => {
 
       await progress.updateComplete;
 
-      const pathCircle = progress.shadowRoot.querySelector(
+      const pathCircle = progress.shadowRoot!.querySelector<SVGCircleElement>(
         "circle.ea-progress__path"
       );
-      const trackCircle = progress.shadowRoot.querySelector(
+      const trackCircle = progress.shadowRoot!.querySelector<SVGCircleElement>(
         "circle.ea-progress__track"
       );
-      expect(pathCircle.style.strokeDasharray).toBeTruthy();
-      expect(trackCircle.style.strokeDasharray).toBeTruthy();
+      expect(pathCircle!.style.strokeDasharray).toBeTruthy();
+      expect(trackCircle!.style.strokeDasharray).toBeTruthy();
     });
 
     it("从 dashboard 切换到 line 后 SVG 应该被替换为 section 结构", async () => {
@@ -1948,16 +2038,16 @@ describe("EaProgress Component", () => {
       progress.setAttribute("variant", "dashboard");
       container.appendChild(progress);
 
-      expect(progress.shadowRoot.querySelector("svg")).toBeTruthy();
-      expect(progress.shadowRoot.querySelector("mask#myMask")).toBeTruthy();
+      expect(progress.shadowRoot!.querySelector("svg")).toBeTruthy();
+      expect(progress.shadowRoot!.querySelector("mask#myMask")).toBeTruthy();
 
       progress.setAttribute("variant", "line");
       await progress.updateComplete;
 
-      expect(progress.shadowRoot.querySelector("svg")).toBeFalsy();
-      expect(progress.shadowRoot.querySelector("mask#myMask")).toBeFalsy();
+      expect(progress.shadowRoot!.querySelector("svg")).toBeFalsy();
+      expect(progress.shadowRoot!.querySelector("mask#myMask")).toBeFalsy();
       expect(
-        progress.shadowRoot.querySelector("section.ea-progress__track")
+        progress.shadowRoot!.querySelector("section.ea-progress__track")
       ).toBeTruthy();
     });
 
@@ -1968,24 +2058,24 @@ describe("EaProgress Component", () => {
 
       expect(progress.variant).toBe("line");
       expect(
-        progress.shadowRoot.querySelector("section.ea-progress__track")
+        progress.shadowRoot!.querySelector("section.ea-progress__track")
       ).toBeTruthy();
 
       progress.setAttribute("variant", "circle");
       await progress.updateComplete;
       expect(progress.variant).toBe("circle");
-      expect(progress.shadowRoot.querySelector("svg")).toBeTruthy();
+      expect(progress.shadowRoot!.querySelector("svg")).toBeTruthy();
 
       progress.setAttribute("variant", "dashboard");
       await progress.updateComplete;
       expect(progress.variant).toBe("dashboard");
-      expect(progress.shadowRoot.querySelector("mask#myMask")).toBeTruthy();
+      expect(progress.shadowRoot!.querySelector("mask#myMask")).toBeTruthy();
 
       progress.setAttribute("variant", "line");
       await progress.updateComplete;
       expect(progress.variant).toBe("line");
       expect(
-        progress.shadowRoot.querySelector("section.ea-progress__track")
+        progress.shadowRoot!.querySelector("section.ea-progress__track")
       ).toBeTruthy();
     });
 
@@ -2002,22 +2092,23 @@ describe("EaProgress Component", () => {
 
       await progress.updateComplete;
 
-      const pathEl = progress.shadowRoot.querySelector(".ea-progress__path");
-      expect(pathEl.style.getPropertyValue("--ea-progress-path-color")).toBe(
+      const pathEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress__path");
+      expect(pathEl!.style.getPropertyValue("--ea-progress-path-color")).toBe(
         "#f56c6c"
       );
 
       progress.setAttribute("percentage", "50");
       await progress.updateComplete;
 
-      expect(pathEl.style.getPropertyValue("--ea-progress-path-color")).toBe(
+      expect(pathEl!.style.getPropertyValue("--ea-progress-path-color")).toBe(
         "#5cb87a"
       );
 
       progress.setAttribute("percentage", "90");
       await progress.updateComplete;
 
-      expect(pathEl.style.getPropertyValue("--ea-progress-path-color")).toBe(
+      expect(pathEl!.style.getPropertyValue("--ea-progress-path-color")).toBe(
         "#f56c6c"
       );
     });
@@ -2028,8 +2119,9 @@ describe("EaProgress Component", () => {
       progress.setAttribute("show-text", "false");
       container.appendChild(progress);
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
-      expect(containerEl.classList.contains("is-show-text")).toBe(false);
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
+      expect(containerEl!.classList.contains("is-show-text")).toBe(false);
     });
 
     it("应该支持 circle 变体 + size + strokeWidth 组合", async () => {
@@ -2042,12 +2134,13 @@ describe("EaProgress Component", () => {
 
       await progress.updateComplete;
 
-      const containerEl = progress.shadowRoot.querySelector(".ea-progress");
-      expect(containerEl.style.getPropertyValue("--ea-progress-size")).toBe(
+      const containerEl =
+        progress.shadowRoot!.querySelector<HTMLElement>(".ea-progress");
+      expect(containerEl!.style.getPropertyValue("--ea-progress-size")).toBe(
         "200px"
       );
       expect(
-        containerEl.style.getPropertyValue("--ea-progress-stroke-width")
+        containerEl!.style.getPropertyValue("--ea-progress-stroke-width")
       ).toBe("8px");
     });
 
@@ -2060,11 +2153,11 @@ describe("EaProgress Component", () => {
 
       await progress.updateComplete;
 
-      const icon = progress.shadowRoot.querySelector(
+      const icon = progress.shadowRoot!.querySelector(
         "ea-icon.ea-progress__status"
       );
       expect(icon).toBeTruthy();
-      expect(icon.getAttribute("name")).toBe("triangle-exclamation");
+      expect(icon!.getAttribute("name")).toBe("triangle-exclamation");
     });
 
     it("应该支持 exception 状态在 dashboard 变体中显示图标", async () => {
@@ -2076,11 +2169,11 @@ describe("EaProgress Component", () => {
 
       await progress.updateComplete;
 
-      const icon = progress.shadowRoot.querySelector(
+      const icon = progress.shadowRoot!.querySelector(
         "ea-icon.ea-progress__status"
       );
       expect(icon).toBeTruthy();
-      expect(icon.getAttribute("name")).toBe("circle-xmark");
+      expect(icon!.getAttribute("name")).toBe("circle-xmark");
     });
   });
 

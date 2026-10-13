@@ -4,7 +4,7 @@ import "./index.ts";
 import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y";
 
 describe("EaStatistic Component", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -27,7 +27,7 @@ describe("EaStatistic Component", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
 
-      const root = statistic.shadowRoot.querySelector(".ea-statistic");
+      const root = statistic.shadowRoot!.querySelector(".ea-statistic");
       expect(root).toBeTruthy();
     });
 
@@ -36,38 +36,38 @@ describe("EaStatistic Component", () => {
       container.appendChild(statistic);
 
       const containerEl =
-        statistic.shadowRoot.querySelector('[part="container"]');
+        statistic.shadowRoot!.querySelector('[part="container"]');
       expect(containerEl).toBeTruthy();
-      expect(containerEl.classList.contains("ea-statistic")).toBe(true);
+      expect(containerEl!.classList.contains("ea-statistic")).toBe(true);
     });
 
     it("应该渲染 header 元素", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
 
-      const header = statistic.shadowRoot.querySelector(
+      const header = statistic.shadowRoot!.querySelector(
         ".ea-statistic__header"
       );
       expect(header).toBeTruthy();
-      expect(header.tagName.toLowerCase()).toBe("header");
+      expect(header!.tagName.toLowerCase()).toBe("header");
     });
 
     it("应该渲染 content 元素", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
 
-      const content = statistic.shadowRoot.querySelector(
+      const content = statistic.shadowRoot!.querySelector(
         ".ea-statistic__content"
       );
       expect(content).toBeTruthy();
-      expect(content.tagName.toLowerCase()).toBe("main");
+      expect(content!.tagName.toLowerCase()).toBe("main");
     });
 
     it("应该渲染 number 元素", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
 
-      const number = statistic.shadowRoot.querySelector(
+      const number = statistic.shadowRoot!.querySelector(
         ".ea-statistic__number"
       );
       expect(number).toBeTruthy();
@@ -77,7 +77,7 @@ describe("EaStatistic Component", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
 
-      const prefix = statistic.shadowRoot.querySelector(
+      const prefix = statistic.shadowRoot!.querySelector(
         ".ea-statistic__prefix"
       );
       expect(prefix).toBeTruthy();
@@ -87,7 +87,7 @@ describe("EaStatistic Component", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
 
-      const suffix = statistic.shadowRoot.querySelector(
+      const suffix = statistic.shadowRoot!.querySelector(
         ".ea-statistic__suffix"
       );
       expect(suffix).toBeTruthy();
@@ -100,7 +100,7 @@ describe("EaStatistic Component", () => {
       container.appendChild(statistic);
 
       expect(
-        statistic.shadowRoot.querySelector('[part="container"]')
+        statistic.shadowRoot!.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
@@ -108,7 +108,7 @@ describe("EaStatistic Component", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
 
-      expect(statistic.shadowRoot.querySelector('[part="title"]')).toBeTruthy();
+      expect(statistic.shadowRoot!.querySelector('[part="title"]')).toBeTruthy();
     });
 
     it("应该支持 content part", () => {
@@ -116,7 +116,7 @@ describe("EaStatistic Component", () => {
       container.appendChild(statistic);
 
       expect(
-        statistic.shadowRoot.querySelector('[part="content"]')
+        statistic.shadowRoot!.querySelector('[part="content"]')
       ).toBeTruthy();
     });
 
@@ -125,7 +125,7 @@ describe("EaStatistic Component", () => {
       container.appendChild(statistic);
 
       expect(
-        statistic.shadowRoot.querySelector('[part="prefix"]')
+        statistic.shadowRoot!.querySelector('[part="prefix"]')
       ).toBeTruthy();
     });
 
@@ -134,7 +134,7 @@ describe("EaStatistic Component", () => {
       container.appendChild(statistic);
 
       expect(
-        statistic.shadowRoot.querySelector('[part="number"]')
+        statistic.shadowRoot!.querySelector('[part="number"]')
       ).toBeTruthy();
     });
 
@@ -143,7 +143,7 @@ describe("EaStatistic Component", () => {
       container.appendChild(statistic);
 
       expect(
-        statistic.shadowRoot.querySelector('[part="suffix"]')
+        statistic.shadowRoot!.querySelector('[part="suffix"]')
       ).toBeTruthy();
     });
   });
@@ -171,10 +171,10 @@ describe("EaStatistic Component", () => {
 
       await statistic.updateComplete;
 
-      const header = statistic.shadowRoot.querySelector(
+      const header = statistic.shadowRoot!.querySelector(
         ".ea-statistic__header"
       );
-      expect(header.textContent).toBe("Daily Active Users");
+      expect(header!.textContent).toBe("Daily Active Users");
     });
 
     it("动态修改 heading 应该更新 header 文本", async () => {
@@ -187,10 +187,10 @@ describe("EaStatistic Component", () => {
       statistic.setAttribute("heading", "New Title");
       await statistic.updateComplete;
 
-      const header = statistic.shadowRoot.querySelector(
+      const header = statistic.shadowRoot!.querySelector(
         ".ea-statistic__header"
       );
-      expect(header.textContent).toBe("New Title");
+      expect(header!.textContent).toBe("New Title");
       expect(statistic.heading).toBe("New Title");
     });
 
@@ -200,10 +200,10 @@ describe("EaStatistic Component", () => {
 
       await statistic.updateComplete;
 
-      const header = statistic.shadowRoot.querySelector(
+      const header = statistic.shadowRoot!.querySelector(
         ".ea-statistic__header"
       );
-      expect(header.textContent.trim()).toBe("");
+      expect(header!.textContent.trim()).toBe("");
     });
   });
 
@@ -238,10 +238,10 @@ describe("EaStatistic Component", () => {
 
       await statistic.updateComplete;
 
-      const numberEl = statistic.shadowRoot.querySelector(
+      const numberEl = statistic.shadowRoot!.querySelector(
         ".ea-statistic__number"
       );
-      expect(numberEl.textContent).toBe("1,000,000");
+      expect(numberEl!.textContent).toBe("1,000,000");
     });
 
     it("value 为 0 时 number 元素应该显示 0", async () => {
@@ -251,10 +251,10 @@ describe("EaStatistic Component", () => {
 
       await statistic.updateComplete;
 
-      const numberEl = statistic.shadowRoot.querySelector(
+      const numberEl = statistic.shadowRoot!.querySelector(
         ".ea-statistic__number"
       );
-      expect(numberEl.textContent).toBe("0");
+      expect(numberEl!.textContent).toBe("0");
     });
 
     it("value 为小数字时应该正确格式化", async () => {
@@ -264,10 +264,10 @@ describe("EaStatistic Component", () => {
 
       await statistic.updateComplete;
 
-      const numberEl = statistic.shadowRoot.querySelector(
+      const numberEl = statistic.shadowRoot!.querySelector(
         ".ea-statistic__number"
       );
-      expect(numberEl.textContent).toBe("1,234.56");
+      expect(numberEl!.textContent).toBe("1,234.56");
     });
 
     it("动态修改 value 应该更新 number 文本", async () => {
@@ -280,10 +280,10 @@ describe("EaStatistic Component", () => {
       statistic.setAttribute("value", "999999");
       await statistic.updateComplete;
 
-      const numberEl = statistic.shadowRoot.querySelector(
+      const numberEl = statistic.shadowRoot!.querySelector(
         ".ea-statistic__number"
       );
-      expect(numberEl.textContent).toBe("999,999");
+      expect(numberEl!.textContent).toBe("999,999");
       expect(statistic.value).toBe(999999);
     });
 
@@ -295,10 +295,10 @@ describe("EaStatistic Component", () => {
       await statistic.updateComplete;
 
       expect(statistic.value).toBe(-1000);
-      const numberEl = statistic.shadowRoot.querySelector(
+      const numberEl = statistic.shadowRoot!.querySelector(
         ".ea-statistic__number"
       );
-      expect(numberEl.textContent).toBe("-1,000");
+      expect(numberEl!.textContent).toBe("-1,000");
     });
   });
 
@@ -309,7 +309,7 @@ describe("EaStatistic Component", () => {
       container.appendChild(statistic);
 
       const titleSlot =
-        statistic.shadowRoot.querySelector('slot[name="title"]');
+        statistic.shadowRoot!.querySelector('slot[name="title"]');
       expect(titleSlot).toBeTruthy();
     });
 
@@ -318,7 +318,7 @@ describe("EaStatistic Component", () => {
       statistic.innerHTML = `<div slot="prefix">$</div>`;
       container.appendChild(statistic);
 
-      const prefixSlot = statistic.shadowRoot.querySelector(
+      const prefixSlot = statistic.shadowRoot!.querySelector(
         'slot[name="prefix"]'
       );
       expect(prefixSlot).toBeTruthy();
@@ -329,7 +329,7 @@ describe("EaStatistic Component", () => {
       statistic.innerHTML = `<div slot="suffix">%</div>`;
       container.appendChild(statistic);
 
-      const suffixSlot = statistic.shadowRoot.querySelector(
+      const suffixSlot = statistic.shadowRoot!.querySelector(
         'slot[name="suffix"]'
       );
       expect(suffixSlot).toBeTruthy();
@@ -341,7 +341,7 @@ describe("EaStatistic Component", () => {
       container.appendChild(statistic);
 
       const defaultSlot =
-        statistic.shadowRoot.querySelector("slot:not([name])");
+        statistic.shadowRoot!.querySelector("slot:not([name])");
       expect(defaultSlot).toBeTruthy();
     });
 
@@ -350,10 +350,10 @@ describe("EaStatistic Component", () => {
       statistic.innerHTML = `<div slot="title">Slotted Title</div>`;
       container.appendChild(statistic);
 
-      const header = statistic.shadowRoot.querySelector(
+      const header = statistic.shadowRoot!.querySelector(
         ".ea-statistic__header"
       );
-      const titleSlot = header.querySelector('slot[name="title"]');
+      const titleSlot = header!.querySelector('slot[name="title"]');
       expect(titleSlot).toBeTruthy();
     });
 
@@ -362,10 +362,10 @@ describe("EaStatistic Component", () => {
       statistic.innerHTML = `<div slot="prefix">$</div>`;
       container.appendChild(statistic);
 
-      const prefix = statistic.shadowRoot.querySelector(
+      const prefix = statistic.shadowRoot!.querySelector(
         ".ea-statistic__prefix"
       );
-      const prefixSlot = prefix.querySelector('slot[name="prefix"]');
+      const prefixSlot = prefix!.querySelector('slot[name="prefix"]');
       expect(prefixSlot).toBeTruthy();
     });
 
@@ -374,10 +374,10 @@ describe("EaStatistic Component", () => {
       statistic.innerHTML = `<div slot="suffix">%</div>`;
       container.appendChild(statistic);
 
-      const suffix = statistic.shadowRoot.querySelector(
+      const suffix = statistic.shadowRoot!.querySelector(
         ".ea-statistic__suffix"
       );
-      const suffixSlot = suffix.querySelector('slot[name="suffix"]');
+      const suffixSlot = suffix!.querySelector('slot[name="suffix"]');
       expect(suffixSlot).toBeTruthy();
     });
 
@@ -386,10 +386,10 @@ describe("EaStatistic Component", () => {
       statistic.innerHTML = `<span>Custom Number</span>`;
       container.appendChild(statistic);
 
-      const number = statistic.shadowRoot.querySelector(
+      const number = statistic.shadowRoot!.querySelector(
         ".ea-statistic__number"
       );
-      const defaultSlot = number.querySelector("slot:not([name])");
+      const defaultSlot = number!.querySelector("slot:not([name])");
       expect(defaultSlot).toBeTruthy();
     });
   });
@@ -399,7 +399,7 @@ describe("EaStatistic Component", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
 
-      const root = statistic.shadowRoot.querySelector(".ea-statistic");
+      const root = statistic.shadowRoot!.querySelector(".ea-statistic");
       expect(root).toBeTruthy();
     });
 
@@ -407,7 +407,7 @@ describe("EaStatistic Component", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
 
-      const header = statistic.shadowRoot.querySelector(
+      const header = statistic.shadowRoot!.querySelector(
         ".ea-statistic__header"
       );
       expect(header).toBeTruthy();
@@ -417,7 +417,7 @@ describe("EaStatistic Component", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
 
-      const content = statistic.shadowRoot.querySelector(
+      const content = statistic.shadowRoot!.querySelector(
         ".ea-statistic__content"
       );
       expect(content).toBeTruthy();
@@ -427,7 +427,7 @@ describe("EaStatistic Component", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
 
-      const prefix = statistic.shadowRoot.querySelector(
+      const prefix = statistic.shadowRoot!.querySelector(
         ".ea-statistic__prefix"
       );
       expect(prefix).toBeTruthy();
@@ -437,7 +437,7 @@ describe("EaStatistic Component", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
 
-      const number = statistic.shadowRoot.querySelector(
+      const number = statistic.shadowRoot!.querySelector(
         ".ea-statistic__number"
       );
       expect(number).toBeTruthy();
@@ -447,7 +447,7 @@ describe("EaStatistic Component", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
 
-      const suffix = statistic.shadowRoot.querySelector(
+      const suffix = statistic.shadowRoot!.querySelector(
         ".ea-statistic__suffix"
       );
       expect(suffix).toBeTruthy();
@@ -459,10 +459,10 @@ describe("EaStatistic Component", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
 
-      const content = statistic.shadowRoot.querySelector(
+      const content = statistic.shadowRoot!.querySelector(
         ".ea-statistic__content"
       );
-      const children = Array.from(content.children).map(el =>
+      const children = Array.from(content!.children).map(el =>
         el.tagName.toLowerCase()
       );
       expect(children).toEqual(["span", "span", "span"]);
@@ -472,8 +472,8 @@ describe("EaStatistic Component", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
 
-      const root = statistic.shadowRoot.querySelector(".ea-statistic");
-      const children = Array.from(root.children).map(el =>
+      const root = statistic.shadowRoot!.querySelector(".ea-statistic");
+      const children = Array.from(root!.children).map(el =>
         el.tagName.toLowerCase()
       );
       expect(children[0]).toBe("header");
@@ -493,14 +493,14 @@ describe("EaStatistic Component", () => {
       expect(statistic.heading).toBe("Total Users");
       expect(statistic.value).toBe(268500);
 
-      const header = statistic.shadowRoot.querySelector(
+      const header = statistic.shadowRoot!.querySelector(
         ".ea-statistic__header"
       );
-      const number = statistic.shadowRoot.querySelector(
+      const number = statistic.shadowRoot!.querySelector(
         ".ea-statistic__number"
       );
-      expect(header.textContent).toBe("Total Users");
-      expect(number.textContent).toBe("268,500");
+      expect(header!.textContent).toBe("Total Users");
+      expect(number!.textContent).toBe("268,500");
     });
 
     it("移除 heading 属性应该恢复默认值", () => {
@@ -569,10 +569,10 @@ describe("EaStatistic Component", () => {
 
       await statistic.updateComplete;
 
-      const numberEl = statistic.shadowRoot.querySelector(
+      const numberEl = statistic.shadowRoot!.querySelector(
         ".ea-statistic__number"
       );
-      expect(numberEl.textContent).toBe("9,999,999,999");
+      expect(numberEl!.textContent).toBe("9,999,999,999");
     });
 
     it("value 为非数字字符串时应该回退到 null", () => {
@@ -590,20 +590,20 @@ describe("EaStatistic Component", () => {
 
       await statistic.updateComplete;
 
-      const headerBefore = statistic.shadowRoot.querySelector(
+      const headerBefore = statistic.shadowRoot!.querySelector(
         ".ea-statistic__header"
       );
-      expect(headerBefore.querySelector('slot[name="title"]')).toBeTruthy();
+      expect(headerBefore!.querySelector('slot[name="title"]')).toBeTruthy();
 
       statistic.setAttribute("heading", "Attribute Title");
       await statistic.updateComplete;
 
       expect(statistic.heading).toBe("Attribute Title");
-      const headerAfter = statistic.shadowRoot.querySelector(
+      const headerAfter = statistic.shadowRoot!.querySelector(
         ".ea-statistic__header"
       );
-      expect(headerAfter.textContent).toBe("Attribute Title");
-      expect(headerAfter.querySelector('slot[name="title"]')).toBeNull();
+      expect(headerAfter!.textContent).toBe("Attribute Title");
+      expect(headerAfter!.querySelector('slot[name="title"]')).toBeNull();
     });
   });
 
@@ -624,8 +624,8 @@ describe("EaStatistic Component", () => {
 
         await statistic.updateComplete;
 
-        const numberEl = statistic.shadowRoot.querySelector(".ea-statistic__number");
-        expect(numberEl.getAttribute("aria-live")).toBe("polite");
+        const numberEl = statistic.shadowRoot!.querySelector(".ea-statistic__number");
+        expect(numberEl!.getAttribute("aria-live")).toBe("polite");
       });
 
       it("设置 value 后 number 元素仍然有 aria-live='polite'", async () => {
@@ -635,8 +635,8 @@ describe("EaStatistic Component", () => {
 
         await statistic.updateComplete;
 
-        const numberEl = statistic.shadowRoot.querySelector(".ea-statistic__number");
-        expect(numberEl.getAttribute("aria-live")).toBe("polite");
+        const numberEl = statistic.shadowRoot!.querySelector(".ea-statistic__number");
+        expect(numberEl!.getAttribute("aria-live")).toBe("polite");
       });
 
       it("动态修改 value 后 number 元素仍然有 aria-live='polite'", async () => {
@@ -649,8 +649,8 @@ describe("EaStatistic Component", () => {
         statistic.setAttribute("value", "2000");
         await statistic.updateComplete;
 
-        const numberEl = statistic.shadowRoot.querySelector(".ea-statistic__number");
-        expect(numberEl.getAttribute("aria-live")).toBe("polite");
+        const numberEl = statistic.shadowRoot!.querySelector(".ea-statistic__number");
+        expect(numberEl!.getAttribute("aria-live")).toBe("polite");
       });
     });
   });

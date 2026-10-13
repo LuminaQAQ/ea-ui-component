@@ -4,7 +4,7 @@ import "./index";
 import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y";
 
 describe("EaAvatar", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -28,16 +28,17 @@ describe("EaAvatar", () => {
       const avatar = document.createElement("ea-avatar");
       container.appendChild(avatar);
 
-      const avatarContainer = avatar.shadowRoot.querySelector(".ea-avatar");
+      const avatarContainer = avatar.shadowRoot!.querySelector(".ea-avatar");
       expect(avatarContainer).toBeDefined();
-      expect(avatarContainer.innerHTML).toContain("svg");
+      expect(avatarContainer!.innerHTML).toContain("svg");
     });
 
     it("应该包含 part='container' 属性", () => {
       const avatar = document.createElement("ea-avatar");
       container.appendChild(avatar);
 
-      const containerEl = avatar.shadowRoot.querySelector('[part="container"]');
+      const containerEl =
+        avatar.shadowRoot!.querySelector('[part="container"]');
       expect(containerEl).toBeDefined();
     });
   });
@@ -50,8 +51,8 @@ describe("EaAvatar", () => {
 
       await avatar.updateComplete;
 
-      const containerEl = avatar.shadowRoot.querySelector(".ea-avatar");
-      expect(containerEl.classList.contains("ea-avatar--circle")).toBe(true);
+      const containerEl = avatar.shadowRoot!.querySelector(".ea-avatar");
+      expect(containerEl!.classList.contains("ea-avatar--circle")).toBe(true);
     });
 
     it('应该正确应用 shape="square" 样式', async () => {
@@ -61,8 +62,8 @@ describe("EaAvatar", () => {
 
       await avatar.updateComplete;
 
-      const containerEl = avatar.shadowRoot.querySelector(".ea-avatar");
-      expect(containerEl.classList.contains("ea-avatar--square")).toBe(true);
+      const containerEl = avatar.shadowRoot!.querySelector(".ea-avatar");
+      expect(containerEl!.classList.contains("ea-avatar--square")).toBe(true);
     });
 
     it("默认 shape 应该是 circle", async () => {
@@ -73,8 +74,8 @@ describe("EaAvatar", () => {
 
       expect(avatar.shape).toBe("circle");
 
-      const containerEl = avatar.shadowRoot.querySelector(".ea-avatar");
-      expect(containerEl.classList.contains("ea-avatar--circle")).toBe(true);
+      const containerEl = avatar.shadowRoot!.querySelector(".ea-avatar");
+      expect(containerEl!.classList.contains("ea-avatar--circle")).toBe(true);
     });
 
     it("shape 属性变化时应该正确更新 class", async () => {
@@ -84,15 +85,15 @@ describe("EaAvatar", () => {
 
       await avatar.updateComplete;
 
-      let containerEl = avatar.shadowRoot.querySelector(".ea-avatar");
-      expect(containerEl.classList.contains("ea-avatar--circle")).toBe(true);
+      let containerEl = avatar.shadowRoot!.querySelector(".ea-avatar");
+      expect(containerEl!.classList.contains("ea-avatar--circle")).toBe(true);
 
       avatar.setAttribute("shape", "square");
       await avatar.updateComplete;
 
-      containerEl = avatar.shadowRoot.querySelector(".ea-avatar");
-      expect(containerEl.classList.contains("ea-avatar--square")).toBe(true);
-      expect(containerEl.classList.contains("ea-avatar--circle")).toBe(false);
+      containerEl = avatar.shadowRoot!.querySelector(".ea-avatar");
+      expect(containerEl!.classList.contains("ea-avatar--square")).toBe(true);
+      expect(containerEl!.classList.contains("ea-avatar--circle")).toBe(false);
     });
   });
 
@@ -198,9 +199,9 @@ describe("EaAvatar", () => {
 
       await avatar.updateComplete;
 
-      const avatarContainer = avatar.shadowRoot.querySelector(".ea-avatar");
-      expect(avatarContainer.innerHTML).toContain("ea-icon");
-      expect(avatarContainer.innerHTML).toContain("coffee");
+      const avatarContainer = avatar.shadowRoot!.querySelector(".ea-avatar");
+      expect(avatarContainer!.innerHTML).toContain("ea-icon");
+      expect(avatarContainer!.innerHTML).toContain("coffee");
     });
 
     it("icon 属性变化时应该正确更新", async () => {
@@ -210,14 +211,14 @@ describe("EaAvatar", () => {
 
       await avatar.updateComplete;
 
-      let avatarContainer = avatar.shadowRoot.querySelector(".ea-avatar");
-      expect(avatarContainer.innerHTML).toContain("coffee");
+      let avatarContainer = avatar.shadowRoot!.querySelector(".ea-avatar");
+      expect(avatarContainer!.innerHTML).toContain("coffee");
 
       avatar.setAttribute("icon", "user");
       await avatar.updateComplete;
 
-      avatarContainer = avatar.shadowRoot.querySelector(".ea-avatar");
-      expect(avatarContainer.innerHTML).toContain("user");
+      avatarContainer = avatar.shadowRoot!.querySelector(".ea-avatar");
+      expect(avatarContainer!.innerHTML).toContain("user");
     });
 
     it("清空 icon 时应该显示默认 slot", async () => {
@@ -230,8 +231,8 @@ describe("EaAvatar", () => {
       avatar.setAttribute("icon", "");
       await avatar.updateComplete;
 
-      const avatarContainer = avatar.shadowRoot.querySelector(".ea-avatar");
-      expect(avatarContainer.innerHTML).toContain("<slot>");
+      const avatarContainer = avatar.shadowRoot!.querySelector(".ea-avatar");
+      expect(avatarContainer!.innerHTML).toContain("<slot>");
     });
 
     it("设置 src 时 icon observer 不应覆盖图片", () => {
@@ -282,7 +283,7 @@ describe("EaAvatar", () => {
       avatar.setAttribute("src", "");
       await avatar.updateComplete;
 
-      const slot = avatar.shadowRoot.querySelector("slot");
+      const slot = avatar.shadowRoot!.querySelector("slot");
       expect(slot).not.toBeNull();
     });
 
@@ -297,9 +298,9 @@ describe("EaAvatar", () => {
       avatar.setAttribute("src", "");
       await avatar.updateComplete;
 
-      const avatarContainer = avatar.shadowRoot.querySelector(".ea-avatar");
-      expect(avatarContainer.innerHTML).toContain("ea-icon");
-      expect(avatarContainer.innerHTML).toContain("user");
+      const avatarContainer = avatar.shadowRoot!.querySelector(".ea-avatar");
+      expect(avatarContainer!.innerHTML).toContain("ea-icon");
+      expect(avatarContainer!.innerHTML).toContain("user");
     });
 
     it("使用 data URI 时应该启动预加载流程", () => {
@@ -321,7 +322,8 @@ describe("EaAvatar", () => {
 
       await avatar.updateComplete;
 
-      const img = avatar.shadowRoot.querySelector(".ea-avatar__img");
+      const img =
+        avatar.shadowRoot!.querySelector<HTMLImageElement>(".ea-avatar__img");
       if (img) {
         expect(img.tagName).toBe("IMG");
         expect(img.getAttribute("part")).toBe("img-avatar");
@@ -351,7 +353,8 @@ describe("EaAvatar", () => {
 
       await avatar.updateComplete;
 
-      const img = avatar.shadowRoot.querySelector(".ea-avatar__img");
+      const img =
+        avatar.shadowRoot!.querySelector<HTMLImageElement>(".ea-avatar__img");
       if (img) {
         expect(img.srcset).toBe(testSrc);
       }
@@ -386,7 +389,8 @@ describe("EaAvatar", () => {
 
       await avatar.updateComplete;
 
-      const img = avatar.shadowRoot.querySelector(".ea-avatar__img");
+      const img =
+        avatar.shadowRoot!.querySelector<HTMLImageElement>(".ea-avatar__img");
       if (img) {
         expect(img.alt).toBe("Test Alt");
       }
@@ -455,7 +459,8 @@ describe("EaAvatar", () => {
       const avatar = document.createElement("ea-avatar");
       container.appendChild(avatar);
 
-      const containerEl = avatar.shadowRoot.querySelector('[part="container"]');
+      const containerEl =
+        avatar.shadowRoot!.querySelector('[part="container"]');
       expect(containerEl).toBeDefined();
     });
   });
@@ -466,7 +471,7 @@ describe("EaAvatar", () => {
       avatar.textContent = "User";
       container.appendChild(avatar);
 
-      const slot = avatar.shadowRoot.querySelector("slot");
+      const slot = avatar.shadowRoot!.querySelector("slot");
       expect(slot).toBeDefined();
     });
 
@@ -475,7 +480,7 @@ describe("EaAvatar", () => {
       avatar.textContent = "AB";
       container.appendChild(avatar);
 
-      const slot = avatar.shadowRoot.querySelector("slot");
+      const slot = avatar.shadowRoot!.querySelector("slot");
       expect(slot).toBeDefined();
     });
   });
@@ -488,8 +493,8 @@ describe("EaAvatar", () => {
 
       await avatar.updateComplete;
 
-      const avatarContainer = avatar.shadowRoot.querySelector(".ea-avatar");
-      expect(avatarContainer.innerHTML).toContain("ea-icon");
+      const avatarContainer = avatar.shadowRoot!.querySelector(".ea-avatar");
+      expect(avatarContainer!.innerHTML).toContain("ea-icon");
     });
 
     it("应该支持图片展示类型", () => {
@@ -505,7 +510,7 @@ describe("EaAvatar", () => {
       avatar.textContent = "user";
       container.appendChild(avatar);
 
-      const slot = avatar.shadowRoot.querySelector("slot");
+      const slot = avatar.shadowRoot!.querySelector("slot");
       expect(slot).toBeDefined();
     });
 
@@ -561,8 +566,8 @@ describe("EaAvatar", () => {
 
       await avatar.updateComplete;
 
-      const containerEl = avatar.shadowRoot.querySelector(".ea-avatar");
-      expect(containerEl.classList.contains("ea-avatar--square")).toBe(true);
+      const containerEl = avatar.shadowRoot!.querySelector(".ea-avatar");
+      expect(containerEl!.classList.contains("ea-avatar--square")).toBe(true);
     });
   });
 
@@ -577,11 +582,11 @@ describe("EaAvatar", () => {
 
       await avatar.updateComplete;
 
-      const containerEl = avatar.shadowRoot.querySelector(".ea-avatar");
-      expect(containerEl.classList.contains("ea-avatar--square")).toBe(true);
+      const containerEl = avatar.shadowRoot!.querySelector(".ea-avatar");
+      expect(containerEl!.classList.contains("ea-avatar--square")).toBe(true);
       expect(avatar.size).toBe("large");
       expect(avatar.fit).toBe("contain");
-      expect(containerEl.innerHTML).toContain("ea-icon");
+      expect(containerEl!.innerHTML).toContain("ea-icon");
     });
 
     it("应该正确处理多个 Avatar 实例", async () => {
@@ -598,11 +603,11 @@ describe("EaAvatar", () => {
 
       await avatar2.updateComplete;
 
-      const containerEl1 = avatar1.shadowRoot.querySelector(".ea-avatar");
-      const containerEl2 = avatar2.shadowRoot.querySelector(".ea-avatar");
+      const containerEl1 = avatar1.shadowRoot!.querySelector(".ea-avatar");
+      const containerEl2 = avatar2.shadowRoot!.querySelector(".ea-avatar");
 
-      expect(containerEl1.classList.contains("ea-avatar--circle")).toBe(true);
-      expect(containerEl2.classList.contains("ea-avatar--square")).toBe(true);
+      expect(containerEl1!.classList.contains("ea-avatar--circle")).toBe(true);
+      expect(containerEl2!.classList.contains("ea-avatar--square")).toBe(true);
     });
 
     it("icon 和 src 同时存在时 src 优先", () => {
@@ -625,9 +630,9 @@ describe("EaAvatar", () => {
       avatar.setAttribute("src", "");
       await avatar.updateComplete;
 
-      const avatarContainer = avatar.shadowRoot.querySelector(".ea-avatar");
-      expect(avatarContainer.innerHTML).toContain("ea-icon");
-      expect(avatarContainer.innerHTML).toContain("user");
+      const avatarContainer = avatar.shadowRoot!.querySelector(".ea-avatar");
+      expect(avatarContainer!.innerHTML).toContain("ea-icon");
+      expect(avatarContainer!.innerHTML).toContain("user");
     });
 
     it("从 src 切换到默认 slot 应该正确显示", async () => {
@@ -640,7 +645,7 @@ describe("EaAvatar", () => {
       avatar.setAttribute("src", "");
       await avatar.updateComplete;
 
-      const slot = avatar.shadowRoot.querySelector("slot");
+      const slot = avatar.shadowRoot!.querySelector("slot");
       expect(slot).not.toBeNull();
     });
   });
@@ -655,7 +660,8 @@ describe("EaAvatar", () => {
         el.setAttribute("alt", "User Avatar");
         container.appendChild(el);
         await el.updateComplete;
-        const img = el.shadowRoot.querySelector(".ea-avatar__img");
+        const img =
+          el.shadowRoot!.querySelector<HTMLImageElement>(".ea-avatar__img");
         if (img) {
           expect(img.alt).toBe("User Avatar");
         }

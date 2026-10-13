@@ -4,29 +4,8 @@ import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y.js";
 
 import "./index";
 
-Element.prototype.scrollTo = Element.prototype.scrollTo || function () {};
-
-ElementInternals.prototype.setValidity =
-  ElementInternals.prototype.setValidity ||
-  function (flags, message) {
-    if (!this.validity) {
-      this.validity = { valid: true };
-    }
-    this.validity.valid = !flags || Object.keys(flags).length === 0;
-    this.validationMessage = message || "";
-  };
-
-ElementInternals.prototype.reportValidity =
-  ElementInternals.prototype.reportValidity ||
-  function () {
-    return this.validity ? this.validity.valid : true;
-  };
-
-ElementInternals.prototype.setFormValue =
-  ElementInternals.prototype.setFormValue || function () {};
-
 describe("EaTimePicker Component", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -45,7 +24,7 @@ describe("EaTimePicker Component", () => {
 
       expect(timePicker.shadowRoot).toBeTruthy();
       expect(
-        timePicker.shadowRoot.querySelector(".ea-time-picker")
+        timePicker.shadowRoot!.querySelector<HTMLElement>(".ea-time-picker")
       ).toBeTruthy();
     });
 
@@ -54,7 +33,7 @@ describe("EaTimePicker Component", () => {
       container.appendChild(timePicker);
 
       expect(
-        timePicker.shadowRoot.querySelector('[part="container"]')
+        timePicker.shadowRoot!.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
@@ -63,7 +42,7 @@ describe("EaTimePicker Component", () => {
       container.appendChild(timePicker);
 
       expect(
-        timePicker.shadowRoot.querySelector('[part="input"]')
+        timePicker.shadowRoot!.querySelector('[part="input"]')
       ).toBeTruthy();
     });
 
@@ -72,7 +51,7 @@ describe("EaTimePicker Component", () => {
       container.appendChild(timePicker);
 
       expect(
-        timePicker.shadowRoot.querySelector('[part="dropdown"]')
+        timePicker.shadowRoot!.querySelector('[part="dropdown"]')
       ).toBeTruthy();
     });
 
@@ -81,7 +60,7 @@ describe("EaTimePicker Component", () => {
       container.appendChild(timePicker);
 
       expect(
-        timePicker.shadowRoot.querySelector('[part="dropdown-inner-wrap"]')
+        timePicker.shadowRoot!.querySelector('[part="dropdown-inner-wrap"]')
       ).toBeTruthy();
     });
 
@@ -89,7 +68,7 @@ describe("EaTimePicker Component", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      const timeLists = timePicker.shadowRoot.querySelectorAll(
+      const timeLists = timePicker.shadowRoot!.querySelectorAll(
         '[part="dropdown-time"]'
       );
       expect(timeLists.length).toBe(3);
@@ -99,7 +78,7 @@ describe("EaTimePicker Component", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      const items = timePicker.shadowRoot.querySelectorAll(
+      const items = timePicker.shadowRoot!.querySelectorAll(
         '[part="dropdown-item"]'
       );
       expect(items.length).toBeGreaterThan(0);
@@ -109,10 +88,10 @@ describe("EaTimePicker Component", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      const hourWrap = timePicker.shadowRoot.querySelector(
+      const hourWrap = timePicker.shadowRoot!.querySelector(
         ".ea-time-picker__dropdown-inner--hour"
       );
-      const items = hourWrap.querySelectorAll("li");
+      const items = hourWrap!.querySelectorAll("li");
       expect(items.length).toBe(24);
     });
 
@@ -120,10 +99,10 @@ describe("EaTimePicker Component", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      const minuteWrap = timePicker.shadowRoot.querySelector(
+      const minuteWrap = timePicker.shadowRoot!.querySelector(
         ".ea-time-picker__dropdown-inner--minute"
       );
-      const items = minuteWrap.querySelectorAll("li");
+      const items = minuteWrap!.querySelectorAll("li");
       expect(items.length).toBe(60);
     });
 
@@ -131,10 +110,10 @@ describe("EaTimePicker Component", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      const secondWrap = timePicker.shadowRoot.querySelector(
+      const secondWrap = timePicker.shadowRoot!.querySelector(
         ".ea-time-picker__dropdown-inner--second"
       );
-      const items = secondWrap.querySelectorAll("li");
+      const items = secondWrap!.querySelectorAll("li");
       expect(items.length).toBe(60);
     });
   });
@@ -146,8 +125,8 @@ describe("EaTimePicker Component", () => {
 
       await timePicker.updateComplete;
 
-      const input = timePicker.shadowRoot.querySelector("ea-input");
-      expect(input.hasAttribute("readonly")).toBe(true);
+      const input = timePicker.shadowRoot!.querySelector("ea-input");
+      expect(input!.hasAttribute("readonly")).toBe(true);
     });
 
     it("内部 ea-input 应该有 autocomplete=off", async () => {
@@ -156,8 +135,8 @@ describe("EaTimePicker Component", () => {
 
       await timePicker.updateComplete;
 
-      const input = timePicker.shadowRoot.querySelector("ea-input");
-      expect(input.getAttribute("autocomplete")).toBe("off");
+      const input = timePicker.shadowRoot!.querySelector("ea-input");
+      expect(input!.getAttribute("autocomplete")).toBe("off");
     });
 
     it("内部 ea-input 应该有 prefix-icon=clock", async () => {
@@ -166,8 +145,8 @@ describe("EaTimePicker Component", () => {
 
       await timePicker.updateComplete;
 
-      const input = timePicker.shadowRoot.querySelector("ea-input");
-      expect(input.getAttribute("prefix-icon")).toBe("clock");
+      const input = timePicker.shadowRoot!.querySelector("ea-input");
+      expect(input!.getAttribute("prefix-icon")).toBe("clock");
     });
   });
 
@@ -179,8 +158,8 @@ describe("EaTimePicker Component", () => {
       await timePicker.updateComplete;
 
       const containerEl =
-        timePicker.shadowRoot.querySelector(".ea-time-picker");
-      expect(containerEl.classList.contains("ea-time-picker")).toBe(true);
+        timePicker.shadowRoot!.querySelector<HTMLElement>(".ea-time-picker");
+      expect(containerEl!.classList.contains("ea-time-picker")).toBe(true);
     });
 
     it("disabled=true 时容器应该有 is-disabled 状态类", async () => {
@@ -191,8 +170,8 @@ describe("EaTimePicker Component", () => {
       await timePicker.updateComplete;
 
       const containerEl =
-        timePicker.shadowRoot.querySelector(".ea-time-picker");
-      expect(containerEl.classList.contains("is-disabled")).toBe(true);
+        timePicker.shadowRoot!.querySelector<HTMLElement>(".ea-time-picker");
+      expect(containerEl!.classList.contains("is-disabled")).toBe(true);
     });
 
     it("size=small 时容器应该有 ea-time-picker--small 修饰符类", async () => {
@@ -203,8 +182,8 @@ describe("EaTimePicker Component", () => {
       await timePicker.updateComplete;
 
       const containerEl =
-        timePicker.shadowRoot.querySelector(".ea-time-picker");
-      expect(containerEl.classList.contains("ea-time-picker--small")).toBe(
+        timePicker.shadowRoot!.querySelector<HTMLElement>(".ea-time-picker");
+      expect(containerEl!.classList.contains("ea-time-picker--small")).toBe(
         true
       );
     });
@@ -217,8 +196,8 @@ describe("EaTimePicker Component", () => {
       await timePicker.updateComplete;
 
       const containerEl =
-        timePicker.shadowRoot.querySelector(".ea-time-picker");
-      expect(containerEl.classList.contains("ea-time-picker--large")).toBe(
+        timePicker.shadowRoot!.querySelector<HTMLElement>(".ea-time-picker");
+      expect(containerEl!.classList.contains("ea-time-picker--large")).toBe(
         true
       );
     });
@@ -231,8 +210,8 @@ describe("EaTimePicker Component", () => {
       await timePicker.updateComplete;
 
       const containerEl =
-        timePicker.shadowRoot.querySelector(".ea-time-picker");
-      expect(containerEl.classList.contains("ea-time-picker--default")).toBe(
+        timePicker.shadowRoot!.querySelector<HTMLElement>(".ea-time-picker");
+      expect(containerEl!.classList.contains("ea-time-picker--default")).toBe(
         false
       );
     });
@@ -245,8 +224,8 @@ describe("EaTimePicker Component", () => {
       await timePicker.updateComplete;
 
       const containerEl =
-        timePicker.shadowRoot.querySelector(".ea-time-picker");
-      expect(containerEl.classList.contains("is-align-center")).toBe(true);
+        timePicker.shadowRoot!.querySelector<HTMLElement>(".ea-time-picker");
+      expect(containerEl!.classList.contains("is-align-center")).toBe(true);
     });
 
     it("align=right 时容器应该有 is-align-right 状态类", async () => {
@@ -257,8 +236,8 @@ describe("EaTimePicker Component", () => {
       await timePicker.updateComplete;
 
       const containerEl =
-        timePicker.shadowRoot.querySelector(".ea-time-picker");
-      expect(containerEl.classList.contains("is-align-right")).toBe(true);
+        timePicker.shadowRoot!.querySelector<HTMLElement>(".ea-time-picker");
+      expect(containerEl!.classList.contains("is-align-right")).toBe(true);
     });
 
     it("align=left 时容器不应该有 align 状态类", async () => {
@@ -268,10 +247,10 @@ describe("EaTimePicker Component", () => {
       await timePicker.updateComplete;
 
       const containerEl =
-        timePicker.shadowRoot.querySelector(".ea-time-picker");
-      expect(containerEl.classList.contains("is-align-left")).toBe(false);
-      expect(containerEl.classList.contains("is-align-center")).toBe(false);
-      expect(containerEl.classList.contains("is-align-right")).toBe(false);
+        timePicker.shadowRoot!.querySelector<HTMLElement>(".ea-time-picker");
+      expect(containerEl!.classList.contains("is-align-left")).toBe(false);
+      expect(containerEl!.classList.contains("is-align-center")).toBe(false);
+      expect(containerEl!.classList.contains("is-align-right")).toBe(false);
     });
 
     it("打开下拉面板后容器应该有 is-open 状态类", async () => {
@@ -284,8 +263,8 @@ describe("EaTimePicker Component", () => {
       await timePicker.updateComplete;
 
       const containerEl =
-        timePicker.shadowRoot.querySelector(".ea-time-picker");
-      expect(containerEl.classList.contains("is-open")).toBe(true);
+        timePicker.shadowRoot!.querySelector<HTMLElement>(".ea-time-picker");
+      expect(containerEl!.classList.contains("is-open")).toBe(true);
     });
 
     it("关闭下拉面板后容器不应该有 is-open 状态类", async () => {
@@ -300,15 +279,15 @@ describe("EaTimePicker Component", () => {
       await timePicker.updateComplete;
 
       const containerEl =
-        timePicker.shadowRoot.querySelector(".ea-time-picker");
-      expect(containerEl.classList.contains("is-open")).toBe(false);
+        timePicker.shadowRoot!.querySelector<HTMLElement>(".ea-time-picker");
+      expect(containerEl!.classList.contains("is-open")).toBe(false);
     });
 
     it("dropdown 元素应该有 ea-time-picker__dropdown 类名", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      const dropdown = timePicker.shadowRoot.querySelector(
+      const dropdown = timePicker.shadowRoot!.querySelector(
         ".ea-time-picker__dropdown"
       );
       expect(dropdown).toBeTruthy();
@@ -318,7 +297,7 @@ describe("EaTimePicker Component", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      const firstItem = timePicker.shadowRoot.querySelector(
+      const firstItem = timePicker.shadowRoot!.querySelector(
         ".ea-time-picker__dropdown-item"
       );
       expect(firstItem).toBeTruthy();
@@ -380,8 +359,8 @@ describe("EaTimePicker Component", () => {
 
       await timePicker.updateComplete;
 
-      const input = timePicker.shadowRoot.querySelector("ea-input");
-      expect(input.value).toBe("14:30:45");
+      const input = timePicker.shadowRoot!.querySelector("ea-input");
+      expect(input!.value).toBe("14:30:45");
     });
   });
 
@@ -435,8 +414,8 @@ describe("EaTimePicker Component", () => {
       await timePicker.updateComplete;
 
       const containerEl =
-        timePicker.shadowRoot.querySelector(".ea-time-picker");
-      expect(containerEl.classList.contains("is-open")).toBe(false);
+        timePicker.shadowRoot!.querySelector<HTMLElement>(".ea-time-picker");
+      expect(containerEl!.classList.contains("is-open")).toBe(false);
     });
   });
 
@@ -487,8 +466,8 @@ describe("EaTimePicker Component", () => {
 
       await timePicker.updateComplete;
 
-      const input = timePicker.shadowRoot.querySelector("ea-input");
-      expect(input.getAttribute("size")).toBe("large");
+      const input = timePicker.shadowRoot!.querySelector("ea-input");
+      expect(input!.getAttribute("size")).toBe("large");
     });
   });
 
@@ -534,9 +513,9 @@ describe("EaTimePicker Component", () => {
       await timePicker.updateComplete;
 
       const containerEl =
-        timePicker.shadowRoot.querySelector(".ea-time-picker");
-      expect(containerEl.classList.contains("is-align-center")).toBe(true);
-      expect(containerEl.classList.contains("is-align-right")).toBe(false);
+        timePicker.shadowRoot!.querySelector<HTMLElement>(".ea-time-picker");
+      expect(containerEl!.classList.contains("is-align-center")).toBe(true);
+      expect(containerEl!.classList.contains("is-align-right")).toBe(false);
     });
   });
 
@@ -564,10 +543,10 @@ describe("EaTimePicker Component", () => {
       await timePicker.updateComplete;
 
       const containerEl =
-        timePicker.shadowRoot.querySelector(".ea-time-picker");
-      expect(containerEl.style.getPropertyValue("--ea-time-picker-width")).toBe(
-        "300px"
-      );
+        timePicker.shadowRoot!.querySelector<HTMLElement>(".ea-time-picker");
+      expect(
+        containerEl!.style.getPropertyValue("--ea-time-picker-width")
+      ).toBe("300px");
     });
   });
 
@@ -594,8 +573,8 @@ describe("EaTimePicker Component", () => {
 
       await timePicker.updateComplete;
 
-      const input = timePicker.shadowRoot.querySelector("ea-input");
-      expect(input.label).toBe("My Label");
+      const input = timePicker.shadowRoot!.querySelector("ea-input");
+      expect(input!.label).toBe("My Label");
     });
   });
 
@@ -630,8 +609,8 @@ describe("EaTimePicker Component", () => {
 
       await timePicker.updateComplete;
 
-      const input = timePicker.shadowRoot.querySelector("ea-input");
-      expect(input.placeholder).toBe("Test placeholder");
+      const input = timePicker.shadowRoot!.querySelector("ea-input");
+      expect(input!.placeholder).toBe("Test placeholder");
     });
   });
 
@@ -674,18 +653,18 @@ describe("EaTimePicker Component", () => {
 
       await timePicker.updateComplete;
 
-      const hourWrap = timePicker.shadowRoot.querySelector(
+      const hourWrap = timePicker.shadowRoot!.querySelector(
         ".ea-time-picker__dropdown-inner--hour"
       );
-      const hour08 = hourWrap.querySelector('li[data-value="8"]');
-      const hour09 = hourWrap.querySelector('li[data-value="9"]');
-      const hour18 = hourWrap.querySelector('li[data-value="18"]');
-      const hour19 = hourWrap.querySelector('li[data-value="19"]');
+      const hour08 = hourWrap!.querySelector('li[data-value="8"]');
+      const hour09 = hourWrap!.querySelector('li[data-value="9"]');
+      const hour18 = hourWrap!.querySelector('li[data-value="18"]');
+      const hour19 = hourWrap!.querySelector('li[data-value="19"]');
 
-      expect(hour08.classList.contains("is-disabled")).toBe(true);
-      expect(hour09.classList.contains("is-disabled")).toBe(false);
-      expect(hour18.classList.contains("is-disabled")).toBe(false);
-      expect(hour19.classList.contains("is-disabled")).toBe(true);
+      expect(hour08!.classList.contains("is-disabled")).toBe(true);
+      expect(hour09!.classList.contains("is-disabled")).toBe(false);
+      expect(hour18!.classList.contains("is-disabled")).toBe(false);
+      expect(hour19!.classList.contains("is-disabled")).toBe(true);
     });
 
     it("同时支持 limit-range-start 和 limit-range-end", () => {
@@ -702,34 +681,34 @@ describe("EaTimePicker Component", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      const hourWrap = timePicker.shadowRoot.querySelector(
+      const hourWrap = timePicker.shadowRoot!.querySelector(
         ".ea-time-picker__dropdown-inner--hour"
       );
 
       timePicker.limitRangeStart = "09:00:00";
       await timePicker.updateComplete;
 
-      const hour08 = hourWrap.querySelector('li[data-value="8"]');
-      const hour09 = hourWrap.querySelector('li[data-value="9"]');
-      expect(hour08.classList.contains("is-disabled")).toBe(true);
-      expect(hour09.classList.contains("is-disabled")).toBe(false);
+      const hour08 = hourWrap!.querySelector('li[data-value="8"]');
+      const hour09 = hourWrap!.querySelector('li[data-value="9"]');
+      expect(hour08!.classList.contains("is-disabled")).toBe(true);
+      expect(hour09!.classList.contains("is-disabled")).toBe(false);
     });
 
     it("动态修改 limitRangeEnd 应该重新应用范围限制", async () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      const hourWrap = timePicker.shadowRoot.querySelector(
+      const hourWrap = timePicker.shadowRoot!.querySelector(
         ".ea-time-picker__dropdown-inner--hour"
       );
 
       timePicker.limitRangeEnd = "18:00:00";
       await timePicker.updateComplete;
 
-      const hour18 = hourWrap.querySelector('li[data-value="18"]');
-      const hour19 = hourWrap.querySelector('li[data-value="19"]');
-      expect(hour18.classList.contains("is-disabled")).toBe(false);
-      expect(hour19.classList.contains("is-disabled")).toBe(true);
+      const hour18 = hourWrap!.querySelector('li[data-value="18"]');
+      const hour19 = hourWrap!.querySelector('li[data-value="19"]');
+      expect(hour18!.classList.contains("is-disabled")).toBe(false);
+      expect(hour19!.classList.contains("is-disabled")).toBe(true);
     });
 
     it("动态修改 limitRangeStart 和 limitRangeEnd 应该同时生效", async () => {
@@ -740,18 +719,18 @@ describe("EaTimePicker Component", () => {
       timePicker.limitRangeEnd = "18:00:00";
       await timePicker.updateComplete;
 
-      const hourWrap = timePicker.shadowRoot.querySelector(
+      const hourWrap = timePicker.shadowRoot!.querySelector(
         ".ea-time-picker__dropdown-inner--hour"
       );
-      const hour08 = hourWrap.querySelector('li[data-value="8"]');
-      const hour09 = hourWrap.querySelector('li[data-value="9"]');
-      const hour18 = hourWrap.querySelector('li[data-value="18"]');
-      const hour19 = hourWrap.querySelector('li[data-value="19"]');
+      const hour08 = hourWrap!.querySelector('li[data-value="8"]');
+      const hour09 = hourWrap!.querySelector('li[data-value="9"]');
+      const hour18 = hourWrap!.querySelector('li[data-value="18"]');
+      const hour19 = hourWrap!.querySelector('li[data-value="19"]');
 
-      expect(hour08.classList.contains("is-disabled")).toBe(true);
-      expect(hour09.classList.contains("is-disabled")).toBe(false);
-      expect(hour18.classList.contains("is-disabled")).toBe(false);
-      expect(hour19.classList.contains("is-disabled")).toBe(true);
+      expect(hour08!.classList.contains("is-disabled")).toBe(true);
+      expect(hour09!.classList.contains("is-disabled")).toBe(false);
+      expect(hour18!.classList.contains("is-disabled")).toBe(false);
+      expect(hour19!.classList.contains("is-disabled")).toBe(true);
     });
 
     it("limit-range 应该限制分钟列表", async () => {
@@ -762,18 +741,18 @@ describe("EaTimePicker Component", () => {
 
       await timePicker.updateComplete;
 
-      const minuteWrap = timePicker.shadowRoot.querySelector(
+      const minuteWrap = timePicker.shadowRoot!.querySelector(
         ".ea-time-picker__dropdown-inner--minute"
       );
-      const min14 = minuteWrap.querySelector('li[data-value="14"]');
-      const min15 = minuteWrap.querySelector('li[data-value="15"]');
-      const min45 = minuteWrap.querySelector('li[data-value="45"]');
-      const min46 = minuteWrap.querySelector('li[data-value="46"]');
+      const min14 = minuteWrap!.querySelector('li[data-value="14"]');
+      const min15 = minuteWrap!.querySelector('li[data-value="15"]');
+      const min45 = minuteWrap!.querySelector('li[data-value="45"]');
+      const min46 = minuteWrap!.querySelector('li[data-value="46"]');
 
-      expect(min14.classList.contains("is-disabled")).toBe(true);
-      expect(min15.classList.contains("is-disabled")).toBe(false);
-      expect(min45.classList.contains("is-disabled")).toBe(false);
-      expect(min46.classList.contains("is-disabled")).toBe(true);
+      expect(min14!.classList.contains("is-disabled")).toBe(true);
+      expect(min15!.classList.contains("is-disabled")).toBe(false);
+      expect(min45!.classList.contains("is-disabled")).toBe(false);
+      expect(min46!.classList.contains("is-disabled")).toBe(true);
     });
 
     it("limit-range 应该限制秒列表", async () => {
@@ -784,18 +763,20 @@ describe("EaTimePicker Component", () => {
 
       await timePicker.updateComplete;
 
-      const secondWrap = timePicker.shadowRoot.querySelector(
+      const secondWrap = timePicker.shadowRoot!.querySelector(
         ".ea-time-picker__dropdown-inner--second"
       );
-      const sec29 = secondWrap.querySelector('li[data-value="29"]');
-      const sec30 = secondWrap.querySelector('li[data-value="30"]');
-      const sec45 = secondWrap.querySelector('li[data-value="45"]');
-      const sec46 = secondWrap.querySelector('li[data-value="46"]');
+      const sec29 = secondWrap!.querySelector('li[data-value="29"]');
+      const sec30 = secondWrap!.querySelector('li[data-value="30"]');
+      const sec45 = secondWrap!.querySelector<HTMLElement>(
+        'li[data-value="45"]'
+      );
+      const sec46 = secondWrap!.querySelector('li[data-value="46"]');
 
-      expect(sec29.classList.contains("is-disabled")).toBe(true);
-      expect(sec30.classList.contains("is-disabled")).toBe(false);
-      expect(sec45.classList.contains("is-disabled")).toBe(false);
-      expect(sec46.classList.contains("is-disabled")).toBe(true);
+      expect(sec29!.classList.contains("is-disabled")).toBe(true);
+      expect(sec30!.classList.contains("is-disabled")).toBe(false);
+      expect(sec45!.classList.contains("is-disabled")).toBe(false);
+      expect(sec46!.classList.contains("is-disabled")).toBe(true);
     });
   });
 
@@ -830,8 +811,8 @@ describe("EaTimePicker Component", () => {
 
       await timePicker.updateComplete;
 
-      const input = timePicker.shadowRoot.querySelector("ea-input");
-      expect(input.hasAttribute("required")).toBe(true);
+      const input = timePicker.shadowRoot!.querySelector("ea-input");
+      expect(input!.hasAttribute("required")).toBe(true);
     });
 
     it("非必填且无值时 checkValidity 应该返回 true", () => {
@@ -881,13 +862,13 @@ describe("EaTimePicker Component", () => {
 
       await timePicker.updateComplete;
 
-      const input = timePicker.shadowRoot.querySelector("ea-input");
-      input.click();
+      const input = timePicker.shadowRoot!.querySelector("ea-input");
+      input!.click();
       await timePicker.updateComplete;
 
       const containerEl =
-        timePicker.shadowRoot.querySelector(".ea-time-picker");
-      expect(containerEl.classList.contains("is-open")).toBe(true);
+        timePicker.shadowRoot!.querySelector<HTMLElement>(".ea-time-picker");
+      expect(containerEl!.classList.contains("is-open")).toBe(true);
     });
 
     it("focus() 应该打开下拉面板", async () => {
@@ -900,8 +881,8 @@ describe("EaTimePicker Component", () => {
       await timePicker.updateComplete;
 
       const containerEl =
-        timePicker.shadowRoot.querySelector(".ea-time-picker");
-      expect(containerEl.classList.contains("is-open")).toBe(true);
+        timePicker.shadowRoot!.querySelector<HTMLElement>(".ea-time-picker");
+      expect(containerEl!.classList.contains("is-open")).toBe(true);
     });
 
     it("点击组件外部应该关闭下拉面板", async () => {
@@ -914,13 +895,13 @@ describe("EaTimePicker Component", () => {
       await timePicker.updateComplete;
 
       const containerEl =
-        timePicker.shadowRoot.querySelector(".ea-time-picker");
-      expect(containerEl.classList.contains("is-open")).toBe(true);
+        timePicker.shadowRoot!.querySelector<HTMLElement>(".ea-time-picker");
+      expect(containerEl!.classList.contains("is-open")).toBe(true);
 
       document.body.click();
       await timePicker.updateComplete;
 
-      expect(containerEl.classList.contains("is-open")).toBe(false);
+      expect(containerEl!.classList.contains("is-open")).toBe(false);
     });
 
     it("disabled 时点击不应该打开下拉面板", async () => {
@@ -930,13 +911,13 @@ describe("EaTimePicker Component", () => {
 
       await timePicker.updateComplete;
 
-      const input = timePicker.shadowRoot.querySelector("ea-input");
-      input.click();
+      const input = timePicker.shadowRoot!.querySelector("ea-input");
+      input!.click();
       await timePicker.updateComplete;
 
       const containerEl =
-        timePicker.shadowRoot.querySelector(".ea-time-picker");
-      expect(containerEl.classList.contains("is-open")).toBe(false);
+        timePicker.shadowRoot!.querySelector<HTMLElement>(".ea-time-picker");
+      expect(containerEl!.classList.contains("is-open")).toBe(false);
     });
 
     it("disabled 时 focus() 不应该打开下拉面板", async () => {
@@ -950,8 +931,8 @@ describe("EaTimePicker Component", () => {
       await timePicker.updateComplete;
 
       const containerEl =
-        timePicker.shadowRoot.querySelector(".ea-time-picker");
-      expect(containerEl.classList.contains("is-open")).toBe(false);
+        timePicker.shadowRoot!.querySelector<HTMLElement>(".ea-time-picker");
+      expect(containerEl!.classList.contains("is-open")).toBe(false);
     });
   });
 
@@ -1007,7 +988,7 @@ describe("EaTimePicker Component", () => {
       await timePicker.updateComplete;
 
       expect(visibleChangeDetail).toBeDefined();
-      expect(visibleChangeDetail.visible).toBe(true);
+      expect(visibleChangeDetail!.visible).toBe(true);
     });
 
     it("handleClose 应该触发 ea-visible-change 事件 (visible=false)", async () => {
@@ -1028,7 +1009,7 @@ describe("EaTimePicker Component", () => {
       await timePicker.updateComplete;
 
       expect(visibleChangeDetail).toBeDefined();
-      expect(visibleChangeDetail.visible).toBe(false);
+      expect(visibleChangeDetail!.visible).toBe(false);
     });
 
     it("点击下拉面板中的时间项应该触发 change 事件", async () => {
@@ -1042,19 +1023,21 @@ describe("EaTimePicker Component", () => {
 
       let changeDetail = null;
       timePicker.addEventListener("change", e => {
-        changeDetail = e.detail;
+        changeDetail = (e as CustomEvent).detail;
       });
 
-      const hourWrap = timePicker.shadowRoot.querySelector(
+      const hourWrap = timePicker.shadowRoot!.querySelector(
         ".ea-time-picker__dropdown-inner--hour"
       );
-      const hour10 = hourWrap.querySelector('li[data-value="10"]');
-      hour10.click();
+      const hour10 = hourWrap!.querySelector<HTMLElement>(
+        'li[data-value="10"]'
+      );
+      hour10!.click();
 
       await timePicker.updateComplete;
 
       expect(changeDetail).toBeDefined();
-      expect(changeDetail.value).toBe("10:00:00");
+      expect(changeDetail!.value).toBe("10:00:00");
     });
 
     it("点击分钟项应该触发 change 事件且值正确", async () => {
@@ -1069,19 +1052,21 @@ describe("EaTimePicker Component", () => {
 
       let changeDetail = null;
       timePicker.addEventListener("change", e => {
-        changeDetail = e.detail;
+        changeDetail = (e as CustomEvent).detail;
       });
 
-      const minuteWrap = timePicker.shadowRoot.querySelector(
+      const minuteWrap = timePicker.shadowRoot!.querySelector(
         ".ea-time-picker__dropdown-inner--minute"
       );
-      const minute30 = minuteWrap.querySelector('li[data-value="30"]');
-      minute30.click();
+      const minute30 = minuteWrap!.querySelector<HTMLElement>(
+        'li[data-value="30"]'
+      );
+      minute30!.click();
 
       await timePicker.updateComplete;
 
       expect(changeDetail).toBeDefined();
-      expect(changeDetail.value).toBe("10:30:00");
+      expect(changeDetail!.value).toBe("10:30:00");
     });
 
     it("点击秒项应该触发 change 事件且值正确", async () => {
@@ -1096,19 +1081,21 @@ describe("EaTimePicker Component", () => {
 
       let changeDetail = null;
       timePicker.addEventListener("change", e => {
-        changeDetail = e.detail;
+        changeDetail = (e as CustomEvent).detail;
       });
 
-      const secondWrap = timePicker.shadowRoot.querySelector(
+      const secondWrap = timePicker.shadowRoot!.querySelector(
         ".ea-time-picker__dropdown-inner--second"
       );
-      const second45 = secondWrap.querySelector('li[data-value="45"]');
-      second45.click();
+      const second45 = secondWrap!.querySelector<HTMLElement>(
+        'li[data-value="45"]'
+      );
+      second45!.click();
 
       await timePicker.updateComplete;
 
       expect(changeDetail).toBeDefined();
-      expect(changeDetail.value).toBe("10:30:45");
+      expect(changeDetail!.value).toBe("10:30:45");
     });
 
     it("重复打开不应该重复触发 ea-visible-change 事件", async () => {
@@ -1181,20 +1168,22 @@ describe("EaTimePicker Component", () => {
 
       let changeDetail = null;
       timePicker.addEventListener("change", e => {
-        changeDetail = e.detail;
+        changeDetail = (e as CustomEvent).detail;
       });
 
-      const hourWrap = timePicker.shadowRoot.querySelector(
+      const hourWrap = timePicker.shadowRoot!.querySelector(
         ".ea-time-picker__dropdown-inner--hour"
       );
-      const hour15 = hourWrap.querySelector('li[data-value="15"]');
-      hour15.click();
+      const hour15 = hourWrap!.querySelector<HTMLElement>(
+        'li[data-value="15"]'
+      );
+      hour15!.click();
 
       await timePicker.updateComplete;
 
       expect(changeDetail).not.toBeNull();
-      expect(changeDetail.value).toBeDefined();
-      expect(typeof changeDetail.value).toBe("string");
+      expect(changeDetail!.value).toBeDefined();
+      expect(typeof changeDetail!.value).toBe("string");
     });
   });
 
@@ -1209,8 +1198,8 @@ describe("EaTimePicker Component", () => {
       await timePicker.updateComplete;
 
       const containerEl =
-        timePicker.shadowRoot.querySelector(".ea-time-picker");
-      expect(containerEl.classList.contains("is-open")).toBe(true);
+        timePicker.shadowRoot!.querySelector<HTMLElement>(".ea-time-picker");
+      expect(containerEl!.classList.contains("is-open")).toBe(true);
     });
 
     it("handleClose 方法应该关闭下拉面板", async () => {
@@ -1225,8 +1214,8 @@ describe("EaTimePicker Component", () => {
       await timePicker.updateComplete;
 
       const containerEl =
-        timePicker.shadowRoot.querySelector(".ea-time-picker");
-      expect(containerEl.classList.contains("is-open")).toBe(false);
+        timePicker.shadowRoot!.querySelector<HTMLElement>(".ea-time-picker");
+      expect(containerEl!.classList.contains("is-open")).toBe(false);
     });
 
     it("focus 方法不应该抛出错误", async () => {
@@ -1257,8 +1246,8 @@ describe("EaTimePicker Component", () => {
       await timePicker.updateComplete;
 
       const containerEl =
-        timePicker.shadowRoot.querySelector(".ea-time-picker");
-      expect(containerEl.classList.contains("is-open")).toBe(true);
+        timePicker.shadowRoot!.querySelector<HTMLElement>(".ea-time-picker");
+      expect(containerEl!.classList.contains("is-open")).toBe(true);
     });
   });
 
@@ -1267,7 +1256,7 @@ describe("EaTimePicker Component", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      const input = timePicker.shadowRoot.querySelector("ea-input");
+      const input = timePicker.shadowRoot!.querySelector("ea-input");
       expect(timePicker.validationTarget).toBe(input);
     });
 
@@ -1333,9 +1322,9 @@ describe("EaTimePicker Component", () => {
       await timePicker.updateComplete;
 
       const containerEl =
-        timePicker.shadowRoot.querySelector(".ea-time-picker");
-      expect(containerEl.classList.contains("is-disabled")).toBe(true);
-      expect(containerEl.classList.contains("is-align-center")).toBe(true);
+        timePicker.shadowRoot!.querySelector<HTMLElement>(".ea-time-picker");
+      expect(containerEl!.classList.contains("is-disabled")).toBe(true);
+      expect(containerEl!.classList.contains("is-align-center")).toBe(true);
     });
   });
 
@@ -1404,11 +1393,11 @@ describe("EaTimePicker Component", () => {
         changeTriggered = true;
       });
 
-      const hourWrap = timePicker.shadowRoot.querySelector(
+      const hourWrap = timePicker.shadowRoot!.querySelector(
         ".ea-time-picker__dropdown-inner--hour"
       );
-      const hour05 = hourWrap.querySelector('li[data-value="5"]');
-      hour05.click();
+      const hour05 = hourWrap!.querySelector<HTMLElement>('li[data-value="5"]');
+      hour05!.click();
 
       await waitForRender(200);
 
@@ -1445,13 +1434,13 @@ describe("EaTimePicker Component", () => {
       await timePicker.updateComplete;
 
       const containerEl =
-        timePicker.shadowRoot.querySelector(".ea-time-picker");
-      expect(containerEl.classList.contains("is-disabled")).toBe(true);
+        timePicker.shadowRoot!.querySelector<HTMLElement>(".ea-time-picker");
+      expect(containerEl!.classList.contains("is-disabled")).toBe(true);
 
       timePicker.removeAttribute("disabled");
       await timePicker.updateComplete;
 
-      expect(containerEl.classList.contains("is-disabled")).toBe(false);
+      expect(containerEl!.classList.contains("is-disabled")).toBe(false);
     });
 
     it("动态修改 align 应该更新 BEM 状态类", async () => {
@@ -1464,8 +1453,8 @@ describe("EaTimePicker Component", () => {
       await timePicker.updateComplete;
 
       const containerEl =
-        timePicker.shadowRoot.querySelector(".ea-time-picker");
-      expect(containerEl.classList.contains("is-align-right")).toBe(true);
+        timePicker.shadowRoot!.querySelector<HTMLElement>(".ea-time-picker");
+      expect(containerEl!.classList.contains("is-align-right")).toBe(true);
     });
   });
 
@@ -1477,23 +1466,27 @@ describe("EaTimePicker Component", () => {
 
       await timePicker.updateComplete;
 
-      const hourWrap = timePicker.shadowRoot.querySelector(
+      const hourWrap = timePicker.shadowRoot!.querySelector(
         ".ea-time-picker__dropdown-inner--hour"
       );
-      const minuteWrap = timePicker.shadowRoot.querySelector(
+      const minuteWrap = timePicker.shadowRoot!.querySelector(
         ".ea-time-picker__dropdown-inner--minute"
       );
-      const secondWrap = timePicker.shadowRoot.querySelector(
+      const secondWrap = timePicker.shadowRoot!.querySelector(
         ".ea-time-picker__dropdown-inner--second"
       );
 
-      const hour14 = hourWrap.querySelector('li[data-value="14"]');
-      const minute30 = minuteWrap.querySelector('li[data-value="30"]');
-      const second45 = secondWrap.querySelector('li[data-value="45"]');
+      const hour14 = hourWrap!.querySelector('li[data-value="14"]');
+      const minute30 = minuteWrap!.querySelector<HTMLElement>(
+        'li[data-value="30"]'
+      );
+      const second45 = secondWrap!.querySelector<HTMLElement>(
+        'li[data-value="45"]'
+      );
 
-      expect(hour14.classList.contains("is-active")).toBe(true);
-      expect(minute30.classList.contains("is-active")).toBe(true);
-      expect(second45.classList.contains("is-active")).toBe(true);
+      expect(hour14!.classList.contains("is-active")).toBe(true);
+      expect(minute30!.classList.contains("is-active")).toBe(true);
+      expect(second45!.classList.contains("is-active")).toBe(true);
     });
 
     it("切换 value 后 is-active 应该更新", async () => {
@@ -1503,24 +1496,24 @@ describe("EaTimePicker Component", () => {
 
       await timePicker.updateComplete;
 
-      const hourWrap = timePicker.shadowRoot.querySelector(
+      const hourWrap = timePicker.shadowRoot!.querySelector(
         ".ea-time-picker__dropdown-inner--hour"
       );
 
       timePicker.value = "08:00:00";
       await timePicker.updateComplete;
 
-      const hour14 = hourWrap.querySelector('li[data-value="14"]');
-      const hour08 = hourWrap.querySelector('li[data-value="8"]');
-      expect(hour14.classList.contains("is-active")).toBe(false);
-      expect(hour08.classList.contains("is-active")).toBe(true);
+      const hour14 = hourWrap!.querySelector('li[data-value="14"]');
+      const hour08 = hourWrap!.querySelector('li[data-value="8"]');
+      expect(hour14!.classList.contains("is-active")).toBe(false);
+      expect(hour08!.classList.contains("is-active")).toBe(true);
     });
 
     it("未设置 value 时不应该有 is-active 项", () => {
       const timePicker = document.createElement("ea-time-picker");
       container.appendChild(timePicker);
 
-      const items = timePicker.shadowRoot.querySelectorAll(
+      const items = timePicker.shadowRoot!.querySelectorAll(
         ".ea-time-picker__dropdown-item.is-active"
       );
       expect(items.length).toBe(0);
@@ -1540,7 +1533,9 @@ describe("EaTimePicker Component", () => {
           new KeyboardEvent("keydown", { key: "Escape", bubbles: true })
         );
         await el.updateComplete;
-        expect(el._container.classList.contains("is-open")).toBe(false);
+        const pickerContainer = (el as unknown as { _container: HTMLElement })
+          ._container;
+        expect(pickerContainer.classList.contains("is-open")).toBe(false);
       });
     });
 
@@ -1564,35 +1559,35 @@ describe("EaTimePicker Component", () => {
         const timePicker = document.createElement("ea-time-picker");
         container.appendChild(timePicker);
         await timePicker.updateComplete;
-        const input = timePicker.shadowRoot.querySelector("ea-input");
-        expect(input.getAttribute("role")).toBe("combobox");
+        const input = timePicker.shadowRoot!.querySelector("ea-input");
+        expect(input!.getAttribute("role")).toBe("combobox");
       });
 
       it("输入框应该有 aria-haspopup=listbox", async () => {
         const timePicker = document.createElement("ea-time-picker");
         container.appendChild(timePicker);
         await timePicker.updateComplete;
-        const input = timePicker.shadowRoot.querySelector("ea-input");
-        expect(input.getAttribute("aria-haspopup")).toBe("listbox");
+        const input = timePicker.shadowRoot!.querySelector("ea-input");
+        expect(input!.getAttribute("aria-haspopup")).toBe("listbox");
       });
 
       it("输入框应该有 aria-controls 指向 dropdown", async () => {
         const timePicker = document.createElement("ea-time-picker");
         container.appendChild(timePicker);
         await timePicker.updateComplete;
-        const input = timePicker.shadowRoot.querySelector("ea-input");
-        const dropdown = timePicker.shadowRoot.querySelector(
+        const input = timePicker.shadowRoot!.querySelector("ea-input");
+        const dropdown = timePicker.shadowRoot!.querySelector(
           ".ea-time-picker__dropdown"
         );
-        expect(input.getAttribute("aria-controls")).toBe(dropdown.id);
+        expect(input!.getAttribute("aria-controls")).toBe(dropdown!.id);
       });
 
       it("关闭时输入框 aria-expanded 应该为 false", async () => {
         const timePicker = document.createElement("ea-time-picker");
         container.appendChild(timePicker);
         await timePicker.updateComplete;
-        const input = timePicker.shadowRoot.querySelector("ea-input");
-        expect(input.getAttribute("aria-expanded")).toBe("false");
+        const input = timePicker.shadowRoot!.querySelector("ea-input");
+        expect(input!.getAttribute("aria-expanded")).toBe("false");
       });
 
       it("打开时输入框 aria-expanded 应该为 true", async () => {
@@ -1601,18 +1596,18 @@ describe("EaTimePicker Component", () => {
         await timePicker.updateComplete;
         timePicker.handleOpen();
         await timePicker.updateComplete;
-        const input = timePicker.shadowRoot.querySelector("ea-input");
-        expect(input.getAttribute("aria-expanded")).toBe("true");
+        const input = timePicker.shadowRoot!.querySelector("ea-input");
+        expect(input!.getAttribute("aria-expanded")).toBe("true");
       });
 
       it("下拉面板应该有 role=listbox", async () => {
         const timePicker = document.createElement("ea-time-picker");
         container.appendChild(timePicker);
         await timePicker.updateComplete;
-        const dropdown = timePicker.shadowRoot.querySelector(
+        const dropdown = timePicker.shadowRoot!.querySelector(
           ".ea-time-picker__dropdown"
         );
-        expect(dropdown.getAttribute("role")).toBe("listbox");
+        expect(dropdown!.getAttribute("role")).toBe("listbox");
       });
 
       it("宿主元素 disabled 时应该有 aria-disabled=true", async () => {
@@ -1634,7 +1629,7 @@ describe("EaTimePicker Component", () => {
         const timePicker = document.createElement("ea-time-picker");
         container.appendChild(timePicker);
         await timePicker.updateComplete;
-        const items = timePicker.shadowRoot.querySelectorAll(
+        const items = timePicker.shadowRoot!.querySelectorAll(
           ".ea-time-picker__dropdown-item"
         );
         expect(items.length).toBeGreaterThan(0);
@@ -1647,7 +1642,7 @@ describe("EaTimePicker Component", () => {
         const timePicker = document.createElement("ea-time-picker");
         container.appendChild(timePicker);
         await timePicker.updateComplete;
-        const items = timePicker.shadowRoot.querySelectorAll(
+        const items = timePicker.shadowRoot!.querySelectorAll(
           ".ea-time-picker__dropdown-item"
         );
         items.forEach(item => {
@@ -1660,11 +1655,11 @@ describe("EaTimePicker Component", () => {
         timePicker.setAttribute("value", "14:30:45");
         container.appendChild(timePicker);
         await timePicker.updateComplete;
-        const hourWrap = timePicker.shadowRoot.querySelector(
+        const hourWrap = timePicker.shadowRoot!.querySelector(
           ".ea-time-picker__dropdown-inner--hour"
         );
-        const hour14 = hourWrap.querySelector('li[data-value="14"]');
-        expect(hour14.getAttribute("aria-selected")).toBe("true");
+        const hour14 = hourWrap!.querySelector('li[data-value="14"]');
+        expect(hour14!.getAttribute("aria-selected")).toBe("true");
       });
 
       it("未选中时间项的 aria-selected 应该为 false", async () => {
@@ -1672,11 +1667,11 @@ describe("EaTimePicker Component", () => {
         timePicker.setAttribute("value", "14:30:45");
         container.appendChild(timePicker);
         await timePicker.updateComplete;
-        const hourWrap = timePicker.shadowRoot.querySelector(
+        const hourWrap = timePicker.shadowRoot!.querySelector(
           ".ea-time-picker__dropdown-inner--hour"
         );
-        const hour00 = hourWrap.querySelector('li[data-value="0"]');
-        expect(hour00.getAttribute("aria-selected")).toBe("false");
+        const hour00 = hourWrap!.querySelector('li[data-value="0"]');
+        expect(hour00!.getAttribute("aria-selected")).toBe("false");
       });
     });
   });

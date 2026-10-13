@@ -2,10 +2,18 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "../../test/utils/waitForRender";
 import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y";
 
+import type { EaMessage } from "./utils/EaMessageInstance";
+
 import "./index";
 
+declare global {
+  interface Window {
+    $message: typeof EaMessage;
+  }
+}
+
 describe("EaMessage Component", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -32,7 +40,7 @@ describe("EaMessage Component", () => {
       container.appendChild(message);
 
       expect(
-        message.shadowRoot.querySelector('[part="container"]')
+        message.shadowRoot!.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
@@ -40,7 +48,7 @@ describe("EaMessage Component", () => {
       const message = document.createElement("ea-message");
       container.appendChild(message);
 
-      expect(message.shadowRoot.querySelector('[part="icon"]')).toBeTruthy();
+      expect(message.shadowRoot!.querySelector('[part="icon"]')).toBeTruthy();
     });
 
     it("应该包含 content-wrap CSS Part", () => {
@@ -48,7 +56,7 @@ describe("EaMessage Component", () => {
       container.appendChild(message);
 
       expect(
-        message.shadowRoot.querySelector('[part="content-wrap"]')
+        message.shadowRoot!.querySelector('[part="content-wrap"]')
       ).toBeTruthy();
     });
 
@@ -57,7 +65,7 @@ describe("EaMessage Component", () => {
       container.appendChild(message);
 
       expect(
-        message.shadowRoot.querySelector('[part="close-icon"]')
+        message.shadowRoot!.querySelector('[part="close-icon"]')
       ).toBeTruthy();
     });
 
@@ -67,7 +75,7 @@ describe("EaMessage Component", () => {
 
       await message.updateComplete;
 
-      const icon = message.shadowRoot.querySelector("ea-icon");
+      const icon = message.shadowRoot!.querySelector("ea-icon");
       expect(icon).toBeTruthy();
     });
 
@@ -76,7 +84,7 @@ describe("EaMessage Component", () => {
       message.showClose = true;
       container.appendChild(message);
 
-      const closeIcon = message.shadowRoot.querySelector(
+      const closeIcon = message.shadowRoot!.querySelector(
         ".ea-message__close-icon"
       );
       expect(closeIcon).toBeTruthy();
@@ -124,7 +132,13 @@ describe("EaMessage Component", () => {
     });
 
     it("应该支持不同的 variant 值", async () => {
-      const variants = ["primary", "success", "warning", "danger", "info"];
+      const variants = [
+        "primary",
+        "success",
+        "warning",
+        "danger",
+        "info",
+      ] as const;
 
       for (const variant of variants) {
         const message = document.createElement("ea-message");
@@ -140,8 +154,8 @@ describe("EaMessage Component", () => {
 
       await message.updateComplete;
 
-      const icon = message.shadowRoot.querySelector(".ea-message__icon");
-      expect(icon.getAttribute("name")).toBe("circle-check");
+      const icon = message.shadowRoot!.querySelector(".ea-message__icon");
+      expect(icon!.getAttribute("name")).toBe("circle-check");
     });
 
     it("variant 为 danger 时图标应该是 circle-xmark", async () => {
@@ -151,8 +165,8 @@ describe("EaMessage Component", () => {
 
       await message.updateComplete;
 
-      const icon = message.shadowRoot.querySelector(".ea-message__icon");
-      expect(icon.getAttribute("name")).toBe("circle-xmark");
+      const icon = message.shadowRoot!.querySelector(".ea-message__icon");
+      expect(icon!.getAttribute("name")).toBe("circle-xmark");
     });
 
     it("variant 为 warning 时图标应该是 triangle-exclamation", async () => {
@@ -162,8 +176,8 @@ describe("EaMessage Component", () => {
 
       await message.updateComplete;
 
-      const icon = message.shadowRoot.querySelector(".ea-message__icon");
-      expect(icon.getAttribute("name")).toBe("triangle-exclamation");
+      const icon = message.shadowRoot!.querySelector(".ea-message__icon");
+      expect(icon!.getAttribute("name")).toBe("triangle-exclamation");
     });
 
     it("variant 为 info 时图标应该是 circle-info", async () => {
@@ -173,8 +187,8 @@ describe("EaMessage Component", () => {
 
       await message.updateComplete;
 
-      const icon = message.shadowRoot.querySelector(".ea-message__icon");
-      expect(icon.getAttribute("name")).toBe("circle-info");
+      const icon = message.shadowRoot!.querySelector(".ea-message__icon");
+      expect(icon!.getAttribute("name")).toBe("circle-info");
     });
 
     it("variant 为 primary 时图标应该是 circle-info", async () => {
@@ -184,8 +198,8 @@ describe("EaMessage Component", () => {
 
       await message.updateComplete;
 
-      const icon = message.shadowRoot.querySelector(".ea-message__icon");
-      expect(icon.getAttribute("name")).toBe("circle-info");
+      const icon = message.shadowRoot!.querySelector(".ea-message__icon");
+      expect(icon!.getAttribute("name")).toBe("circle-info");
     });
 
     it("动态修改 variant 应该更新图标", async () => {
@@ -198,8 +212,8 @@ describe("EaMessage Component", () => {
       message.variant = "success";
       await message.updateComplete;
 
-      const icon = message.shadowRoot.querySelector(".ea-message__icon");
-      expect(icon.getAttribute("name")).toBe("circle-check");
+      const icon = message.shadowRoot!.querySelector(".ea-message__icon");
+      expect(icon!.getAttribute("name")).toBe("circle-check");
     });
 
     it("动态修改 variant 应该更新容器类名", async () => {
@@ -212,8 +226,8 @@ describe("EaMessage Component", () => {
       message.variant = "danger";
       await message.updateComplete;
 
-      const containerEl = message.shadowRoot.querySelector(".ea-message");
-      expect(containerEl.classList.contains("ea-message--danger")).toBe(true);
+      const containerEl = message.shadowRoot!.querySelector(".ea-message");
+      expect(containerEl!.classList.contains("ea-message--danger")).toBe(true);
     });
   });
 
@@ -240,8 +254,8 @@ describe("EaMessage Component", () => {
 
       await message.updateComplete;
 
-      const containerEl = message.shadowRoot.querySelector(".ea-message");
-      expect(containerEl.classList.contains("is-visible")).toBe(true);
+      const containerEl = message.shadowRoot!.querySelector(".ea-message");
+      expect(containerEl!.classList.contains("is-visible")).toBe(true);
     });
 
     it("visible 为 false 时不应该包含 is-visible 状态类名", async () => {
@@ -251,8 +265,8 @@ describe("EaMessage Component", () => {
 
       await message.updateComplete;
 
-      const containerEl = message.shadowRoot.querySelector(".ea-message");
-      expect(containerEl.classList.contains("is-visible")).toBe(false);
+      const containerEl = message.shadowRoot!.querySelector(".ea-message");
+      expect(containerEl!.classList.contains("is-visible")).toBe(false);
     });
 
     it("从 false 切换到 true 应该触发 ea-show 事件", async () => {
@@ -310,8 +324,8 @@ describe("EaMessage Component", () => {
 
       await message.updateComplete;
 
-      const content = message.shadowRoot.querySelector(".ea-message__content");
-      expect(content.textContent).toBe("Test content");
+      const content = message.shadowRoot!.querySelector(".ea-message__content");
+      expect(content!.textContent).toBe("Test content");
     });
 
     it("动态修改 message 应该更新内容", async () => {
@@ -324,8 +338,8 @@ describe("EaMessage Component", () => {
       message.message = "Updated";
       await message.updateComplete;
 
-      const content = message.shadowRoot.querySelector(".ea-message__content");
-      expect(content.textContent).toBe("Updated");
+      const content = message.shadowRoot!.querySelector(".ea-message__content");
+      expect(content!.textContent).toBe("Updated");
     });
   });
 
@@ -352,8 +366,8 @@ describe("EaMessage Component", () => {
 
       await message.updateComplete;
 
-      const containerEl = message.shadowRoot.querySelector(".ea-message");
-      expect(containerEl.classList.contains("is-show-close")).toBe(true);
+      const containerEl = message.shadowRoot!.querySelector(".ea-message");
+      expect(containerEl!.classList.contains("is-show-close")).toBe(true);
     });
 
     it("showClose 为 false 时不应该包含 is-show-close 状态类名", async () => {
@@ -363,8 +377,8 @@ describe("EaMessage Component", () => {
 
       await message.updateComplete;
 
-      const containerEl = message.shadowRoot.querySelector(".ea-message");
-      expect(containerEl.classList.contains("is-show-close")).toBe(false);
+      const containerEl = message.shadowRoot!.querySelector(".ea-message");
+      expect(containerEl!.classList.contains("is-show-close")).toBe(false);
     });
 
     it("动态修改 showClose 应该更新类名", async () => {
@@ -377,8 +391,8 @@ describe("EaMessage Component", () => {
       message.showClose = true;
       await message.updateComplete;
 
-      const containerEl = message.shadowRoot.querySelector(".ea-message");
-      expect(containerEl.classList.contains("is-show-close")).toBe(true);
+      const containerEl = message.shadowRoot!.querySelector(".ea-message");
+      expect(containerEl!.classList.contains("is-show-close")).toBe(true);
     });
   });
 
@@ -399,7 +413,7 @@ describe("EaMessage Component", () => {
         "bottom-left",
         "bottom-right",
         "middle",
-      ];
+      ] as const;
 
       for (const placement of placements) {
         const message = document.createElement("ea-message");
@@ -415,8 +429,8 @@ describe("EaMessage Component", () => {
 
       await message.updateComplete;
 
-      const containerEl = message.shadowRoot.querySelector(".ea-message");
-      expect(containerEl.classList.contains("ea-message--bottom-left")).toBe(
+      const containerEl = message.shadowRoot!.querySelector(".ea-message");
+      expect(containerEl!.classList.contains("ea-message--bottom-left")).toBe(
         true
       );
     });
@@ -431,9 +445,9 @@ describe("EaMessage Component", () => {
       message.placement = "bottom";
       await message.updateComplete;
 
-      const containerEl = message.shadowRoot.querySelector(".ea-message");
-      expect(containerEl.classList.contains("ea-message--bottom")).toBe(true);
-      expect(containerEl.classList.contains("ea-message--top")).toBe(false);
+      const containerEl = message.shadowRoot!.querySelector(".ea-message");
+      expect(containerEl!.classList.contains("ea-message--bottom")).toBe(true);
+      expect(containerEl!.classList.contains("ea-message--top")).toBe(false);
     });
 
     it("应该支持 middle placement", async () => {
@@ -443,8 +457,8 @@ describe("EaMessage Component", () => {
 
       await message.updateComplete;
 
-      const containerEl = message.shadowRoot.querySelector(".ea-message");
-      expect(containerEl.classList.contains("ea-message--middle")).toBe(true);
+      const containerEl = message.shadowRoot!.querySelector(".ea-message");
+      expect(containerEl!.classList.contains("ea-message--middle")).toBe(true);
     });
   });
 
@@ -472,8 +486,8 @@ describe("EaMessage Component", () => {
 
       await message.updateComplete;
 
-      const icon = message.shadowRoot.querySelector(".ea-message__icon");
-      expect(icon.getAttribute("name")).toBe("custom-icon");
+      const icon = message.shadowRoot!.querySelector(".ea-message__icon");
+      expect(icon!.getAttribute("name")).toBe("custom-icon");
     });
 
     it("动态修改 icon 应该更新图标元素", async () => {
@@ -486,8 +500,8 @@ describe("EaMessage Component", () => {
       message.icon = "star";
       await message.updateComplete;
 
-      const icon = message.shadowRoot.querySelector(".ea-message__icon");
-      expect(icon.getAttribute("name")).toBe("star");
+      const icon = message.shadowRoot!.querySelector(".ea-message__icon");
+      expect(icon!.getAttribute("name")).toBe("star");
     });
 
     it("清空 icon 后应该恢复为 variant 对应的默认图标", async () => {
@@ -501,8 +515,8 @@ describe("EaMessage Component", () => {
       message.icon = "";
       await message.updateComplete;
 
-      const icon = message.shadowRoot.querySelector(".ea-message__icon");
-      expect(icon.getAttribute("name")).toBe("circle-xmark");
+      const icon = message.shadowRoot!.querySelector(".ea-message__icon");
+      expect(icon!.getAttribute("name")).toBe("circle-xmark");
     });
   });
 
@@ -556,8 +570,8 @@ describe("EaMessage Component", () => {
 
       await message.updateComplete;
 
-      const content = message.shadowRoot.querySelector(".ea-message__content");
-      expect(content.innerHTML).toBe("&lt;strong&gt;Bold&lt;/strong&gt; text");
+      const content = message.shadowRoot!.querySelector(".ea-message__content");
+      expect(content!.innerHTML).toBe("&lt;strong&gt;Bold&lt;/strong&gt; text");
     });
 
     it("dangerouslyUseHTMLString 为 true 时应该渲染 HTML", async () => {
@@ -567,8 +581,8 @@ describe("EaMessage Component", () => {
       container.appendChild(message);
       await message.updateComplete;
 
-      const content = message.shadowRoot.querySelector(".ea-message__content");
-      expect(content.querySelector("strong")).toBeTruthy();
+      const content = message.shadowRoot!.querySelector(".ea-message__content");
+      expect(content!.querySelector("strong")).toBeTruthy();
     });
   });
 
@@ -751,10 +765,10 @@ describe("EaMessage Component", () => {
       const closeHandler = vi.fn();
       message.addEventListener("ea-close", closeHandler);
 
-      const closeIcon = message.shadowRoot.querySelector(
+      const closeIcon = message.shadowRoot!.querySelector<HTMLElement>(
         ".ea-message__close-icon"
       );
-      closeIcon.click();
+      closeIcon!.click();
 
       await message.updateComplete;
 
@@ -772,10 +786,10 @@ describe("EaMessage Component", () => {
       const closeHandler = vi.fn();
       message.addEventListener("ea-close", closeHandler);
 
-      const closeIcon = message.shadowRoot.querySelector(
+      const closeIcon = message.shadowRoot!.querySelector<HTMLElement>(
         ".ea-message__close-icon"
       );
-      closeIcon.click();
+      closeIcon!.click();
 
       await message.updateComplete;
 
@@ -833,14 +847,14 @@ describe("EaMessage Component", () => {
 
       await message.updateComplete;
 
-      const containerEl = message.shadowRoot.querySelector(".ea-message");
-      expect(containerEl.classList.contains("ea-message--danger")).toBe(true);
-      expect(containerEl.classList.contains("ea-message--bottom")).toBe(true);
-      expect(containerEl.classList.contains("is-visible")).toBe(true);
-      expect(containerEl.classList.contains("is-show-close")).toBe(true);
+      const containerEl = message.shadowRoot!.querySelector(".ea-message");
+      expect(containerEl!.classList.contains("ea-message--danger")).toBe(true);
+      expect(containerEl!.classList.contains("ea-message--bottom")).toBe(true);
+      expect(containerEl!.classList.contains("is-visible")).toBe(true);
+      expect(containerEl!.classList.contains("is-show-close")).toBe(true);
 
-      const content = message.shadowRoot.querySelector(".ea-message__content");
-      expect(content.textContent).toBe("Error!");
+      const content = message.shadowRoot!.querySelector(".ea-message__content");
+      expect(content!.textContent).toBe("Error!");
     });
   });
 
@@ -860,8 +874,8 @@ describe("EaMessage Component", () => {
 
       await message.updateComplete;
 
-      const content = message.shadowRoot.querySelector(".ea-message__content");
-      expect(content.textContent).toBe("");
+      const content = message.shadowRoot!.querySelector(".ea-message__content");
+      expect(content!.textContent).toBe("");
     });
 
     it("HTML 特殊字符应该被正确转义", () => {
@@ -869,8 +883,8 @@ describe("EaMessage Component", () => {
       message.message = "<div>test</div>";
       container.appendChild(message);
 
-      const content = message.shadowRoot.querySelector(".ea-message__content");
-      expect(content.querySelector("div")).toBeFalsy();
+      const content = message.shadowRoot!.querySelector(".ea-message__content");
+      expect(content!.querySelector("div")).toBeFalsy();
     });
 
     it("多个消息应该正确堆叠", async () => {
@@ -940,7 +954,7 @@ describe("EaMessage Component", () => {
       container.appendChild(message);
 
       expect(
-        message.shadowRoot.querySelector('[part="container"]')
+        message.shadowRoot!.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
@@ -1010,9 +1024,9 @@ describe("EaMessage Component", () => {
 
       await message.updateComplete;
 
-      const containerEl = message.shadowRoot.querySelector(".ea-message");
+      const containerEl = message.shadowRoot!.querySelector(".ea-message");
       expect(containerEl).toBeTruthy();
-      expect(containerEl.classList.contains("ea-message")).toBe(true);
+      expect(containerEl!.classList.contains("ea-message")).toBe(true);
     });
 
     it("应该包含 variant 对应的修饰类名", async () => {
@@ -1022,8 +1036,8 @@ describe("EaMessage Component", () => {
 
       await message.updateComplete;
 
-      const containerEl = message.shadowRoot.querySelector(".ea-message");
-      expect(containerEl.classList.contains("ea-message--success")).toBe(true);
+      const containerEl = message.shadowRoot!.querySelector(".ea-message");
+      expect(containerEl!.classList.contains("ea-message--success")).toBe(true);
     });
 
     it("应该包含 placement 对应的修饰类名", async () => {
@@ -1033,8 +1047,8 @@ describe("EaMessage Component", () => {
 
       await message.updateComplete;
 
-      const containerEl = message.shadowRoot.querySelector(".ea-message");
-      expect(containerEl.classList.contains("ea-message--bottom-right")).toBe(
+      const containerEl = message.shadowRoot!.querySelector(".ea-message");
+      expect(containerEl!.classList.contains("ea-message--bottom-right")).toBe(
         true
       );
     });
@@ -1046,8 +1060,8 @@ describe("EaMessage Component", () => {
 
       await message.updateComplete;
 
-      const containerEl = message.shadowRoot.querySelector(".ea-message");
-      expect(containerEl.classList.contains("is-show")).toBe(true);
+      const containerEl = message.shadowRoot!.querySelector(".ea-message");
+      expect(containerEl!.classList.contains("is-show")).toBe(true);
     });
 
     it("关闭图标默认应该包含 xmark", async () => {
@@ -1057,10 +1071,10 @@ describe("EaMessage Component", () => {
 
       await message.updateComplete;
 
-      const closeIcon = message.shadowRoot.querySelector(
+      const closeIcon = message.shadowRoot!.querySelector(
         ".ea-message__close-icon"
       );
-      expect(closeIcon.getAttribute("name")).toBe("xmark");
+      expect(closeIcon!.getAttribute("name")).toBe("xmark");
     });
   });
 

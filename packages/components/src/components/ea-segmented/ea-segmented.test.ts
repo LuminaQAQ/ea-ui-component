@@ -2,9 +2,10 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y";
 
 import "./index";
+import type { SegmentedOption } from "./index";
 
 describe("EaSegmented Component", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -16,7 +17,10 @@ describe("EaSegmented Component", () => {
     container.remove();
   });
 
-  function createSegmented(attrs = {}, options = null) {
+  function createSegmented(
+    attrs: Record<string, string | boolean> = {},
+    options: SegmentedOption[] | null = null
+  ) {
     const el = document.createElement("ea-segmented");
     Object.entries(attrs).forEach(([key, val]) => {
       if (val === true) {
@@ -34,15 +38,15 @@ describe("EaSegmented Component", () => {
       const segmented = createSegmented({ name: "test" }, ["Mon", "Tue"]);
       container.appendChild(segmented);
       expect(segmented.shadowRoot).toBeDefined();
-      expect(segmented.shadowRoot.nodeType).toBe(11);
+      expect(segmented.shadowRoot!.nodeType).toBe(11);
     });
 
     it("应该包含 .ea-segmented 容器元素", () => {
       const segmented = createSegmented({ name: "test" }, ["Mon", "Tue"]);
       container.appendChild(segmented);
-      const el = segmented.shadowRoot.querySelector(".ea-segmented");
+      const el = segmented.shadowRoot!.querySelector(".ea-segmented");
       expect(el).toBeTruthy();
-      expect(el.getAttribute("part")).toBe("container");
+      expect(el!.getAttribute("part")).toBe("container");
     });
 
     it("应该包含所有必需的 CSS Parts", async () => {
@@ -51,13 +55,17 @@ describe("EaSegmented Component", () => {
       await segmented.updateComplete;
 
       expect(
-        segmented.shadowRoot.querySelector('[part="container"]')
+        segmented.shadowRoot!.querySelector('[part="container"]')
       ).toBeTruthy();
-      expect(segmented.shadowRoot.querySelector('[part="item"]')).toBeTruthy();
-      expect(segmented.shadowRoot.querySelector('[part="label"]')).toBeTruthy();
-      expect(segmented.shadowRoot.querySelector('[part="input"]')).toBeTruthy();
+      expect(segmented.shadowRoot!.querySelector('[part="item"]')).toBeTruthy();
       expect(
-        segmented.shadowRoot.querySelector('[part="indicator"]')
+        segmented.shadowRoot!.querySelector('[part="label"]')
+      ).toBeTruthy();
+      expect(
+        segmented.shadowRoot!.querySelector('[part="input"]')
+      ).toBeTruthy();
+      expect(
+        segmented.shadowRoot!.querySelector('[part="indicator"]')
       ).toBeTruthy();
     });
 
@@ -66,11 +74,11 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const indicator = segmented.shadowRoot.querySelector(
+      const indicator = segmented.shadowRoot!.querySelector(
         ".ea-segmented__indicator"
       );
       expect(indicator).toBeTruthy();
-      expect(indicator.getAttribute("part")).toBe("indicator");
+      expect(indicator!.getAttribute("part")).toBe("indicator");
     });
 
     it("无 options 时不应渲染 item", async () => {
@@ -78,7 +86,7 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const items = segmented.shadowRoot.querySelectorAll(
+      const items = segmented.shadowRoot!.querySelectorAll(
         ".ea-segmented__item"
       );
       expect(items.length).toBe(0);
@@ -97,7 +105,7 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const items = segmented.shadowRoot.querySelectorAll(
+      const items = segmented.shadowRoot!.querySelectorAll(
         ".ea-segmented__item"
       );
       expect(items.length).toBe(5);
@@ -112,12 +120,12 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const items = segmented.shadowRoot.querySelectorAll(
+      const items = segmented.shadowRoot!.querySelectorAll(
         ".ea-segmented__item"
       );
       expect(items.length).toBe(3);
 
-      const inputs = segmented.shadowRoot.querySelectorAll(
+      const inputs = segmented.shadowRoot!.querySelectorAll<HTMLInputElement>(
         ".ea-segmented__original"
       );
       expect(inputs[0].value).toBe("Apple");
@@ -134,7 +142,7 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const labels = segmented.shadowRoot.querySelectorAll(
+      const labels = segmented.shadowRoot!.querySelectorAll(
         ".ea-segmented__label"
       );
       expect(labels[0].textContent.trim()).toBe("Mon");
@@ -150,7 +158,7 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const labels = segmented.shadowRoot.querySelectorAll(
+      const labels = segmented.shadowRoot!.querySelectorAll(
         ".ea-segmented__label"
       );
       expect(labels[0].textContent.trim()).toBe("苹果");
@@ -162,7 +170,7 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const items = segmented.shadowRoot.querySelectorAll(
+      const items = segmented.shadowRoot!.querySelectorAll(
         ".ea-segmented__item"
       );
       items.forEach(item => {
@@ -176,7 +184,7 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const inputs = segmented.shadowRoot.querySelectorAll(
+      const inputs = segmented.shadowRoot!.querySelectorAll<HTMLInputElement>(
         ".ea-segmented__original"
       );
       inputs.forEach(input => {
@@ -189,7 +197,7 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const inputs = segmented.shadowRoot.querySelectorAll(
+      const inputs = segmented.shadowRoot!.querySelectorAll<HTMLInputElement>(
         ".ea-segmented__original"
       );
       inputs.forEach(input => {
@@ -220,7 +228,7 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const items = segmented.shadowRoot.querySelectorAll(
+      const items = segmented.shadowRoot!.querySelectorAll(
         ".ea-segmented__item"
       );
       expect(items.length).toBe(0);
@@ -232,14 +240,14 @@ describe("EaSegmented Component", () => {
       await segmented.updateComplete;
 
       expect(
-        segmented.shadowRoot.querySelectorAll(".ea-segmented__item").length
+        segmented.shadowRoot!.querySelectorAll(".ea-segmented__item").length
       ).toBe(2);
 
       segmented.options = ["Mon", "Tue", "Wed", "Thu"];
       await segmented.updateComplete;
 
       expect(
-        segmented.shadowRoot.querySelectorAll(".ea-segmented__item").length
+        segmented.shadowRoot!.querySelectorAll(".ea-segmented__item").length
       ).toBe(4);
     });
 
@@ -251,7 +259,7 @@ describe("EaSegmented Component", () => {
       segmented.options = ["Tue", "Wed"];
       await segmented.updateComplete;
 
-      const labels = segmented.shadowRoot.querySelectorAll(
+      const labels = segmented.shadowRoot!.querySelectorAll(
         ".ea-segmented__label"
       );
       expect(labels[0].textContent.trim()).toBe("Tue");
@@ -267,7 +275,7 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const items = segmented.shadowRoot.querySelectorAll(
+      const items = segmented.shadowRoot!.querySelectorAll(
         ".ea-segmented__item"
       );
       expect(items.length).toBe(3);
@@ -282,7 +290,7 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const labels = segmented.shadowRoot.querySelectorAll(
+      const labels = segmented.shadowRoot!.querySelectorAll(
         ".ea-segmented__label"
       );
       expect(labels[0].textContent.trim()).toBe("Option 1");
@@ -298,7 +306,7 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const items = segmented.shadowRoot.querySelectorAll(
+      const items = segmented.shadowRoot!.querySelectorAll(
         ".ea-segmented__item"
       );
       expect(items.length).toBe(2);
@@ -309,7 +317,7 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const labels = segmented.shadowRoot.querySelectorAll(
+      const labels = segmented.shadowRoot!.querySelectorAll(
         ".ea-segmented__label"
       );
       expect(labels[0].textContent).toBe("Mon");
@@ -347,7 +355,7 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const items = segmented.shadowRoot.querySelectorAll(
+      const items = segmented.shadowRoot!.querySelectorAll(
         ".ea-segmented__item"
       );
       expect(items[0].classList.contains("is-checked")).toBe(false);
@@ -364,7 +372,7 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const inputs = segmented.shadowRoot.querySelectorAll(
+      const inputs = segmented.shadowRoot!.querySelectorAll<HTMLInputElement>(
         ".ea-segmented__original"
       );
       expect(inputs[0].checked).toBe(false);
@@ -399,7 +407,7 @@ describe("EaSegmented Component", () => {
       await segmented.updateComplete;
 
       await vi.waitFor(() => {
-        const items = segmented.shadowRoot.querySelectorAll(
+        const items = segmented.shadowRoot!.querySelectorAll(
           ".ea-segmented__item"
         );
         expect(items[0].classList.contains("is-checked")).toBe(false);
@@ -415,7 +423,7 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const items = segmented.shadowRoot.querySelectorAll(
+      const items = segmented.shadowRoot!.querySelectorAll(
         ".ea-segmented__item"
       );
       expect(items[0].classList.contains("is-checked")).toBe(false);
@@ -431,7 +439,7 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const items = segmented.shadowRoot.querySelectorAll(
+      const items = segmented.shadowRoot!.querySelectorAll(
         ".ea-segmented__item"
       );
       expect(items[1].classList.contains("is-checked")).toBe(true);
@@ -466,18 +474,20 @@ describe("EaSegmented Component", () => {
     it("size 变化时应该正确更新容器 class", async () => {
       const segmented = createSegmented({ name: "week" }, ["Mon", "Tue"]);
       container.appendChild(segmented);
-      const containerEl = segmented.shadowRoot.querySelector(".ea-segmented");
+      const containerEl = segmented.shadowRoot!.querySelector(".ea-segmented");
 
       segmented.setAttribute("size", "large");
       await segmented.updateComplete;
 
-      expect(containerEl.classList.contains("ea-segmented--large")).toBe(true);
+      expect(containerEl!.classList.contains("ea-segmented--large")).toBe(true);
 
       segmented.setAttribute("size", "small");
       await segmented.updateComplete;
 
-      expect(containerEl.classList.contains("ea-segmented--small")).toBe(true);
-      expect(containerEl.classList.contains("ea-segmented--large")).toBe(false);
+      expect(containerEl!.classList.contains("ea-segmented--small")).toBe(true);
+      expect(containerEl!.classList.contains("ea-segmented--large")).toBe(
+        false
+      );
     });
 
     it("size 属性变化时应该正确更新", () => {
@@ -521,18 +531,18 @@ describe("EaSegmented Component", () => {
     it("direction 变化时应该正确更新容器 class", async () => {
       const segmented = createSegmented({ name: "week" }, ["Mon", "Tue"]);
       container.appendChild(segmented);
-      const containerEl = segmented.shadowRoot.querySelector(".ea-segmented");
+      const containerEl = segmented.shadowRoot!.querySelector(".ea-segmented");
 
       segmented.setAttribute("direction", "horizontal");
       await segmented.updateComplete;
 
-      expect(containerEl.classList.contains("is-horizontal")).toBe(true);
+      expect(containerEl!.classList.contains("is-horizontal")).toBe(true);
 
       segmented.setAttribute("direction", "vertical");
       await segmented.updateComplete;
 
-      expect(containerEl.classList.contains("is-vertical")).toBe(true);
-      expect(containerEl.classList.contains("is-horizontal")).toBe(false);
+      expect(containerEl!.classList.contains("is-vertical")).toBe(true);
+      expect(containerEl!.classList.contains("is-horizontal")).toBe(false);
     });
   });
 
@@ -579,7 +589,7 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const inputs = segmented.shadowRoot.querySelectorAll(
+      const inputs = segmented.shadowRoot!.querySelectorAll<HTMLInputElement>(
         ".ea-segmented__original"
       );
       inputs.forEach(input => {
@@ -596,7 +606,7 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const items = segmented.shadowRoot.querySelectorAll(
+      const items = segmented.shadowRoot!.querySelectorAll(
         ".ea-segmented__item"
       );
       items.forEach(item => {
@@ -609,13 +619,13 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const containerEl = segmented.shadowRoot.querySelector(".ea-segmented");
-      expect(containerEl.classList.contains("is-disabled")).toBe(false);
+      const containerEl = segmented.shadowRoot!.querySelector(".ea-segmented");
+      expect(containerEl!.classList.contains("is-disabled")).toBe(false);
 
       segmented.setAttribute("disabled", "");
       await segmented.updateComplete;
 
-      expect(containerEl.classList.contains("is-disabled")).toBe(false);
+      expect(containerEl!.classList.contains("is-disabled")).toBe(false);
     });
 
     it("应该支持 options 中的 disabled 属性", async () => {
@@ -627,7 +637,7 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const items = segmented.shadowRoot.querySelectorAll(
+      const items = segmented.shadowRoot!.querySelectorAll(
         ".ea-segmented__item"
       );
       expect(items[0].classList.contains("is-disabled")).toBe(true);
@@ -643,7 +653,7 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const inputs = segmented.shadowRoot.querySelectorAll(
+      const inputs = segmented.shadowRoot!.querySelectorAll<HTMLInputElement>(
         ".ea-segmented__original"
       );
       expect(inputs[0].disabled).toBe(true);
@@ -658,7 +668,7 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const inputs = segmented.shadowRoot.querySelectorAll(
+      const inputs = segmented.shadowRoot!.querySelectorAll<HTMLInputElement>(
         ".ea-segmented__original"
       );
       inputs.forEach(input => {
@@ -693,13 +703,13 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const containerEl = segmented.shadowRoot.querySelector(".ea-segmented");
-      expect(containerEl.classList.contains("is-block")).toBe(false);
+      const containerEl = segmented.shadowRoot!.querySelector(".ea-segmented");
+      expect(containerEl!.classList.contains("is-block")).toBe(false);
 
       segmented.setAttribute("block", "");
       await segmented.updateComplete;
 
-      expect(containerEl.classList.contains("is-block")).toBe(true);
+      expect(containerEl!.classList.contains("is-block")).toBe(true);
     });
 
     it("block 属性应该可以动态移除", () => {
@@ -733,7 +743,7 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const inputs = segmented.shadowRoot.querySelectorAll(
+      const inputs = segmented.shadowRoot!.querySelectorAll<HTMLInputElement>(
         ".ea-segmented__original"
       );
       inputs.forEach(input => {
@@ -763,11 +773,11 @@ describe("EaSegmented Component", () => {
       segmented.options = [
         { myLabel: "Mon", myValue: "Mon", myDisabled: true },
         { myLabel: "Tue", myValue: "Tue" },
-      ];
+      ] as unknown as SegmentedOption[];
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const labels = segmented.shadowRoot.querySelectorAll(
+      const labels = segmented.shadowRoot!.querySelectorAll(
         ".ea-segmented__label"
       );
       expect(labels[0].textContent.trim()).toBe("Mon");
@@ -784,11 +794,11 @@ describe("EaSegmented Component", () => {
       segmented.options = [
         { text: "A", key: "a", isLocked: true },
         { text: "B", key: "b" },
-      ];
+      ] as unknown as SegmentedOption[];
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const items = segmented.shadowRoot.querySelectorAll(
+      const items = segmented.shadowRoot!.querySelectorAll(
         ".ea-segmented__item"
       );
       expect(items[0].classList.contains("is-disabled")).toBe(true);
@@ -805,11 +815,11 @@ describe("EaSegmented Component", () => {
       segmented.options = [
         { text: "A", key: "a" },
         { text: "B", key: "b" },
-      ];
+      ] as unknown as SegmentedOption[];
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const items = segmented.shadowRoot.querySelectorAll(
+      const items = segmented.shadowRoot!.querySelectorAll(
         ".ea-segmented__item"
       );
       expect(items[0].classList.contains("is-checked")).toBe(false);
@@ -823,8 +833,8 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const containerEl = segmented.shadowRoot.querySelector(".ea-segmented");
-      expect(containerEl.classList.contains("ea-segmented")).toBe(true);
+      const containerEl = segmented.shadowRoot!.querySelector(".ea-segmented");
+      expect(containerEl!.classList.contains("ea-segmented")).toBe(true);
     });
 
     it("size 应该生成正确的修饰符类名", async () => {
@@ -835,8 +845,8 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const containerEl = segmented.shadowRoot.querySelector(".ea-segmented");
-      expect(containerEl.classList.contains("ea-segmented--large")).toBe(true);
+      const containerEl = segmented.shadowRoot!.querySelector(".ea-segmented");
+      expect(containerEl!.classList.contains("ea-segmented--large")).toBe(true);
     });
 
     it("direction 应该生成正确的状态类名", async () => {
@@ -847,8 +857,8 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const containerEl = segmented.shadowRoot.querySelector(".ea-segmented");
-      expect(containerEl.classList.contains("is-vertical")).toBe(true);
+      const containerEl = segmented.shadowRoot!.querySelector(".ea-segmented");
+      expect(containerEl!.classList.contains("is-vertical")).toBe(true);
     });
 
     it("block 应该生成正确的状态类名", async () => {
@@ -859,8 +869,8 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const containerEl = segmented.shadowRoot.querySelector(".ea-segmented");
-      expect(containerEl.classList.contains("is-block")).toBe(true);
+      const containerEl = segmented.shadowRoot!.querySelector(".ea-segmented");
+      expect(containerEl!.classList.contains("is-block")).toBe(true);
     });
 
     it("disabled 不应该在容器上生成状态类名（仅影响 item）", async () => {
@@ -871,10 +881,10 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const containerEl = segmented.shadowRoot.querySelector(".ea-segmented");
-      expect(containerEl.classList.contains("is-disabled")).toBe(false);
+      const containerEl = segmented.shadowRoot!.querySelector(".ea-segmented");
+      expect(containerEl!.classList.contains("is-disabled")).toBe(false);
 
-      const items = segmented.shadowRoot.querySelectorAll(
+      const items = segmented.shadowRoot!.querySelectorAll(
         ".ea-segmented__item"
       );
       items.forEach(item => {
@@ -890,10 +900,10 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const containerEl = segmented.shadowRoot.querySelector(".ea-segmented");
-      expect(containerEl.classList.contains("ea-segmented--large")).toBe(true);
-      expect(containerEl.classList.contains("is-vertical")).toBe(true);
-      expect(containerEl.classList.contains("is-block")).toBe(true);
+      const containerEl = segmented.shadowRoot!.querySelector(".ea-segmented");
+      expect(containerEl!.classList.contains("ea-segmented--large")).toBe(true);
+      expect(containerEl!.classList.contains("is-vertical")).toBe(true);
+      expect(containerEl!.classList.contains("is-block")).toBe(true);
     });
 
     it("item 应该有 ea-segmented__item 类名", async () => {
@@ -901,7 +911,7 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const items = segmented.shadowRoot.querySelectorAll(
+      const items = segmented.shadowRoot!.querySelectorAll(
         ".ea-segmented__item"
       );
       items.forEach(item => {
@@ -914,7 +924,7 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const labels = segmented.shadowRoot.querySelectorAll(
+      const labels = segmented.shadowRoot!.querySelectorAll(
         ".ea-segmented__label"
       );
       labels.forEach(label => {
@@ -927,7 +937,7 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const inputs = segmented.shadowRoot.querySelectorAll(
+      const inputs = segmented.shadowRoot!.querySelectorAll<HTMLInputElement>(
         ".ea-segmented__original"
       );
       inputs.forEach(input => {
@@ -940,10 +950,10 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const indicator = segmented.shadowRoot.querySelector(
+      const indicator = segmented.shadowRoot!.querySelector(
         ".ea-segmented__indicator"
       );
-      expect(indicator.classList.contains("ea-segmented__indicator")).toBe(
+      expect(indicator!.classList.contains("ea-segmented__indicator")).toBe(
         true
       );
     });
@@ -962,8 +972,11 @@ describe("EaSegmented Component", () => {
       const changeHandler = vi.fn();
       segmented.addEventListener("change", changeHandler);
 
-      const input = segmented.shadowRoot.querySelector('input[value="Tue"]');
-      input.click();
+      const input =
+        segmented.shadowRoot!.querySelector<HTMLInputElement>(
+          'input[value="Tue"]'
+        );
+      input!.click();
       await segmented.updateComplete;
 
       expect(changeHandler).toHaveBeenCalled();
@@ -980,13 +993,16 @@ describe("EaSegmented Component", () => {
 
       let eventDetail = null;
       segmented.addEventListener("change", e => {
-        eventDetail = e.detail;
+        eventDetail = (e as CustomEvent).detail;
       });
 
-      const input = segmented.shadowRoot.querySelector('input[value="Wed"]');
-      input.click();
+      const input =
+        segmented.shadowRoot!.querySelector<HTMLInputElement>(
+          'input[value="Wed"]'
+        );
+      input!.click();
       expect(eventDetail).toBeTruthy();
-      expect(eventDetail.value).toBe("Wed");
+      expect(eventDetail!.value).toBe("Wed");
     });
 
     it("点击选项后 value 应该更新", async () => {
@@ -998,8 +1014,11 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const input = segmented.shadowRoot.querySelector('input[value="Tue"]');
-      input.click();
+      const input =
+        segmented.shadowRoot!.querySelector<HTMLInputElement>(
+          'input[value="Tue"]'
+        );
+      input!.click();
       expect(segmented.value).toBe("Tue");
     });
 
@@ -1012,12 +1031,15 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const input = segmented.shadowRoot.querySelector('input[value="Wed"]');
-      input.click();
+      const input =
+        segmented.shadowRoot!.querySelector<HTMLInputElement>(
+          'input[value="Wed"]'
+        );
+      input!.click();
       await segmented.updateComplete;
 
       await vi.waitFor(() => {
-        const items = segmented.shadowRoot.querySelectorAll(
+        const items = segmented.shadowRoot!.querySelectorAll(
           ".ea-segmented__item"
         );
         expect(items[0].classList.contains("is-checked")).toBe(false);
@@ -1039,12 +1061,15 @@ describe("EaSegmented Component", () => {
         receivedEvent = e;
       });
 
-      const input = segmented.shadowRoot.querySelector('input[value="Tue"]');
-      input.click();
+      const input =
+        segmented.shadowRoot!.querySelector<HTMLInputElement>(
+          'input[value="Tue"]'
+        );
+      input!.click();
       expect(receivedEvent).toBeTruthy();
-      expect(receivedEvent.type).toBe("change");
-      expect(receivedEvent.bubbles).toBe(true);
-      expect(receivedEvent.composed).toBe(true);
+      expect(receivedEvent!.type).toBe("change");
+      expect(receivedEvent!.bubbles).toBe(true);
+      expect(receivedEvent!.composed).toBe(true);
     });
 
     it("原生 change 事件不应泄漏到组件外部", async () => {
@@ -1058,11 +1083,14 @@ describe("EaSegmented Component", () => {
 
       const nativeChangeHandler = vi.fn();
       segmented.addEventListener("change", e => {
-        if (!e.detail) nativeChangeHandler();
+        if (!(e as CustomEvent).detail) nativeChangeHandler();
       });
 
-      const input = segmented.shadowRoot.querySelector('input[value="Tue"]');
-      input.click();
+      const input =
+        segmented.shadowRoot!.querySelector<HTMLInputElement>(
+          'input[value="Tue"]'
+        );
+      input!.click();
       await segmented.updateComplete;
 
       expect(nativeChangeHandler).not.toHaveBeenCalled();
@@ -1173,7 +1201,7 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const items = segmented.shadowRoot.querySelectorAll(
+      const items = segmented.shadowRoot!.querySelectorAll(
         ".ea-segmented__item"
       );
       expect(items.length).toBe(3);
@@ -1196,7 +1224,7 @@ describe("EaSegmented Component", () => {
       segmented.options = ["A", "B", "C"];
       await segmented.updateComplete;
 
-      const labels = segmented.shadowRoot.querySelectorAll(
+      const labels = segmented.shadowRoot!.querySelectorAll(
         ".ea-segmented__label"
       );
       expect(labels.length).toBe(3);
@@ -1215,9 +1243,9 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const containerEl = segmented.shadowRoot.querySelector(".ea-segmented");
-      expect(containerEl.classList.contains("ea-segmented--large")).toBe(true);
-      expect(containerEl.classList.contains("is-vertical")).toBe(true);
+      const containerEl = segmented.shadowRoot!.querySelector(".ea-segmented");
+      expect(containerEl!.classList.contains("ea-segmented--large")).toBe(true);
+      expect(containerEl!.classList.contains("is-vertical")).toBe(true);
     });
 
     it("size + disabled 应该同时生效", async () => {
@@ -1228,10 +1256,10 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const containerEl = segmented.shadowRoot.querySelector(".ea-segmented");
-      expect(containerEl.classList.contains("ea-segmented--small")).toBe(true);
+      const containerEl = segmented.shadowRoot!.querySelector(".ea-segmented");
+      expect(containerEl!.classList.contains("ea-segmented--small")).toBe(true);
 
-      const items = segmented.shadowRoot.querySelectorAll(
+      const items = segmented.shadowRoot!.querySelectorAll(
         ".ea-segmented__item"
       );
       items.forEach(item => {
@@ -1247,9 +1275,9 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const containerEl = segmented.shadowRoot.querySelector(".ea-segmented");
-      expect(containerEl.classList.contains("is-block")).toBe(true);
-      expect(containerEl.classList.contains("is-horizontal")).toBe(true);
+      const containerEl = segmented.shadowRoot!.querySelector(".ea-segmented");
+      expect(containerEl!.classList.contains("is-block")).toBe(true);
+      expect(containerEl!.classList.contains("is-horizontal")).toBe(true);
     });
 
     it("value + disabled 应该同时生效", async () => {
@@ -1260,7 +1288,7 @@ describe("EaSegmented Component", () => {
       container.appendChild(segmented);
       await segmented.updateComplete;
 
-      const items = segmented.shadowRoot.querySelectorAll(
+      const items = segmented.shadowRoot!.querySelectorAll(
         ".ea-segmented__item"
       );
       expect(items[0].classList.contains("is-checked")).toBe(true);
@@ -1300,7 +1328,7 @@ describe("EaSegmented Component", () => {
         const el = createSegmented({ name: "week" }, ["Mon", "Tue"]);
         container.appendChild(el);
         await el.updateComplete;
-        const items = el.shadowRoot.querySelectorAll(".ea-segmented__item");
+        const items = el.shadowRoot!.querySelectorAll(".ea-segmented__item");
         items.forEach(item => {
           expect(item.getAttribute("role")).toBe("radio");
         });
@@ -1313,7 +1341,7 @@ describe("EaSegmented Component", () => {
         ]);
         container.appendChild(el);
         await el.updateComplete;
-        const items = el.shadowRoot.querySelectorAll(".ea-segmented__item");
+        const items = el.shadowRoot!.querySelectorAll(".ea-segmented__item");
         expect(items[0].getAttribute("aria-checked")).toBe("true");
         expect(items[1].getAttribute("aria-checked")).toBe("false");
       });

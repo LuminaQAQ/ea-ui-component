@@ -24,7 +24,7 @@ if (!componentReady) {
 }
 
 describe("EaFormAssociatedBase", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -262,7 +262,7 @@ describe("EaFormAssociatedBase", () => {
     it("默认状态应该无 a11y 违规", async () => {
       const el = document.createElement("ea-form-associated-base");
       container.appendChild(el);
-      await el.updateComplete;
+      await (el as unknown as { updateComplete: Promise<void> }).updateComplete;
       const results = await runAxe(el);
       assertNoA11yViolations(results);
     });

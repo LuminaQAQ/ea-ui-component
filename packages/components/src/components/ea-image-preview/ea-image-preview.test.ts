@@ -1,34 +1,18 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y.js";
+import { ImmediateIntersectionObserver } from "../../test/utils/mockIntersectionObserver";
 
-class MockIntersectionObserver {
-  constructor(callback) {
-    this.callback = callback;
-  }
-  observe(element) {
-    this.callback([
-      { intersectionRatio: 1, isIntersecting: true, target: element },
-    ]);
-  }
-  unobserve() {}
-  disconnect() {}
-}
-
-if (typeof window !== "undefined" && !window.IntersectionObserver) {
-  window.IntersectionObserver = MockIntersectionObserver;
+if (!window.IntersectionObserver) {
+  window.IntersectionObserver = ImmediateIntersectionObserver;
 }
 
 import "../ea-image/index.ts";
 import "./index.ts";
 
 describe("EaImagePreview Component", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
-    if (!window.IntersectionObserver) {
-      window.IntersectionObserver = MockIntersectionObserver;
-    }
-
     if (!document.activeElement || document.activeElement === document.body) {
       const focusable = document.createElement("button");
       document.body.appendChild(focusable);
@@ -42,7 +26,14 @@ describe("EaImagePreview Component", () => {
     container.remove();
   });
 
-  function createPreview(options = {}) {
+  function createPreview(
+    options: {
+      urlList?: string[];
+      showProgress?: boolean;
+      initialIndex?: number;
+      infinite?: boolean;
+    } = {}
+  ) {
     const preview = document.createElement("ea-image-preview");
     if (options.urlList) preview.urlList = options.urlList;
     if (options.showProgress) preview.showProgress = true;
@@ -78,7 +69,7 @@ describe("EaImagePreview Component", () => {
       ];
       for (const part of parts) {
         expect(
-          preview.shadowRoot.querySelector(`[part="${part}"]`)
+          preview.shadowRoot!.querySelector(`[part="${part}"]`)
         ).toBeTruthy();
       }
     });
@@ -86,33 +77,35 @@ describe("EaImagePreview Component", () => {
     it("应该包含关闭图标", () => {
       const preview = createPreview();
       expect(
-        preview.shadowRoot.querySelector(".ea-image-preview__close-icon")
+        preview.shadowRoot!.querySelector(".ea-image-preview__close-icon")
       ).toBeTruthy();
     });
 
     it("应该包含上一页、下一页图标", () => {
       const preview = createPreview();
       expect(
-        preview.shadowRoot.querySelector(".ea-image-preview__prev-icon")
+        preview.shadowRoot!.querySelector(".ea-image-preview__prev-icon")
       ).toBeTruthy();
       expect(
-        preview.shadowRoot.querySelector(".ea-image-preview__next-icon")
+        preview.shadowRoot!.querySelector(".ea-image-preview__next-icon")
       ).toBeTruthy();
     });
 
     it("应该包含默认工具栏图标（缩放和旋转）", () => {
       const preview = createPreview();
       expect(
-        preview.shadowRoot.querySelector(".ea-image-preview__zoom-out-icon")
+        preview.shadowRoot!.querySelector(".ea-image-preview__zoom-out-icon")
       ).toBeTruthy();
       expect(
-        preview.shadowRoot.querySelector(".ea-image-preview__zoom-in-icon")
+        preview.shadowRoot!.querySelector(".ea-image-preview__zoom-in-icon")
       ).toBeTruthy();
       expect(
-        preview.shadowRoot.querySelector(".ea-image-preview__rotate-left-icon")
+        preview.shadowRoot!.querySelector(".ea-image-preview__rotate-left-icon")
       ).toBeTruthy();
       expect(
-        preview.shadowRoot.querySelector(".ea-image-preview__rotate-right-icon")
+        preview.shadowRoot!.querySelector(
+          ".ea-image-preview__rotate-right-icon"
+        )
       ).toBeTruthy();
     });
 
@@ -130,37 +123,37 @@ describe("EaImagePreview Component", () => {
       };
 
       for (const [selector, action] of Object.entries(actionMap)) {
-        const el = preview.shadowRoot.querySelector(selector);
-        expect(el.getAttribute("data-action")).toBe(action);
+        const el = preview.shadowRoot!.querySelector(selector);
+        expect(el!.getAttribute("data-action")).toBe(action);
       }
     });
 
     it("应该包含 progress 和 toolbar 区域", () => {
       const preview = createPreview();
       expect(
-        preview.shadowRoot.querySelector(".ea-image-preview__progress")
+        preview.shadowRoot!.querySelector(".ea-image-preview__progress")
       ).toBeTruthy();
       expect(
-        preview.shadowRoot.querySelector(".ea-image-preview__toolbar")
+        preview.shadowRoot!.querySelector(".ea-image-preview__toolbar")
       ).toBeTruthy();
     });
 
     it("应该包含 header、main、footer 区域", () => {
       const preview = createPreview();
       expect(
-        preview.shadowRoot.querySelector(".ea-image-preview__header")
+        preview.shadowRoot!.querySelector(".ea-image-preview__header")
       ).toBeTruthy();
       expect(
-        preview.shadowRoot.querySelector(".ea-image-preview__main")
+        preview.shadowRoot!.querySelector(".ea-image-preview__main")
       ).toBeTruthy();
       expect(
-        preview.shadowRoot.querySelector(".ea-image-preview__footer")
+        preview.shadowRoot!.querySelector(".ea-image-preview__footer")
       ).toBeTruthy();
     });
 
     it("图标应该使用 ea-icon 组件", () => {
       const preview = createPreview();
-      const icons = preview.shadowRoot.querySelectorAll(
+      const icons = preview.shadowRoot!.querySelectorAll(
         ".ea-image-preview__icon"
       );
       expect(icons.length).toBeGreaterThan(0);
@@ -200,12 +193,12 @@ describe("EaImagePreview Component", () => {
 
     it("应该包含 overlay 容器结构", () => {
       const preview = createPreview();
-      expect(preview.shadowRoot.querySelector(".ea-overlay")).toBeTruthy();
+      expect(preview.shadowRoot!.querySelector(".ea-overlay")).toBeTruthy();
       expect(
-        preview.shadowRoot.querySelector(".ea-overlay__mask")
+        preview.shadowRoot!.querySelector(".ea-overlay__mask")
       ).toBeTruthy();
       expect(
-        preview.shadowRoot.querySelector(".ea-overlay__content")
+        preview.shadowRoot!.querySelector(".ea-overlay__content")
       ).toBeTruthy();
     });
   });
@@ -246,7 +239,7 @@ describe("EaImagePreview Component", () => {
 
       preview.index = 1;
       expect(
-        preview.shadowRoot.querySelector(".ea-image-preview__img")
+        preview.shadowRoot!.querySelector(".ea-image-preview__img")
       ).toBeTruthy();
     });
 
@@ -307,7 +300,7 @@ describe("EaImagePreview Component", () => {
       await preview.updateComplete;
 
       preview.index = 1;
-      const img = preview.shadowRoot.querySelector(".ea-image-preview__img");
+      const img = preview.shadowRoot!.querySelector(".ea-image-preview__img");
       expect(img).toBeTruthy();
     });
   });
@@ -370,8 +363,10 @@ describe("EaImagePreview Component", () => {
       preview.scale = 2;
       await preview.updateComplete;
 
-      const content = preview.shadowRoot.querySelector(".ea-overlay__content");
-      expect(content.style.getPropertyValue("--ea-image-preview-scale")).toBe(
+      const content = preview.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-overlay__content"
+      );
+      expect(content!.style.getPropertyValue("--ea-image-preview-scale")).toBe(
         "2"
       );
     });
@@ -442,17 +437,17 @@ describe("EaImagePreview Component", () => {
       preview.setAttribute("show-progress", "");
       await preview.updateComplete;
 
-      const overlayEl = preview.shadowRoot.querySelector(".ea-overlay");
-      expect(overlayEl.classList.contains("is-show-progress")).toBe(true);
+      const overlayEl = preview.shadowRoot!.querySelector(".ea-overlay");
+      expect(overlayEl!.classList.contains("is-show-progress")).toBe(true);
     });
 
     it("showProgress 为 false 时不应包含 show-progress 类名", async () => {
       const preview = createPreview({ showProgress: false });
       await preview.updateComplete;
 
-      const overlayEl = preview.shadowRoot.querySelector(".ea-overlay");
+      const overlayEl = preview.shadowRoot!.querySelector(".ea-overlay");
       expect(
-        overlayEl.classList.contains("ea-image-preview--show-progress")
+        overlayEl!.classList.contains("ea-image-preview--show-progress")
       ).toBe(false);
     });
   });
@@ -471,7 +466,7 @@ describe("EaImagePreview Component", () => {
       await preview.updateComplete;
 
       expect(
-        preview.shadowRoot.querySelector(".ea-image-preview__img")
+        preview.shadowRoot!.querySelector(".ea-image-preview__img")
       ).toBeTruthy();
     });
 
@@ -548,10 +543,10 @@ describe("EaImagePreview Component", () => {
       preview.visible = true;
       await preview.updateComplete;
 
-      const closeIcon = preview.shadowRoot.querySelector(
+      const closeIcon = preview.shadowRoot!.querySelector<HTMLElement>(
         ".ea-image-preview__close-icon"
       );
-      closeIcon.click();
+      closeIcon!.click();
       expect(preview.visible).toBe(false);
     });
 
@@ -561,10 +556,10 @@ describe("EaImagePreview Component", () => {
 
       const hideSpy = vi.spyOn(preview, "hide");
 
-      const closeIcon = preview.shadowRoot.querySelector(
+      const closeIcon = preview.shadowRoot!.querySelector<HTMLElement>(
         ".ea-image-preview__close-icon"
       );
-      closeIcon.click();
+      closeIcon!.click();
       await preview.updateComplete;
 
       expect(hideSpy).toHaveBeenCalled();
@@ -580,7 +575,9 @@ describe("EaImagePreview Component", () => {
       preview.index = 1;
       await preview.updateComplete;
 
-      preview.shadowRoot.querySelector(".ea-image-preview__prev-icon").click();
+      preview
+        .shadowRoot!.querySelector<HTMLElement>(".ea-image-preview__prev-icon")!
+        .click();
       expect(preview.index).toBe(0);
     });
 
@@ -591,7 +588,9 @@ describe("EaImagePreview Component", () => {
       preview.index = 0;
       await preview.updateComplete;
 
-      preview.shadowRoot.querySelector(".ea-image-preview__next-icon").click();
+      preview
+        .shadowRoot!.querySelector<HTMLElement>(".ea-image-preview__next-icon")!
+        .click();
       expect(preview.index).toBe(1);
     });
 
@@ -602,7 +601,9 @@ describe("EaImagePreview Component", () => {
       preview.index = 1;
       await preview.updateComplete;
 
-      preview.shadowRoot.querySelector(".ea-image-preview__main").click();
+      preview
+        .shadowRoot!.querySelector<HTMLElement>(".ea-image-preview__main")!
+        .click();
       expect(preview.index).toBe(1);
     });
   });
@@ -615,8 +616,10 @@ describe("EaImagePreview Component", () => {
       preview.scale = 2;
       await preview.updateComplete;
 
-      preview.shadowRoot
-        .querySelector(".ea-image-preview__zoom-out-icon")
+      preview
+        .shadowRoot!.querySelector<HTMLElement>(
+          ".ea-image-preview__zoom-out-icon"
+        )!
         .click();
       expect(preview.scale).toBeLessThan(2);
     });
@@ -625,8 +628,10 @@ describe("EaImagePreview Component", () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
       await preview.updateComplete;
 
-      preview.shadowRoot
-        .querySelector(".ea-image-preview__zoom-in-icon")
+      preview
+        .shadowRoot!.querySelector<HTMLElement>(
+          ".ea-image-preview__zoom-in-icon"
+        )!
         .click();
       expect(preview.scale).toBeGreaterThan(1);
     });
@@ -635,13 +640,17 @@ describe("EaImagePreview Component", () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
       await preview.updateComplete;
 
-      preview.shadowRoot
-        .querySelector(".ea-image-preview__rotate-left-icon")
+      preview
+        .shadowRoot!.querySelector<HTMLElement>(
+          ".ea-image-preview__rotate-left-icon"
+        )!
         .click();
       await preview.updateComplete;
 
-      const content = preview.shadowRoot.querySelector(".ea-overlay__content");
-      expect(content.style.getPropertyValue("--ea-image-preview-rotate")).toBe(
+      const content = preview.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-overlay__content"
+      );
+      expect(content!.style.getPropertyValue("--ea-image-preview-rotate")).toBe(
         "-90deg"
       );
     });
@@ -650,13 +659,17 @@ describe("EaImagePreview Component", () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
       await preview.updateComplete;
 
-      preview.shadowRoot
-        .querySelector(".ea-image-preview__rotate-right-icon")
+      preview
+        .shadowRoot!.querySelector<HTMLElement>(
+          ".ea-image-preview__rotate-right-icon"
+        )!
         .click();
       await preview.updateComplete;
 
-      const content = preview.shadowRoot.querySelector(".ea-overlay__content");
-      expect(content.style.getPropertyValue("--ea-image-preview-rotate")).toBe(
+      const content = preview.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-overlay__content"
+      );
+      expect(content!.style.getPropertyValue("--ea-image-preview-rotate")).toBe(
         "90deg"
       );
     });
@@ -666,7 +679,9 @@ describe("EaImagePreview Component", () => {
       await preview.updateComplete;
 
       const scaleBefore = preview.scale;
-      preview.shadowRoot.querySelector(".ea-image-preview__toolbar").click();
+      preview
+        .shadowRoot!.querySelector<HTMLElement>(".ea-image-preview__toolbar")!
+        .click();
       expect(preview.scale).toBe(scaleBefore);
     });
   });
@@ -678,8 +693,10 @@ describe("EaImagePreview Component", () => {
       await preview.updateComplete;
 
       preview.scale = 1;
-      preview.shadowRoot
-        .querySelector(".ea-image-preview__zoom-in-icon")
+      preview
+        .shadowRoot!.querySelector<HTMLElement>(
+          ".ea-image-preview__zoom-in-icon"
+        )!
         .click();
       expect(preview.scale).toBeCloseTo(1.2, 2);
     });
@@ -690,8 +707,10 @@ describe("EaImagePreview Component", () => {
       await preview.updateComplete;
 
       preview.scale = 1.2;
-      preview.shadowRoot
-        .querySelector(".ea-image-preview__zoom-out-icon")
+      preview
+        .shadowRoot!.querySelector<HTMLElement>(
+          ".ea-image-preview__zoom-out-icon"
+        )!
         .click();
       expect(preview.scale).toBeCloseTo(1, 2);
     });
@@ -702,14 +721,14 @@ describe("EaImagePreview Component", () => {
       await preview.updateComplete;
 
       preview.scale = 1;
-      const zoomInIcon = preview.shadowRoot.querySelector(
+      const zoomInIcon = preview.shadowRoot!.querySelector<HTMLElement>(
         ".ea-image-preview__zoom-in-icon"
       );
 
-      zoomInIcon.click();
+      zoomInIcon!.click();
       await preview.updateComplete;
 
-      zoomInIcon.click();
+      zoomInIcon!.click();
       expect(preview.scale).toBeCloseTo(1.44, 2);
     });
 
@@ -720,8 +739,10 @@ describe("EaImagePreview Component", () => {
       await preview.updateComplete;
 
       preview.scale = 2;
-      preview.shadowRoot
-        .querySelector(".ea-image-preview__zoom-in-icon")
+      preview
+        .shadowRoot!.querySelector<HTMLElement>(
+          ".ea-image-preview__zoom-in-icon"
+        )!
         .click();
       await preview.updateComplete;
 
@@ -735,8 +756,10 @@ describe("EaImagePreview Component", () => {
       await preview.updateComplete;
 
       preview.scale = 0.5;
-      preview.shadowRoot
-        .querySelector(".ea-image-preview__zoom-out-icon")
+      preview
+        .shadowRoot!.querySelector<HTMLElement>(
+          ".ea-image-preview__zoom-out-icon"
+        )!
         .click();
       await preview.updateComplete;
 
@@ -749,16 +772,18 @@ describe("EaImagePreview Component", () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
       await preview.updateComplete;
 
-      const rotateRightIcon = preview.shadowRoot.querySelector(
+      const rotateRightIcon = preview.shadowRoot!.querySelector<HTMLElement>(
         ".ea-image-preview__rotate-right-icon"
       );
-      rotateRightIcon.click();
+      rotateRightIcon!.click();
       await preview.updateComplete;
-      rotateRightIcon.click();
+      rotateRightIcon!.click();
       await preview.updateComplete;
 
-      const content = preview.shadowRoot.querySelector(".ea-overlay__content");
-      expect(content.style.getPropertyValue("--ea-image-preview-rotate")).toBe(
+      const content = preview.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-overlay__content"
+      );
+      expect(content!.style.getPropertyValue("--ea-image-preview-rotate")).toBe(
         "180deg"
       );
     });
@@ -767,17 +792,23 @@ describe("EaImagePreview Component", () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
       await preview.updateComplete;
 
-      preview.shadowRoot
-        .querySelector(".ea-image-preview__rotate-right-icon")
+      preview
+        .shadowRoot!.querySelector<HTMLElement>(
+          ".ea-image-preview__rotate-right-icon"
+        )!
         .click();
       await preview.updateComplete;
-      preview.shadowRoot
-        .querySelector(".ea-image-preview__rotate-left-icon")
+      preview
+        .shadowRoot!.querySelector<HTMLElement>(
+          ".ea-image-preview__rotate-left-icon"
+        )!
         .click();
       await preview.updateComplete;
 
-      const content = preview.shadowRoot.querySelector(".ea-overlay__content");
-      expect(content.style.getPropertyValue("--ea-image-preview-rotate")).toBe(
+      const content = preview.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-overlay__content"
+      );
+      expect(content!.style.getPropertyValue("--ea-image-preview-rotate")).toBe(
         "0deg"
       );
     });
@@ -789,8 +820,10 @@ describe("EaImagePreview Component", () => {
       const rotateSpy = vi.fn();
       preview.addEventListener("ea-rotate", rotateSpy);
 
-      preview.shadowRoot
-        .querySelector(".ea-image-preview__rotate-right-icon")
+      preview
+        .shadowRoot!.querySelector<HTMLElement>(
+          ".ea-image-preview__rotate-right-icon"
+        )!
         .click();
       await preview.updateComplete;
 
@@ -806,13 +839,15 @@ describe("EaImagePreview Component", () => {
         capturedEvent = e;
       });
 
-      preview.shadowRoot
-        .querySelector(".ea-image-preview__rotate-right-icon")
+      preview
+        .shadowRoot!.querySelector<HTMLElement>(
+          ".ea-image-preview__rotate-right-icon"
+        )!
         .click();
       expect(capturedEvent).toBeTruthy();
-      expect(capturedEvent.detail).toBeDefined();
-      expect(capturedEvent.detail.oldVal).toBeDefined();
-      expect(capturedEvent.detail.rotate).toBeDefined();
+      expect(capturedEvent!.detail).toBeDefined();
+      expect(capturedEvent!.detail.oldVal).toBeDefined();
+      expect(capturedEvent!.detail.rotate).toBeDefined();
     });
   });
 
@@ -824,11 +859,11 @@ describe("EaImagePreview Component", () => {
       preview.index = 0;
       await preview.updateComplete;
 
-      const progressEl = preview.shadowRoot.querySelector(
+      const progressEl = preview.shadowRoot!.querySelector(
         ".ea-image-preview__progress"
       );
-      expect(progressEl.textContent).toContain("1");
-      expect(progressEl.textContent).toContain("3");
+      expect(progressEl!.textContent).toContain("1");
+      expect(progressEl!.textContent).toContain("3");
     });
 
     it("切换图片后 progress 应该更新", async () => {
@@ -838,26 +873,28 @@ describe("EaImagePreview Component", () => {
       preview.index = 2;
       await preview.updateComplete;
 
-      const progressEl = preview.shadowRoot.querySelector(
+      const progressEl = preview.shadowRoot!.querySelector(
         ".ea-image-preview__progress"
       );
-      expect(progressEl.textContent).toContain("3");
+      expect(progressEl!.textContent).toContain("3");
     });
 
     it("showProgress 为 false 时 progress 应该隐藏", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
       await preview.updateComplete;
 
-      const containerEl = preview.shadowRoot.querySelector(".ea-image-preview");
-      expect(containerEl.classList.contains("is-show-progress")).toBe(false);
+      const containerEl =
+        preview.shadowRoot!.querySelector(".ea-image-preview");
+      expect(containerEl!.classList.contains("is-show-progress")).toBe(false);
     });
 
     it("showProgress 为 true 时 progress 应该显示", async () => {
       const preview = createPreview({ urlList: ["a.jpg"], showProgress: true });
       await preview.updateComplete;
 
-      const containerEl = preview.shadowRoot.querySelector(".ea-image-preview");
-      expect(containerEl.classList.contains("is-show-progress")).toBe(true);
+      const containerEl =
+        preview.shadowRoot!.querySelector(".ea-image-preview");
+      expect(containerEl!.classList.contains("is-show-progress")).toBe(true);
     });
   });
 
@@ -870,8 +907,8 @@ describe("EaImagePreview Component", () => {
       preview.index = 0;
       await preview.updateComplete;
 
-      expect(preview.querySelector("[data-active]").textContent).toBe("1");
-      expect(preview.querySelector("[data-total]").textContent).toBe("2");
+      expect(preview.querySelector("[data-active]")!.textContent).toBe("1");
+      expect(preview.querySelector("[data-total]")!.textContent).toBe("2");
     });
 
     it("切换图片后自定义 progress 应该更新", async () => {
@@ -882,8 +919,8 @@ describe("EaImagePreview Component", () => {
       preview.index = 2;
       await preview.updateComplete;
 
-      expect(preview.querySelector("[data-active]").textContent).toBe("3");
-      expect(preview.querySelector("[data-total]").textContent).toBe("3");
+      expect(preview.querySelector("[data-active]")!.textContent).toBe("3");
+      expect(preview.querySelector("[data-total]")!.textContent).toBe("3");
     });
   });
 
@@ -896,7 +933,9 @@ describe("EaImagePreview Component", () => {
       preview.index = 0;
       await preview.updateComplete;
 
-      preview.querySelector('[data-action="switch-next"]').click();
+      preview
+        .querySelector<HTMLElement>('[data-action="switch-next"]')!
+        .click();
       expect(preview.index).toBe(1);
     });
 
@@ -906,7 +945,7 @@ describe("EaImagePreview Component", () => {
       await preview.updateComplete;
 
       const scaleBefore = preview.scale;
-      preview.querySelector('[data-action="zoom-in"]').click();
+      preview.querySelector<HTMLElement>('[data-action="zoom-in"]')!.click();
       expect(preview.scale).toBeGreaterThan(scaleBefore);
     });
 
@@ -915,11 +954,15 @@ describe("EaImagePreview Component", () => {
       preview.innerHTML = `<section slot="toolbar"><button data-action="rotate-anticlockwise">Rotate Left</button></section>`;
       await preview.updateComplete;
 
-      preview.querySelector('[data-action="rotate-anticlockwise"]').click();
+      preview
+        .querySelector<HTMLElement>('[data-action="rotate-anticlockwise"]')!
+        .click();
       await preview.updateComplete;
 
-      const content = preview.shadowRoot.querySelector(".ea-overlay__content");
-      expect(content.style.getPropertyValue("--ea-image-preview-rotate")).toBe(
+      const content = preview.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-overlay__content"
+      );
+      expect(content!.style.getPropertyValue("--ea-image-preview-rotate")).toBe(
         "-90deg"
       );
     });
@@ -929,11 +972,15 @@ describe("EaImagePreview Component", () => {
       preview.innerHTML = `<section slot="toolbar"><button data-action="rotate-clockwise">Rotate Right</button></section>`;
       await preview.updateComplete;
 
-      preview.querySelector('[data-action="rotate-clockwise"]').click();
+      preview
+        .querySelector<HTMLElement>('[data-action="rotate-clockwise"]')!
+        .click();
       await preview.updateComplete;
 
-      const content = preview.shadowRoot.querySelector(".ea-overlay__content");
-      expect(content.style.getPropertyValue("--ea-image-preview-rotate")).toBe(
+      const content = preview.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-overlay__content"
+      );
+      expect(content!.style.getPropertyValue("--ea-image-preview-rotate")).toBe(
         "90deg"
       );
     });
@@ -946,7 +993,7 @@ describe("EaImagePreview Component", () => {
       preview.scale = 2;
       await preview.updateComplete;
 
-      preview.querySelector('[data-action="zoom-out"]').click();
+      preview.querySelector<HTMLElement>('[data-action="zoom-out"]')!.click();
       expect(preview.scale).toBeLessThan(2);
     });
 
@@ -958,7 +1005,9 @@ describe("EaImagePreview Component", () => {
       preview.index = 1;
       await preview.updateComplete;
 
-      preview.querySelector('[data-action="switch-prev"]').click();
+      preview
+        .querySelector<HTMLElement>('[data-action="switch-prev"]')!
+        .click();
       expect(preview.index).toBe(0);
     });
   });
@@ -968,25 +1017,25 @@ describe("EaImagePreview Component", () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
       await preview.updateComplete;
 
-      const img = preview.shadowRoot.querySelector(".ea-image-preview__img");
+      const img = preview.shadowRoot!.querySelector(".ea-image-preview__img");
       expect(img).toBeTruthy();
-      expect(img.tagName.toLowerCase()).toBe("ea-image");
+      expect(img!.tagName.toLowerCase()).toBe("ea-image");
     });
 
     it("渲染的 ea-image 应该有正确的 src", async () => {
       const preview = createPreview({ urlList: ["test.jpg"] });
       await preview.updateComplete;
 
-      const img = preview.shadowRoot.querySelector(".ea-image-preview__img");
-      expect(img.getAttribute("src")).toBe("test.jpg");
+      const img = preview.shadowRoot!.querySelector(".ea-image-preview__img");
+      expect(img!.getAttribute("src")).toBe("test.jpg");
     });
 
     it("渲染的 ea-image 应该设置 fit 为 contain", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
       await preview.updateComplete;
 
-      const img = preview.shadowRoot.querySelector(".ea-image-preview__img");
-      expect(img.getAttribute("fit")).toBe("contain");
+      const img = preview.shadowRoot!.querySelector(".ea-image-preview__img");
+      expect(img!.getAttribute("fit")).toBe("contain");
     });
 
     it("切换 index 应该替换当前图片", async () => {
@@ -996,14 +1045,14 @@ describe("EaImagePreview Component", () => {
       preview.index = 0;
       await preview.updateComplete;
 
-      let img = preview.shadowRoot.querySelector(".ea-image-preview__img");
-      expect(img.getAttribute("src")).toBe("a.jpg");
+      let img = preview.shadowRoot!.querySelector(".ea-image-preview__img");
+      expect(img!.getAttribute("src")).toBe("a.jpg");
 
       preview.index = 1;
       await preview.updateComplete;
 
-      img = preview.shadowRoot.querySelector(".ea-image-preview__img");
-      expect(img.getAttribute("src")).toBe("b.jpg");
+      img = preview.shadowRoot!.querySelector(".ea-image-preview__img");
+      expect(img!.getAttribute("src")).toBe("b.jpg");
     });
   });
 
@@ -1040,8 +1089,8 @@ describe("EaImagePreview Component", () => {
       await preview.updateComplete;
 
       expect(capturedEvent).toBeTruthy();
-      expect(capturedEvent.detail.index).toBe(1);
-      expect(capturedEvent.detail.url).toBe("b.jpg");
+      expect(capturedEvent!.detail.index).toBe(1);
+      expect(capturedEvent!.detail.url).toBe("b.jpg");
     });
   });
 
@@ -1050,14 +1099,14 @@ describe("EaImagePreview Component", () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
       await preview.updateComplete;
 
-      const overlay = preview.shadowRoot.querySelector(".ea-overlay");
+      const overlay = preview.shadowRoot!.querySelector(".ea-overlay");
       const wheelEvent = new WheelEvent("wheel", {
         deltaY: -100,
         bubbles: true,
         cancelable: true,
       });
 
-      overlay.dispatchEvent(wheelEvent);
+      overlay!.dispatchEvent(wheelEvent);
       expect(preview.scale).toBeGreaterThan(1);
     });
 
@@ -1068,14 +1117,14 @@ describe("EaImagePreview Component", () => {
       preview.scale = 2;
       await preview.updateComplete;
 
-      const overlay = preview.shadowRoot.querySelector(".ea-overlay");
+      const overlay = preview.shadowRoot!.querySelector(".ea-overlay");
       const wheelEvent = new WheelEvent("wheel", {
         deltaY: 100,
         bubbles: true,
         cancelable: true,
       });
 
-      overlay.dispatchEvent(wheelEvent);
+      overlay!.dispatchEvent(wheelEvent);
       expect(preview.scale).toBeLessThan(2);
     });
   });
@@ -1085,7 +1134,9 @@ describe("EaImagePreview Component", () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
       await preview.updateComplete;
 
-      const content = preview.shadowRoot.querySelector(".ea-overlay__content");
+      const content = preview.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-overlay__content"
+      );
       const mousedownEvent = new MouseEvent("mousedown", {
         clientX: 100,
         clientY: 100,
@@ -1093,7 +1144,7 @@ describe("EaImagePreview Component", () => {
         cancelable: true,
       });
 
-      expect(() => content.dispatchEvent(mousedownEvent)).not.toThrow();
+      expect(() => content!.dispatchEvent(mousedownEvent)).not.toThrow();
     });
   });
 
@@ -1145,16 +1196,20 @@ describe("EaImagePreview Component", () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
       await preview.updateComplete;
 
-      preview.shadowRoot
-        .querySelector(".ea-image-preview__rotate-right-icon")
+      preview
+        .shadowRoot!.querySelector<HTMLElement>(
+          ".ea-image-preview__rotate-right-icon"
+        )!
         .click();
       await preview.updateComplete;
 
       preview.reset();
       await preview.updateComplete;
 
-      const content = preview.shadowRoot.querySelector(".ea-overlay__content");
-      expect(content.style.getPropertyValue("--ea-image-preview-rotate")).toBe(
+      const content = preview.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-overlay__content"
+      );
+      expect(content!.style.getPropertyValue("--ea-image-preview-rotate")).toBe(
         "0deg"
       );
     });
@@ -1166,12 +1221,14 @@ describe("EaImagePreview Component", () => {
       preview.reset();
       await preview.updateComplete;
 
-      const content = preview.shadowRoot.querySelector(".ea-overlay__content");
+      const content = preview.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-overlay__content"
+      );
       expect(
-        content.style.getPropertyValue("--ea-image-preview-img-move-x")
+        content!.style.getPropertyValue("--ea-image-preview-img-move-x")
       ).toBe("0px");
       expect(
-        content.style.getPropertyValue("--ea-image-preview-img-move-y")
+        content!.style.getPropertyValue("--ea-image-preview-img-move-y")
       ).toBe("0px");
     });
   });
@@ -1203,7 +1260,11 @@ describe("EaImagePreview Component", () => {
         value: document.createElement("div"),
       });
 
-      preview._handleClosed(fakeEvent);
+      (
+        preview as unknown as {
+          _handleClosed: (e: CustomEvent) => void;
+        }
+      )._handleClosed(fakeEvent);
       expect(preview.scale).toBe(3);
     });
 
@@ -1222,7 +1283,11 @@ describe("EaImagePreview Component", () => {
         value: preview,
       });
 
-      preview._handleClosed(realEvent);
+      (
+        preview as unknown as {
+          _handleClosed: (e: CustomEvent) => void;
+        }
+      )._handleClosed(realEvent);
       expect(preview.scale).toBe(1);
     });
   });
@@ -1235,8 +1300,10 @@ describe("EaImagePreview Component", () => {
       preview.scale = 2;
       await preview.updateComplete;
 
-      const content = preview.shadowRoot.querySelector(".ea-overlay__content");
-      expect(content.style.getPropertyValue("--ea-image-preview-scale")).toBe(
+      const content = preview.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-overlay__content"
+      );
+      expect(content!.style.getPropertyValue("--ea-image-preview-scale")).toBe(
         "2"
       );
     });
@@ -1245,13 +1312,17 @@ describe("EaImagePreview Component", () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
       await preview.updateComplete;
 
-      preview.shadowRoot
-        .querySelector(".ea-image-preview__rotate-right-icon")
+      preview
+        .shadowRoot!.querySelector<HTMLElement>(
+          ".ea-image-preview__rotate-right-icon"
+        )!
         .click();
       await preview.updateComplete;
 
-      const content = preview.shadowRoot.querySelector(".ea-overlay__content");
-      expect(content.style.getPropertyValue("--ea-image-preview-rotate")).toBe(
+      const content = preview.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-overlay__content"
+      );
+      expect(content!.style.getPropertyValue("--ea-image-preview-rotate")).toBe(
         "90deg"
       );
     });
@@ -1260,12 +1331,14 @@ describe("EaImagePreview Component", () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
       await preview.updateComplete;
 
-      const content = preview.shadowRoot.querySelector(".ea-overlay__content");
+      const content = preview.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-overlay__content"
+      );
       expect(
-        content.style.getPropertyValue("--ea-image-preview-img-move-x")
+        content!.style.getPropertyValue("--ea-image-preview-img-move-x")
       ).toBeDefined();
       expect(
-        content.style.getPropertyValue("--ea-image-preview-img-move-y")
+        content!.style.getPropertyValue("--ea-image-preview-img-move-y")
       ).toBeDefined();
     });
   });
@@ -1273,7 +1346,7 @@ describe("EaImagePreview Component", () => {
   describe("Lifecycle", () => {
     it("组件挂载时应该调用 $mount", () => {
       const preview = createPreview();
-      const overlayEl = preview.shadowRoot.querySelector(".ea-overlay");
+      const overlayEl = preview.shadowRoot!.querySelector(".ea-overlay");
       expect(overlayEl).toBeTruthy();
     });
 

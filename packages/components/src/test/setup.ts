@@ -74,6 +74,43 @@ if (typeof Element !== "undefined" && !Element.prototype.scrollIntoView) {
   };
 }
 
+// Element.prototype.scrollTo：jsdom 未实现，写入选项到 scrollTop/scrollLeft
+if (typeof Element !== "undefined" && !Element.prototype.scrollTo) {
+  (Element.prototype as any).scrollTo = function (
+    this: Element,
+    optionsOrX?: ScrollToOptions | number,
+    y?: number
+  ) {
+    let top: number | undefined;
+    let left: number | undefined;
+    if (typeof optionsOrX === "object" && optionsOrX !== null) {
+      top = optionsOrX.top;
+      left = optionsOrX.left;
+    } else {
+      top = typeof optionsOrX === "number" ? optionsOrX : undefined;
+      left = typeof y === "number" ? y : undefined;
+    }
+    if (top !== undefined) this.scrollTop = top;
+    if (left !== undefined) this.scrollLeft = left;
+  };
+}
+
+// canvas 2d 上下文：测试环境未安装 canvas 包，与 jsdom 缺省行为一致返回 null，
+// 仅绕开 jsdom 的 notImplemented 告警分支
+if (typeof HTMLCanvasElement !== "undefined") {
+  HTMLCanvasElement.prototype.getContext = function getContext() {
+    return null;
+  } as typeof HTMLCanvasElement.prototype.getContext;
+}
+
+// getComputedStyle 伪元素：jsdom 未实现伪元素样式，其原生行为是返回元素
+// 计算样式并告警；这里保持返回值语义、仅走非伪元素路径
+if (typeof window !== "undefined") {
+  const nativeGetComputedStyle = window.getComputedStyle.bind(window);
+  window.getComputedStyle = ((elt: Element, _pseudoElt?: string | null) =>
+    nativeGetComputedStyle(elt)) as typeof window.getComputedStyle;
+}
+
 // Element.prototype.part：jsdom 未实现，基于 part attribute 的 token list
 if (
   typeof Element !== "undefined" &&

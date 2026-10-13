@@ -3,7 +3,7 @@ import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import "./index";
 
 describe("EaBorderBeam", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -27,7 +27,9 @@ describe("EaBorderBeam", () => {
       const el = document.createElement("ea-border-beam");
       container.appendChild(el);
 
-      const containerEl = el.shadowRoot.querySelector(".ea-border-beam");
+      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-border-beam"
+      );
       expect(containerEl).toBeDefined();
     });
 
@@ -35,14 +37,14 @@ describe("EaBorderBeam", () => {
       const el = document.createElement("ea-border-beam");
       container.appendChild(el);
 
-      expect(el.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(el.shadowRoot!.querySelector('[part="container"]')).toBeTruthy();
     });
 
     it("默认应该有 1 个 indicator CSS Part", () => {
       const el = document.createElement("ea-border-beam");
       container.appendChild(el);
 
-      const indicators = el.shadowRoot.querySelectorAll('[part="indicator"]');
+      const indicators = el.shadowRoot!.querySelectorAll('[part="indicator"]');
       expect(indicators.length).toBe(1);
     });
 
@@ -51,7 +53,7 @@ describe("EaBorderBeam", () => {
       el.innerHTML = '<div class="test-content">Slot Content</div>';
       container.appendChild(el);
 
-      const slot = el.shadowRoot.querySelector("slot");
+      const slot = el.shadowRoot!.querySelector("slot");
       expect(slot).toBeDefined();
       expect(el.textContent).toContain("Slot Content");
     });
@@ -77,14 +79,14 @@ describe("EaBorderBeam", () => {
       const el = document.createElement("ea-border-beam");
       container.appendChild(el);
 
-      expect(el.shadowRoot.querySelectorAll('[part="indicator"]').length).toBe(
+      expect(el.shadowRoot!.querySelectorAll('[part="indicator"]').length).toBe(
         1
       );
 
       el.setAttribute("count", "3");
       await el.updateComplete;
 
-      const indicators = el.shadowRoot.querySelectorAll('[part="indicator"]');
+      const indicators = el.shadowRoot!.querySelectorAll('[part="indicator"]');
       expect(indicators.length).toBe(3);
     });
 
@@ -93,14 +95,14 @@ describe("EaBorderBeam", () => {
       el.setAttribute("count", "3");
       container.appendChild(el);
 
-      expect(el.shadowRoot.querySelectorAll('[part="indicator"]').length).toBe(
+      expect(el.shadowRoot!.querySelectorAll('[part="indicator"]').length).toBe(
         3
       );
 
       el.setAttribute("count", "1");
       await el.updateComplete;
 
-      const indicators = el.shadowRoot.querySelectorAll('[part="indicator"]');
+      const indicators = el.shadowRoot!.querySelectorAll('[part="indicator"]');
       expect(indicators.length).toBe(1);
     });
 
@@ -111,7 +113,7 @@ describe("EaBorderBeam", () => {
 
       await el.updateComplete;
 
-      const indicators = el.shadowRoot.querySelectorAll('[part="indicator"]');
+      const indicators = el.shadowRoot!.querySelectorAll('[part="indicator"]');
       expect(indicators.length).toBe(1);
     });
   });
@@ -141,8 +143,10 @@ describe("EaBorderBeam", () => {
       el.setAttribute("trigger", "hover");
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-border-beam");
-      expect(containerEl.classList.contains("is-trigger-hover")).toBe(true);
+      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-border-beam"
+      );
+      expect(containerEl!.classList.contains("is-trigger-hover")).toBe(true);
     });
   });
 
@@ -171,9 +175,11 @@ describe("EaBorderBeam", () => {
       el.setAttribute("size", "56");
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-border-beam");
+      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-border-beam"
+      );
       expect(
-        containerEl.style.getPropertyValue("--ea-border-beam-indicator-size")
+        containerEl!.style.getPropertyValue("--ea-border-beam-indicator-size")
       ).toBe("56px");
     });
   });
@@ -203,9 +209,11 @@ describe("EaBorderBeam", () => {
       el.setAttribute("line-width", "3");
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-border-beam");
+      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-border-beam"
+      );
       expect(
-        containerEl.style.getPropertyValue(
+        containerEl!.style.getPropertyValue(
           "--ea-border-beam-indicator-line-width"
         )
       ).toBe("3px");
@@ -237,9 +245,11 @@ describe("EaBorderBeam", () => {
       el.setAttribute("duration", "5");
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-border-beam");
+      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-border-beam"
+      );
       expect(
-        containerEl.style.getPropertyValue("--ea-border-beam-duration")
+        containerEl!.style.getPropertyValue("--ea-border-beam-duration")
       ).toBe("5s");
     });
   });
@@ -269,9 +279,11 @@ describe("EaBorderBeam", () => {
       el.setAttribute("start-delay", "2");
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-border-beam");
+      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-border-beam"
+      );
       expect(
-        containerEl.style.getPropertyValue("--ea-border-beam-start-delay")
+        containerEl!.style.getPropertyValue("--ea-border-beam-start-delay")
       ).toBe("2s");
     });
   });
@@ -287,20 +299,22 @@ describe("EaBorderBeam", () => {
 
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-border-beam");
+      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-border-beam"
+      );
       expect(
-        containerEl.style.getPropertyValue("--ea-border-beam-indicator-size")
+        containerEl!.style.getPropertyValue("--ea-border-beam-indicator-size")
       ).toBe("56px");
       expect(
-        containerEl.style.getPropertyValue(
+        containerEl!.style.getPropertyValue(
           "--ea-border-beam-indicator-line-width"
         )
       ).toBe("2px");
       expect(
-        containerEl.style.getPropertyValue("--ea-border-beam-duration")
+        containerEl!.style.getPropertyValue("--ea-border-beam-duration")
       ).toBe("5s");
       expect(
-        containerEl.style.getPropertyValue("--ea-border-beam-start-delay")
+        containerEl!.style.getPropertyValue("--ea-border-beam-start-delay")
       ).toBe("1s");
     });
   });
@@ -312,8 +326,10 @@ describe("EaBorderBeam", () => {
 
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-border-beam");
-      expect(containerEl.classList.contains("ea-border-beam")).toBe(true);
+      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-border-beam"
+      );
+      expect(containerEl!.classList.contains("ea-border-beam")).toBe(true);
     });
 
     it("trigger=hover 时应该添加 is-trigger-hover class", async () => {
@@ -323,8 +339,10 @@ describe("EaBorderBeam", () => {
 
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-border-beam");
-      expect(containerEl.classList.contains("is-trigger-hover")).toBe(true);
+      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-border-beam"
+      );
+      expect(containerEl!.classList.contains("is-trigger-hover")).toBe(true);
     });
   });
 
@@ -334,8 +352,8 @@ describe("EaBorderBeam", () => {
       el.innerHTML = "<div>Content</div>";
       container.appendChild(el);
 
-      expect(el.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
-      expect(el.shadowRoot.querySelectorAll('[part="indicator"]').length).toBe(
+      expect(el.shadowRoot!.querySelector('[part="container"]')).toBeTruthy();
+      expect(el.shadowRoot!.querySelectorAll('[part="indicator"]').length).toBe(
         1
       );
     });
@@ -359,7 +377,7 @@ describe("EaBorderBeam", () => {
       el.setAttribute("count", "5");
       await el.updateComplete;
 
-      const indicators = el.shadowRoot.querySelectorAll('[part="indicator"]');
+      const indicators = el.shadowRoot!.querySelectorAll('[part="indicator"]');
       expect(indicators.length).toBe(5);
     });
   });

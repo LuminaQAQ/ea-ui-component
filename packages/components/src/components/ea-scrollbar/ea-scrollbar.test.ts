@@ -1,26 +1,10 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y.js";
 
-if (!Element.prototype.scrollTo) {
-  Element.prototype.scrollTo = function (options) {
-    if (typeof options === "object") {
-      if (options.top !== undefined) this.scrollTop = options.top;
-      if (options.left !== undefined) this.scrollLeft = options.left;
-    }
-  };
-}
-
-global.requestAnimationFrame = callback => {
-  return setTimeout(callback, 16);
-};
-global.cancelAnimationFrame = id => {
-  clearTimeout(id);
-};
-
 import "./index.ts";
 
 describe("EaScrollbar Component", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -42,7 +26,7 @@ describe("EaScrollbar Component", () => {
       container.appendChild(scrollbar);
 
       expect(scrollbar.shadowRoot).toBeTruthy();
-      expect(scrollbar.shadowRoot.querySelector(".ea-scrollbar")).toBeTruthy();
+      expect(scrollbar.shadowRoot!.querySelector(".ea-scrollbar")).toBeTruthy();
     });
 
     it("应该支持 CSS Parts", () => {
@@ -51,21 +35,21 @@ describe("EaScrollbar Component", () => {
       container.appendChild(scrollbar);
 
       expect(
-        scrollbar.shadowRoot.querySelector('[part="container"]')
+        scrollbar.shadowRoot!.querySelector('[part="container"]')
       ).toBeTruthy();
       expect(
-        scrollbar.shadowRoot.querySelector('[part="track-horizontal"]')
+        scrollbar.shadowRoot!.querySelector('[part="track-horizontal"]')
       ).toBeTruthy();
       expect(
-        scrollbar.shadowRoot.querySelector('[part="track-vertical"]')
+        scrollbar.shadowRoot!.querySelector('[part="track-vertical"]')
       ).toBeTruthy();
       expect(
-        scrollbar.shadowRoot.querySelector('[part="thumb-horizontal"]')
+        scrollbar.shadowRoot!.querySelector('[part="thumb-horizontal"]')
       ).toBeTruthy();
       expect(
-        scrollbar.shadowRoot.querySelector('[part="thumb-vertical"]')
+        scrollbar.shadowRoot!.querySelector('[part="thumb-vertical"]')
       ).toBeTruthy();
-      expect(scrollbar.shadowRoot.querySelector('[part="view"]')).toBeTruthy();
+      expect(scrollbar.shadowRoot!.querySelector('[part="view"]')).toBeTruthy();
     });
 
     it("应该渲染默认插槽内容", () => {
@@ -76,7 +60,7 @@ describe("EaScrollbar Component", () => {
       `;
       container.appendChild(scrollbar);
 
-      const slot = scrollbar.shadowRoot.querySelector("slot");
+      const slot = scrollbar.shadowRoot!.querySelector("slot");
       expect(slot).toBeTruthy();
     });
 
@@ -85,10 +69,10 @@ describe("EaScrollbar Component", () => {
       scrollbar.innerHTML = `<div style="height: 500px; width: 500px;">Content</div>`;
       container.appendChild(scrollbar);
 
-      const horizontalTrack = scrollbar.shadowRoot.querySelector(
+      const horizontalTrack = scrollbar.shadowRoot!.querySelector(
         ".ea-scrollbar__track-horizontal"
       );
-      const verticalTrack = scrollbar.shadowRoot.querySelector(
+      const verticalTrack = scrollbar.shadowRoot!.querySelector(
         ".ea-scrollbar__track-vertical"
       );
       expect(horizontalTrack).toBeTruthy();
@@ -100,10 +84,10 @@ describe("EaScrollbar Component", () => {
       scrollbar.innerHTML = `<div style="height: 500px; width: 500px;">Content</div>`;
       container.appendChild(scrollbar);
 
-      const horizontalThumb = scrollbar.shadowRoot.querySelector(
+      const horizontalThumb = scrollbar.shadowRoot!.querySelector(
         ".ea-scrollbar__thumb-horizontal"
       );
-      const verticalThumb = scrollbar.shadowRoot.querySelector(
+      const verticalThumb = scrollbar.shadowRoot!.querySelector(
         ".ea-scrollbar__thumb-vertical"
       );
       expect(horizontalThumb).toBeTruthy();
@@ -137,8 +121,9 @@ describe("EaScrollbar Component", () => {
 
       await scrollbar.updateComplete;
 
-      const containerEl = scrollbar.shadowRoot.querySelector(".ea-scrollbar");
-      expect(containerEl.style.height).toBe("200px");
+      const containerEl =
+        scrollbar.shadowRoot!.querySelector<HTMLElement>(".ea-scrollbar");
+      expect(containerEl!.style.height).toBe("200px");
     });
 
     it("height 为空时容器高度应为 100%", async () => {
@@ -148,8 +133,9 @@ describe("EaScrollbar Component", () => {
 
       await scrollbar.updateComplete;
 
-      const containerEl = scrollbar.shadowRoot.querySelector(".ea-scrollbar");
-      expect(containerEl.style.height).toBe("100%");
+      const containerEl =
+        scrollbar.shadowRoot!.querySelector<HTMLElement>(".ea-scrollbar");
+      expect(containerEl!.style.height).toBe("100%");
     });
   });
 
@@ -179,8 +165,11 @@ describe("EaScrollbar Component", () => {
 
       await scrollbar.updateComplete;
 
-      const containerEl = scrollbar.shadowRoot.querySelector(".ea-scrollbar");
-      expect(containerEl.classList.contains("ea-scrollbar--native")).toBe(true);
+      const containerEl =
+        scrollbar.shadowRoot!.querySelector<HTMLElement>(".ea-scrollbar");
+      expect(containerEl!.classList.contains("ea-scrollbar--native")).toBe(
+        true
+      );
     });
   });
 
@@ -210,8 +199,9 @@ describe("EaScrollbar Component", () => {
 
       await scrollbar.updateComplete;
 
-      const containerEl = scrollbar.shadowRoot.querySelector(".ea-scrollbar");
-      expect(containerEl.classList.contains("ea-scrollbar--noresize")).toBe(
+      const containerEl =
+        scrollbar.shadowRoot!.querySelector<HTMLElement>(".ea-scrollbar");
+      expect(containerEl!.classList.contains("ea-scrollbar--noresize")).toBe(
         true
       );
     });
@@ -243,8 +233,11 @@ describe("EaScrollbar Component", () => {
 
       await scrollbar.updateComplete;
 
-      const containerEl = scrollbar.shadowRoot.querySelector(".ea-scrollbar");
-      expect(containerEl.classList.contains("ea-scrollbar--always")).toBe(true);
+      const containerEl =
+        scrollbar.shadowRoot!.querySelector<HTMLElement>(".ea-scrollbar");
+      expect(containerEl!.classList.contains("ea-scrollbar--always")).toBe(
+        true
+      );
     });
   });
 
@@ -261,9 +254,9 @@ describe("EaScrollbar Component", () => {
       const scrollHandler = vi.fn();
       scrollbar.addEventListener("ea-scroll", scrollHandler);
 
-      const view = scrollbar.shadowRoot.querySelector(".ea-scrollbar__view");
-      view.scrollTop = 100;
-      view.dispatchEvent(new Event("scroll"));
+      const view = scrollbar.shadowRoot!.querySelector(".ea-scrollbar__view");
+      view!.scrollTop = 100;
+      view!.dispatchEvent(new Event("scroll"));
 
       await scrollbar.updateComplete;
 
@@ -281,19 +274,19 @@ describe("EaScrollbar Component", () => {
 
       let eventDetail = null;
       scrollbar.addEventListener("ea-scroll", e => {
-        eventDetail = e.detail;
+        eventDetail = (e as CustomEvent).detail;
       });
 
-      const view = scrollbar.shadowRoot.querySelector(".ea-scrollbar__view");
-      view.scrollTop = 50;
-      view.scrollLeft = 30;
-      view.dispatchEvent(new Event("scroll"));
+      const view = scrollbar.shadowRoot!.querySelector(".ea-scrollbar__view");
+      view!.scrollTop = 50;
+      view!.scrollLeft = 30;
+      view!.dispatchEvent(new Event("scroll"));
 
       await scrollbar.updateComplete;
 
       expect(eventDetail).toBeTruthy();
-      expect(typeof eventDetail.scrollTop).toBe("number");
-      expect(typeof eventDetail.scrollLeft).toBe("number");
+      expect(typeof eventDetail!.scrollTop).toBe("number");
+      expect(typeof eventDetail!.scrollLeft).toBe("number");
     });
 
     it("应该触发 ea-end-reached 事件（滚动到顶部边界）", async () => {
@@ -305,7 +298,7 @@ describe("EaScrollbar Component", () => {
 
       await scrollbar.updateComplete;
 
-      const view = scrollbar.shadowRoot.querySelector(".ea-scrollbar__view");
+      const view = scrollbar.shadowRoot!.querySelector(".ea-scrollbar__view");
 
       Object.defineProperty(view, "scrollTop", {
         value: 0,
@@ -327,7 +320,7 @@ describe("EaScrollbar Component", () => {
       const endReachedHandler = vi.fn();
       scrollbar.addEventListener("ea-end-reached", endReachedHandler);
 
-      view.dispatchEvent(new Event("scroll"));
+      view!.dispatchEvent(new Event("scroll"));
 
       await scrollbar.updateComplete;
 
@@ -343,7 +336,7 @@ describe("EaScrollbar Component", () => {
 
       await scrollbar.updateComplete;
 
-      const view = scrollbar.shadowRoot.querySelector(".ea-scrollbar__view");
+      const view = scrollbar.shadowRoot!.querySelector(".ea-scrollbar__view");
 
       Object.defineProperty(view, "scrollTop", {
         value: 0,
@@ -364,16 +357,16 @@ describe("EaScrollbar Component", () => {
 
       let eventDetail = null;
       scrollbar.addEventListener("ea-end-reached", e => {
-        eventDetail = e.detail;
+        eventDetail = (e as CustomEvent).detail;
       });
 
-      view.dispatchEvent(new Event("scroll"));
+      view!.dispatchEvent(new Event("scroll"));
 
       await scrollbar.updateComplete;
 
       expect(eventDetail).toBeTruthy();
       expect(["top", "bottom", "left", "right"]).toContain(
-        eventDetail.direction
+        eventDetail!.direction
       );
     });
   });
@@ -398,13 +391,13 @@ describe("EaScrollbar Component", () => {
 
       await scrollbar.updateComplete;
 
-      const view = scrollbar.shadowRoot.querySelector(".ea-scrollbar__view");
+      const view = scrollbar.shadowRoot!.querySelector(".ea-scrollbar__view");
 
       scrollbar.scrollTo({ top: 100 });
 
       await scrollbar.updateComplete;
 
-      expect(view.scrollTop).toBeGreaterThanOrEqual(0);
+      expect(view!.scrollTop).toBeGreaterThanOrEqual(0);
     });
 
     it("scrollTo 应该支持 x, y 参数形式", async () => {
@@ -428,7 +421,7 @@ describe("EaScrollbar Component", () => {
 
       await scrollbar.updateComplete;
 
-      const verticalThumb = scrollbar.shadowRoot.querySelector(
+      const verticalThumb = scrollbar.shadowRoot!.querySelector(
         ".ea-scrollbar__thumb-vertical"
       );
 
@@ -438,19 +431,20 @@ describe("EaScrollbar Component", () => {
         clientX: 0,
         clientY: 0,
       });
-      verticalThumb.dispatchEvent(mousedownEvent);
+      verticalThumb!.dispatchEvent(mousedownEvent);
 
       await scrollbar.updateComplete;
 
-      const containerEl = scrollbar.shadowRoot.querySelector(".ea-scrollbar");
-      expect(containerEl.classList.contains("is-dragging")).toBe(true);
+      const containerEl =
+        scrollbar.shadowRoot!.querySelector<HTMLElement>(".ea-scrollbar");
+      expect(containerEl!.classList.contains("is-dragging")).toBe(true);
 
       const mouseupEvent = new MouseEvent("mouseup", { bubbles: true });
       window.dispatchEvent(mouseupEvent);
 
       await scrollbar.updateComplete;
 
-      expect(containerEl.classList.contains("is-dragging")).toBe(false);
+      expect(containerEl!.classList.contains("is-dragging")).toBe(false);
     });
 
     it("鼠标按下垂直滑块应该添加 is-active 状态", async () => {
@@ -460,7 +454,7 @@ describe("EaScrollbar Component", () => {
 
       await scrollbar.updateComplete;
 
-      const verticalThumb = scrollbar.shadowRoot.querySelector(
+      const verticalThumb = scrollbar.shadowRoot!.querySelector(
         ".ea-scrollbar__thumb-vertical"
       );
 
@@ -470,18 +464,18 @@ describe("EaScrollbar Component", () => {
         clientX: 0,
         clientY: 0,
       });
-      verticalThumb.dispatchEvent(mousedownEvent);
+      verticalThumb!.dispatchEvent(mousedownEvent);
 
       await scrollbar.updateComplete;
 
-      expect(verticalThumb.classList.contains("is-active")).toBe(true);
+      expect(verticalThumb!.classList.contains("is-active")).toBe(true);
 
       const mouseupEvent = new MouseEvent("mouseup", { bubbles: true });
       window.dispatchEvent(mouseupEvent);
 
       await scrollbar.updateComplete;
 
-      expect(verticalThumb.classList.contains("is-active")).toBe(false);
+      expect(verticalThumb!.classList.contains("is-active")).toBe(false);
     });
   });
 
@@ -495,15 +489,15 @@ describe("EaScrollbar Component", () => {
 
       await scrollbar.updateComplete;
 
-      const view = scrollbar.shadowRoot.querySelector(".ea-scrollbar__view");
-      const initialScrollTop = view.scrollTop;
+      const view = scrollbar.shadowRoot!.querySelector(".ea-scrollbar__view");
+      const initialScrollTop = view!.scrollTop;
 
       const keydownEvent = new KeyboardEvent("keydown", { key: "ArrowDown" });
       scrollbar.dispatchEvent(keydownEvent);
 
       await scrollbar.updateComplete;
 
-      expect(view.scrollTop >= initialScrollTop).toBe(true);
+      expect(view!.scrollTop >= initialScrollTop).toBe(true);
     });
 
     it("应该响应键盘左右箭头事件", async () => {
@@ -515,15 +509,15 @@ describe("EaScrollbar Component", () => {
 
       await scrollbar.updateComplete;
 
-      const view = scrollbar.shadowRoot.querySelector(".ea-scrollbar__view");
-      const initialScrollLeft = view.scrollLeft;
+      const view = scrollbar.shadowRoot!.querySelector(".ea-scrollbar__view");
+      const initialScrollLeft = view!.scrollLeft;
 
       const keydownEvent = new KeyboardEvent("keydown", { key: "ArrowRight" });
       scrollbar.dispatchEvent(keydownEvent);
 
       await scrollbar.updateComplete;
 
-      expect(view.scrollLeft >= initialScrollLeft).toBe(true);
+      expect(view!.scrollLeft >= initialScrollLeft).toBe(true);
     });
   });
 
@@ -535,8 +529,8 @@ describe("EaScrollbar Component", () => {
 
       await scrollbar.updateComplete;
 
-      const view = scrollbar.shadowRoot.querySelector(".ea-scrollbar__view");
-      const verticalTrack = scrollbar.shadowRoot.querySelector(
+      const view = scrollbar.shadowRoot!.querySelector(".ea-scrollbar__view");
+      const verticalTrack = scrollbar.shadowRoot!.querySelector(
         ".ea-scrollbar__track-vertical"
       );
 
@@ -556,7 +550,7 @@ describe("EaScrollbar Component", () => {
       window.dispatchEvent(new Event("resize"));
 
       await vi.waitFor(() => {
-        expect(verticalTrack.classList.contains("is-hidden")).toBe(true);
+        expect(verticalTrack!.classList.contains("is-hidden")).toBe(true);
       });
     });
   });
@@ -566,7 +560,7 @@ describe("EaScrollbar Component", () => {
       const scrollbar = document.createElement("ea-scrollbar");
       container.appendChild(scrollbar);
 
-      expect(scrollbar.shadowRoot.querySelector(".ea-scrollbar")).toBeTruthy();
+      expect(scrollbar.shadowRoot!.querySelector(".ea-scrollbar")).toBeTruthy();
     });
 
     it("应该处理少量内容（不需要滚动）", () => {
@@ -575,7 +569,7 @@ describe("EaScrollbar Component", () => {
       container.appendChild(scrollbar);
 
       expect(
-        scrollbar.shadowRoot.querySelector(".ea-scrollbar__view")
+        scrollbar.shadowRoot!.querySelector(".ea-scrollbar__view")
       ).toBeTruthy();
     });
 
@@ -586,9 +580,9 @@ describe("EaScrollbar Component", () => {
       `;
       container.appendChild(scrollbar);
 
-      const view = scrollbar.shadowRoot.querySelector(".ea-scrollbar__view");
+      const view = scrollbar.shadowRoot!.querySelector(".ea-scrollbar__view");
       expect(view).toBeTruthy();
-      expect(scrollbar.querySelector("div").textContent).toBe("Large Content");
+      expect(scrollbar.querySelector("div")!.textContent).toBe("Large Content");
     });
 
     it("应该处理动态添加内容", async () => {
@@ -649,9 +643,14 @@ describe("EaScrollbar Component", () => {
 
       await scrollbar.updateComplete;
 
-      const containerEl = scrollbar.shadowRoot.querySelector(".ea-scrollbar");
-      expect(containerEl.classList.contains("ea-scrollbar--native")).toBe(true);
-      expect(containerEl.classList.contains("ea-scrollbar--always")).toBe(true);
+      const containerEl =
+        scrollbar.shadowRoot!.querySelector<HTMLElement>(".ea-scrollbar");
+      expect(containerEl!.classList.contains("ea-scrollbar--native")).toBe(
+        true
+      );
+      expect(containerEl!.classList.contains("ea-scrollbar--always")).toBe(
+        true
+      );
     });
   });
 

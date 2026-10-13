@@ -1,12 +1,13 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y.js";
 
-import "./index.ts";
-import { Color } from "../../utils/Color.ts";
-import { EaColorPickerChangeEvent } from "./events/EaColorPickerChangeEvent.ts";
+import "./index";
+import { Color } from "../../utils/Color";
+import type { ColorFormat, ColorInput } from "../../utils/Color";
+import { EaColorPickerChangeEvent } from "./events/EaColorPickerChangeEvent";
 
 describe("EaColorPicker Component", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -47,7 +48,7 @@ describe("EaColorPicker Component", () => {
 
       parts.forEach(part => {
         expect(
-          picker.shadowRoot.querySelector(`[part="${part}"]`)
+          picker.shadowRoot!.querySelector(`[part="${part}"]`)
         ).toBeTruthy();
       });
     });
@@ -56,7 +57,7 @@ describe("EaColorPicker Component", () => {
       const picker = document.createElement("ea-color-picker");
       container.appendChild(picker);
 
-      const popper = picker.shadowRoot.querySelector("ea-popper");
+      const popper = picker.shadowRoot!.querySelector("ea-popper");
       expect(popper).toBeTruthy();
     });
 
@@ -64,7 +65,7 @@ describe("EaColorPicker Component", () => {
       const picker = document.createElement("ea-color-picker");
       container.appendChild(picker);
 
-      const panel = picker.shadowRoot.querySelector("ea-color-picker-panel");
+      const panel = picker.shadowRoot!.querySelector("ea-color-picker-panel");
       expect(panel).toBeTruthy();
     });
 
@@ -72,10 +73,10 @@ describe("EaColorPicker Component", () => {
       const picker = document.createElement("ea-color-picker");
       container.appendChild(picker);
 
-      const clearBtn = picker.shadowRoot.querySelector(
+      const clearBtn = picker.shadowRoot!.querySelector(
         'ea-button[part="clear-btn"]'
       );
-      const confirmBtn = picker.shadowRoot.querySelector(
+      const confirmBtn = picker.shadowRoot!.querySelector(
         'ea-button[part="confirm-btn"]'
       );
       expect(clearBtn).toBeTruthy();
@@ -106,11 +107,11 @@ describe("EaColorPicker Component", () => {
 
       await picker.updateComplete;
 
-      const labelEl = picker.shadowRoot.querySelector(
+      const labelEl = picker.shadowRoot!.querySelector(
         ".ea-color-picker__form-label"
       );
       expect(labelEl).toBeTruthy();
-      expect(labelEl.textContent).toBe("主题色");
+      expect(labelEl!.textContent).toBe("主题色");
     });
 
     it("动态修改 label 应该更新显示", async () => {
@@ -123,10 +124,10 @@ describe("EaColorPicker Component", () => {
       picker.setAttribute("label", "新标签");
       await picker.updateComplete;
 
-      const labelEl = picker.shadowRoot.querySelector(
+      const labelEl = picker.shadowRoot!.querySelector(
         ".ea-color-picker__form-label"
       );
-      expect(labelEl.textContent).toBe("新标签");
+      expect(labelEl!.textContent).toBe("新标签");
     });
   });
 
@@ -164,9 +165,10 @@ describe("EaColorPicker Component", () => {
 
       await picker.updateComplete;
 
-      const inner = picker.shadowRoot.querySelector('[part="inner"]');
+      const inner =
+        picker.shadowRoot!.querySelector<HTMLElement>('[part="inner"]');
       expect(inner).toBeTruthy();
-      const bg = inner.style.getPropertyValue(
+      const bg = inner!.style.getPropertyValue(
         "--ea-color-picker-inner-background-color"
       );
       expect(bg).toBeTruthy();
@@ -182,8 +184,9 @@ describe("EaColorPicker Component", () => {
       picker.removeAttribute("value");
       await picker.updateComplete;
 
-      const inner = picker.shadowRoot.querySelector('[part="inner"]');
-      const bg = inner.style.getPropertyValue(
+      const inner =
+        picker.shadowRoot!.querySelector<HTMLElement>('[part="inner"]');
+      const bg = inner!.style.getPropertyValue(
         "--ea-color-picker-inner-background-color"
       );
       expect(bg).toBe("transparent");
@@ -195,15 +198,15 @@ describe("EaColorPicker Component", () => {
 
       await picker.updateComplete;
 
-      const statusIcon = picker.shadowRoot.querySelector(
+      const statusIcon = picker.shadowRoot!.querySelector(
         '[part="status-icon"]'
       );
-      expect(statusIcon.getAttribute("name")).toBe("xmark");
+      expect(statusIcon!.getAttribute("name")).toBe("xmark");
 
       picker.setAttribute("value", "#409eff");
       await picker.updateComplete;
 
-      expect(statusIcon.getAttribute("name")).toBe("angle-down");
+      expect(statusIcon!.getAttribute("name")).toBe("angle-down");
     });
 
     it("value 变化时应该同步到 panel", async () => {
@@ -213,8 +216,8 @@ describe("EaColorPicker Component", () => {
 
       await picker.updateComplete;
 
-      const panel = picker.shadowRoot.querySelector("ea-color-picker-panel");
-      expect(panel.value).toBeTruthy();
+      const panel = picker.shadowRoot!.querySelector("ea-color-picker-panel");
+      expect(panel!.value).toBeTruthy();
     });
   });
 
@@ -241,8 +244,9 @@ describe("EaColorPicker Component", () => {
 
       await picker.updateComplete;
 
-      const containerEl = picker.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-disabled")).toBe(true);
+      const containerEl =
+        picker.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-disabled")).toBe(true);
     });
 
     it("动态切换 disabled 应该更新 class", async () => {
@@ -251,18 +255,19 @@ describe("EaColorPicker Component", () => {
 
       await picker.updateComplete;
 
-      const containerEl = picker.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-disabled")).toBe(false);
+      const containerEl =
+        picker.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-disabled")).toBe(false);
 
       picker.setAttribute("disabled", "");
       await picker.updateComplete;
 
-      expect(containerEl.classList.contains("is-disabled")).toBe(true);
+      expect(containerEl!.classList.contains("is-disabled")).toBe(true);
 
       picker.removeAttribute("disabled");
       await picker.updateComplete;
 
-      expect(containerEl.classList.contains("is-disabled")).toBe(false);
+      expect(containerEl!.classList.contains("is-disabled")).toBe(false);
     });
   });
 
@@ -278,10 +283,10 @@ describe("EaColorPicker Component", () => {
         await picker.updateComplete;
 
         const containerEl =
-          picker.shadowRoot.querySelector('[part="container"]');
-        expect(containerEl.classList.contains(`ea-color-picker--${size}`)).toBe(
-          true
-        );
+          picker.shadowRoot!.querySelector('[part="container"]');
+        expect(
+          containerEl!.classList.contains(`ea-color-picker--${size}`)
+        ).toBe(true);
       });
     });
 
@@ -299,18 +304,19 @@ describe("EaColorPicker Component", () => {
 
       await picker.updateComplete;
 
-      const containerEl = picker.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-color-picker--small")).toBe(
+      const containerEl =
+        picker.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-color-picker--small")).toBe(
         true
       );
 
       picker.setAttribute("size", "large");
       await picker.updateComplete;
 
-      expect(containerEl.classList.contains("ea-color-picker--small")).toBe(
+      expect(containerEl!.classList.contains("ea-color-picker--small")).toBe(
         false
       );
-      expect(containerEl.classList.contains("ea-color-picker--large")).toBe(
+      expect(containerEl!.classList.contains("ea-color-picker--large")).toBe(
         true
       );
     });
@@ -339,8 +345,8 @@ describe("EaColorPicker Component", () => {
 
       await picker.updateComplete;
 
-      const panel = picker.shadowRoot.querySelector("ea-color-picker-panel");
-      expect(panel.getAttribute("clearable")).toBe("true");
+      const panel = picker.shadowRoot!.querySelector("ea-color-picker-panel");
+      expect(panel!.getAttribute("clearable")).toBe("true");
     });
   });
 
@@ -371,8 +377,8 @@ describe("EaColorPicker Component", () => {
 
       await picker.updateComplete;
 
-      const panel = picker.shadowRoot.querySelector("ea-color-picker-panel");
-      expect(panel.getAttribute("color-format")).toBe("rgb");
+      const panel = picker.shadowRoot!.querySelector("ea-color-picker-panel");
+      expect(panel!.getAttribute("color-format")).toBe("rgb");
     });
   });
 
@@ -399,8 +405,8 @@ describe("EaColorPicker Component", () => {
 
       await picker.updateComplete;
 
-      const panel = picker.shadowRoot.querySelector("ea-color-picker-panel");
-      expect(panel.getAttribute("show-alpha")).toBe("true");
+      const panel = picker.shadowRoot!.querySelector("ea-color-picker-panel");
+      expect(panel!.getAttribute("show-alpha")).toBe("true");
     });
   });
 
@@ -444,8 +450,8 @@ describe("EaColorPicker Component", () => {
 
       await picker.updateComplete;
 
-      const popper = picker.shadowRoot.querySelector("ea-popper");
-      expect(popper.getAttribute("placement")).toBe("top-start");
+      const popper = picker.shadowRoot!.querySelector("ea-popper");
+      expect(popper!.getAttribute("placement")).toBe("top-start");
     });
   });
 
@@ -549,8 +555,8 @@ describe("EaColorPicker Component", () => {
 
       await picker.updateComplete;
 
-      const panel = picker.shadowRoot.querySelector("ea-color-picker-panel");
-      expect(panel.predefine).toEqual(predefineList);
+      const panel = picker.shadowRoot!.querySelector("ea-color-picker-panel");
+      expect(panel!.predefine).toEqual(predefineList);
     });
   });
 
@@ -562,8 +568,8 @@ describe("EaColorPicker Component", () => {
 
       await picker.updateComplete;
 
-      const panel = picker.shadowRoot.querySelector("ea-color-picker-panel");
-      panel.dispatchEvent(
+      const panel = picker.shadowRoot!.querySelector("ea-color-picker-panel");
+      panel!.dispatchEvent(
         new EaColorPickerChangeEvent({
           value: "#67c23a",
           color: new Color("#67c23a"),
@@ -584,8 +590,9 @@ describe("EaColorPicker Component", () => {
       const clearHandler = vi.fn();
       picker.addEventListener("ea-clear", clearHandler);
 
-      const clearBtn = picker.shadowRoot.querySelector('[part="clear-btn"]');
-      clearBtn.click();
+      const clearBtn =
+        picker.shadowRoot!.querySelector<HTMLElement>('[part="clear-btn"]');
+      clearBtn!.click();
 
       await picker.updateComplete;
 
@@ -600,8 +607,9 @@ describe("EaColorPicker Component", () => {
 
       await picker.updateComplete;
 
-      const clearBtn = picker.shadowRoot.querySelector('[part="clear-btn"]');
-      clearBtn.click();
+      const clearBtn =
+        picker.shadowRoot!.querySelector<HTMLElement>('[part="clear-btn"]');
+      clearBtn!.click();
 
       expect(picker.value).toBe("");
     });
@@ -617,8 +625,9 @@ describe("EaColorPicker Component", () => {
       const changeHandler = vi.fn();
       picker.addEventListener("change", changeHandler);
 
-      const clearBtn = picker.shadowRoot.querySelector('[part="clear-btn"]');
-      clearBtn.click();
+      const clearBtn =
+        picker.shadowRoot!.querySelector<HTMLElement>('[part="clear-btn"]');
+      clearBtn!.click();
 
       await picker.updateComplete;
 
@@ -682,8 +691,9 @@ describe("EaColorPicker Component", () => {
 
       await picker.updateComplete;
 
-      const containerEl = picker.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-has-value")).toBe(true);
+      const containerEl =
+        picker.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-has-value")).toBe(true);
     });
 
     it("无 value 时 container 不应该有 has-value class", async () => {
@@ -692,8 +702,9 @@ describe("EaColorPicker Component", () => {
 
       await picker.updateComplete;
 
-      const containerEl = picker.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-has-value")).toBe(false);
+      const containerEl =
+        picker.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-has-value")).toBe(false);
     });
   });
 
@@ -706,9 +717,9 @@ describe("EaColorPicker Component", () => {
 
       await picker.updateComplete;
 
-      const panel = picker.shadowRoot.querySelector("ea-color-picker-panel");
-      expect(panel.value).toBeTruthy();
-      expect(panel.getAttribute("clearable")).toBe("true");
+      const panel = picker.shadowRoot!.querySelector("ea-color-picker-panel");
+      expect(panel!.value).toBeTruthy();
+      expect(panel!.getAttribute("clearable")).toBe("true");
     });
 
     it("$mounted 时 color-format 和 show-alpha 应该同步到 panel", async () => {
@@ -720,15 +731,15 @@ describe("EaColorPicker Component", () => {
 
       await picker.updateComplete;
 
-      const panel = picker.shadowRoot.querySelector("ea-color-picker-panel");
-      expect(panel.getAttribute("color-format")).toBe("rgb");
-      expect(panel.getAttribute("show-alpha")).toBe("true");
+      const panel = picker.shadowRoot!.querySelector("ea-color-picker-panel");
+      expect(panel!.getAttribute("color-format")).toBe("rgb");
+      expect(panel!.getAttribute("show-alpha")).toBe("true");
     });
   });
 });
 
 describe("EaColorPickerPanel Component", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -772,7 +783,9 @@ describe("EaColorPickerPanel Component", () => {
       ];
 
       parts.forEach(part => {
-        expect(panel.shadowRoot.querySelector(`[part="${part}"]`)).toBeTruthy();
+        expect(
+          panel.shadowRoot!.querySelector(`[part="${part}"]`)
+        ).toBeTruthy();
       });
     });
 
@@ -780,13 +793,13 @@ describe("EaColorPickerPanel Component", () => {
       const panel = document.createElement("ea-color-picker-panel");
       container.appendChild(panel);
 
-      const svpanel = panel.shadowRoot.querySelector(
+      const svpanel = panel.shadowRoot!.querySelector(
         ".ea-color-picker-panel__svpanel"
       );
-      const hueSlider = panel.shadowRoot.querySelector(
+      const hueSlider = panel.shadowRoot!.querySelector(
         ".ea-color-picker-panel__hue-slider"
       );
-      const alphaSlider = panel.shadowRoot.querySelector(
+      const alphaSlider = panel.shadowRoot!.querySelector(
         ".ea-color-picker-panel__alpha-slider"
       );
 
@@ -799,7 +812,7 @@ describe("EaColorPickerPanel Component", () => {
       const panel = document.createElement("ea-color-picker-panel");
       container.appendChild(panel);
 
-      const colorInput = panel.shadowRoot.querySelector("ea-input");
+      const colorInput = panel.shadowRoot!.querySelector("ea-input");
       expect(colorInput).toBeTruthy();
     });
   });
@@ -1008,8 +1021,8 @@ describe("EaColorPickerPanel Component", () => {
 
       await panel.updateComplete;
 
-      const containerEl = panel.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-show-alpha")).toBe(true);
+      const containerEl = panel.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-show-alpha")).toBe(true);
     });
   });
 
@@ -1036,8 +1049,8 @@ describe("EaColorPickerPanel Component", () => {
 
       await panel.updateComplete;
 
-      const containerEl = panel.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-disabled")).toBe(true);
+      const containerEl = panel.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-disabled")).toBe(true);
     });
   });
 
@@ -1064,8 +1077,8 @@ describe("EaColorPickerPanel Component", () => {
 
       await panel.updateComplete;
 
-      const containerEl = panel.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-border")).toBe(true);
+      const containerEl = panel.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-border")).toBe(true);
     });
   });
 
@@ -1092,8 +1105,8 @@ describe("EaColorPickerPanel Component", () => {
 
       await panel.updateComplete;
 
-      const containerEl = panel.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-clearable")).toBe(true);
+      const containerEl = panel.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-clearable")).toBe(true);
     });
 
     it("clearable=false 时 container 不应该有 is-clearable class", async () => {
@@ -1104,8 +1117,8 @@ describe("EaColorPickerPanel Component", () => {
 
       await panel.updateComplete;
 
-      const containerEl = panel.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-clearable")).toBe(false);
+      const containerEl = panel.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-clearable")).toBe(false);
     });
   });
 
@@ -1144,7 +1157,7 @@ describe("EaColorPickerPanel Component", () => {
 
       await panel.updateComplete;
 
-      const colors = panel.shadowRoot.querySelectorAll(
+      const colors = panel.shadowRoot!.querySelectorAll(
         ".ea-color-picker-panel__predefine-color"
       );
       expect(colors.length).toBe(3);
@@ -1161,7 +1174,7 @@ describe("EaColorPickerPanel Component", () => {
 
       await panel.updateComplete;
 
-      const colors = panel.shadowRoot.querySelectorAll(
+      const colors = panel.shadowRoot!.querySelectorAll(
         ".ea-color-picker-panel__predefine-color"
       );
       expect(colors[0].getAttribute("data-color")).toBe("#ff4500");
@@ -1178,7 +1191,7 @@ describe("EaColorPickerPanel Component", () => {
 
       await panel.updateComplete;
 
-      const colorsBefore = panel.shadowRoot.querySelectorAll(
+      const colorsBefore = panel.shadowRoot!.querySelectorAll(
         ".ea-color-picker-panel__predefine-color"
       );
       expect(colorsBefore.length).toBe(1);
@@ -1187,7 +1200,7 @@ describe("EaColorPickerPanel Component", () => {
 
       await panel.updateComplete;
 
-      const colors = panel.shadowRoot.querySelectorAll(
+      const colors = panel.shadowRoot!.querySelectorAll(
         ".ea-color-picker-panel__predefine-color"
       );
       expect(colors.length).toBe(0);
@@ -1247,15 +1260,15 @@ describe("EaColorPickerPanel Component", () => {
 
       await panel.updateComplete;
 
-      const svCursor = panel.shadowRoot.querySelector(
+      const svCursor = panel.shadowRoot!.querySelector<HTMLElement>(
         '[part="svpanel-cursor"]'
       );
-      expect(svCursor.style.left).toBeTruthy();
+      expect(svCursor!.style.left).toBeTruthy();
 
       panel.resetCursorPosition();
 
-      expect(svCursor.style.left).toBe("");
-      expect(svCursor.style.top).toBe("");
+      expect(svCursor!.style.left).toBe("");
+      expect(svCursor!.style.top).toBe("");
     });
   });
 
@@ -1264,7 +1277,7 @@ describe("EaColorPickerPanel Component", () => {
       const panel = document.createElement("ea-color-picker-panel");
       container.appendChild(panel);
 
-      const colorInput = panel.shadowRoot.querySelector("ea-input");
+      const colorInput = panel.shadowRoot!.querySelector("ea-input");
       expect(colorInput).toBeTruthy();
     });
 
@@ -1273,7 +1286,7 @@ describe("EaColorPickerPanel Component", () => {
       panel.setAttribute("clearable", "false");
       container.appendChild(panel);
 
-      const textDisplay = panel.shadowRoot.querySelector(
+      const textDisplay = panel.shadowRoot!.querySelector(
         ".ea-color-picker-panel__text-display"
       );
       expect(textDisplay).toBeTruthy();
@@ -1286,8 +1299,8 @@ describe("EaColorPickerPanel Component", () => {
 
       await panel.updateComplete;
 
-      const colorInput = panel.shadowRoot.querySelector("ea-input");
-      expect(colorInput.getAttribute("value")).toBe("#409eff");
+      const colorInput = panel.shadowRoot!.querySelector("ea-input");
+      expect(colorInput!.getAttribute("value")).toBe("#409eff");
     });
 
     it("颜色输入 change 应派发类型化 EaColorPickerChangeEvent", async () => {
@@ -1299,11 +1312,11 @@ describe("EaColorPickerPanel Component", () => {
       const handler = vi.fn();
       panel.addEventListener("change", handler);
 
-      const colorInput = panel.shadowRoot.querySelector("ea-input");
-      colorInput.setAttribute("value", "#409eff");
+      const colorInput = panel.shadowRoot!.querySelector("ea-input");
+      colorInput!.setAttribute("value", "#409eff");
       await panel.updateComplete;
 
-      colorInput.dispatchEvent(new Event("change", { bubbles: true }));
+      colorInput!.dispatchEvent(new Event("change", { bubbles: true }));
       await panel.updateComplete;
 
       expect(handler).toHaveBeenCalled();
@@ -1364,40 +1377,40 @@ describe("EaColorPickerPanel Component", () => {
         const el = document.createElement("ea-color-picker");
         container.appendChild(el);
         await el.updateComplete;
-        const trigger = el.shadowRoot.querySelector('[part="trigger"]');
-        expect(trigger.getAttribute("role")).toBe("button");
+        const trigger = el.shadowRoot!.querySelector('[part="trigger"]');
+        expect(trigger!.getAttribute("role")).toBe("button");
       });
 
       it("trigger 应该有 aria-haspopup='dialog'", async () => {
         const el = document.createElement("ea-color-picker");
         container.appendChild(el);
         await el.updateComplete;
-        const trigger = el.shadowRoot.querySelector('[part="trigger"]');
-        expect(trigger.getAttribute("aria-haspopup")).toBe("dialog");
+        const trigger = el.shadowRoot!.querySelector('[part="trigger"]');
+        expect(trigger!.getAttribute("aria-haspopup")).toBe("dialog");
       });
 
       it("trigger 应该有 aria-expanded 属性", async () => {
         const el = document.createElement("ea-color-picker");
         container.appendChild(el);
         await el.updateComplete;
-        const trigger = el.shadowRoot.querySelector('[part="trigger"]');
-        expect(trigger.hasAttribute("aria-expanded")).toBe(true);
+        const trigger = el.shadowRoot!.querySelector('[part="trigger"]');
+        expect(trigger!.hasAttribute("aria-expanded")).toBe(true);
       });
 
       it("svpanel 应该有 role='slider'", async () => {
         const panel = document.createElement("ea-color-picker-panel");
         container.appendChild(panel);
         await panel.updateComplete;
-        const svpanel = panel.shadowRoot.querySelector('[part="svpanel"]');
-        expect(svpanel.getAttribute("role")).toBe("slider");
+        const svpanel = panel.shadowRoot!.querySelector('[part="svpanel"]');
+        expect(svpanel!.getAttribute("role")).toBe("slider");
       });
 
       it("svpanel 应该有 aria-label='Saturation and brightness'", async () => {
         const panel = document.createElement("ea-color-picker-panel");
         container.appendChild(panel);
         await panel.updateComplete;
-        const svpanel = panel.shadowRoot.querySelector('[part="svpanel"]');
-        expect(svpanel.getAttribute("aria-label")).toBe(
+        const svpanel = panel.shadowRoot!.querySelector('[part="svpanel"]');
+        expect(svpanel!.getAttribute("aria-label")).toBe(
           "Saturation and brightness"
         );
       });
@@ -1406,72 +1419,78 @@ describe("EaColorPickerPanel Component", () => {
         const panel = document.createElement("ea-color-picker-panel");
         container.appendChild(panel);
         await panel.updateComplete;
-        const svpanel = panel.shadowRoot.querySelector('[part="svpanel"]');
-        expect(svpanel.getAttribute("aria-valuemin")).toBe("0");
-        expect(svpanel.getAttribute("aria-valuemax")).toBe("100");
+        const svpanel = panel.shadowRoot!.querySelector('[part="svpanel"]');
+        expect(svpanel!.getAttribute("aria-valuemin")).toBe("0");
+        expect(svpanel!.getAttribute("aria-valuemax")).toBe("100");
       });
 
       it("hue slider 应该有 role='slider'", async () => {
         const panel = document.createElement("ea-color-picker-panel");
         container.appendChild(panel);
         await panel.updateComplete;
-        const hueSlider = panel.shadowRoot.querySelector('[part="hue-slider"]');
-        expect(hueSlider.getAttribute("role")).toBe("slider");
+        const hueSlider = panel.shadowRoot!.querySelector(
+          '[part="hue-slider"]'
+        );
+        expect(hueSlider!.getAttribute("role")).toBe("slider");
       });
 
       it("hue slider 应该有 aria-label='Hue'", async () => {
         const panel = document.createElement("ea-color-picker-panel");
         container.appendChild(panel);
         await panel.updateComplete;
-        const hueSlider = panel.shadowRoot.querySelector('[part="hue-slider"]');
-        expect(hueSlider.getAttribute("aria-label")).toBe("Hue");
+        const hueSlider = panel.shadowRoot!.querySelector(
+          '[part="hue-slider"]'
+        );
+        expect(hueSlider!.getAttribute("aria-label")).toBe("Hue");
       });
 
       it("hue slider 应该有 aria-valuemin='0' 和 aria-valuemax='360'", async () => {
         const panel = document.createElement("ea-color-picker-panel");
         container.appendChild(panel);
         await panel.updateComplete;
-        const hueSlider = panel.shadowRoot.querySelector('[part="hue-slider"]');
-        expect(hueSlider.getAttribute("aria-valuemin")).toBe("0");
-        expect(hueSlider.getAttribute("aria-valuemax")).toBe("360");
+        const hueSlider = panel.shadowRoot!.querySelector(
+          '[part="hue-slider"]'
+        );
+        expect(hueSlider!.getAttribute("aria-valuemin")).toBe("0");
+        expect(hueSlider!.getAttribute("aria-valuemax")).toBe("360");
       });
 
       it("alpha slider 应该有 role='slider'", async () => {
         const panel = document.createElement("ea-color-picker-panel");
         container.appendChild(panel);
         await panel.updateComplete;
-        const alphaSlider = panel.shadowRoot.querySelector(
+        const alphaSlider = panel.shadowRoot!.querySelector(
           '[part="alpha-slider"]'
         );
-        expect(alphaSlider.getAttribute("role")).toBe("slider");
+        expect(alphaSlider!.getAttribute("role")).toBe("slider");
       });
 
       it("alpha slider 应该有 aria-label='Opacity'", async () => {
         const panel = document.createElement("ea-color-picker-panel");
         container.appendChild(panel);
         await panel.updateComplete;
-        const alphaSlider = panel.shadowRoot.querySelector(
+        const alphaSlider = panel.shadowRoot!.querySelector(
           '[part="alpha-slider"]'
         );
-        expect(alphaSlider.getAttribute("aria-label")).toBe("Opacity");
+        expect(alphaSlider!.getAttribute("aria-label")).toBe("Opacity");
       });
 
       it("alpha slider 应该有 aria-valuemin='0' 和 aria-valuemax='100'", async () => {
         const panel = document.createElement("ea-color-picker-panel");
         container.appendChild(panel);
         await panel.updateComplete;
-        const alphaSlider = panel.shadowRoot.querySelector(
+        const alphaSlider = panel.shadowRoot!.querySelector(
           '[part="alpha-slider"]'
         );
-        expect(alphaSlider.getAttribute("aria-valuemin")).toBe("0");
-        expect(alphaSlider.getAttribute("aria-valuemax")).toBe("100");
+        expect(alphaSlider!.getAttribute("aria-valuemin")).toBe("0");
+        expect(alphaSlider!.getAttribute("aria-valuemax")).toBe("100");
       });
     });
   });
 });
 
 describe("Color Utils", () => {
-  const HSV_RGB_CASES = [
+  const HSV_RGB_CASES: Array<[number, { r: number; g: number; b: number }]> = [
     [0, { r: 255, g: 0, b: 0 }],
     [60, { r: 255, g: 255, b: 0 }],
     [120, { r: 0, g: 255, b: 0 }],
@@ -1480,7 +1499,7 @@ describe("Color Utils", () => {
     [300, { r: 255, g: 0, b: 255 }],
   ];
 
-  const HSL_RGB_CASES = [
+  const HSL_RGB_CASES: Array<[string, { r: number; g: number; b: number }]> = [
     ["hsl(0, 100%, 50%)", { r: 255, g: 0, b: 0 }],
     ["hsl(60, 100%, 50%)", { r: 255, g: 255, b: 0 }],
     ["hsl(120, 100%, 50%)", { r: 0, g: 255, b: 0 }],
@@ -1508,7 +1527,12 @@ describe("Color Utils", () => {
     });
 
     it("非字符串非对象输入返回默认黑色", () => {
-      expect(new Color(5).getValue()).toEqual({ r: 0, g: 0, b: 0, a: 1 });
+      expect(new Color(5 as unknown as ColorInput).getValue()).toEqual({
+        r: 0,
+        g: 0,
+        b: 0,
+        a: 1,
+      });
     });
 
     it("空对象返回默认黑色", () => {
@@ -1564,8 +1588,8 @@ describe("Color Utils", () => {
         a: 1,
       });
       const hexa = Color.parseStringStrict("#aabbcc80");
-      expect(hexa.r).toBe(170);
-      expect(hexa.a).toBeCloseTo(128 / 255, 6);
+      expect(hexa!.r).toBe(170);
+      expect(hexa!.a).toBeCloseTo(128 / 255, 6);
       expect(Color.parseStringStrict("#12")).toBeNull();
     });
   });
@@ -1669,7 +1693,7 @@ describe("Color Utils", () => {
   });
 
   describe("hsv 解析", () => {
-    const hsvText = h => `hsv(${h}, 100%, 100%)`;
+    const hsvText = (h: number) => `hsv(${h}, 100%, 100%)`;
 
     it.each(HSV_RGB_CASES)("实例解析色相 %i 度", (h, expected) => {
       expect(new Color(hsvText(h)).getValue()).toEqual({ ...expected, a: 1 });
@@ -1765,7 +1789,7 @@ describe("Color Utils", () => {
   describe("静态解析兜底", () => {
     it("空值与非字符串返回 null", () => {
       expect(Color.parseStringStrict("")).toBeNull();
-      expect(Color.parseStringStrict(123)).toBeNull();
+      expect(Color.parseStringStrict(123 as unknown as string)).toBeNull();
     });
 
     it("未知格式返回 null", () => {
@@ -1777,7 +1801,7 @@ describe("Color Utils", () => {
       expect(Color.isValidColor("rgb(1, 2, 3)")).toBe(true);
       expect(Color.isValidColor("")).toBe(false);
       expect(Color.isValidColor("nope")).toBe(false);
-      expect(Color.isValidColor(42)).toBe(false);
+      expect(Color.isValidColor(42 as unknown as string)).toBe(false);
     });
   });
 
@@ -1829,8 +1853,12 @@ describe("Color Utils", () => {
     });
 
     it("toString 大小写不敏感且未知格式回落 hex", () => {
-      expect(new Color("#ff0000").toString("HEX")).toBe("#ff0000");
-      expect(new Color("#ff0000").toString("cmyk")).toBe("#ff0000");
+      expect(
+        new Color("#ff0000").toString("HEX" as unknown as ColorFormat)
+      ).toBe("#ff0000");
+      expect(
+        new Color("#ff0000").toString("cmyk" as unknown as ColorFormat)
+      ).toBe("#ff0000");
     });
   });
 

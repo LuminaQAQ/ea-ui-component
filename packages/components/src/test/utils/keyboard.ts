@@ -5,7 +5,11 @@
  * @param {KeyboardEventInit} init - 额外的事件初始化参数
  * @returns {KeyboardEvent} 派发的事件对象
  */
-export function fireKeydown(target, key, init = {}) {
+export function fireKeydown(
+  target: Element | null,
+  key: string,
+  init: KeyboardEventInit = {}
+) {
   const event = new KeyboardEvent("keydown", {
     key,
     bubbles: true,
@@ -13,7 +17,7 @@ export function fireKeydown(target, key, init = {}) {
     cancelable: true,
     ...init,
   });
-  target.dispatchEvent(event);
+  target!.dispatchEvent(event);
   return event;
 }
 
@@ -23,7 +27,7 @@ export function fireKeydown(target, key, init = {}) {
  * @param {"focusin" | "focusout"} type - 事件类型
  * @returns {FocusEvent} 派发的事件对象
  */
-export function fireFocusEvent(target, type) {
+export function fireFocusEvent(target: Element, type: "focusin" | "focusout") {
   const event = new FocusEvent(type, {
     bubbles: true,
     composed: true,

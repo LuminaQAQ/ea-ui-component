@@ -5,7 +5,7 @@ import "../ea-icon/index.ts";
 import "./index.ts";
 
 describe("EaDrawer Component", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -34,33 +34,51 @@ describe("EaDrawer Component", () => {
       const drawer = document.createElement("ea-drawer");
       container.appendChild(drawer);
 
-      expect(drawer.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
-      expect(drawer.shadowRoot.querySelector('[part="header"]')).toBeTruthy();
-      expect(drawer.shadowRoot.querySelector('[part="heading"]')).toBeTruthy();
-      expect(drawer.shadowRoot.querySelector('[part="close-icon"]')).toBeTruthy();
-      expect(drawer.shadowRoot.querySelector('[part="content"]')).toBeTruthy();
-      expect(drawer.shadowRoot.querySelector('[part="footer"]')).toBeTruthy();
+      expect(
+        drawer.shadowRoot!.querySelector('[part="container"]')
+      ).toBeTruthy();
+      expect(drawer.shadowRoot!.querySelector('[part="header"]')).toBeTruthy();
+      expect(drawer.shadowRoot!.querySelector('[part="heading"]')).toBeTruthy();
+      expect(
+        drawer.shadowRoot!.querySelector('[part="close-icon"]')
+      ).toBeTruthy();
+      expect(drawer.shadowRoot!.querySelector('[part="content"]')).toBeTruthy();
+      expect(drawer.shadowRoot!.querySelector('[part="footer"]')).toBeTruthy();
     });
 
     it("应该包含遮罩层相关结构", () => {
       const drawer = document.createElement("ea-drawer");
       container.appendChild(drawer);
 
-      expect(drawer.shadowRoot.querySelector(".ea-overlay")).toBeTruthy();
-      expect(drawer.shadowRoot.querySelector(".ea-overlay__mask")).toBeTruthy();
-      expect(drawer.shadowRoot.querySelector(".ea-overlay__content")).toBeTruthy();
+      expect(drawer.shadowRoot!.querySelector(".ea-overlay")).toBeTruthy();
+      expect(
+        drawer.shadowRoot!.querySelector(".ea-overlay__mask")
+      ).toBeTruthy();
+      expect(
+        drawer.shadowRoot!.querySelector(".ea-overlay__content")
+      ).toBeTruthy();
     });
 
     it("应该包含抽屉主体结构", () => {
       const drawer = document.createElement("ea-drawer");
       container.appendChild(drawer);
 
-      expect(drawer.shadowRoot.querySelector(".ea-drawer-main")).toBeTruthy();
-      expect(drawer.shadowRoot.querySelector(".ea-drawer-main__header")).toBeTruthy();
-      expect(drawer.shadowRoot.querySelector(".ea-drawer-main__heading")).toBeTruthy();
-      expect(drawer.shadowRoot.querySelector(".ea-drawer-main__close-icon")).toBeTruthy();
-      expect(drawer.shadowRoot.querySelector(".ea-drawer-main__content")).toBeTruthy();
-      expect(drawer.shadowRoot.querySelector(".ea-drawer-main__footer")).toBeTruthy();
+      expect(drawer.shadowRoot!.querySelector(".ea-drawer-main")).toBeTruthy();
+      expect(
+        drawer.shadowRoot!.querySelector(".ea-drawer-main__header")
+      ).toBeTruthy();
+      expect(
+        drawer.shadowRoot!.querySelector(".ea-drawer-main__heading")
+      ).toBeTruthy();
+      expect(
+        drawer.shadowRoot!.querySelector(".ea-drawer-main__close-icon")
+      ).toBeTruthy();
+      expect(
+        drawer.shadowRoot!.querySelector(".ea-drawer-main__content")
+      ).toBeTruthy();
+      expect(
+        drawer.shadowRoot!.querySelector(".ea-drawer-main__footer")
+      ).toBeTruthy();
     });
 
     it("应该包含 header、footer 和默认插槽", async () => {
@@ -73,7 +91,7 @@ describe("EaDrawer Component", () => {
       container.appendChild(drawer);
       await drawer.updateComplete;
 
-      const slots = drawer.shadowRoot.querySelectorAll("slot");
+      const slots = drawer.shadowRoot!.querySelectorAll("slot");
       expect(slots.length).toBeGreaterThanOrEqual(3);
     });
   });
@@ -85,9 +103,9 @@ describe("EaDrawer Component", () => {
       container.appendChild(drawer);
       await drawer.updateComplete;
 
-      const headingEl = drawer.shadowRoot.querySelector('[part="heading"]');
+      const headingEl = drawer.shadowRoot!.querySelector('[part="heading"]');
       expect(headingEl).toBeTruthy();
-      expect(headingEl.textContent).toBe("Test Title");
+      expect(headingEl!.textContent).toBe("Test Title");
     });
 
     it("默认 heading 应该为空", async () => {
@@ -96,8 +114,8 @@ describe("EaDrawer Component", () => {
       await drawer.updateComplete;
 
       expect(drawer.heading).toBe("");
-      const headingEl = drawer.shadowRoot.querySelector('[part="heading"]');
-      expect(headingEl.textContent).toBe("");
+      const headingEl = drawer.shadowRoot!.querySelector('[part="heading"]');
+      expect(headingEl!.textContent).toBe("");
     });
 
     it("动态修改 heading 应该更新标题文本", async () => {
@@ -112,8 +130,8 @@ describe("EaDrawer Component", () => {
       await drawer.updateComplete;
 
       expect(drawer.heading).toBe("Updated Title");
-      const headingEl = drawer.shadowRoot.querySelector('[part="heading"]');
-      expect(headingEl.textContent).toBe("Updated Title");
+      const headingEl = drawer.shadowRoot!.querySelector('[part="heading"]');
+      expect(headingEl!.textContent).toBe("Updated Title");
     });
   });
 
@@ -163,8 +181,8 @@ describe("EaDrawer Component", () => {
       container.appendChild(drawer);
       await drawer.updateComplete;
 
-      const overlay = drawer.shadowRoot.querySelector(".ea-overlay");
-      expect(overlay.classList.contains("ea-drawer--ltr")).toBe(true);
+      const overlay = drawer.shadowRoot!.querySelector(".ea-overlay");
+      expect(overlay!.classList.contains("ea-drawer--ltr")).toBe(true);
     });
 
     it("direction='rtl' 应该生成正确的 BEM 类名", async () => {
@@ -173,8 +191,8 @@ describe("EaDrawer Component", () => {
       container.appendChild(drawer);
       await drawer.updateComplete;
 
-      const overlay = drawer.shadowRoot.querySelector(".ea-overlay");
-      expect(overlay.classList.contains("ea-drawer--rtl")).toBe(true);
+      const overlay = drawer.shadowRoot!.querySelector(".ea-overlay");
+      expect(overlay!.classList.contains("ea-drawer--rtl")).toBe(true);
     });
 
     it("direction='ttb' 应该生成正确的 BEM 类名", async () => {
@@ -183,8 +201,8 @@ describe("EaDrawer Component", () => {
       container.appendChild(drawer);
       await drawer.updateComplete;
 
-      const overlay = drawer.shadowRoot.querySelector(".ea-overlay");
-      expect(overlay.classList.contains("ea-drawer--ttb")).toBe(true);
+      const overlay = drawer.shadowRoot!.querySelector(".ea-overlay");
+      expect(overlay!.classList.contains("ea-drawer--ttb")).toBe(true);
     });
 
     it("direction='btt' 应该生成正确的 BEM 类名", async () => {
@@ -193,8 +211,8 @@ describe("EaDrawer Component", () => {
       container.appendChild(drawer);
       await drawer.updateComplete;
 
-      const overlay = drawer.shadowRoot.querySelector(".ea-overlay");
-      expect(overlay.classList.contains("ea-drawer--btt")).toBe(true);
+      const overlay = drawer.shadowRoot!.querySelector(".ea-overlay");
+      expect(overlay!.classList.contains("ea-drawer--btt")).toBe(true);
     });
 
     it("动态修改 direction 应该更新 BEM 类名", async () => {
@@ -202,14 +220,14 @@ describe("EaDrawer Component", () => {
       container.appendChild(drawer);
       await drawer.updateComplete;
 
-      const overlay = drawer.shadowRoot.querySelector(".ea-overlay");
-      expect(overlay.classList.contains("ea-drawer--rtl")).toBe(true);
+      const overlay = drawer.shadowRoot!.querySelector(".ea-overlay");
+      expect(overlay!.classList.contains("ea-drawer--rtl")).toBe(true);
 
       drawer.setAttribute("direction", "ltr");
       await drawer.updateComplete;
 
-      expect(overlay.classList.contains("ea-drawer--rtl")).toBe(false);
-      expect(overlay.classList.contains("ea-drawer--ltr")).toBe(true);
+      expect(overlay!.classList.contains("ea-drawer--rtl")).toBe(false);
+      expect(overlay!.classList.contains("ea-drawer--ltr")).toBe(true);
     });
   });
 
@@ -259,8 +277,8 @@ describe("EaDrawer Component", () => {
       await drawer.updateComplete;
 
       expect(drawer.visible).toBe(false);
-      const overlay = drawer.shadowRoot.querySelector(".ea-overlay");
-      expect(overlay.classList.contains("ea-overlay--open")).toBe(false);
+      const overlay = drawer.shadowRoot!.querySelector(".ea-overlay");
+      expect(overlay!.classList.contains("ea-overlay--open")).toBe(false);
     });
 
     it("调用 show() 方法应该显示抽屉", async () => {
@@ -347,8 +365,8 @@ describe("EaDrawer Component", () => {
       drawer.withHeader = false;
       await drawer.updateComplete;
 
-      const overlay = drawer.shadowRoot.querySelector(".ea-overlay");
-      expect(overlay.classList.contains("is-header-hidden")).toBe(true);
+      const overlay = drawer.shadowRoot!.querySelector(".ea-overlay");
+      expect(overlay!.classList.contains("is-header-hidden")).toBe(true);
     });
 
     it("withHeader 为 true 时不应该添加 is-header-hidden 状态类", async () => {
@@ -356,8 +374,8 @@ describe("EaDrawer Component", () => {
       container.appendChild(drawer);
       await drawer.updateComplete;
 
-      const overlay = drawer.shadowRoot.querySelector(".ea-overlay");
-      expect(overlay.classList.contains("is-header-hidden")).toBe(false);
+      const overlay = drawer.shadowRoot!.querySelector(".ea-overlay");
+      expect(overlay!.classList.contains("is-header-hidden")).toBe(false);
     });
 
     it("动态修改 withHeader 应该更新状态类", async () => {
@@ -365,18 +383,18 @@ describe("EaDrawer Component", () => {
       container.appendChild(drawer);
       await drawer.updateComplete;
 
-      const overlay = drawer.shadowRoot.querySelector(".ea-overlay");
-      expect(overlay.classList.contains("is-header-hidden")).toBe(false);
+      const overlay = drawer.shadowRoot!.querySelector(".ea-overlay");
+      expect(overlay!.classList.contains("is-header-hidden")).toBe(false);
 
       drawer.withHeader = false;
       await drawer.updateComplete;
 
-      expect(overlay.classList.contains("is-header-hidden")).toBe(true);
+      expect(overlay!.classList.contains("is-header-hidden")).toBe(true);
 
       drawer.withHeader = true;
       await drawer.updateComplete;
 
-      expect(overlay.classList.contains("is-header-hidden")).toBe(false);
+      expect(overlay!.classList.contains("is-header-hidden")).toBe(false);
     });
   });
 
@@ -402,8 +420,8 @@ describe("EaDrawer Component", () => {
       drawer.showClose = false;
       await drawer.updateComplete;
 
-      const overlay = drawer.shadowRoot.querySelector(".ea-overlay");
-      expect(overlay.classList.contains("is-close-hidden")).toBe(true);
+      const overlay = drawer.shadowRoot!.querySelector(".ea-overlay");
+      expect(overlay!.classList.contains("is-close-hidden")).toBe(true);
     });
 
     it("showClose 为 true 时不应该添加 is-close-hidden 状态类", async () => {
@@ -411,8 +429,8 @@ describe("EaDrawer Component", () => {
       container.appendChild(drawer);
       await drawer.updateComplete;
 
-      const overlay = drawer.shadowRoot.querySelector(".ea-overlay");
-      expect(overlay.classList.contains("is-close-hidden")).toBe(false);
+      const overlay = drawer.shadowRoot!.querySelector(".ea-overlay");
+      expect(overlay!.classList.contains("is-close-hidden")).toBe(false);
     });
 
     it("动态修改 showClose 应该更新状态类", async () => {
@@ -420,18 +438,18 @@ describe("EaDrawer Component", () => {
       container.appendChild(drawer);
       await drawer.updateComplete;
 
-      const overlay = drawer.shadowRoot.querySelector(".ea-overlay");
-      expect(overlay.classList.contains("is-close-hidden")).toBe(false);
+      const overlay = drawer.shadowRoot!.querySelector(".ea-overlay");
+      expect(overlay!.classList.contains("is-close-hidden")).toBe(false);
 
       drawer.showClose = false;
       await drawer.updateComplete;
 
-      expect(overlay.classList.contains("is-close-hidden")).toBe(true);
+      expect(overlay!.classList.contains("is-close-hidden")).toBe(true);
 
       drawer.showClose = true;
       await drawer.updateComplete;
 
-      expect(overlay.classList.contains("is-close-hidden")).toBe(false);
+      expect(overlay!.classList.contains("is-close-hidden")).toBe(false);
     });
   });
 
@@ -446,8 +464,10 @@ describe("EaDrawer Component", () => {
 
       expect(drawer.visible).toBe(true);
 
-      const closeIcon = drawer.shadowRoot.querySelector(".ea-drawer-main__close-icon");
-      closeIcon.click();
+      const closeIcon = drawer.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-drawer-main__close-icon"
+      );
+      closeIcon!.click();
 
       await drawer.updateComplete;
 
@@ -466,8 +486,10 @@ describe("EaDrawer Component", () => {
 
       expect(drawer.visible).toBe(true);
 
-      const closeIcon = drawer.shadowRoot.querySelector(".ea-drawer-main__close-icon");
-      closeIcon.click();
+      const closeIcon = drawer.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-drawer-main__close-icon"
+      );
+      closeIcon!.click();
 
       await drawer.updateComplete;
 
@@ -496,8 +518,8 @@ describe("EaDrawer Component", () => {
       container.appendChild(drawer);
       await drawer.updateComplete;
 
-      const overlay = drawer.shadowRoot.querySelector(".ea-overlay");
-      expect(overlay.classList.contains("is-modal")).toBe(true);
+      const overlay = drawer.shadowRoot!.querySelector(".ea-overlay");
+      expect(overlay!.classList.contains("is-modal")).toBe(true);
     });
 
     it("modal 为 false 时不应该添加 is-modal 状态类", async () => {
@@ -506,8 +528,8 @@ describe("EaDrawer Component", () => {
       drawer.modal = false;
       await drawer.updateComplete;
 
-      const overlay = drawer.shadowRoot.querySelector(".ea-overlay");
-      expect(overlay.classList.contains("is-modal")).toBe(false);
+      const overlay = drawer.shadowRoot!.querySelector(".ea-overlay");
+      expect(overlay!.classList.contains("is-modal")).toBe(false);
     });
   });
 
@@ -537,8 +559,9 @@ describe("EaDrawer Component", () => {
 
       expect(drawer.visible).toBe(true);
 
-      const mask = drawer.shadowRoot.querySelector(".ea-overlay__mask");
-      mask.click();
+      const mask =
+        drawer.shadowRoot!.querySelector<HTMLElement>(".ea-overlay__mask");
+      mask!.click();
 
       await drawer.updateComplete;
 
@@ -557,8 +580,9 @@ describe("EaDrawer Component", () => {
 
       expect(drawer.visible).toBe(true);
 
-      const mask = drawer.shadowRoot.querySelector(".ea-overlay__mask");
-      mask.click();
+      const mask =
+        drawer.shadowRoot!.querySelector<HTMLElement>(".ea-overlay__mask");
+      mask!.click();
 
       await drawer.updateComplete;
 
@@ -832,8 +856,8 @@ describe("EaDrawer Component", () => {
       await new Promise(resolve => requestAnimationFrame(resolve));
       await drawer.updateComplete;
 
-      const overlayContainer = drawer.shadowRoot.querySelector(".ea-overlay");
-      overlayContainer.dispatchEvent(
+      const overlayContainer = drawer.shadowRoot!.querySelector(".ea-overlay");
+      overlayContainer!.dispatchEvent(
         new Event("transitionend", { bubbles: true })
       );
 
@@ -856,8 +880,8 @@ describe("EaDrawer Component", () => {
       drawer.visible = false;
       await drawer.updateComplete;
 
-      const overlayContainer = drawer.shadowRoot.querySelector(".ea-overlay");
-      overlayContainer.dispatchEvent(
+      const overlayContainer = drawer.shadowRoot!.querySelector(".ea-overlay");
+      overlayContainer!.dispatchEvent(
         new Event("transitionend", { bubbles: true })
       );
 
@@ -897,7 +921,7 @@ describe("EaDrawer Component", () => {
 
       drawer.show();
 
-      const content = drawer.shadowRoot.querySelector('[part="content"]');
+      const content = drawer.shadowRoot!.querySelector('[part="content"]');
       expect(content).toBeTruthy();
     });
 
@@ -906,8 +930,8 @@ describe("EaDrawer Component", () => {
       container.appendChild(drawer);
       await drawer.updateComplete;
 
-      const headingEl = drawer.shadowRoot.querySelector('[part="heading"]');
-      expect(headingEl.textContent).toBe("");
+      const headingEl = drawer.shadowRoot!.querySelector('[part="heading"]');
+      expect(headingEl!.textContent).toBe("");
     });
 
     it("自定义 title slot 应该生效", () => {
@@ -918,7 +942,7 @@ describe("EaDrawer Component", () => {
       `;
       container.appendChild(drawer);
 
-      const titleSlot = drawer.shadowRoot.querySelector('slot[name="title"]');
+      const titleSlot = drawer.shadowRoot!.querySelector('slot[name="title"]');
       expect(titleSlot).toBeTruthy();
     });
 
@@ -930,7 +954,9 @@ describe("EaDrawer Component", () => {
       `;
       container.appendChild(drawer);
 
-      const footerSlot = drawer.shadowRoot.querySelector('slot[name="footer"]');
+      const footerSlot = drawer.shadowRoot!.querySelector(
+        'slot[name="footer"]'
+      );
       expect(footerSlot).toBeTruthy();
     });
 
@@ -962,8 +988,9 @@ describe("EaDrawer Component", () => {
 
       expect(drawer.visible).toBe(true);
 
-      const drawerContent = drawer.shadowRoot.querySelector(".ea-drawer-main");
-      drawerContent.click();
+      const drawerContent =
+        drawer.shadowRoot!.querySelector<HTMLElement>(".ea-drawer-main");
+      drawerContent!.click();
 
       await drawer.updateComplete;
 
@@ -976,9 +1003,9 @@ describe("EaDrawer Component", () => {
       drawer.withHeader = false;
       await drawer.updateComplete;
 
-      const overlay = drawer.shadowRoot.querySelector(".ea-overlay");
-      expect(overlay.classList.contains("is-header-hidden")).toBe(true);
-      expect(overlay.classList.contains("is-close-hidden")).toBe(false);
+      const overlay = drawer.shadowRoot!.querySelector(".ea-overlay");
+      expect(overlay!.classList.contains("is-header-hidden")).toBe(true);
+      expect(overlay!.classList.contains("is-close-hidden")).toBe(false);
     });
 
     it("withHeader 为 false 且 showClose 为 false 时的组合应该正确", async () => {
@@ -988,9 +1015,9 @@ describe("EaDrawer Component", () => {
       drawer.showClose = false;
       await drawer.updateComplete;
 
-      const overlay = drawer.shadowRoot.querySelector(".ea-overlay");
-      expect(overlay.classList.contains("is-header-hidden")).toBe(true);
-      expect(overlay.classList.contains("is-close-hidden")).toBe(true);
+      const overlay = drawer.shadowRoot!.querySelector(".ea-overlay");
+      expect(overlay!.classList.contains("is-header-hidden")).toBe(true);
+      expect(overlay!.classList.contains("is-close-hidden")).toBe(true);
     });
   });
 
@@ -1001,7 +1028,9 @@ describe("EaDrawer Component", () => {
       container.appendChild(drawer);
       await drawer.updateComplete;
 
-      expect(drawer.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(
+        drawer.shadowRoot!.querySelector('[part="container"]')
+      ).toBeTruthy();
       expect(drawer.getAttribute("role")).toBe("dialog");
     });
 
@@ -1072,10 +1101,8 @@ describe("EaDrawer Component", () => {
       const labelledBy = drawer.getAttribute("aria-labelledby");
       expect(labelledBy).not.toBeNull();
 
-      const heading = drawer.shadowRoot.querySelector(
-        '[part="heading"]'
-      );
-      expect(heading.id).toBe(labelledBy);
+      const heading = drawer.shadowRoot!.querySelector('[part="heading"]');
+      expect(heading!.id).toBe(labelledBy);
     });
 
     it("无 heading 时不应有 aria-labelledby 或 aria-label", async () => {
@@ -1096,10 +1123,10 @@ describe("EaDrawer Component", () => {
       const describedBy = drawer.getAttribute("aria-describedby");
       expect(describedBy).not.toBeNull();
 
-      const content = drawer.shadowRoot.querySelector(
+      const content = drawer.shadowRoot!.querySelector(
         ".ea-drawer-main__content"
       );
-      expect(content.id).toBe(describedBy);
+      expect(content!.id).toBe(describedBy);
     });
 
     it("无 description 时不应有 aria-describedby", async () => {

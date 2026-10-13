@@ -33,8 +33,8 @@ function createTargetElement(id = "tour-target") {
 }
 
 describe("EaTour Component", () => {
-  let container;
-  let targetEl;
+  let container: HTMLDivElement;
+  let targetEl: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -66,14 +66,14 @@ describe("EaTour Component", () => {
       document.body.appendChild(tour);
 
       expect(tour.shadowRoot).toBeDefined();
-      expect(tour.shadowRoot.mode).toBe("open");
+      expect(tour.shadowRoot!.mode).toBe("open");
     });
 
     it("应该渲染 .ea-tour 容器", () => {
       const tour = createTour();
       document.body.appendChild(tour);
 
-      expect(tour.shadowRoot.querySelector(".ea-tour")).toBeTruthy();
+      expect(tour.shadowRoot!.querySelector(".ea-tour")).toBeTruthy();
     });
 
     it("应该渲染 SVG 遮罩结构", async () => {
@@ -82,9 +82,9 @@ describe("EaTour Component", () => {
 
       await tour.updateComplete;
 
-      expect(tour.shadowRoot.querySelector(".ea-tour__svg")).toBeTruthy();
-      expect(tour.shadowRoot.querySelector(".ea-tour__mask")).toBeTruthy();
-      expect(tour.shadowRoot.querySelector(".ea-tour__hollow")).toBeTruthy();
+      expect(tour.shadowRoot!.querySelector(".ea-tour__svg")).toBeTruthy();
+      expect(tour.shadowRoot!.querySelector(".ea-tour__mask")).toBeTruthy();
+      expect(tour.shadowRoot!.querySelector(".ea-tour__hollow")).toBeTruthy();
     });
 
     it("应该渲染四个方向的分割线", () => {
@@ -92,16 +92,16 @@ describe("EaTour Component", () => {
       document.body.appendChild(tour);
 
       expect(
-        tour.shadowRoot.querySelector(".ea-tour__divider.top-mask")
+        tour.shadowRoot!.querySelector(".ea-tour__divider.top-mask")
       ).toBeTruthy();
       expect(
-        tour.shadowRoot.querySelector(".ea-tour__divider.right-mask")
+        tour.shadowRoot!.querySelector(".ea-tour__divider.right-mask")
       ).toBeTruthy();
       expect(
-        tour.shadowRoot.querySelector(".ea-tour__divider.bottom-mask")
+        tour.shadowRoot!.querySelector(".ea-tour__divider.bottom-mask")
       ).toBeTruthy();
       expect(
-        tour.shadowRoot.querySelector(".ea-tour__divider.left-mask")
+        tour.shadowRoot!.querySelector(".ea-tour__divider.left-mask")
       ).toBeTruthy();
     });
 
@@ -111,8 +111,8 @@ describe("EaTour Component", () => {
       `);
       document.body.appendChild(tour);
 
-      expect(tour.shadowRoot.querySelector(".ea-tour__content")).toBeTruthy();
-      const slot = tour.shadowRoot.querySelector(".ea-tour__content slot");
+      expect(tour.shadowRoot!.querySelector(".ea-tour__content")).toBeTruthy();
+      const slot = tour.shadowRoot!.querySelector(".ea-tour__content slot");
       expect(slot).toBeTruthy();
     });
 
@@ -120,7 +120,7 @@ describe("EaTour Component", () => {
       const tour = createTour();
       document.body.appendChild(tour);
 
-      expect(tour.shadowRoot.querySelector('[part="hollow"]')).toBeTruthy();
+      expect(tour.shadowRoot!.querySelector('[part="hollow"]')).toBeTruthy();
     });
 
     it("默认不可见时容器不应有 is-visible 状态类", async () => {
@@ -129,8 +129,8 @@ describe("EaTour Component", () => {
 
       await tour.updateComplete;
 
-      const tourEl = tour.shadowRoot.querySelector(".ea-tour");
-      expect(tourEl.classList.contains("is-visible")).toBe(false);
+      const tourEl = tour.shadowRoot!.querySelector(".ea-tour");
+      expect(tourEl!.classList.contains("is-visible")).toBe(false);
     });
   });
 
@@ -158,8 +158,8 @@ describe("EaTour Component", () => {
       await tour.updateComplete;
 
       expect(tour.visible).toBe(true);
-      const tourEl = tour.shadowRoot.querySelector(".ea-tour");
-      expect(tourEl.classList.contains("is-visible")).toBe(true);
+      const tourEl = tour.shadowRoot!.querySelector(".ea-tour");
+      expect(tourEl!.classList.contains("is-visible")).toBe(true);
     });
 
     it("通过 setAttribute 设置 visible", () => {
@@ -238,8 +238,8 @@ describe("EaTour Component", () => {
 
       await tour.updateComplete;
 
-      const tourEl = tour.shadowRoot.querySelector(".ea-tour");
-      expect(tourEl.classList.contains("is-mask")).toBe(true);
+      const tourEl = tour.shadowRoot!.querySelector(".ea-tour");
+      expect(tourEl!.classList.contains("is-mask")).toBe(true);
     });
 
     it("设置 mask 为 false 应该移除 is-mask 状态类", async () => {
@@ -250,8 +250,8 @@ describe("EaTour Component", () => {
       await tour.updateComplete;
 
       expect(tour.mask).toBe(false);
-      const tourEl = tour.shadowRoot.querySelector(".ea-tour");
-      expect(tourEl.classList.contains("is-mask")).toBe(false);
+      const tourEl = tour.shadowRoot!.querySelector(".ea-tour");
+      expect(tourEl!.classList.contains("is-mask")).toBe(false);
     });
 
     it("mask 为 false 且 visible 为 true 时不应该隐藏 body 滚动", async () => {
@@ -397,7 +397,7 @@ describe("EaTour Component", () => {
       await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
-      expect(step.getAttribute("variant")).toBe("primary");
+      expect(step!.getAttribute("variant")).toBe("primary");
     });
 
     it("variant 从 primary 改回 default 时应该移除子步骤的 variant 属性", async () => {
@@ -413,7 +413,7 @@ describe("EaTour Component", () => {
       await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
-      expect(step.hasAttribute("variant")).toBe(false);
+      expect(step!.hasAttribute("variant")).toBe(false);
     });
   });
 
@@ -445,7 +445,7 @@ describe("EaTour Component", () => {
       await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
-      expect(step.getAttribute("placement")).toBe("top-start");
+      expect(step!.getAttribute("placement")).toBe("top-start");
     });
 
     it("placement 不应该覆盖子步骤已有的 placement", async () => {
@@ -458,7 +458,7 @@ describe("EaTour Component", () => {
       await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
-      expect(step.getAttribute("placement")).toBe("left");
+      expect(step!.getAttribute("placement")).toBe("left");
     });
   });
 
@@ -698,9 +698,9 @@ describe("EaTour Component", () => {
 
       await tour.updateComplete;
 
-      const tourEl = tour.shadowRoot.querySelector(".ea-tour");
+      const tourEl = tour.shadowRoot!.querySelector(".ea-tour");
       expect(tourEl).toBeTruthy();
-      expect(tourEl.classList.contains("ea-tour")).toBe(true);
+      expect(tourEl!.classList.contains("ea-tour")).toBe(true);
     });
 
     it("visible 为 true 时应该添加 is-visible 状态类", async () => {
@@ -714,8 +714,8 @@ describe("EaTour Component", () => {
       tour.visible = true;
       await tour.updateComplete;
 
-      const tourEl = tour.shadowRoot.querySelector(".ea-tour");
-      expect(tourEl.classList.contains("is-visible")).toBe(true);
+      const tourEl = tour.shadowRoot!.querySelector(".ea-tour");
+      expect(tourEl!.classList.contains("is-visible")).toBe(true);
     });
 
     it("mask 为 true 时应该添加 is-mask 状态类", async () => {
@@ -724,8 +724,8 @@ describe("EaTour Component", () => {
 
       await tour.updateComplete;
 
-      const tourEl = tour.shadowRoot.querySelector(".ea-tour");
-      expect(tourEl.classList.contains("is-mask")).toBe(true);
+      const tourEl = tour.shadowRoot!.querySelector(".ea-tour");
+      expect(tourEl!.classList.contains("is-mask")).toBe(true);
     });
 
     it("mask 为 false 时不应该有 is-mask 状态类", async () => {
@@ -735,15 +735,15 @@ describe("EaTour Component", () => {
 
       await tour.updateComplete;
 
-      const tourEl = tour.shadowRoot.querySelector(".ea-tour");
-      expect(tourEl.classList.contains("is-mask")).toBe(false);
+      const tourEl = tour.shadowRoot!.querySelector(".ea-tour");
+      expect(tourEl!.classList.contains("is-mask")).toBe(false);
     });
   });
 });
 
 describe("EaTourStep Component", () => {
-  let container;
-  let targetEl;
+  let container: HTMLDivElement;
+  let targetEl: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -769,7 +769,7 @@ describe("EaTourStep Component", () => {
 
       const step = tour.querySelector("ea-tour-step");
       expect(step).toBeDefined();
-      expect(step.tagName.toLowerCase()).toBe("ea-tour-step");
+      expect(step!.tagName.toLowerCase()).toBe("ea-tour-step");
     });
 
     it("应该创建 open 模式的 shadow DOM", () => {
@@ -779,8 +779,8 @@ describe("EaTourStep Component", () => {
       document.body.appendChild(tour);
 
       const step = tour.querySelector("ea-tour-step");
-      expect(step.shadowRoot).toBeDefined();
-      expect(step.shadowRoot.mode).toBe("open");
+      expect(step!.shadowRoot).toBeDefined();
+      expect(step!.shadowRoot!.mode).toBe("open");
     });
 
     it("应该渲染 .ea-tour-step 容器", () => {
@@ -790,7 +790,7 @@ describe("EaTourStep Component", () => {
       document.body.appendChild(tour);
 
       const step = tour.querySelector("ea-tour-step");
-      expect(step.shadowRoot.querySelector(".ea-tour-step")).toBeTruthy();
+      expect(step!.shadowRoot!.querySelector(".ea-tour-step")).toBeTruthy();
     });
 
     it("应该渲染完整的结构：header、content、footer", () => {
@@ -801,13 +801,13 @@ describe("EaTourStep Component", () => {
 
       const step = tour.querySelector("ea-tour-step");
       expect(
-        step.shadowRoot.querySelector(".ea-tour-step__header")
+        step!.shadowRoot!.querySelector(".ea-tour-step__header")
       ).toBeTruthy();
       expect(
-        step.shadowRoot.querySelector(".ea-tour-step__content")
+        step!.shadowRoot!.querySelector(".ea-tour-step__content")
       ).toBeTruthy();
       expect(
-        step.shadowRoot.querySelector(".ea-tour-step__footer")
+        step!.shadowRoot!.querySelector(".ea-tour-step__footer")
       ).toBeTruthy();
     });
 
@@ -819,10 +819,10 @@ describe("EaTourStep Component", () => {
 
       const step = tour.querySelector("ea-tour-step");
       expect(
-        step.shadowRoot.querySelector(".ea-tour-step__indicator-group")
+        step!.shadowRoot!.querySelector(".ea-tour-step__indicator-group")
       ).toBeTruthy();
       expect(
-        step.shadowRoot.querySelector(".ea-tour-step__switch-group")
+        step!.shadowRoot!.querySelector(".ea-tour-step__switch-group")
       ).toBeTruthy();
     });
 
@@ -833,7 +833,9 @@ describe("EaTourStep Component", () => {
       document.body.appendChild(tour);
 
       const step = tour.querySelector("ea-tour-step");
-      const slot = step.shadowRoot.querySelector(".ea-tour-step__content slot");
+      const slot = step!.shadowRoot!.querySelector<HTMLSlotElement>(
+        ".ea-tour-step__content slot"
+      );
       expect(slot).toBeTruthy();
     });
 
@@ -844,7 +846,9 @@ describe("EaTourStep Component", () => {
       document.body.appendChild(tour);
 
       const step = tour.querySelector("ea-tour-step");
-      const headerSlot = step.shadowRoot.querySelector("slot[name='header']");
+      const headerSlot = step!.shadowRoot!.querySelector<HTMLSlotElement>(
+        "slot[name='header']"
+      );
       expect(headerSlot).toBeTruthy();
     });
 
@@ -855,7 +859,7 @@ describe("EaTourStep Component", () => {
       document.body.appendChild(tour);
 
       const step = tour.querySelector("ea-tour-step");
-      const indicatorSlot = step.shadowRoot.querySelector(
+      const indicatorSlot = step!.shadowRoot!.querySelector(
         "slot[name='indicator']"
       );
       expect(indicatorSlot).toBeTruthy();
@@ -868,7 +872,9 @@ describe("EaTourStep Component", () => {
       document.body.appendChild(tour);
 
       const step = tour.querySelector("ea-tour-step");
-      const footerSlot = step.shadowRoot.querySelector("slot[name='footer']");
+      const footerSlot = step!.shadowRoot!.querySelector<HTMLSlotElement>(
+        "slot[name='footer']"
+      );
       expect(footerSlot).toBeTruthy();
     });
   });
@@ -883,7 +889,9 @@ describe("EaTourStep Component", () => {
       document.body.appendChild(tour);
 
       const step = tour.querySelector("ea-tour-step");
-      expect(step.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(
+        step!.shadowRoot!.querySelector('[part="container"]')
+      ).toBeTruthy();
     });
 
     it("应该支持 header part", () => {
@@ -893,7 +901,7 @@ describe("EaTourStep Component", () => {
       document.body.appendChild(tour);
 
       const step = tour.querySelector("ea-tour-step");
-      expect(step.shadowRoot.querySelector('[part="header"]')).toBeTruthy();
+      expect(step!.shadowRoot!.querySelector('[part="header"]')).toBeTruthy();
     });
 
     it("应该支持 close-icon part", () => {
@@ -903,7 +911,9 @@ describe("EaTourStep Component", () => {
       document.body.appendChild(tour);
 
       const step = tour.querySelector("ea-tour-step");
-      expect(step.shadowRoot.querySelector('[part="close-icon"]')).toBeTruthy();
+      expect(
+        step!.shadowRoot!.querySelector('[part="close-icon"]')
+      ).toBeTruthy();
     });
 
     it("应该支持 content part", () => {
@@ -913,7 +923,7 @@ describe("EaTourStep Component", () => {
       document.body.appendChild(tour);
 
       const step = tour.querySelector("ea-tour-step");
-      expect(step.shadowRoot.querySelector('[part="content"]')).toBeTruthy();
+      expect(step!.shadowRoot!.querySelector('[part="content"]')).toBeTruthy();
     });
 
     it("应该支持 footer part", () => {
@@ -923,7 +933,7 @@ describe("EaTourStep Component", () => {
       document.body.appendChild(tour);
 
       const step = tour.querySelector("ea-tour-step");
-      expect(step.shadowRoot.querySelector('[part="footer"]')).toBeTruthy();
+      expect(step!.shadowRoot!.querySelector('[part="footer"]')).toBeTruthy();
     });
 
     it("应该支持 indicator-group part", () => {
@@ -934,7 +944,7 @@ describe("EaTourStep Component", () => {
 
       const step = tour.querySelector("ea-tour-step");
       expect(
-        step.shadowRoot.querySelector('[part="indicator-group"]')
+        step!.shadowRoot!.querySelector('[part="indicator-group"]')
       ).toBeTruthy();
     });
 
@@ -946,7 +956,7 @@ describe("EaTourStep Component", () => {
 
       const step = tour.querySelector("ea-tour-step");
       expect(
-        step.shadowRoot.querySelector('[part="switch-group"]')
+        step!.shadowRoot!.querySelector('[part="switch-group"]')
       ).toBeTruthy();
     });
 
@@ -957,9 +967,15 @@ describe("EaTourStep Component", () => {
       document.body.appendChild(tour);
 
       const step = tour.querySelector("ea-tour-step");
-      expect(step.shadowRoot.querySelector('[part="previous"]')).toBeTruthy();
-      expect(step.shadowRoot.querySelector('[part="next"]')).toBeTruthy();
-      expect(step.shadowRoot.querySelector('[part="finish"]')).toBeTruthy();
+      expect(
+        step!.shadowRoot!.querySelector<HTMLElement>('[part="previous"]')
+      ).toBeTruthy();
+      expect(
+        step!.shadowRoot!.querySelector<HTMLElement>('[part="next"]')
+      ).toBeTruthy();
+      expect(
+        step!.shadowRoot!.querySelector<HTMLElement>('[part="finish"]')
+      ).toBeTruthy();
     });
   });
 
@@ -973,7 +989,7 @@ describe("EaTourStep Component", () => {
       document.body.appendChild(tour);
 
       const step = tour.querySelector("ea-tour-step");
-      expect(step.heading).toBe("");
+      expect(step!.heading).toBe("");
     });
 
     it("应该支持 heading 属性", () => {
@@ -983,7 +999,7 @@ describe("EaTourStep Component", () => {
       document.body.appendChild(tour);
 
       const step = tour.querySelector("ea-tour-step");
-      expect(step.heading).toBe("Test Title");
+      expect(step!.heading).toBe("Test Title");
     });
 
     it("通过 setAttribute 设置 heading", () => {
@@ -993,8 +1009,8 @@ describe("EaTourStep Component", () => {
       document.body.appendChild(tour);
 
       const step = tour.querySelector("ea-tour-step");
-      step.setAttribute("heading", "New Title");
-      expect(step.heading).toBe("New Title");
+      step!.setAttribute("heading", "New Title");
+      expect(step!.heading).toBe("New Title");
     });
 
     it("heading 变化时应该更新标题文本", async () => {
@@ -1004,13 +1020,13 @@ describe("EaTourStep Component", () => {
       document.body.appendChild(tour);
 
       const step = tour.querySelector("ea-tour-step");
-      step.setAttribute("heading", "New Title");
+      step!.setAttribute("heading", "New Title");
       await tour.updateComplete;
 
-      const titleSlot = step.shadowRoot.querySelector(
+      const titleSlot = step!.shadowRoot!.querySelector(
         ".ea-tour-step__header slot"
       );
-      expect(titleSlot.textContent).toBe("New Title");
+      expect(titleSlot!.textContent).toBe("New Title");
     });
   });
 
@@ -1024,7 +1040,7 @@ describe("EaTourStep Component", () => {
       document.body.appendChild(tour);
 
       const step = tour.querySelector("ea-tour-step");
-      expect(step.target).toBe("");
+      expect(step!.target).toBe("");
     });
 
     it("应该支持 target 属性", () => {
@@ -1034,7 +1050,7 @@ describe("EaTourStep Component", () => {
       document.body.appendChild(tour);
 
       const step = tour.querySelector("ea-tour-step");
-      expect(step.target).toBe("#step-target");
+      expect(step!.target).toBe("#step-target");
     });
 
     it("通过 setAttribute 设置 target", () => {
@@ -1044,8 +1060,8 @@ describe("EaTourStep Component", () => {
       document.body.appendChild(tour);
 
       const step = tour.querySelector("ea-tour-step");
-      step.setAttribute("target", "#step-target");
-      expect(step.target).toBe("#step-target");
+      step!.setAttribute("target", "#step-target");
+      expect(step!.target).toBe("#step-target");
     });
   });
 
@@ -1059,7 +1075,7 @@ describe("EaTourStep Component", () => {
       document.body.appendChild(tour);
 
       const step = tour.querySelector("ea-tour-step");
-      expect(step.variant).toBe("default");
+      expect(step!.variant).toBe("default");
     });
 
     it("应该支持 variant 属性设置为 primary", () => {
@@ -1069,7 +1085,7 @@ describe("EaTourStep Component", () => {
       document.body.appendChild(tour);
 
       const step = tour.querySelector("ea-tour-step");
-      expect(step.variant).toBe("primary");
+      expect(step!.variant).toBe("primary");
     });
 
     it("variant 为 primary 时容器应该有 ea-tour-step--primary 修饰符", async () => {
@@ -1081,8 +1097,8 @@ describe("EaTourStep Component", () => {
       await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
-      const container = step.shadowRoot.querySelector(".ea-tour-step");
-      expect(container.classList.contains("ea-tour-step--primary")).toBe(true);
+      const container = step!.shadowRoot!.querySelector(".ea-tour-step");
+      expect(container!.classList.contains("ea-tour-step--primary")).toBe(true);
     });
 
     it("variant 为 default 时容器不应该有 ea-tour-step--primary 修饰符", async () => {
@@ -1094,8 +1110,10 @@ describe("EaTourStep Component", () => {
       await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
-      const container = step.shadowRoot.querySelector(".ea-tour-step");
-      expect(container.classList.contains("ea-tour-step--primary")).toBe(false);
+      const container = step!.shadowRoot!.querySelector(".ea-tour-step");
+      expect(container!.classList.contains("ea-tour-step--primary")).toBe(
+        false
+      );
     });
 
     it("variant 为 primary 时按钮应该设置 variant 为 primary", async () => {
@@ -1107,8 +1125,9 @@ describe("EaTourStep Component", () => {
       await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
-      const nextBtn = step.shadowRoot.querySelector('[part="next"]');
-      expect(nextBtn.getAttribute("variant")).toBe("primary");
+      const nextBtn =
+        step!.shadowRoot!.querySelector<HTMLElement>('[part="next"]');
+      expect(nextBtn!.getAttribute("variant")).toBe("primary");
     });
 
     it("variant 从 primary 改回 default 时按钮应该移除 variant 属性", async () => {
@@ -1118,11 +1137,12 @@ describe("EaTourStep Component", () => {
       document.body.appendChild(tour);
 
       const step = tour.querySelector("ea-tour-step");
-      step.setAttribute("variant", "default");
+      step!.setAttribute("variant", "default");
       await tour.updateComplete;
 
-      const nextBtn = step.shadowRoot.querySelector('[part="next"]');
-      expect(nextBtn.hasAttribute("variant")).toBe(false);
+      const nextBtn =
+        step!.shadowRoot!.querySelector<HTMLElement>('[part="next"]');
+      expect(nextBtn!.hasAttribute("variant")).toBe(false);
     });
   });
 
@@ -1136,7 +1156,7 @@ describe("EaTourStep Component", () => {
       document.body.appendChild(tour);
 
       const step = tour.querySelector("ea-tour-step");
-      expect(step.placement).toBe("bottom");
+      expect(step!.placement).toBe("bottom");
     });
 
     it("应该支持 placement 属性设置", () => {
@@ -1146,7 +1166,7 @@ describe("EaTourStep Component", () => {
       document.body.appendChild(tour);
 
       const step = tour.querySelector("ea-tour-step");
-      expect(step.placement).toBe("top");
+      expect(step!.placement).toBe("top");
     });
 
     it("应该支持所有 placement 值", async () => {
@@ -1174,7 +1194,7 @@ describe("EaTourStep Component", () => {
         await tour.updateComplete;
 
         const step = tour.querySelector("ea-tour-step");
-        expect(step.placement).toBe(placement);
+        expect(step!.placement).toBe(placement);
 
         tour.remove();
       }
@@ -1193,9 +1213,11 @@ describe("EaTourStep Component", () => {
       await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
-      const prevBtn = step.shadowRoot.querySelector(".ea-tour-step__previous");
+      const prevBtn = step!.shadowRoot!.querySelector(
+        ".ea-tour-step__previous"
+      );
       expect(prevBtn).toBeTruthy();
-      expect(prevBtn.textContent).toBe("Previous");
+      expect(prevBtn!.textContent).toBe("Previous");
     });
 
     it("应该渲染 Next 按钮", async () => {
@@ -1207,9 +1229,9 @@ describe("EaTourStep Component", () => {
       await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
-      const nextBtn = step.shadowRoot.querySelector(".ea-tour-step__next");
+      const nextBtn = step!.shadowRoot!.querySelector(".ea-tour-step__next");
       expect(nextBtn).toBeTruthy();
-      expect(nextBtn.textContent).toBe("Next");
+      expect(nextBtn!.textContent).toBe("Next");
     });
 
     it("应该渲染 Finish 按钮", async () => {
@@ -1221,9 +1243,11 @@ describe("EaTourStep Component", () => {
       await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
-      const finishBtn = step.shadowRoot.querySelector(".ea-tour-step__finish");
+      const finishBtn = step!.shadowRoot!.querySelector(
+        ".ea-tour-step__finish"
+      );
       expect(finishBtn).toBeTruthy();
-      expect(finishBtn.textContent).toBe("Finish");
+      expect(finishBtn!.textContent).toBe("Finish");
     });
 
     it("应该渲染关闭图标", () => {
@@ -1233,7 +1257,7 @@ describe("EaTourStep Component", () => {
       document.body.appendChild(tour);
 
       const step = tour.querySelector("ea-tour-step");
-      const closeIcon = step.shadowRoot.querySelector(
+      const closeIcon = step!.shadowRoot!.querySelector<HTMLElement>(
         ".ea-tour-step__close-icon"
       );
       expect(closeIcon).toBeTruthy();
@@ -1246,8 +1270,8 @@ describe("EaTourStep Component", () => {
       document.body.appendChild(tour);
 
       const step = tour.querySelector("ea-tour-step");
-      const header = step.shadowRoot.querySelector(".ea-tour-step__header");
-      const closeIcon = header.querySelector(".ea-tour-step__close-icon");
+      const header = step!.shadowRoot!.querySelector(".ea-tour-step__header");
+      const closeIcon = header!.querySelector(".ea-tour-step__close-icon");
       expect(closeIcon).toBeTruthy();
     });
 
@@ -1260,7 +1284,7 @@ describe("EaTourStep Component", () => {
       await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
-      const buttons = step.shadowRoot.querySelectorAll("ea-button");
+      const buttons = step!.shadowRoot!.querySelectorAll("ea-button");
       expect(buttons.length).toBe(3);
     });
   });
@@ -1279,7 +1303,7 @@ describe("EaTourStep Component", () => {
       await tour.updateComplete;
 
       const steps = tour.querySelectorAll("ea-tour-step");
-      const indicators = steps[0].shadowRoot.querySelectorAll(
+      const indicators = steps[0].shadowRoot!.querySelectorAll(
         ".ea-tour-step__indicator"
       );
       expect(indicators.length).toBe(3);
@@ -1295,7 +1319,7 @@ describe("EaTourStep Component", () => {
       await tour.updateComplete;
 
       const steps = tour.querySelectorAll("ea-tour-step");
-      const indicators = steps[0].shadowRoot.querySelectorAll(
+      const indicators = steps[0].shadowRoot!.querySelectorAll(
         ".ea-tour-step__indicator"
       );
       expect(indicators[0].classList.contains("is-active")).toBe(true);
@@ -1312,7 +1336,7 @@ describe("EaTourStep Component", () => {
       await tour.updateComplete;
 
       let steps = tour.querySelectorAll("ea-tour-step");
-      let indicators = steps[0].shadowRoot.querySelectorAll(
+      let indicators = steps[0].shadowRoot!.querySelectorAll(
         ".ea-tour-step__indicator"
       );
       expect(indicators.length).toBe(2);
@@ -1325,7 +1349,7 @@ describe("EaTourStep Component", () => {
       await newStep.updateComplete;
 
       steps = tour.querySelectorAll("ea-tour-step");
-      indicators = steps[0].shadowRoot.querySelectorAll(
+      indicators = steps[0].shadowRoot!.querySelectorAll(
         ".ea-tour-step__indicator"
       );
       expect(indicators.length).toBe(3);
@@ -1342,7 +1366,7 @@ describe("EaTourStep Component", () => {
       await tour.updateComplete;
 
       let steps = tour.querySelectorAll("ea-tour-step");
-      let indicators = steps[0].shadowRoot.querySelectorAll(
+      let indicators = steps[0].shadowRoot!.querySelectorAll(
         ".ea-tour-step__indicator"
       );
       expect(indicators.length).toBe(3);
@@ -1353,7 +1377,7 @@ describe("EaTourStep Component", () => {
 
       await vi.waitFor(() => {
         steps = tour.querySelectorAll("ea-tour-step");
-        indicators = steps[0].shadowRoot.querySelectorAll(
+        indicators = steps[0].shadowRoot!.querySelectorAll(
           ".ea-tour-step__indicator"
         );
         expect(indicators.length).toBe(2);
@@ -1376,10 +1400,10 @@ describe("EaTourStep Component", () => {
       await newStep.updateComplete;
 
       const steps = tour.querySelectorAll("ea-tour-step");
-      const indicators1 = steps[0].shadowRoot.querySelectorAll(
+      const indicators1 = steps[0].shadowRoot!.querySelectorAll(
         ".ea-tour-step__indicator"
       );
-      const indicators2 = steps[1].shadowRoot.querySelectorAll(
+      const indicators2 = steps[1].shadowRoot!.querySelectorAll(
         ".ea-tour-step__indicator"
       );
       expect(indicators1.length).toBe(2);
@@ -1401,7 +1425,7 @@ describe("EaTourStep Component", () => {
       steps[0].updateIndicators([...steps]);
       await tour.updateComplete;
 
-      const indicators = steps[0].shadowRoot.querySelectorAll(
+      const indicators = steps[0].shadowRoot!.querySelectorAll(
         ".ea-tour-step__indicator"
       );
       expect(indicators.length).toBe(2);
@@ -1421,10 +1445,11 @@ describe("EaTourStep Component", () => {
 
       const step = tour.querySelector("ea-tour-step");
       const nextHandler = vi.fn();
-      step.addEventListener("ea-tour-step-next", nextHandler);
+      step!.addEventListener("ea-tour-step-next", nextHandler);
 
-      const nextBtn = step.shadowRoot.querySelector('[part="next"]');
-      nextBtn.click();
+      const nextBtn =
+        step!.shadowRoot!.querySelector<HTMLElement>('[part="next"]');
+      nextBtn!.click();
       await tour.updateComplete;
 
       expect(nextHandler).toHaveBeenCalled();
@@ -1440,10 +1465,11 @@ describe("EaTourStep Component", () => {
 
       const step = tour.querySelector("ea-tour-step");
       const previousHandler = vi.fn();
-      step.addEventListener("ea-tour-step-previous", previousHandler);
+      step!.addEventListener("ea-tour-step-previous", previousHandler);
 
-      const previousBtn = step.shadowRoot.querySelector('[part="previous"]');
-      previousBtn.click();
+      const previousBtn =
+        step!.shadowRoot!.querySelector<HTMLElement>('[part="previous"]');
+      previousBtn!.click();
       await tour.updateComplete;
 
       expect(previousHandler).toHaveBeenCalled();
@@ -1459,10 +1485,11 @@ describe("EaTourStep Component", () => {
 
       const step = tour.querySelector("ea-tour-step");
       const finishHandler = vi.fn();
-      step.addEventListener("ea-tour-step-finish", finishHandler);
+      step!.addEventListener("ea-tour-step-finish", finishHandler);
 
-      const finishBtn = step.shadowRoot.querySelector('[part="finish"]');
-      finishBtn.click();
+      const finishBtn =
+        step!.shadowRoot!.querySelector<HTMLElement>('[part="finish"]');
+      finishBtn!.click();
       await tour.updateComplete;
 
       expect(finishHandler).toHaveBeenCalled();
@@ -1478,12 +1505,12 @@ describe("EaTourStep Component", () => {
 
       const step = tour.querySelector("ea-tour-step");
       const closeHandler = vi.fn();
-      step.addEventListener("ea-close", closeHandler);
+      step!.addEventListener("ea-close", closeHandler);
 
-      const closeIcon = step.shadowRoot.querySelector(
+      const closeIcon = step!.shadowRoot!.querySelector<HTMLElement>(
         ".ea-tour-step__close-icon"
       );
-      closeIcon.click();
+      closeIcon!.click();
       await tour.updateComplete;
 
       expect(closeHandler).toHaveBeenCalled();
@@ -1501,15 +1528,15 @@ describe("EaTourStep Component", () => {
       const steps = tour.querySelectorAll("ea-tour-step");
       let closeEventDetail = null;
       steps[1].addEventListener("ea-close", e => {
-        closeEventDetail = e.detail;
+        closeEventDetail = (e as CustomEvent).detail;
       });
 
-      const closeIcon = steps[1].shadowRoot.querySelector(
+      const closeIcon = steps[1].shadowRoot!.querySelector<HTMLElement>(
         ".ea-tour-step__close-icon"
       );
-      closeIcon.click();
+      closeIcon!.click();
       expect(closeEventDetail).toBeTruthy();
-      expect(closeEventDetail.current).toBe(1);
+      expect(closeEventDetail!.current).toBe(1);
     });
 
     it("ea-close 事件应该冒泡", async () => {
@@ -1524,10 +1551,10 @@ describe("EaTourStep Component", () => {
       const closeHandler = vi.fn();
       tour.addEventListener("ea-close", closeHandler);
 
-      const closeIcon = step.shadowRoot.querySelector(
+      const closeIcon = step!.shadowRoot!.querySelector<HTMLElement>(
         ".ea-tour-step__close-icon"
       );
-      closeIcon.click();
+      closeIcon!.click();
       await tour.updateComplete;
 
       expect(closeHandler).toHaveBeenCalled();
@@ -1544,8 +1571,9 @@ describe("EaTourStep Component", () => {
       await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
-      const nextBtn = step.shadowRoot.querySelector('[part="next"]');
-      nextBtn.click();
+      const nextBtn =
+        step!.shadowRoot!.querySelector<HTMLElement>('[part="next"]');
+      nextBtn!.click();
       expect(tour.current).toBe(1);
     });
   });
@@ -1562,8 +1590,8 @@ describe("EaTourStep Component", () => {
       await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
-      const containerEl = step.shadowRoot.querySelector(".ea-tour-step");
-      expect(containerEl.classList.contains("ea-tour-step")).toBe(true);
+      const containerEl = step!.shadowRoot!.querySelector(".ea-tour-step");
+      expect(containerEl!.classList.contains("ea-tour-step")).toBe(true);
     });
 
     it("header 应该有正确的 BEM 元素类名", () => {
@@ -1574,7 +1602,7 @@ describe("EaTourStep Component", () => {
 
       const step = tour.querySelector("ea-tour-step");
       expect(
-        step.shadowRoot.querySelector(".ea-tour-step__header")
+        step!.shadowRoot!.querySelector(".ea-tour-step__header")
       ).toBeTruthy();
     });
 
@@ -1586,7 +1614,7 @@ describe("EaTourStep Component", () => {
 
       const step = tour.querySelector("ea-tour-step");
       expect(
-        step.shadowRoot.querySelector(".ea-tour-step__content")
+        step!.shadowRoot!.querySelector(".ea-tour-step__content")
       ).toBeTruthy();
     });
 
@@ -1598,7 +1626,7 @@ describe("EaTourStep Component", () => {
 
       const step = tour.querySelector("ea-tour-step");
       expect(
-        step.shadowRoot.querySelector(".ea-tour-step__footer")
+        step!.shadowRoot!.querySelector(".ea-tour-step__footer")
       ).toBeTruthy();
     });
 
@@ -1610,7 +1638,7 @@ describe("EaTourStep Component", () => {
 
       const step = tour.querySelector("ea-tour-step");
       expect(
-        step.shadowRoot.querySelector(".ea-tour-step__close-icon")
+        step!.shadowRoot!.querySelector(".ea-tour-step__close-icon")
       ).toBeTruthy();
     });
 
@@ -1622,7 +1650,7 @@ describe("EaTourStep Component", () => {
 
       const step = tour.querySelector("ea-tour-step");
       expect(
-        step.shadowRoot.querySelector(".ea-tour-step__indicator-group")
+        step!.shadowRoot!.querySelector(".ea-tour-step__indicator-group")
       ).toBeTruthy();
     });
 
@@ -1634,7 +1662,7 @@ describe("EaTourStep Component", () => {
 
       const step = tour.querySelector("ea-tour-step");
       expect(
-        step.shadowRoot.querySelector(".ea-tour-step__switch-group")
+        step!.shadowRoot!.querySelector(".ea-tour-step__switch-group")
       ).toBeTruthy();
     });
 
@@ -1646,11 +1674,13 @@ describe("EaTourStep Component", () => {
 
       const step = tour.querySelector("ea-tour-step");
       expect(
-        step.shadowRoot.querySelector(".ea-tour-step__previous")
+        step!.shadowRoot!.querySelector(".ea-tour-step__previous")
       ).toBeTruthy();
-      expect(step.shadowRoot.querySelector(".ea-tour-step__next")).toBeTruthy();
       expect(
-        step.shadowRoot.querySelector(".ea-tour-step__finish")
+        step!.shadowRoot!.querySelector(".ea-tour-step__next")
+      ).toBeTruthy();
+      expect(
+        step!.shadowRoot!.querySelector(".ea-tour-step__finish")
       ).toBeTruthy();
     });
 
@@ -1663,8 +1693,8 @@ describe("EaTourStep Component", () => {
       await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
-      const containerEl = step.shadowRoot.querySelector(".ea-tour-step");
-      expect(containerEl.classList.contains("ea-tour-step--primary")).toBe(
+      const containerEl = step!.shadowRoot!.querySelector(".ea-tour-step");
+      expect(containerEl!.classList.contains("ea-tour-step--primary")).toBe(
         true
       );
     });
@@ -1680,7 +1710,7 @@ describe("EaTourStep Component", () => {
       document.body.appendChild(tour);
 
       const step = tour.querySelector("ea-tour-step");
-      expect(step.shadowRoot).toBeTruthy();
+      expect(step!.shadowRoot).toBeTruthy();
     });
 
     it("组件断开连接后应该正常移除", async () => {
@@ -1693,7 +1723,7 @@ describe("EaTourStep Component", () => {
 
       const step = tour.querySelector("ea-tour-step");
       tour.remove();
-      expect(step.isConnected).toBe(false);
+      expect(step!.isConnected).toBe(false);
     });
   });
 
@@ -1709,8 +1739,10 @@ describe("EaTourStep Component", () => {
       await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
-      const slot = step.shadowRoot.querySelector(".ea-tour-step__content slot");
-      const assigned = slot.assignedElements();
+      const slot = step!.shadowRoot!.querySelector<HTMLSlotElement>(
+        ".ea-tour-step__content slot"
+      );
+      const assigned = slot!.assignedElements();
       expect(assigned.length).toBeGreaterThan(0);
     });
 
@@ -1726,8 +1758,10 @@ describe("EaTourStep Component", () => {
       await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
-      const headerSlot = step.shadowRoot.querySelector("slot[name='header']");
-      const assigned = headerSlot.assignedElements();
+      const headerSlot = step!.shadowRoot!.querySelector<HTMLSlotElement>(
+        "slot[name='header']"
+      );
+      const assigned = headerSlot!.assignedElements();
       expect(assigned.length).toBeGreaterThan(0);
       expect(assigned[0].classList.contains("custom-header")).toBe(true);
     });
@@ -1744,8 +1778,10 @@ describe("EaTourStep Component", () => {
       await tour.updateComplete;
 
       const step = tour.querySelector("ea-tour-step");
-      const footerSlot = step.shadowRoot.querySelector("slot[name='footer']");
-      const assigned = footerSlot.assignedElements();
+      const footerSlot = step!.shadowRoot!.querySelector<HTMLSlotElement>(
+        "slot[name='footer']"
+      );
+      const assigned = footerSlot!.assignedElements();
       expect(assigned.length).toBeGreaterThan(0);
       expect(assigned[0].classList.contains("custom-footer")).toBe(true);
     });
@@ -1761,8 +1797,8 @@ describe("EaTourStep Component", () => {
       document.body.appendChild(tour);
 
       const step = tour.querySelector("ea-tour-step");
-      step.setAttribute("heading", "New");
-      expect(step.heading).toBe("New");
+      step!.setAttribute("heading", "New");
+      expect(step!.heading).toBe("New");
     });
 
     it("动态修改 variant 应该更新容器类名", async () => {
@@ -1772,18 +1808,18 @@ describe("EaTourStep Component", () => {
       document.body.appendChild(tour);
 
       const step = tour.querySelector("ea-tour-step");
-      step.setAttribute("variant", "primary");
-      await step.updateComplete;
+      step!.setAttribute("variant", "primary");
+      await step!.updateComplete;
 
-      const containerEl = step.shadowRoot.querySelector(".ea-tour-step");
-      expect(containerEl.classList.contains("ea-tour-step--primary")).toBe(
+      const containerEl = step!.shadowRoot!.querySelector(".ea-tour-step");
+      expect(containerEl!.classList.contains("ea-tour-step--primary")).toBe(
         true
       );
 
-      step.setAttribute("variant", "default");
-      await step.updateComplete;
+      step!.setAttribute("variant", "default");
+      await step!.updateComplete;
 
-      expect(containerEl.classList.contains("ea-tour-step--primary")).toBe(
+      expect(containerEl!.classList.contains("ea-tour-step--primary")).toBe(
         false
       );
     });
@@ -1795,8 +1831,8 @@ describe("EaTourStep Component", () => {
       document.body.appendChild(tour);
 
       const step = tour.querySelector("ea-tour-step");
-      step.setAttribute("placement", "top-start");
-      expect(step.placement).toBe("top-start");
+      step!.setAttribute("placement", "top-start");
+      expect(step!.placement).toBe("top-start");
     });
   });
 
@@ -1816,24 +1852,24 @@ describe("EaTourStep Component", () => {
         const el = document.createElement("ea-tour-step");
         container.appendChild(el);
         await el.updateComplete;
-        const containerEl = el.shadowRoot.querySelector('[part="container"]');
-        expect(containerEl.getAttribute("role")).toBe("dialog");
+        const containerEl = el.shadowRoot!.querySelector('[part="container"]');
+        expect(containerEl!.getAttribute("role")).toBe("dialog");
       });
 
       it("step 容器应该有 aria-modal='true'", async () => {
         const el = document.createElement("ea-tour-step");
         container.appendChild(el);
         await el.updateComplete;
-        const containerEl = el.shadowRoot.querySelector('[part="container"]');
-        expect(containerEl.getAttribute("aria-modal")).toBe("true");
+        const containerEl = el.shadowRoot!.querySelector('[part="container"]');
+        expect(containerEl!.getAttribute("aria-modal")).toBe("true");
       });
 
       it("关闭图标应该有 aria-label='close'", async () => {
         const el = document.createElement("ea-tour-step");
         container.appendChild(el);
         await el.updateComplete;
-        const closeIcon = el.shadowRoot.querySelector('[part="close-icon"]');
-        expect(closeIcon.getAttribute("aria-label")).toBe("close");
+        const closeIcon = el.shadowRoot!.querySelector('[part="close-icon"]');
+        expect(closeIcon!.getAttribute("aria-label")).toBe("close");
       });
     });
   });

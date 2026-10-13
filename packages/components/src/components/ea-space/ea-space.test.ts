@@ -4,7 +4,7 @@ import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y.js";
 import "./index";
 
 describe("EaSpace", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -26,14 +26,16 @@ describe("EaSpace", () => {
       container.appendChild(space);
 
       expect(space.shadowRoot).toBeTruthy();
-      expect(space.shadowRoot.querySelector(".ea-space")).toBeTruthy();
+      expect(space.shadowRoot!.querySelector(".ea-space")).toBeTruthy();
     });
 
     it("应该支持 CSS Parts", () => {
       const space = document.createElement("ea-space");
       container.appendChild(space);
 
-      expect(space.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(
+        space.shadowRoot!.querySelector('[part="container"]')
+      ).toBeTruthy();
     });
 
     it("应该渲染默认插槽内容", () => {
@@ -44,7 +46,7 @@ describe("EaSpace", () => {
       `;
       container.appendChild(space);
 
-      const slot = space.shadowRoot.querySelector("slot");
+      const slot = space.shadowRoot!.querySelector("slot");
       expect(slot).toBeTruthy();
       expect(space.querySelector(".item-1")).toBeTruthy();
       expect(space.querySelector(".item-2")).toBeTruthy();
@@ -74,8 +76,8 @@ describe("EaSpace", () => {
 
       await space.updateComplete;
 
-      const containerEl = space.shadowRoot.querySelector(".ea-space");
-      expect(containerEl.classList.contains("ea-space--vertical")).toBe(true);
+      const containerEl = space.shadowRoot!.querySelector(".ea-space");
+      expect(containerEl!.classList.contains("ea-space--vertical")).toBe(true);
     });
 
     it("direction=horizontal 不应该生成 vertical 修饰符类名", async () => {
@@ -85,8 +87,8 @@ describe("EaSpace", () => {
 
       await space.updateComplete;
 
-      const containerEl = space.shadowRoot.querySelector(".ea-space");
-      expect(containerEl.classList.contains("ea-space--vertical")).toBe(false);
+      const containerEl = space.shadowRoot!.querySelector(".ea-space");
+      expect(containerEl!.classList.contains("ea-space--vertical")).toBe(false);
     });
 
     it("无效 direction 值应该被 Enum 拦截", () => {
@@ -129,8 +131,8 @@ describe("EaSpace", () => {
 
       await space.updateComplete;
 
-      const containerEl = space.shadowRoot.querySelector(".ea-space");
-      expect(containerEl.classList.contains("ea-space--small")).toBe(true);
+      const containerEl = space.shadowRoot!.querySelector(".ea-space");
+      expect(containerEl!.classList.contains("ea-space--small")).toBe(true);
     });
 
     it("size=large 应该生成 ea-space--large 修饰符类名", async () => {
@@ -140,8 +142,8 @@ describe("EaSpace", () => {
 
       await space.updateComplete;
 
-      const containerEl = space.shadowRoot.querySelector(".ea-space");
-      expect(containerEl.classList.contains("ea-space--large")).toBe(true);
+      const containerEl = space.shadowRoot!.querySelector(".ea-space");
+      expect(containerEl!.classList.contains("ea-space--large")).toBe(true);
     });
 
     it("size=default 应该生成 ea-space--default 修饰符类名", async () => {
@@ -151,8 +153,8 @@ describe("EaSpace", () => {
 
       await space.updateComplete;
 
-      const containerEl = space.shadowRoot.querySelector(".ea-space");
-      expect(containerEl.classList.contains("ea-space--default")).toBe(true);
+      const containerEl = space.shadowRoot!.querySelector(".ea-space");
+      expect(containerEl!.classList.contains("ea-space--default")).toBe(true);
     });
 
     it("自定义 size 值不应该生成尺寸修饰符类名", async () => {
@@ -162,10 +164,10 @@ describe("EaSpace", () => {
 
       await space.updateComplete;
 
-      const containerEl = space.shadowRoot.querySelector(".ea-space");
-      expect(containerEl.classList.contains("ea-space--small")).toBe(false);
-      expect(containerEl.classList.contains("ea-space--default")).toBe(false);
-      expect(containerEl.classList.contains("ea-space--large")).toBe(false);
+      const containerEl = space.shadowRoot!.querySelector(".ea-space");
+      expect(containerEl!.classList.contains("ea-space--small")).toBe(false);
+      expect(containerEl!.classList.contains("ea-space--default")).toBe(false);
+      expect(containerEl!.classList.contains("ea-space--large")).toBe(false);
     });
 
     it("应该支持自定义 size 值（像素）", () => {
@@ -218,8 +220,8 @@ describe("EaSpace", () => {
 
       await space.updateComplete;
 
-      const containerEl = space.shadowRoot.querySelector(".ea-space");
-      expect(containerEl.classList.contains("is-wrap")).toBe(true);
+      const containerEl = space.shadowRoot!.querySelector(".ea-space");
+      expect(containerEl!.classList.contains("is-wrap")).toBe(true);
     });
 
     it("wrap=false 不应该生成 is-wrap 状态类名", async () => {
@@ -228,8 +230,8 @@ describe("EaSpace", () => {
 
       await space.updateComplete;
 
-      const containerEl = space.shadowRoot.querySelector(".ea-space");
-      expect(containerEl.classList.contains("is-wrap")).toBe(false);
+      const containerEl = space.shadowRoot!.querySelector(".ea-space");
+      expect(containerEl!.classList.contains("is-wrap")).toBe(false);
     });
   });
 
@@ -346,7 +348,7 @@ describe("EaSpace", () => {
 
       await space.updateComplete;
 
-      const spacers = space.querySelectorAll('[part="spacer"]');
+      const spacers = space.querySelectorAll<HTMLElement>('[part="spacer"]');
       expect(spacers.length).toBe(2);
       expect(spacers[0].innerText).toBe("|");
       expect(spacers[1].innerText).toBe("|");
@@ -418,8 +420,8 @@ describe("EaSpace", () => {
 
       await space.updateComplete;
 
-      const containerEl = space.shadowRoot.querySelector(".ea-space");
-      expect(containerEl.classList.contains("ea-space--fill")).toBe(true);
+      const containerEl = space.shadowRoot!.querySelector(".ea-space");
+      expect(containerEl!.classList.contains("ea-space--fill")).toBe(true);
     });
 
     it("fill=false 不应该生成 ea-space--fill 修饰符类名", async () => {
@@ -428,8 +430,8 @@ describe("EaSpace", () => {
 
       await space.updateComplete;
 
-      const containerEl = space.shadowRoot.querySelector(".ea-space");
-      expect(containerEl.classList.contains("ea-space--fill")).toBe(false);
+      const containerEl = space.shadowRoot!.querySelector(".ea-space");
+      expect(containerEl!.classList.contains("ea-space--fill")).toBe(false);
     });
   });
 
@@ -477,12 +479,12 @@ describe("EaSpace", () => {
 
       await space.updateComplete;
 
-      const containerEl = space.shadowRoot.querySelector(".ea-space");
-      expect(containerEl.classList.contains("ea-space")).toBe(true);
-      expect(containerEl.classList.contains("ea-space--default")).toBe(true);
-      expect(containerEl.classList.contains("ea-space--vertical")).toBe(false);
-      expect(containerEl.classList.contains("ea-space--fill")).toBe(false);
-      expect(containerEl.classList.contains("is-wrap")).toBe(false);
+      const containerEl = space.shadowRoot!.querySelector(".ea-space");
+      expect(containerEl!.classList.contains("ea-space")).toBe(true);
+      expect(containerEl!.classList.contains("ea-space--default")).toBe(true);
+      expect(containerEl!.classList.contains("ea-space--vertical")).toBe(false);
+      expect(containerEl!.classList.contains("ea-space--fill")).toBe(false);
+      expect(containerEl!.classList.contains("is-wrap")).toBe(false);
     });
 
     it("组合属性应该生成正确的类名", async () => {
@@ -495,14 +497,14 @@ describe("EaSpace", () => {
 
       await space.updateComplete;
 
-      const containerEl = space.shadowRoot.querySelector(".ea-space");
-      expect(containerEl.classList.contains("ea-space")).toBe(true);
-      expect(containerEl.classList.contains("ea-space--large")).toBe(true);
-      expect(containerEl.classList.contains("ea-space--vertical")).toBe(true);
-      expect(containerEl.classList.contains("ea-space--fill")).toBe(true);
-      expect(containerEl.classList.contains("is-wrap")).toBe(true);
-      expect(containerEl.classList.contains("ea-space--small")).toBe(false);
-      expect(containerEl.classList.contains("ea-space--default")).toBe(false);
+      const containerEl = space.shadowRoot!.querySelector(".ea-space");
+      expect(containerEl!.classList.contains("ea-space")).toBe(true);
+      expect(containerEl!.classList.contains("ea-space--large")).toBe(true);
+      expect(containerEl!.classList.contains("ea-space--vertical")).toBe(true);
+      expect(containerEl!.classList.contains("ea-space--fill")).toBe(true);
+      expect(containerEl!.classList.contains("is-wrap")).toBe(true);
+      expect(containerEl!.classList.contains("ea-space--small")).toBe(false);
+      expect(containerEl!.classList.contains("ea-space--default")).toBe(false);
     });
   });
 
@@ -511,7 +513,7 @@ describe("EaSpace", () => {
       const space = document.createElement("ea-space");
       container.appendChild(space);
 
-      expect(space.shadowRoot.querySelector(".ea-space")).toBeTruthy();
+      expect(space.shadowRoot!.querySelector(".ea-space")).toBeTruthy();
     });
 
     it("应该处理只有一个子元素的情况", async () => {
@@ -521,7 +523,7 @@ describe("EaSpace", () => {
 
       await space.updateComplete;
 
-      expect(space.querySelector("div").textContent).toBe("Only Item");
+      expect(space.querySelector("div")!.textContent).toBe("Only Item");
     });
 
     it("应该处理多个子元素", () => {

@@ -10,7 +10,7 @@ const isJSDOM =
   typeof navigator !== "undefined" && /jsdom/i.test(navigator.userAgent);
 
 export function waitForRender(timeout = 100) {
-  return new Promise(resolve => {
+  return new Promise<void>(resolve => {
     if (timeout === 0) {
       requestAnimationFrame(() => resolve());
     } else if (isJSDOM) {

@@ -4,7 +4,7 @@ import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y.js";
 import "./index.ts";
 
 describe("EaPagination", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -28,7 +28,8 @@ describe("EaPagination", () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
-      const containerEl = pagination.shadowRoot.querySelector(".ea-pagination");
+      const containerEl =
+        pagination.shadowRoot!.querySelector(".ea-pagination");
       expect(containerEl).toBeTruthy();
     });
 
@@ -37,7 +38,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
       expect(
-        pagination.shadowRoot.querySelector('[part="container"]')
+        pagination.shadowRoot!.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
@@ -60,7 +61,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
       expect(
-        pagination.shadowRoot.querySelector(".ea-pagination__icon--prev")
+        pagination.shadowRoot!.querySelector(".ea-pagination__icon--prev")
       ).toBeTruthy();
     });
 
@@ -69,7 +70,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
       expect(
-        pagination.shadowRoot.querySelector(".ea-pagination__icon--next")
+        pagination.shadowRoot!.querySelector(".ea-pagination__icon--next")
       ).toBeTruthy();
     });
 
@@ -78,7 +79,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
       expect(
-        pagination.shadowRoot.querySelector(".ea-pagination__pager")
+        pagination.shadowRoot!.querySelector(".ea-pagination__pager")
       ).toBeTruthy();
     });
 
@@ -87,7 +88,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
       expect(
-        pagination.shadowRoot.querySelector(".ea-pagination__total")
+        pagination.shadowRoot!.querySelector(".ea-pagination__total")
       ).toBeTruthy();
     });
 
@@ -96,7 +97,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
       expect(
-        pagination.shadowRoot.querySelector(".ea-pagination__jumper")
+        pagination.shadowRoot!.querySelector(".ea-pagination__jumper")
       ).toBeTruthy();
     });
   });
@@ -107,7 +108,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
       expect(
-        pagination.shadowRoot.querySelector('[part="container"]')
+        pagination.shadowRoot!.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
@@ -116,7 +117,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
       expect(
-        pagination.shadowRoot.querySelector('[part="pager"]')
+        pagination.shadowRoot!.querySelector('[part="pager"]')
       ).toBeTruthy();
     });
 
@@ -125,7 +126,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
       expect(
-        pagination.shadowRoot.querySelector('[part="icon prev-icon"]')
+        pagination.shadowRoot!.querySelector('[part="icon prev-icon"]')
       ).toBeTruthy();
     });
 
@@ -134,7 +135,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
       expect(
-        pagination.shadowRoot.querySelector('[part="icon next-icon"]')
+        pagination.shadowRoot!.querySelector('[part="icon next-icon"]')
       ).toBeTruthy();
     });
 
@@ -143,7 +144,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
       expect(
-        pagination.shadowRoot.querySelector('[part="total"]')
+        pagination.shadowRoot!.querySelector('[part="total"]')
       ).toBeTruthy();
     });
 
@@ -153,7 +154,9 @@ describe("EaPagination", () => {
       container.appendChild(pagination);
       await pagination.updateComplete;
 
-      expect(pagination.shadowRoot.querySelector('[part="page"]')).toBeTruthy();
+      expect(
+        pagination.shadowRoot!.querySelector('[part="page"]')
+      ).toBeTruthy();
     });
 
     it("应该支持 jumper-wrap part", () => {
@@ -161,7 +164,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
       expect(
-        pagination.shadowRoot.querySelector('[part="jumper-wrap"]')
+        pagination.shadowRoot!.querySelector('[part="jumper-wrap"]')
       ).toBeTruthy();
     });
 
@@ -170,7 +173,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
       expect(
-        pagination.shadowRoot.querySelector('[part="jumper"]')
+        pagination.shadowRoot!.querySelector('[part="jumper"]')
       ).toBeTruthy();
     });
 
@@ -179,7 +182,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
       expect(
-        pagination.shadowRoot.querySelector('[part="separator"]')
+        pagination.shadowRoot!.querySelector('[part="separator"]')
       ).toBeTruthy();
     });
   });
@@ -204,16 +207,16 @@ describe("EaPagination", () => {
       container.appendChild(pagination);
       await pagination.updateComplete;
 
-      let totalEl = pagination.shadowRoot.querySelector(
+      let totalEl = pagination.shadowRoot!.querySelector(
         ".ea-pagination__total"
       );
-      expect(totalEl.textContent).toBe("Total 100");
+      expect(totalEl!.textContent).toBe("Total 100");
 
       pagination.setAttribute("total", "200");
       await pagination.updateComplete;
 
-      totalEl = pagination.shadowRoot.querySelector(".ea-pagination__total");
-      expect(totalEl.textContent).toBe("Total 200");
+      totalEl = pagination.shadowRoot!.querySelector(".ea-pagination__total");
+      expect(totalEl!.textContent).toBe("Total 200");
     });
 
     it("total 为 0 应正常渲染", async () => {
@@ -223,10 +226,10 @@ describe("EaPagination", () => {
       await pagination.updateComplete;
 
       expect(pagination.total).toBe(0);
-      const totalEl = pagination.shadowRoot.querySelector(
+      const totalEl = pagination.shadowRoot!.querySelector(
         ".ea-pagination__total"
       );
-      expect(totalEl.textContent).toBe("Total 0");
+      expect(totalEl!.textContent).toBe("Total 0");
     });
   });
 
@@ -303,12 +306,12 @@ describe("EaPagination", () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
-      const initialPageCount = pagination.shadowRoot.querySelectorAll(
+      const initialPageCount = pagination.shadowRoot!.querySelectorAll(
         ".ea-pagination__page"
       ).length;
 
       pagination.pageSize = 50;
-      const newPageCount = pagination.shadowRoot.querySelectorAll(
+      const newPageCount = pagination.shadowRoot!.querySelectorAll(
         ".ea-pagination__page"
       ).length;
 
@@ -339,7 +342,7 @@ describe("EaPagination", () => {
       container.appendChild(pagination);
       await pagination.updateComplete;
 
-      const moreItems = pagination.shadowRoot.querySelectorAll(
+      const moreItems = pagination.shadowRoot!.querySelectorAll(
         ".ea-pagination__more"
       );
       expect(moreItems.length).toBeGreaterThan(0);
@@ -387,7 +390,7 @@ describe("EaPagination", () => {
       pagination.currentPage = 3;
       await pagination.updateComplete;
 
-      const activePage = pagination.shadowRoot.querySelector(
+      const activePage = pagination.shadowRoot!.querySelector(
         '.ea-pagination__page.is-active[data-page="3"]'
       );
       expect(activePage).toBeTruthy();
@@ -429,8 +432,9 @@ describe("EaPagination", () => {
       container.appendChild(pagination);
       await pagination.updateComplete;
 
-      const containerEl = pagination.shadowRoot.querySelector(".ea-pagination");
-      expect(containerEl.classList.contains("ea-pagination--background")).toBe(
+      const containerEl =
+        pagination.shadowRoot!.querySelector(".ea-pagination");
+      expect(containerEl!.classList.contains("ea-pagination--background")).toBe(
         true
       );
     });
@@ -441,8 +445,9 @@ describe("EaPagination", () => {
       container.appendChild(pagination);
       await pagination.updateComplete;
 
-      const containerEl = pagination.shadowRoot.querySelector(".ea-pagination");
-      expect(containerEl.classList.contains("ea-pagination--background")).toBe(
+      const containerEl =
+        pagination.shadowRoot!.querySelector(".ea-pagination");
+      expect(containerEl!.classList.contains("ea-pagination--background")).toBe(
         false
       );
     });
@@ -453,22 +458,23 @@ describe("EaPagination", () => {
       container.appendChild(pagination);
       await pagination.updateComplete;
 
-      const containerEl = pagination.shadowRoot.querySelector(".ea-pagination");
-      expect(containerEl.classList.contains("ea-pagination--background")).toBe(
+      const containerEl =
+        pagination.shadowRoot!.querySelector(".ea-pagination");
+      expect(containerEl!.classList.contains("ea-pagination--background")).toBe(
         false
       );
 
       pagination.setAttribute("background", "");
       await pagination.updateComplete;
 
-      expect(containerEl.classList.contains("ea-pagination--background")).toBe(
+      expect(containerEl!.classList.contains("ea-pagination--background")).toBe(
         true
       );
 
       pagination.removeAttribute("background");
       await pagination.updateComplete;
 
-      expect(containerEl.classList.contains("ea-pagination--background")).toBe(
+      expect(containerEl!.classList.contains("ea-pagination--background")).toBe(
         false
       );
     });
@@ -513,8 +519,9 @@ describe("EaPagination", () => {
       container.appendChild(pagination);
       await pagination.updateComplete;
 
-      const containerEl = pagination.shadowRoot.querySelector(".ea-pagination");
-      expect(containerEl.classList.contains("ea-pagination--size-small")).toBe(
+      const containerEl =
+        pagination.shadowRoot!.querySelector(".ea-pagination");
+      expect(containerEl!.classList.contains("ea-pagination--size-small")).toBe(
         true
       );
     });
@@ -525,11 +532,12 @@ describe("EaPagination", () => {
       container.appendChild(pagination);
       await pagination.updateComplete;
 
-      const containerEl = pagination.shadowRoot.querySelector(".ea-pagination");
-      expect(containerEl.classList.contains("ea-pagination--size-small")).toBe(
+      const containerEl =
+        pagination.shadowRoot!.querySelector(".ea-pagination");
+      expect(containerEl!.classList.contains("ea-pagination--size-small")).toBe(
         false
       );
-      expect(containerEl.classList.contains("ea-pagination--size-large")).toBe(
+      expect(containerEl!.classList.contains("ea-pagination--size-large")).toBe(
         false
       );
     });
@@ -541,18 +549,19 @@ describe("EaPagination", () => {
       container.appendChild(pagination);
       await pagination.updateComplete;
 
-      const containerEl = pagination.shadowRoot.querySelector(".ea-pagination");
-      expect(containerEl.classList.contains("ea-pagination--size-small")).toBe(
+      const containerEl =
+        pagination.shadowRoot!.querySelector(".ea-pagination");
+      expect(containerEl!.classList.contains("ea-pagination--size-small")).toBe(
         true
       );
 
       pagination.setAttribute("size", "large");
       await pagination.updateComplete;
 
-      expect(containerEl.classList.contains("ea-pagination--size-small")).toBe(
+      expect(containerEl!.classList.contains("ea-pagination--size-small")).toBe(
         false
       );
-      expect(containerEl.classList.contains("ea-pagination--size-large")).toBe(
+      expect(containerEl!.classList.contains("ea-pagination--size-large")).toBe(
         true
       );
     });
@@ -581,8 +590,9 @@ describe("EaPagination", () => {
       container.appendChild(pagination);
       await pagination.updateComplete;
 
-      const containerEl = pagination.shadowRoot.querySelector(".ea-pagination");
-      expect(containerEl.classList.contains("is-hide")).toBe(true);
+      const containerEl =
+        pagination.shadowRoot!.querySelector(".ea-pagination");
+      expect(containerEl!.classList.contains("is-hide")).toBe(true);
     });
 
     it("hideOnSinglePage 为 true 且有多页时不应隐藏", async () => {
@@ -592,8 +602,9 @@ describe("EaPagination", () => {
       container.appendChild(pagination);
       await pagination.updateComplete;
 
-      const containerEl = pagination.shadowRoot.querySelector(".ea-pagination");
-      expect(containerEl.classList.contains("is-hide")).toBe(false);
+      const containerEl =
+        pagination.shadowRoot!.querySelector(".ea-pagination");
+      expect(containerEl!.classList.contains("is-hide")).toBe(false);
     });
 
     it("hideOnSinglePage 在不含 pager 的 layout 中也应生效", async () => {
@@ -604,8 +615,9 @@ describe("EaPagination", () => {
       container.appendChild(pagination);
       await pagination.updateComplete;
 
-      const containerEl = pagination.shadowRoot.querySelector(".ea-pagination");
-      expect(containerEl.classList.contains("is-hide")).toBe(true);
+      const containerEl =
+        pagination.shadowRoot!.querySelector(".ea-pagination");
+      expect(containerEl!.classList.contains("is-hide")).toBe(true);
     });
   });
 
@@ -632,8 +644,9 @@ describe("EaPagination", () => {
       container.appendChild(pagination);
       await pagination.updateComplete;
 
-      const containerEl = pagination.shadowRoot.querySelector(".ea-pagination");
-      expect(containerEl.classList.contains("is-disabled")).toBe(true);
+      const containerEl =
+        pagination.shadowRoot!.querySelector(".ea-pagination");
+      expect(containerEl!.classList.contains("is-disabled")).toBe(true);
     });
 
     it("disabled 应禁用跳转输入框", async () => {
@@ -646,8 +659,10 @@ describe("EaPagination", () => {
       await pagination.updateComplete;
 
       const jumperInput =
-        pagination.shadowRoot.querySelector('[part="jumper"]');
-      expect(jumperInput.disabled).toBe(true);
+        pagination.shadowRoot!.querySelector<
+          HTMLElementTagNameMap["ea-input-number"]
+        >('[part="jumper"]');
+      expect(jumperInput!.disabled).toBe(true);
     });
 
     it("disabled 应禁用 sizes 下拉框", async () => {
@@ -660,8 +675,11 @@ describe("EaPagination", () => {
       pagination.setAttribute("disabled", "");
       await pagination.updateComplete;
 
-      const sizes = pagination.shadowRoot.querySelector('[part="sizes"]');
-      expect(sizes.disabled).toBe(true);
+      const sizes =
+        pagination.shadowRoot!.querySelector<
+          HTMLElementTagNameMap["ea-select"]
+        >('[part="sizes"]');
+      expect(sizes!.disabled).toBe(true);
     });
   });
 
@@ -687,7 +705,10 @@ describe("EaPagination", () => {
       pagination.layout = ["sizes", "prev", "pager", "next"];
       container.appendChild(pagination);
       pagination.pageSizes = [5, 15, 25];
-      const sizes = pagination.shadowRoot.querySelector('[part="sizes"]');
+      const sizes =
+        pagination.shadowRoot!.querySelector<
+          HTMLElementTagNameMap["ea-select"]
+        >('[part="sizes"]');
       expect(sizes).toBeTruthy();
     });
   });
@@ -706,7 +727,10 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "100");
       pagination.layout = ["sizes", "prev", "pager", "next"];
       container.appendChild(pagination);
-      const sizes = pagination.shadowRoot.querySelector('[part="sizes"]');
+      const sizes =
+        pagination.shadowRoot!.querySelector<
+          HTMLElementTagNameMap["ea-select"]
+        >('[part="sizes"]');
       expect(sizes).toBeTruthy();
     });
 
@@ -715,7 +739,10 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "100");
       pagination.layout = ["prev", "pager", "next"];
       container.appendChild(pagination);
-      const sizes = pagination.shadowRoot.querySelector('[part="sizes"]');
+      const sizes =
+        pagination.shadowRoot!.querySelector<
+          HTMLElementTagNameMap["ea-select"]
+        >('[part="sizes"]');
       expect(sizes).toBeFalsy();
     });
 
@@ -724,7 +751,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "100");
       pagination.layout = ["prev", "pager", "next"];
       container.appendChild(pagination);
-      const total = pagination.shadowRoot.querySelector('[part="total"]');
+      const total = pagination.shadowRoot!.querySelector('[part="total"]');
       expect(total).toBeFalsy();
     });
 
@@ -733,7 +760,7 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "100");
       pagination.layout = ["prev", "pager", "next"];
       container.appendChild(pagination);
-      const jumperWrap = pagination.shadowRoot.querySelector(
+      const jumperWrap = pagination.shadowRoot!.querySelector(
         '[part="jumper-wrap"]'
       );
       expect(jumperWrap).toBeFalsy();
@@ -745,7 +772,7 @@ describe("EaPagination", () => {
       pagination.layout = ["prev", "pager", "next", "->", "total"];
       container.appendChild(pagination);
       const separator =
-        pagination.shadowRoot.querySelector('[part="separator"]');
+        pagination.shadowRoot!.querySelector('[part="separator"]');
       expect(separator).toBeTruthy();
     });
   });
@@ -758,10 +785,10 @@ describe("EaPagination", () => {
       container.appendChild(pagination);
       await pagination.updateComplete;
 
-      const prevIcon = pagination.shadowRoot.querySelector(
+      const prevIcon = pagination.shadowRoot!.querySelector(
         ".ea-pagination__icon--prev"
       );
-      prevIcon.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      prevIcon!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       expect(pagination.currentPage).toBe(2);
     });
 
@@ -771,10 +798,10 @@ describe("EaPagination", () => {
       container.appendChild(pagination);
       await pagination.updateComplete;
 
-      const nextIcon = pagination.shadowRoot.querySelector(
+      const nextIcon = pagination.shadowRoot!.querySelector(
         ".ea-pagination__icon--next"
       );
-      nextIcon.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      nextIcon!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       expect(pagination.currentPage).toBe(2);
     });
 
@@ -788,10 +815,10 @@ describe("EaPagination", () => {
       const handler = vi.fn();
       pagination.addEventListener("ea-prev-click", handler);
 
-      const prevIcon = pagination.shadowRoot.querySelector(
+      const prevIcon = pagination.shadowRoot!.querySelector(
         ".ea-pagination__icon--prev"
       );
-      prevIcon.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      prevIcon!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await pagination.updateComplete;
 
       expect(handler).toHaveBeenCalled();
@@ -806,10 +833,10 @@ describe("EaPagination", () => {
       const handler = vi.fn();
       pagination.addEventListener("ea-next-click", handler);
 
-      const nextIcon = pagination.shadowRoot.querySelector(
+      const nextIcon = pagination.shadowRoot!.querySelector(
         ".ea-pagination__icon--next"
       );
-      nextIcon.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      nextIcon!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await pagination.updateComplete;
 
       expect(handler).toHaveBeenCalled();
@@ -821,10 +848,10 @@ describe("EaPagination", () => {
       container.appendChild(pagination);
       await pagination.updateComplete;
 
-      const prevIcon = pagination.shadowRoot.querySelector(
+      const prevIcon = pagination.shadowRoot!.querySelector(
         ".ea-pagination__icon--prev"
       );
-      expect(prevIcon.classList.contains("is-disabled")).toBe(true);
+      expect(prevIcon!.classList.contains("is-disabled")).toBe(true);
     });
 
     it("最后一页时下一页按钮应为禁用状态", async () => {
@@ -834,10 +861,10 @@ describe("EaPagination", () => {
       container.appendChild(pagination);
       await pagination.updateComplete;
 
-      const nextIcon = pagination.shadowRoot.querySelector(
+      const nextIcon = pagination.shadowRoot!.querySelector(
         ".ea-pagination__icon--next"
       );
-      expect(nextIcon.classList.contains("is-disabled")).toBe(true);
+      expect(nextIcon!.classList.contains("is-disabled")).toBe(true);
     });
 
     it("disabled 状态下点击上一页不应切换页码", async () => {
@@ -848,10 +875,10 @@ describe("EaPagination", () => {
       container.appendChild(pagination);
       await pagination.updateComplete;
 
-      const prevIcon = pagination.shadowRoot.querySelector(
+      const prevIcon = pagination.shadowRoot!.querySelector(
         ".ea-pagination__icon--prev"
       );
-      prevIcon.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      prevIcon!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       expect(pagination.currentPage).toBe(3);
     });
 
@@ -862,10 +889,10 @@ describe("EaPagination", () => {
       container.appendChild(pagination);
       await pagination.updateComplete;
 
-      const nextIcon = pagination.shadowRoot.querySelector(
+      const nextIcon = pagination.shadowRoot!.querySelector(
         ".ea-pagination__icon--next"
       );
-      nextIcon.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      nextIcon!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       expect(pagination.currentPage).toBe(1);
     });
   });
@@ -877,10 +904,10 @@ describe("EaPagination", () => {
       container.appendChild(pagination);
       await pagination.updateComplete;
 
-      const page5 = pagination.shadowRoot.querySelector(
+      const page5 = pagination.shadowRoot!.querySelector(
         '.ea-pagination__page[data-page="5"]'
       );
-      page5.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      page5!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       expect(pagination.currentPage).toBe(5);
     });
 
@@ -893,10 +920,10 @@ describe("EaPagination", () => {
       const handler = vi.fn();
       pagination.addEventListener("ea-current-change", handler);
 
-      const page3 = pagination.shadowRoot.querySelector(
+      const page3 = pagination.shadowRoot!.querySelector(
         '.ea-pagination__page[data-page="3"]'
       );
-      page3.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      page3!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await pagination.updateComplete;
 
       expect(handler).toHaveBeenCalled();
@@ -910,10 +937,10 @@ describe("EaPagination", () => {
       container.appendChild(pagination);
       await pagination.updateComplete;
 
-      const moreItem = pagination.shadowRoot.querySelector(
+      const moreItem = pagination.shadowRoot!.querySelector(
         ".ea-pagination__more"
       );
-      moreItem.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      moreItem!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       expect(pagination.currentPage).toBeGreaterThan(1);
     });
 
@@ -924,7 +951,7 @@ describe("EaPagination", () => {
       container.appendChild(pagination);
       await pagination.updateComplete;
 
-      const activePage = pagination.shadowRoot.querySelector(
+      const activePage = pagination.shadowRoot!.querySelector(
         '.ea-pagination__page.is-active[data-page="3"]'
       );
       expect(activePage).toBeTruthy();
@@ -937,10 +964,10 @@ describe("EaPagination", () => {
       container.appendChild(pagination);
       await pagination.updateComplete;
 
-      const page5 = pagination.shadowRoot.querySelector(
+      const page5 = pagination.shadowRoot!.querySelector(
         '.ea-pagination__page[data-page="5"]'
       );
-      expect(page5.classList.contains("is-active")).toBe(false);
+      expect(page5!.classList.contains("is-active")).toBe(false);
     });
   });
 
@@ -953,8 +980,10 @@ describe("EaPagination", () => {
       await pagination.updateComplete;
 
       const jumperInput =
-        pagination.shadowRoot.querySelector('[part="jumper"]');
-      expect(jumperInput.value).toBe(5);
+        pagination.shadowRoot!.querySelector<
+          HTMLElementTagNameMap["ea-input-number"]
+        >('[part="jumper"]');
+      expect(jumperInput!.value).toBe(5);
     });
 
     it("ea-change 事件应更新当前页码", async () => {
@@ -964,8 +993,10 @@ describe("EaPagination", () => {
       await pagination.updateComplete;
 
       const jumperInput =
-        pagination.shadowRoot.querySelector('[part="jumper"]');
-      jumperInput.dispatchEvent(
+        pagination.shadowRoot!.querySelector<
+          HTMLElementTagNameMap["ea-input-number"]
+        >('[part="jumper"]');
+      jumperInput!.dispatchEvent(
         new CustomEvent("ea-change", {
           detail: { currentValue: 8, oldValue: 1 },
           bubbles: true,
@@ -985,8 +1016,10 @@ describe("EaPagination", () => {
       await pagination.updateComplete;
 
       const jumperInput =
-        pagination.shadowRoot.querySelector('[part="jumper"]');
-      expect(jumperInput.value).toBe(5);
+        pagination.shadowRoot!.querySelector<
+          HTMLElementTagNameMap["ea-input-number"]
+        >('[part="jumper"]');
+      expect(jumperInput!.value).toBe(5);
     });
 
     it("跳转输入框的 max 应与总页数一致", async () => {
@@ -996,8 +1029,10 @@ describe("EaPagination", () => {
       await pagination.updateComplete;
 
       const jumperInput =
-        pagination.shadowRoot.querySelector('[part="jumper"]');
-      expect(jumperInput.max).toBe(10);
+        pagination.shadowRoot!.querySelector<
+          HTMLElementTagNameMap["ea-input-number"]
+        >('[part="jumper"]');
+      expect(jumperInput!.max).toBe(10);
     });
 
     it("跳转输入框的 min 应为 1", () => {
@@ -1005,8 +1040,10 @@ describe("EaPagination", () => {
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
       const jumperInput =
-        pagination.shadowRoot.querySelector('[part="jumper"]');
-      expect(jumperInput.min).toBe(1);
+        pagination.shadowRoot!.querySelector<
+          HTMLElementTagNameMap["ea-input-number"]
+        >('[part="jumper"]');
+      expect(jumperInput!.min).toBe(1);
     });
   });
 
@@ -1018,8 +1055,11 @@ describe("EaPagination", () => {
       container.appendChild(pagination);
       await pagination.updateComplete;
 
-      const sizes = pagination.shadowRoot.querySelector('[part="sizes"]');
-      const options = sizes.querySelectorAll("ea-option");
+      const sizes =
+        pagination.shadowRoot!.querySelector<
+          HTMLElementTagNameMap["ea-select"]
+        >('[part="sizes"]');
+      const options = sizes!.querySelectorAll("ea-option");
       expect(options.length).toBe(6);
     });
 
@@ -1031,8 +1071,11 @@ describe("EaPagination", () => {
       container.appendChild(pagination);
       await pagination.updateComplete;
 
-      const sizes = pagination.shadowRoot.querySelector('[part="sizes"]');
-      expect(sizes.value).toBe(20);
+      const sizes =
+        pagination.shadowRoot!.querySelector<
+          HTMLElementTagNameMap["ea-select"]
+        >('[part="sizes"]');
+      expect(sizes!.value).toBe(20);
     });
 
     it("sizes 变化应触发 ea-size-change 事件", async () => {
@@ -1045,9 +1088,12 @@ describe("EaPagination", () => {
       const handler = vi.fn();
       pagination.addEventListener("ea-size-change", handler);
 
-      const sizes = pagination.shadowRoot.querySelector('[part="sizes"]');
-      sizes.value = 50;
-      sizes.dispatchEvent(new Event("change", { bubbles: true }));
+      const sizes =
+        pagination.shadowRoot!.querySelector<
+          HTMLElementTagNameMap["ea-select"]
+        >('[part="sizes"]');
+      sizes!.value = 50;
+      sizes!.dispatchEvent(new Event("change", { bubbles: true }));
       await pagination.updateComplete;
 
       expect(handler).toHaveBeenCalled();
@@ -1062,9 +1108,12 @@ describe("EaPagination", () => {
       container.appendChild(pagination);
       await pagination.updateComplete;
 
-      const sizes = pagination.shadowRoot.querySelector('[part="sizes"]');
-      sizes.value = 50;
-      sizes.dispatchEvent(new Event("change", { bubbles: true }));
+      const sizes =
+        pagination.shadowRoot!.querySelector<
+          HTMLElementTagNameMap["ea-select"]
+        >('[part="sizes"]');
+      sizes!.value = 50;
+      sizes!.dispatchEvent(new Event("change", { bubbles: true }));
       expect(pagination.currentPage).toBe(2);
     });
   });
@@ -1083,14 +1132,14 @@ describe("EaPagination", () => {
       container.appendChild(pagination);
       await pagination.updateComplete;
 
-      const prevIcon = pagination.shadowRoot.querySelector(
+      const prevIcon = pagination.shadowRoot!.querySelector(
         ".ea-pagination__icon--prev"
       );
-      const nextIcon = pagination.shadowRoot.querySelector(
+      const nextIcon = pagination.shadowRoot!.querySelector(
         ".ea-pagination__icon--next"
       );
-      expect(prevIcon.classList.contains("is-disabled")).toBe(true);
-      expect(nextIcon.classList.contains("is-disabled")).toBe(true);
+      expect(prevIcon!.classList.contains("is-disabled")).toBe(true);
+      expect(nextIcon!.classList.contains("is-disabled")).toBe(true);
     });
 
     it("pageSize 大于 total 应只有一页", async () => {
@@ -1100,7 +1149,7 @@ describe("EaPagination", () => {
       container.appendChild(pagination);
       await pagination.updateComplete;
 
-      const pages = pagination.shadowRoot.querySelectorAll(
+      const pages = pagination.shadowRoot!.querySelectorAll(
         ".ea-pagination__page"
       );
       expect(pages.length).toBe(1);
@@ -1131,12 +1180,12 @@ describe("EaPagination", () => {
       container.appendChild(pagination);
       await pagination.updateComplete;
 
-      const initialPages = pagination.shadowRoot.querySelectorAll(
+      const initialPages = pagination.shadowRoot!.querySelectorAll(
         ".ea-pagination__page"
       ).length;
 
       pagination.setAttribute("total", "200");
-      const newPages = pagination.shadowRoot.querySelectorAll(
+      const newPages = pagination.shadowRoot!.querySelectorAll(
         ".ea-pagination__page"
       ).length;
 
@@ -1150,13 +1199,15 @@ describe("EaPagination", () => {
       await pagination.updateComplete;
 
       expect(
-        pagination.shadowRoot.querySelector('[part="total"]')
+        pagination.shadowRoot!.querySelector('[part="total"]')
       ).toBeTruthy();
 
       pagination.layout = ["prev", "pager", "next"];
       await pagination.updateComplete;
 
-      expect(pagination.shadowRoot.querySelector('[part="total"]')).toBeFalsy();
+      expect(
+        pagination.shadowRoot!.querySelector('[part="total"]')
+      ).toBeFalsy();
     });
 
     it("较大的 total 值应正常渲染", async () => {
@@ -1166,10 +1217,10 @@ describe("EaPagination", () => {
       await pagination.updateComplete;
 
       expect(pagination.shadowRoot).toBeDefined();
-      const totalEl = pagination.shadowRoot.querySelector(
+      const totalEl = pagination.shadowRoot!.querySelector(
         ".ea-pagination__total"
       );
-      expect(totalEl.textContent).toBe("Total 100000");
+      expect(totalEl!.textContent).toBe("Total 100000");
     });
   });
 
@@ -1238,9 +1289,9 @@ describe("EaPagination", () => {
         pagination.setAttribute("total", "100");
         container.appendChild(pagination);
         await pagination.updateComplete;
-        const nav = pagination.shadowRoot.querySelector("nav");
+        const nav = pagination.shadowRoot!.querySelector("nav");
         expect(nav).toBeTruthy();
-        expect(nav.getAttribute("aria-label")).toBe("Pagination");
+        expect(nav!.getAttribute("aria-label")).toBe("Pagination");
       });
 
       it("上一页图标应该有 aria-label=Previous page", async () => {
@@ -1248,10 +1299,10 @@ describe("EaPagination", () => {
         pagination.setAttribute("total", "100");
         container.appendChild(pagination);
         await pagination.updateComplete;
-        const prevIcon = pagination.shadowRoot.querySelector(
+        const prevIcon = pagination.shadowRoot!.querySelector(
           ".ea-pagination__icon--prev"
         );
-        expect(prevIcon.getAttribute("aria-label")).toBe("Previous page");
+        expect(prevIcon!.getAttribute("aria-label")).toBe("Previous page");
       });
 
       it("下一页图标应该有 aria-label=Next page", async () => {
@@ -1259,10 +1310,10 @@ describe("EaPagination", () => {
         pagination.setAttribute("total", "100");
         container.appendChild(pagination);
         await pagination.updateComplete;
-        const nextIcon = pagination.shadowRoot.querySelector(
+        const nextIcon = pagination.shadowRoot!.querySelector(
           ".ea-pagination__icon--next"
         );
-        expect(nextIcon.getAttribute("aria-label")).toBe("Next page");
+        expect(nextIcon!.getAttribute("aria-label")).toBe("Next page");
       });
 
       it("第一页时上一页图标应该有 aria-disabled=true", async () => {
@@ -1270,10 +1321,10 @@ describe("EaPagination", () => {
         pagination.setAttribute("total", "100");
         container.appendChild(pagination);
         await pagination.updateComplete;
-        const prevIcon = pagination.shadowRoot.querySelector(
+        const prevIcon = pagination.shadowRoot!.querySelector(
           ".ea-pagination__icon--prev"
         );
-        expect(prevIcon.getAttribute("aria-disabled")).toBe("true");
+        expect(prevIcon!.getAttribute("aria-disabled")).toBe("true");
       });
 
       it("非第一页时上一页图标不应该有 aria-disabled=true", async () => {
@@ -1282,10 +1333,10 @@ describe("EaPagination", () => {
         pagination.setAttribute("current-page", "3");
         container.appendChild(pagination);
         await pagination.updateComplete;
-        const prevIcon = pagination.shadowRoot.querySelector(
+        const prevIcon = pagination.shadowRoot!.querySelector(
           ".ea-pagination__icon--prev"
         );
-        expect(prevIcon.getAttribute("aria-disabled")).toBe("false");
+        expect(prevIcon!.getAttribute("aria-disabled")).toBe("false");
       });
 
       it("最后一页时下一页图标应该有 aria-disabled=true", async () => {
@@ -1294,10 +1345,10 @@ describe("EaPagination", () => {
         pagination.setAttribute("current-page", "10");
         container.appendChild(pagination);
         await pagination.updateComplete;
-        const nextIcon = pagination.shadowRoot.querySelector(
+        const nextIcon = pagination.shadowRoot!.querySelector(
           ".ea-pagination__icon--next"
         );
-        expect(nextIcon.getAttribute("aria-disabled")).toBe("true");
+        expect(nextIcon!.getAttribute("aria-disabled")).toBe("true");
       });
 
       it("激活页码应该有 aria-current=page", async () => {
@@ -1306,11 +1357,11 @@ describe("EaPagination", () => {
         pagination.setAttribute("current-page", "3");
         container.appendChild(pagination);
         await pagination.updateComplete;
-        const activePage = pagination.shadowRoot.querySelector(
+        const activePage = pagination.shadowRoot!.querySelector(
           ".ea-pagination__page.is-active"
         );
         expect(activePage).toBeTruthy();
-        expect(activePage.getAttribute("aria-current")).toBe("page");
+        expect(activePage!.getAttribute("aria-current")).toBe("page");
       });
 
       it("宿主元素 disabled 时应该有 aria-disabled=true", async () => {

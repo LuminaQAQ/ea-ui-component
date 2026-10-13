@@ -4,7 +4,7 @@ import "./index";
 import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y";
 
 describe("EaBacktop", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -28,7 +28,7 @@ describe("EaBacktop", () => {
       const backtop = document.createElement("ea-backtop");
       container.appendChild(backtop);
 
-      const containerEl = backtop.shadowRoot.querySelector(".ea-backtop");
+      const containerEl = backtop.shadowRoot!.querySelector(".ea-backtop");
       expect(containerEl).toBeDefined();
     });
 
@@ -36,7 +36,7 @@ describe("EaBacktop", () => {
       const backtop = document.createElement("ea-backtop");
       container.appendChild(backtop);
 
-      const partEl = backtop.shadowRoot.querySelector('[part="container"]');
+      const partEl = backtop.shadowRoot!.querySelector('[part="container"]');
       expect(partEl).toBeDefined();
     });
 
@@ -44,7 +44,7 @@ describe("EaBacktop", () => {
       const backtop = document.createElement("ea-backtop");
       container.appendChild(backtop);
 
-      const slot = backtop.shadowRoot.querySelector("slot");
+      const slot = backtop.shadowRoot!.querySelector("slot");
       expect(slot).toBeDefined();
     });
   });
@@ -233,7 +233,7 @@ describe("EaBacktop", () => {
       backtop.textContent = "UP";
       container.appendChild(backtop);
 
-      const slot = backtop.shadowRoot.querySelector("slot");
+      const slot = backtop.shadowRoot!.querySelector("slot");
       expect(slot).toBeDefined();
     });
 
@@ -244,7 +244,7 @@ describe("EaBacktop", () => {
       backtop.appendChild(icon);
       container.appendChild(backtop);
 
-      const slot = backtop.shadowRoot.querySelector("slot");
+      const slot = backtop.shadowRoot!.querySelector("slot");
       expect(slot).toBeDefined();
     });
   });
@@ -256,8 +256,8 @@ describe("EaBacktop", () => {
 
       await backtop.updateComplete;
 
-      const containerEl = backtop.shadowRoot.querySelector(".ea-backtop");
-      expect(containerEl.className).toContain("ea-backtop");
+      const containerEl = backtop.shadowRoot!.querySelector(".ea-backtop");
+      expect(containerEl!.className).toContain("ea-backtop");
     });
 
     it("组件移除时应该清理资源", () => {
@@ -332,15 +332,15 @@ describe("EaBacktop", () => {
       it("容器应该有 role='button'", () => {
         const el = document.createElement("ea-backtop");
         container.appendChild(el);
-        const containerEl = el.shadowRoot.querySelector('[part="container"]');
-        expect(containerEl.getAttribute("role")).toBe("button");
+        const containerEl = el.shadowRoot!.querySelector('[part="container"]');
+        expect(containerEl!.getAttribute("role")).toBe("button");
       });
 
       it("容器应该有 aria-label='Back to top'", () => {
         const el = document.createElement("ea-backtop");
         container.appendChild(el);
-        const containerEl = el.shadowRoot.querySelector('[part="container"]');
-        expect(containerEl.getAttribute("aria-label")).toBe("Back to top");
+        const containerEl = el.shadowRoot!.querySelector('[part="container"]');
+        expect(containerEl!.getAttribute("aria-label")).toBe("Back to top");
       });
     });
 
@@ -349,11 +349,11 @@ describe("EaBacktop", () => {
         const el = document.createElement("ea-backtop");
         container.appendChild(el);
         await el.updateComplete;
-        const containerEl = el.shadowRoot.querySelector('[part="container"]');
+        const containerEl = el.shadowRoot!.querySelector('[part="container"]');
         const scrollSpy = vi
-          .spyOn(el, "_scrollToTop")
+          .spyOn(el as unknown as { _scrollToTop: () => void }, "_scrollToTop")
           .mockImplementation(() => {});
-        containerEl.dispatchEvent(
+        containerEl!.dispatchEvent(
           new KeyboardEvent("keydown", { key: "Enter" })
         );
         expect(scrollSpy).toHaveBeenCalled();
@@ -364,11 +364,11 @@ describe("EaBacktop", () => {
         const el = document.createElement("ea-backtop");
         container.appendChild(el);
         await el.updateComplete;
-        const containerEl = el.shadowRoot.querySelector('[part="container"]');
+        const containerEl = el.shadowRoot!.querySelector('[part="container"]');
         const scrollSpy = vi
-          .spyOn(el, "_scrollToTop")
+          .spyOn(el as unknown as { _scrollToTop: () => void }, "_scrollToTop")
           .mockImplementation(() => {});
-        containerEl.dispatchEvent(new KeyboardEvent("keydown", { key: " " }));
+        containerEl!.dispatchEvent(new KeyboardEvent("keydown", { key: " " }));
         expect(scrollSpy).toHaveBeenCalled();
         scrollSpy.mockRestore();
       });

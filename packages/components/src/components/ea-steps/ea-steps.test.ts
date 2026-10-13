@@ -4,7 +4,7 @@ import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y.js";
 import "./index.ts";
 
 describe("EaSteps Component", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -30,14 +30,16 @@ describe("EaSteps Component", () => {
       const steps = document.createElement("ea-steps");
       container.appendChild(steps);
 
-      expect(steps.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(
+        steps.shadowRoot!.querySelector('[part="container"]')
+      ).toBeTruthy();
     });
 
     it("应该包含默认 slot", () => {
       const steps = document.createElement("ea-steps");
       container.appendChild(steps);
 
-      expect(steps.shadowRoot.querySelector("slot")).toBeTruthy();
+      expect(steps.shadowRoot!.querySelector("slot")).toBeTruthy();
     });
 
     it("默认容器不应该有 is-simple 和 is-align-center CSS 类", async () => {
@@ -47,9 +49,9 @@ describe("EaSteps Component", () => {
       await steps.updateComplete;
 
       const stepsContainer =
-        steps.shadowRoot.querySelector('[part="container"]');
-      expect(stepsContainer.classList.contains("is-simple")).toBe(false);
-      expect(stepsContainer.classList.contains("is-align-center")).toBe(false);
+        steps.shadowRoot!.querySelector('[part="container"]');
+      expect(stepsContainer!.classList.contains("is-simple")).toBe(false);
+      expect(stepsContainer!.classList.contains("is-align-center")).toBe(false);
     });
   });
 
@@ -83,7 +85,7 @@ describe("EaSteps Component", () => {
       ];
 
       for (const part of parts) {
-        expect(step.shadowRoot.querySelector(`[part="${part}"]`)).toBeTruthy();
+        expect(step.shadowRoot!.querySelector(`[part="${part}"]`)).toBeTruthy();
       }
     });
 
@@ -93,7 +95,7 @@ describe("EaSteps Component", () => {
 
       await step.updateComplete;
 
-      const slots = step.shadowRoot.querySelectorAll("slot");
+      const slots = step.shadowRoot!.querySelectorAll("slot");
       const slotNames = [...slots].map(s => s.name || "default");
 
       expect(slotNames).toContain("heading");
@@ -108,8 +110,9 @@ describe("EaSteps Component", () => {
 
       await step.updateComplete;
 
-      const stepContainer = step.shadowRoot.querySelector('[part="container"]');
-      expect(stepContainer.classList.contains("ea-step")).toBe(true);
+      const stepContainer =
+        step.shadowRoot!.querySelector('[part="container"]');
+      expect(stepContainer!.classList.contains("ea-step")).toBe(true);
     });
   });
 
@@ -295,8 +298,8 @@ describe("EaSteps Component", () => {
       await steps.updateComplete;
 
       const stepsContainer =
-        steps.shadowRoot.querySelector('[part="container"]');
-      expect(stepsContainer.classList.contains("is-align-center")).toBe(true);
+        steps.shadowRoot!.querySelector('[part="container"]');
+      expect(stepsContainer!.classList.contains("is-align-center")).toBe(true);
     });
 
     it("设置 alignCenter 应该在子 step 上设置 align-center attribute", async () => {
@@ -325,8 +328,8 @@ describe("EaSteps Component", () => {
 
       const stepElement = steps.querySelector("ea-step");
       const stepContainer =
-        stepElement.shadowRoot.querySelector('[part="container"]');
-      expect(stepContainer.classList.contains("is-align-center")).toBe(true);
+        stepElement!.shadowRoot!.querySelector('[part="container"]');
+      expect(stepContainer!.classList.contains("is-align-center")).toBe(true);
     });
 
     it("动态关闭 alignCenter 应该移除 CSS 类和 attribute", async () => {
@@ -341,11 +344,11 @@ describe("EaSteps Component", () => {
       await steps.updateComplete;
 
       const stepsContainer =
-        steps.shadowRoot.querySelector('[part="container"]');
-      expect(stepsContainer.classList.contains("is-align-center")).toBe(false);
+        steps.shadowRoot!.querySelector('[part="container"]');
+      expect(stepsContainer!.classList.contains("is-align-center")).toBe(false);
 
       const stepElement = steps.querySelector("ea-step");
-      expect(stepElement.hasAttribute("align-center")).toBe(false);
+      expect(stepElement!.hasAttribute("align-center")).toBe(false);
     });
   });
 
@@ -367,8 +370,8 @@ describe("EaSteps Component", () => {
       await steps.updateComplete;
 
       const stepsContainer =
-        steps.shadowRoot.querySelector('[part="container"]');
-      expect(stepsContainer.classList.contains("is-simple")).toBe(true);
+        steps.shadowRoot!.querySelector('[part="container"]');
+      expect(stepsContainer!.classList.contains("is-simple")).toBe(true);
     });
 
     it("设置 simple 应该在子 step 上设置 simple attribute", async () => {
@@ -397,8 +400,8 @@ describe("EaSteps Component", () => {
 
       const stepElement = steps.querySelector("ea-step");
       const stepContainer =
-        stepElement.shadowRoot.querySelector('[part="container"]');
-      expect(stepContainer.classList.contains("is-simple")).toBe(true);
+        stepElement!.shadowRoot!.querySelector('[part="container"]');
+      expect(stepContainer!.classList.contains("is-simple")).toBe(true);
     });
 
     it("simple 模式下应该为子 step 添加箭头图标", async () => {
@@ -415,8 +418,8 @@ describe("EaSteps Component", () => {
       const stepElements = steps.querySelectorAll("ea-step");
       const arrow1 = stepElements[0].querySelector('[slot="simple-arrow"]');
       expect(arrow1).toBeTruthy();
-      expect(arrow1.tagName.toLowerCase()).toBe("ea-icon");
-      expect(arrow1.getAttribute("name")).toBe("angle-right");
+      expect(arrow1!.tagName.toLowerCase()).toBe("ea-icon");
+      expect(arrow1!.getAttribute("name")).toBe("angle-right");
     });
 
     it("simple 模式下最后一个 step 仍有箭头元素（CSS 控制显隐）", async () => {
@@ -448,8 +451,8 @@ describe("EaSteps Component", () => {
 
       const stepElements = steps.querySelectorAll("ea-step");
       const lastContainer =
-        stepElements[1].shadowRoot.querySelector('[part="container"]');
-      expect(lastContainer.classList.contains("is-last")).toBe(true);
+        stepElements[1].shadowRoot!.querySelector('[part="container"]');
+      expect(lastContainer!.classList.contains("is-last")).toBe(true);
     });
 
     it("动态关闭 simple 应该移除箭头图标", async () => {
@@ -464,7 +467,7 @@ describe("EaSteps Component", () => {
       await steps.updateComplete;
 
       const stepElement = steps.querySelector("ea-step");
-      const arrow = stepElement.querySelector('[slot="simple-arrow"]');
+      const arrow = stepElement!.querySelector('[slot="simple-arrow"]');
       expect(arrow).toBeFalsy();
     });
 
@@ -480,11 +483,11 @@ describe("EaSteps Component", () => {
       await steps.updateComplete;
 
       const stepElement = steps.querySelector("ea-step");
-      expect(stepElement.hasAttribute("simple")).toBe(false);
+      expect(stepElement!.hasAttribute("simple")).toBe(false);
 
       const stepContainer =
-        stepElement.shadowRoot.querySelector('[part="container"]');
-      expect(stepContainer.classList.contains("is-simple")).toBe(false);
+        stepElement!.shadowRoot!.querySelector('[part="container"]');
+      expect(stepContainer!.classList.contains("is-simple")).toBe(false);
     });
   });
 
@@ -524,8 +527,8 @@ describe("EaSteps Component", () => {
 
       const stepElement = steps.querySelector("ea-step");
       const stepContainer =
-        stepElement.shadowRoot.querySelector('[part="container"]');
-      expect(stepContainer.classList.contains("ea-step--vertical")).toBe(true);
+        stepElement!.shadowRoot!.querySelector('[part="container"]');
+      expect(stepContainer!.classList.contains("ea-step--vertical")).toBe(true);
     });
 
     it("动态修改 direction 应该更新子 step", async () => {
@@ -539,11 +542,11 @@ describe("EaSteps Component", () => {
       await steps.updateComplete;
 
       const stepElement = steps.querySelector("ea-step");
-      expect(stepElement.getAttribute("direction")).toBe("vertical");
+      expect(stepElement!.getAttribute("direction")).toBe("vertical");
 
       const stepContainer =
-        stepElement.shadowRoot.querySelector('[part="container"]');
-      expect(stepContainer.classList.contains("ea-step--vertical")).toBe(true);
+        stepElement!.shadowRoot!.querySelector('[part="container"]');
+      expect(stepContainer!.classList.contains("ea-step--vertical")).toBe(true);
     });
   });
 
@@ -564,8 +567,10 @@ describe("EaSteps Component", () => {
 
       await step.updateComplete;
 
-      const headingSlot = step.shadowRoot.querySelector('slot[name="heading"]');
-      expect(headingSlot.textContent).toBe("Step 1");
+      const headingSlot = step.shadowRoot!.querySelector(
+        'slot[name="heading"]'
+      );
+      expect(headingSlot!.textContent).toBe("Step 1");
     });
 
     it("动态修改 heading 应该更新文本内容", async () => {
@@ -578,8 +583,10 @@ describe("EaSteps Component", () => {
       step.heading = "Updated Step";
       await step.updateComplete;
 
-      const headingSlot = step.shadowRoot.querySelector('slot[name="heading"]');
-      expect(headingSlot.textContent).toBe("Updated Step");
+      const headingSlot = step.shadowRoot!.querySelector(
+        'slot[name="heading"]'
+      );
+      expect(headingSlot!.textContent).toBe("Updated Step");
     });
   });
 
@@ -600,10 +607,10 @@ describe("EaSteps Component", () => {
 
       await step.updateComplete;
 
-      const descriptionSlot = step.shadowRoot.querySelector(
+      const descriptionSlot = step.shadowRoot!.querySelector(
         'slot[name="description"]'
       );
-      expect(descriptionSlot.textContent).toBe("Some description");
+      expect(descriptionSlot!.textContent).toBe("Some description");
     });
 
     it("动态修改 description 应该更新文本内容", async () => {
@@ -616,10 +623,10 @@ describe("EaSteps Component", () => {
       step.description = "New description";
       await step.updateComplete;
 
-      const descriptionSlot = step.shadowRoot.querySelector(
+      const descriptionSlot = step.shadowRoot!.querySelector(
         'slot[name="description"]'
       );
-      expect(descriptionSlot.textContent).toBe("New description");
+      expect(descriptionSlot!.textContent).toBe("New description");
     });
   });
 
@@ -640,8 +647,8 @@ describe("EaSteps Component", () => {
 
       await step.updateComplete;
 
-      const iconElement = step.shadowRoot.querySelector('[part="icon"]');
-      expect(iconElement.getAttribute("name")).toBe("music");
+      const iconElement = step.shadowRoot!.querySelector('[part="icon"]');
+      expect(iconElement!.getAttribute("name")).toBe("music");
     });
 
     it("设置 icon 后容器应该有 is-icon CSS 类", async () => {
@@ -651,8 +658,9 @@ describe("EaSteps Component", () => {
 
       await step.updateComplete;
 
-      const stepContainer = step.shadowRoot.querySelector('[part="container"]');
-      expect(stepContainer.classList.contains("is-icon")).toBe(true);
+      const stepContainer =
+        step.shadowRoot!.querySelector('[part="container"]');
+      expect(stepContainer!.classList.contains("is-icon")).toBe(true);
     });
 
     it("动态修改 icon 应该更新 ea-icon 的 name", async () => {
@@ -665,8 +673,8 @@ describe("EaSteps Component", () => {
       step.icon = "video";
       await step.updateComplete;
 
-      const iconElement = step.shadowRoot.querySelector('[part="icon"]');
-      expect(iconElement.getAttribute("name")).toBe("video");
+      const iconElement = step.shadowRoot!.querySelector('[part="icon"]');
+      expect(iconElement!.getAttribute("name")).toBe("video");
     });
   });
 
@@ -681,7 +689,13 @@ describe("EaSteps Component", () => {
     });
 
     it("设置 status 应该在容器上添加对应的状态 CSS 类", async () => {
-      const statuses = ["wait", "process", "finish", "error", "success"];
+      const statuses = [
+        "wait",
+        "process",
+        "finish",
+        "error",
+        "success",
+      ] as const;
 
       for (const status of statuses) {
         const step = document.createElement("ea-step");
@@ -691,8 +705,8 @@ describe("EaSteps Component", () => {
         await step.updateComplete;
 
         const stepContainer =
-          step.shadowRoot.querySelector('[part="container"]');
-        expect(stepContainer.classList.contains(`is-${status}`)).toBe(true);
+          step.shadowRoot!.querySelector('[part="container"]');
+        expect(stepContainer!.classList.contains(`is-${status}`)).toBe(true);
 
         step.remove();
       }
@@ -706,8 +720,8 @@ describe("EaSteps Component", () => {
 
       await step.updateComplete;
 
-      const iconElement = step.shadowRoot.querySelector('[part="icon"]');
-      expect(iconElement.textContent).toBe("3");
+      const iconElement = step.shadowRoot!.querySelector('[part="icon"]');
+      expect(iconElement!.textContent).toBe("3");
     });
 
     it("有 icon 时设置 status 不应该覆盖 icon", async () => {
@@ -718,8 +732,8 @@ describe("EaSteps Component", () => {
 
       await step.updateComplete;
 
-      const iconElement = step.shadowRoot.querySelector('[part="icon"]');
-      expect(iconElement.getAttribute("name")).toBe("music");
+      const iconElement = step.shadowRoot!.querySelector('[part="icon"]');
+      expect(iconElement!.getAttribute("name")).toBe("music");
     });
   });
 
@@ -740,8 +754,9 @@ describe("EaSteps Component", () => {
 
       await step.updateComplete;
 
-      const stepContainer = step.shadowRoot.querySelector('[part="container"]');
-      expect(stepContainer.classList.contains("is-first")).toBe(true);
+      const stepContainer =
+        step.shadowRoot!.querySelector('[part="container"]');
+      expect(stepContainer!.classList.contains("is-first")).toBe(true);
     });
   });
 
@@ -762,8 +777,9 @@ describe("EaSteps Component", () => {
 
       await step.updateComplete;
 
-      const stepContainer = step.shadowRoot.querySelector('[part="container"]');
-      expect(stepContainer.classList.contains("ea-step--vertical")).toBe(true);
+      const stepContainer =
+        step.shadowRoot!.querySelector('[part="container"]');
+      expect(stepContainer!.classList.contains("ea-step--vertical")).toBe(true);
     });
 
     it("设置 direction=horizontal 应该在容器上添加 ea-step--horizontal CSS 类", async () => {
@@ -773,8 +789,9 @@ describe("EaSteps Component", () => {
 
       await step.updateComplete;
 
-      const stepContainer = step.shadowRoot.querySelector('[part="container"]');
-      expect(stepContainer.classList.contains("ea-step--horizontal")).toBe(
+      const stepContainer =
+        step.shadowRoot!.querySelector('[part="container"]');
+      expect(stepContainer!.classList.contains("ea-step--horizontal")).toBe(
         true
       );
     });
@@ -832,12 +849,12 @@ describe("EaSteps Component", () => {
 
       const stepElements = steps.querySelectorAll("ea-step");
       const lastContainer =
-        stepElements[1].shadowRoot.querySelector('[part="container"]');
-      expect(lastContainer.classList.contains("is-last")).toBe(true);
+        stepElements[1].shadowRoot!.querySelector('[part="container"]');
+      expect(lastContainer!.classList.contains("is-last")).toBe(true);
 
       const firstContainer =
-        stepElements[0].shadowRoot.querySelector('[part="container"]');
-      expect(firstContainer.classList.contains("is-last")).toBe(false);
+        stepElements[0].shadowRoot!.querySelector('[part="container"]');
+      expect(firstContainer!.classList.contains("is-last")).toBe(false);
     });
 
     it("steps 应该根据 active 设置子 step 的 status", async () => {
@@ -874,15 +891,15 @@ describe("EaSteps Component", () => {
 
       const stepElements = steps.querySelectorAll("ea-step");
       const container0 =
-        stepElements[0].shadowRoot.querySelector('[part="container"]');
+        stepElements[0].shadowRoot!.querySelector('[part="container"]');
       const container1 =
-        stepElements[1].shadowRoot.querySelector('[part="container"]');
+        stepElements[1].shadowRoot!.querySelector('[part="container"]');
       const container2 =
-        stepElements[2].shadowRoot.querySelector('[part="container"]');
+        stepElements[2].shadowRoot!.querySelector('[part="container"]');
 
-      expect(container0.classList.contains("is-finish")).toBe(true);
-      expect(container1.classList.contains("is-process")).toBe(true);
-      expect(container2.classList.contains("is-wait")).toBe(true);
+      expect(container0!.classList.contains("is-finish")).toBe(true);
+      expect(container1!.classList.contains("is-process")).toBe(true);
+      expect(container2!.classList.contains("is-wait")).toBe(true);
     });
 
     it("动态修改 active 应该更新所有子 step 状态和 CSS 类", async () => {
@@ -905,8 +922,8 @@ describe("EaSteps Component", () => {
       expect(stepElements[2].getAttribute("status")).toBe("process");
 
       const container2 =
-        stepElements[2].shadowRoot.querySelector('[part="container"]');
-      expect(container2.classList.contains("is-process")).toBe(true);
+        stepElements[2].shadowRoot!.querySelector('[part="container"]');
+      expect(container2!.classList.contains("is-process")).toBe(true);
     });
   });
 
@@ -925,8 +942,8 @@ describe("EaSteps Component", () => {
 
       const stepElements = steps.querySelectorAll("ea-step");
       const iconElement =
-        stepElements[0].shadowRoot.querySelector('[part="icon"]');
-      expect(iconElement.textContent).toBe("1");
+        stepElements[0].shadowRoot!.querySelector('[part="icon"]');
+      expect(iconElement!.textContent).toBe("1");
     });
 
     it("finishStatus=success 且 step 已完成时应该显示 check 图标", async () => {
@@ -943,9 +960,9 @@ describe("EaSteps Component", () => {
 
       const stepElements = steps.querySelectorAll("ea-step");
       const iconElement =
-        stepElements[0].shadowRoot.querySelector('[part="icon"]');
-      expect(iconElement.getAttribute("name")).toBe("check");
-      expect(iconElement.textContent).toBe("");
+        stepElements[0].shadowRoot!.querySelector('[part="icon"]');
+      expect(iconElement!.getAttribute("name")).toBe("check");
+      expect(iconElement!.textContent).toBe("");
     });
 
     it("finishStatus=finish 且 step 已完成时应该显示 check 图标", async () => {
@@ -962,8 +979,8 @@ describe("EaSteps Component", () => {
 
       const stepElements = steps.querySelectorAll("ea-step");
       const iconElement =
-        stepElements[0].shadowRoot.querySelector('[part="icon"]');
-      expect(iconElement.getAttribute("name")).toBe("check");
+        stepElements[0].shadowRoot!.querySelector('[part="icon"]');
+      expect(iconElement!.getAttribute("name")).toBe("check");
     });
 
     it("有自定义 icon 时不应该被 status 覆盖", async () => {
@@ -978,8 +995,9 @@ describe("EaSteps Component", () => {
       await steps.updateComplete;
 
       const stepElement = steps.querySelector("ea-step");
-      const iconElement = stepElement.shadowRoot.querySelector('[part="icon"]');
-      expect(iconElement.getAttribute("name")).toBe("star");
+      const iconElement =
+        stepElement!.shadowRoot!.querySelector('[part="icon"]');
+      expect(iconElement!.getAttribute("name")).toBe("star");
     });
   });
 
@@ -990,7 +1008,9 @@ describe("EaSteps Component", () => {
       const steps = document.createElement("ea-steps");
       container.appendChild(steps);
 
-      expect(steps.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(
+        steps.shadowRoot!.querySelector('[part="container"]')
+      ).toBeTruthy();
     });
 
     it("单个 step 应该同时有 first 和 last attribute", async () => {
@@ -1001,8 +1021,8 @@ describe("EaSteps Component", () => {
       await steps.updateComplete;
 
       const stepElement = steps.querySelector("ea-step");
-      expect(stepElement.hasAttribute("first")).toBe(true);
-      expect(stepElement.hasAttribute("last")).toBe(true);
+      expect(stepElement!.hasAttribute("first")).toBe(true);
+      expect(stepElement!.hasAttribute("last")).toBe(true);
     });
 
     it("单个 step 的容器应该同时有 is-first 和 is-last CSS 类", async () => {
@@ -1014,9 +1034,9 @@ describe("EaSteps Component", () => {
 
       const stepElement = steps.querySelector("ea-step");
       const stepContainer =
-        stepElement.shadowRoot.querySelector('[part="container"]');
-      expect(stepContainer.classList.contains("is-first")).toBe(true);
-      expect(stepContainer.classList.contains("is-last")).toBe(true);
+        stepElement!.shadowRoot!.querySelector('[part="container"]');
+      expect(stepContainer!.classList.contains("is-first")).toBe(true);
+      expect(stepContainer!.classList.contains("is-last")).toBe(true);
     });
 
     it("两个 step 时第一个有 first，第二个有 last", async () => {
@@ -1157,12 +1177,12 @@ describe("EaSteps Component", () => {
       await steps.updateComplete;
 
       const stepElement = steps.querySelector("ea-step");
-      expect(stepElement.getAttribute("direction")).toBe("vertical");
+      expect(stepElement!.getAttribute("direction")).toBe("vertical");
 
       steps.direction = "horizontal";
       await steps.updateComplete;
 
-      expect(stepElement.getAttribute("direction")).toBe("horizontal");
+      expect(stepElement!.getAttribute("direction")).toBe("horizontal");
     });
 
     it("active 从 0 逐步增加到 2 应该正确更新所有 step 状态", async () => {
@@ -1212,10 +1232,10 @@ describe("EaSteps Component", () => {
       await steps.updateComplete;
 
       const stepsContainer =
-        steps.shadowRoot.querySelector('[part="container"]');
-      expect(stepsContainer.classList.contains("ea-steps")).toBe(true);
-      expect(stepsContainer.classList.contains("is-simple")).toBe(false);
-      expect(stepsContainer.classList.contains("is-align-center")).toBe(false);
+        steps.shadowRoot!.querySelector('[part="container"]');
+      expect(stepsContainer!.classList.contains("ea-steps")).toBe(true);
+      expect(stepsContainer!.classList.contains("is-simple")).toBe(false);
+      expect(stepsContainer!.classList.contains("is-align-center")).toBe(false);
     });
 
     it("simple=true 时容器应该有 is-simple CSS 类", async () => {
@@ -1226,8 +1246,8 @@ describe("EaSteps Component", () => {
       await steps.updateComplete;
 
       const stepsContainer =
-        steps.shadowRoot.querySelector('[part="container"]');
-      expect(stepsContainer.classList.contains("is-simple")).toBe(true);
+        steps.shadowRoot!.querySelector('[part="container"]');
+      expect(stepsContainer!.classList.contains("is-simple")).toBe(true);
     });
 
     it("alignCenter=true 时容器应该有 is-align-center CSS 类", async () => {
@@ -1238,8 +1258,8 @@ describe("EaSteps Component", () => {
       await steps.updateComplete;
 
       const stepsContainer =
-        steps.shadowRoot.querySelector('[part="container"]');
-      expect(stepsContainer.classList.contains("is-align-center")).toBe(true);
+        steps.shadowRoot!.querySelector('[part="container"]');
+      expect(stepsContainer!.classList.contains("is-align-center")).toBe(true);
     });
 
     it("simple 和 alignCenter 同时设置时容器应该同时有两个 CSS 类", async () => {
@@ -1251,9 +1271,9 @@ describe("EaSteps Component", () => {
       await steps.updateComplete;
 
       const stepsContainer =
-        steps.shadowRoot.querySelector('[part="container"]');
-      expect(stepsContainer.classList.contains("is-simple")).toBe(true);
-      expect(stepsContainer.classList.contains("is-align-center")).toBe(true);
+        steps.shadowRoot!.querySelector('[part="container"]');
+      expect(stepsContainer!.classList.contains("is-simple")).toBe(true);
+      expect(stepsContainer!.classList.contains("is-align-center")).toBe(true);
     });
   });
 
@@ -1273,12 +1293,12 @@ describe("EaSteps Component", () => {
 
       const stepElements = steps.querySelectorAll("ea-step");
       const container0 =
-        stepElements[0].shadowRoot.querySelector('[part="container"]');
+        stepElements[0].shadowRoot!.querySelector('[part="container"]');
 
-      expect(container0.classList.contains("ea-step")).toBe(true);
-      expect(container0.classList.contains("ea-step--horizontal")).toBe(true);
-      expect(container0.classList.contains("is-process")).toBe(true);
-      expect(container0.classList.contains("is-first")).toBe(true);
+      expect(container0!.classList.contains("ea-step")).toBe(true);
+      expect(container0!.classList.contains("ea-step--horizontal")).toBe(true);
+      expect(container0!.classList.contains("is-process")).toBe(true);
+      expect(container0!.classList.contains("is-first")).toBe(true);
     });
 
     it("有 icon 的 step 应该有 is-icon CSS 类", async () => {
@@ -1290,8 +1310,8 @@ describe("EaSteps Component", () => {
 
       const stepElement = steps.querySelector("ea-step");
       const stepContainer =
-        stepElement.shadowRoot.querySelector('[part="container"]');
-      expect(stepContainer.classList.contains("is-icon")).toBe(true);
+        stepElement!.shadowRoot!.querySelector('[part="container"]');
+      expect(stepContainer!.classList.contains("is-icon")).toBe(true);
     });
 
     it("simple 和 alignCenter 同时设置时 step 应该同时有两个 CSS 类", async () => {
@@ -1305,9 +1325,9 @@ describe("EaSteps Component", () => {
 
       const stepElement = steps.querySelector("ea-step");
       const stepContainer =
-        stepElement.shadowRoot.querySelector('[part="container"]');
-      expect(stepContainer.classList.contains("is-simple")).toBe(true);
-      expect(stepContainer.classList.contains("is-align-center")).toBe(true);
+        stepElement!.shadowRoot!.querySelector('[part="container"]');
+      expect(stepContainer!.classList.contains("is-simple")).toBe(true);
+      expect(stepContainer!.classList.contains("is-align-center")).toBe(true);
     });
   });
 
@@ -1350,16 +1370,18 @@ describe("EaSteps Component", () => {
         const steps = document.createElement("ea-steps");
         container.appendChild(steps);
         await steps.updateComplete;
-        const containerEl = steps.shadowRoot.querySelector('[part="container"]');
-        expect(containerEl.getAttribute("role")).toBe("list");
+        const containerEl =
+          steps.shadowRoot!.querySelector('[part="container"]');
+        expect(containerEl!.getAttribute("role")).toBe("list");
       });
 
       it("ea-step 容器应该有 role=listitem", async () => {
         const step = document.createElement("ea-step");
         container.appendChild(step);
         await step.updateComplete;
-        const containerEl = step.shadowRoot.querySelector('[part="container"]');
-        expect(containerEl.getAttribute("role")).toBe("listitem");
+        const containerEl =
+          step.shadowRoot!.querySelector('[part="container"]');
+        expect(containerEl!.getAttribute("role")).toBe("listitem");
       });
 
       it("process 状态的 step 应该有 aria-current=step", async () => {
@@ -1372,8 +1394,9 @@ describe("EaSteps Component", () => {
         container.appendChild(steps);
         await steps.updateComplete;
         const stepElements = steps.querySelectorAll("ea-step");
-        const processStep = stepElements[0].shadowRoot.querySelector('[part="container"]');
-        expect(processStep.getAttribute("aria-current")).toBe("step");
+        const processStep =
+          stepElements[0].shadowRoot!.querySelector('[part="container"]');
+        expect(processStep!.getAttribute("aria-current")).toBe("step");
       });
 
       it("非 process 状态的 step 不应该有 aria-current", async () => {
@@ -1386,8 +1409,9 @@ describe("EaSteps Component", () => {
         container.appendChild(steps);
         await steps.updateComplete;
         const stepElements = steps.querySelectorAll("ea-step");
-        const waitStep = stepElements[1].shadowRoot.querySelector('[part="container"]');
-        expect(waitStep.hasAttribute("aria-current")).toBe(false);
+        const waitStep =
+          stepElements[1].shadowRoot!.querySelector('[part="container"]');
+        expect(waitStep!.hasAttribute("aria-current")).toBe(false);
       });
 
       it("active 变化时 aria-current 应该跟随更新", async () => {
@@ -1400,15 +1424,17 @@ describe("EaSteps Component", () => {
         await steps.updateComplete;
 
         const stepElements = steps.querySelectorAll("ea-step");
-        const container0 = stepElements[0].shadowRoot.querySelector('[part="container"]');
-        expect(container0.getAttribute("aria-current")).toBe("step");
+        const container0 =
+          stepElements[0].shadowRoot!.querySelector('[part="container"]');
+        expect(container0!.getAttribute("aria-current")).toBe("step");
 
         steps.active = 1;
         await steps.updateComplete;
 
-        expect(container0.hasAttribute("aria-current")).toBe(false);
-        const container1 = stepElements[1].shadowRoot.querySelector('[part="container"]');
-        expect(container1.getAttribute("aria-current")).toBe("step");
+        expect(container0!.hasAttribute("aria-current")).toBe(false);
+        const container1 =
+          stepElements[1].shadowRoot!.querySelector('[part="container"]');
+        expect(container1!.getAttribute("aria-current")).toBe("step");
       });
     });
   });

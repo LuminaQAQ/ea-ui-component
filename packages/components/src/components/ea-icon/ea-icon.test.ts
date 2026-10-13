@@ -4,7 +4,7 @@ import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y";
 import "./index";
 
 describe("EaIcon", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -28,14 +28,14 @@ describe("EaIcon", () => {
       const icon = document.createElement("ea-icon");
       container.appendChild(icon);
 
-      expect(icon.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(icon.shadowRoot!.querySelector('[part="container"]')).toBeTruthy();
     });
 
     it("应该包含 i 元素作为图标容器", () => {
       const icon = document.createElement("ea-icon");
       container.appendChild(icon);
 
-      const iElement = icon.shadowRoot.querySelector("i.ea-icon");
+      const iElement = icon.shadowRoot!.querySelector("i.ea-icon");
       expect(iElement).toBeTruthy();
     });
 
@@ -44,7 +44,7 @@ describe("EaIcon", () => {
       icon.innerHTML = "Custom Content";
       container.appendChild(icon);
 
-      const slot = icon.shadowRoot.querySelector("slot");
+      const slot = icon.shadowRoot!.querySelector("slot");
       expect(slot).toBeTruthy();
     });
   });
@@ -72,9 +72,9 @@ describe("EaIcon", () => {
 
       await icon.updateComplete;
 
-      const iElement = icon.shadowRoot.querySelector("i.ea-icon");
-      expect(iElement.classList.contains("fa-solid")).toBe(true);
-      expect(iElement.classList.contains("fa-coffee")).toBe(true);
+      const iElement = icon.shadowRoot!.querySelector("i.ea-icon");
+      expect(iElement!.classList.contains("fa-solid")).toBe(true);
+      expect(iElement!.classList.contains("fa-coffee")).toBe(true);
     });
 
     it("应该支持以 fa- 开头的完整类名", async () => {
@@ -85,9 +85,9 @@ describe("EaIcon", () => {
       await icon.updateComplete;
 
       expect(icon.name).toBe("fa-solid fa-coffee");
-      const iElement = icon.shadowRoot.querySelector("i.ea-icon");
-      expect(iElement.classList.contains("fa-solid")).toBe(true);
-      expect(iElement.classList.contains("fa-coffee")).toBe(true);
+      const iElement = icon.shadowRoot!.querySelector("i.ea-icon");
+      expect(iElement!.classList.contains("fa-solid")).toBe(true);
+      expect(iElement!.classList.contains("fa-coffee")).toBe(true);
     });
 
     it("空 name 时应该只有基础类名", async () => {
@@ -96,8 +96,8 @@ describe("EaIcon", () => {
 
       await icon.updateComplete;
 
-      const iElement = icon.shadowRoot.querySelector("i.ea-icon");
-      expect(iElement.className).toBe("ea-icon");
+      const iElement = icon.shadowRoot!.querySelector("i.ea-icon");
+      expect(iElement!.className).toBe("ea-icon");
     });
   });
 
@@ -118,9 +118,9 @@ describe("EaIcon", () => {
       await icon.updateComplete;
 
       expect(icon.family).toBe("brands");
-      const iElement = icon.shadowRoot.querySelector("i.ea-icon");
-      expect(iElement.classList.contains("fa-brands")).toBe(true);
-      expect(iElement.classList.contains("fa-github")).toBe(true);
+      const iElement = icon.shadowRoot!.querySelector("i.ea-icon");
+      expect(iElement!.classList.contains("fa-brands")).toBe(true);
+      expect(iElement!.classList.contains("fa-github")).toBe(true);
     });
 
     it("family='sharp' 应该生成 fa-sharp 类名", async () => {
@@ -132,8 +132,8 @@ describe("EaIcon", () => {
       await icon.updateComplete;
 
       expect(icon.family).toBe("sharp");
-      const iElement = icon.shadowRoot.querySelector("i.ea-icon");
-      expect(iElement.classList.contains("fa-sharp")).toBe(true);
+      const iElement = icon.shadowRoot!.querySelector("i.ea-icon");
+      expect(iElement!.classList.contains("fa-sharp")).toBe(true);
     });
 
     it("family='classic' 应该不生成 fa-classic 类名", async () => {
@@ -144,9 +144,9 @@ describe("EaIcon", () => {
 
       await icon.updateComplete;
 
-      const iElement = icon.shadowRoot.querySelector("i.ea-icon");
-      expect(iElement.classList.contains("fa-classic")).toBe(false);
-      expect(iElement.classList.contains("fa-solid")).toBe(true);
+      const iElement = icon.shadowRoot!.querySelector("i.ea-icon");
+      expect(iElement!.classList.contains("fa-classic")).toBe(false);
+      expect(iElement!.classList.contains("fa-solid")).toBe(true);
     });
   });
 
@@ -167,8 +167,8 @@ describe("EaIcon", () => {
       await icon.updateComplete;
 
       expect(icon.variant).toBe("regular");
-      const iElement = icon.shadowRoot.querySelector("i.ea-icon");
-      expect(iElement.classList.contains("fa-regular")).toBe(true);
+      const iElement = icon.shadowRoot!.querySelector("i.ea-icon");
+      expect(iElement!.classList.contains("fa-regular")).toBe(true);
     });
 
     it("variant='light' 应该生成 fa-light 类名", async () => {
@@ -179,8 +179,8 @@ describe("EaIcon", () => {
 
       await icon.updateComplete;
 
-      const iElement = icon.shadowRoot.querySelector("i.ea-icon");
-      expect(iElement.classList.contains("fa-light")).toBe(true);
+      const iElement = icon.shadowRoot!.querySelector("i.ea-icon");
+      expect(iElement!.classList.contains("fa-light")).toBe(true);
     });
 
     it("variant='thin' 应该生成 fa-thin 类名", async () => {
@@ -191,8 +191,8 @@ describe("EaIcon", () => {
 
       await icon.updateComplete;
 
-      const iElement = icon.shadowRoot.querySelector("i.ea-icon");
-      expect(iElement.classList.contains("fa-thin")).toBe(true);
+      const iElement = icon.shadowRoot!.querySelector("i.ea-icon");
+      expect(iElement!.classList.contains("fa-thin")).toBe(true);
     });
 
     it("variant='duotone' 应该生成 fa-duotone 类名", async () => {
@@ -203,8 +203,8 @@ describe("EaIcon", () => {
 
       await icon.updateComplete;
 
-      const iElement = icon.shadowRoot.querySelector("i.ea-icon");
-      expect(iElement.classList.contains("fa-duotone")).toBe(true);
+      const iElement = icon.shadowRoot!.querySelector("i.ea-icon");
+      expect(iElement!.classList.contains("fa-duotone")).toBe(true);
     });
   });
 
@@ -315,8 +315,8 @@ describe("EaIcon", () => {
       await icon.updateComplete;
 
       expect(icon.spin).toBe(true);
-      const iElement = icon.shadowRoot.querySelector("i.ea-icon");
-      expect(iElement.classList.contains("fa-spin")).toBe(true);
+      const iElement = icon.shadowRoot!.querySelector("i.ea-icon");
+      expect(iElement!.classList.contains("fa-spin")).toBe(true);
     });
 
     it("未设置 spin 时不应包含 fa-spin 类名", async () => {
@@ -326,8 +326,8 @@ describe("EaIcon", () => {
 
       await icon.updateComplete;
 
-      const iElement = icon.shadowRoot.querySelector("i.ea-icon");
-      expect(iElement.classList.contains("fa-spin")).toBe(false);
+      const iElement = icon.shadowRoot!.querySelector("i.ea-icon");
+      expect(iElement!.classList.contains("fa-spin")).toBe(false);
     });
   });
 
@@ -356,9 +356,9 @@ describe("EaIcon", () => {
 
       await icon.updateComplete;
 
-      const iElement = icon.shadowRoot.querySelector("i.ea-icon");
-      expect(iElement.classList.contains("fa-brands")).toBe(true);
-      expect(iElement.classList.contains("fa-github")).toBe(true);
+      const iElement = icon.shadowRoot!.querySelector("i.ea-icon");
+      expect(iElement!.classList.contains("fa-brands")).toBe(true);
+      expect(iElement!.classList.contains("fa-github")).toBe(true);
     });
 
     it("sharp family 和 variant 组合应该正确生成类名", async () => {
@@ -370,10 +370,10 @@ describe("EaIcon", () => {
 
       await icon.updateComplete;
 
-      const iElement = icon.shadowRoot.querySelector("i.ea-icon");
-      expect(iElement.classList.contains("fa-sharp")).toBe(true);
-      expect(iElement.classList.contains("fa-solid")).toBe(true);
-      expect(iElement.classList.contains("fa-star")).toBe(true);
+      const iElement = icon.shadowRoot!.querySelector("i.ea-icon");
+      expect(iElement!.classList.contains("fa-sharp")).toBe(true);
+      expect(iElement!.classList.contains("fa-solid")).toBe(true);
+      expect(iElement!.classList.contains("fa-star")).toBe(true);
     });
 
     it("spin 与其他属性组合应该正确", async () => {
@@ -385,10 +385,10 @@ describe("EaIcon", () => {
 
       await icon.updateComplete;
 
-      const iElement = icon.shadowRoot.querySelector("i.ea-icon");
-      expect(iElement.classList.contains("fa-regular")).toBe(true);
-      expect(iElement.classList.contains("fa-spinner")).toBe(true);
-      expect(iElement.classList.contains("fa-spin")).toBe(true);
+      const iElement = icon.shadowRoot!.querySelector("i.ea-icon");
+      expect(iElement!.classList.contains("fa-regular")).toBe(true);
+      expect(iElement!.classList.contains("fa-spinner")).toBe(true);
+      expect(iElement!.classList.contains("fa-spin")).toBe(true);
     });
   });
 
@@ -404,9 +404,9 @@ describe("EaIcon", () => {
       await icon.updateComplete;
 
       expect(icon.name).toBe("star");
-      const iElement = icon.shadowRoot.querySelector("i.ea-icon");
-      expect(iElement.classList.contains("fa-star")).toBe(true);
-      expect(iElement.classList.contains("fa-coffee")).toBe(false);
+      const iElement = icon.shadowRoot!.querySelector("i.ea-icon");
+      expect(iElement!.classList.contains("fa-star")).toBe(true);
+      expect(iElement!.classList.contains("fa-coffee")).toBe(false);
     });
 
     it("动态修改 family 应该更新类名", async () => {
@@ -421,8 +421,8 @@ describe("EaIcon", () => {
       await icon.updateComplete;
 
       expect(icon.family).toBe("brands");
-      const iElement = icon.shadowRoot.querySelector("i.ea-icon");
-      expect(iElement.classList.contains("fa-brands")).toBe(true);
+      const iElement = icon.shadowRoot!.querySelector("i.ea-icon");
+      expect(iElement!.classList.contains("fa-brands")).toBe(true);
     });
 
     it("动态修改 variant 应该更新类名", async () => {
@@ -437,9 +437,9 @@ describe("EaIcon", () => {
       await icon.updateComplete;
 
       expect(icon.variant).toBe("regular");
-      const iElement = icon.shadowRoot.querySelector("i.ea-icon");
-      expect(iElement.classList.contains("fa-regular")).toBe(true);
-      expect(iElement.classList.contains("fa-solid")).toBe(false);
+      const iElement = icon.shadowRoot!.querySelector("i.ea-icon");
+      expect(iElement!.classList.contains("fa-regular")).toBe(true);
+      expect(iElement!.classList.contains("fa-solid")).toBe(false);
     });
 
     it("动态添加 spin 属性应该生效", async () => {
@@ -455,8 +455,8 @@ describe("EaIcon", () => {
       await icon.updateComplete;
 
       expect(icon.spin).toBe(true);
-      const iElement = icon.shadowRoot.querySelector("i.ea-icon");
-      expect(iElement.classList.contains("fa-spin")).toBe(true);
+      const iElement = icon.shadowRoot!.querySelector("i.ea-icon");
+      expect(iElement!.classList.contains("fa-spin")).toBe(true);
     });
 
     it("动态修改 color 应该更新 CSS 变量", async () => {
@@ -495,9 +495,9 @@ describe("EaIcon", () => {
 
       await icon.updateComplete;
 
-      const iElement = icon.shadowRoot.querySelector("i.ea-icon");
+      const iElement = icon.shadowRoot!.querySelector("i.ea-icon");
       expect(iElement).toBeTruthy();
-      expect(iElement.className).toBe("ea-icon");
+      expect(iElement!.className).toBe("ea-icon");
     });
 
     it("空字符串属性应该正确处理", () => {
@@ -539,8 +539,8 @@ describe("EaIcon", () => {
         el.setAttribute("name", "star");
         container.appendChild(el);
         await el.updateComplete;
-        const iElement = el.shadowRoot.querySelector("i.ea-icon");
-        expect(iElement.getAttribute("aria-hidden")).toBe("true");
+        const iElement = el.shadowRoot!.querySelector("i.ea-icon");
+        expect(iElement!.getAttribute("aria-hidden")).toBe("true");
       });
 
       it("有 aria-label 时内部 i 元素不应该有 aria-hidden=true", async () => {
@@ -549,8 +549,8 @@ describe("EaIcon", () => {
         el.setAttribute("aria-label", "Star icon");
         container.appendChild(el);
         await el.updateComplete;
-        const iElement = el.shadowRoot.querySelector("i.ea-icon");
-        expect(iElement.getAttribute("aria-hidden")).toBe("false");
+        const iElement = el.shadowRoot!.querySelector("i.ea-icon");
+        expect(iElement!.getAttribute("aria-hidden")).toBe("false");
       });
     });
   });

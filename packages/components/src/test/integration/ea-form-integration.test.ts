@@ -27,7 +27,7 @@ if (!componentReady) {
 }
 
 describe("Native Form Integration", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -260,7 +260,10 @@ describe("Native Form Integration", () => {
       const eaInput = document.createElement("ea-input");
       container.appendChild(eaInput);
 
-      expect(eaInput.constructor.formAssociated).toBe(true);
+      expect(
+        (eaInput.constructor as Function & { formAssociated: boolean })
+          .formAssociated
+      ).toBe(true);
     });
 
     it("ea-input 在表单中应该能通过 getForm 获取关联表单", () => {
@@ -314,28 +317,40 @@ describe("Native Form Integration", () => {
       const eaSwitch = document.createElement("ea-switch");
       container.appendChild(eaSwitch);
 
-      expect(eaSwitch.constructor.formAssociated).toBe(true);
+      expect(
+        (eaSwitch.constructor as Function & { formAssociated: boolean })
+          .formAssociated
+      ).toBe(true);
     });
 
     it("ea-select 应该具有 formAssociated 静态属性", () => {
       const eaSelect = document.createElement("ea-select");
       container.appendChild(eaSelect);
 
-      expect(eaSelect.constructor.formAssociated).toBe(true);
+      expect(
+        (eaSelect.constructor as Function & { formAssociated: boolean })
+          .formAssociated
+      ).toBe(true);
     });
 
     it("ea-radio-group 应该具有 formAssociated 静态属性", () => {
       const eaRadioGroup = document.createElement("ea-radio-group");
       container.appendChild(eaRadioGroup);
 
-      expect(eaRadioGroup.constructor.formAssociated).toBe(true);
+      expect(
+        (eaRadioGroup.constructor as Function & { formAssociated: boolean })
+          .formAssociated
+      ).toBe(true);
     });
 
     it("ea-checkbox-group 应该具有 formAssociated 静态属性", () => {
       const eaCheckboxGroup = document.createElement("ea-checkbox-group");
       container.appendChild(eaCheckboxGroup);
 
-      expect(eaCheckboxGroup.constructor.formAssociated).toBe(true);
+      expect(
+        (eaCheckboxGroup.constructor as Function & { formAssociated: boolean })
+          .formAssociated
+      ).toBe(true);
     });
   });
 

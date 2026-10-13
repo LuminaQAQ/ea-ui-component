@@ -5,7 +5,7 @@ import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y";
 import "./index";
 
 describe("EaMenu Component", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -30,23 +30,26 @@ describe("EaMenu Component", () => {
     it("应该包含 container CSS Part", () => {
       const menu = document.createElement("ea-menu");
       container.appendChild(menu);
-      expect(menu.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(
+        menu.shadowRoot!.querySelector<HTMLElement>('[part="container"]')
+      ).toBeTruthy();
     });
 
     it("应该渲染 slot 内容", () => {
       const menu = document.createElement("ea-menu");
       menu.innerHTML = "<ea-menu-item>Item</ea-menu-item>";
       container.appendChild(menu);
-      expect(menu.shadowRoot.querySelector("slot")).toBeTruthy();
+      expect(menu.shadowRoot!.querySelector("slot")).toBeTruthy();
     });
 
     it("container 应该是 ul 元素且 role 为 menubar", async () => {
       const menu = document.createElement("ea-menu");
       container.appendChild(menu);
       await menu.updateComplete;
-      const el = menu.shadowRoot.querySelector('[part="container"]');
-      expect(el.tagName).toBe("UL");
-      expect(el.getAttribute("role")).toBe("menubar");
+      const el =
+        menu.shadowRoot!.querySelector<HTMLElement>('[part="container"]');
+      expect(el!.tagName).toBe("UL");
+      expect(el!.getAttribute("role")).toBe("menubar");
     });
 
     it("updateContainerClasslist 应该返回正确的类名", async () => {
@@ -87,8 +90,9 @@ describe("EaMenu Component", () => {
       menu.setAttribute("mode", "horizontal");
       container.appendChild(menu);
       await menu.updateComplete;
-      const el = menu.shadowRoot.querySelector('[part="container"]');
-      expect(el.className).toContain("ea-menu--horizontal");
+      const el =
+        menu.shadowRoot!.querySelector<HTMLElement>('[part="container"]');
+      expect(el!.className).toContain("ea-menu--horizontal");
     });
 
     it("vertical 模式应该应用 BEM modifier 类", async () => {
@@ -96,8 +100,9 @@ describe("EaMenu Component", () => {
       menu.setAttribute("mode", "vertical");
       container.appendChild(menu);
       await menu.updateComplete;
-      const el = menu.shadowRoot.querySelector('[part="container"]');
-      expect(el.className).toContain("ea-menu--vertical");
+      const el =
+        menu.shadowRoot!.querySelector<HTMLElement>('[part="container"]');
+      expect(el!.className).toContain("ea-menu--vertical");
     });
 
     it("动态修改 mode 应该更新 BEM 类", async () => {
@@ -109,9 +114,10 @@ describe("EaMenu Component", () => {
       menu.setAttribute("mode", "horizontal");
       await menu.updateComplete;
 
-      const el = menu.shadowRoot.querySelector('[part="container"]');
-      expect(el.className).toContain("ea-menu--horizontal");
-      expect(el.className).not.toContain("ea-menu--vertical");
+      const el =
+        menu.shadowRoot!.querySelector<HTMLElement>('[part="container"]');
+      expect(el!.className).toContain("ea-menu--horizontal");
+      expect(el!.className).not.toContain("ea-menu--vertical");
     });
 
     it("修改 mode 应该同步到直接子 ea-sub-menu", async () => {
@@ -162,8 +168,9 @@ describe("EaMenu Component", () => {
       container.appendChild(menu);
       await menu.updateComplete;
 
-      const el = menu.shadowRoot.querySelector('[part="container"]');
-      expect(el.style.getPropertyValue("--ea-menu-bg-color")).toBe("#545c64");
+      const el =
+        menu.shadowRoot!.querySelector<HTMLElement>('[part="container"]');
+      expect(el!.style.getPropertyValue("--ea-menu-bg-color")).toBe("#545c64");
     });
 
     it("应该支持 text-color 属性并设置 CSS 变量", async () => {
@@ -172,8 +179,9 @@ describe("EaMenu Component", () => {
       container.appendChild(menu);
       await menu.updateComplete;
 
-      const el = menu.shadowRoot.querySelector('[part="container"]');
-      expect(el.style.getPropertyValue("--ea-menu-text-color")).toBe("#fff");
+      const el =
+        menu.shadowRoot!.querySelector<HTMLElement>('[part="container"]');
+      expect(el!.style.getPropertyValue("--ea-menu-text-color")).toBe("#fff");
     });
 
     it("应该支持 active-text-color 属性并设置 CSS 变量", async () => {
@@ -182,8 +190,9 @@ describe("EaMenu Component", () => {
       container.appendChild(menu);
       await menu.updateComplete;
 
-      const el = menu.shadowRoot.querySelector('[part="container"]');
-      expect(el.style.getPropertyValue("--ea-menu-active-text-color")).toBe(
+      const el =
+        menu.shadowRoot!.querySelector<HTMLElement>('[part="container"]');
+      expect(el!.style.getPropertyValue("--ea-menu-active-text-color")).toBe(
         "#ffd04b"
       );
     });
@@ -206,8 +215,9 @@ describe("EaMenu Component", () => {
       menu.setAttribute("background-color", "#000000");
       await menu.updateComplete;
 
-      const el = menu.shadowRoot.querySelector('[part="container"]');
-      expect(el.style.getPropertyValue("--ea-menu-bg-color")).toBe("#000000");
+      const el =
+        menu.shadowRoot!.querySelector<HTMLElement>('[part="container"]');
+      expect(el!.style.getPropertyValue("--ea-menu-bg-color")).toBe("#000000");
     });
   });
 
@@ -424,11 +434,16 @@ describe("EaMenu Component", () => {
       await menu.updateComplete;
 
       const selectPromise = new Promise(resolve => {
-        menu.addEventListener("select", e => resolve(e.detail));
+        menu.addEventListener("select", e =>
+          resolve((e as CustomEvent).detail)
+        );
       });
 
       menuItem.click();
-      const detail = await selectPromise;
+      const detail = (await selectPromise) as {
+        index: string;
+        target: Element;
+      };
       expect(detail.index).toBe("1");
       expect(detail.target).toBe(menuItem);
     });
@@ -481,11 +496,16 @@ describe("EaMenu Component", () => {
       await menu.updateComplete;
 
       const selectPromise = new Promise(resolve => {
-        menu.addEventListener("select", e => resolve(e.detail));
+        menu.addEventListener("select", e =>
+          resolve((e as CustomEvent).detail)
+        );
       });
 
       menuItem.click();
-      const detail = await selectPromise;
+      const detail = (await selectPromise) as {
+        index: string;
+        target: Element;
+      };
       expect(detail.index).toBe("2-1");
       expect(detail.target).toBe(menuItem);
     });
@@ -506,11 +526,16 @@ describe("EaMenu Component", () => {
       await menu.updateComplete;
 
       const selectPromise = new Promise(resolve => {
-        menu.addEventListener("select", e => resolve(e.detail));
+        menu.addEventListener("select", e =>
+          resolve((e as CustomEvent).detail)
+        );
       });
 
       menuItem.click();
-      const detail = await selectPromise;
+      const detail = (await selectPromise) as {
+        index: string;
+        target: Element;
+      };
       expect(detail.index).toBe("1-1-1");
       expect(detail.target).toBe(menuItem);
     });
@@ -603,8 +628,9 @@ describe("EaMenu Component", () => {
       await menu.updateComplete;
       expect(item1.hasAttribute("active")).toBe(true);
 
-      const titleEl = subMenu.shadowRoot.querySelector('[part="title"]');
-      titleEl.click();
+      const titleEl =
+        subMenu.shadowRoot!.querySelector<HTMLElement>('[part="title"]');
+      titleEl!.click();
       await subItem.updateComplete;
 
       expect(subMenu.open).toBe(true);
@@ -620,7 +646,9 @@ describe("EaMenu Component", () => {
       const menu = document.createElement("ea-menu");
       menu.setAttribute("mode", "horizontal");
       container.appendChild(menu);
-      expect(menu.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(
+        menu.shadowRoot!.querySelector<HTMLElement>('[part="container"]')
+      ).toBeTruthy();
     });
 
     it("$beforeUnmount 应该清理 abort controller", async () => {
@@ -669,7 +697,7 @@ describe("EaMenu Component", () => {
       const menuItem = document.createElement("ea-menu-item");
       container.appendChild(menuItem);
       expect(
-        menuItem.shadowRoot.querySelector('[part="container"]')
+        menuItem.shadowRoot!.querySelector<HTMLElement>('[part="container"]')
       ).toBeTruthy();
     });
 
@@ -677,8 +705,9 @@ describe("EaMenu Component", () => {
       const menuItem = document.createElement("ea-menu-item");
       container.appendChild(menuItem);
       await menuItem.updateComplete;
-      const el = menuItem.shadowRoot.querySelector('[part="container"]');
-      expect(el.tagName).toBe("LI");
+      const el =
+        menuItem.shadowRoot!.querySelector<HTMLElement>('[part="container"]');
+      expect(el!.tagName).toBe("LI");
       expect(menuItem.getAttribute("role")).toBe("menuitem");
     });
 
@@ -686,7 +715,7 @@ describe("EaMenu Component", () => {
       const menuItem = document.createElement("ea-menu-item");
       menuItem.textContent = "Menu Item";
       container.appendChild(menuItem);
-      expect(menuItem.shadowRoot.querySelector("slot")).toBeTruthy();
+      expect(menuItem.shadowRoot!.querySelector("slot")).toBeTruthy();
     });
 
     it("updateContainerClasslist 应该返回正确的类名", async () => {
@@ -753,8 +782,9 @@ describe("EaMenu Component", () => {
       menuItem.setAttribute("disabled", "");
       container.appendChild(menuItem);
       await menuItem.updateComplete;
-      const el = menuItem.shadowRoot.querySelector('[part="container"]');
-      expect(el.className).toContain("is-disabled");
+      const el =
+        menuItem.shadowRoot!.querySelector<HTMLElement>('[part="container"]');
+      expect(el!.className).toContain("is-disabled");
     });
 
     it("动态设置 disabled 应该更新 BEM 类", async () => {
@@ -764,8 +794,9 @@ describe("EaMenu Component", () => {
 
       menuItem.setAttribute("disabled", "");
       await menuItem.updateComplete;
-      const el = menuItem.shadowRoot.querySelector('[part="container"]');
-      expect(el.className).toContain("is-disabled");
+      const el =
+        menuItem.shadowRoot!.querySelector<HTMLElement>('[part="container"]');
+      expect(el!.className).toContain("is-disabled");
     });
 
     it("移除 disabled 应该移除 BEM 类", async () => {
@@ -776,8 +807,9 @@ describe("EaMenu Component", () => {
 
       menuItem.removeAttribute("disabled");
       await menuItem.updateComplete;
-      const el = menuItem.shadowRoot.querySelector('[part="container"]');
-      expect(el.className).not.toContain("is-disabled");
+      const el =
+        menuItem.shadowRoot!.querySelector<HTMLElement>('[part="container"]');
+      expect(el!.className).not.toContain("is-disabled");
     });
   });
 
@@ -805,8 +837,9 @@ describe("EaMenu Component", () => {
       menuItem.setAttribute("active", "");
       container.appendChild(menuItem);
       await menuItem.updateComplete;
-      const el = menuItem.shadowRoot.querySelector('[part="container"]');
-      expect(el.className).toContain("is-active");
+      const el =
+        menuItem.shadowRoot!.querySelector<HTMLElement>('[part="container"]');
+      expect(el!.className).toContain("is-active");
     });
 
     it("动态设置 active 应该更新 BEM 类", async () => {
@@ -816,8 +849,9 @@ describe("EaMenu Component", () => {
 
       menuItem.setAttribute("active", "");
       await menuItem.updateComplete;
-      const el = menuItem.shadowRoot.querySelector('[part="container"]');
-      expect(el.className).toContain("is-active");
+      const el =
+        menuItem.shadowRoot!.querySelector<HTMLElement>('[part="container"]');
+      expect(el!.className).toContain("is-active");
     });
 
     it("移除 active 应该移除 BEM 类", async () => {
@@ -828,8 +862,9 @@ describe("EaMenu Component", () => {
 
       menuItem.removeAttribute("active");
       await menuItem.updateComplete;
-      const el = menuItem.shadowRoot.querySelector('[part="container"]');
-      expect(el.className).not.toContain("is-active");
+      const el =
+        menuItem.shadowRoot!.querySelector<HTMLElement>('[part="container"]');
+      expect(el!.className).not.toContain("is-active");
     });
 
     it("同时设置 disabled 和 active 应该都有对应 BEM 类", async () => {
@@ -838,9 +873,10 @@ describe("EaMenu Component", () => {
       menuItem.setAttribute("active", "");
       container.appendChild(menuItem);
       await menuItem.updateComplete;
-      const el = menuItem.shadowRoot.querySelector('[part="container"]');
-      expect(el.className).toContain("is-disabled");
-      expect(el.className).toContain("is-active");
+      const el =
+        menuItem.shadowRoot!.querySelector<HTMLElement>('[part="container"]');
+      expect(el!.className).toContain("is-disabled");
+      expect(el!.className).toContain("is-active");
     });
   });
 
@@ -859,26 +895,30 @@ describe("EaMenu Component", () => {
       const subMenu = document.createElement("ea-sub-menu");
       container.appendChild(subMenu);
       expect(
-        subMenu.shadowRoot.querySelector('[part="container"]')
+        subMenu.shadowRoot!.querySelector<HTMLElement>('[part="container"]')
       ).toBeTruthy();
     });
 
     it("应该包含 title CSS Part", () => {
       const subMenu = document.createElement("ea-sub-menu");
       container.appendChild(subMenu);
-      expect(subMenu.shadowRoot.querySelector('[part="title"]')).toBeTruthy();
+      expect(
+        subMenu.shadowRoot!.querySelector<HTMLElement>('[part="title"]')
+      ).toBeTruthy();
     });
 
     it("应该包含 arrow CSS Part", () => {
       const subMenu = document.createElement("ea-sub-menu");
       container.appendChild(subMenu);
-      expect(subMenu.shadowRoot.querySelector('[part="arrow"]')).toBeTruthy();
+      expect(subMenu.shadowRoot!.querySelector('[part="arrow"]')).toBeTruthy();
     });
 
     it("应该包含 content CSS Part", () => {
       const subMenu = document.createElement("ea-sub-menu");
       container.appendChild(subMenu);
-      expect(subMenu.shadowRoot.querySelector('[part="content"]')).toBeTruthy();
+      expect(
+        subMenu.shadowRoot!.querySelector<HTMLElement>('[part="content"]')
+      ).toBeTruthy();
     });
 
     it("应该渲染 title 插槽", () => {
@@ -886,7 +926,7 @@ describe("EaMenu Component", () => {
       subMenu.innerHTML = '<span slot="title">Sub Menu</span>';
       container.appendChild(subMenu);
       expect(
-        subMenu.shadowRoot.querySelector('slot[name="title"]')
+        subMenu.shadowRoot!.querySelector('slot[name="title"]')
       ).toBeTruthy();
     });
 
@@ -895,7 +935,7 @@ describe("EaMenu Component", () => {
       subMenu.innerHTML = "<ea-menu-item>Item</ea-menu-item>";
       container.appendChild(subMenu);
       await subMenu.updateComplete;
-      const defaultSlot = subMenu.shadowRoot.querySelector(
+      const defaultSlot = subMenu.shadowRoot!.querySelector(
         "ul[part='content'] slot:not([name])"
       );
       expect(defaultSlot).toBeTruthy();
@@ -956,8 +996,9 @@ describe("EaMenu Component", () => {
       subMenu.setAttribute("mode", "horizontal");
       container.appendChild(subMenu);
       await subMenu.updateComplete;
-      const el = subMenu.shadowRoot.querySelector('[part="container"]');
-      expect(el.className).toContain("ea-sub-menu--horizontal");
+      const el =
+        subMenu.shadowRoot!.querySelector<HTMLElement>('[part="container"]');
+      expect(el!.className).toContain("ea-sub-menu--horizontal");
     });
 
     it("vertical 模式应该应用 BEM modifier 类", async () => {
@@ -965,8 +1006,9 @@ describe("EaMenu Component", () => {
       subMenu.setAttribute("mode", "vertical");
       container.appendChild(subMenu);
       await subMenu.updateComplete;
-      const el = subMenu.shadowRoot.querySelector('[part="container"]');
-      expect(el.className).toContain("ea-sub-menu--vertical");
+      const el =
+        subMenu.shadowRoot!.querySelector<HTMLElement>('[part="container"]');
+      expect(el!.className).toContain("ea-sub-menu--vertical");
     });
 
     it("动态修改 mode 应该更新 BEM 类", async () => {
@@ -977,9 +1019,10 @@ describe("EaMenu Component", () => {
 
       subMenu.setAttribute("mode", "horizontal");
       await subMenu.updateComplete;
-      const el = subMenu.shadowRoot.querySelector('[part="container"]');
-      expect(el.className).toContain("ea-sub-menu--horizontal");
-      expect(el.className).not.toContain("ea-sub-menu--vertical");
+      const el =
+        subMenu.shadowRoot!.querySelector<HTMLElement>('[part="container"]');
+      expect(el!.className).toContain("ea-sub-menu--horizontal");
+      expect(el!.className).not.toContain("ea-sub-menu--vertical");
     });
   });
 
@@ -1005,8 +1048,9 @@ describe("EaMenu Component", () => {
       subMenu.setAttribute("disabled", "");
       container.appendChild(subMenu);
       await subMenu.updateComplete;
-      const el = subMenu.shadowRoot.querySelector('[part="container"]');
-      expect(el.className).toContain("is-disabled");
+      const el =
+        subMenu.shadowRoot!.querySelector<HTMLElement>('[part="container"]');
+      expect(el!.className).toContain("is-disabled");
     });
 
     it("移除 disabled 应该移除 BEM 类", async () => {
@@ -1017,8 +1061,9 @@ describe("EaMenu Component", () => {
 
       subMenu.removeAttribute("disabled");
       await subMenu.updateComplete;
-      const el = subMenu.shadowRoot.querySelector('[part="container"]');
-      expect(el.className).not.toContain("is-disabled");
+      const el =
+        subMenu.shadowRoot!.querySelector<HTMLElement>('[part="container"]');
+      expect(el!.className).not.toContain("is-disabled");
     });
 
     it("disabled 子菜单点击标题不应展开/收起", async () => {
@@ -1027,8 +1072,9 @@ describe("EaMenu Component", () => {
       container.appendChild(subMenu);
       await subMenu.updateComplete;
 
-      const titleEl = subMenu.shadowRoot.querySelector('[part="title"]');
-      titleEl.click();
+      const titleEl =
+        subMenu.shadowRoot!.querySelector<HTMLElement>('[part="title"]');
+      titleEl!.click();
       await subMenu.updateComplete;
 
       expect(subMenu.open).toBe(false);
@@ -1080,8 +1126,9 @@ describe("EaMenu Component", () => {
       subMenu.setAttribute("active", "");
       container.appendChild(subMenu);
       await subMenu.updateComplete;
-      const el = subMenu.shadowRoot.querySelector('[part="container"]');
-      expect(el.className).toContain("is-active");
+      const el =
+        subMenu.shadowRoot!.querySelector<HTMLElement>('[part="container"]');
+      expect(el!.className).toContain("is-active");
     });
 
     it("移除 active 应该移除 BEM 类", async () => {
@@ -1092,8 +1139,9 @@ describe("EaMenu Component", () => {
 
       subMenu.removeAttribute("active");
       await subMenu.updateComplete;
-      const el = subMenu.shadowRoot.querySelector('[part="container"]');
-      expect(el.className).not.toContain("is-active");
+      const el =
+        subMenu.shadowRoot!.querySelector<HTMLElement>('[part="container"]');
+      expect(el!.className).not.toContain("is-active");
     });
   });
 
@@ -1123,8 +1171,9 @@ describe("EaMenu Component", () => {
 
       subMenu.open = true;
       await subMenu.updateComplete;
-      const el = subMenu.shadowRoot.querySelector('[part="container"]');
-      expect(el.className).toContain("is-open");
+      const el =
+        subMenu.shadowRoot!.querySelector<HTMLElement>('[part="container"]');
+      expect(el!.className).toContain("is-open");
     });
 
     it("vertical 模式点击标题应该切换 open 状态", async () => {
@@ -1133,12 +1182,13 @@ describe("EaMenu Component", () => {
       container.appendChild(subMenu);
       await subMenu.updateComplete;
 
-      const titleEl = subMenu.shadowRoot.querySelector('[part="title"]');
-      titleEl.click();
+      const titleEl =
+        subMenu.shadowRoot!.querySelector<HTMLElement>('[part="title"]');
+      titleEl!.click();
       await subMenu.updateComplete;
       expect(subMenu.open).toBe(true);
 
-      titleEl.click();
+      titleEl!.click();
       await subMenu.updateComplete;
       expect(subMenu.open).toBe(false);
     });
@@ -1175,8 +1225,9 @@ describe("EaMenu Component", () => {
       container.appendChild(subMenu);
       await subMenu.updateComplete;
 
-      const titleEl = subMenu.shadowRoot.querySelector('[part="title"]');
-      titleEl.click();
+      const titleEl =
+        subMenu.shadowRoot!.querySelector<HTMLElement>('[part="title"]');
+      titleEl!.click();
       await subMenu.updateComplete;
       expect(subMenu.open).toBe(true);
 
@@ -1210,8 +1261,8 @@ describe("EaMenu Component", () => {
       subMenu.setAttribute("label", "Test Label");
       container.appendChild(subMenu);
       await subMenu.updateComplete;
-      const titleSlot = subMenu.shadowRoot.querySelector('slot[name="title"]');
-      expect(titleSlot.textContent).toBe("Test Label");
+      const titleSlot = subMenu.shadowRoot!.querySelector('slot[name="title"]');
+      expect(titleSlot!.textContent).toBe("Test Label");
     });
 
     it("动态修改 label 应该更新 title slot", async () => {
@@ -1222,8 +1273,8 @@ describe("EaMenu Component", () => {
 
       subMenu.setAttribute("label", "New Label");
       await subMenu.updateComplete;
-      const titleSlot = subMenu.shadowRoot.querySelector('slot[name="title"]');
-      expect(titleSlot.textContent).toBe("New Label");
+      const titleSlot = subMenu.shadowRoot!.querySelector('slot[name="title"]');
+      expect(titleSlot!.textContent).toBe("New Label");
     });
   });
 
@@ -1236,8 +1287,8 @@ describe("EaMenu Component", () => {
       subMenu.setAttribute("mode", "vertical");
       container.appendChild(subMenu);
       await subMenu.updateComplete;
-      const arrow = subMenu.shadowRoot.querySelector('[part="arrow"]');
-      expect(arrow.getAttribute("name")).toBe("angle-down");
+      const arrow = subMenu.shadowRoot!.querySelector('[part="arrow"]');
+      expect(arrow!.getAttribute("name")).toBe("angle-down");
     });
 
     it("horizontal 模式箭头默认应该是 angle-down", async () => {
@@ -1245,8 +1296,8 @@ describe("EaMenu Component", () => {
       subMenu.setAttribute("mode", "horizontal");
       container.appendChild(subMenu);
       await subMenu.updateComplete;
-      const arrow = subMenu.shadowRoot.querySelector('[part="arrow"]');
-      expect(arrow.getAttribute("name")).toBe("angle-down");
+      const arrow = subMenu.shadowRoot!.querySelector('[part="arrow"]');
+      expect(arrow!.getAttribute("name")).toBe("angle-down");
     });
 
     it("嵌套子菜单在 vertical 模式下箭头应该是 angle-down", async () => {
@@ -1261,8 +1312,8 @@ describe("EaMenu Component", () => {
       container.appendChild(menu);
       await menu.updateComplete;
 
-      const innerArrow = innerSub.shadowRoot.querySelector('[part="arrow"]');
-      expect(innerArrow.getAttribute("name")).toBe("angle-down");
+      const innerArrow = innerSub.shadowRoot!.querySelector('[part="arrow"]');
+      expect(innerArrow!.getAttribute("name")).toBe("angle-down");
     });
 
     it("嵌套子菜单在 horizontal 模式下箭头应该是 angle-down", async () => {
@@ -1277,8 +1328,8 @@ describe("EaMenu Component", () => {
       container.appendChild(menu);
       await menu.updateComplete;
 
-      const innerArrow = innerSub.shadowRoot.querySelector('[part="arrow"]');
-      expect(innerArrow.getAttribute("name")).toBe("angle-down");
+      const innerArrow = innerSub.shadowRoot!.querySelector('[part="arrow"]');
+      expect(innerArrow!.getAttribute("name")).toBe("angle-down");
     });
   });
 
@@ -1297,11 +1348,17 @@ describe("EaMenu Component", () => {
       await subMenu.updateComplete;
 
       const eventPromise = new Promise(resolve => {
-        subMenu.addEventListener("ea-sub-menu-click", e => resolve(e.detail));
+        subMenu.addEventListener("ea-sub-menu-click", e =>
+          resolve((e as CustomEvent).detail)
+        );
       });
 
       menuItem.click();
-      const detail = await eventPromise;
+      const detail = (await eventPromise) as {
+        index: string;
+        itemIndex: string;
+        target: Element;
+      };
       expect(detail.index).toBe("2");
       expect(detail.itemIndex).toBe("2-1");
       expect(detail.target).toBe(menuItem);
@@ -1358,11 +1415,17 @@ describe("EaMenu Component", () => {
       await menu.updateComplete;
 
       const eventPromise = new Promise(resolve => {
-        menu.addEventListener("ea-sub-menu-click", e => resolve(e.detail));
+        menu.addEventListener("ea-sub-menu-click", e =>
+          resolve((e as CustomEvent).detail)
+        );
       });
 
       menuItem.click();
-      const detail = await eventPromise;
+      const detail = (await eventPromise) as {
+        index: string;
+        itemIndex: string;
+        target: Element;
+      };
       expect(detail.index).toBe("2");
       expect(detail.itemIndex).toBe("2-1");
     });
@@ -1377,7 +1440,7 @@ describe("EaMenu Component", () => {
       subMenu.setAttribute("mode", "horizontal");
       container.appendChild(subMenu);
       expect(
-        subMenu.shadowRoot.querySelector('[part="container"]')
+        subMenu.shadowRoot!.querySelector<HTMLElement>('[part="container"]')
       ).toBeTruthy();
     });
 
@@ -1390,8 +1453,9 @@ describe("EaMenu Component", () => {
       subMenu.remove();
       await subMenu.updateComplete;
 
-      const titleEl = subMenu.shadowRoot.querySelector('[part="title"]');
-      titleEl.click();
+      const titleEl =
+        subMenu.shadowRoot!.querySelector<HTMLElement>('[part="title"]');
+      titleEl!.click();
       await subMenu.updateComplete;
       expect(subMenu.open).toBe(false);
     });
@@ -1412,21 +1476,23 @@ describe("EaMenu Component", () => {
       const menuGroup = document.createElement("ea-menu-item-group");
       container.appendChild(menuGroup);
       expect(
-        menuGroup.shadowRoot.querySelector('[part="container"]')
+        menuGroup.shadowRoot!.querySelector<HTMLElement>('[part="container"]')
       ).toBeTruthy();
     });
 
     it("应该包含 title CSS Part", () => {
       const menuGroup = document.createElement("ea-menu-item-group");
       container.appendChild(menuGroup);
-      expect(menuGroup.shadowRoot.querySelector('[part="title"]')).toBeTruthy();
+      expect(
+        menuGroup.shadowRoot!.querySelector<HTMLElement>('[part="title"]')
+      ).toBeTruthy();
     });
 
     it("应该包含 content CSS Part", () => {
       const menuGroup = document.createElement("ea-menu-item-group");
       container.appendChild(menuGroup);
       expect(
-        menuGroup.shadowRoot.querySelector('[part="content"]')
+        menuGroup.shadowRoot!.querySelector<HTMLElement>('[part="content"]')
       ).toBeTruthy();
     });
 
@@ -1435,7 +1501,7 @@ describe("EaMenu Component", () => {
       menuGroup.innerHTML = "<ea-menu-item>Item</ea-menu-item>";
       container.appendChild(menuGroup);
       await menuGroup.updateComplete;
-      const defaultSlot = menuGroup.shadowRoot.querySelector(
+      const defaultSlot = menuGroup.shadowRoot!.querySelector(
         '[part="content"] slot'
       );
       expect(defaultSlot).toBeTruthy();
@@ -1460,8 +1526,8 @@ describe("EaMenu Component", () => {
       container.appendChild(menuGroup);
       await menuGroup.updateComplete;
       const titleSlot =
-        menuGroup.shadowRoot.querySelector('slot[name="title"]');
-      expect(titleSlot.textContent).toBe("Group Title");
+        menuGroup.shadowRoot!.querySelector('slot[name="title"]');
+      expect(titleSlot!.textContent).toBe("Group Title");
     });
 
     it("动态修改 group-title 应该更新 title slot", async () => {
@@ -1473,8 +1539,8 @@ describe("EaMenu Component", () => {
       menuGroup.setAttribute("group-title", "New Title");
       await menuGroup.updateComplete;
       const titleSlot =
-        menuGroup.shadowRoot.querySelector('slot[name="title"]');
-      expect(titleSlot.textContent).toBe("New Title");
+        menuGroup.shadowRoot!.querySelector('slot[name="title"]');
+      expect(titleSlot!.textContent).toBe("New Title");
     });
 
     it("默认 group-title 应该为空", () => {
@@ -1691,8 +1757,9 @@ describe("EaMenu Component", () => {
 
       subMenu.setAttribute("disabled", "");
       await subMenu.updateComplete;
-      const el = subMenu.shadowRoot.querySelector('[part="container"]');
-      expect(el.className).toContain("is-disabled");
+      const el =
+        subMenu.shadowRoot!.querySelector<HTMLElement>('[part="container"]');
+      expect(el!.className).toContain("is-disabled");
     });
 
     it("动态修改 sub-menu active 应该更新 BEM 类", async () => {
@@ -1702,8 +1769,9 @@ describe("EaMenu Component", () => {
 
       subMenu.setAttribute("active", "");
       await subMenu.updateComplete;
-      const el = subMenu.shadowRoot.querySelector('[part="container"]');
-      expect(el.className).toContain("is-active");
+      const el =
+        subMenu.shadowRoot!.querySelector<HTMLElement>('[part="container"]');
+      expect(el!.className).toContain("is-active");
     });
 
     it("组件断开连接后应该正常移除", () => {
@@ -1745,8 +1813,9 @@ describe("EaMenu Component", () => {
       container.appendChild(subMenu);
       await subMenu.updateComplete;
 
-      const titleEl = subMenu.shadowRoot.querySelector('[part="title"]');
-      expect(() => titleEl.click()).not.toThrow();
+      const titleEl =
+        subMenu.shadowRoot!.querySelector<HTMLElement>('[part="title"]');
+      expect(() => titleEl!.click()).not.toThrow();
     });
   });
 
@@ -1759,7 +1828,7 @@ describe("EaMenu Component", () => {
         await menu.updateComplete;
         await menu.updateComplete;
         const item = menu.querySelector("ea-menu-item");
-        expect(item.getAttribute("role")).toBe("menuitem");
+        expect(item!.getAttribute("role")).toBe("menuitem");
       });
 
       it("ea-menu-item disabled 时宿主元素应该有 aria-disabled=true", async () => {
@@ -1769,7 +1838,7 @@ describe("EaMenu Component", () => {
         await menu.updateComplete;
         await menu.updateComplete;
         const item = menu.querySelector("ea-menu-item");
-        expect(item.getAttribute("aria-disabled")).toBe("true");
+        expect(item!.getAttribute("aria-disabled")).toBe("true");
       });
 
       it("ea-sub-menu title 应该有 role=menuitem", async () => {
@@ -1779,8 +1848,8 @@ describe("EaMenu Component", () => {
         await menu.updateComplete;
         await menu.updateComplete;
         const subMenu = menu.querySelector("ea-sub-menu");
-        const title = subMenu.shadowRoot.querySelector(".ea-sub-menu__title");
-        expect(title.getAttribute("role")).toBe("menuitem");
+        const title = subMenu!.shadowRoot!.querySelector(".ea-sub-menu__title");
+        expect(title!.getAttribute("role")).toBe("menuitem");
       });
 
       it("ea-sub-menu content 应该有 role=menu", async () => {
@@ -1790,10 +1859,10 @@ describe("EaMenu Component", () => {
         await menu.updateComplete;
         await menu.updateComplete;
         const subMenu = menu.querySelector("ea-sub-menu");
-        const content = subMenu.shadowRoot.querySelector(
+        const content = subMenu!.shadowRoot!.querySelector(
           ".ea-sub-menu__content"
         );
-        expect(content.getAttribute("role")).toBe("menu");
+        expect(content!.getAttribute("role")).toBe("menu");
       });
 
       it("ea-sub-menu title 应该有 aria-haspopup=menu", async () => {
@@ -1803,8 +1872,8 @@ describe("EaMenu Component", () => {
         await menu.updateComplete;
         await menu.updateComplete;
         const subMenu = menu.querySelector("ea-sub-menu");
-        const title = subMenu.shadowRoot.querySelector(".ea-sub-menu__title");
-        expect(title.getAttribute("aria-haspopup")).toBe("menu");
+        const title = subMenu!.shadowRoot!.querySelector(".ea-sub-menu__title");
+        expect(title!.getAttribute("aria-haspopup")).toBe("menu");
       });
 
       it("ea-sub-menu 关闭时 title 的 aria-expanded 应该为 false", async () => {
@@ -1814,8 +1883,8 @@ describe("EaMenu Component", () => {
         await menu.updateComplete;
         await menu.updateComplete;
         const subMenu = menu.querySelector("ea-sub-menu");
-        const title = subMenu.shadowRoot.querySelector(".ea-sub-menu__title");
-        expect(title.getAttribute("aria-expanded")).toBe("false");
+        const title = subMenu!.shadowRoot!.querySelector(".ea-sub-menu__title");
+        expect(title!.getAttribute("aria-expanded")).toBe("false");
       });
 
       it("ea-sub-menu disabled 时宿主元素应该有 aria-disabled=true", async () => {
@@ -1825,7 +1894,7 @@ describe("EaMenu Component", () => {
         await menu.updateComplete;
         await menu.updateComplete;
         const subMenu = menu.querySelector("ea-sub-menu");
-        expect(subMenu.getAttribute("aria-disabled")).toBe("true");
+        expect(subMenu!.getAttribute("aria-disabled")).toBe("true");
       });
     });
 
@@ -1840,11 +1909,14 @@ describe("EaMenu Component", () => {
 });
 
 describe("EaSubMenu Keyboard And Focus", () => {
-  let container;
+  let container: HTMLDivElement;
 
   const ITEMS = `<ea-menu-item index="1">A</ea-menu-item><ea-menu-item index="2">B</ea-menu-item><ea-menu-item index="3">C</ea-menu-item>`;
 
-  function createSubMenu(attrs = {}, innerHTML = ITEMS) {
+  function createSubMenu(
+    attrs: Record<string, string> = {},
+    innerHTML = ITEMS
+  ) {
     const subMenu = document.createElement("ea-sub-menu");
     for (const [key, value] of Object.entries(attrs)) {
       subMenu.setAttribute(key, value);
@@ -1854,8 +1926,8 @@ describe("EaSubMenu Keyboard And Focus", () => {
     return subMenu;
   }
 
-  const getTitle = subMenu =>
-    subMenu.shadowRoot.querySelector('[part="title"]');
+  const getTitle = (subMenu: HTMLElementTagNameMap["ea-sub-menu"]) =>
+    subMenu.shadowRoot!.querySelector<HTMLElement>('[part="title"]');
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -2106,24 +2178,26 @@ describe("EaSubMenu Keyboard And Focus", () => {
       const subMenu = createSubMenu();
       await subMenu.updateComplete;
 
-      const content = subMenu.shadowRoot.querySelector('[part="content"]');
-      getTitle(subMenu).click();
+      const content =
+        subMenu.shadowRoot!.querySelector<HTMLElement>('[part="content"]');
+      getTitle(subMenu)!.click();
       expect(subMenu.open).toBe(true);
 
-      content.dispatchEvent(new Event("transitionend"));
-      expect(content.style.height).toBe("100%");
+      content!.dispatchEvent(new Event("transitionend"));
+      expect(content!.style.height).toBe("100%");
     });
 
     it("键盘展开后应该在过渡结束时固定高度", async () => {
       const subMenu = createSubMenu();
       await subMenu.updateComplete;
 
-      const content = subMenu.shadowRoot.querySelector('[part="content"]');
+      const content =
+        subMenu.shadowRoot!.querySelector<HTMLElement>('[part="content"]');
       fireKeydown(getTitle(subMenu), "Enter");
       expect(subMenu.open).toBe(true);
 
-      content.dispatchEvent(new Event("transitionend"));
-      expect(content.style.height).toBe("100%");
+      content!.dispatchEvent(new Event("transitionend"));
+      expect(content!.style.height).toBe("100%");
     });
   });
 
@@ -2147,7 +2221,7 @@ describe("EaSubMenu Keyboard And Focus", () => {
       const subMenu = createSubMenu();
       await subMenu.updateComplete;
       subMenu.open = true;
-      subMenu.querySelector("ea-menu-item").focus();
+      subMenu.querySelector("ea-menu-item")!.focus();
 
       subMenu.dispatchEvent(
         new FocusEvent("focusout", { bubbles: true, composed: true })

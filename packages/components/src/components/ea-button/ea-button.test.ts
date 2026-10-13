@@ -4,7 +4,7 @@ import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y";
 import "./index";
 
 describe("EaButton Component", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -28,7 +28,7 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      const buttonContainer = button.shadowRoot.querySelector(".ea-button");
+      const buttonContainer = button.shadowRoot!.querySelector(".ea-button");
       expect(buttonContainer).toBeDefined();
     });
 
@@ -36,8 +36,8 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      const buttonContainer = button.shadowRoot.querySelector(".ea-button");
-      expect(buttonContainer.tagName.toLowerCase()).toBe("button");
+      const buttonContainer = button.shadowRoot!.querySelector(".ea-button");
+      expect(buttonContainer!.tagName.toLowerCase()).toBe("button");
     });
 
     it("应该支持 slot 内容", () => {
@@ -45,7 +45,7 @@ describe("EaButton Component", () => {
       button.textContent = "Click Me";
       container.appendChild(button);
 
-      const slot = button.shadowRoot.querySelector("slot");
+      const slot = button.shadowRoot!.querySelector("slot");
       expect(slot).toBeDefined();
     });
 
@@ -53,18 +53,18 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      const buttonContainer = button.shadowRoot.querySelector(".ea-button");
-      expect(buttonContainer.getAttribute("tabindex")).toBeNull();
+      const buttonContainer = button.shadowRoot!.querySelector(".ea-button");
+      expect(buttonContainer!.getAttribute("tabindex")).toBeNull();
     });
 
     it("应该包含 loading-icon 和 icon 元素", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      const loadingIcon = button.shadowRoot.querySelector(
+      const loadingIcon = button.shadowRoot!.querySelector(
         ".ea-button__loading-icon"
       );
-      const icon = button.shadowRoot.querySelector(".ea-button__icon");
+      const icon = button.shadowRoot!.querySelector(".ea-button__icon");
 
       expect(loadingIcon).toBeDefined();
       expect(icon).toBeDefined();
@@ -74,11 +74,11 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      const loadingIcon = button.shadowRoot.querySelector(
+      const loadingIcon = button.shadowRoot!.querySelector(
         ".ea-button__loading-icon"
       );
-      expect(loadingIcon.getAttribute("name")).toBe("spinner");
-      expect(loadingIcon.hasAttribute("spin")).toBe(true);
+      expect(loadingIcon!.getAttribute("name")).toBe("spinner");
+      expect(loadingIcon!.hasAttribute("spin")).toBe(true);
     });
   });
 
@@ -139,14 +139,14 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.classList.contains("ea-button--primary")).toBe(true);
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.classList.contains("ea-button--primary")).toBe(true);
 
       button.setAttribute("variant", "success");
       await button.updateComplete;
 
-      expect(containerEl.classList.contains("ea-button--success")).toBe(true);
-      expect(containerEl.classList.contains("ea-button--primary")).toBe(false);
+      expect(containerEl!.classList.contains("ea-button--success")).toBe(true);
+      expect(containerEl!.classList.contains("ea-button--primary")).toBe(false);
     });
 
     it("variant=info 应该正确应用", async () => {
@@ -156,8 +156,8 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.classList.contains("ea-button--info")).toBe(true);
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.classList.contains("ea-button--info")).toBe(true);
     });
   });
 
@@ -197,14 +197,14 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.classList.contains("ea-button--small")).toBe(true);
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.classList.contains("ea-button--small")).toBe(true);
 
       button.setAttribute("size", "large");
       await button.updateComplete;
 
-      expect(containerEl.classList.contains("ea-button--large")).toBe(true);
-      expect(containerEl.classList.contains("ea-button--small")).toBe(false);
+      expect(containerEl!.classList.contains("ea-button--large")).toBe(true);
+      expect(containerEl!.classList.contains("ea-button--small")).toBe(false);
     });
 
     it("size 变化时应该更新 loading-icon 的 size 属性", async () => {
@@ -215,15 +215,15 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const loadingIcon = button.shadowRoot.querySelector(
+      const loadingIcon = button.shadowRoot!.querySelector(
         ".ea-button__loading-icon"
       );
-      expect(loadingIcon.getAttribute("size")).toBe("small");
+      expect(loadingIcon!.getAttribute("size")).toBe("small");
 
       button.setAttribute("size", "large");
       await button.updateComplete;
 
-      expect(loadingIcon.getAttribute("size")).toBe("large");
+      expect(loadingIcon!.getAttribute("size")).toBe("large");
     });
   });
 
@@ -254,13 +254,13 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.classList.contains("is-disabled")).toBe(false);
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.classList.contains("is-disabled")).toBe(false);
 
       button.setAttribute("disabled", "");
       await button.updateComplete;
 
-      expect(containerEl.classList.contains("is-disabled")).toBe(true);
+      expect(containerEl!.classList.contains("is-disabled")).toBe(true);
     });
 
     it("disabled 属性应该可以动态移除", async () => {
@@ -301,13 +301,13 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.classList.contains("ea-button--plain")).toBe(false);
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.classList.contains("ea-button--plain")).toBe(false);
 
       button.setAttribute("plain", "");
       await button.updateComplete;
 
-      expect(containerEl.classList.contains("ea-button--plain")).toBe(true);
+      expect(containerEl!.classList.contains("ea-button--plain")).toBe(true);
     });
   });
 
@@ -333,13 +333,13 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.classList.contains("ea-button--round")).toBe(false);
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.classList.contains("ea-button--round")).toBe(false);
 
       button.setAttribute("round", "");
       await button.updateComplete;
 
-      expect(containerEl.classList.contains("ea-button--round")).toBe(true);
+      expect(containerEl!.classList.contains("ea-button--round")).toBe(true);
     });
   });
 
@@ -365,13 +365,13 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.classList.contains("ea-button--circle")).toBe(false);
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.classList.contains("ea-button--circle")).toBe(false);
 
       button.setAttribute("circle", "");
       await button.updateComplete;
 
-      expect(containerEl.classList.contains("ea-button--circle")).toBe(true);
+      expect(containerEl!.classList.contains("ea-button--circle")).toBe(true);
     });
   });
 
@@ -397,13 +397,13 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.classList.contains("ea-button--text")).toBe(false);
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.classList.contains("ea-button--text")).toBe(false);
 
       button.setAttribute("text", "");
       await button.updateComplete;
 
-      expect(containerEl.classList.contains("ea-button--text")).toBe(true);
+      expect(containerEl!.classList.contains("ea-button--text")).toBe(true);
     });
   });
 
@@ -442,8 +442,8 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.classList.contains("is-loading")).toBe(true);
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.classList.contains("is-loading")).toBe(true);
     });
 
     it("loading 为 true 时应该添加 is-disabled 状态 class", async () => {
@@ -453,8 +453,8 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.classList.contains("is-disabled")).toBe(true);
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.classList.contains("is-disabled")).toBe(true);
     });
 
     it("loading 为 false 时 loading-icon 不应该显示（无 is-loading class）", async () => {
@@ -463,8 +463,8 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.classList.contains("is-loading")).toBe(false);
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.classList.contains("is-loading")).toBe(false);
     });
 
     it("loading 状态切换应该正确工作", async () => {
@@ -473,19 +473,19 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.classList.contains("is-loading")).toBe(false);
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.classList.contains("is-loading")).toBe(false);
 
       button.setAttribute("loading", "");
       await button.updateComplete;
 
-      expect(containerEl.classList.contains("is-loading")).toBe(true);
+      expect(containerEl!.classList.contains("is-loading")).toBe(true);
       expect(button.hasAttribute("disabled")).toBe(true);
 
       button.removeAttribute("loading");
       await button.updateComplete;
 
-      expect(containerEl.classList.contains("is-loading")).toBe(false);
+      expect(containerEl!.classList.contains("is-loading")).toBe(false);
       expect(button.hasAttribute("disabled")).toBe(false);
     });
 
@@ -499,10 +499,10 @@ describe("EaButton Component", () => {
       button.setAttribute("loading", "");
       await button.updateComplete;
 
-      const loadingIcon = button.shadowRoot.querySelector(
+      const loadingIcon = button.shadowRoot!.querySelector(
         ".ea-button__loading-icon"
       );
-      expect(loadingIcon.getAttribute("size")).toBe("large");
+      expect(loadingIcon!.getAttribute("size")).toBe("large");
     });
   });
 
@@ -529,8 +529,8 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.classList.contains("is-icon")).toBe(true);
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.classList.contains("is-icon")).toBe(true);
     });
 
     it("未设置 icon 时不应有 is-icon 状态 class", async () => {
@@ -539,8 +539,8 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.classList.contains("is-icon")).toBe(false);
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.classList.contains("is-icon")).toBe(false);
     });
 
     it("icon 变化时应该更新 icon 元素的 name 属性", async () => {
@@ -550,13 +550,13 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const iconEl = button.shadowRoot.querySelector(".ea-button__icon");
-      expect(iconEl.getAttribute("name")).toBe("coffee");
+      const iconEl = button.shadowRoot!.querySelector(".ea-button__icon");
+      expect(iconEl!.getAttribute("name")).toBe("coffee");
 
       button.setAttribute("icon", "search");
       await button.updateComplete;
 
-      expect(iconEl.getAttribute("name")).toBe("search");
+      expect(iconEl!.getAttribute("name")).toBe("search");
     });
 
     it("icon 变化时应该更新 icon 元素的 size 属性", async () => {
@@ -567,8 +567,8 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const iconEl = button.shadowRoot.querySelector(".ea-button__icon");
-      expect(iconEl.getAttribute("size")).toBe("large");
+      const iconEl = button.shadowRoot!.querySelector(".ea-button__icon");
+      expect(iconEl!.getAttribute("size")).toBe("large");
     });
 
     it("移除 icon 后应该移除 is-icon 状态 class", async () => {
@@ -578,13 +578,13 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.classList.contains("is-icon")).toBe(true);
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.classList.contains("is-icon")).toBe(true);
 
       button.removeAttribute("icon");
       await button.updateComplete;
 
-      expect(containerEl.classList.contains("is-icon")).toBe(false);
+      expect(containerEl!.classList.contains("is-icon")).toBe(false);
     });
   });
 
@@ -611,8 +611,8 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.tagName.toLowerCase()).toBe("a");
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.tagName.toLowerCase()).toBe("a");
     });
 
     it("link 为 false 时应该渲染为 button 标签", async () => {
@@ -621,8 +621,8 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.tagName.toLowerCase()).toBe("button");
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.tagName.toLowerCase()).toBe("button");
     });
 
     it("link 为 true 时应该添加 ea-button--link 修饰符 class", async () => {
@@ -632,8 +632,8 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.classList.contains("ea-button--link")).toBe(true);
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.classList.contains("ea-button--link")).toBe(true);
     });
 
     it("link 为 true 时应该添加 ea-button--text 修饰符 class", async () => {
@@ -643,8 +643,8 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.classList.contains("ea-button--text")).toBe(true);
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.classList.contains("ea-button--text")).toBe(true);
     });
 
     it("应该正确设置 href 属性", () => {
@@ -664,8 +664,8 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.getAttribute("href")).toBe("https://example.com");
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.getAttribute("href")).toBe("https://example.com");
     });
 
     it("href 变化时应该更新 a 标签的 href", async () => {
@@ -676,13 +676,13 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.getAttribute("href")).toBe("https://example.com");
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.getAttribute("href")).toBe("https://example.com");
 
       button.setAttribute("href", "https://new.example.com");
       await button.updateComplete;
 
-      expect(containerEl.getAttribute("href")).toBe("https://new.example.com");
+      expect(containerEl!.getAttribute("href")).toBe("https://new.example.com");
     });
 
     it("link 从 false 变为 true 时应该重新渲染为 a 标签", async () => {
@@ -691,14 +691,14 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      let containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.tagName.toLowerCase()).toBe("button");
+      let containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.tagName.toLowerCase()).toBe("button");
 
       button.setAttribute("link", "");
       await button.updateComplete;
 
-      containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.tagName.toLowerCase()).toBe("a");
+      containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.tagName.toLowerCase()).toBe("a");
     });
 
     it("link 为 true 时 button 标签不应有 type 属性", async () => {
@@ -708,8 +708,8 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.getAttribute("type")).toBeNull();
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.getAttribute("type")).toBeNull();
     });
 
     it("应该正确设置 target 属性", async () => {
@@ -721,8 +721,8 @@ describe("EaButton Component", () => {
       await button.updateComplete;
 
       expect(button.target).toBe("_blank");
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.getAttribute("target")).toBe("_blank");
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.getAttribute("target")).toBe("_blank");
     });
 
     it("应该正确设置 rel 属性", async () => {
@@ -734,8 +734,8 @@ describe("EaButton Component", () => {
       await button.updateComplete;
 
       expect(button.rel).toBe("noopener noreferrer");
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.getAttribute("rel")).toBe("noopener noreferrer");
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.getAttribute("rel")).toBe("noopener noreferrer");
     });
 
     it("应该正确设置 download 属性", async () => {
@@ -747,8 +747,8 @@ describe("EaButton Component", () => {
       await button.updateComplete;
 
       expect(button.download).toBe("file.pdf");
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.getAttribute("download")).toBe("file.pdf");
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.getAttribute("download")).toBe("file.pdf");
     });
 
     it("target 变化时应该更新 a 标签的 target", async () => {
@@ -761,8 +761,8 @@ describe("EaButton Component", () => {
       button.setAttribute("target", "_blank");
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.getAttribute("target")).toBe("_blank");
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.getAttribute("target")).toBe("_blank");
     });
 
     it("非 link 模式下 target 不应设置到 button 元素", async () => {
@@ -772,8 +772,8 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.getAttribute("target")).toBeNull();
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.getAttribute("target")).toBeNull();
     });
   });
 
@@ -819,8 +819,8 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.getAttribute("type")).toBe("submit");
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.getAttribute("type")).toBe("submit");
     });
 
     it("type 变化时应该更新内部 button 元素的 type 属性", async () => {
@@ -829,13 +829,13 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.getAttribute("type")).toBe("button");
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.getAttribute("type")).toBe("button");
 
       button.setAttribute("type", "reset");
       await button.updateComplete;
 
-      expect(containerEl.getAttribute("type")).toBe("reset");
+      expect(containerEl!.getAttribute("type")).toBe("reset");
     });
 
     it("link 为 true 时不应设置 type 属性到 a 标签", async () => {
@@ -846,9 +846,9 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.tagName.toLowerCase()).toBe("a");
-      expect(containerEl.getAttribute("type")).toBeNull();
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.tagName.toLowerCase()).toBe("a");
+      expect(containerEl!.getAttribute("type")).toBeNull();
     });
   });
 
@@ -859,10 +859,10 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.classList.contains("ea-button")).toBe(true);
-      expect(containerEl.classList.contains("ea-button--normal")).toBe(true);
-      expect(containerEl.classList.contains("ea-button--medium")).toBe(true);
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.classList.contains("ea-button")).toBe(true);
+      expect(containerEl!.classList.contains("ea-button--normal")).toBe(true);
+      expect(containerEl!.classList.contains("ea-button--medium")).toBe(true);
     });
 
     it("variant=primary 应该添加 ea-button--primary class", async () => {
@@ -872,8 +872,8 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.classList.contains("ea-button--primary")).toBe(true);
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.classList.contains("ea-button--primary")).toBe(true);
     });
 
     it("size=small 应该添加 ea-button--small class", async () => {
@@ -883,8 +883,8 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.classList.contains("ea-button--small")).toBe(true);
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.classList.contains("ea-button--small")).toBe(true);
     });
 
     it("disabled 应该添加 is-disabled 状态 class", async () => {
@@ -894,8 +894,8 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.classList.contains("is-disabled")).toBe(true);
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.classList.contains("is-disabled")).toBe(true);
     });
 
     it("text 应该添加 ea-button--text class", async () => {
@@ -905,8 +905,8 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.classList.contains("ea-button--text")).toBe(true);
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.classList.contains("ea-button--text")).toBe(true);
     });
 
     it("plain 应该添加 ea-button--plain class", async () => {
@@ -916,8 +916,8 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.classList.contains("ea-button--plain")).toBe(true);
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.classList.contains("ea-button--plain")).toBe(true);
     });
 
     it("round 应该添加 ea-button--round class", async () => {
@@ -927,8 +927,8 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.classList.contains("ea-button--round")).toBe(true);
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.classList.contains("ea-button--round")).toBe(true);
     });
 
     it("circle 应该添加 ea-button--circle class", async () => {
@@ -938,8 +938,8 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.classList.contains("ea-button--circle")).toBe(true);
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.classList.contains("ea-button--circle")).toBe(true);
     });
 
     it("loading 应该添加 is-loading 状态 class", async () => {
@@ -949,8 +949,8 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.classList.contains("is-loading")).toBe(true);
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.classList.contains("is-loading")).toBe(true);
     });
 
     it("icon 设置后应该添加 is-icon 状态 class", async () => {
@@ -960,8 +960,8 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.classList.contains("is-icon")).toBe(true);
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.classList.contains("is-icon")).toBe(true);
     });
 
     it("link 应该添加 ea-button--link 和 ea-button--text 修饰符 class", async () => {
@@ -971,9 +971,9 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.classList.contains("ea-button--link")).toBe(true);
-      expect(containerEl.classList.contains("ea-button--text")).toBe(true);
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.classList.contains("ea-button--link")).toBe(true);
+      expect(containerEl!.classList.contains("ea-button--text")).toBe(true);
     });
   });
 
@@ -982,7 +982,7 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      const containerEl = button.shadowRoot.querySelector('[part="container"]');
+      const containerEl = button.shadowRoot!.querySelector('[part="container"]');
       expect(containerEl).toBeDefined();
     });
 
@@ -990,7 +990,7 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      const iconEl = button.shadowRoot.querySelector('[part="icon"]');
+      const iconEl = button.shadowRoot!.querySelector('[part="icon"]');
       expect(iconEl).toBeDefined();
     });
 
@@ -998,7 +998,7 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      const loadingIconEl = button.shadowRoot.querySelector(
+      const loadingIconEl = button.shadowRoot!.querySelector(
         '[part="loading-icon"]'
       );
       expect(loadingIconEl).toBeDefined();
@@ -1091,8 +1091,10 @@ describe("EaButton Component", () => {
       const submitHandler = vi.fn();
       form.addEventListener("submit", submitHandler);
 
-      const innerButton = button.shadowRoot.querySelector(".ea-button");
-      innerButton.click();
+      const innerButton = button.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-button"
+      );
+      innerButton!.click();
 
       expect(submitHandler).toHaveBeenCalled();
     });
@@ -1114,8 +1116,10 @@ describe("EaButton Component", () => {
       await button.updateComplete;
 
       const resetSpy = vi.spyOn(form, "reset");
-      const innerButton = button.shadowRoot.querySelector(".ea-button");
-      innerButton.click();
+      const innerButton = button.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-button"
+      );
+      innerButton!.click();
 
       expect(resetSpy).toHaveBeenCalled();
     });
@@ -1156,10 +1160,10 @@ describe("EaButton Component", () => {
       expect(button.size).toBe("large");
       expect(button.round).toBe(true);
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.classList.contains("ea-button--primary")).toBe(true);
-      expect(containerEl.classList.contains("ea-button--large")).toBe(true);
-      expect(containerEl.classList.contains("ea-button--round")).toBe(true);
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.classList.contains("ea-button--primary")).toBe(true);
+      expect(containerEl!.classList.contains("ea-button--large")).toBe(true);
+      expect(containerEl!.classList.contains("ea-button--round")).toBe(true);
     });
 
     it("应该支持图标按钮", async () => {
@@ -1175,10 +1179,10 @@ describe("EaButton Component", () => {
       expect(button.circle).toBe(true);
       expect(button.variant).toBe("primary");
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.classList.contains("is-icon")).toBe(true);
-      expect(containerEl.classList.contains("ea-button--circle")).toBe(true);
-      expect(containerEl.classList.contains("ea-button--primary")).toBe(true);
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.classList.contains("is-icon")).toBe(true);
+      expect(containerEl!.classList.contains("ea-button--circle")).toBe(true);
+      expect(containerEl!.classList.contains("ea-button--primary")).toBe(true);
     });
 
     it("应该支持链接按钮", async () => {
@@ -1191,11 +1195,11 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.tagName.toLowerCase()).toBe("a");
-      expect(containerEl.getAttribute("href")).toBe("https://example.com");
-      expect(containerEl.classList.contains("ea-button--link")).toBe(true);
-      expect(containerEl.classList.contains("ea-button--text")).toBe(true);
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.tagName.toLowerCase()).toBe("a");
+      expect(containerEl!.getAttribute("href")).toBe("https://example.com");
+      expect(containerEl!.classList.contains("ea-button--link")).toBe(true);
+      expect(containerEl!.classList.contains("ea-button--text")).toBe(true);
     });
 
     it("应该支持文字按钮", async () => {
@@ -1210,9 +1214,9 @@ describe("EaButton Component", () => {
       expect(button.text).toBe(true);
       expect(button.icon).toBe("coffee");
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.classList.contains("ea-button--text")).toBe(true);
-      expect(containerEl.classList.contains("is-icon")).toBe(true);
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.classList.contains("ea-button--text")).toBe(true);
+      expect(containerEl!.classList.contains("is-icon")).toBe(true);
     });
 
     it("loading 状态切换应该正确工作", async () => {
@@ -1221,19 +1225,19 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.classList.contains("is-loading")).toBe(false);
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.classList.contains("is-loading")).toBe(false);
 
       button.setAttribute("loading", "");
       await button.updateComplete;
 
-      expect(containerEl.classList.contains("is-loading")).toBe(true);
+      expect(containerEl!.classList.contains("is-loading")).toBe(true);
       expect(button.hasAttribute("disabled")).toBe(true);
 
       button.removeAttribute("loading");
       await button.updateComplete;
 
-      expect(containerEl.classList.contains("is-loading")).toBe(false);
+      expect(containerEl!.classList.contains("is-loading")).toBe(false);
       expect(button.hasAttribute("disabled")).toBe(false);
     });
 
@@ -1245,15 +1249,15 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.classList.contains("is-disabled")).toBe(true);
-      expect(containerEl.classList.contains("is-loading")).toBe(true);
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.classList.contains("is-disabled")).toBe(true);
+      expect(containerEl!.classList.contains("is-loading")).toBe(true);
 
       button.removeAttribute("loading");
       await button.updateComplete;
 
-      expect(containerEl.classList.contains("is-disabled")).toBe(false);
-      expect(containerEl.classList.contains("is-loading")).toBe(false);
+      expect(containerEl!.classList.contains("is-disabled")).toBe(false);
+      expect(containerEl!.classList.contains("is-loading")).toBe(false);
       expect(button.hasAttribute("disabled")).toBe(false);
     });
 
@@ -1280,9 +1284,9 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.classList.contains("ea-button--primary")).toBe(true);
-      expect(containerEl.classList.contains("ea-button--plain")).toBe(true);
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.classList.contains("ea-button--primary")).toBe(true);
+      expect(containerEl!.classList.contains("ea-button--plain")).toBe(true);
     });
 
     it("应该支持动态切换 variant", async () => {
@@ -1292,14 +1296,14 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.classList.contains("ea-button--primary")).toBe(true);
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.classList.contains("ea-button--primary")).toBe(true);
 
       button.setAttribute("variant", "danger");
       await button.updateComplete;
 
-      expect(containerEl.classList.contains("ea-button--danger")).toBe(true);
-      expect(containerEl.classList.contains("ea-button--primary")).toBe(false);
+      expect(containerEl!.classList.contains("ea-button--danger")).toBe(true);
+      expect(containerEl!.classList.contains("ea-button--primary")).toBe(false);
     });
 
     it("应该支持动态切换 size", async () => {
@@ -1309,14 +1313,14 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      const containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.classList.contains("ea-button--small")).toBe(true);
+      const containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.classList.contains("ea-button--small")).toBe(true);
 
       button.setAttribute("size", "large");
       await button.updateComplete;
 
-      expect(containerEl.classList.contains("ea-button--large")).toBe(true);
-      expect(containerEl.classList.contains("ea-button--small")).toBe(false);
+      expect(containerEl!.classList.contains("ea-button--large")).toBe(true);
+      expect(containerEl!.classList.contains("ea-button--small")).toBe(false);
     });
 
     it("link 切换时应该正确重新渲染容器", async () => {
@@ -1325,22 +1329,22 @@ describe("EaButton Component", () => {
 
       await button.updateComplete;
 
-      let containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.tagName.toLowerCase()).toBe("button");
+      let containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.tagName.toLowerCase()).toBe("button");
 
       button.setAttribute("link", "");
       button.setAttribute("href", "https://example.com");
       await button.updateComplete;
 
-      containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.tagName.toLowerCase()).toBe("a");
-      expect(containerEl.getAttribute("href")).toBe("https://example.com");
+      containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.tagName.toLowerCase()).toBe("a");
+      expect(containerEl!.getAttribute("href")).toBe("https://example.com");
 
       button.removeAttribute("link");
       await button.updateComplete;
 
-      containerEl = button.shadowRoot.querySelector(".ea-button");
-      expect(containerEl.tagName.toLowerCase()).toBe("button");
+      containerEl = button.shadowRoot!.querySelector(".ea-button");
+      expect(containerEl!.tagName.toLowerCase()).toBe("button");
     });
 
     it("所有 variant 和 size 组合应该正确应用 class", async () => {
@@ -1363,11 +1367,11 @@ describe("EaButton Component", () => {
 
           await button.updateComplete;
 
-          const containerEl = button.shadowRoot.querySelector(".ea-button");
-          expect(containerEl.classList.contains(`ea-button--${variant}`)).toBe(
+          const containerEl = button.shadowRoot!.querySelector(".ea-button");
+          expect(containerEl!.classList.contains(`ea-button--${variant}`)).toBe(
             true
           );
-          expect(containerEl.classList.contains(`ea-button--${size}`)).toBe(
+          expect(containerEl!.classList.contains(`ea-button--${size}`)).toBe(
             true
           );
 
@@ -1488,7 +1492,7 @@ describe("EaButton Component", () => {
 });
 
 describe("EaButtonGroup Component", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -1512,7 +1516,7 @@ describe("EaButtonGroup Component", () => {
       const group = document.createElement("ea-button-group");
       container.appendChild(group);
 
-      const containerEl = group.shadowRoot.querySelector(".ea-button-group");
+      const containerEl = group.shadowRoot!.querySelector(".ea-button-group");
       expect(containerEl).toBeDefined();
     });
 
@@ -1523,7 +1527,7 @@ describe("EaButtonGroup Component", () => {
       group.appendChild(button);
       container.appendChild(group);
 
-      const slot = group.shadowRoot.querySelector("slot");
+      const slot = group.shadowRoot!.querySelector("slot");
       expect(slot).toBeDefined();
     });
 
@@ -1531,7 +1535,7 @@ describe("EaButtonGroup Component", () => {
       const group = document.createElement("ea-button-group");
       container.appendChild(group);
 
-      const containerEl = group.shadowRoot.querySelector('[part="container"]');
+      const containerEl = group.shadowRoot!.querySelector('[part="container"]');
       expect(containerEl).toBeDefined();
     });
   });

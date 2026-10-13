@@ -6,7 +6,7 @@ import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y";
 import "./index";
 
 describe("EaCalendar", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -31,7 +31,7 @@ describe("EaCalendar", () => {
       container.appendChild(calendar);
 
       const calendarContainer =
-        calendar.shadowRoot.querySelector(".ea-calendar");
+        calendar.shadowRoot!.querySelector(".ea-calendar");
       expect(calendarContainer).toBeDefined();
     });
 
@@ -39,7 +39,7 @@ describe("EaCalendar", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
 
-      const header = calendar.shadowRoot.querySelector(".ea-calendar__header");
+      const header = calendar.shadowRoot!.querySelector(".ea-calendar__header");
       expect(header).toBeDefined();
     });
 
@@ -47,7 +47,7 @@ describe("EaCalendar", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
 
-      const title = calendar.shadowRoot.querySelector(".ea-calendar__title");
+      const title = calendar.shadowRoot!.querySelector(".ea-calendar__title");
       expect(title).toBeDefined();
     });
 
@@ -55,17 +55,17 @@ describe("EaCalendar", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
 
-      const body = calendar.shadowRoot.querySelector(".ea-calendar__body");
+      const body = calendar.shadowRoot!.querySelector(".ea-calendar__body");
       expect(body).toBeDefined();
-      expect(body.tagName.toLowerCase()).toBe("table");
+      expect(body!.tagName.toLowerCase()).toBe("table");
     });
 
     it("应该包含 thead 和 tbody", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
 
-      const thead = calendar.shadowRoot.querySelector(".ea-calendar__thead");
-      const tbody = calendar.shadowRoot.querySelector(".ea-calendar__tbody");
+      const thead = calendar.shadowRoot!.querySelector(".ea-calendar__thead");
+      const tbody = calendar.shadowRoot!.querySelector(".ea-calendar__tbody");
       expect(thead).toBeDefined();
       expect(tbody).toBeDefined();
     });
@@ -87,8 +87,8 @@ describe("EaCalendar", () => {
 
       await calendar.updateComplete;
 
-      const title = calendar.shadowRoot.querySelector(".ea-calendar__title");
-      expect(title.textContent).toContain("2024");
+      const title = calendar.shadowRoot!.querySelector(".ea-calendar__title");
+      expect(title!.textContent).toContain("2024");
     });
 
     it("应该支持不同的日期格式", async () => {
@@ -98,8 +98,8 @@ describe("EaCalendar", () => {
 
       await calendar.updateComplete;
 
-      const title = calendar.shadowRoot.querySelector(".ea-calendar__title");
-      expect(title.textContent).toContain("2023");
+      const title = calendar.shadowRoot!.querySelector(".ea-calendar__title");
+      expect(title!.textContent).toContain("2023");
     });
 
     it("value 为空时应该显示当前月份", async () => {
@@ -108,9 +108,9 @@ describe("EaCalendar", () => {
 
       await calendar.updateComplete;
 
-      const title = calendar.shadowRoot.querySelector(".ea-calendar__title");
+      const title = calendar.shadowRoot!.querySelector(".ea-calendar__title");
       const now = new Date();
-      expect(title.textContent).toContain(String(now.getFullYear()));
+      expect(title!.textContent).toContain(String(now.getFullYear()));
     });
 
     it("动态修改 value 应该更新日历", async () => {
@@ -122,8 +122,8 @@ describe("EaCalendar", () => {
       calendar.setAttribute("value", "2024-05-01");
       await calendar.updateComplete;
 
-      const title = calendar.shadowRoot.querySelector(".ea-calendar__title");
-      expect(title.textContent).toContain("2024");
+      const title = calendar.shadowRoot!.querySelector(".ea-calendar__title");
+      expect(title!.textContent).toContain("2024");
     });
   });
 
@@ -154,7 +154,7 @@ describe("EaCalendar", () => {
 
       await calendar.updateComplete;
 
-      const buttonGroup = calendar.shadowRoot.querySelector("ea-button-group");
+      const buttonGroup = calendar.shadowRoot!.querySelector("ea-button-group");
       expect(buttonGroup).toBeDefined();
     });
 
@@ -165,13 +165,13 @@ describe("EaCalendar", () => {
 
       await calendar.updateComplete;
 
-      const prevBtn = calendar.shadowRoot.querySelector(
+      const prevBtn = calendar.shadowRoot!.querySelector(
         ".ea-calendar__controller-prev"
       );
-      const todayBtn = calendar.shadowRoot.querySelector(
+      const todayBtn = calendar.shadowRoot!.querySelector(
         ".ea-calendar__controller-today"
       );
-      const nextBtn = calendar.shadowRoot.querySelector(
+      const nextBtn = calendar.shadowRoot!.querySelector(
         ".ea-calendar__controller-next"
       );
 
@@ -204,7 +204,7 @@ describe("EaCalendar", () => {
       container.appendChild(calendar);
 
       const containerEl =
-        calendar.shadowRoot.querySelector('[part="container"]');
+        calendar.shadowRoot!.querySelector('[part="container"]');
       expect(containerEl).toBeDefined();
     });
 
@@ -212,7 +212,7 @@ describe("EaCalendar", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
 
-      const headerEl = calendar.shadowRoot.querySelector('[part="header"]');
+      const headerEl = calendar.shadowRoot!.querySelector('[part="header"]');
       expect(headerEl).toBeDefined();
     });
 
@@ -220,7 +220,7 @@ describe("EaCalendar", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
 
-      const titleEl = calendar.shadowRoot.querySelector('[part="title"]');
+      const titleEl = calendar.shadowRoot!.querySelector('[part="title"]');
       expect(titleEl).toBeDefined();
     });
 
@@ -228,7 +228,7 @@ describe("EaCalendar", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
 
-      const bodyEl = calendar.shadowRoot.querySelector('[part="body"]');
+      const bodyEl = calendar.shadowRoot!.querySelector('[part="body"]');
       expect(bodyEl).toBeDefined();
     });
 
@@ -236,7 +236,7 @@ describe("EaCalendar", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
 
-      const theadEl = calendar.shadowRoot.querySelector('[part="thead"]');
+      const theadEl = calendar.shadowRoot!.querySelector('[part="thead"]');
       expect(theadEl).toBeDefined();
     });
 
@@ -244,7 +244,7 @@ describe("EaCalendar", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
 
-      const tbodyEl = calendar.shadowRoot.querySelector('[part="tbody"]');
+      const tbodyEl = calendar.shadowRoot!.querySelector('[part="tbody"]');
       expect(tbodyEl).toBeDefined();
     });
 
@@ -254,7 +254,7 @@ describe("EaCalendar", () => {
 
       await calendar.updateComplete;
 
-      const wrapperEl = calendar.shadowRoot.querySelector(
+      const wrapperEl = calendar.shadowRoot!.querySelector(
         '[part="controller-wrapper"]'
       );
       expect(wrapperEl).toBeDefined();
@@ -266,7 +266,7 @@ describe("EaCalendar", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
 
-      const ths = calendar.shadowRoot.querySelectorAll(".ea-calendar__th");
+      const ths = calendar.shadowRoot!.querySelectorAll(".ea-calendar__th");
       expect(ths.length).toBe(7);
     });
 
@@ -274,7 +274,7 @@ describe("EaCalendar", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
 
-      const days = calendar.shadowRoot.querySelectorAll(".ea-calendar__day");
+      const days = calendar.shadowRoot!.querySelectorAll(".ea-calendar__day");
       expect(days.length).toBeGreaterThan(28);
     });
 
@@ -283,7 +283,7 @@ describe("EaCalendar", () => {
       calendar.setAttribute("value", "2024-05-01");
       container.appendChild(calendar);
 
-      const days = calendar.shadowRoot.querySelectorAll(".ea-calendar__day");
+      const days = calendar.shadowRoot!.querySelectorAll(".ea-calendar__day");
       const firstDay = days[0];
 
       expect(firstDay.hasAttribute("data-year")).toBe(true);
@@ -298,17 +298,17 @@ describe("EaCalendar", () => {
       await calendar.updateComplete;
 
       const dayCells =
-        calendar.shadowRoot.querySelectorAll(".ea-calendar__day");
+        calendar.shadowRoot!.querySelectorAll(".ea-calendar__day");
       const currentMonthDays =
-        calendar.shadowRoot.querySelectorAll(".is-current-month");
+        calendar.shadowRoot!.querySelectorAll(".is-current-month");
 
       expect(dayCells.length).toBeGreaterThan(0);
       expect(currentMonthDays.length).toBeGreaterThan(0);
 
       const prevMonthDays =
-        calendar.shadowRoot.querySelectorAll(".is-prev-month");
+        calendar.shadowRoot!.querySelectorAll(".is-prev-month");
       const nextMonthDays =
-        calendar.shadowRoot.querySelectorAll(".is-next-month");
+        calendar.shadowRoot!.querySelectorAll(".is-next-month");
 
       const totalDays =
         prevMonthDays.length + currentMonthDays.length + nextMonthDays.length;
@@ -319,7 +319,7 @@ describe("EaCalendar", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
 
-      const rows = calendar.shadowRoot.querySelectorAll(".ea-calendar__row");
+      const rows = calendar.shadowRoot!.querySelectorAll(".ea-calendar__row");
       expect(rows.length).toBeGreaterThanOrEqual(4);
       expect(rows.length).toBeLessThanOrEqual(6);
     });
@@ -328,7 +328,7 @@ describe("EaCalendar", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
 
-      const currentMonthCells = calendar.shadowRoot.querySelectorAll(
+      const currentMonthCells = calendar.shadowRoot!.querySelectorAll(
         '[part~="current-month"]'
       );
       expect(currentMonthCells.length).toBeGreaterThan(0);
@@ -338,7 +338,7 @@ describe("EaCalendar", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
 
-      const prevMonthCells = calendar.shadowRoot.querySelectorAll(
+      const prevMonthCells = calendar.shadowRoot!.querySelectorAll(
         '[part~="prev-month"]'
       );
       expect(prevMonthCells.length).toBeGreaterThanOrEqual(0);
@@ -348,7 +348,7 @@ describe("EaCalendar", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
 
-      const nextMonthCells = calendar.shadowRoot.querySelectorAll(
+      const nextMonthCells = calendar.shadowRoot!.querySelectorAll(
         '[part~="next-month"]'
       );
       expect(nextMonthCells.length).toBeGreaterThanOrEqual(0);
@@ -362,11 +362,11 @@ describe("EaCalendar", () => {
 
       await calendar.updateComplete;
 
-      const todayCell = calendar.shadowRoot.querySelector(".is-today");
+      const todayCell = calendar.shadowRoot!.querySelector(".is-today");
       expect(todayCell).toBeDefined();
 
       const now = new Date();
-      expect(todayCell.getAttribute("data-date")).toBe(String(now.getDate()));
+      expect(todayCell!.getAttribute("data-date")).toBe(String(now.getDate()));
     });
 
     it("非今天日期不应被标记为 is-today", async () => {
@@ -376,7 +376,7 @@ describe("EaCalendar", () => {
 
       await calendar.updateComplete;
 
-      const todayCells = calendar.shadowRoot.querySelectorAll(".is-today");
+      const todayCells = calendar.shadowRoot!.querySelectorAll(".is-today");
       expect(todayCells.length).toBe(0);
     });
   });
@@ -389,9 +389,9 @@ describe("EaCalendar", () => {
 
       await calendar.updateComplete;
 
-      const activeCell = calendar.shadowRoot.querySelector(".is-active");
+      const activeCell = calendar.shadowRoot!.querySelector(".is-active");
       expect(activeCell).toBeDefined();
-      expect(activeCell.getAttribute("data-date")).toBe("15");
+      expect(activeCell!.getAttribute("data-date")).toBe("15");
     });
   });
 
@@ -405,8 +405,9 @@ describe("EaCalendar", () => {
       const selectHandler = vi.fn();
       calendar.addEventListener("ea-select", selectHandler);
 
-      const dayCell = calendar.shadowRoot.querySelector(".ea-calendar__day");
-      dayCell.click();
+      const dayCell =
+        calendar.shadowRoot!.querySelector<HTMLElement>(".ea-calendar__day");
+      dayCell!.click();
 
       expect(selectHandler).toHaveBeenCalled();
     });
@@ -422,8 +423,9 @@ describe("EaCalendar", () => {
         eventDetail = e.detail;
       });
 
-      const dayCell = calendar.shadowRoot.querySelector(".ea-calendar__day");
-      dayCell.click();
+      const dayCell =
+        calendar.shadowRoot!.querySelector<HTMLElement>(".ea-calendar__day");
+      dayCell!.click();
 
       expect(eventDetail).toBeDefined();
       expect(eventDetail).toHaveProperty("year");
@@ -446,10 +448,10 @@ describe("EaCalendar", () => {
       });
 
       const currentMonthCell =
-        calendar.shadowRoot.querySelector(".is-current-month");
+        calendar.shadowRoot!.querySelector<HTMLElement>(".is-current-month");
       if (currentMonthCell) {
         currentMonthCell.click();
-        expect(eventDetail.fullDate).toMatch(/^\d+-\d+-\d+$/);
+        expect(eventDetail!.fullDate).toMatch(/^\d+-\d+-\d+$/);
       }
     });
 
@@ -462,8 +464,10 @@ describe("EaCalendar", () => {
       const selectHandler = vi.fn();
       calendar.addEventListener("ea-select", selectHandler);
 
-      const tbody = calendar.shadowRoot.querySelector(".ea-calendar__tbody");
-      tbody.click();
+      const tbody = calendar.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-calendar__tbody"
+      );
+      tbody!.click();
 
       expect(selectHandler).not.toHaveBeenCalled();
     });
@@ -477,7 +481,7 @@ describe("EaCalendar", () => {
       `;
       container.appendChild(calendar);
 
-      const slot = calendar.shadowRoot.querySelector('slot[name="header"]');
+      const slot = calendar.shadowRoot!.querySelector('slot[name="header"]');
       expect(slot).toBeDefined();
     });
   });
@@ -519,7 +523,7 @@ describe("EaCalendar", () => {
       const calendar = document.createElement("ea-calendar");
       container.appendChild(calendar);
 
-      const days = calendar.shadowRoot.querySelectorAll(".ea-calendar__day");
+      const days = calendar.shadowRoot!.querySelectorAll(".ea-calendar__day");
       expect(days.length % 7).toBe(0);
     });
 
@@ -530,7 +534,7 @@ describe("EaCalendar", () => {
       await calendar.updateComplete;
 
       const currentMonthDays =
-        calendar.shadowRoot.querySelectorAll(".is-current-month");
+        calendar.shadowRoot!.querySelectorAll(".is-current-month");
       expect(currentMonthDays.length).toBeGreaterThanOrEqual(28);
       expect(currentMonthDays.length).toBeLessThanOrEqual(31);
     });
@@ -549,25 +553,25 @@ describe("EaCalendar", () => {
       it("table 应该有 role=grid", () => {
         const calendar = document.createElement("ea-calendar");
         container.appendChild(calendar);
-        const table = calendar.shadowRoot.querySelector(".ea-calendar__body");
-        expect(table.getAttribute("role")).toBe("grid");
+        const table = calendar.shadowRoot!.querySelector(".ea-calendar__body");
+        expect(table!.getAttribute("role")).toBe("grid");
       });
 
       it("table 应该有 aria-labelledby 指向 title", async () => {
         const calendar = document.createElement("ea-calendar");
         container.appendChild(calendar);
         await calendar.updateComplete;
-        const table = calendar.shadowRoot.querySelector(".ea-calendar__body");
-        const title = calendar.shadowRoot.querySelector(".ea-calendar__title");
-        expect(table.getAttribute("aria-labelledby")).toBe(title.id);
+        const table = calendar.shadowRoot!.querySelector(".ea-calendar__body");
+        const title = calendar.shadowRoot!.querySelector(".ea-calendar__title");
+        expect(table!.getAttribute("aria-labelledby")).toBe(title!.id);
       });
 
       it("table 应该有 aria-colcount=7", async () => {
         const calendar = document.createElement("ea-calendar");
         container.appendChild(calendar);
         await calendar.updateComplete;
-        const table = calendar.shadowRoot.querySelector(".ea-calendar__body");
-        expect(table.getAttribute("aria-colcount")).toBe("7");
+        const table = calendar.shadowRoot!.querySelector(".ea-calendar__body");
+        expect(table!.getAttribute("aria-colcount")).toBe("7");
       });
 
       it("表头行应该有 role=row 和 aria-rowindex=1", async () => {
@@ -575,15 +579,15 @@ describe("EaCalendar", () => {
         container.appendChild(calendar);
         await calendar.updateComplete;
         const theadRow =
-          calendar.shadowRoot.querySelector(".ea-calendar__week");
-        expect(theadRow.getAttribute("role")).toBe("row");
-        expect(theadRow.getAttribute("aria-rowindex")).toBe("1");
+          calendar.shadowRoot!.querySelector(".ea-calendar__week");
+        expect(theadRow!.getAttribute("role")).toBe("row");
+        expect(theadRow!.getAttribute("aria-rowindex")).toBe("1");
       });
 
       it("表头单元格应该有 role=columnheader", () => {
         const calendar = document.createElement("ea-calendar");
         container.appendChild(calendar);
-        const ths = calendar.shadowRoot.querySelectorAll(".ea-calendar__th");
+        const ths = calendar.shadowRoot!.querySelectorAll(".ea-calendar__th");
         expect(ths.length).toBe(7);
         ths.forEach(th => {
           expect(th.getAttribute("role")).toBe("columnheader");
@@ -594,7 +598,7 @@ describe("EaCalendar", () => {
         const calendar = document.createElement("ea-calendar");
         container.appendChild(calendar);
         await calendar.updateComplete;
-        const ths = calendar.shadowRoot.querySelectorAll(".ea-calendar__th");
+        const ths = calendar.shadowRoot!.querySelectorAll(".ea-calendar__th");
         ths.forEach((th, i) => {
           expect(th.getAttribute("aria-colindex")).toBe(String(i + 1));
         });
@@ -603,7 +607,7 @@ describe("EaCalendar", () => {
       it("日期行应该有 role=row", () => {
         const calendar = document.createElement("ea-calendar");
         container.appendChild(calendar);
-        const rows = calendar.shadowRoot.querySelectorAll(".ea-calendar__row");
+        const rows = calendar.shadowRoot!.querySelectorAll(".ea-calendar__row");
         rows.forEach(row => {
           expect(row.getAttribute("role")).toBe("row");
         });
@@ -613,7 +617,7 @@ describe("EaCalendar", () => {
         const calendar = document.createElement("ea-calendar");
         container.appendChild(calendar);
         await calendar.updateComplete;
-        const rows = calendar.shadowRoot.querySelectorAll(".ea-calendar__row");
+        const rows = calendar.shadowRoot!.querySelectorAll(".ea-calendar__row");
         rows.forEach(row => {
           expect(row.hasAttribute("aria-rowindex")).toBe(true);
         });
@@ -622,7 +626,7 @@ describe("EaCalendar", () => {
       it("日期单元格应该有 role=gridcell", () => {
         const calendar = document.createElement("ea-calendar");
         container.appendChild(calendar);
-        const cells = calendar.shadowRoot.querySelectorAll(
+        const cells = calendar.shadowRoot!.querySelectorAll(
           "td[role='gridcell']"
         );
         expect(cells.length).toBeGreaterThan(0);
@@ -633,7 +637,7 @@ describe("EaCalendar", () => {
         calendar.setAttribute("value", "2026-06-15");
         container.appendChild(calendar);
         await calendar.updateComplete;
-        const selectedCell = calendar.shadowRoot.querySelector(
+        const selectedCell = calendar.shadowRoot!.querySelector(
           'td[role="gridcell"][aria-selected="true"]'
         );
         expect(selectedCell).toBeTruthy();
@@ -643,7 +647,7 @@ describe("EaCalendar", () => {
         const calendar = document.createElement("ea-calendar");
         container.appendChild(calendar);
         await calendar.updateComplete;
-        const todayCell = calendar.shadowRoot.querySelector(
+        const todayCell = calendar.shadowRoot!.querySelector(
           'td[aria-current="date"]'
         );
         expect(todayCell).toBeTruthy();
@@ -654,9 +658,9 @@ describe("EaCalendar", () => {
         container.appendChild(calendar);
         await calendar.updateComplete;
         const prevMonthCells =
-          calendar.shadowRoot.querySelectorAll(".is-prev-month");
+          calendar.shadowRoot!.querySelectorAll(".is-prev-month");
         const nextMonthCells =
-          calendar.shadowRoot.querySelectorAll(".is-next-month");
+          calendar.shadowRoot!.querySelectorAll(".is-next-month");
         const outOfRangeCells = [...prevMonthCells, ...nextMonthCells];
         expect(outOfRangeCells.length).toBeGreaterThan(0);
         outOfRangeCells.forEach(cell => {
@@ -669,7 +673,7 @@ describe("EaCalendar", () => {
         container.appendChild(calendar);
         await calendar.updateComplete;
         const currentMonthCells =
-          calendar.shadowRoot.querySelectorAll(".is-current-month");
+          calendar.shadowRoot!.querySelectorAll(".is-current-month");
         expect(currentMonthCells.length).toBeGreaterThan(0);
         currentMonthCells.forEach(cell => {
           expect(cell.getAttribute("aria-disabled")).toBeFalsy();
@@ -680,7 +684,7 @@ describe("EaCalendar", () => {
         const calendar = document.createElement("ea-calendar");
         container.appendChild(calendar);
         await calendar.updateComplete;
-        const cells = calendar.shadowRoot.querySelectorAll(
+        const cells = calendar.shadowRoot!.querySelectorAll(
           "td[role='gridcell']"
         );
         cells.forEach(cell => {
@@ -692,7 +696,7 @@ describe("EaCalendar", () => {
 });
 
 describe("EaCalendar Controllers And Keyboard", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -703,7 +707,7 @@ describe("EaCalendar Controllers And Keyboard", () => {
     container.remove();
   });
 
-  async function createCalendar(attrs = {}) {
+  async function createCalendar(attrs: Record<string, string> = {}) {
     const calendar = document.createElement("ea-calendar");
     for (const [key, value] of Object.entries(attrs)) {
       calendar.setAttribute(key, value);
@@ -713,12 +717,14 @@ describe("EaCalendar Controllers And Keyboard", () => {
     return calendar;
   }
 
-  const getGridCells = calendar => [
-    ...calendar.shadowRoot.querySelectorAll("td[role='gridcell']"),
+  const getGridCells = (calendar: HTMLElementTagNameMap["ea-calendar"]) => [
+    ...calendar.shadowRoot!.querySelectorAll("td[role='gridcell']"),
   ];
 
-  const getActiveCell = calendar =>
-    calendar.shadowRoot.querySelector("td[role='gridcell'][tabindex='0']");
+  const getActiveCell = (calendar: HTMLElementTagNameMap["ea-calendar"]) =>
+    calendar.shadowRoot!.querySelector<HTMLElement>(
+      "td[role='gridcell'][tabindex='0']"
+    );
 
   describe("updateContainerClasslist", () => {
     it("应返回块类名并应用到容器元素", async () => {
@@ -727,19 +733,23 @@ describe("EaCalendar Controllers And Keyboard", () => {
       const className = calendar.updateContainerClasslist();
 
       expect(className).toBe("ea-calendar");
-      expect(calendar.shadowRoot.querySelector(".ea-calendar").className).toBe(
-        "ea-calendar"
-      );
+      expect(
+        calendar.shadowRoot!.querySelector(".ea-calendar")!.className
+      ).toBe("ea-calendar");
     });
   });
 
-  async function waitForElement(calendar, selector, tries = 40) {
+  async function waitForElement<T extends Element = Element>(
+    calendar: HTMLElementTagNameMap["ea-calendar"],
+    selector: string,
+    tries = 40
+  ): Promise<T> {
     for (let i = 0; i < tries; i++) {
-      const el = calendar.shadowRoot?.querySelector(selector);
+      const el = calendar.shadowRoot?.querySelector<T>(selector);
       if (el) return el;
       await waitForRender(50);
     }
-    return null;
+    return null as unknown as T;
   }
 
   describe("Button Controller", () => {
@@ -749,7 +759,7 @@ describe("EaCalendar Controllers And Keyboard", () => {
         value: "2024-05-15",
       });
 
-      const prevBtn = await waitForElement(
+      const prevBtn = await waitForElement<HTMLElement>(
         calendar,
         ".ea-calendar__controller-prev"
       );
@@ -765,7 +775,7 @@ describe("EaCalendar Controllers And Keyboard", () => {
         value: "2024-05-15",
       });
 
-      const nextBtn = await waitForElement(
+      const nextBtn = await waitForElement<HTMLElement>(
         calendar,
         ".ea-calendar__controller-next"
       );
@@ -781,7 +791,7 @@ describe("EaCalendar Controllers And Keyboard", () => {
         value: "2020-01-15",
       });
 
-      const todayBtn = await waitForElement(
+      const todayBtn = await waitForElement<HTMLElement>(
         calendar,
         ".ea-calendar__controller-today"
       );
@@ -791,7 +801,7 @@ describe("EaCalendar Controllers And Keyboard", () => {
       expect(calendar.value).toMatch(/^\d{4}-\d{2}-\d{2}$/);
       expect(calendar.value.startsWith(String(now.getFullYear()))).toBe(true);
       expect(
-        calendar.shadowRoot.querySelector(".ea-calendar__title").textContent
+        calendar.shadowRoot!.querySelector(".ea-calendar__title")!.textContent
       ).toContain(String(now.getFullYear()));
     });
   });
@@ -803,11 +813,11 @@ describe("EaCalendar Controllers And Keyboard", () => {
         value: "2024-05-15",
       });
 
-      const yearEl = await waitForElement(
+      const yearEl = await waitForElement<HTMLElementTagNameMap["ea-select"]>(
         calendar,
         ".ea-calendar__controller-year"
       );
-      const monthEl = await waitForElement(
+      const monthEl = await waitForElement<HTMLElementTagNameMap["ea-select"]>(
         calendar,
         ".ea-calendar__controller-month"
       );
@@ -827,7 +837,7 @@ describe("EaCalendar Controllers And Keyboard", () => {
         value: "2024-05-15",
       });
 
-      const yearEl = await waitForElement(
+      const yearEl = await waitForElement<HTMLElementTagNameMap["ea-select"]>(
         calendar,
         ".ea-calendar__controller-year"
       );
@@ -847,7 +857,7 @@ describe("EaCalendar Controllers And Keyboard", () => {
         value: "2024-05-15",
       });
 
-      const monthEl = await waitForElement(
+      const monthEl = await waitForElement<HTMLElementTagNameMap["ea-select"]>(
         calendar,
         ".ea-calendar__controller-month"
       );
@@ -863,12 +873,12 @@ describe("EaCalendar Controllers And Keyboard", () => {
   });
 
   describe("Grid Keyboard Navigation", () => {
-    function indices(calendar) {
+    function indices(calendar: HTMLElementTagNameMap["ea-calendar"]) {
       const cells = getGridCells(calendar);
       return {
         cells,
         active: getActiveCell(calendar),
-        index: cells.indexOf(getActiveCell(calendar)),
+        index: cells.indexOf(getActiveCell(calendar)!),
       };
     }
 
@@ -879,7 +889,7 @@ describe("EaCalendar Controllers And Keyboard", () => {
       const event = fireKeydown(active, "ArrowRight");
 
       expect(event.defaultPrevented).toBe(true);
-      expect(active.getAttribute("tabindex")).toBe("-1");
+      expect(active!.getAttribute("tabindex")).toBe("-1");
       expect(cells[index + 1].getAttribute("tabindex")).toBe("0");
     });
 
@@ -1004,7 +1014,7 @@ describe("EaCalendar Controllers And Keyboard", () => {
 
     it("非网格单元格目标不应处理", async () => {
       const calendar = await createCalendar({ value: "2024-05-15" });
-      const tbody = calendar.shadowRoot.querySelector(".ea-calendar__tbody");
+      const tbody = calendar.shadowRoot!.querySelector(".ea-calendar__tbody");
 
       const event = fireKeydown(tbody, "ArrowRight");
 
@@ -1014,7 +1024,7 @@ describe("EaCalendar Controllers And Keyboard", () => {
     it("网格内聚焦时切换月份应恢复焦点到活动单元格", async () => {
       const calendar = await createCalendar({ value: "2024-05-15" });
       const active = getActiveCell(calendar);
-      active.focus();
+      active!.focus();
 
       calendar.displayDate = calendar.displayDate.add(1, "month");
       await calendar.updateComplete;
@@ -1046,11 +1056,11 @@ describe("EaCalendar Controllers And Keyboard", () => {
 
       calendar.setAttribute("locale", "zh-CN");
 
-      const yearEl = await waitForElement(
+      const yearEl = await waitForElement<HTMLElementTagNameMap["ea-select"]>(
         calendar,
         ".ea-calendar__controller-year"
       );
-      const monthEl = await waitForElement(
+      const monthEl = await waitForElement<HTMLElementTagNameMap["ea-select"]>(
         calendar,
         ".ea-calendar__controller-month"
       );

@@ -1,22 +1,17 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 
-global.requestAnimationFrame = callback => {
-  return setTimeout(callback, 16);
-};
-global.cancelAnimationFrame = id => {
-  clearTimeout(id);
-};
-
 import "./index.js";
 import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y.js";
 
-async function waitForOptionsMounted(select) {
+async function waitForOptionsMounted(
+  select: HTMLElementTagNameMap["ea-select"]
+) {
   const options = [...select.querySelectorAll("ea-option")];
   await Promise.all(options.map(option => option.updateComplete));
 }
 
 describe("EaSelect Component", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -41,7 +36,7 @@ describe("EaSelect Component", () => {
       container.appendChild(select);
 
       expect(
-        select.shadowRoot.querySelector('[part="container"]')
+        select.shadowRoot!.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
@@ -49,14 +44,16 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       container.appendChild(select);
 
-      expect(select.shadowRoot.querySelector('[part="input"]')).toBeTruthy();
+      expect(select.shadowRoot!.querySelector('[part="input"]')).toBeTruthy();
     });
 
     it("应该包含 dropdown CSS Part", () => {
       const select = document.createElement("ea-select");
       container.appendChild(select);
 
-      expect(select.shadowRoot.querySelector('[part="dropdown"]')).toBeTruthy();
+      expect(
+        select.shadowRoot!.querySelector('[part="dropdown"]')
+      ).toBeTruthy();
     });
 
     it("应该渲染 slot 内容", () => {
@@ -64,7 +61,7 @@ describe("EaSelect Component", () => {
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
 
-      const slot = select.shadowRoot.querySelector("slot");
+      const slot = select.shadowRoot!.querySelector("slot");
       expect(slot).toBeTruthy();
     });
 
@@ -72,8 +69,9 @@ describe("EaSelect Component", () => {
       const select = document.createElement("ea-select");
       container.appendChild(select);
 
-      const containerEl = select.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-select")).toBe(true);
+      const containerEl =
+        select.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-select")).toBe(true);
     });
   });
 
@@ -287,7 +285,7 @@ describe("EaSelect Component", () => {
       await option.updateComplete;
 
       expect(
-        option.shadowRoot.querySelector('[part="container"]')
+        option.shadowRoot!.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
@@ -299,7 +297,7 @@ describe("EaSelect Component", () => {
 
       await option.updateComplete;
 
-      const slot = option.shadowRoot.querySelector("slot");
+      const slot = option.shadowRoot!.querySelector("slot");
       expect(slot).toBeTruthy();
     });
 
@@ -310,8 +308,9 @@ describe("EaSelect Component", () => {
 
       await option.updateComplete;
 
-      const containerEl = option.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-option")).toBe(true);
+      const containerEl =
+        option.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-option")).toBe(true);
     });
   });
 
@@ -392,13 +391,13 @@ describe("EaSelect Component", () => {
       group.label = "Test Group";
       container.appendChild(group);
 
-      const containerEl = group.shadowRoot.querySelector('[part="container"]');
+      const containerEl = group.shadowRoot!.querySelector('[part="container"]');
       expect(containerEl).toBeTruthy();
 
-      const header = group.shadowRoot.querySelector('[part="header"]');
+      const header = group.shadowRoot!.querySelector('[part="header"]');
       expect(header).toBeTruthy();
 
-      const content = group.shadowRoot.querySelector('[part="content"]');
+      const content = group.shadowRoot!.querySelector('[part="content"]');
       expect(content).toBeTruthy();
     });
 
@@ -406,14 +405,16 @@ describe("EaSelect Component", () => {
       const group = document.createElement("ea-option-group");
       container.appendChild(group);
 
-      const containerEl = group.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-option-group")).toBe(true);
+      const containerEl = group.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-option-group")).toBe(true);
 
-      const header = group.shadowRoot.querySelector('[part="header"]');
-      expect(header.classList.contains("ea-option-group__header")).toBe(true);
+      const header = group.shadowRoot!.querySelector('[part="header"]');
+      expect(header!.classList.contains("ea-option-group__header")).toBe(true);
 
-      const content = group.shadowRoot.querySelector('[part="content"]');
-      expect(content.classList.contains("ea-option-group__content")).toBe(true);
+      const content = group.shadowRoot!.querySelector('[part="content"]');
+      expect(content!.classList.contains("ea-option-group__content")).toBe(
+        true
+      );
     });
   });
 
@@ -443,9 +444,9 @@ describe("EaSelect Component", () => {
       group.label = "Updated Label";
       await group.updateComplete;
 
-      const headerSlot = group.shadowRoot.querySelector('slot[name="header"]');
+      const headerSlot = group.shadowRoot!.querySelector('slot[name="header"]');
       expect(headerSlot).toBeTruthy();
-      expect(headerSlot.textContent).toBe("Updated Label");
+      expect(headerSlot!.textContent).toBe("Updated Label");
     });
   });
 
@@ -461,7 +462,7 @@ describe("EaSelect Component", () => {
       group.appendChild(option1);
       container.appendChild(group);
 
-      const defaultSlot = group.shadowRoot.querySelector("slot:not([name])");
+      const defaultSlot = group.shadowRoot!.querySelector("slot:not([name])");
       expect(defaultSlot).toBeTruthy();
     });
 
@@ -470,7 +471,7 @@ describe("EaSelect Component", () => {
       group.label = "Default Header";
       container.appendChild(group);
 
-      const headerSlot = group.shadowRoot.querySelector('slot[name="header"]');
+      const headerSlot = group.shadowRoot!.querySelector('slot[name="header"]');
       expect(headerSlot).toBeTruthy();
     });
   });
@@ -482,8 +483,9 @@ describe("EaSelect Component", () => {
       container.appendChild(select);
       await select.updateComplete;
 
-      const containerEl = select.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-disabled")).toBe(true);
+      const containerEl =
+        select.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-disabled")).toBe(true);
     });
 
     it("disabled 动态切换应正确更新 class", async () => {
@@ -491,15 +493,16 @@ describe("EaSelect Component", () => {
       container.appendChild(select);
       await select.updateComplete;
 
-      const containerEl = select.shadowRoot.querySelector('[part="container"]');
+      const containerEl =
+        select.shadowRoot!.querySelector('[part="container"]');
 
       select.disabled = true;
       await select.updateComplete;
-      expect(containerEl.classList.contains("is-disabled")).toBe(true);
+      expect(containerEl!.classList.contains("is-disabled")).toBe(true);
 
       select.disabled = false;
       await select.updateComplete;
-      expect(containerEl.classList.contains("is-disabled")).toBe(false);
+      expect(containerEl!.classList.contains("is-disabled")).toBe(false);
     });
 
     it("clearable 且有值时容器应有 is-clearable 类", async () => {
@@ -512,8 +515,9 @@ describe("EaSelect Component", () => {
       select.value = "1";
       await select.updateComplete;
 
-      const containerEl = select.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-clearable")).toBe(true);
+      const containerEl =
+        select.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-clearable")).toBe(true);
     });
 
     it("clearable 但无值时不应有 is-clearable 类", async () => {
@@ -522,8 +526,9 @@ describe("EaSelect Component", () => {
       container.appendChild(select);
       await select.updateComplete;
 
-      const containerEl = select.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-clearable")).toBe(false);
+      const containerEl =
+        select.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-clearable")).toBe(false);
     });
 
     it("size='large' 时容器应有 ea-select--large 类", async () => {
@@ -532,8 +537,9 @@ describe("EaSelect Component", () => {
       container.appendChild(select);
       await select.updateComplete;
 
-      const containerEl = select.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-select--large")).toBe(true);
+      const containerEl =
+        select.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-select--large")).toBe(true);
     });
 
     it("size='small' 时容器应有 ea-select--small 类", async () => {
@@ -542,8 +548,9 @@ describe("EaSelect Component", () => {
       container.appendChild(select);
       await select.updateComplete;
 
-      const containerEl = select.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-select--small")).toBe(true);
+      const containerEl =
+        select.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-select--small")).toBe(true);
     });
 
     it("默认 size 不应有 size 修饰符类", async () => {
@@ -551,9 +558,10 @@ describe("EaSelect Component", () => {
       container.appendChild(select);
       await select.updateComplete;
 
-      const containerEl = select.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-select--large")).toBe(false);
-      expect(containerEl.classList.contains("ea-select--small")).toBe(false);
+      const containerEl =
+        select.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-select--large")).toBe(false);
+      expect(containerEl!.classList.contains("ea-select--small")).toBe(false);
     });
 
     it("multiple 时容器应有 is-multiple 类", async () => {
@@ -562,8 +570,9 @@ describe("EaSelect Component", () => {
       container.appendChild(select);
       await select.updateComplete;
 
-      const containerEl = select.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-multiple")).toBe(true);
+      const containerEl =
+        select.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-multiple")).toBe(true);
     });
 
     it("filterable 时容器应有 is-filterable 类", async () => {
@@ -572,8 +581,9 @@ describe("EaSelect Component", () => {
       container.appendChild(select);
       await select.updateComplete;
 
-      const containerEl = select.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-filterable")).toBe(true);
+      const containerEl =
+        select.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-filterable")).toBe(true);
     });
 
     it("有值时容器应有 is-has-value 类", async () => {
@@ -585,8 +595,9 @@ describe("EaSelect Component", () => {
       select.value = "1";
       await select.updateComplete;
 
-      const containerEl = select.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-has-value")).toBe(true);
+      const containerEl =
+        select.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-has-value")).toBe(true);
     });
 
     it("无值时容器不应有 is-has-value 类", async () => {
@@ -594,8 +605,9 @@ describe("EaSelect Component", () => {
       container.appendChild(select);
       await select.updateComplete;
 
-      const containerEl = select.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-has-value")).toBe(false);
+      const containerEl =
+        select.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-has-value")).toBe(false);
     });
 
     it("多选空数组时不应有 is-has-value 类", async () => {
@@ -608,8 +620,9 @@ describe("EaSelect Component", () => {
       select.value = [];
       await select.updateComplete;
 
-      const containerEl = select.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-has-value")).toBe(false);
+      const containerEl =
+        select.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-has-value")).toBe(false);
     });
   });
 
@@ -620,12 +633,13 @@ describe("EaSelect Component", () => {
       container.appendChild(select);
       await select.updateComplete;
 
-      const inputEl = select.shadowRoot.querySelector('[part="input"]');
-      inputEl.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      const inputEl = select.shadowRoot!.querySelector('[part="input"]');
+      inputEl!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await select.updateComplete;
 
-      const containerEl = select.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-focus")).toBe(true);
+      const containerEl =
+        select.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-focus")).toBe(true);
     });
 
     it("打开下拉框时应触发 ea-visible-change 事件", async () => {
@@ -637,8 +651,8 @@ describe("EaSelect Component", () => {
       const handler = vi.fn();
       select.addEventListener("ea-visible-change", handler);
 
-      const inputEl = select.shadowRoot.querySelector('[part="input"]');
-      inputEl.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      const inputEl = select.shadowRoot!.querySelector('[part="input"]');
+      inputEl!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await select.updateComplete;
 
       expect(handler).toHaveBeenCalled();
@@ -650,8 +664,8 @@ describe("EaSelect Component", () => {
       container.appendChild(select);
       await select.updateComplete;
 
-      const inputEl = select.shadowRoot.querySelector('[part="input"]');
-      inputEl.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      const inputEl = select.shadowRoot!.querySelector('[part="input"]');
+      inputEl!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await select.updateComplete;
 
       const handler = vi.fn();
@@ -673,8 +687,9 @@ describe("EaSelect Component", () => {
       select.show();
       await select.updateComplete;
 
-      const containerEl = select.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-focus")).toBe(true);
+      const containerEl =
+        select.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-focus")).toBe(true);
     });
 
     it("hide() 方法应关闭下拉框并移除 is-focus", async () => {
@@ -689,8 +704,9 @@ describe("EaSelect Component", () => {
       select.hide();
       await select.updateComplete;
 
-      const containerEl = select.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-focus")).toBe(false);
+      const containerEl =
+        select.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-focus")).toBe(false);
     });
 
     it("disabled 时不应打开下拉框", async () => {
@@ -700,12 +716,13 @@ describe("EaSelect Component", () => {
       container.appendChild(select);
       await select.updateComplete;
 
-      const inputEl = select.shadowRoot.querySelector('[part="input"]');
-      inputEl.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      const inputEl = select.shadowRoot!.querySelector('[part="input"]');
+      inputEl!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await select.updateComplete;
 
-      const containerEl = select.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-focus")).toBe(false);
+      const containerEl =
+        select.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-focus")).toBe(false);
     });
   });
 
@@ -717,12 +734,12 @@ describe("EaSelect Component", () => {
       container.appendChild(select);
       await select.updateComplete;
 
-      const inputEl = select.shadowRoot.querySelector('[part="input"]');
-      inputEl.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      const inputEl = select.shadowRoot!.querySelector('[part="input"]');
+      inputEl!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await select.updateComplete;
 
       const option2 = select.querySelector('ea-option[value="2"]');
-      option2.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      option2!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await select.updateComplete;
 
       expect(select.value).toBe("2");
@@ -735,16 +752,17 @@ describe("EaSelect Component", () => {
       container.appendChild(select);
       await select.updateComplete;
 
-      const inputEl = select.shadowRoot.querySelector('[part="input"]');
-      inputEl.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      const inputEl = select.shadowRoot!.querySelector('[part="input"]');
+      inputEl!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await select.updateComplete;
 
       const option1 = select.querySelector('ea-option[value="1"]');
-      option1.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      option1!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await select.updateComplete;
 
-      const containerEl = select.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-focus")).toBe(false);
+      const containerEl =
+        select.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-focus")).toBe(false);
     });
 
     it("选择选项应触发 change 事件", async () => {
@@ -757,12 +775,12 @@ describe("EaSelect Component", () => {
       const handler = vi.fn();
       select.addEventListener("change", handler);
 
-      const inputEl = select.shadowRoot.querySelector('[part="input"]');
-      inputEl.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      const inputEl = select.shadowRoot!.querySelector('[part="input"]');
+      inputEl!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await select.updateComplete;
 
       const option2 = select.querySelector('ea-option[value="2"]');
-      option2.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      option2!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await select.updateComplete;
 
       expect(handler).toHaveBeenCalled();
@@ -778,12 +796,12 @@ describe("EaSelect Component", () => {
       select.value = "1";
       await select.updateComplete;
 
-      const inputEl = select.shadowRoot.querySelector('[part="input"]');
-      inputEl.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      const inputEl = select.shadowRoot!.querySelector('[part="input"]');
+      inputEl!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await select.updateComplete;
 
       const option2 = select.querySelector('ea-option[value="2"]');
-      option2.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      option2!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await select.updateComplete;
 
       expect(select.value).toBe("1");
@@ -799,12 +817,12 @@ describe("EaSelect Component", () => {
       container.appendChild(select);
       await select.updateComplete;
 
-      const inputEl = select.shadowRoot.querySelector('[part="input"]');
-      inputEl.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      const inputEl = select.shadowRoot!.querySelector('[part="input"]');
+      inputEl!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await select.updateComplete;
 
       const option1 = select.querySelector('ea-option[value="1"]');
-      option1.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      option1!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await select.updateComplete;
 
       expect(Array.isArray(select.value)).toBe(true);
@@ -822,12 +840,12 @@ describe("EaSelect Component", () => {
       select.value = ["1"];
       await select.updateComplete;
 
-      const inputEl = select.shadowRoot.querySelector('[part="input"]');
-      inputEl.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      const inputEl = select.shadowRoot!.querySelector('[part="input"]');
+      inputEl!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await select.updateComplete;
 
       const option1 = select.querySelector('ea-option[value="1"]');
-      option1.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      option1!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await select.updateComplete;
 
       expect(select.value).not.toContain("1");
@@ -841,16 +859,17 @@ describe("EaSelect Component", () => {
       container.appendChild(select);
       await select.updateComplete;
 
-      const inputEl = select.shadowRoot.querySelector('[part="input"]');
-      inputEl.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      const inputEl = select.shadowRoot!.querySelector('[part="input"]');
+      inputEl!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await select.updateComplete;
 
       const option1 = select.querySelector('ea-option[value="1"]');
-      option1.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      option1!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await select.updateComplete;
 
-      const containerEl = select.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-focus")).toBe(true);
+      const containerEl =
+        select.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-focus")).toBe(true);
     });
 
     it("多选时应触发 change 事件", async () => {
@@ -864,12 +883,12 @@ describe("EaSelect Component", () => {
       const handler = vi.fn();
       select.addEventListener("change", handler);
 
-      const inputEl = select.shadowRoot.querySelector('[part="input"]');
-      inputEl.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      const inputEl = select.shadowRoot!.querySelector('[part="input"]');
+      inputEl!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await select.updateComplete;
 
       const option1 = select.querySelector('ea-option[value="1"]');
-      option1.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      option1!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await select.updateComplete;
 
       expect(handler).toHaveBeenCalled();
@@ -887,8 +906,8 @@ describe("EaSelect Component", () => {
       select.value = "1";
       await select.updateComplete;
 
-      const clearIcon = select.shadowRoot.querySelector('[part="clear-icon"]');
-      clearIcon.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      const clearIcon = select.shadowRoot!.querySelector('[part="clear-icon"]');
+      clearIcon!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await select.updateComplete;
 
       expect(select.value).toBe("");
@@ -907,8 +926,8 @@ describe("EaSelect Component", () => {
       const handler = vi.fn();
       select.addEventListener("ea-clear", handler);
 
-      const clearIcon = select.shadowRoot.querySelector('[part="clear-icon"]');
-      clearIcon.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      const clearIcon = select.shadowRoot!.querySelector('[part="clear-icon"]');
+      clearIcon!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await select.updateComplete;
 
       expect(handler).toHaveBeenCalled();
@@ -926,8 +945,8 @@ describe("EaSelect Component", () => {
       select.value = ["1", "2"];
       await select.updateComplete;
 
-      const clearIcon = select.shadowRoot.querySelector('[part="clear-icon"]');
-      clearIcon.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      const clearIcon = select.shadowRoot!.querySelector('[part="clear-icon"]');
+      clearIcon!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await select.updateComplete;
 
       expect(select.value).toEqual([]);
@@ -946,8 +965,9 @@ describe("EaSelect Component", () => {
       );
       await select.updateComplete;
 
-      const containerEl = select.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-focus")).toBe(true);
+      const containerEl =
+        select.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-focus")).toBe(true);
     });
 
     it("ArrowDown 键应打开下拉框", async () => {
@@ -961,8 +981,9 @@ describe("EaSelect Component", () => {
       );
       await select.updateComplete;
 
-      const containerEl = select.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-focus")).toBe(true);
+      const containerEl =
+        select.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-focus")).toBe(true);
     });
 
     it("Space 键应打开下拉框（非 filterable 模式）", async () => {
@@ -976,8 +997,9 @@ describe("EaSelect Component", () => {
       );
       await select.updateComplete;
 
-      const containerEl = select.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-focus")).toBe(true);
+      const containerEl =
+        select.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-focus")).toBe(true);
     });
 
     it("Escape 键应关闭下拉框", async () => {
@@ -994,8 +1016,9 @@ describe("EaSelect Component", () => {
       );
       await select.updateComplete;
 
-      const containerEl = select.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-focus")).toBe(false);
+      const containerEl =
+        select.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-focus")).toBe(false);
     });
 
     it("ArrowDown 应移动到下一个选项", async () => {
@@ -1125,8 +1148,9 @@ describe("EaSelect Component", () => {
       );
       await select.updateComplete;
 
-      const containerEl = select.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-focus")).toBe(false);
+      const containerEl =
+        select.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-focus")).toBe(false);
     });
   });
 
@@ -1285,12 +1309,12 @@ describe("EaSelect Component", () => {
       const handler = vi.fn();
       select.addEventListener("change", handler);
 
-      const inputEl = select.shadowRoot.querySelector('[part="input"]');
-      inputEl.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      const inputEl = select.shadowRoot!.querySelector('[part="input"]');
+      inputEl!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await select.updateComplete;
 
       const option2 = select.querySelector('ea-option[value="2"]');
-      option2.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      option2!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await select.updateComplete;
 
       expect(handler).toHaveBeenCalled();
@@ -1308,12 +1332,12 @@ describe("EaSelect Component", () => {
       const handler = vi.fn();
       select.addEventListener("change", handler);
 
-      const inputEl = select.shadowRoot.querySelector('[part="input"]');
-      inputEl.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      const inputEl = select.shadowRoot!.querySelector('[part="input"]');
+      inputEl!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await select.updateComplete;
 
       const option1 = select.querySelector('ea-option[value="1"]');
-      option1.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      option1!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await select.updateComplete;
 
       expect(handler).toHaveBeenCalled();
@@ -1330,9 +1354,9 @@ describe("EaSelect Component", () => {
 
       await option.updateComplete;
 
-      const clickPromise = new Promise(resolve => {
+      const clickPromise = new Promise<{ value: unknown }>(resolve => {
         select.addEventListener("ea-option-click", e => {
-          resolve(e.detail);
+          resolve((e as CustomEvent).detail);
         });
       });
 
@@ -1340,7 +1364,9 @@ describe("EaSelect Component", () => {
 
       const detail = await Promise.race([
         clickPromise,
-        new Promise(resolve => setTimeout(() => resolve({ value: 1 }), 500)),
+        new Promise<{ value: unknown }>(resolve =>
+          setTimeout(() => resolve({ value: 1 }), 500)
+        ),
       ]);
       expect(detail.value == "1").toBe(true);
     });
@@ -1382,7 +1408,7 @@ describe("EaSelect Component", () => {
       container.appendChild(select);
 
       expect(
-        select.shadowRoot.querySelector('[part="container"]')
+        select.shadowRoot!.querySelector('[part="container"]')
       ).toBeTruthy();
       expect(select.value).toBe("");
     });
@@ -1435,8 +1461,9 @@ describe("EaSelect Component", () => {
       container.appendChild(option);
       await option.updateComplete;
 
-      const containerEl = option.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-selected")).toBe(true);
+      const containerEl =
+        option.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-selected")).toBe(true);
     });
 
     it("取消 selected 应移除 is-selected 类", async () => {
@@ -1449,8 +1476,9 @@ describe("EaSelect Component", () => {
       option.selected = false;
       await option.updateComplete;
 
-      const containerEl = option.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-selected")).toBe(false);
+      const containerEl =
+        option.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-selected")).toBe(false);
     });
 
     it("disabled option 应有 is-disabled 类", async () => {
@@ -1460,8 +1488,9 @@ describe("EaSelect Component", () => {
       container.appendChild(option);
       await option.updateComplete;
 
-      const containerEl = option.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-disabled")).toBe(true);
+      const containerEl =
+        option.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-disabled")).toBe(true);
     });
 
     it("disabled option 不应有 tabindex", async () => {
@@ -1471,8 +1500,9 @@ describe("EaSelect Component", () => {
       container.appendChild(option);
       await option.updateComplete;
 
-      const containerEl = option.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.hasAttribute("tabindex")).toBe(false);
+      const containerEl =
+        option.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.hasAttribute("tabindex")).toBe(false);
     });
 
     it("option 不应有 tabindex（由 aria-activedescendant 管理）", async () => {
@@ -1481,8 +1511,9 @@ describe("EaSelect Component", () => {
       container.appendChild(option);
       await option.updateComplete;
 
-      const containerEl = option.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.hasAttribute("tabindex")).toBe(false);
+      const containerEl =
+        option.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.hasAttribute("tabindex")).toBe(false);
     });
 
     it("组件从 DOM 移除后应正常清理", async () => {
@@ -1520,12 +1551,13 @@ describe("EaSelect Component", () => {
       container.appendChild(select);
       await select.updateComplete;
 
-      const inputEl = select.shadowRoot.querySelector('[part="input"]');
-      inputEl.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      const inputEl = select.shadowRoot!.querySelector('[part="input"]');
+      inputEl!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await select.updateComplete;
 
-      const containerEl = select.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-focus")).toBe(false);
+      const containerEl =
+        select.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-focus")).toBe(false);
     });
 
     it("label 属性应优先于 textContent 作为显示值", async () => {
@@ -1538,7 +1570,7 @@ describe("EaSelect Component", () => {
       select.value = "1";
       await select.updateComplete;
 
-      const inputEl = select.shadowRoot.querySelector('[part="input"]');
+      const inputEl = select.shadowRoot!.querySelector('[part="input"]');
       expect(inputEl).toBeTruthy();
     });
 
@@ -1624,7 +1656,7 @@ describe("EaSelect Component", () => {
 
       const parts = ["container", "header", "content"];
       parts.forEach(partName => {
-        const element = group.shadowRoot.querySelector(`[part="${partName}"]`);
+        const element = group.shadowRoot!.querySelector(`[part="${partName}"]`);
         expect(element).toBeTruthy();
       });
     });
@@ -1694,8 +1726,8 @@ describe("EaSelect Component", () => {
       const ariaControls = select.getAttribute("aria-controls");
       expect(ariaControls).toBeTruthy();
 
-      const dropdown = select.shadowRoot.querySelector('[part="dropdown"]');
-      expect(dropdown.id).toBe(ariaControls);
+      const dropdown = select.shadowRoot!.querySelector('[part="dropdown"]');
+      expect(dropdown!.id).toBe(ariaControls);
     });
 
     it("dropdown 应有 role='listbox'", async () => {
@@ -1704,8 +1736,8 @@ describe("EaSelect Component", () => {
       container.appendChild(select);
       await select.updateComplete;
 
-      const dropdown = select.shadowRoot.querySelector('[part="dropdown"]');
-      expect(dropdown.getAttribute("role")).toBe("listbox");
+      const dropdown = select.shadowRoot!.querySelector('[part="dropdown"]');
+      expect(dropdown!.getAttribute("role")).toBe("listbox");
     });
 
     it("dropdown 初始应有 inert 属性", async () => {
@@ -1714,8 +1746,9 @@ describe("EaSelect Component", () => {
       container.appendChild(select);
       await select.updateComplete;
 
-      const dropdown = select.shadowRoot.querySelector('[part="dropdown"]');
-      expect(dropdown.inert).toBe(true);
+      const dropdown =
+        select.shadowRoot!.querySelector<HTMLElement>('[part="dropdown"]');
+      expect(dropdown!.inert).toBe(true);
     });
 
     it("打开下拉框时 inert 应被移除", async () => {
@@ -1727,8 +1760,9 @@ describe("EaSelect Component", () => {
       select.show();
       await select.updateComplete;
 
-      const dropdown = select.shadowRoot.querySelector('[part="dropdown"]');
-      expect(dropdown.inert).toBe(false);
+      const dropdown =
+        select.shadowRoot!.querySelector<HTMLElement>('[part="dropdown"]');
+      expect(dropdown!.inert).toBe(false);
     });
 
     it("ea-option 应有 role='option'", async () => {
@@ -1844,8 +1878,8 @@ describe("EaSelect Component", () => {
       container.appendChild(group);
       await group.updateComplete;
 
-      const content = group.shadowRoot.querySelector('[part="content"]');
-      expect(content.getAttribute("role")).toBe("group");
+      const content = group.shadowRoot!.querySelector('[part="content"]');
+      expect(content!.getAttribute("role")).toBe("group");
     });
 
     it("ea-option-group content 应有 aria-label", async () => {
@@ -1854,8 +1888,8 @@ describe("EaSelect Component", () => {
       container.appendChild(group);
       await group.updateComplete;
 
-      const content = group.shadowRoot.querySelector('[part="content"]');
-      expect(content.getAttribute("aria-label")).toBe("Group A");
+      const content = group.shadowRoot!.querySelector('[part="content"]');
+      expect(content!.getAttribute("aria-label")).toBe("Group A");
     });
 
     it("打开下拉框时应有 aria-activedescendant", async () => {
@@ -1928,8 +1962,8 @@ describe("EaSelect Component", () => {
 
       const options = select.querySelectorAll("ea-option");
       const containerEl =
-        options[1].shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-active")).toBe(true);
+        options[1].shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-active")).toBe(true);
     });
   });
 
@@ -2051,7 +2085,7 @@ describe("EaSelect Component", () => {
       container.appendChild(select);
       await select.updateComplete;
 
-      const input = select.shadowRoot.querySelector("ea-input");
+      const input = select.shadowRoot!.querySelector("ea-input");
       if (input) {
         input.value = "test";
       }
@@ -2063,7 +2097,7 @@ describe("EaSelect Component", () => {
       select.dispatchEvent(event);
       await select.updateComplete;
 
-      expect(input.value).toBe("");
+      expect(input!.value).toBe("");
     });
 
     it("Alt+ArrowDown 应打开下拉框但不移动选择", async () => {
@@ -2116,8 +2150,8 @@ describe("EaSelect Component", () => {
       select.show();
       await select.updateComplete;
 
-      const input = select.shadowRoot.querySelector("ea-input");
-      input.dispatchEvent(new Event("click", { bubbles: true }));
+      const input = select.shadowRoot!.querySelector("ea-input");
+      input!.dispatchEvent(new Event("click", { bubbles: true }));
       await select.updateComplete;
 
       expect(select.getAttribute("aria-expanded")).toBe("true");

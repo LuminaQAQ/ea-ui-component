@@ -4,7 +4,7 @@ import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y";
 import "./index.ts";
 
 describe("EaDescriptions", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -28,9 +28,9 @@ describe("EaDescriptions", () => {
       const descriptions = document.createElement("ea-descriptions");
       container.appendChild(descriptions);
 
-      const containerEl = descriptions.shadowRoot.querySelector("[part='container']");
-      const bodyEl = descriptions.shadowRoot.querySelector("[part='body']");
-      const captionEl = descriptions.shadowRoot.querySelector("[part='caption']");
+      const containerEl = descriptions.shadowRoot!.querySelector("[part='container']");
+      const bodyEl = descriptions.shadowRoot!.querySelector("[part='body']");
+      const captionEl = descriptions.shadowRoot!.querySelector("[part='caption']");
 
       expect(containerEl).not.toBeNull();
       expect(bodyEl).not.toBeNull();
@@ -45,8 +45,8 @@ describe("EaDescriptions", () => {
       `;
       container.appendChild(descriptions);
 
-      const headerSlot = descriptions.shadowRoot.querySelector("slot[name='header']");
-      const extraSlot = descriptions.shadowRoot.querySelector("slot[name='extra']");
+      const headerSlot = descriptions.shadowRoot!.querySelector("slot[name='header']");
+      const extraSlot = descriptions.shadowRoot!.querySelector("slot[name='extra']");
 
       expect(headerSlot).not.toBeNull();
       expect(extraSlot).not.toBeNull();
@@ -56,8 +56,8 @@ describe("EaDescriptions", () => {
       const descriptions = document.createElement("ea-descriptions");
       container.appendChild(descriptions);
 
-      const table = descriptions.shadowRoot.querySelector("table");
-      const tbody = descriptions.shadowRoot.querySelector("tbody");
+      const table = descriptions.shadowRoot!.querySelector("table");
+      const tbody = descriptions.shadowRoot!.querySelector("tbody");
 
       expect(table).not.toBeNull();
       expect(tbody).not.toBeNull();
@@ -119,8 +119,8 @@ describe("EaDescriptions", () => {
 
       await descriptions.updateComplete;
 
-      const table = descriptions.shadowRoot.querySelector("table");
-      expect(table.classList.contains("is-border")).toBe(true);
+      const table = descriptions.shadowRoot!.querySelector("table");
+      expect(table!.classList.contains("is-border")).toBe(true);
     });
   });
 
@@ -147,8 +147,8 @@ describe("EaDescriptions", () => {
 
       await descriptions.updateComplete;
 
-      const table = descriptions.shadowRoot.querySelector("table");
-      expect(table.classList.contains("is-vertical")).toBe(true);
+      const table = descriptions.shadowRoot!.querySelector("table");
+      expect(table!.classList.contains("is-vertical")).toBe(true);
     });
   });
 
@@ -168,8 +168,8 @@ describe("EaDescriptions", () => {
       await descriptions.updateComplete;
 
       expect(descriptions.size).toBe("large");
-      const table = descriptions.shadowRoot.querySelector("table");
-      expect(table.classList.contains("ea-descriptions--large")).toBe(true);
+      const table = descriptions.shadowRoot!.querySelector("table");
+      expect(table!.classList.contains("ea-descriptions--large")).toBe(true);
     });
 
     it("设置 size='small' 应该应用 small 修饰符类", async () => {
@@ -180,8 +180,8 @@ describe("EaDescriptions", () => {
       await descriptions.updateComplete;
 
       expect(descriptions.size).toBe("small");
-      const table = descriptions.shadowRoot.querySelector("table");
-      expect(table.classList.contains("ea-descriptions--small")).toBe(true);
+      const table = descriptions.shadowRoot!.querySelector("table");
+      expect(table!.classList.contains("ea-descriptions--small")).toBe(true);
     });
   });
 
@@ -234,9 +234,9 @@ describe("EaDescriptions", () => {
 
       await descriptions.updateComplete;
 
-      const tbody = descriptions.shadowRoot.querySelector(".ea-descriptions__body");
+      const tbody = descriptions.shadowRoot!.querySelector(".ea-descriptions__body");
       expect(tbody).not.toBeNull();
-      const rows = tbody.querySelectorAll("tr");
+      const rows = tbody!.querySelectorAll("tr");
       expect(rows.length).toBeGreaterThan(0);
     });
 
@@ -249,7 +249,7 @@ describe("EaDescriptions", () => {
 
       await descriptions.updateComplete;
 
-      const cells = descriptions.shadowRoot.querySelectorAll(".ea-descriptions__cell");
+      const cells = descriptions.shadowRoot!.querySelectorAll(".ea-descriptions__cell");
       expect(cells.length).toBeGreaterThan(0);
 
       const label = cells[0].querySelector(".ea-descriptions__label");
@@ -270,8 +270,8 @@ describe("EaDescriptions", () => {
 
       await descriptions.updateComplete;
 
-      const labels = descriptions.shadowRoot.querySelectorAll("td.ea-descriptions__label");
-      const contents = descriptions.shadowRoot.querySelectorAll("td.ea-descriptions__content");
+      const labels = descriptions.shadowRoot!.querySelectorAll("td.ea-descriptions__label");
+      const contents = descriptions.shadowRoot!.querySelectorAll("td.ea-descriptions__content");
       expect(labels.length).toBeGreaterThan(0);
       expect(contents.length).toBeGreaterThan(0);
     });
@@ -288,8 +288,8 @@ describe("EaDescriptions", () => {
 
       await descriptions.updateComplete;
 
-      const thElements = descriptions.shadowRoot.querySelectorAll("th");
-      const tdElements = descriptions.shadowRoot.querySelectorAll("td.ea-descriptions__content");
+      const thElements = descriptions.shadowRoot!.querySelectorAll("th");
+      const tdElements = descriptions.shadowRoot!.querySelectorAll("td.ea-descriptions__content");
       expect(thElements.length).toBeGreaterThan(0);
       expect(tdElements.length).toBeGreaterThan(0);
     });
@@ -320,8 +320,8 @@ describe("EaDescriptions", () => {
 
       await descriptions.updateComplete;
 
-      const tbody = descriptions.shadowRoot.querySelector(".ea-descriptions__body");
-      expect(tbody.children.length).toBe(0);
+      const tbody = descriptions.shadowRoot!.querySelector(".ea-descriptions__body");
+      expect(tbody!.children.length).toBe(0);
     });
 
     it("只有一个子项时应该正确处理", async () => {
@@ -333,8 +333,8 @@ describe("EaDescriptions", () => {
 
       await descriptions.updateComplete;
 
-      const tbody = descriptions.shadowRoot.querySelector(".ea-descriptions__body");
-      expect(tbody.children.length).toBeGreaterThan(0);
+      const tbody = descriptions.shadowRoot!.querySelector(".ea-descriptions__body");
+      expect(tbody!.children.length).toBeGreaterThan(0);
     });
 
     it("子项数量超过 column 时应该换行", async () => {
@@ -349,7 +349,7 @@ describe("EaDescriptions", () => {
 
       await descriptions.updateComplete;
 
-      const rows = descriptions.shadowRoot.querySelectorAll(".ea-descriptions__row");
+      const rows = descriptions.shadowRoot!.querySelectorAll(".ea-descriptions__row");
       expect(rows.length).toBeGreaterThanOrEqual(2);
     });
   });
@@ -375,7 +375,7 @@ describe("EaDescriptions", () => {
 });
 
 describe("EaDescriptionsItem", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -399,9 +399,9 @@ describe("EaDescriptionsItem", () => {
       const item = document.createElement("ea-descriptions-item");
       container.appendChild(item);
 
-      const containerEl = item.shadowRoot.querySelector("[part='container']");
-      const labelEl = item.shadowRoot.querySelector("[part='label']");
-      const contentEl = item.shadowRoot.querySelector("[part='content']");
+      const containerEl = item.shadowRoot!.querySelector("[part='container']");
+      const labelEl = item.shadowRoot!.querySelector("[part='label']");
+      const contentEl = item.shadowRoot!.querySelector("[part='content']");
 
       expect(containerEl).not.toBeNull();
       expect(labelEl).not.toBeNull();
@@ -413,7 +413,7 @@ describe("EaDescriptionsItem", () => {
       item.innerHTML = "Content";
       container.appendChild(item);
 
-      const slot = item.shadowRoot.querySelector("slot");
+      const slot = item.shadowRoot!.querySelector("slot");
       expect(slot).not.toBeNull();
     });
   });
@@ -688,8 +688,8 @@ describe("EaDescriptionsItem", () => {
         el.innerHTML = `<ea-descriptions-item label="Name">John</ea-descriptions-item>`;
         container.appendChild(el);
         await el.updateComplete;
-        const table = el.shadowRoot.querySelector("table");
-        expect(table.getAttribute("aria-labelledby")).toBeTruthy();
+        const table = el.shadowRoot!.querySelector("table");
+        expect(table!.getAttribute("aria-labelledby")).toBeTruthy();
       });
 
       it("label 元素应该有 role='rowheader'", async () => {
@@ -697,7 +697,7 @@ describe("EaDescriptionsItem", () => {
         el.innerHTML = `<ea-descriptions-item label="Name">John</ea-descriptions-item>`;
         container.appendChild(el);
         await el.updateComplete;
-        const labels = el.shadowRoot.querySelectorAll(".ea-descriptions__label");
+        const labels = el.shadowRoot!.querySelectorAll(".ea-descriptions__label");
         expect(labels.length).toBeGreaterThan(0);
         labels.forEach(label => {
           expect(label.getAttribute("role")).toBe("rowheader");

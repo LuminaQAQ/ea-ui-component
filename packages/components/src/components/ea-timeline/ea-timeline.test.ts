@@ -4,7 +4,7 @@ import "./index.js";
 import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y";
 
 describe("EaTimeline", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -22,7 +22,7 @@ describe("EaTimeline", () => {
 
     it("创建的元素应该是 ea-timeline 自定义元素实例", () => {
       const timeline = document.createElement("ea-timeline");
-      expect(timeline instanceof customElements.get("ea-timeline")).toBe(true);
+      expect(timeline instanceof customElements.get("ea-timeline")!).toBe(true);
     });
   });
 
@@ -31,7 +31,7 @@ describe("EaTimeline", () => {
       const timeline = document.createElement("ea-timeline");
       container.appendChild(timeline);
       expect(timeline.shadowRoot).toBeDefined();
-      expect(timeline.shadowRoot.mode).toBe("open");
+      expect(timeline.shadowRoot!.mode).toBe("open");
     });
   });
 
@@ -39,21 +39,21 @@ describe("EaTimeline", () => {
     it("应该包含 container CSS Part", () => {
       const timeline = document.createElement("ea-timeline");
       container.appendChild(timeline);
-      const el = timeline.shadowRoot.querySelector('[part="container"]');
+      const el = timeline.shadowRoot!.querySelector('[part="container"]');
       expect(el).toBeTruthy();
     });
 
     it("container CSS Part 应该在 div 元素上", () => {
       const timeline = document.createElement("ea-timeline");
       container.appendChild(timeline);
-      const el = timeline.shadowRoot.querySelector('[part="container"]');
-      expect(el.tagName.toLowerCase()).toBe("div");
+      const el = timeline.shadowRoot!.querySelector('[part="container"]');
+      expect(el!.tagName.toLowerCase()).toBe("div");
     });
 
     it("不应包含其他额外的 CSS Parts", () => {
       const timeline = document.createElement("ea-timeline");
       container.appendChild(timeline);
-      const parts = timeline.shadowRoot.querySelectorAll("[part]");
+      const parts = timeline.shadowRoot!.querySelectorAll("[part]");
       expect(parts.length).toBe(1);
     });
   });
@@ -63,8 +63,8 @@ describe("EaTimeline", () => {
       const timeline = document.createElement("ea-timeline");
       container.appendChild(timeline);
       await timeline.updateComplete;
-      const el = timeline.shadowRoot.querySelector('[part="container"]');
-      expect(el.classList.contains("ea-timeline")).toBe(true);
+      const el = timeline.shadowRoot!.querySelector('[part="container"]');
+      expect(el!.classList.contains("ea-timeline")).toBe(true);
     });
   });
 
@@ -73,22 +73,22 @@ describe("EaTimeline", () => {
       const timeline = document.createElement("ea-timeline");
       container.appendChild(timeline);
       const containerEl =
-        timeline.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.querySelector("slot")).toBeTruthy();
+        timeline.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.querySelector("slot")).toBeTruthy();
     });
 
     it("默认 slot 不应有 name 属性", async () => {
       const timeline = document.createElement("ea-timeline");
       container.appendChild(timeline);
       await timeline.updateComplete;
-      const slot = timeline.shadowRoot.querySelector("slot");
-      expect(slot.hasAttribute("name")).toBe(false);
+      const slot = timeline.shadowRoot!.querySelector("slot");
+      expect(slot!.hasAttribute("name")).toBe(false);
     });
 
     it("Shadow DOM 中应该只有一个 slot", () => {
       const timeline = document.createElement("ea-timeline");
       container.appendChild(timeline);
-      expect(timeline.shadowRoot.querySelectorAll("slot").length).toBe(1);
+      expect(timeline.shadowRoot!.querySelectorAll("slot").length).toBe(1);
     });
   });
 
@@ -115,7 +115,7 @@ describe("EaTimeline", () => {
       const timeline = document.createElement("ea-timeline");
       container.appendChild(timeline);
       expect(
-        timeline.shadowRoot.querySelector('[part="container"]')
+        timeline.shadowRoot!.querySelector('[part="container"]')
       ).toBeTruthy();
     });
   });
@@ -126,7 +126,7 @@ describe("EaTimeline", () => {
       container.appendChild(timeline);
       expect(timeline.shadowRoot).toBeDefined();
       expect(
-        timeline.shadowRoot.querySelector('[part="container"]')
+        timeline.shadowRoot!.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
@@ -179,10 +179,10 @@ describe("EaTimeline", () => {
 
       container.appendChild(timeline1);
       container.appendChild(timeline2);
-      expect(timeline1.querySelector("ea-timeline-item").variant).toBe(
+      expect(timeline1.querySelector("ea-timeline-item")!.variant).toBe(
         "primary"
       );
-      expect(timeline2.querySelector("ea-timeline-item").variant).toBe(
+      expect(timeline2.querySelector("ea-timeline-item")!.variant).toBe(
         "success"
       );
     });
@@ -190,7 +190,7 @@ describe("EaTimeline", () => {
 });
 
 describe("EaTimelineItem", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -208,7 +208,9 @@ describe("EaTimelineItem", () => {
 
     it("创建的元素应该是 ea-timeline-item 自定义元素实例", () => {
       const item = document.createElement("ea-timeline-item");
-      expect(item instanceof customElements.get("ea-timeline-item")).toBe(true);
+      expect(item instanceof customElements.get("ea-timeline-item")!).toBe(
+        true
+      );
     });
   });
 
@@ -217,7 +219,7 @@ describe("EaTimelineItem", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
       expect(item.shadowRoot).toBeDefined();
-      expect(item.shadowRoot.mode).toBe("open");
+      expect(item.shadowRoot!.mode).toBe("open");
     });
   });
 
@@ -236,16 +238,16 @@ describe("EaTimelineItem", () => {
       it(`应该包含 ${name} CSS Part 且在 ${tag} 元素上`, () => {
         const item = document.createElement("ea-timeline-item");
         container.appendChild(item);
-        const el = item.shadowRoot.querySelector(`[part="${name}"]`);
+        const el = item.shadowRoot!.querySelector(`[part="${name}"]`);
         expect(el).toBeTruthy();
-        expect(el.tagName.toLowerCase()).toBe(tag);
+        expect(el!.tagName.toLowerCase()).toBe(tag);
       });
     });
 
     it("默认状态下不应包含 icon-dot CSS Part", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
-      expect(item.shadowRoot.querySelector('[part="icon-dot"]')).toBeFalsy();
+      expect(item.shadowRoot!.querySelector('[part="icon-dot"]')).toBeFalsy();
     });
 
     it("设置 icon 后 dot 内应该包含带 icon-dot CSS Part 的 ea-icon", async () => {
@@ -253,10 +255,10 @@ describe("EaTimelineItem", () => {
       item.icon = "mug-hot";
       container.appendChild(item);
       await item.updateComplete;
-      const dotEl = item.shadowRoot.querySelector('[part="dot"]');
-      const iconEl = dotEl.querySelector("ea-icon");
+      const dotEl = item.shadowRoot!.querySelector<HTMLElement>('[part="dot"]');
+      const iconEl = dotEl!.querySelector("ea-icon");
       expect(iconEl).toBeTruthy();
-      expect(iconEl.getAttribute("part")).toContain("icon-dot");
+      expect(iconEl!.getAttribute("part")).toContain("icon-dot");
     });
   });
 
@@ -265,8 +267,8 @@ describe("EaTimelineItem", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
       await item.updateComplete;
-      const el = item.shadowRoot.querySelector('[part="container"]');
-      expect(el.classList.contains("ea-timeline-item")).toBe(true);
+      const el = item.shadowRoot!.querySelector('[part="container"]');
+      expect(el!.classList.contains("ea-timeline-item")).toBe(true);
     });
 
     const expectedElements = [
@@ -284,8 +286,8 @@ describe("EaTimelineItem", () => {
         const item = document.createElement("ea-timeline-item");
         container.appendChild(item);
         await item.updateComplete;
-        const el = item.shadowRoot.querySelector(`[part="${part}"]`);
-        expect(el.classList.contains(className)).toBe(true);
+        const el = item.shadowRoot!.querySelector(`[part="${part}"]`);
+        expect(el!.classList.contains(className)).toBe(true);
       });
     });
 
@@ -294,10 +296,10 @@ describe("EaTimelineItem", () => {
       item.icon = "mug-hot";
       container.appendChild(item);
       await item.updateComplete;
-      const iconEl = item.shadowRoot
-        .querySelector('[part="dot"]')
+      const iconEl = item
+        .shadowRoot!.querySelector<HTMLElement>('[part="dot"]')!
         .querySelector("ea-icon");
-      expect(iconEl.classList.contains("ea-timeline-item__icon-dot")).toBe(
+      expect(iconEl!.classList.contains("ea-timeline-item__icon-dot")).toBe(
         true
       );
     });
@@ -307,69 +309,75 @@ describe("EaTimelineItem", () => {
     it("container 应该包含 left-wrapper 和 right-wrapper", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.querySelector('[part="left-wrapper"]')).toBeTruthy();
-      expect(containerEl.querySelector('[part="right-wrapper"]')).toBeTruthy();
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.querySelector('[part="left-wrapper"]')).toBeTruthy();
+      expect(containerEl!.querySelector('[part="right-wrapper"]')).toBeTruthy();
     });
 
     it("left-wrapper 和 right-wrapper 应该是 container 的直接子元素", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      const directChildren = Array.from(containerEl.children);
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      const directChildren = Array.from(containerEl!.children);
       expect(directChildren).toContain(
-        item.shadowRoot.querySelector('[part="left-wrapper"]')
+        item.shadowRoot!.querySelector('[part="left-wrapper"]')
       );
       expect(directChildren).toContain(
-        item.shadowRoot.querySelector('[part="right-wrapper"]')
+        item.shadowRoot!.querySelector('[part="right-wrapper"]')
       );
     });
 
     it("left-wrapper 应该包含 dot slot 和 tail", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
-      const leftWrapper = item.shadowRoot.querySelector(
+      const leftWrapper = item.shadowRoot!.querySelector(
         '[part="left-wrapper"]'
       );
-      expect(leftWrapper.querySelector('slot[name="dot"]')).toBeTruthy();
-      expect(leftWrapper.querySelector('[part="dot"]')).toBeTruthy();
-      expect(leftWrapper.querySelector('[part="tail"]')).toBeTruthy();
+      expect(leftWrapper!.querySelector('slot[name="dot"]')).toBeTruthy();
+      expect(leftWrapper!.querySelector('[part="dot"]')).toBeTruthy();
+      expect(leftWrapper!.querySelector('[part="tail"]')).toBeTruthy();
     });
 
     it("dot 应该在 slot[name='dot'] 内部作为默认内容", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
-      const dotSlot = item.shadowRoot.querySelector('slot[name="dot"]');
-      expect(dotSlot.querySelector('[part="dot"]')).toBeTruthy();
+      const dotSlot = item.shadowRoot!.querySelector('slot[name="dot"]');
+      expect(dotSlot!.querySelector('[part="dot"]')).toBeTruthy();
     });
 
     it("right-wrapper 应该包含 content 和 timestamp", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
-      const rightWrapper = item.shadowRoot.querySelector(
+      const rightWrapper = item.shadowRoot!.querySelector(
         '[part="right-wrapper"]'
       );
-      expect(rightWrapper.querySelector('[part="content"]')).toBeTruthy();
-      expect(rightWrapper.querySelector('[part="timestamp"]')).toBeTruthy();
+      expect(rightWrapper!.querySelector('[part="content"]')).toBeTruthy();
+      expect(rightWrapper!.querySelector('[part="timestamp"]')).toBeTruthy();
     });
 
     it("content 应该包含默认 slot", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
-      const contentEl = item.shadowRoot.querySelector('[part="content"]');
-      expect(contentEl.querySelector("slot:not([name])")).toBeTruthy();
+      const contentEl = item.shadowRoot!.querySelector('[part="content"]');
+      expect(contentEl!.querySelector("slot:not([name])")).toBeTruthy();
     });
 
     it("timestamp 应该包含 timestamp slot", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
-      const timestampEl = item.shadowRoot.querySelector('[part="timestamp"]');
-      expect(timestampEl.querySelector('slot[name="timestamp"]')).toBeTruthy();
+      const timestampEl = item.shadowRoot!.querySelector('[part="timestamp"]');
+      expect(timestampEl!.querySelector('slot[name="timestamp"]')).toBeTruthy();
     });
   });
 
   describe("variant 属性", () => {
-    const variants = ["primary", "success", "warning", "danger", "info"];
+    const variants = [
+      "primary",
+      "success",
+      "warning",
+      "danger",
+      "info",
+    ] as const;
 
     it("默认 variant 应该是空字符串", () => {
       const item = document.createElement("ea-timeline-item");
@@ -390,8 +398,9 @@ describe("EaTimelineItem", () => {
         item.variant = v;
         container.appendChild(item);
         await item.updateComplete;
-        const containerEl = item.shadowRoot.querySelector('[part="container"]');
-        expect(containerEl.classList.contains(`ea-timeline-item--${v}`)).toBe(
+        const containerEl =
+          item.shadowRoot!.querySelector('[part="container"]');
+        expect(containerEl!.classList.contains(`ea-timeline-item--${v}`)).toBe(
           true
         );
       });
@@ -408,9 +417,9 @@ describe("EaTimelineItem", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
       await item.updateComplete;
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
       variants.forEach(v => {
-        expect(containerEl.classList.contains(`ea-timeline-item--${v}`)).toBe(
+        expect(containerEl!.classList.contains(`ea-timeline-item--${v}`)).toBe(
           false
         );
       });
@@ -422,17 +431,17 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-timeline-item--primary")).toBe(
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-timeline-item--primary")).toBe(
         true
       );
 
       item.variant = "danger";
       await item.updateComplete;
-      expect(containerEl.classList.contains("ea-timeline-item--primary")).toBe(
+      expect(containerEl!.classList.contains("ea-timeline-item--primary")).toBe(
         false
       );
-      expect(containerEl.classList.contains("ea-timeline-item--danger")).toBe(
+      expect(containerEl!.classList.contains("ea-timeline-item--danger")).toBe(
         true
       );
     });
@@ -443,14 +452,14 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-timeline-item--primary")).toBe(
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-timeline-item--primary")).toBe(
         true
       );
 
       item.variant = "";
       await item.updateComplete;
-      expect(containerEl.classList.contains("ea-timeline-item--primary")).toBe(
+      expect(containerEl!.classList.contains("ea-timeline-item--primary")).toBe(
         false
       );
     });
@@ -458,14 +467,14 @@ describe("EaTimelineItem", () => {
     it("variant 循环切换应该正确更新类名", async () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
       for (const variant of variants) {
         item.variant = variant;
         await item.updateComplete;
         variants.forEach(v => {
-          expect(containerEl.classList.contains(`ea-timeline-item--${v}`)).toBe(
-            v === variant
-          );
+          expect(
+            containerEl!.classList.contains(`ea-timeline-item--${v}`)
+          ).toBe(v === variant);
         });
       }
     });
@@ -476,17 +485,17 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-timeline-item--success")).toBe(
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-timeline-item--success")).toBe(
         true
       );
 
       item.setAttribute("variant", "warning");
       await item.updateComplete;
-      expect(containerEl.classList.contains("ea-timeline-item--success")).toBe(
+      expect(containerEl!.classList.contains("ea-timeline-item--success")).toBe(
         false
       );
-      expect(containerEl.classList.contains("ea-timeline-item--warning")).toBe(
+      expect(containerEl!.classList.contains("ea-timeline-item--warning")).toBe(
         true
       );
     });
@@ -519,14 +528,14 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const timestampSlot = item.shadowRoot.querySelector(
+      const timestampSlot = item.shadowRoot!.querySelector(
         'slot[name="timestamp"]'
       );
-      expect(timestampSlot.textContent).toBe("2024-7-1");
+      expect(timestampSlot!.textContent).toBe("2024-7-1");
 
       item.timestamp = "2024-7-2";
       await item.updateComplete;
-      expect(timestampSlot.textContent).toBe("2024-7-2");
+      expect(timestampSlot!.textContent).toBe("2024-7-2");
     });
 
     it("timestamp 设置为空字符串应该清空内容", async () => {
@@ -535,14 +544,14 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const timestampSlot = item.shadowRoot.querySelector(
+      const timestampSlot = item.shadowRoot!.querySelector(
         'slot[name="timestamp"]'
       );
-      expect(timestampSlot.textContent).toBe("2024-7-1");
+      expect(timestampSlot!.textContent).toBe("2024-7-1");
 
       item.timestamp = "";
       await item.updateComplete;
-      expect(timestampSlot.textContent).toBe("");
+      expect(timestampSlot!.textContent).toBe("");
     });
 
     it("timestamp 支持中文内容", async () => {
@@ -551,7 +560,7 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
       expect(
-        item.shadowRoot.querySelector('slot[name="timestamp"]').textContent
+        item.shadowRoot!.querySelector('slot[name="timestamp"]')!.textContent
       ).toBe("2024年7月1日");
     });
 
@@ -562,7 +571,7 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
       expect(
-        item.shadowRoot.querySelector('slot[name="timestamp"]').textContent
+        item.shadowRoot!.querySelector('slot[name="timestamp"]')!.textContent
       ).toBe(longText);
     });
 
@@ -572,14 +581,14 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const timestampSlot = item.shadowRoot.querySelector(
+      const timestampSlot = item.shadowRoot!.querySelector(
         'slot[name="timestamp"]'
       );
-      expect(timestampSlot.textContent).toBe("2024-1-1");
+      expect(timestampSlot!.textContent).toBe("2024-1-1");
 
       item.setAttribute("timestamp", "2024-12-31");
       await item.updateComplete;
-      expect(timestampSlot.textContent).toBe("2024-12-31");
+      expect(timestampSlot!.textContent).toBe("2024-12-31");
     });
   });
 
@@ -595,8 +604,8 @@ describe("EaTimelineItem", () => {
       item.hideTimestamp = true;
       container.appendChild(item);
       await item.updateComplete;
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-hide-timestamp")).toBe(true);
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-hide-timestamp")).toBe(true);
     });
 
     it("hideTimestamp 为 false 时不应添加 hide-timestamp 状态类名", async () => {
@@ -604,8 +613,8 @@ describe("EaTimelineItem", () => {
       item.hideTimestamp = false;
       container.appendChild(item);
       await item.updateComplete;
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-hide-timestamp")).toBe(false);
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-hide-timestamp")).toBe(false);
     });
 
     it("hideTimestamp 应该通过 setAttribute 设置", () => {
@@ -621,12 +630,12 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-hide-timestamp")).toBe(true);
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-hide-timestamp")).toBe(true);
 
       item.hideTimestamp = false;
       await item.updateComplete;
-      expect(containerEl.classList.contains("is-hide-timestamp")).toBe(false);
+      expect(containerEl!.classList.contains("is-hide-timestamp")).toBe(false);
     });
 
     it("hideTimestamp 从 false 变为 true 应该添加 is-hide-timestamp 状态类名", async () => {
@@ -634,12 +643,12 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-hide-timestamp")).toBe(false);
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-hide-timestamp")).toBe(false);
 
       item.hideTimestamp = true;
       await item.updateComplete;
-      expect(containerEl.classList.contains("is-hide-timestamp")).toBe(true);
+      expect(containerEl!.classList.contains("is-hide-timestamp")).toBe(true);
     });
   });
 
@@ -655,8 +664,8 @@ describe("EaTimelineItem", () => {
       item.color = "#0bbd87";
       container.appendChild(item);
       await item.updateComplete;
-      const dot = item.shadowRoot.querySelector('[part="dot"]');
-      expect(dot.style.borderColor).toBeTruthy();
+      const dot = item.shadowRoot!.querySelector<HTMLElement>('[part="dot"]');
+      expect(dot!.style.borderColor).toBeTruthy();
     });
 
     it("设置 color 应该设置 CSS 变量 --ea-timeline-item-dot-color", async () => {
@@ -682,14 +691,14 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const dot = item.shadowRoot.querySelector('[part="dot"]');
-      const initialBorderColor = dot.style.borderColor;
+      const dot = item.shadowRoot!.querySelector<HTMLElement>('[part="dot"]');
+      const initialBorderColor = dot!.style.borderColor;
       expect(initialBorderColor).toBeTruthy();
 
       item.color = "#ff0000";
       await item.updateComplete;
-      expect(dot.style.borderColor).toBeTruthy();
-      expect(dot.style.borderColor).not.toBe(initialBorderColor);
+      expect(dot!.style.borderColor).toBeTruthy();
+      expect(dot!.style.borderColor).not.toBe(initialBorderColor);
     });
 
     it("color 设置为空字符串时应该清除 borderColor 和 CSS 变量", async () => {
@@ -698,12 +707,12 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const dot = item.shadowRoot.querySelector('[part="dot"]');
-      expect(dot.style.borderColor).toBeTruthy();
+      const dot = item.shadowRoot!.querySelector<HTMLElement>('[part="dot"]');
+      expect(dot!.style.borderColor).toBeTruthy();
 
       item.color = "";
       await item.updateComplete;
-      expect(dot.style.borderColor).toBeFalsy();
+      expect(dot!.style.borderColor).toBeFalsy();
       expect(
         item.style.getPropertyValue("--ea-timeline-item-dot-color")
       ).toBeFalsy();
@@ -722,16 +731,16 @@ describe("EaTimelineItem", () => {
       item.hollow = true;
       container.appendChild(item);
       await item.updateComplete;
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-hollow-dot")).toBe(true);
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-hollow-dot")).toBe(true);
     });
 
     it("hollow 为 false 时不应添加 hollow-dot 状态类名", async () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
       await item.updateComplete;
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-hollow-dot")).toBe(false);
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-hollow-dot")).toBe(false);
     });
 
     it("hollow 应该通过 setAttribute 设置", () => {
@@ -747,12 +756,12 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-hollow-dot")).toBe(true);
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-hollow-dot")).toBe(true);
 
       item.hollow = false;
       await item.updateComplete;
-      expect(containerEl.classList.contains("is-hollow-dot")).toBe(false);
+      expect(containerEl!.classList.contains("is-hollow-dot")).toBe(false);
     });
 
     it("hollow 从 false 变为 true 应该添加 is-hollow-dot 状态类名", async () => {
@@ -760,12 +769,12 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-hollow-dot")).toBe(false);
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-hollow-dot")).toBe(false);
 
       item.hollow = true;
       await item.updateComplete;
-      expect(containerEl.classList.contains("is-hollow-dot")).toBe(true);
+      expect(containerEl!.classList.contains("is-hollow-dot")).toBe(true);
     });
   });
 
@@ -781,8 +790,8 @@ describe("EaTimelineItem", () => {
       item.icon = "mug-hot";
       container.appendChild(item);
       await item.updateComplete;
-      const dotEl = item.shadowRoot.querySelector('[part="dot"]');
-      const iconEl = dotEl.querySelector("ea-icon");
+      const dotEl = item.shadowRoot!.querySelector<HTMLElement>('[part="dot"]');
+      const iconEl = dotEl!.querySelector("ea-icon");
       expect(iconEl).toBeTruthy();
     });
 
@@ -791,10 +800,10 @@ describe("EaTimelineItem", () => {
       item.icon = "mug-hot";
       container.appendChild(item);
       await item.updateComplete;
-      const iconEl = item.shadowRoot
-        .querySelector('[part="dot"]')
+      const iconEl = item
+        .shadowRoot!.querySelector<HTMLElement>('[part="dot"]')!
         .querySelector("ea-icon");
-      expect(iconEl.getAttribute("name")).toBe("mug-hot");
+      expect(iconEl!.getAttribute("name")).toBe("mug-hot");
     });
 
     it("icon 应该通过 setAttribute 设置", () => {
@@ -810,10 +819,10 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       item.icon = "star";
       await item.updateComplete;
-      const iconEl = item.shadowRoot
-        .querySelector('[part="dot"]')
+      const iconEl = item
+        .shadowRoot!.querySelector<HTMLElement>('[part="dot"]')!
         .querySelector("ea-icon");
-      expect(iconEl.getAttribute("name")).toBe("star");
+      expect(iconEl!.getAttribute("name")).toBe("star");
     });
 
     it("icon 设置为空字符串后应该移除 ea-icon", async () => {
@@ -822,12 +831,12 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const dotEl = item.shadowRoot.querySelector('[part="dot"]');
-      expect(dotEl.querySelector("ea-icon")).toBeTruthy();
+      const dotEl = item.shadowRoot!.querySelector<HTMLElement>('[part="dot"]');
+      expect(dotEl!.querySelector("ea-icon")).toBeTruthy();
 
       item.icon = "";
       await item.updateComplete;
-      expect(dotEl.querySelector("ea-icon")).toBeFalsy();
+      expect(dotEl!.querySelector("ea-icon")).toBeFalsy();
     });
 
     it("设置 icon 后 ea-icon 应该有 icon-dot CSS Part", async () => {
@@ -835,10 +844,10 @@ describe("EaTimelineItem", () => {
       item.icon = "mug-hot";
       container.appendChild(item);
       await item.updateComplete;
-      const iconEl = item.shadowRoot
-        .querySelector('[part="dot"]')
+      const iconEl = item
+        .shadowRoot!.querySelector<HTMLElement>('[part="dot"]')!
         .querySelector("ea-icon");
-      expect(iconEl.getAttribute("part")).toContain("icon-dot");
+      expect(iconEl!.getAttribute("part")).toContain("icon-dot");
     });
   });
 
@@ -868,8 +877,8 @@ describe("EaTimelineItem", () => {
       item.size = "large";
       container.appendChild(item);
       await item.updateComplete;
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-timeline-item--large")).toBe(
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-timeline-item--large")).toBe(
         true
       );
     });
@@ -879,8 +888,8 @@ describe("EaTimelineItem", () => {
       item.size = "normal";
       container.appendChild(item);
       await item.updateComplete;
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-timeline-item--normal")).toBe(
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-timeline-item--normal")).toBe(
         true
       );
     });
@@ -898,14 +907,14 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-timeline-item--large")).toBe(
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-timeline-item--large")).toBe(
         true
       );
 
       item.size = "";
       await item.updateComplete;
-      expect(containerEl.classList.contains("ea-timeline-item--large")).toBe(
+      expect(containerEl!.classList.contains("ea-timeline-item--large")).toBe(
         false
       );
     });
@@ -916,17 +925,17 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-timeline-item--normal")).toBe(
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-timeline-item--normal")).toBe(
         true
       );
 
       item.size = "large";
       await item.updateComplete;
-      expect(containerEl.classList.contains("ea-timeline-item--normal")).toBe(
+      expect(containerEl!.classList.contains("ea-timeline-item--normal")).toBe(
         false
       );
-      expect(containerEl.classList.contains("ea-timeline-item--large")).toBe(
+      expect(containerEl!.classList.contains("ea-timeline-item--large")).toBe(
         true
       );
     });
@@ -958,8 +967,8 @@ describe("EaTimelineItem", () => {
       item.placement = "top";
       container.appendChild(item);
       await item.updateComplete;
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-timeline-item--top")).toBe(
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-timeline-item--top")).toBe(
         true
       );
     });
@@ -969,8 +978,8 @@ describe("EaTimelineItem", () => {
       item.placement = "bottom";
       container.appendChild(item);
       await item.updateComplete;
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-timeline-item--bottom")).toBe(
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-timeline-item--bottom")).toBe(
         true
       );
     });
@@ -988,17 +997,17 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-timeline-item--top")).toBe(
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-timeline-item--top")).toBe(
         true
       );
 
       item.placement = "bottom";
       await item.updateComplete;
-      expect(containerEl.classList.contains("ea-timeline-item--top")).toBe(
+      expect(containerEl!.classList.contains("ea-timeline-item--top")).toBe(
         false
       );
-      expect(containerEl.classList.contains("ea-timeline-item--bottom")).toBe(
+      expect(containerEl!.classList.contains("ea-timeline-item--bottom")).toBe(
         true
       );
     });
@@ -1009,14 +1018,14 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-timeline-item--top")).toBe(
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-timeline-item--top")).toBe(
         true
       );
 
       item.placement = "";
       await item.updateComplete;
-      expect(containerEl.classList.contains("ea-timeline-item--top")).toBe(
+      expect(containerEl!.classList.contains("ea-timeline-item--top")).toBe(
         false
       );
     });
@@ -1034,8 +1043,8 @@ describe("EaTimelineItem", () => {
       item.center = true;
       container.appendChild(item);
       await item.updateComplete;
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-timeline-item--center")).toBe(
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-timeline-item--center")).toBe(
         true
       );
     });
@@ -1044,8 +1053,8 @@ describe("EaTimelineItem", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
       await item.updateComplete;
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-timeline-item--center")).toBe(
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-timeline-item--center")).toBe(
         false
       );
     });
@@ -1063,14 +1072,14 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-timeline-item--center")).toBe(
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-timeline-item--center")).toBe(
         true
       );
 
       item.center = false;
       await item.updateComplete;
-      expect(containerEl.classList.contains("ea-timeline-item--center")).toBe(
+      expect(containerEl!.classList.contains("ea-timeline-item--center")).toBe(
         false
       );
     });
@@ -1080,14 +1089,14 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-timeline-item--center")).toBe(
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-timeline-item--center")).toBe(
         false
       );
 
       item.center = true;
       await item.updateComplete;
-      expect(containerEl.classList.contains("ea-timeline-item--center")).toBe(
+      expect(containerEl!.classList.contains("ea-timeline-item--center")).toBe(
         true
       );
     });
@@ -1097,32 +1106,32 @@ describe("EaTimelineItem", () => {
     it("默认 slot 应该在 content 元素内", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
-      const contentEl = item.shadowRoot.querySelector('[part="content"]');
-      expect(contentEl.querySelector("slot:not([name])")).toBeTruthy();
+      const contentEl = item.shadowRoot!.querySelector('[part="content"]');
+      expect(contentEl!.querySelector("slot:not([name])")).toBeTruthy();
     });
 
     it("dot slot 应该在 left-wrapper 内", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
-      const leftWrapper = item.shadowRoot.querySelector(
+      const leftWrapper = item.shadowRoot!.querySelector(
         '[part="left-wrapper"]'
       );
-      expect(leftWrapper.querySelector('slot[name="dot"]')).toBeTruthy();
+      expect(leftWrapper!.querySelector('slot[name="dot"]')).toBeTruthy();
     });
 
     it("timestamp slot 应该在 timestamp 元素内", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
-      const timestampEl = item.shadowRoot.querySelector('[part="timestamp"]');
-      expect(timestampEl.querySelector('slot[name="timestamp"]')).toBeTruthy();
+      const timestampEl = item.shadowRoot!.querySelector('[part="timestamp"]');
+      expect(timestampEl!.querySelector('slot[name="timestamp"]')).toBeTruthy();
     });
 
     it("默认 slot 应该无 name 属性", async () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
       await item.updateComplete;
-      const slot = item.shadowRoot.querySelector("slot:not([name])");
-      expect(slot.hasAttribute("name")).toBe(false);
+      const slot = item.shadowRoot!.querySelector("slot:not([name])");
+      expect(slot!.hasAttribute("name")).toBe(false);
     });
   });
 
@@ -1131,8 +1140,8 @@ describe("EaTimelineItem", () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
       await item.updateComplete;
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-timeline-item")).toBe(true);
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-timeline-item")).toBe(true);
     });
 
     it("多个修饰属性同时设置应该正确生成组合类名", async () => {
@@ -1143,15 +1152,15 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-timeline-item")).toBe(true);
-      expect(containerEl.classList.contains("ea-timeline-item--primary")).toBe(
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-timeline-item")).toBe(true);
+      expect(containerEl!.classList.contains("ea-timeline-item--primary")).toBe(
         true
       );
-      expect(containerEl.classList.contains("ea-timeline-item--large")).toBe(
+      expect(containerEl!.classList.contains("ea-timeline-item--large")).toBe(
         true
       );
-      expect(containerEl.classList.contains("ea-timeline-item--center")).toBe(
+      expect(containerEl!.classList.contains("ea-timeline-item--center")).toBe(
         true
       );
     });
@@ -1163,11 +1172,11 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-timeline-item--danger")).toBe(
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-timeline-item--danger")).toBe(
         true
       );
-      expect(containerEl.classList.contains("is-hollow-dot")).toBe(true);
+      expect(containerEl!.classList.contains("is-hollow-dot")).toBe(true);
     });
 
     it("所有属性同时设置应该正确生成组合类名", async () => {
@@ -1181,22 +1190,22 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-timeline-item")).toBe(true);
-      expect(containerEl.classList.contains("ea-timeline-item--warning")).toBe(
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-timeline-item")).toBe(true);
+      expect(containerEl!.classList.contains("ea-timeline-item--warning")).toBe(
         true
       );
-      expect(containerEl.classList.contains("ea-timeline-item--large")).toBe(
+      expect(containerEl!.classList.contains("ea-timeline-item--large")).toBe(
         true
       );
-      expect(containerEl.classList.contains("ea-timeline-item--top")).toBe(
+      expect(containerEl!.classList.contains("ea-timeline-item--top")).toBe(
         true
       );
-      expect(containerEl.classList.contains("ea-timeline-item--center")).toBe(
+      expect(containerEl!.classList.contains("ea-timeline-item--center")).toBe(
         true
       );
-      expect(containerEl.classList.contains("is-hollow-dot")).toBe(true);
-      expect(containerEl.classList.contains("is-hide-timestamp")).toBe(true);
+      expect(containerEl!.classList.contains("is-hollow-dot")).toBe(true);
+      expect(containerEl!.classList.contains("is-hide-timestamp")).toBe(true);
     });
   });
 
@@ -1206,14 +1215,14 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-timeline-item--primary")).toBe(
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-timeline-item--primary")).toBe(
         false
       );
 
       item.variant = "primary";
       await item.updateComplete;
-      expect(containerEl.classList.contains("ea-timeline-item--primary")).toBe(
+      expect(containerEl!.classList.contains("ea-timeline-item--primary")).toBe(
         true
       );
     });
@@ -1223,14 +1232,14 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const timestampSlot = item.shadowRoot.querySelector(
+      const timestampSlot = item.shadowRoot!.querySelector(
         'slot[name="timestamp"]'
       );
-      expect(timestampSlot.textContent).toBe("");
+      expect(timestampSlot!.textContent).toBe("");
 
       item.timestamp = "2024-7-1";
       await item.updateComplete;
-      expect(timestampSlot.textContent).toBe("2024-7-1");
+      expect(timestampSlot!.textContent).toBe("2024-7-1");
     });
 
     it("hideTimestamp observer 应该在属性变化时更新状态类名", async () => {
@@ -1238,12 +1247,12 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-hide-timestamp")).toBe(false);
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-hide-timestamp")).toBe(false);
 
       item.hideTimestamp = true;
       await item.updateComplete;
-      expect(containerEl.classList.contains("is-hide-timestamp")).toBe(true);
+      expect(containerEl!.classList.contains("is-hide-timestamp")).toBe(true);
     });
 
     it("color observer 应该在属性变化时更新 dot 的 borderColor", async () => {
@@ -1251,12 +1260,12 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const dot = item.shadowRoot.querySelector('[part="dot"]');
-      expect(dot.style.borderColor).toBeFalsy();
+      const dot = item.shadowRoot!.querySelector<HTMLElement>('[part="dot"]');
+      expect(dot!.style.borderColor).toBeFalsy();
 
       item.color = "#0bbd87";
       await item.updateComplete;
-      expect(dot.style.borderColor).toBeTruthy();
+      expect(dot!.style.borderColor).toBeTruthy();
     });
 
     it("hollow observer 应该在属性变化时更新容器类名", async () => {
@@ -1264,12 +1273,12 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-hollow-dot")).toBe(false);
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-hollow-dot")).toBe(false);
 
       item.hollow = true;
       await item.updateComplete;
-      expect(containerEl.classList.contains("is-hollow-dot")).toBe(true);
+      expect(containerEl!.classList.contains("is-hollow-dot")).toBe(true);
     });
 
     it("icon observer 应该在属性变化时更新 dot 的 innerHTML", async () => {
@@ -1277,12 +1286,12 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const dot = item.shadowRoot.querySelector('[part="dot"]');
-      expect(dot.querySelector("ea-icon")).toBeFalsy();
+      const dot = item.shadowRoot!.querySelector<HTMLElement>('[part="dot"]');
+      expect(dot!.querySelector("ea-icon")).toBeFalsy();
 
       item.icon = "mug-hot";
       await item.updateComplete;
-      expect(dot.querySelector("ea-icon")).toBeTruthy();
+      expect(dot!.querySelector("ea-icon")).toBeTruthy();
     });
 
     it("size observer 应该在属性变化时更新容器类名", async () => {
@@ -1290,14 +1299,14 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-timeline-item--large")).toBe(
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-timeline-item--large")).toBe(
         false
       );
 
       item.size = "large";
       await item.updateComplete;
-      expect(containerEl.classList.contains("ea-timeline-item--large")).toBe(
+      expect(containerEl!.classList.contains("ea-timeline-item--large")).toBe(
         true
       );
     });
@@ -1307,14 +1316,14 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-timeline-item--top")).toBe(
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-timeline-item--top")).toBe(
         false
       );
 
       item.placement = "top";
       await item.updateComplete;
-      expect(containerEl.classList.contains("ea-timeline-item--top")).toBe(
+      expect(containerEl!.classList.contains("ea-timeline-item--top")).toBe(
         true
       );
     });
@@ -1324,14 +1333,14 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-timeline-item--center")).toBe(
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-timeline-item--center")).toBe(
         false
       );
 
       item.center = true;
       await item.updateComplete;
-      expect(containerEl.classList.contains("ea-timeline-item--center")).toBe(
+      expect(containerEl!.classList.contains("ea-timeline-item--center")).toBe(
         true
       );
     });
@@ -1344,8 +1353,8 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-timeline-item--primary")).toBe(
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-timeline-item--primary")).toBe(
         true
       );
     });
@@ -1449,11 +1458,11 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-timeline-item--primary")).toBe(
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-timeline-item--primary")).toBe(
         true
       );
-      expect(containerEl.classList.contains("is-hollow-dot")).toBe(true);
+      expect(containerEl!.classList.contains("is-hollow-dot")).toBe(true);
     });
 
     it("variant + color 应该同时生效", async () => {
@@ -1463,12 +1472,12 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      const dot = item.shadowRoot.querySelector('[part="dot"]');
-      expect(containerEl.classList.contains("ea-timeline-item--primary")).toBe(
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      const dot = item.shadowRoot!.querySelector<HTMLElement>('[part="dot"]');
+      expect(containerEl!.classList.contains("ea-timeline-item--primary")).toBe(
         true
       );
-      expect(dot.style.borderColor).toBeTruthy();
+      expect(dot!.style.borderColor).toBeTruthy();
     });
 
     it("variant + icon 应该同时生效", async () => {
@@ -1478,15 +1487,15 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      const iconEl = item.shadowRoot
-        .querySelector('[part="dot"]')
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      const iconEl = item
+        .shadowRoot!.querySelector<HTMLElement>('[part="dot"]')!
         .querySelector("ea-icon");
-      expect(containerEl.classList.contains("ea-timeline-item--success")).toBe(
+      expect(containerEl!.classList.contains("ea-timeline-item--success")).toBe(
         true
       );
       expect(iconEl).toBeTruthy();
-      expect(iconEl.getAttribute("name")).toBe("circle-check");
+      expect(iconEl!.getAttribute("name")).toBe("circle-check");
     });
 
     it("size + placement + center 应该同时生效", async () => {
@@ -1497,14 +1506,14 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-timeline-item--large")).toBe(
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-timeline-item--large")).toBe(
         true
       );
-      expect(containerEl.classList.contains("ea-timeline-item--top")).toBe(
+      expect(containerEl!.classList.contains("ea-timeline-item--top")).toBe(
         true
       );
-      expect(containerEl.classList.contains("ea-timeline-item--center")).toBe(
+      expect(containerEl!.classList.contains("ea-timeline-item--center")).toBe(
         true
       );
     });
@@ -1516,17 +1525,17 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      const timestampSlot = item.shadowRoot.querySelector(
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      const timestampSlot = item.shadowRoot!.querySelector(
         'slot[name="timestamp"]'
       );
-      expect(timestampSlot.textContent).toBe("2024-7-1");
-      expect(containerEl.classList.contains("is-hide-timestamp")).toBe(true);
+      expect(timestampSlot!.textContent).toBe("2024-7-1");
+      expect(containerEl!.classList.contains("is-hide-timestamp")).toBe(true);
 
       item.hideTimestamp = false;
       await item.updateComplete;
-      expect(timestampSlot.textContent).toBe("2024-7-1");
-      expect(containerEl.classList.contains("is-hide-timestamp")).toBe(false);
+      expect(timestampSlot!.textContent).toBe("2024-7-1");
+      expect(containerEl!.classList.contains("is-hide-timestamp")).toBe(false);
     });
 
     it("完整属性组合应该全部生效", async () => {
@@ -1543,9 +1552,9 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      const dot = item.shadowRoot.querySelector('[part="dot"]');
-      const timestampSlot = item.shadowRoot.querySelector(
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      const dot = item.shadowRoot!.querySelector<HTMLElement>('[part="dot"]');
+      const timestampSlot = item.shadowRoot!.querySelector(
         'slot[name="timestamp"]'
       );
 
@@ -1559,23 +1568,23 @@ describe("EaTimelineItem", () => {
       expect(item.placement).toBe("bottom");
       expect(item.center).toBe(true);
 
-      expect(containerEl.classList.contains("ea-timeline-item--danger")).toBe(
+      expect(containerEl!.classList.contains("ea-timeline-item--danger")).toBe(
         true
       );
-      expect(containerEl.classList.contains("is-hollow-dot")).toBe(true);
-      expect(containerEl.classList.contains("ea-timeline-item--large")).toBe(
+      expect(containerEl!.classList.contains("is-hollow-dot")).toBe(true);
+      expect(containerEl!.classList.contains("ea-timeline-item--large")).toBe(
         true
       );
-      expect(containerEl.classList.contains("ea-timeline-item--bottom")).toBe(
+      expect(containerEl!.classList.contains("ea-timeline-item--bottom")).toBe(
         true
       );
-      expect(containerEl.classList.contains("ea-timeline-item--center")).toBe(
+      expect(containerEl!.classList.contains("ea-timeline-item--center")).toBe(
         true
       );
-      expect(containerEl.classList.contains("is-hide-timestamp")).toBe(false);
-      expect(dot.style.borderColor).toBeTruthy();
-      expect(dot.querySelector("ea-icon")).toBeTruthy();
-      expect(timestampSlot.textContent).toBe("2024-7-1");
+      expect(containerEl!.classList.contains("is-hide-timestamp")).toBe(false);
+      expect(dot!.style.borderColor).toBeTruthy();
+      expect(dot!.querySelector("ea-icon")).toBeTruthy();
+      expect(timestampSlot!.textContent).toBe("2024-7-1");
     });
   });
 
@@ -1590,18 +1599,18 @@ describe("EaTimelineItem", () => {
       container.appendChild(item2);
       await item2.updateComplete;
 
-      const container1 = item1.shadowRoot.querySelector('[part="container"]');
-      const container2 = item2.shadowRoot.querySelector('[part="container"]');
-      expect(container1.classList.contains("ea-timeline-item--primary")).toBe(
+      const container1 = item1.shadowRoot!.querySelector('[part="container"]');
+      const container2 = item2.shadowRoot!.querySelector('[part="container"]');
+      expect(container1!.classList.contains("ea-timeline-item--primary")).toBe(
         true
       );
-      expect(container1.classList.contains("ea-timeline-item--danger")).toBe(
+      expect(container1!.classList.contains("ea-timeline-item--danger")).toBe(
         false
       );
-      expect(container2.classList.contains("ea-timeline-item--danger")).toBe(
+      expect(container2!.classList.contains("ea-timeline-item--danger")).toBe(
         true
       );
-      expect(container2.classList.contains("ea-timeline-item--primary")).toBe(
+      expect(container2!.classList.contains("ea-timeline-item--primary")).toBe(
         false
       );
     });
@@ -1617,10 +1626,10 @@ describe("EaTimelineItem", () => {
       await item2.updateComplete;
 
       expect(
-        item1.shadowRoot.querySelector('slot[name="timestamp"]').textContent
+        item1.shadowRoot!.querySelector('slot[name="timestamp"]')!.textContent
       ).toBe("2024-1-1");
       expect(
-        item2.shadowRoot.querySelector('slot[name="timestamp"]').textContent
+        item2.shadowRoot!.querySelector('slot[name="timestamp"]')!.textContent
       ).toBe("2024-12-31");
     });
 
@@ -1635,12 +1644,12 @@ describe("EaTimelineItem", () => {
       item1.variant = "warning";
       await item2.updateComplete;
 
-      const container1 = item1.shadowRoot.querySelector('[part="container"]');
-      const container2 = item2.shadowRoot.querySelector('[part="container"]');
-      expect(container1.classList.contains("ea-timeline-item--warning")).toBe(
+      const container1 = item1.shadowRoot!.querySelector('[part="container"]');
+      const container2 = item2.shadowRoot!.querySelector('[part="container"]');
+      expect(container1!.classList.contains("ea-timeline-item--warning")).toBe(
         true
       );
-      expect(container2.classList.contains("ea-timeline-item--success")).toBe(
+      expect(container2!.classList.contains("ea-timeline-item--success")).toBe(
         true
       );
     });
@@ -1712,8 +1721,8 @@ describe("EaTimelineItem", () => {
         container.appendChild(timeline);
         await timeline.updateComplete;
         const containerEl =
-          timeline.shadowRoot.querySelector('[part="container"]');
-        expect(containerEl.getAttribute("role")).toBe("list");
+          timeline.shadowRoot!.querySelector('[part="container"]');
+        expect(containerEl!.getAttribute("role")).toBe("list");
       });
 
       it("ea-timeline-item 容器应该有 role='listitem'", async () => {
@@ -1722,8 +1731,9 @@ describe("EaTimelineItem", () => {
         timeline.appendChild(item);
         container.appendChild(timeline);
         await timeline.updateComplete;
-        const containerEl = item.shadowRoot.querySelector('[part="container"]');
-        expect(containerEl.getAttribute("role")).toBe("listitem");
+        const containerEl =
+          item.shadowRoot!.querySelector('[part="container"]');
+        expect(containerEl!.getAttribute("role")).toBe("listitem");
       });
     });
   });

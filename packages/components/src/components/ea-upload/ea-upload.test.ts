@@ -1,23 +1,15 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 
-global.requestAnimationFrame = callback => {
-  return setTimeout(callback, 16);
-};
-global.cancelAnimationFrame = id => {
-  clearTimeout(id);
-};
-
 import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y.js";
 
 import "./index.ts";
-import {
-  buildFormData,
-  createUploadRequest,
-} from "./utils/ajax.ts";
-import { EaUploadAjaxError } from "./events/EaUploadAjaxError.ts";
+import { buildFormData, createUploadRequest } from "./utils/ajax";
+import { EaUploadAjaxError } from "./events/EaUploadAjaxError";
+import type { EaImagePreview } from "@components/ea-image-preview/index";
+import type { FileItem, UploadRequestOptions } from "./type";
 
 describe("EaUpload Component", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -44,7 +36,7 @@ describe("EaUpload Component", () => {
       const parts = ["container", "content", "tip", "list", "preview"];
       parts.forEach(part => {
         expect(
-          upload.shadowRoot.querySelector(`[part="${part}"]`)
+          upload.shadowRoot!.querySelector(`[part="${part}"]`)
         ).toBeTruthy();
       });
     });
@@ -53,9 +45,10 @@ describe("EaUpload Component", () => {
       const upload = document.createElement("ea-upload");
       container.appendChild(upload);
 
-      const input = upload.shadowRoot.querySelector("input#original");
+      const input =
+        upload.shadowRoot!.querySelector<HTMLInputElement>("input#original");
       expect(input).toBeTruthy();
-      expect(input.type).toBe("file");
+      expect(input!.type).toBe("file");
     });
 
     it("应该包含 ea-image-preview 子组件", async () => {
@@ -64,7 +57,7 @@ describe("EaUpload Component", () => {
 
       await upload.updateComplete;
 
-      const preview = upload.shadowRoot.querySelector("ea-image-preview");
+      const preview = upload.shadowRoot!.querySelector("ea-image-preview");
       expect(preview).toBeTruthy();
     });
   });
@@ -77,9 +70,10 @@ describe("EaUpload Component", () => {
 
       await upload.updateComplete;
 
-      const defaultSlot = upload.shadowRoot.querySelector("slot:not([name])");
+      const defaultSlot =
+        upload.shadowRoot!.querySelector<HTMLSlotElement>("slot:not([name])");
       expect(defaultSlot).toBeTruthy();
-      const assigned = defaultSlot.assignedNodes();
+      const assigned = defaultSlot!.assignedNodes();
       expect(assigned.length).toBeGreaterThan(0);
     });
 
@@ -88,7 +82,7 @@ describe("EaUpload Component", () => {
       upload.innerHTML = `<div slot="tip">Tip text</div>`;
       container.appendChild(upload);
 
-      const tipSlot = upload.shadowRoot.querySelector('slot[name="tip"]');
+      const tipSlot = upload.shadowRoot!.querySelector('slot[name="tip"]');
       expect(tipSlot).toBeTruthy();
     });
 
@@ -97,7 +91,7 @@ describe("EaUpload Component", () => {
       upload.innerHTML = `<ea-button slot="trigger">Select file</ea-button>`;
       container.appendChild(upload);
 
-      const triggerSlot = upload.shadowRoot.querySelector(
+      const triggerSlot = upload.shadowRoot!.querySelector(
         'slot[name="trigger"]'
       );
       expect(triggerSlot).toBeTruthy();
@@ -150,8 +144,9 @@ describe("EaUpload Component", () => {
       await upload.updateComplete;
 
       expect(upload.multiple).toBe(true);
-      const input = upload.shadowRoot.querySelector("input#original");
-      expect(input.hasAttribute("multiple")).toBe(true);
+      const input =
+        upload.shadowRoot!.querySelector<HTMLInputElement>("input#original");
+      expect(input!.hasAttribute("multiple")).toBe(true);
     });
 
     it("默认 disabled 应该是 false", () => {
@@ -169,8 +164,9 @@ describe("EaUpload Component", () => {
       await upload.updateComplete;
 
       expect(upload.disabled).toBe(true);
-      const input = upload.shadowRoot.querySelector("input#original");
-      expect(input.hasAttribute("disabled")).toBe(true);
+      const input =
+        upload.shadowRoot!.querySelector<HTMLInputElement>("input#original");
+      expect(input!.hasAttribute("disabled")).toBe(true);
     });
 
     it("默认 showFileList 应该是 true", () => {
@@ -270,8 +266,9 @@ describe("EaUpload Component", () => {
       await upload.updateComplete;
 
       expect(upload.directory).toBe(true);
-      const input = upload.shadowRoot.querySelector("input#original");
-      expect(input.webkitdirectory).toBe(true);
+      const input =
+        upload.shadowRoot!.querySelector<HTMLInputElement>("input#original");
+      expect(input!.webkitdirectory).toBe(true);
     });
 
     it("应该支持 accept 属性", async () => {
@@ -282,8 +279,9 @@ describe("EaUpload Component", () => {
       await upload.updateComplete;
 
       expect(upload.accept).toBe("image/*");
-      const input = upload.shadowRoot.querySelector("input#original");
-      expect(input.getAttribute("accept")).toBe("image/*");
+      const input =
+        upload.shadowRoot!.querySelector<HTMLInputElement>("input#original");
+      expect(input!.getAttribute("accept")).toBe("image/*");
     });
 
     it("应该支持 name 属性", () => {
@@ -316,7 +314,7 @@ describe("EaUpload Component", () => {
       const upload = document.createElement("ea-upload");
       container.appendChild(upload);
 
-      const el = upload.shadowRoot.querySelector(".ea-upload");
+      const el = upload.shadowRoot!.querySelector(".ea-upload");
       expect(el).toBeTruthy();
     });
 
@@ -327,8 +325,8 @@ describe("EaUpload Component", () => {
 
       await upload.updateComplete;
 
-      const el = upload.shadowRoot.querySelector(".ea-upload");
-      expect(el.classList.contains("ea-upload--picture")).toBe(true);
+      const el = upload.shadowRoot!.querySelector(".ea-upload");
+      expect(el!.classList.contains("ea-upload--picture")).toBe(true);
     });
 
     it("list-type='picture-card' 应该添加对应修饰符类名", async () => {
@@ -338,8 +336,8 @@ describe("EaUpload Component", () => {
 
       await upload.updateComplete;
 
-      const el = upload.shadowRoot.querySelector(".ea-upload");
-      expect(el.classList.contains("ea-upload--picture-card")).toBe(true);
+      const el = upload.shadowRoot!.querySelector(".ea-upload");
+      expect(el!.classList.contains("ea-upload--picture-card")).toBe(true);
     });
 
     it("drag 为 true 时应该添加 ea-upload--drag 修饰符类名", async () => {
@@ -349,8 +347,8 @@ describe("EaUpload Component", () => {
 
       await upload.updateComplete;
 
-      const el = upload.shadowRoot.querySelector(".ea-upload");
-      expect(el.classList.contains("ea-upload--drag")).toBe(true);
+      const el = upload.shadowRoot!.querySelector(".ea-upload");
+      expect(el!.classList.contains("ea-upload--drag")).toBe(true);
     });
 
     it("listType 变化时应该更新容器 class", async () => {
@@ -359,14 +357,14 @@ describe("EaUpload Component", () => {
 
       await upload.updateComplete;
 
-      const el = upload.shadowRoot.querySelector(".ea-upload");
-      expect(el.classList.contains("ea-upload--text")).toBe(true);
+      const el = upload.shadowRoot!.querySelector(".ea-upload");
+      expect(el!.classList.contains("ea-upload--text")).toBe(true);
 
       upload.setAttribute("list-type", "picture");
       await upload.updateComplete;
 
-      expect(el.classList.contains("ea-upload--picture")).toBe(true);
-      expect(el.classList.contains("ea-upload--text")).toBe(false);
+      expect(el!.classList.contains("ea-upload--picture")).toBe(true);
+      expect(el!.classList.contains("ea-upload--text")).toBe(false);
     });
   });
 
@@ -388,10 +386,10 @@ describe("EaUpload Component", () => {
 
       await upload.updateComplete;
 
-      const listEl = upload.shadowRoot.querySelector(".ea-upload__list");
-      const li = listEl.querySelector('li[data-uid="1"]');
+      const listEl = upload.shadowRoot!.querySelector(".ea-upload__list");
+      const li = listEl!.querySelector('li[data-uid="1"]');
       expect(li).toBeTruthy();
-      expect(li.classList.contains("is-done")).toBe(true);
+      expect(li!.classList.contains("is-done")).toBe(true);
     });
 
     it("文件列表项应该有 ea-upload-file-item 子组件", async () => {
@@ -404,7 +402,7 @@ describe("EaUpload Component", () => {
 
       await upload.updateComplete;
 
-      const fileItem = upload.shadowRoot.querySelector("ea-upload-file-item");
+      const fileItem = upload.shadowRoot!.querySelector("ea-upload-file-item");
       expect(fileItem).toBeTruthy();
     });
 
@@ -419,21 +417,21 @@ describe("EaUpload Component", () => {
 
       await upload.updateComplete;
 
-      const li = upload.shadowRoot.querySelector('li[data-uid="1"]');
-      expect(li.classList.contains("is-pending")).toBe(true);
+      const li = upload.shadowRoot!.querySelector('li[data-uid="1"]');
+      expect(li!.classList.contains("is-pending")).toBe(true);
 
       // 重新赋值 fileList 触发 observer
       upload.fileList[0].status = "uploading";
       upload.fileList = [...upload.fileList];
       await upload.updateComplete;
 
-      expect(li.classList.contains("is-uploading")).toBe(true);
+      expect(li!.classList.contains("is-uploading")).toBe(true);
 
       upload.fileList[0].status = "done";
       upload.fileList = [...upload.fileList];
       await upload.updateComplete;
 
-      expect(li.classList.contains("is-done")).toBe(true);
+      expect(li!.classList.contains("is-done")).toBe(true);
     });
 
     it("设置 fileList 时没有 uid 的项应该自动生成 uid", async () => {
@@ -442,7 +440,7 @@ describe("EaUpload Component", () => {
 
       await upload.updateComplete;
 
-      upload.fileList = [{ name: "test.txt", status: "done" }];
+      upload.fileList = [{ name: "test.txt", status: "done" }] as FileItem[];
 
       expect(upload.fileList[0].uid).toBeTruthy();
     });
@@ -545,7 +543,7 @@ describe("EaUpload Component", () => {
       const mockController = {
         abort: vi.fn(),
         submit: vi.fn(),
-        xhr: {},
+        xhr: {} as XMLHttpRequest,
       };
 
       upload.fileList = [
@@ -573,12 +571,12 @@ describe("EaUpload Component", () => {
       const mockController1 = {
         abort: vi.fn(),
         submit: vi.fn(),
-        xhr: {},
+        xhr: {} as XMLHttpRequest,
       };
       const mockController2 = {
         abort: vi.fn(),
         submit: vi.fn(),
-        xhr: {},
+        xhr: {} as XMLHttpRequest,
       };
 
       upload.fileList = [
@@ -610,9 +608,10 @@ describe("EaUpload Component", () => {
 
       await upload.updateComplete;
 
-      const input = upload.shadowRoot.querySelector("input#original");
+      const input =
+        upload.shadowRoot!.querySelector<HTMLInputElement>("input#original");
       const clickHandler = vi.fn();
-      input.addEventListener("click", clickHandler);
+      input!.addEventListener("click", clickHandler);
 
       upload.handleFileSelect();
 
@@ -626,9 +625,10 @@ describe("EaUpload Component", () => {
 
       await upload.updateComplete;
 
-      const input = upload.shadowRoot.querySelector("input#original");
+      const input =
+        upload.shadowRoot!.querySelector<HTMLInputElement>("input#original");
       const clickHandler = vi.fn();
-      input.addEventListener("click", clickHandler);
+      input!.addEventListener("click", clickHandler);
 
       upload.handleFileSelect();
 
@@ -675,8 +675,8 @@ describe("EaUpload Component", () => {
       await upload.updateComplete;
 
       // 模拟文件项删除事件
-      const fileItem = upload.shadowRoot.querySelector("ea-upload-file-item");
-      fileItem.dispatchEvent(
+      const fileItem = upload.shadowRoot!.querySelector("ea-upload-file-item");
+      fileItem!.dispatchEvent(
         new CustomEvent("ea-upload-file-delete", {
           detail: { uid: "1" },
           bubbles: true,
@@ -744,8 +744,8 @@ describe("EaUpload Component", () => {
       await upload.updateComplete;
 
       // 模拟文件删除
-      const fileItem = upload.shadowRoot.querySelector("ea-upload-file-item");
-      fileItem.dispatchEvent(
+      const fileItem = upload.shadowRoot!.querySelector("ea-upload-file-item");
+      fileItem!.dispatchEvent(
         new CustomEvent("ea-upload-file-delete", {
           detail: { uid: "1" },
           bubbles: true,
@@ -770,8 +770,8 @@ describe("EaUpload Component", () => {
       expect(upload.fileList.length).toBe(1);
 
       // 模拟文件删除
-      const fileItem = upload.shadowRoot.querySelector("ea-upload-file-item");
-      fileItem.dispatchEvent(
+      const fileItem = upload.shadowRoot!.querySelector("ea-upload-file-item");
+      fileItem!.dispatchEvent(
         new CustomEvent("ea-upload-file-delete", {
           detail: { uid: "1" },
           bubbles: true,
@@ -794,8 +794,8 @@ describe("EaUpload Component", () => {
       await upload.updateComplete;
 
       // 模拟文件删除
-      const fileItem = upload.shadowRoot.querySelector("ea-upload-file-item");
-      fileItem.dispatchEvent(
+      const fileItem = upload.shadowRoot!.querySelector("ea-upload-file-item");
+      fileItem!.dispatchEvent(
         new CustomEvent("ea-upload-file-delete", {
           detail: { uid: "1" },
           bubbles: true,
@@ -824,12 +824,13 @@ describe("EaUpload Component", () => {
 
       // 尝试添加超过限制的文件 - 直接通过 Object.defineProperty 来模拟 input.files
       const file = new File(["content"], "test2.txt", { type: "text/plain" });
-      const input = upload.shadowRoot.querySelector("input#original");
+      const input =
+        upload.shadowRoot!.querySelector<HTMLInputElement>("input#original");
       Object.defineProperty(input, "files", {
         value: [file],
         configurable: true,
       });
-      input.dispatchEvent(new Event("change", { bubbles: true }));
+      input!.dispatchEvent(new Event("change", { bubbles: true }));
 
       await upload.updateComplete;
 
@@ -845,16 +846,16 @@ describe("EaUpload Component", () => {
 
       await upload.updateComplete;
 
-      const contentEl = upload.shadowRoot.querySelector(".ea-upload__content");
+      const contentEl = upload.shadowRoot!.querySelector(".ea-upload__content");
       const dragoverHandler = vi.fn();
 
-      contentEl.addEventListener("dragover", dragoverHandler);
+      contentEl!.addEventListener("dragover", dragoverHandler);
 
       const event = new DragEvent("dragover", {
         bubbles: true,
         composed: true,
       });
-      contentEl.dispatchEvent(event);
+      contentEl!.dispatchEvent(event);
 
       // drag=false 时，_handleDragOver 直接 return，不会 preventDefault
       expect(event.defaultPrevented).toBe(false);
@@ -867,12 +868,12 @@ describe("EaUpload Component", () => {
 
       await upload.updateComplete;
 
-      const contentEl = upload.shadowRoot.querySelector(".ea-upload__content");
+      const contentEl = upload.shadowRoot!.querySelector(".ea-upload__content");
       const event = new DragEvent("dragover", {
         bubbles: true,
         composed: true,
       });
-      contentEl.dispatchEvent(event);
+      contentEl!.dispatchEvent(event);
 
       expect(event.defaultPrevented).toBe(true);
     });
@@ -884,15 +885,15 @@ describe("EaUpload Component", () => {
 
       await upload.updateComplete;
 
-      const contentEl = upload.shadowRoot.querySelector(".ea-upload__content");
+      const contentEl = upload.shadowRoot!.querySelector(".ea-upload__content");
       const event = new DragEvent("dragenter", {
         bubbles: true,
         composed: true,
       });
-      contentEl.dispatchEvent(event);
+      contentEl!.dispatchEvent(event);
 
-      const containerEl = upload.shadowRoot.querySelector(".ea-upload");
-      expect(containerEl.classList.contains("is-dragover")).toBe(true);
+      const containerEl = upload.shadowRoot!.querySelector(".ea-upload");
+      expect(containerEl!.classList.contains("is-dragover")).toBe(true);
     });
 
     it("drag 为 true 时拖拽离开应该移除 is-dragover 状态类", async () => {
@@ -902,20 +903,20 @@ describe("EaUpload Component", () => {
 
       await upload.updateComplete;
 
-      const contentEl = upload.shadowRoot.querySelector(".ea-upload__content");
+      const contentEl = upload.shadowRoot!.querySelector(".ea-upload__content");
 
       // 先进入
-      contentEl.dispatchEvent(
+      contentEl!.dispatchEvent(
         new DragEvent("dragenter", { bubbles: true, composed: true })
       );
 
       // 再离开
-      contentEl.dispatchEvent(
+      contentEl!.dispatchEvent(
         new DragEvent("dragleave", { bubbles: true, composed: true })
       );
 
-      const containerEl = upload.shadowRoot.querySelector(".ea-upload");
-      expect(containerEl.classList.contains("is-dragover")).toBe(false);
+      const containerEl = upload.shadowRoot!.querySelector(".ea-upload");
+      expect(containerEl!.classList.contains("is-dragover")).toBe(false);
     });
 
     it("drag 为 true 时拖拽放置应该添加文件", async () => {
@@ -930,13 +931,13 @@ describe("EaUpload Component", () => {
       const dt = new DataTransfer();
       dt.items.add(file);
 
-      const contentEl = upload.shadowRoot.querySelector(".ea-upload__content");
+      const contentEl = upload.shadowRoot!.querySelector(".ea-upload__content");
       const event = new DragEvent("drop", {
         dataTransfer: dt,
         bubbles: true,
         composed: true,
       });
-      contentEl.dispatchEvent(event);
+      contentEl!.dispatchEvent(event);
 
       expect(upload.fileList.length).toBe(1);
       expect(upload.fileList[0].name).toBe("test.txt");
@@ -952,12 +953,13 @@ describe("EaUpload Component", () => {
       await upload.updateComplete;
 
       const file = new File(["content"], "test.txt", { type: "text/plain" });
-      const input = upload.shadowRoot.querySelector("input#original");
+      const input =
+        upload.shadowRoot!.querySelector<HTMLInputElement>("input#original");
       Object.defineProperty(input, "files", {
         value: [file],
         configurable: true,
       });
-      input.dispatchEvent(new Event("change", { bubbles: true }));
+      input!.dispatchEvent(new Event("change", { bubbles: true }));
 
       expect(upload.fileList.length).toBe(1);
       expect(upload.fileList[0].name).toBe("test.txt");
@@ -972,7 +974,8 @@ describe("EaUpload Component", () => {
 
       await upload.updateComplete;
 
-      const input = upload.shadowRoot.querySelector("input#original");
+      const input =
+        upload.shadowRoot!.querySelector<HTMLInputElement>("input#original");
       Object.defineProperty(input, "files", {
         value: [
           new File(["a"], "a.txt", { type: "text/plain" }),
@@ -980,7 +983,7 @@ describe("EaUpload Component", () => {
         ],
         configurable: true,
       });
-      input.dispatchEvent(new Event("change", { bubbles: true }));
+      input!.dispatchEvent(new Event("change", { bubbles: true }));
 
       expect(upload.fileList.length).toBe(2);
     });
@@ -994,16 +997,17 @@ describe("EaUpload Component", () => {
       await upload.updateComplete;
 
       const file = new File(["content"], "test.txt", { type: "text/plain" });
-      const input = upload.shadowRoot.querySelector("input#original");
+      const input =
+        upload.shadowRoot!.querySelector<HTMLInputElement>("input#original");
       Object.defineProperty(input, "files", {
         value: [file],
         configurable: true,
       });
-      input.dispatchEvent(new Event("change", { bubbles: true }));
+      input!.dispatchEvent(new Event("change", { bubbles: true }));
 
       expect(upload.fileList.length).toBe(1);
-      const listEl = upload.shadowRoot.querySelector(".ea-upload__list");
-      expect(listEl.querySelectorAll("li[data-uid]").length).toBe(0);
+      const listEl = upload.shadowRoot!.querySelector(".ea-upload__list");
+      expect(listEl!.querySelectorAll("li[data-uid]").length).toBe(0);
     });
   });
 
@@ -1014,7 +1018,10 @@ describe("EaUpload Component", () => {
 
       await upload.updateComplete;
 
+      const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
       expect(() => upload.submit()).not.toThrow();
+      expect(warnSpy).toHaveBeenCalledWith("No files to upload.");
+      warnSpy.mockRestore();
     });
 
     it("beforeUpload 返回 false 时应阻止上传", async () => {
@@ -1125,10 +1132,12 @@ describe("EaUpload Component", () => {
       ];
       await upload.updateComplete;
 
-      const captured = { options: null };
-      upload.httpRequest = vi.fn(options => {
+      const captured: { options: UploadRequestOptions | null } = {
+        options: null,
+      };
+      upload.httpRequest = vi.fn((options: UploadRequestOptions) => {
         captured.options = options;
-        return { submit: vi.fn(), abort: vi.fn(), xhr: {} };
+        return { submit: vi.fn(), abort: vi.fn(), xhr: {} as XMLHttpRequest };
       });
 
       await upload.submit();
@@ -1143,7 +1152,7 @@ describe("EaUpload Component", () => {
       upload.addEventListener("ea-upload-success", handler);
 
       const file = upload.fileList[0];
-      options.onSuccess({ url: "/f" }, file, upload.fileList);
+      options!.onSuccess!({ url: "/f" }, file, upload.fileList);
 
       expect(onSuccess).toHaveBeenCalledWith(
         { url: "/f" },
@@ -1166,28 +1175,36 @@ describe("EaUpload Component", () => {
       upload.addEventListener("ea-upload-progress", handler);
 
       const file = upload.fileList[0];
-      options.onProgress({ loaded: 30, total: 60 }, file, upload.fileList);
+      options!.onProgress!(
+        { loaded: 30, total: 60 } as ProgressEvent,
+        file,
+        upload.fileList
+      );
 
       await vi.waitFor(() => {
-        const li = upload.shadowRoot.querySelector('li[data-uid="1"]');
-        const progressEl = li
-          .querySelector("ea-upload-file-item")
-          .shadowRoot.querySelector("ea-progress");
-        expect(progressEl.getAttribute("percentage")).toBe("50");
+        const li = upload.shadowRoot!.querySelector('li[data-uid="1"]');
+        const progressEl = li!
+          .querySelector("ea-upload-file-item")!
+          .shadowRoot!.querySelector("ea-progress");
+        expect(progressEl!.getAttribute("percentage")).toBe("50");
       });
 
       expect(onProgress).toHaveBeenCalled();
       expect(handler).toHaveBeenCalled();
       expect(file.percent).toBe(50);
 
-      const li = upload.shadowRoot.querySelector('li[data-uid="1"]');
-      const progressEl = li
-        .querySelector("ea-upload-file-item")
-        .shadowRoot.querySelector("ea-progress");
+      const li = upload.shadowRoot!.querySelector('li[data-uid="1"]');
+      const progressEl = li!
+        .querySelector("ea-upload-file-item")!
+        .shadowRoot!.querySelector("ea-progress");
 
-      options.onProgress({ loaded: 60, total: 60 }, file, upload.fileList);
+      options!.onProgress!(
+        { loaded: 60, total: 60 } as ProgressEvent,
+        file,
+        upload.fileList
+      );
       expect(file.percent).toBe(100);
-      expect(progressEl.getAttribute("status")).toBe("success");
+      expect(progressEl!.getAttribute("status")).toBe("success");
     });
 
     it("文件已被移除时回调应安全忽略", async () => {
@@ -1196,10 +1213,14 @@ describe("EaUpload Component", () => {
       upload.fileList = [];
 
       expect(() =>
-        options.onProgress({ loaded: 1, total: 2 }, file, upload.fileList)
+        options!.onProgress!(
+          { loaded: 1, total: 2 } as ProgressEvent,
+          file,
+          upload.fileList
+        )
       ).not.toThrow();
       expect(() =>
-        options.onSuccess({ ok: true }, file, upload.fileList)
+        options!.onSuccess!({ ok: true }, file, upload.fileList)
       ).not.toThrow();
     });
 
@@ -1213,7 +1234,7 @@ describe("EaUpload Component", () => {
       const setAttribute = vi.spyOn(Element.prototype, "setAttribute");
       const file = upload.fileList[0];
       const error = new Error("boom");
-      options.onError(error, file, upload.fileList);
+      options!.onError!(error as EaUploadAjaxError, file, upload.fileList);
 
       expect(onError).toHaveBeenCalledWith(error, file, upload.fileList);
       expect(handler).toHaveBeenCalled();
@@ -1236,8 +1257,8 @@ describe("EaUpload Component", () => {
       upload.fileList = [{ uid: "1", name: "a.txt", status: "done" }];
       await upload.updateComplete;
 
-      const fileItem = upload.shadowRoot.querySelector("ea-upload-file-item");
-      fileItem.dispatchEvent(
+      const fileItem = upload.shadowRoot!.querySelector("ea-upload-file-item");
+      fileItem!.dispatchEvent(
         new CustomEvent("ea-upload-file-delete", {
           detail: { uid: "1" },
           bubbles: true,
@@ -1255,7 +1276,9 @@ describe("EaUpload Component", () => {
       container.appendChild(upload);
       await upload.updateComplete;
 
-      const controller = { abort: vi.fn() };
+      const controller = {
+        abort: vi.fn(),
+      } as unknown as NonNullable<FileItem["controller"]>;
       upload.fileList = [
         {
           uid: "1",
@@ -1267,8 +1290,8 @@ describe("EaUpload Component", () => {
       ];
       await upload.updateComplete;
 
-      const fileItem = upload.shadowRoot.querySelector("ea-upload-file-item");
-      fileItem.dispatchEvent(
+      const fileItem = upload.shadowRoot!.querySelector("ea-upload-file-item");
+      fileItem!.dispatchEvent(
         new CustomEvent("ea-upload-file-delete", {
           detail: { uid: "1" },
           bubbles: true,
@@ -1293,9 +1316,11 @@ describe("EaUpload Component", () => {
       ];
       await upload.updateComplete;
 
-      const previewEl = upload.shadowRoot.querySelector(".ea-upload__preview");
-      const fileItem = upload.shadowRoot.querySelector("ea-upload-file-item");
-      fileItem.dispatchEvent(
+      const previewEl = upload.shadowRoot!.querySelector<EaImagePreview>(
+        ".ea-upload__preview"
+      );
+      const fileItem = upload.shadowRoot!.querySelector("ea-upload-file-item");
+      fileItem!.dispatchEvent(
         new CustomEvent("ea-upload-file-preview", {
           detail: { uid: "2" },
           bubbles: true,
@@ -1304,9 +1329,9 @@ describe("EaUpload Component", () => {
       );
       await upload.updateComplete;
 
-      expect(previewEl.visible).toBe(true);
-      expect(previewEl.urlList).toEqual(["blob:a", "blob:b"]);
-      expect(previewEl.initialIndex).toBe(1);
+      expect(previewEl!.visible).toBe(true);
+      expect(previewEl!.urlList).toEqual(["blob:a", "blob:b"]);
+      expect(previewEl!.initialIndex).toBe(1);
     });
   });
 
@@ -1346,8 +1371,32 @@ describe("EaUpload Component", () => {
 
 describe("Upload Ajax Utils", () => {
   class FakeXHR {
-    static instances = [];
-    static preset = {};
+    static instances: FakeXHR[] = [];
+    static preset: {
+      status?: number;
+      response?: unknown;
+      responseText?: string;
+      noUpload?: boolean;
+    } = {};
+
+    listeners: Record<string, ((evt: Event) => void)[]>;
+    uploadListeners: Record<string, ((evt: ProgressEvent) => void)[]>;
+    headers: Record<string, string>;
+    status: number;
+    response: unknown;
+    responseText: string;
+    aborted: boolean;
+    sent: FormData | undefined;
+    opened: { method: string; url: string; async: boolean } | null;
+    withCredentials: boolean;
+    upload:
+      | {
+          addEventListener: (
+            type: string,
+            handler: (evt: ProgressEvent) => void
+          ) => void;
+        }
+      | undefined;
 
     constructor() {
       this.listeners = {};
@@ -1371,20 +1420,20 @@ describe("Upload Ajax Utils", () => {
       FakeXHR.instances.push(this);
     }
 
-    addEventListener(type, handler) {
+    addEventListener(type: string, handler: (evt: Event) => void) {
       if (!this.listeners[type]) this.listeners[type] = [];
       this.listeners[type].push(handler);
     }
 
-    open(method, url, async) {
+    open(method: string, url: string, async: boolean) {
       this.opened = { method, url, async };
     }
 
-    setRequestHeader(key, value) {
+    setRequestHeader(key: string, value: string) {
       this.headers[key] = value;
     }
 
-    send(data) {
+    send(data: FormData) {
       this.sent = data;
     }
 
@@ -1392,21 +1441,27 @@ describe("Upload Ajax Utils", () => {
       this.aborted = true;
     }
 
-    emit(type, event) {
+    emit(type: string, event: Event) {
       (this.listeners[type] || []).forEach(handler => handler(event));
     }
 
-    emitUpload(type, event) {
+    emitUpload(type: string, event: ProgressEvent) {
       (this.uploadListeners[type] || []).forEach(handler => handler(event));
     }
   }
+
+  type FakeRequest = {
+    xhr: FakeXHR;
+    submit: () => void;
+    abort: () => void;
+  };
 
   const makeField = () => {
     const file = {
       uid: "1",
       name: "a.txt",
       raw: new File(["content"], "a.txt", { type: "text/plain" }),
-    };
+    } as unknown as FileItem;
     return { name: "file", file, files: [file] };
   };
 
@@ -1439,7 +1494,7 @@ describe("Upload Ajax Utils", () => {
         file: [
           { uid: "1", name: "b.bin", raw: new Blob(["b"]) },
           { uid: "2", name: "skip.bin" },
-        ],
+        ] as FileItem[],
       });
 
       expect(formData.getAll("files")).toHaveLength(1);
@@ -1448,7 +1503,7 @@ describe("Upload Ajax Utils", () => {
     it("File 本身可作为 FileItem", () => {
       const formData = buildFormData({
         name: "file",
-        file: new File(["c"], "c.txt"),
+        file: new File(["c"], "c.txt") as unknown as FileItem,
       });
       expect(formData.get("file")).toBeInstanceOf(File);
     });
@@ -1462,7 +1517,7 @@ describe("Upload Ajax Utils", () => {
         headers: { "X-Token": "abc", "X-Num": 1 },
         withCredentials: true,
         fileField: makeField(),
-      });
+      } as unknown as UploadRequestOptions) as unknown as FakeRequest;
 
       expect(request.xhr.opened).toEqual({
         method: "PUT",
@@ -1474,10 +1529,12 @@ describe("Upload Ajax Utils", () => {
     });
 
     it("method 与 action 使用默认值", () => {
-      const request = createUploadRequest({ fileField: makeField() });
+      const request = createUploadRequest({
+        fileField: makeField(),
+      } as unknown as UploadRequestOptions) as unknown as FakeRequest;
 
-      expect(request.xhr.opened.method).toBe("POST");
-      expect(request.xhr.opened.url).toBe("");
+      expect(request.xhr.opened!.method).toBe("POST");
+      expect(request.xhr.opened!.url).toBe("");
       expect(request.xhr.withCredentials).toBe(false);
     });
 
@@ -1486,7 +1543,7 @@ describe("Upload Ajax Utils", () => {
         action: "/api",
         headers: new Headers({ Authorization: "Bearer token" }),
         fileField: makeField(),
-      });
+      } as unknown as UploadRequestOptions) as unknown as FakeRequest;
 
       expect(request.xhr.headers).toEqual({ authorization: "Bearer token" });
     });
@@ -1495,7 +1552,7 @@ describe("Upload Ajax Utils", () => {
       const request = createUploadRequest({
         action: "/api",
         fileField: makeField(),
-      });
+      } as unknown as UploadRequestOptions) as unknown as FakeRequest;
 
       request.submit();
       expect(request.xhr.sent).toBeInstanceOf(FormData);
@@ -1508,7 +1565,10 @@ describe("Upload Ajax Utils", () => {
       FakeXHR.preset = { noUpload: true };
 
       expect(() =>
-        createUploadRequest({ action: "/api", fileField: makeField() })
+        createUploadRequest({
+          action: "/api",
+          fileField: makeField(),
+        } as UploadRequestOptions)
       ).not.toThrow();
       expect(FakeXHR.instances[0].upload).toBeUndefined();
     });
@@ -1521,7 +1581,7 @@ describe("Upload Ajax Utils", () => {
         method: "POST",
         fileField: field,
         onSuccess,
-      });
+      } as unknown as UploadRequestOptions) as unknown as FakeRequest;
 
       request.xhr.status = 200;
       request.xhr.responseText = JSON.stringify({ url: "/f" });
@@ -1540,7 +1600,7 @@ describe("Upload Ajax Utils", () => {
         action: "/api",
         fileField: makeField(),
         onSuccess,
-      });
+      } as unknown as UploadRequestOptions) as unknown as FakeRequest;
 
       request.xhr.status = 200;
       request.xhr.responseText = "<html>ok</html>";
@@ -1556,7 +1616,7 @@ describe("Upload Ajax Utils", () => {
         action: "/api",
         fileField: field,
         onSuccess,
-      });
+      } as unknown as UploadRequestOptions) as unknown as FakeRequest;
 
       request.xhr.status = 204;
       request.xhr.responseText = "";
@@ -1575,7 +1635,7 @@ describe("Upload Ajax Utils", () => {
         fileField: makeField(),
         onSuccess,
         onError,
-      });
+      } as unknown as UploadRequestOptions) as unknown as FakeRequest;
 
       request.xhr.status = 500;
       request.xhr.responseText = "server error";
@@ -1598,7 +1658,7 @@ describe("Upload Ajax Utils", () => {
         method: "POST",
         fileField: makeField(),
         onError,
-      });
+      } as unknown as UploadRequestOptions) as unknown as FakeRequest;
 
       request.xhr.emit("error", new Event("error"));
 
@@ -1614,7 +1674,7 @@ describe("Upload Ajax Utils", () => {
         action: "/api",
         fileField: makeField(),
         onError,
-      });
+      } as unknown as UploadRequestOptions) as unknown as FakeRequest;
 
       request.xhr.emit("error", new Event("error"));
 
@@ -1628,7 +1688,7 @@ describe("Upload Ajax Utils", () => {
         action: "/api",
         fileField: makeField(),
         onError,
-      });
+      } as unknown as UploadRequestOptions) as unknown as FakeRequest;
 
       request.xhr.emit("error", new Event("error"));
 
@@ -1639,12 +1699,15 @@ describe("Upload Ajax Utils", () => {
       const request = createUploadRequest({
         action: "/api",
         fileField: makeField(),
-      });
+      } as unknown as UploadRequestOptions) as unknown as FakeRequest;
 
       expect(() => request.xhr.emit("load", new Event("load"))).not.toThrow();
       expect(() => request.xhr.emit("error", new Event("error"))).not.toThrow();
       expect(() =>
-        request.xhr.emitUpload("progress", { loaded: 1, total: 2 })
+        request.xhr.emitUpload("progress", {
+          loaded: 1,
+          total: 2,
+        } as ProgressEvent)
       ).not.toThrow();
     });
 
@@ -1655,10 +1718,13 @@ describe("Upload Ajax Utils", () => {
         action: "/api",
         fileField: field,
         onProgress,
-      });
+      } as unknown as UploadRequestOptions) as unknown as FakeRequest;
 
-      const event = { loaded: 30, total: 60 };
-      request.xhr.emitUpload("progress", event);
+      const event: { loaded: number; total: number; percent?: number } = {
+        loaded: 30,
+        total: 60,
+      };
+      request.xhr.emitUpload("progress", event as ProgressEvent);
 
       expect(event.percent).toBe(50);
       expect(onProgress).toHaveBeenCalledWith(event, field.file, field.files);

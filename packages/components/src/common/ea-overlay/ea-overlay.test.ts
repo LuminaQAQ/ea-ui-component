@@ -6,7 +6,7 @@ import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y";
 import "./index";
 
 describe("EaOverlay", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -29,7 +29,7 @@ describe("EaOverlay", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      const containerEl = overlay.shadowRoot.querySelector(".ea-overlay");
+      const containerEl = overlay.shadowRoot!.querySelector(".ea-overlay");
       expect(containerEl).toBeTruthy();
     });
 
@@ -37,7 +37,7 @@ describe("EaOverlay", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      const mask = overlay.shadowRoot.querySelector(".ea-overlay__mask");
+      const mask = overlay.shadowRoot!.querySelector(".ea-overlay__mask");
       expect(mask).toBeTruthy();
     });
 
@@ -45,7 +45,7 @@ describe("EaOverlay", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      const content = overlay.shadowRoot.querySelector(".ea-overlay__content");
+      const content = overlay.shadowRoot!.querySelector(".ea-overlay__content");
       expect(content).toBeTruthy();
     });
 
@@ -53,7 +53,7 @@ describe("EaOverlay", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      const slot = overlay.shadowRoot.querySelector(
+      const slot = overlay.shadowRoot!.querySelector(
         ".ea-overlay__content slot"
       );
       expect(slot).toBeTruthy();
@@ -66,7 +66,7 @@ describe("EaOverlay", () => {
       container.appendChild(overlay);
 
       expect(
-        overlay.shadowRoot.querySelector('[part="container"]')
+        overlay.shadowRoot!.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
@@ -74,14 +74,16 @@ describe("EaOverlay", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      expect(overlay.shadowRoot.querySelector('[part="mask"]')).toBeTruthy();
+      expect(overlay.shadowRoot!.querySelector('[part="mask"]')).toBeTruthy();
     });
 
     it("should have content part", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      expect(overlay.shadowRoot.querySelector('[part="content"]')).toBeTruthy();
+      expect(
+        overlay.shadowRoot!.querySelector('[part="content"]')
+      ).toBeTruthy();
     });
   });
 
@@ -92,8 +94,8 @@ describe("EaOverlay", () => {
 
       await overlay.updateComplete;
 
-      const containerEl = overlay.shadowRoot.querySelector(".ea-overlay");
-      expect(containerEl.classList.contains("ea-overlay")).toBe(true);
+      const containerEl = overlay.shadowRoot!.querySelector(".ea-overlay");
+      expect(containerEl!.classList.contains("ea-overlay")).toBe(true);
     });
 
     it("should have is-modal state class by default", async () => {
@@ -102,8 +104,8 @@ describe("EaOverlay", () => {
 
       await overlay.updateComplete;
 
-      const containerEl = overlay.shadowRoot.querySelector(".ea-overlay");
-      expect(containerEl.classList.contains("is-modal")).toBe(true);
+      const containerEl = overlay.shadowRoot!.querySelector(".ea-overlay");
+      expect(containerEl!.classList.contains("is-modal")).toBe(true);
     });
 
     it("should add ea-overlay--open modifier when visible", async () => {
@@ -115,8 +117,8 @@ describe("EaOverlay", () => {
       overlay.visible = true;
       await overlay.updateComplete;
 
-      const containerEl = overlay.shadowRoot.querySelector(".ea-overlay");
-      expect(containerEl.classList.contains("ea-overlay--open")).toBe(true);
+      const containerEl = overlay.shadowRoot!.querySelector(".ea-overlay");
+      expect(containerEl!.classList.contains("ea-overlay--open")).toBe(true);
     });
 
     it("should remove is-modal state class when modal is false", async () => {
@@ -126,8 +128,8 @@ describe("EaOverlay", () => {
       overlay.modal = false;
       await overlay.updateComplete;
 
-      const containerEl = overlay.shadowRoot.querySelector(".ea-overlay");
-      expect(containerEl.classList.contains("is-modal")).toBe(false);
+      const containerEl = overlay.shadowRoot!.querySelector(".ea-overlay");
+      expect(containerEl!.classList.contains("is-modal")).toBe(false);
     });
 
     it("should add is-show state class during open transition", async () => {
@@ -141,8 +143,8 @@ describe("EaOverlay", () => {
 
       await new Promise(resolve => requestAnimationFrame(resolve));
 
-      const containerEl = overlay.shadowRoot.querySelector(".ea-overlay");
-      expect(containerEl.classList.contains("is-show")).toBe(true);
+      const containerEl = overlay.shadowRoot!.querySelector(".ea-overlay");
+      expect(containerEl!.classList.contains("is-show")).toBe(true);
     });
 
     it("should add is-before-close state class during close transition", async () => {
@@ -157,8 +159,8 @@ describe("EaOverlay", () => {
       overlay.visible = false;
       await overlay.updateComplete;
 
-      const containerEl = overlay.shadowRoot.querySelector(".ea-overlay");
-      expect(containerEl.classList.contains("is-before-close")).toBe(true);
+      const containerEl = overlay.shadowRoot!.querySelector(".ea-overlay");
+      expect(containerEl!.classList.contains("is-before-close")).toBe(true);
     });
   });
 
@@ -248,13 +250,13 @@ describe("EaOverlay", () => {
 
       await overlay.updateComplete;
 
-      const containerEl = overlay.shadowRoot.querySelector(".ea-overlay");
-      expect(containerEl.classList.contains("is-modal")).toBe(true);
+      const containerEl = overlay.shadowRoot!.querySelector(".ea-overlay");
+      expect(containerEl!.classList.contains("is-modal")).toBe(true);
 
       overlay.modal = false;
       await overlay.updateComplete;
 
-      expect(containerEl.classList.contains("is-modal")).toBe(false);
+      expect(containerEl!.classList.contains("is-modal")).toBe(false);
     });
   });
 
@@ -276,8 +278,8 @@ describe("EaOverlay", () => {
       await overlay.updateComplete;
       expect(overlay.visible).toBe(true);
 
-      const mask = overlay.shadowRoot.querySelector(".ea-overlay__mask");
-      mask.dispatchEvent(new Event("click", { bubbles: true }));
+      const mask = overlay.shadowRoot!.querySelector(".ea-overlay__mask");
+      mask!.dispatchEvent(new Event("click", { bubbles: true }));
 
       await overlay.updateComplete;
 
@@ -295,8 +297,8 @@ describe("EaOverlay", () => {
       await overlay.updateComplete;
       expect(overlay.visible).toBe(true);
 
-      const mask = overlay.shadowRoot.querySelector(".ea-overlay__mask");
-      mask.dispatchEvent(new Event("click", { bubbles: true }));
+      const mask = overlay.shadowRoot!.querySelector(".ea-overlay__mask");
+      mask!.dispatchEvent(new Event("click", { bubbles: true }));
 
       await overlay.updateComplete;
 
@@ -544,8 +546,8 @@ describe("EaOverlay", () => {
       await overlay.updateComplete;
       expect(overlay.visible).toBe(true);
 
-      const mask = overlay.shadowRoot.querySelector(".ea-overlay__mask");
-      mask.dispatchEvent(new Event("click", { bubbles: true }));
+      const mask = overlay.shadowRoot!.querySelector(".ea-overlay__mask");
+      mask!.dispatchEvent(new Event("click", { bubbles: true }));
 
       await overlay.updateComplete;
 
@@ -559,7 +561,7 @@ describe("EaOverlay", () => {
 
       await overlay.updateComplete;
 
-      let doneFn = null;
+      let doneFn: ((cancel?: boolean) => void) | undefined;
       overlay.beforeClose = done => {
         doneFn = done;
       };
@@ -567,8 +569,8 @@ describe("EaOverlay", () => {
       overlay.show();
       await overlay.updateComplete;
 
-      const mask = overlay.shadowRoot.querySelector(".ea-overlay__mask");
-      mask.dispatchEvent(new Event("click", { bubbles: true }));
+      const mask = overlay.shadowRoot!.querySelector(".ea-overlay__mask");
+      mask!.dispatchEvent(new Event("click", { bubbles: true }));
 
       await overlay.updateComplete;
 
@@ -597,8 +599,8 @@ describe("EaOverlay", () => {
       overlay.show();
       await overlay.updateComplete;
 
-      const mask = overlay.shadowRoot.querySelector(".ea-overlay__mask");
-      mask.dispatchEvent(new Event("click", { bubbles: true }));
+      const mask = overlay.shadowRoot!.querySelector(".ea-overlay__mask");
+      mask!.dispatchEvent(new Event("click", { bubbles: true }));
 
       await waitForRender(100);
 
@@ -638,8 +640,8 @@ describe("EaOverlay", () => {
       await new Promise(resolve => requestAnimationFrame(resolve));
       await overlay.updateComplete;
 
-      const containerEl = overlay.shadowRoot.querySelector(".ea-overlay");
-      containerEl.dispatchEvent(new Event("transitionend", { bubbles: true }));
+      const containerEl = overlay.shadowRoot!.querySelector(".ea-overlay");
+      containerEl!.dispatchEvent(new Event("transitionend", { bubbles: true }));
 
       await overlay.updateComplete;
 
@@ -681,8 +683,8 @@ describe("EaOverlay", () => {
       overlay.visible = false;
       await overlay.updateComplete;
 
-      const containerEl = overlay.shadowRoot.querySelector(".ea-overlay");
-      containerEl.dispatchEvent(new Event("transitionend", { bubbles: true }));
+      const containerEl = overlay.shadowRoot!.querySelector(".ea-overlay");
+      containerEl!.dispatchEvent(new Event("transitionend", { bubbles: true }));
 
       await overlay.updateComplete;
 
@@ -715,7 +717,7 @@ describe("EaOverlay", () => {
       overlay.innerHTML = `<div class="content">Overlay Content</div>`;
       container.appendChild(overlay);
 
-      const slot = overlay.shadowRoot.querySelector("slot");
+      const slot = overlay.shadowRoot!.querySelector("slot");
       expect(slot).toBeTruthy();
     });
   });

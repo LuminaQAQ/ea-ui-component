@@ -4,7 +4,7 @@ import "./index";
 import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y";
 
 describe("EaTag", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -29,14 +29,14 @@ describe("EaTag", () => {
       const tag = document.createElement("ea-tag");
       container.appendChild(tag);
 
-      expect(tag.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(tag.shadowRoot!.querySelector('[part="container"]')).toBeTruthy();
     });
 
     it("应该包含 close-icon CSS Part", () => {
       const tag = document.createElement("ea-tag");
       container.appendChild(tag);
 
-      expect(tag.shadowRoot.querySelector('[part="close-icon"]')).toBeTruthy();
+      expect(tag.shadowRoot!.querySelector('[part="close-icon"]')).toBeTruthy();
     });
 
     it("应该正确显示标签内容", () => {
@@ -51,7 +51,7 @@ describe("EaTag", () => {
       const tag = document.createElement("ea-tag");
       container.appendChild(tag);
 
-      expect(tag.shadowRoot.querySelector(".ea-tag__content")).toBeTruthy();
+      expect(tag.shadowRoot!.querySelector(".ea-tag__content")).toBeTruthy();
     });
   });
 
@@ -104,8 +104,8 @@ describe("EaTag", () => {
       tag.variant = "success";
       await tag.updateComplete;
 
-      const containerEl = tag.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-tag--success")).toBe(true);
+      const containerEl = tag.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-tag--success")).toBe(true);
     });
   });
 
@@ -142,8 +142,8 @@ describe("EaTag", () => {
       tag.size = "large";
       await tag.updateComplete;
 
-      const containerEl = tag.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-tag--large-size")).toBe(true);
+      const containerEl = tag.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-tag--large-size")).toBe(true);
     });
   });
 
@@ -180,8 +180,8 @@ describe("EaTag", () => {
       tag.effect = "dark";
       await tag.updateComplete;
 
-      const containerEl = tag.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-tag--dark")).toBe(true);
+      const containerEl = tag.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-tag--dark")).toBe(true);
     });
   });
 
@@ -199,8 +199,8 @@ describe("EaTag", () => {
       container.appendChild(tag);
 
       expect(tag.closable).toBe(true);
-      const containerEl = tag.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-closable")).toBe(true);
+      const containerEl = tag.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-closable")).toBe(true);
     });
 
     it("应该触发 ea-remove 事件", async () => {
@@ -217,21 +217,23 @@ describe("EaTag", () => {
         removeDetail = e.detail;
       });
 
-      const closeIcon = tag.shadowRoot.querySelector('[part="close-icon"]');
-      closeIcon.click();
+      const closeIcon = tag.shadowRoot!.querySelector<HTMLElement>(
+        '[part="close-icon"]'
+      );
+      closeIcon!.click();
 
       await tag.updateComplete;
 
       expect(removeDetail).not.toBeNull();
-      expect(removeDetail.text).toBe("Test Tag");
+      expect(removeDetail!.text).toBe("Test Tag");
     });
 
     it("closable 为 false 时关闭图标应该隐藏", () => {
       const tag = document.createElement("ea-tag");
       container.appendChild(tag);
 
-      const containerEl = tag.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-closable")).toBe(false);
+      const containerEl = tag.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-closable")).toBe(false);
     });
   });
 
@@ -249,8 +251,8 @@ describe("EaTag", () => {
       container.appendChild(tag);
 
       expect(tag.round).toBe(true);
-      const containerEl = tag.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-round")).toBe(true);
+      const containerEl = tag.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-round")).toBe(true);
     });
   });
 
@@ -309,10 +311,10 @@ describe("EaTag", () => {
       tag.size = "large";
       container.appendChild(tag);
 
-      const containerEl = tag.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-tag--success")).toBe(true);
-      expect(containerEl.classList.contains("ea-tag--dark")).toBe(true);
-      expect(containerEl.classList.contains("ea-tag--large-size")).toBe(true);
+      const containerEl = tag.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-tag--success")).toBe(true);
+      expect(containerEl!.classList.contains("ea-tag--dark")).toBe(true);
+      expect(containerEl!.classList.contains("ea-tag--large-size")).toBe(true);
     });
 
     it("应该同时支持 variant + closable + round 组合", () => {
@@ -322,10 +324,10 @@ describe("EaTag", () => {
       tag.round = true;
       container.appendChild(tag);
 
-      const containerEl = tag.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-tag--danger")).toBe(true);
-      expect(containerEl.classList.contains("is-closable")).toBe(true);
-      expect(containerEl.classList.contains("is-round")).toBe(true);
+      const containerEl = tag.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-tag--danger")).toBe(true);
+      expect(containerEl!.classList.contains("is-closable")).toBe(true);
+      expect(containerEl!.classList.contains("is-round")).toBe(true);
     });
   });
 
@@ -334,7 +336,7 @@ describe("EaTag", () => {
       const tag = document.createElement("ea-tag");
       container.appendChild(tag);
 
-      expect(tag.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(tag.shadowRoot!.querySelector('[part="container"]')).toBeTruthy();
     });
 
     it("ea-tag 使用无效 variant 应该保留原始值", () => {
@@ -352,7 +354,7 @@ describe("EaTag", () => {
       tag.textContent = "Test";
       container.appendChild(tag);
 
-      expect(tag.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(tag.shadowRoot!.querySelector('[part="container"]')).toBeTruthy();
     });
 
     it("ea-tag 组件断开连接后应该正常移除", () => {
@@ -380,7 +382,7 @@ describe("EaTag", () => {
 });
 
 describe("EaCheckTag", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -406,7 +408,7 @@ describe("EaCheckTag", () => {
       container.appendChild(checkTag);
 
       expect(
-        checkTag.shadowRoot.querySelector('[part="container"]')
+        checkTag.shadowRoot!.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
@@ -442,8 +444,8 @@ describe("EaCheckTag", () => {
       await checkTag.updateComplete;
 
       const containerEl =
-        checkTag.shadowRoot.querySelector('[part="container"]');
-      containerEl.click();
+        checkTag.shadowRoot!.querySelector<HTMLElement>('[part="container"]');
+      containerEl!.click();
 
       await checkTag.updateComplete;
 
@@ -458,17 +460,17 @@ describe("EaCheckTag", () => {
 
       let changeDetail = null;
       checkTag.addEventListener("change", e => {
-        changeDetail = e.detail;
+        changeDetail = (e as CustomEvent).detail;
       });
 
       const containerEl =
-        checkTag.shadowRoot.querySelector('[part="container"]');
-      containerEl.click();
+        checkTag.shadowRoot!.querySelector<HTMLElement>('[part="container"]');
+      containerEl!.click();
 
       await checkTag.updateComplete;
 
       expect(changeDetail).not.toBeNull();
-      expect(changeDetail.checked).toBe(true);
+      expect(changeDetail!.checked).toBe(true);
     });
 
     it("再次点击应该取消选中", async () => {
@@ -479,8 +481,8 @@ describe("EaCheckTag", () => {
       await checkTag.updateComplete;
 
       const containerEl =
-        checkTag.shadowRoot.querySelector('[part="container"]');
-      containerEl.click();
+        checkTag.shadowRoot!.querySelector<HTMLElement>('[part="container"]');
+      containerEl!.click();
 
       await checkTag.updateComplete;
 
@@ -512,8 +514,8 @@ describe("EaCheckTag", () => {
       await checkTag.updateComplete;
 
       const containerEl =
-        checkTag.shadowRoot.querySelector('[part="container"]');
-      containerEl.click();
+        checkTag.shadowRoot!.querySelector<HTMLElement>('[part="container"]');
+      containerEl!.click();
 
       await checkTag.updateComplete;
 
@@ -533,8 +535,8 @@ describe("EaCheckTag", () => {
       });
 
       const containerEl =
-        checkTag.shadowRoot.querySelector('[part="container"]');
-      containerEl.click();
+        checkTag.shadowRoot!.querySelector<HTMLElement>('[part="container"]');
+      containerEl!.click();
 
       await checkTag.updateComplete;
 
@@ -547,8 +549,8 @@ describe("EaCheckTag", () => {
       container.appendChild(checkTag);
 
       const containerEl =
-        checkTag.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-disabled")).toBe(true);
+        checkTag.shadowRoot!.querySelector<HTMLElement>('[part="container"]');
+      expect(containerEl!.classList.contains("is-disabled")).toBe(true);
     });
   });
 
@@ -603,8 +605,8 @@ describe("EaCheckTag", () => {
       container.appendChild(checkTag);
 
       const containerEl =
-        checkTag.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-check-tag--success")).toBe(
+        checkTag.shadowRoot!.querySelector<HTMLElement>('[part="container"]');
+      expect(containerEl!.classList.contains("ea-check-tag--success")).toBe(
         true
       );
     });
@@ -615,8 +617,8 @@ describe("EaCheckTag", () => {
       container.appendChild(checkTag);
 
       const containerEl =
-        checkTag.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-check-tag--success")).toBe(
+        checkTag.shadowRoot!.querySelector<HTMLElement>('[part="container"]');
+      expect(containerEl!.classList.contains("ea-check-tag--success")).toBe(
         false
       );
     });
@@ -628,7 +630,7 @@ describe("EaCheckTag", () => {
       container.appendChild(checkTag);
 
       expect(
-        checkTag.shadowRoot.querySelector('[part="container"]')
+        checkTag.shadowRoot!.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
@@ -649,7 +651,7 @@ describe("EaCheckTag", () => {
       container.appendChild(checkTag);
 
       expect(
-        checkTag.shadowRoot.querySelector('[part="container"]')
+        checkTag.shadowRoot!.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
@@ -691,7 +693,7 @@ describe("EaCheckTag", () => {
 });
 
 describe("Combined Tests", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -703,7 +705,13 @@ describe("Combined Tests", () => {
   });
 
   it("应该同时渲染多个 ea-tag", () => {
-    const variants = ["primary", "success", "info", "warning", "danger"];
+    const variants = [
+      "primary",
+      "success",
+      "info",
+      "warning",
+      "danger",
+    ] as const;
 
     variants.forEach(variant => {
       const tag = document.createElement("ea-tag");
@@ -717,7 +725,13 @@ describe("Combined Tests", () => {
   });
 
   it("应该同时渲染多个 ea-check-tag", () => {
-    const variants = ["primary", "success", "info", "warning", "danger"];
+    const variants = [
+      "primary",
+      "success",
+      "info",
+      "warning",
+      "danger",
+    ] as const;
 
     variants.forEach(variant => {
       const checkTag = document.createElement("ea-check-tag");
@@ -746,8 +760,8 @@ describe("Combined Tests", () => {
         tag.closable = true;
         container.appendChild(tag);
 
-        const closeIcon = tag.shadowRoot.querySelector('[part="close-icon"]');
-        expect(closeIcon.getAttribute("role")).toBe("button");
+        const closeIcon = tag.shadowRoot!.querySelector('[part="close-icon"]');
+        expect(closeIcon!.getAttribute("role")).toBe("button");
       });
 
       it("ea-tag 关闭图标应该有 aria-label='close'", () => {
@@ -755,8 +769,8 @@ describe("Combined Tests", () => {
         tag.closable = true;
         container.appendChild(tag);
 
-        const closeIcon = tag.shadowRoot.querySelector('[part="close-icon"]');
-        expect(closeIcon.getAttribute("aria-label")).toBe("close");
+        const closeIcon = tag.shadowRoot!.querySelector('[part="close-icon"]');
+        expect(closeIcon!.getAttribute("aria-label")).toBe("close");
       });
 
       it("ea-tag 关闭图标应该有 tabindex='0'", () => {
@@ -764,8 +778,8 @@ describe("Combined Tests", () => {
         tag.closable = true;
         container.appendChild(tag);
 
-        const closeIcon = tag.shadowRoot.querySelector('[part="close-icon"]');
-        expect(closeIcon.getAttribute("tabindex")).toBe("0");
+        const closeIcon = tag.shadowRoot!.querySelector('[part="close-icon"]');
+        expect(closeIcon!.getAttribute("tabindex")).toBe("0");
       });
 
       it("ea-check-tag 容器应该有 role=checkbox", () => {
@@ -773,8 +787,8 @@ describe("Combined Tests", () => {
         container.appendChild(checkTag);
 
         const containerEl =
-          checkTag.shadowRoot.querySelector('[part="container"]');
-        expect(containerEl.getAttribute("role")).toBe("checkbox");
+          checkTag.shadowRoot!.querySelector('[part="container"]');
+        expect(containerEl!.getAttribute("role")).toBe("checkbox");
       });
 
       it("ea-check-tag checked=true 时宿主元素应该有 aria-checked='true'", () => {

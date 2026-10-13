@@ -1,10 +1,12 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y.js";
 
-import "./index.ts";
+import type { EaSwitchChangeEvent } from "./events/EaSwitchChangeEvent";
+
+import "./index";
 
 describe("EaSwitch Component", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -24,7 +26,7 @@ describe("EaSwitch Component", () => {
 
       expect(switchEl).toBeDefined();
       expect(switchEl.shadowRoot).toBeDefined();
-      expect(switchEl.shadowRoot.innerHTML).toBeTruthy();
+      expect(switchEl.shadowRoot!.innerHTML).toBeTruthy();
     });
 
     it("应该包含所有必要的 CSS Parts", () => {
@@ -42,12 +44,14 @@ describe("EaSwitch Component", () => {
 
       parts.forEach(part => {
         expect(
-          switchEl.shadowRoot.querySelector(`[part~="${part}"]`)
+          switchEl.shadowRoot!.querySelector(`[part~="${part}"]`)
         ).toBeTruthy();
       });
 
       expect(
-        switchEl.shadowRoot.querySelector(`[part~="label"][part~="form-label"]`)
+        switchEl.shadowRoot!.querySelector(
+          `[part~="label"][part~="form-label"]`
+        )
       ).toBeTruthy();
     });
 
@@ -57,21 +61,21 @@ describe("EaSwitch Component", () => {
 
       await switchEl.updateComplete;
 
-      const inputElement = switchEl.shadowRoot.querySelector(
+      const inputElement = switchEl.shadowRoot!.querySelector<HTMLInputElement>(
         ".ea-switch__original"
       );
       expect(inputElement).toBeTruthy();
-      expect(inputElement.type).toBe("checkbox");
+      expect(inputElement!.type).toBe("checkbox");
     });
 
     it("应该包含 active 和 inactive 插槽", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
 
-      const activeSlot = switchEl.shadowRoot.querySelector(
+      const activeSlot = switchEl.shadowRoot!.querySelector(
         'slot[name="active"]'
       );
-      const inactiveSlot = switchEl.shadowRoot.querySelector(
+      const inactiveSlot = switchEl.shadowRoot!.querySelector(
         'slot[name="inactive"]'
       );
       expect(activeSlot).toBeTruthy();
@@ -84,9 +88,9 @@ describe("EaSwitch Component", () => {
 
       await switchEl.updateComplete;
 
-      const wrapper = switchEl.shadowRoot.querySelector("label.ea-switch");
+      const wrapper = switchEl.shadowRoot!.querySelector("label.ea-switch");
       expect(wrapper).toBeTruthy();
-      expect(wrapper.tagName).toBe("LABEL");
+      expect(wrapper!.tagName).toBe("LABEL");
     });
 
     it("应该包含 content span 元素", async () => {
@@ -95,11 +99,11 @@ describe("EaSwitch Component", () => {
 
       await switchEl.updateComplete;
 
-      const contentEl = switchEl.shadowRoot.querySelector(
+      const contentEl = switchEl.shadowRoot!.querySelector(
         ".ea-switch__content"
       );
       expect(contentEl).toBeTruthy();
-      expect(contentEl.tagName).toBe("SPAN");
+      expect(contentEl!.tagName).toBe("SPAN");
     });
 
     it("应该包含 inner span 元素", async () => {
@@ -108,9 +112,9 @@ describe("EaSwitch Component", () => {
 
       await switchEl.updateComplete;
 
-      const inner = switchEl.shadowRoot.querySelector(".ea-switch__inner");
+      const inner = switchEl.shadowRoot!.querySelector(".ea-switch__inner");
       expect(inner).toBeTruthy();
-      expect(inner.tagName).toBe("SPAN");
+      expect(inner!.tagName).toBe("SPAN");
     });
   });
 
@@ -143,11 +147,11 @@ describe("EaSwitch Component", () => {
 
       await switchEl.updateComplete;
 
-      const labelElement = switchEl.shadowRoot.querySelector(
+      const labelElement = switchEl.shadowRoot!.querySelector(
         ".ea-switch__form-label"
       );
       expect(labelElement).toBeTruthy();
-      expect(labelElement.textContent).toBe("Enable Feature");
+      expect(labelElement!.textContent).toBe("Enable Feature");
     });
 
     it("动态修改 label 应该生效", async () => {
@@ -161,10 +165,10 @@ describe("EaSwitch Component", () => {
       await switchEl.updateComplete;
 
       expect(switchEl.label).toBe("New Label");
-      const labelElement = switchEl.shadowRoot.querySelector(
+      const labelElement = switchEl.shadowRoot!.querySelector(
         ".ea-switch__form-label"
       );
-      expect(labelElement.textContent).toBe("New Label");
+      expect(labelElement!.textContent).toBe("New Label");
     });
 
     it("通过 setter 设置 label 应该生效", () => {
@@ -206,8 +210,10 @@ describe("EaSwitch Component", () => {
 
       await switchEl.updateComplete;
 
-      const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
-      expect(input.getAttribute("name")).toBe("my-switch");
+      const input = switchEl.shadowRoot!.querySelector<HTMLInputElement>(
+        ".ea-switch__original"
+      );
+      expect(input!.getAttribute("name")).toBe("my-switch");
     });
 
     it("name 应该同步到原生 input 的 id 属性", async () => {
@@ -217,8 +223,10 @@ describe("EaSwitch Component", () => {
 
       await switchEl.updateComplete;
 
-      const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
-      expect(input.getAttribute("id")).toBe("my-switch");
+      const input = switchEl.shadowRoot!.querySelector<HTMLInputElement>(
+        ".ea-switch__original"
+      );
+      expect(input!.getAttribute("id")).toBe("my-switch");
     });
 
     it("name 应该同步到 container 的 for 属性", async () => {
@@ -228,8 +236,8 @@ describe("EaSwitch Component", () => {
 
       await switchEl.updateComplete;
 
-      const containerEl = switchEl.shadowRoot.querySelector(".ea-switch");
-      expect(containerEl.getAttribute("for")).toBe("my-switch");
+      const containerEl = switchEl.shadowRoot!.querySelector(".ea-switch");
+      expect(containerEl!.getAttribute("for")).toBe("my-switch");
     });
 
     it("动态修改 name 应该生效", async () => {
@@ -243,8 +251,10 @@ describe("EaSwitch Component", () => {
       await switchEl.updateComplete;
 
       expect(switchEl.name).toBe("new-name");
-      const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
-      expect(input.getAttribute("name")).toBe("new-name");
+      const input = switchEl.shadowRoot!.querySelector<HTMLInputElement>(
+        ".ea-switch__original"
+      );
+      expect(input!.getAttribute("name")).toBe("new-name");
     });
   });
 
@@ -286,8 +296,10 @@ describe("EaSwitch Component", () => {
 
       await switchEl.updateComplete;
 
-      const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
-      expect(input.checked).toBe(true);
+      const input = switchEl.shadowRoot!.querySelector<HTMLInputElement>(
+        ".ea-switch__original"
+      );
+      expect(input!.checked).toBe(true);
     });
 
     it("value 为 false 时原生 input 不应该被选中", async () => {
@@ -297,8 +309,10 @@ describe("EaSwitch Component", () => {
 
       await switchEl.updateComplete;
 
-      const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
-      expect(input.checked).toBe(false);
+      const input = switchEl.shadowRoot!.querySelector<HTMLInputElement>(
+        ".ea-switch__original"
+      );
+      expect(input!.checked).toBe(false);
     });
 
     it("动态修改 value 应该生效", async () => {
@@ -312,8 +326,10 @@ describe("EaSwitch Component", () => {
       await switchEl.updateComplete;
 
       expect(switchEl.getAttribute("value")).toBe("true");
-      const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
-      expect(input.checked).toBe(true);
+      const input = switchEl.shadowRoot!.querySelector<HTMLInputElement>(
+        ".ea-switch__original"
+      );
+      expect(input!.checked).toBe(true);
     });
 
     it("空字符串 value 应该正确处理", async () => {
@@ -391,8 +407,10 @@ describe("EaSwitch Component", () => {
 
       await switchEl.updateComplete;
 
-      const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
-      expect(input.checked).toBe(true);
+      const input = switchEl.shadowRoot!.querySelector<HTMLInputElement>(
+        ".ea-switch__original"
+      );
+      expect(input!.checked).toBe(true);
     });
 
     it("value 等于 inactive-value 时应该显示为关闭状态", async () => {
@@ -404,8 +422,10 @@ describe("EaSwitch Component", () => {
 
       await switchEl.updateComplete;
 
-      const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
-      expect(input.checked).toBe(false);
+      const input = switchEl.shadowRoot!.querySelector<HTMLInputElement>(
+        ".ea-switch__original"
+      );
+      expect(input!.checked).toBe(false);
     });
 
     it("value 不匹配 active-value 或 inactive-value 时应该显示为关闭状态", async () => {
@@ -417,8 +437,10 @@ describe("EaSwitch Component", () => {
 
       await switchEl.updateComplete;
 
-      const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
-      expect(input.checked).toBe(false);
+      const input = switchEl.shadowRoot!.querySelector<HTMLInputElement>(
+        ".ea-switch__original"
+      );
+      expect(input!.checked).toBe(false);
     });
 
     it("动态修改 active-value 应该更新选中状态", async () => {
@@ -430,13 +452,15 @@ describe("EaSwitch Component", () => {
 
       await switchEl.updateComplete;
 
-      const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
-      expect(input.checked).toBe(true);
+      const input = switchEl.shadowRoot!.querySelector<HTMLInputElement>(
+        ".ea-switch__original"
+      );
+      expect(input!.checked).toBe(true);
 
       switchEl.setAttribute("active-value", "on");
       await switchEl.updateComplete;
 
-      expect(input.checked).toBe(false);
+      expect(input!.checked).toBe(false);
     });
 
     it("0 作为 active-value 应该正确处理", async () => {
@@ -448,8 +472,10 @@ describe("EaSwitch Component", () => {
 
       await switchEl.updateComplete;
 
-      const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
-      expect(input.checked).toBe(true);
+      const input = switchEl.shadowRoot!.querySelector<HTMLInputElement>(
+        ".ea-switch__original"
+      );
+      expect(input!.checked).toBe(true);
     });
   });
 
@@ -498,8 +524,8 @@ describe("EaSwitch Component", () => {
 
       await switchEl.updateComplete;
 
-      const containerEl = switchEl.shadowRoot.querySelector(".ea-switch");
-      expect(containerEl.classList.contains("ea-switch--large")).toBe(true);
+      const containerEl = switchEl.shadowRoot!.querySelector(".ea-switch");
+      expect(containerEl!.classList.contains("ea-switch--large")).toBe(true);
     });
 
     it("动态修改 size 应该生效", async () => {
@@ -513,9 +539,9 @@ describe("EaSwitch Component", () => {
       await switchEl.updateComplete;
 
       expect(switchEl.size).toBe("large");
-      const containerEl = switchEl.shadowRoot.querySelector(".ea-switch");
-      expect(containerEl.classList.contains("ea-switch--large")).toBe(true);
-      expect(containerEl.classList.contains("ea-switch--default")).toBe(false);
+      const containerEl = switchEl.shadowRoot!.querySelector(".ea-switch");
+      expect(containerEl!.classList.contains("ea-switch--large")).toBe(true);
+      expect(containerEl!.classList.contains("ea-switch--default")).toBe(false);
     });
 
     it("通过 setter 设置 size 应该生效", () => {
@@ -779,8 +805,10 @@ describe("EaSwitch Component", () => {
 
       await switchEl.updateComplete;
 
-      const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
-      expect(input.disabled).toBe(true);
+      const input = switchEl.shadowRoot!.querySelector<HTMLInputElement>(
+        ".ea-switch__original"
+      );
+      expect(input!.disabled).toBe(true);
     });
 
     it("disabled 状态应该反映在 container 的 class 中", async () => {
@@ -790,8 +818,8 @@ describe("EaSwitch Component", () => {
 
       await switchEl.updateComplete;
 
-      const containerEl = switchEl.shadowRoot.querySelector(".ea-switch");
-      expect(containerEl.classList.contains("is-disabled")).toBe(true);
+      const containerEl = switchEl.shadowRoot!.querySelector(".ea-switch");
+      expect(containerEl!.classList.contains("is-disabled")).toBe(true);
     });
 
     it("动态修改 disabled 应该生效", async () => {
@@ -804,14 +832,16 @@ describe("EaSwitch Component", () => {
       await switchEl.updateComplete;
 
       expect(switchEl.disabled).toBe(true);
-      const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
-      expect(input.disabled).toBe(true);
+      const input = switchEl.shadowRoot!.querySelector<HTMLInputElement>(
+        ".ea-switch__original"
+      );
+      expect(input!.disabled).toBe(true);
 
       switchEl.disabled = false;
       await switchEl.updateComplete;
 
       expect(switchEl.disabled).toBe(false);
-      expect(input.disabled).toBe(false);
+      expect(input!.disabled).toBe(false);
     });
   });
 
@@ -844,8 +874,10 @@ describe("EaSwitch Component", () => {
 
       await switchEl.updateComplete;
 
-      const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
-      expect(input.hasAttribute("required")).toBe(true);
+      const input = switchEl.shadowRoot!.querySelector<HTMLInputElement>(
+        ".ea-switch__original"
+      );
+      expect(input!.hasAttribute("required")).toBe(true);
     });
 
     it("动态修改 required 应该生效", async () => {
@@ -874,8 +906,8 @@ describe("EaSwitch Component", () => {
 
       await switchEl.updateComplete;
 
-      const containerEl = switchEl.shadowRoot.querySelector(".ea-switch");
-      expect(containerEl.classList.contains("is-checked")).toBe(true);
+      const containerEl = switchEl.shadowRoot!.querySelector(".ea-switch");
+      expect(containerEl!.classList.contains("is-checked")).toBe(true);
     });
 
     it("value 不等于 active-value 时 container 不应该有 checked class", async () => {
@@ -885,8 +917,8 @@ describe("EaSwitch Component", () => {
 
       await switchEl.updateComplete;
 
-      const containerEl = switchEl.shadowRoot.querySelector(".ea-switch");
-      expect(containerEl.classList.contains("is-checked")).toBe(false);
+      const containerEl = switchEl.shadowRoot!.querySelector(".ea-switch");
+      expect(containerEl!.classList.contains("is-checked")).toBe(false);
     });
 
     it("切换 value 时 checked class 应该更新", async () => {
@@ -896,14 +928,14 @@ describe("EaSwitch Component", () => {
 
       await switchEl.updateComplete;
 
-      let containerEl = switchEl.shadowRoot.querySelector(".ea-switch");
-      expect(containerEl.classList.contains("is-checked")).toBe(false);
+      let containerEl = switchEl.shadowRoot!.querySelector(".ea-switch");
+      expect(containerEl!.classList.contains("is-checked")).toBe(false);
 
       switchEl.setAttribute("value", "true");
       await switchEl.updateComplete;
 
-      containerEl = switchEl.shadowRoot.querySelector(".ea-switch");
-      expect(containerEl.classList.contains("is-checked")).toBe(true);
+      containerEl = switchEl.shadowRoot!.querySelector(".ea-switch");
+      expect(containerEl!.classList.contains("is-checked")).toBe(true);
     });
 
     it("disabled 时 container 应该同时有 checked 和 disabled class", async () => {
@@ -914,9 +946,9 @@ describe("EaSwitch Component", () => {
 
       await switchEl.updateComplete;
 
-      const containerEl = switchEl.shadowRoot.querySelector(".ea-switch");
-      expect(containerEl.classList.contains("is-checked")).toBe(true);
-      expect(containerEl.classList.contains("is-disabled")).toBe(true);
+      const containerEl = switchEl.shadowRoot!.querySelector(".ea-switch");
+      expect(containerEl!.classList.contains("is-checked")).toBe(true);
+      expect(containerEl!.classList.contains("is-disabled")).toBe(true);
     });
   });
 
@@ -928,9 +960,11 @@ describe("EaSwitch Component", () => {
 
       await switchEl.updateComplete;
 
-      const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
-      input.checked = true;
-      input.dispatchEvent(new CustomEvent("change", { bubbles: true }));
+      const input = switchEl.shadowRoot!.querySelector<HTMLInputElement>(
+        ".ea-switch__original"
+      );
+      input!.checked = true;
+      input!.dispatchEvent(new CustomEvent("change", { bubbles: true }));
 
       await switchEl.updateComplete;
 
@@ -944,8 +978,10 @@ describe("EaSwitch Component", () => {
 
       await switchEl.updateComplete;
 
-      const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
-      input.click();
+      const input = switchEl.shadowRoot!.querySelector<HTMLInputElement>(
+        ".ea-switch__original"
+      );
+      input!.click();
 
       await switchEl.updateComplete;
 
@@ -961,9 +997,11 @@ describe("EaSwitch Component", () => {
 
       await switchEl.updateComplete;
 
-      const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
-      input.checked = true;
-      input.dispatchEvent(new CustomEvent("change", { bubbles: true }));
+      const input = switchEl.shadowRoot!.querySelector<HTMLInputElement>(
+        ".ea-switch__original"
+      );
+      input!.checked = true;
+      input!.dispatchEvent(new CustomEvent("change", { bubbles: true }));
 
       await switchEl.updateComplete;
 
@@ -979,9 +1017,11 @@ describe("EaSwitch Component", () => {
 
       await switchEl.updateComplete;
 
-      const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
-      input.checked = false;
-      input.dispatchEvent(new CustomEvent("change", { bubbles: true }));
+      const input = switchEl.shadowRoot!.querySelector<HTMLInputElement>(
+        ".ea-switch__original"
+      );
+      input!.checked = false;
+      input!.dispatchEvent(new CustomEvent("change", { bubbles: true }));
 
       await switchEl.updateComplete;
 
@@ -995,14 +1035,16 @@ describe("EaSwitch Component", () => {
 
       await switchEl.updateComplete;
 
-      const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
-      input.checked = true;
-      input.dispatchEvent(new CustomEvent("change", { bubbles: true }));
+      const input = switchEl.shadowRoot!.querySelector<HTMLInputElement>(
+        ".ea-switch__original"
+      );
+      input!.checked = true;
+      input!.dispatchEvent(new CustomEvent("change", { bubbles: true }));
 
       await switchEl.updateComplete;
 
-      const containerEl = switchEl.shadowRoot.querySelector(".ea-switch");
-      expect(containerEl.classList.contains("is-checked")).toBe(true);
+      const containerEl = switchEl.shadowRoot!.querySelector(".ea-switch");
+      expect(containerEl!.classList.contains("is-checked")).toBe(true);
     });
   });
 
@@ -1033,8 +1075,10 @@ describe("EaSwitch Component", () => {
 
       switchEl.beforeChange = () => Promise.resolve(true);
 
-      const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
-      input.dispatchEvent(new Event("click", { bubbles: true }));
+      const input = switchEl.shadowRoot!.querySelector<HTMLInputElement>(
+        ".ea-switch__original"
+      );
+      input!.dispatchEvent(new Event("click", { bubbles: true }));
 
       await switchEl.updateComplete;
 
@@ -1050,8 +1094,10 @@ describe("EaSwitch Component", () => {
 
       switchEl.beforeChange = () => Promise.reject(new Error("rejected"));
 
-      const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
-      input.dispatchEvent(new Event("click", { bubbles: true }));
+      const input = switchEl.shadowRoot!.querySelector<HTMLInputElement>(
+        ".ea-switch__original"
+      );
+      input!.dispatchEvent(new Event("click", { bubbles: true }));
 
       await switchEl.updateComplete;
 
@@ -1065,7 +1111,7 @@ describe("EaSwitch Component", () => {
       switchEl.innerHTML = `<ea-icon name="check" slot="active"></ea-icon>`;
       container.appendChild(switchEl);
 
-      const slot = switchEl.shadowRoot.querySelector('slot[name="active"]');
+      const slot = switchEl.shadowRoot!.querySelector('slot[name="active"]');
       expect(slot).toBeTruthy();
     });
 
@@ -1074,7 +1120,7 @@ describe("EaSwitch Component", () => {
       switchEl.innerHTML = `<ea-icon name="ban" slot="inactive"></ea-icon>`;
       container.appendChild(switchEl);
 
-      const slot = switchEl.shadowRoot.querySelector('slot[name="inactive"]');
+      const slot = switchEl.shadowRoot!.querySelector('slot[name="inactive"]');
       expect(slot).toBeTruthy();
     });
 
@@ -1086,10 +1132,10 @@ describe("EaSwitch Component", () => {
       `;
       container.appendChild(switchEl);
 
-      const activeSlot = switchEl.shadowRoot.querySelector(
+      const activeSlot = switchEl.shadowRoot!.querySelector(
         'slot[name="active"]'
       );
-      const inactiveSlot = switchEl.shadowRoot.querySelector(
+      const inactiveSlot = switchEl.shadowRoot!.querySelector(
         'slot[name="inactive"]'
       );
       expect(activeSlot).toBeTruthy();
@@ -1169,7 +1215,7 @@ describe("EaSwitch Component", () => {
       container.appendChild(switchEl);
 
       expect(
-        switchEl.shadowRoot.querySelector('[part="container"]')
+        switchEl.shadowRoot!.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
@@ -1257,10 +1303,12 @@ describe("EaSwitch Component", () => {
       expect(switchEl.required).toBe(true);
       expect(switchEl.getAttribute("value")).toBe("true");
 
-      const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
-      expect(input.disabled).toBe(true);
-      expect(input.hasAttribute("required")).toBe(true);
-      expect(input.checked).toBe(true);
+      const input = switchEl.shadowRoot!.querySelector<HTMLInputElement>(
+        ".ea-switch__original"
+      );
+      expect(input!.disabled).toBe(true);
+      expect(input!.hasAttribute("required")).toBe(true);
+      expect(input!.checked).toBe(true);
     });
   });
 
@@ -1332,19 +1380,21 @@ describe("EaSwitch Component", () => {
 
       await switchEl.updateComplete;
 
-      let eventDetail = null;
+      let eventDetail: EaSwitchChangeEvent["detail"] | null = null;
       switchEl.addEventListener("change", e => {
-        eventDetail = e.detail;
+        eventDetail = (e as EaSwitchChangeEvent).detail;
       });
 
-      const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
-      input.checked = true;
-      input.dispatchEvent(new CustomEvent("change", { bubbles: true }));
+      const input = switchEl.shadowRoot!.querySelector<HTMLInputElement>(
+        ".ea-switch__original"
+      );
+      input!.checked = true;
+      input!.dispatchEvent(new CustomEvent("change", { bubbles: true }));
 
       await switchEl.updateComplete;
 
       expect(eventDetail).toBeTruthy();
-      expect(eventDetail.value).toBe(true);
+      expect(eventDetail!.value).toBe(true);
     });
 
     it("change 事件应该冒泡且可取消", async () => {
@@ -1359,16 +1409,18 @@ describe("EaSwitch Component", () => {
         capturedEvent = e;
       });
 
-      const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
-      input.checked = true;
-      input.dispatchEvent(new CustomEvent("change", { bubbles: true }));
+      const input = switchEl.shadowRoot!.querySelector<HTMLInputElement>(
+        ".ea-switch__original"
+      );
+      input!.checked = true;
+      input!.dispatchEvent(new CustomEvent("change", { bubbles: true }));
 
       await switchEl.updateComplete;
 
       expect(capturedEvent).toBeTruthy();
-      expect(capturedEvent.bubbles).toBe(true);
-      expect(capturedEvent.cancelable).toBe(true);
-      expect(capturedEvent.composed).toBe(true);
+      expect(capturedEvent!.bubbles).toBe(true);
+      expect(capturedEvent!.cancelable).toBe(true);
+      expect(capturedEvent!.composed).toBe(true);
     });
 
     it("取消选中时 change 事件 detail 应该包含 inactiveValue", async () => {
@@ -1380,19 +1432,21 @@ describe("EaSwitch Component", () => {
 
       await switchEl.updateComplete;
 
-      let eventDetail = null;
+      let eventDetail: EaSwitchChangeEvent["detail"] | null = null;
       switchEl.addEventListener("change", e => {
-        eventDetail = e.detail;
+        eventDetail = (e as EaSwitchChangeEvent).detail;
       });
 
-      const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
-      input.checked = false;
-      input.dispatchEvent(new CustomEvent("change", { bubbles: true }));
+      const input = switchEl.shadowRoot!.querySelector<HTMLInputElement>(
+        ".ea-switch__original"
+      );
+      input!.checked = false;
+      input!.dispatchEvent(new CustomEvent("change", { bubbles: true }));
 
       await switchEl.updateComplete;
 
       expect(eventDetail).toBeTruthy();
-      expect(eventDetail.value).toBe("off");
+      expect(eventDetail!.value).toBe("off");
     });
 
     it("原生 change 事件应该被阻止传播", async () => {
@@ -1403,17 +1457,22 @@ describe("EaSwitch Component", () => {
       await switchEl.updateComplete;
 
       let nativeChangeCaptured = false;
-      switchEl.shadowRoot.addEventListener("change", e => {
+      switchEl.shadowRoot!.addEventListener("change", e => {
         if (
-          e.target === switchEl.shadowRoot.querySelector(".ea-switch__original")
+          e.target ===
+          switchEl.shadowRoot!.querySelector<HTMLInputElement>(
+            ".ea-switch__original"
+          )
         ) {
           nativeChangeCaptured = true;
         }
       });
 
-      const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
-      input.checked = true;
-      input.dispatchEvent(new CustomEvent("change", { bubbles: true }));
+      const input = switchEl.shadowRoot!.querySelector<HTMLInputElement>(
+        ".ea-switch__original"
+      );
+      input!.checked = true;
+      input!.dispatchEvent(new CustomEvent("change", { bubbles: true }));
 
       await switchEl.updateComplete;
 
@@ -1431,10 +1490,10 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("inactive-text", "Close");
       await switchEl.updateComplete;
 
-      const labelLeft = switchEl.shadowRoot.querySelector(
+      const labelLeft = switchEl.shadowRoot!.querySelector(
         ".ea-switch__label-left"
       );
-      expect(labelLeft.textContent).toBe("Close");
+      expect(labelLeft!.textContent).toBe("Close");
     });
 
     it("设置 activeText 后应该更新 label-right 文本内容", async () => {
@@ -1446,10 +1505,10 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("active-text", "Open");
       await switchEl.updateComplete;
 
-      const labelRight = switchEl.shadowRoot.querySelector(
+      const labelRight = switchEl.shadowRoot!.querySelector(
         ".ea-switch__label-right"
       );
-      expect(labelRight.textContent).toBe("Open");
+      expect(labelRight!.textContent).toBe("Open");
     });
 
     it("动态修改 inactiveText 应该更新 label-left 文本内容", async () => {
@@ -1464,10 +1523,10 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("inactive-text", "New");
       await switchEl.updateComplete;
 
-      const labelLeft = switchEl.shadowRoot.querySelector(
+      const labelLeft = switchEl.shadowRoot!.querySelector(
         ".ea-switch__label-left"
       );
-      expect(labelLeft.textContent).toBe("New");
+      expect(labelLeft!.textContent).toBe("New");
     });
 
     it("动态修改 activeText 应该更新 label-right 文本内容", async () => {
@@ -1482,10 +1541,10 @@ describe("EaSwitch Component", () => {
       switchEl.setAttribute("active-text", "New");
       await switchEl.updateComplete;
 
-      const labelRight = switchEl.shadowRoot.querySelector(
+      const labelRight = switchEl.shadowRoot!.querySelector(
         ".ea-switch__label-right"
       );
-      expect(labelRight.textContent).toBe("New");
+      expect(labelRight!.textContent).toBe("New");
     });
   });
 
@@ -1530,9 +1589,9 @@ describe("EaSwitch Component", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
 
-      const wrapperEl = switchEl.shadowRoot.querySelector("label.ea-switch");
+      const wrapperEl = switchEl.shadowRoot!.querySelector("label.ea-switch");
       const className = switchEl.updateContainerClasslist();
-      expect(wrapperEl.className).toBe(className);
+      expect(wrapperEl!.className).toBe(className);
     });
   });
 
@@ -1560,8 +1619,8 @@ describe("EaSwitch Component", () => {
       switchEl.formResetCallback();
       await switchEl.updateComplete;
 
-      const wrapperEl = switchEl.shadowRoot.querySelector("label.ea-switch");
-      expect(wrapperEl.classList.contains("is-checked")).toBe(false);
+      const wrapperEl = switchEl.shadowRoot!.querySelector("label.ea-switch");
+      expect(wrapperEl!.classList.contains("is-checked")).toBe(false);
     });
 
     it("重置后原生 input 应该未选中", async () => {
@@ -1574,8 +1633,10 @@ describe("EaSwitch Component", () => {
       switchEl.formResetCallback();
       await switchEl.updateComplete;
 
-      const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
-      expect(input.checked).toBe(false);
+      const input = switchEl.shadowRoot!.querySelector<HTMLInputElement>(
+        ".ea-switch__original"
+      );
+      expect(input!.checked).toBe(false);
     });
   });
 
@@ -1587,10 +1648,12 @@ describe("EaSwitch Component", () => {
 
       await switchEl.updateComplete;
 
-      const wrapper = switchEl.shadowRoot.querySelector("label.ea-switch");
-      const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
-      expect(wrapper.getAttribute("for")).toBe("test-name");
-      expect(input.getAttribute("id")).toBe("test-name");
+      const wrapper = switchEl.shadowRoot!.querySelector("label.ea-switch");
+      const input = switchEl.shadowRoot!.querySelector<HTMLInputElement>(
+        ".ea-switch__original"
+      );
+      expect(wrapper!.getAttribute("for")).toBe("test-name");
+      expect(input!.getAttribute("id")).toBe("test-name");
     });
 
     it("form-label 为空时应该存在但无内容", async () => {
@@ -1599,11 +1662,11 @@ describe("EaSwitch Component", () => {
 
       await switchEl.updateComplete;
 
-      const formLabel = switchEl.shadowRoot.querySelector(
+      const formLabel = switchEl.shadowRoot!.querySelector(
         ".ea-switch__form-label"
       );
       expect(formLabel).toBeTruthy();
-      expect(formLabel.textContent).toBe("");
+      expect(formLabel!.textContent).toBe("");
     });
 
     it("设置 label 后 form-label 应该显示文本", async () => {
@@ -1613,21 +1676,23 @@ describe("EaSwitch Component", () => {
 
       await switchEl.updateComplete;
 
-      const formLabel = switchEl.shadowRoot.querySelector(
+      const formLabel = switchEl.shadowRoot!.querySelector(
         ".ea-switch__form-label"
       );
-      expect(formLabel.textContent).toBe("Test Label");
+      expect(formLabel!.textContent).toBe("Test Label");
     });
 
     it("content 元素应该包含 original、label-left、inner、label-right", () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
 
-      const content = switchEl.shadowRoot.querySelector(".ea-switch__content");
-      expect(content.querySelector(".ea-switch__original")).toBeTruthy();
-      expect(content.querySelector(".ea-switch__label-left")).toBeTruthy();
-      expect(content.querySelector(".ea-switch__inner")).toBeTruthy();
-      expect(content.querySelector(".ea-switch__label-right")).toBeTruthy();
+      const content = switchEl.shadowRoot!.querySelector(".ea-switch__content");
+      expect(
+        content!.querySelector<HTMLInputElement>(".ea-switch__original")
+      ).toBeTruthy();
+      expect(content!.querySelector(".ea-switch__label-left")).toBeTruthy();
+      expect(content!.querySelector(".ea-switch__inner")).toBeTruthy();
+      expect(content!.querySelector(".ea-switch__label-right")).toBeTruthy();
     });
   });
 

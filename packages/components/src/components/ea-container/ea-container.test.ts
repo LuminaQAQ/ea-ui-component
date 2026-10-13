@@ -4,7 +4,7 @@ import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y";
 import "./index";
 
 describe("EaContainer", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -21,7 +21,7 @@ describe("EaContainer", () => {
       container.appendChild(el);
 
       expect(el.shadowRoot).toBeTruthy();
-      expect(el.shadowRoot.querySelector(".ea-container")).toBeTruthy();
+      expect(el.shadowRoot!.querySelector(".ea-container")).toBeTruthy();
     });
 
     it("应该正确渲染 ea-header 组件", () => {
@@ -29,7 +29,7 @@ describe("EaContainer", () => {
       container.appendChild(el);
 
       expect(el.shadowRoot).toBeTruthy();
-      expect(el.shadowRoot.querySelector(".ea-header")).toBeTruthy();
+      expect(el.shadowRoot!.querySelector(".ea-header")).toBeTruthy();
     });
 
     it("应该正确渲染 ea-main 组件", () => {
@@ -37,7 +37,7 @@ describe("EaContainer", () => {
       container.appendChild(el);
 
       expect(el.shadowRoot).toBeTruthy();
-      expect(el.shadowRoot.querySelector(".ea-main")).toBeTruthy();
+      expect(el.shadowRoot!.querySelector(".ea-main")).toBeTruthy();
     });
 
     it("应该正确渲染 ea-footer 组件", () => {
@@ -45,7 +45,7 @@ describe("EaContainer", () => {
       container.appendChild(el);
 
       expect(el.shadowRoot).toBeTruthy();
-      expect(el.shadowRoot.querySelector(".ea-footer")).toBeTruthy();
+      expect(el.shadowRoot!.querySelector(".ea-footer")).toBeTruthy();
     });
 
     it("应该正确渲染 ea-aside 组件", () => {
@@ -53,7 +53,7 @@ describe("EaContainer", () => {
       container.appendChild(el);
 
       expect(el.shadowRoot).toBeTruthy();
-      expect(el.shadowRoot.querySelector(".ea-aside")).toBeTruthy();
+      expect(el.shadowRoot!.querySelector(".ea-aside")).toBeTruthy();
     });
   });
 
@@ -62,35 +62,35 @@ describe("EaContainer", () => {
       const el = document.createElement("ea-container");
       container.appendChild(el);
 
-      expect(el.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(el.shadowRoot!.querySelector('[part="container"]')).toBeTruthy();
     });
 
     it("ea-header 应该支持 container part", () => {
       const el = document.createElement("ea-header");
       container.appendChild(el);
 
-      expect(el.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(el.shadowRoot!.querySelector('[part="container"]')).toBeTruthy();
     });
 
     it("ea-main 应该支持 container part", () => {
       const el = document.createElement("ea-main");
       container.appendChild(el);
 
-      expect(el.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(el.shadowRoot!.querySelector('[part="container"]')).toBeTruthy();
     });
 
     it("ea-footer 应该支持 container part", () => {
       const el = document.createElement("ea-footer");
       container.appendChild(el);
 
-      expect(el.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(el.shadowRoot!.querySelector('[part="container"]')).toBeTruthy();
     });
 
     it("ea-aside 应该支持 container part", () => {
       const el = document.createElement("ea-aside");
       container.appendChild(el);
 
-      expect(el.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(el.shadowRoot!.querySelector('[part="container"]')).toBeTruthy();
     });
   });
 
@@ -124,14 +124,14 @@ describe("EaContainer", () => {
 
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-container");
-      expect(containerEl.classList.contains("ea-container--horizontal")).toBe(true);
+      const containerEl = el.shadowRoot!.querySelector(".ea-container");
+      expect(containerEl!.classList.contains("ea-container--horizontal")).toBe(true);
 
       el.setAttribute("direction", "vertical");
       await el.updateComplete;
 
-      expect(containerEl.classList.contains("ea-container--vertical")).toBe(true);
-      expect(containerEl.classList.contains("ea-container--horizontal")).toBe(false);
+      expect(containerEl!.classList.contains("ea-container--vertical")).toBe(true);
+      expect(containerEl!.classList.contains("ea-container--horizontal")).toBe(false);
     });
   });
 
@@ -454,7 +454,7 @@ describe("EaContainer", () => {
       el.innerHTML = "<span>Header Content</span>";
       container.appendChild(el);
 
-      const slot = el.shadowRoot.querySelector("slot");
+      const slot = el.shadowRoot!.querySelector("slot");
       expect(slot).toBeTruthy();
     });
 
@@ -463,7 +463,7 @@ describe("EaContainer", () => {
       el.innerHTML = "<div>Main Content</div>";
       container.appendChild(el);
 
-      const slot = el.shadowRoot.querySelector("slot");
+      const slot = el.shadowRoot!.querySelector("slot");
       expect(slot).toBeTruthy();
     });
 
@@ -472,7 +472,7 @@ describe("EaContainer", () => {
       el.innerHTML = "<nav>Aside Content</nav>";
       container.appendChild(el);
 
-      const slot = el.shadowRoot.querySelector("slot");
+      const slot = el.shadowRoot!.querySelector("slot");
       expect(slot).toBeTruthy();
     });
 
@@ -481,7 +481,7 @@ describe("EaContainer", () => {
       el.innerHTML = "<span>Footer Content</span>";
       container.appendChild(el);
 
-      const slot = el.shadowRoot.querySelector("slot");
+      const slot = el.shadowRoot!.querySelector("slot");
       expect(slot).toBeTruthy();
     });
 
@@ -491,7 +491,7 @@ describe("EaContainer", () => {
       el.appendChild(main);
       container.appendChild(el);
 
-      const slot = el.shadowRoot.querySelector("slot");
+      const slot = el.shadowRoot!.querySelector("slot");
       expect(slot).toBeTruthy();
     });
   });
@@ -503,9 +503,9 @@ describe("EaContainer", () => {
 
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-container");
-      expect(containerEl.classList.contains("ea-container")).toBe(true);
-      expect(containerEl.classList.contains("ea-container--horizontal")).toBe(true);
+      const containerEl = el.shadowRoot!.querySelector(".ea-container");
+      expect(containerEl!.classList.contains("ea-container")).toBe(true);
+      expect(containerEl!.classList.contains("ea-container--horizontal")).toBe(true);
     });
 
     it("ea-container 设置 vertical 后应该有 ea-container--vertical 修饰符类名", async () => {
@@ -515,36 +515,36 @@ describe("EaContainer", () => {
 
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-container");
-      expect(containerEl.classList.contains("ea-container--vertical")).toBe(true);
+      const containerEl = el.shadowRoot!.querySelector(".ea-container");
+      expect(containerEl!.classList.contains("ea-container--vertical")).toBe(true);
     });
 
     it("ea-header 应该有 ea-header 块类名", () => {
       const el = document.createElement("ea-header");
       container.appendChild(el);
 
-      expect(el.shadowRoot.querySelector(".ea-header")).toBeTruthy();
+      expect(el.shadowRoot!.querySelector(".ea-header")).toBeTruthy();
     });
 
     it("ea-main 应该有 ea-main 块类名", () => {
       const el = document.createElement("ea-main");
       container.appendChild(el);
 
-      expect(el.shadowRoot.querySelector(".ea-main")).toBeTruthy();
+      expect(el.shadowRoot!.querySelector(".ea-main")).toBeTruthy();
     });
 
     it("ea-footer 应该有 ea-footer 块类名", () => {
       const el = document.createElement("ea-footer");
       container.appendChild(el);
 
-      expect(el.shadowRoot.querySelector(".ea-footer")).toBeTruthy();
+      expect(el.shadowRoot!.querySelector(".ea-footer")).toBeTruthy();
     });
 
     it("ea-aside 应该有 ea-aside 块类名", () => {
       const el = document.createElement("ea-aside");
       container.appendChild(el);
 
-      expect(el.shadowRoot.querySelector(".ea-aside")).toBeTruthy();
+      expect(el.shadowRoot!.querySelector(".ea-aside")).toBeTruthy();
     });
   });
 
@@ -634,16 +634,16 @@ describe("EaContainer", () => {
         header.setAttribute("label", "Site header");
         container.appendChild(header);
         await header.updateComplete;
-        const headerEl = header.shadowRoot.querySelector(".ea-header");
-        expect(headerEl.getAttribute("aria-label")).toBe("Site header");
+        const headerEl = header.shadowRoot!.querySelector(".ea-header");
+        expect(headerEl!.getAttribute("aria-label")).toBe("Site header");
       });
 
       it("ea-header 未设置 label 时不应该有 aria-label", async () => {
         const header = document.createElement("ea-header");
         container.appendChild(header);
         await header.updateComplete;
-        const headerEl = header.shadowRoot.querySelector(".ea-header");
-        expect(headerEl.hasAttribute("aria-label")).toBe(false);
+        const headerEl = header.shadowRoot!.querySelector(".ea-header");
+        expect(headerEl!.hasAttribute("aria-label")).toBe(false);
       });
 
       it("ea-footer 设置 label 时应该有 aria-label", async () => {
@@ -651,16 +651,16 @@ describe("EaContainer", () => {
         footer.setAttribute("label", "Site footer");
         container.appendChild(footer);
         await footer.updateComplete;
-        const footerEl = footer.shadowRoot.querySelector(".ea-footer");
-        expect(footerEl.getAttribute("aria-label")).toBe("Site footer");
+        const footerEl = footer.shadowRoot!.querySelector(".ea-footer");
+        expect(footerEl!.getAttribute("aria-label")).toBe("Site footer");
       });
 
       it("ea-footer 未设置 label 时不应该有 aria-label", async () => {
         const footer = document.createElement("ea-footer");
         container.appendChild(footer);
         await footer.updateComplete;
-        const footerEl = footer.shadowRoot.querySelector(".ea-footer");
-        expect(footerEl.hasAttribute("aria-label")).toBe(false);
+        const footerEl = footer.shadowRoot!.querySelector(".ea-footer");
+        expect(footerEl!.hasAttribute("aria-label")).toBe(false);
       });
 
       it("ea-aside 设置 label 时应该有 aria-label", async () => {
@@ -668,16 +668,16 @@ describe("EaContainer", () => {
         aside.setAttribute("label", "Sidebar navigation");
         container.appendChild(aside);
         await aside.updateComplete;
-        const asideEl = aside.shadowRoot.querySelector(".ea-aside");
-        expect(asideEl.getAttribute("aria-label")).toBe("Sidebar navigation");
+        const asideEl = aside.shadowRoot!.querySelector(".ea-aside");
+        expect(asideEl!.getAttribute("aria-label")).toBe("Sidebar navigation");
       });
 
       it("ea-aside 未设置 label 时不应该有 aria-label", async () => {
         const aside = document.createElement("ea-aside");
         container.appendChild(aside);
         await aside.updateComplete;
-        const asideEl = aside.shadowRoot.querySelector(".ea-aside");
-        expect(asideEl.hasAttribute("aria-label")).toBe(false);
+        const asideEl = aside.shadowRoot!.querySelector(".ea-aside");
+        expect(asideEl!.hasAttribute("aria-label")).toBe(false);
       });
 
       it("ea-main 设置 label 时应该有 aria-label", async () => {
@@ -685,16 +685,16 @@ describe("EaContainer", () => {
         main.setAttribute("label", "Main content");
         container.appendChild(main);
         await main.updateComplete;
-        const mainEl = main.shadowRoot.querySelector(".ea-main");
-        expect(mainEl.getAttribute("aria-label")).toBe("Main content");
+        const mainEl = main.shadowRoot!.querySelector(".ea-main");
+        expect(mainEl!.getAttribute("aria-label")).toBe("Main content");
       });
 
       it("ea-main 未设置 label 时不应该有 aria-label", async () => {
         const main = document.createElement("ea-main");
         container.appendChild(main);
         await main.updateComplete;
-        const mainEl = main.shadowRoot.querySelector(".ea-main");
-        expect(mainEl.hasAttribute("aria-label")).toBe(false);
+        const mainEl = main.shadowRoot!.querySelector(".ea-main");
+        expect(mainEl!.hasAttribute("aria-label")).toBe(false);
       });
     });
   });

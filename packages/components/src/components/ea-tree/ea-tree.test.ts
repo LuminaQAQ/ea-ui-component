@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "../../test/utils/waitForRender";
 import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y";
 import "./index";
+import type { EaTree } from "./index";
 import { EaTreeCheckChangeEvent } from "./events/EaTreeCheckChangeEvent";
 import { EaTreeCheckEvent } from "./events/EaTreeCheckEvent";
 import { EaTreeCurrentChangeEvent } from "./events/EaTreeCurrentChangeEvent";
@@ -11,15 +12,27 @@ import { EaTreeNodeContextmenuEvent } from "./events/EaTreeNodeContextmenuEvent"
 import { EaTreeNodeExpandEvent } from "./events/EaTreeNodeExpandEvent";
 import { EaTreeNodeSelectEvent } from "./events/EaTreeNodeSelectEvent";
 
+type EaTreeInternals = {
+  _expandPath: (path: string) => void;
+  _collapsePath: (path: string) => void;
+  _toggleExpand: (path: string) => void;
+  _expandAncestorPaths: (path: string) => void;
+  _selectPath: (path: string) => void;
+  _handleCheckboxToggle: (path: string, checked?: boolean) => void;
+};
+
 describe("EaTree", () => {
-  let container;
+  let container: HTMLDivElement;
+  let warnSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
+    warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
     container = document.createElement("div");
     document.body.appendChild(container);
   });
 
   afterEach(() => {
+    warnSpy.mockRestore();
     container.remove();
   });
 
@@ -94,18 +107,24 @@ describe("EaTree", () => {
     },
   ];
 
-  const findNodeByPath = (tree, path) =>
-    tree.shadowRoot.querySelector(`.ea-tree__node[data-path="${path}"]`);
+  const findNodeByPath = (tree: EaTree, path: string) =>
+    tree.shadowRoot!.querySelector<HTMLElement>(
+      `.ea-tree__node[data-path="${path}"]`
+    )!;
 
-  const findLabelByPath = (tree, path) =>
-    tree.shadowRoot.querySelector(`.ea-tree__label[data-path="${path}"]`);
+  const findLabelByPath = (tree: EaTree, path: string) =>
+    tree.shadowRoot!.querySelector<HTMLElement>(
+      `.ea-tree__label[data-path="${path}"]`
+    )!;
 
-  const findCheckboxByPath = (tree, path) => {
+  const findCheckboxByPath = (tree: EaTree, path: string) => {
     const label = findLabelByPath(tree, path);
-    return label ? label.querySelector(".ea-tree__checkbox") : null;
+    return label
+      ? label.querySelector<HTMLInputElement>(".ea-tree__checkbox")
+      : null;
   };
 
-  const findChildrenByPath = (tree, path) => {
+  const findChildrenByPath = (tree: EaTree, path: string): Element | null => {
     const node = findNodeByPath(tree, path);
     if (!node) return null;
     for (const child of node.children) {
@@ -116,7 +135,7 @@ describe("EaTree", () => {
     return null;
   };
 
-  const findToggleIconByPath = (tree, path) => {
+  const findToggleIconByPath = (tree: EaTree, path: string) => {
     const label = findLabelByPath(tree, path);
     return label ? label.querySelector(".ea-tree__toggle-icon") : null;
   };
@@ -138,7 +157,7 @@ describe("EaTree", () => {
 
       await tree.updateComplete;
 
-      expect(tree.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(tree.shadowRoot!.querySelector('[part="container"]')).toBeTruthy();
     });
 
     it("空数据时应该正常渲染", async () => {
@@ -190,9 +209,9 @@ describe("EaTree", () => {
 
       await tree.updateComplete;
 
-      const text1 = tree.shadowRoot.querySelector(".ea-tree__text");
+      const text1 = tree.shadowRoot!.querySelector(".ea-tree__text");
       expect(text1).toBeTruthy();
-      expect(text1.textContent).toBe("Level one 1");
+      expect(text1!.textContent).toBe("Level one 1");
     });
 
     it("有子节点的节点应该包含 toggle icon", async () => {
@@ -226,7 +245,7 @@ describe("EaTree", () => {
 
       const childrenEl = findChildrenByPath(tree, "1$");
       expect(childrenEl).toBeTruthy();
-      expect(childrenEl.classList.contains("ea-tree__children")).toBe(true);
+      expect(childrenEl!.classList.contains("ea-tree__children")).toBe(true);
     });
 
     it("叶子节点不应该包含 children 容器", async () => {
@@ -426,8 +445,8 @@ describe("EaTree", () => {
         disabled: "isDisabled",
       });
 
-      const text = tree.shadowRoot.querySelector(".ea-tree__text");
-      expect(text.textContent).toBe("Custom Node");
+      const text = tree.shadowRoot!.querySelector(".ea-tree__text");
+      expect(text!.textContent).toBe("Custom Node");
     });
 
     it("自定义 dataProps 的子节点应该正确渲染", async () => {
@@ -463,7 +482,7 @@ describe("EaTree", () => {
 
       await tree.updateComplete;
 
-      tree._expandPath("1$");
+      (tree as unknown as EaTreeInternals)._expandPath("1$");
 
       const node = findNodeByPath(tree, "1$");
       expect(node.classList.contains("is-expanded")).toBe(true);
@@ -476,12 +495,12 @@ describe("EaTree", () => {
 
       await tree.updateComplete;
 
-      tree._expandPath("1$");
+      (tree as unknown as EaTreeInternals)._expandPath("1$");
       expect(findNodeByPath(tree, "1$").classList.contains("is-expanded")).toBe(
         true
       );
 
-      tree._collapsePath("1$");
+      (tree as unknown as EaTreeInternals)._collapsePath("1$");
       expect(findNodeByPath(tree, "1$").classList.contains("is-expanded")).toBe(
         false
       );
@@ -494,12 +513,12 @@ describe("EaTree", () => {
 
       await tree.updateComplete;
 
-      tree._toggleExpand("1$");
+      (tree as unknown as EaTreeInternals)._toggleExpand("1$");
       expect(findNodeByPath(tree, "1$").classList.contains("is-expanded")).toBe(
         true
       );
 
-      tree._toggleExpand("1$");
+      (tree as unknown as EaTreeInternals)._toggleExpand("1$");
       expect(findNodeByPath(tree, "1$").classList.contains("is-expanded")).toBe(
         false
       );
@@ -515,7 +534,7 @@ describe("EaTree", () => {
       const handler = vi.fn();
       tree.addEventListener("ea-node-expand", handler);
 
-      tree._expandPath("1$");
+      (tree as unknown as EaTreeInternals)._expandPath("1$");
 
       expect(handler).toHaveBeenCalledOnce();
       expect(handler.mock.calls[0][0].detail.data.label).toBe("Level one 1");
@@ -529,12 +548,12 @@ describe("EaTree", () => {
 
       await tree.updateComplete;
 
-      tree._expandPath("1$");
+      (tree as unknown as EaTreeInternals)._expandPath("1$");
 
       const handler = vi.fn();
       tree.addEventListener("ea-node-collapse", handler);
 
-      tree._collapsePath("1$");
+      (tree as unknown as EaTreeInternals)._collapsePath("1$");
 
       expect(handler).toHaveBeenCalledOnce();
       expect(handler.mock.calls[0][0].detail.data.label).toBe("Level one 1");
@@ -551,7 +570,7 @@ describe("EaTree", () => {
       const handler = vi.fn();
       tree.addEventListener("ea-node-expand", handler);
 
-      tree._expandPath("1$-1-1");
+      (tree as unknown as EaTreeInternals)._expandPath("1$-1-1");
 
       expect(handler).not.toHaveBeenCalled();
     });
@@ -593,7 +612,7 @@ describe("EaTree", () => {
 
       await tree.updateComplete;
 
-      tree._expandAncestorPaths("1$-1-1");
+      (tree as unknown as EaTreeInternals)._expandAncestorPaths("1$-1-1");
 
       expect(findNodeByPath(tree, "1$").classList.contains("is-expanded")).toBe(
         true
@@ -612,7 +631,7 @@ describe("EaTree", () => {
 
       await tree.updateComplete;
 
-      tree._selectPath("1$");
+      (tree as unknown as EaTreeInternals)._selectPath("1$");
 
       const node = findNodeByPath(tree, "1$");
       expect(node.classList.contains("is-selected")).toBe(true);
@@ -625,12 +644,12 @@ describe("EaTree", () => {
 
       await tree.updateComplete;
 
-      tree._selectPath("1$");
+      (tree as unknown as EaTreeInternals)._selectPath("1$");
       expect(findNodeByPath(tree, "1$").classList.contains("is-selected")).toBe(
         true
       );
 
-      tree._selectPath("2$");
+      (tree as unknown as EaTreeInternals)._selectPath("2$");
       expect(findNodeByPath(tree, "1$").classList.contains("is-selected")).toBe(
         false
       );
@@ -649,7 +668,7 @@ describe("EaTree", () => {
       const handler = vi.fn();
       tree.addEventListener("ea-node-select", handler);
 
-      tree._selectPath("1$");
+      (tree as unknown as EaTreeInternals)._selectPath("1$");
 
       expect(handler).toHaveBeenCalledOnce();
       expect(handler.mock.calls[0][0].detail.node.label).toBe("Level one 1");
@@ -666,7 +685,7 @@ describe("EaTree", () => {
       const handler = vi.fn();
       tree.addEventListener("ea-current-change", handler);
 
-      tree._selectPath("1$");
+      (tree as unknown as EaTreeInternals)._selectPath("1$");
 
       expect(handler).toHaveBeenCalledOnce();
       expect(handler.mock.calls[0][0].detail.data.label).toBe("Level one 1");
@@ -770,7 +789,7 @@ describe("EaTree", () => {
 
       await tree.updateComplete;
 
-      tree._handleCheckboxToggle("1$-1-1");
+      (tree as unknown as EaTreeInternals)._handleCheckboxToggle("1$-1-1");
 
       const leafNode = findNodeByPath(tree, "1$-1-1");
       const parentNode = findNodeByPath(tree, "1$-1");
@@ -800,8 +819,8 @@ describe("EaTree", () => {
 
       await tree.updateComplete;
 
-      tree._handleCheckboxToggle("1$-1");
-      tree._handleCheckboxToggle("1$-2");
+      (tree as unknown as EaTreeInternals)._handleCheckboxToggle("1$-1");
+      (tree as unknown as EaTreeInternals)._handleCheckboxToggle("1$-2");
 
       const parentNode = findNodeByPath(tree, "1$");
       expect(parentNode.classList.contains("is-checked")).toBe(true);
@@ -825,14 +844,14 @@ describe("EaTree", () => {
 
       await tree.updateComplete;
 
-      tree._handleCheckboxToggle("1$-1");
-      tree._handleCheckboxToggle("1$-2");
+      (tree as unknown as EaTreeInternals)._handleCheckboxToggle("1$-1");
+      (tree as unknown as EaTreeInternals)._handleCheckboxToggle("1$-2");
 
       expect(findNodeByPath(tree, "1$").classList.contains("is-checked")).toBe(
         true
       );
 
-      tree._handleCheckboxToggle("1$-1");
+      (tree as unknown as EaTreeInternals)._handleCheckboxToggle("1$-1");
 
       const parentNode = findNodeByPath(tree, "1$");
       expect(parentNode.classList.contains("is-checked")).toBe(false);
@@ -847,7 +866,7 @@ describe("EaTree", () => {
 
       await tree.updateComplete;
 
-      tree._handleCheckboxToggle("1$");
+      (tree as unknown as EaTreeInternals)._handleCheckboxToggle("1$");
 
       const rootNode = findNodeByPath(tree, "1$");
       const childNode = findNodeByPath(tree, "1$-1");
@@ -866,12 +885,12 @@ describe("EaTree", () => {
 
       await tree.updateComplete;
 
-      tree._handleCheckboxToggle("1$");
+      (tree as unknown as EaTreeInternals)._handleCheckboxToggle("1$");
       expect(
         findNodeByPath(tree, "1$-1").classList.contains("is-checked")
       ).toBe(true);
 
-      tree._handleCheckboxToggle("1$");
+      (tree as unknown as EaTreeInternals)._handleCheckboxToggle("1$");
 
       expect(findNodeByPath(tree, "1$").classList.contains("is-checked")).toBe(
         false
@@ -893,7 +912,7 @@ describe("EaTree", () => {
 
       await tree.updateComplete;
 
-      tree._handleCheckboxToggle("1$");
+      (tree as unknown as EaTreeInternals)._handleCheckboxToggle("1$");
 
       const rootNode = findNodeByPath(tree, "1$");
       const childNode = findNodeByPath(tree, "1$-1");
@@ -913,7 +932,7 @@ describe("EaTree", () => {
 
       await tree.updateComplete;
 
-      tree._handleCheckboxToggle("1$-1-1");
+      (tree as unknown as EaTreeInternals)._handleCheckboxToggle("1$-1-1");
 
       const rootNode = findNodeByPath(tree, "1$");
       const childNode = findNodeByPath(tree, "1$-1");
@@ -943,7 +962,7 @@ describe("EaTree", () => {
 
       await tree.updateComplete;
 
-      tree._handleCheckboxToggle("1$-1");
+      (tree as unknown as EaTreeInternals)._handleCheckboxToggle("1$-1");
 
       const disabledNode = findNodeByPath(tree, "1$-1");
       expect(disabledNode.classList.contains("is-checked")).toBe(false);
@@ -966,7 +985,7 @@ describe("EaTree", () => {
 
       await tree.updateComplete;
 
-      tree._handleCheckboxToggle("1$");
+      (tree as unknown as EaTreeInternals)._handleCheckboxToggle("1$");
 
       const disabledNode = findNodeByPath(tree, "1$-1");
       const normalNode = findNodeByPath(tree, "1$-2");
@@ -1014,7 +1033,7 @@ describe("EaTree", () => {
       const handler = vi.fn();
       tree.addEventListener("ea-check-change", handler);
 
-      tree._handleCheckboxToggle("1$-1-1");
+      (tree as unknown as EaTreeInternals)._handleCheckboxToggle("1$-1-1");
 
       expect(handler).toHaveBeenCalled();
       const event = handler.mock.calls[0][0];
@@ -1034,7 +1053,7 @@ describe("EaTree", () => {
       const handler = vi.fn();
       tree.addEventListener("ea-check", handler);
 
-      tree._handleCheckboxToggle("1$-1-1");
+      (tree as unknown as EaTreeInternals)._handleCheckboxToggle("1$-1-1");
 
       expect(handler).toHaveBeenCalled();
       const event = handler.mock.calls[0][0];
@@ -1080,7 +1099,7 @@ describe("EaTree", () => {
 
       const grandchildA1 = findNodeByPath(tree, "1$-1-1");
       expect(grandchildA1).toBeTruthy();
-      tree._handleCheckboxToggle("1$-1-1");
+      (tree as unknown as EaTreeInternals)._handleCheckboxToggle("1$-1-1");
 
       await tree.updateComplete;
 
@@ -1095,7 +1114,7 @@ describe("EaTree", () => {
 
       const grandchildB1 = findNodeByPath(tree, "1$-2-1");
       expect(grandchildB1).toBeTruthy();
-      tree._handleCheckboxToggle("1$-2-1");
+      (tree as unknown as EaTreeInternals)._handleCheckboxToggle("1$-2-1");
 
       await tree.updateComplete;
 
@@ -1112,10 +1131,10 @@ describe("EaTree", () => {
 
       await tree.updateComplete;
 
-      tree._handleCheckboxToggle("1$-1-1");
+      (tree as unknown as EaTreeInternals)._handleCheckboxToggle("1$-1-1");
 
       const checkbox = findCheckboxByPath(tree, "1$-1-1");
-      expect(checkbox.checked).toBe(true);
+      expect(checkbox!.checked).toBe(true);
     });
 
     it("checkbox DOM 元素的 indeterminate 状态应该同步更新", async () => {
@@ -1135,10 +1154,10 @@ describe("EaTree", () => {
 
       await tree.updateComplete;
 
-      tree._handleCheckboxToggle("1$-1");
+      (tree as unknown as EaTreeInternals)._handleCheckboxToggle("1$-1");
 
       const parentCheckbox = findCheckboxByPath(tree, "1$");
-      expect(parentCheckbox.indeterminate).toBe(true);
+      expect(parentCheckbox!.indeterminate).toBe(true);
     });
   });
 
@@ -1172,7 +1191,7 @@ describe("EaTree", () => {
       await tree.updateComplete;
 
       const toggleIcon = findToggleIconByPath(tree, "1$");
-      toggleIcon.dispatchEvent(
+      toggleIcon!.dispatchEvent(
         new MouseEvent("click", { bubbles: true, composed: true })
       );
 
@@ -1192,8 +1211,8 @@ describe("EaTree", () => {
 
       await tree.updateComplete;
 
-      const textEl = tree.shadowRoot.querySelector(".ea-tree__text");
-      textEl.dispatchEvent(
+      const textEl = tree.shadowRoot!.querySelector(".ea-tree__text");
+      textEl!.dispatchEvent(
         new MouseEvent("click", { bubbles: true, composed: true })
       );
 
@@ -1245,7 +1264,7 @@ describe("EaTree", () => {
 
         await tree.updateComplete;
 
-        tree._handleCheckboxToggle("1$-1-1");
+        (tree as unknown as EaTreeInternals)._handleCheckboxToggle("1$-1-1");
 
         const nodes = tree.getCheckedNodes();
         expect(nodes.length).toBeGreaterThan(0);
@@ -1260,7 +1279,7 @@ describe("EaTree", () => {
 
         await tree.updateComplete;
 
-        tree._handleCheckboxToggle("1$");
+        (tree as unknown as EaTreeInternals)._handleCheckboxToggle("1$");
 
         const allNodes = tree.getCheckedNodes();
         const leafNodes = tree.getCheckedNodes(true);
@@ -1279,7 +1298,7 @@ describe("EaTree", () => {
 
         await tree.updateComplete;
 
-        tree._handleCheckboxToggle("1$-1-1");
+        (tree as unknown as EaTreeInternals)._handleCheckboxToggle("1$-1-1");
 
         const nodesWithoutHalf = tree.getCheckedNodes(false, false);
         const nodesWithHalf = tree.getCheckedNodes(false, true);
@@ -1307,7 +1326,7 @@ describe("EaTree", () => {
 
         await tree.updateComplete;
 
-        tree._handleCheckboxToggle("1$-1-1");
+        (tree as unknown as EaTreeInternals)._handleCheckboxToggle("1$-1-1");
 
         expect(tree.getCheckedKeys()).toEqual([]);
       });
@@ -1321,7 +1340,7 @@ describe("EaTree", () => {
 
         await tree.updateComplete;
 
-        tree._handleCheckboxToggle("1$-1-1");
+        (tree as unknown as EaTreeInternals)._handleCheckboxToggle("1$-1-1");
 
         const keys = tree.getCheckedKeys();
         expect(keys).toContain(3);
@@ -1336,7 +1355,7 @@ describe("EaTree", () => {
 
         await tree.updateComplete;
 
-        tree._handleCheckboxToggle("1$");
+        (tree as unknown as EaTreeInternals)._handleCheckboxToggle("1$");
 
         const allKeys = tree.getCheckedKeys();
         const leafKeys = tree.getCheckedKeys(true);
@@ -1353,6 +1372,9 @@ describe("EaTree", () => {
         container.appendChild(tree);
 
         expect(tree.setCheckedKeys([3])).toBe(false);
+        expect(warnSpy).toHaveBeenCalledWith(
+          "setCheckedKeys requires show-checkbox and node-key to be set"
+        );
       });
 
       it("nodeKey 为空时返回 false", () => {
@@ -1362,6 +1384,9 @@ describe("EaTree", () => {
         container.appendChild(tree);
 
         expect(tree.setCheckedKeys([3])).toBe(false);
+        expect(warnSpy).toHaveBeenCalledWith(
+          "setCheckedKeys requires show-checkbox and node-key to be set"
+        );
       });
 
       it("应该勾选指定 key 的节点", async () => {
@@ -1402,6 +1427,9 @@ describe("EaTree", () => {
         container.appendChild(tree);
 
         expect(tree.setChecked(3, true)).toBe(false);
+        expect(warnSpy).toHaveBeenCalledWith(
+          "setChecked requires show-checkbox and node-key to be set"
+        );
       });
 
       it("nodeKey 为空时返回 false", () => {
@@ -1411,6 +1439,9 @@ describe("EaTree", () => {
         container.appendChild(tree);
 
         expect(tree.setChecked(3, true)).toBe(false);
+        expect(warnSpy).toHaveBeenCalledWith(
+          "setChecked requires show-checkbox and node-key to be set"
+        );
       });
 
       it("应该设置指定节点的勾选状态", async () => {
@@ -1435,7 +1466,7 @@ describe("EaTree", () => {
         ).toBe(false);
       });
 
-      it("禁用节点返回 false", () => {
+      it("禁用节点返回 false", async () => {
         const tree = document.createElement("ea-tree");
         tree.showCheckbox = true;
         tree.nodeKey = "id";
@@ -1448,17 +1479,25 @@ describe("EaTree", () => {
         ];
         container.appendChild(tree);
 
+        await tree.updateComplete;
+
         expect(tree.setChecked(1, true)).toBe(false);
+        expect(warnSpy).toHaveBeenCalledWith(
+          "Cannot set checked state for disabled node"
+        );
       });
 
-      it("不存在的节点返回 false", () => {
+      it("不存在的节点返回 false", async () => {
         const tree = document.createElement("ea-tree");
         tree.showCheckbox = true;
         tree.nodeKey = "id";
         tree.data = generateIdTestData();
         container.appendChild(tree);
 
+        await tree.updateComplete;
+
         expect(tree.setChecked(999, true)).toBe(false);
+        expect(warnSpy).toHaveBeenCalledWith("Node not found");
       });
 
       it("应该支持通过数据对象设置勾选状态", async () => {
@@ -1485,6 +1524,9 @@ describe("EaTree", () => {
         container.appendChild(tree);
 
         expect(tree.setCheckedNodes([])).toBe(false);
+        expect(warnSpy).toHaveBeenCalledWith(
+          "setCheckedNodes requires show-checkbox and node-key to be set"
+        );
       });
 
       it("nodeKey 为空时返回 false", () => {
@@ -1494,6 +1536,9 @@ describe("EaTree", () => {
         container.appendChild(tree);
 
         expect(tree.setCheckedNodes([])).toBe(false);
+        expect(warnSpy).toHaveBeenCalledWith(
+          "setCheckedNodes requires show-checkbox and node-key to be set"
+        );
       });
 
       it("应该勾选指定节点", async () => {
@@ -1521,7 +1566,7 @@ describe("EaTree", () => {
 
         await tree.updateComplete;
 
-        tree._selectPath("1$");
+        (tree as unknown as EaTreeInternals)._selectPath("1$");
 
         expect(tree.getCurrentKey()).toBe(null);
       });
@@ -1543,7 +1588,7 @@ describe("EaTree", () => {
 
         await tree.updateComplete;
 
-        tree._selectPath("1$");
+        (tree as unknown as EaTreeInternals)._selectPath("1$");
 
         expect(tree.getCurrentKey()).toBe(1);
       });
@@ -1565,7 +1610,7 @@ describe("EaTree", () => {
 
         await tree.updateComplete;
 
-        tree._selectPath("1$");
+        (tree as unknown as EaTreeInternals)._selectPath("1$");
 
         const node = tree.getCurrentNode();
         expect(node).toBeDefined();
@@ -1580,24 +1625,33 @@ describe("EaTree", () => {
         container.appendChild(tree);
 
         expect(tree.setCurrentKey(1)).toBe(false);
+        expect(warnSpy).toHaveBeenCalledWith(
+          "setCurrentKey requires node-key to be set"
+        );
       });
 
-      it("不存在的 key 返回 false", () => {
+      it("不存在的 key 返回 false", async () => {
         const tree = document.createElement("ea-tree");
         tree.nodeKey = "id";
         tree.data = generateIdTestData();
         container.appendChild(tree);
 
+        await tree.updateComplete;
+
         expect(tree.setCurrentKey(999)).toBe(false);
+        expect(warnSpy).toHaveBeenCalledWith("Node with key 999 not found");
       });
 
-      it("禁用节点返回 false", () => {
+      it("禁用节点返回 false", async () => {
         const tree = document.createElement("ea-tree");
         tree.nodeKey = "id";
         tree.data = [{ id: 1, label: "Disabled", disabled: true }];
         container.appendChild(tree);
 
+        await tree.updateComplete;
+
         expect(tree.setCurrentKey(1)).toBe(false);
+        expect(warnSpy).toHaveBeenCalledWith("Cannot select disabled node");
       });
 
       it("应该选中指定 key 的节点", async () => {
@@ -1679,17 +1733,23 @@ describe("EaTree", () => {
         await tree.updateComplete;
 
         expect(tree.setCurrentNode(tree.data[0])).toBe(false);
+        expect(warnSpy).toHaveBeenCalledWith(
+          "setCurrentNode requires node-key to be set"
+        );
       });
 
-      it("不存在的节点返回 false", () => {
+      it("不存在的节点返回 false", async () => {
         const tree = document.createElement("ea-tree");
         tree.nodeKey = "id";
         tree.data = generateIdTestData();
         container.appendChild(tree);
 
+        await tree.updateComplete;
+
         expect(tree.setCurrentNode({ id: 999, label: "Not exist" })).toBe(
           false
         );
+        expect(warnSpy).toHaveBeenCalledWith("Node not found");
       });
 
       it("应该选中指定节点", async () => {
@@ -1751,6 +1811,9 @@ describe("EaTree", () => {
         await tree.updateComplete;
 
         expect(tree.getNode(1)).toBe(null);
+        expect(warnSpy).toHaveBeenCalledWith(
+          "getNode requires node-key to be set"
+        );
       });
 
       it("不存在的节点返回 null", async () => {
@@ -1844,7 +1907,7 @@ describe("EaTree", () => {
 
         await tree.updateComplete;
 
-        tree._handleCheckboxToggle("1$-1");
+        (tree as unknown as EaTreeInternals)._handleCheckboxToggle("1$-1");
 
         const halfNodes = tree.getHalfCheckedNodes();
         expect(halfNodes.length).toBeGreaterThan(0);
@@ -1868,7 +1931,7 @@ describe("EaTree", () => {
 
         await tree.updateComplete;
 
-        tree._handleCheckboxToggle("1$-1-1");
+        (tree as unknown as EaTreeInternals)._handleCheckboxToggle("1$-1-1");
 
         expect(tree.getHalfCheckedKeys()).toEqual([]);
       });
@@ -1891,7 +1954,7 @@ describe("EaTree", () => {
 
         await tree.updateComplete;
 
-        tree._handleCheckboxToggle("1$-1");
+        (tree as unknown as EaTreeInternals)._handleCheckboxToggle("1$-1");
 
         const halfKeys = tree.getHalfCheckedKeys();
         expect(halfKeys.length).toBeGreaterThan(0);
@@ -1906,24 +1969,35 @@ describe("EaTree", () => {
         container.appendChild(tree);
 
         expect(tree.updateKeyChildren(1, [])).toBe(false);
+        expect(warnSpy).toHaveBeenCalledWith(
+          "updateKeyChildren requires node-key to be set"
+        );
       });
 
-      it("不存在的 key 返回 false", () => {
+      it("不存在的 key 返回 false", async () => {
         const tree = document.createElement("ea-tree");
         tree.nodeKey = "id";
         tree.data = generateIdTestData();
         container.appendChild(tree);
+
+        await tree.updateComplete;
 
         expect(tree.updateKeyChildren(999, [])).toBe(false);
+        expect(warnSpy).toHaveBeenCalledWith("Node with key 999 not found");
       });
 
-      it("叶子节点返回 false", () => {
+      it("叶子节点返回 false", async () => {
         const tree = document.createElement("ea-tree");
         tree.nodeKey = "id";
         tree.data = generateIdTestData();
         container.appendChild(tree);
 
+        await tree.updateComplete;
+
         expect(tree.updateKeyChildren(3, [])).toBe(false);
+        expect(warnSpy).toHaveBeenCalledWith(
+          "Target node is not a parent node"
+        );
       });
 
       it("应该更新指定节点的子节点", async () => {
@@ -2025,7 +2099,7 @@ describe("EaTree", () => {
       expect(tree1.data.length).toBe(2);
       expect(tree2.data.length).toBe(1);
 
-      tree1._selectPath("1$");
+      (tree1 as unknown as EaTreeInternals)._selectPath("1$");
       expect(tree1.getCurrentNode()).toBeDefined();
       expect(tree2.getCurrentNode()).toBe(null);
     });
@@ -2118,12 +2192,18 @@ describe("EaTree", () => {
 
       await tree.updateComplete;
 
-      tree._handleCheckboxToggle("1$-1-1", true);
+      (tree as unknown as EaTreeInternals)._handleCheckboxToggle(
+        "1$-1-1",
+        true
+      );
 
       const handler = vi.fn();
       tree.addEventListener("ea-check-change", handler);
 
-      tree._handleCheckboxToggle("1$-1-1", true);
+      (tree as unknown as EaTreeInternals)._handleCheckboxToggle(
+        "1$-1-1",
+        true
+      );
 
       expect(handler).not.toHaveBeenCalled();
     });
@@ -2182,7 +2262,7 @@ describe("EaTree", () => {
       const handler = vi.fn();
       tree.addEventListener("ea-node-expand", handler);
 
-      tree._expandPath("1$");
+      (tree as unknown as EaTreeInternals)._expandPath("1$");
 
       expect(handler).toHaveBeenCalledOnce();
       const event = handler.mock.calls[0][0];
@@ -2199,12 +2279,12 @@ describe("EaTree", () => {
 
       await tree.updateComplete;
 
-      tree._expandPath("1$");
+      (tree as unknown as EaTreeInternals)._expandPath("1$");
 
       const handler = vi.fn();
       tree.addEventListener("ea-node-collapse", handler);
 
-      tree._collapsePath("1$");
+      (tree as unknown as EaTreeInternals)._collapsePath("1$");
 
       expect(handler).toHaveBeenCalledOnce();
       const event = handler.mock.calls[0][0];
@@ -2224,7 +2304,7 @@ describe("EaTree", () => {
       const handler = vi.fn();
       tree.addEventListener("ea-node-select", handler);
 
-      tree._selectPath("1$");
+      (tree as unknown as EaTreeInternals)._selectPath("1$");
 
       expect(handler).toHaveBeenCalledOnce();
       const event = handler.mock.calls[0][0];
@@ -2268,7 +2348,7 @@ describe("EaTree", () => {
       const handler = vi.fn();
       tree.addEventListener("ea-check-change", handler);
 
-      tree._handleCheckboxToggle("1$-1-1");
+      (tree as unknown as EaTreeInternals)._handleCheckboxToggle("1$-1-1");
 
       expect(handler).toHaveBeenCalled();
       const event = handler.mock.calls[0][0];
@@ -2290,7 +2370,7 @@ describe("EaTree", () => {
       const handler = vi.fn();
       tree.addEventListener("ea-check", handler);
 
-      tree._handleCheckboxToggle("1$-1-1");
+      (tree as unknown as EaTreeInternals)._handleCheckboxToggle("1$-1-1");
 
       expect(handler).toHaveBeenCalled();
       const event = handler.mock.calls[0][0];
@@ -2310,7 +2390,7 @@ describe("EaTree", () => {
       const handler = vi.fn();
       tree.addEventListener("ea-current-change", handler);
 
-      tree._selectPath("1$");
+      (tree as unknown as EaTreeInternals)._selectPath("1$");
 
       expect(handler).toHaveBeenCalledOnce();
       const event = handler.mock.calls[0][0];
@@ -2357,7 +2437,7 @@ describe("EaTree", () => {
       const handler = vi.fn();
       tree.addEventListener("ea-node-expand", handler);
 
-      tree._expandPath("1$");
+      (tree as unknown as EaTreeInternals)._expandPath("1$");
 
       const event = handler.mock.calls[0][0];
       expect(event.detail.node).toBeDefined();
@@ -2373,12 +2453,12 @@ describe("EaTree", () => {
 
       await tree.updateComplete;
 
-      tree._expandPath("1$");
+      (tree as unknown as EaTreeInternals)._expandPath("1$");
 
       const handler = vi.fn();
       tree.addEventListener("ea-node-collapse", handler);
 
-      tree._collapsePath("1$");
+      (tree as unknown as EaTreeInternals)._collapsePath("1$");
 
       const event = handler.mock.calls[0][0];
       expect(event.detail.node).toBeDefined();
@@ -2397,7 +2477,7 @@ describe("EaTree", () => {
       const handler = vi.fn();
       tree.addEventListener("ea-check-change", handler);
 
-      tree._handleCheckboxToggle("1$-1-1");
+      (tree as unknown as EaTreeInternals)._handleCheckboxToggle("1$-1-1");
 
       const event = handler.mock.calls[0][0];
       expect(event.detail.hasCheckedChildren).toBeDefined();
@@ -2414,7 +2494,7 @@ describe("EaTree", () => {
       const handler = vi.fn();
       tree.addEventListener("ea-current-change", handler);
 
-      tree._selectPath("1$");
+      (tree as unknown as EaTreeInternals)._selectPath("1$");
 
       const event = handler.mock.calls[0][0];
       expect(event.detail.node).toBeDefined();
@@ -2454,7 +2534,7 @@ describe("EaTree", () => {
       const handler = vi.fn();
       tree.addEventListener("ea-check", handler);
 
-      tree._handleCheckboxToggle("1$-1-1");
+      (tree as unknown as EaTreeInternals)._handleCheckboxToggle("1$-1-1");
 
       const event = handler.mock.calls[0][0];
       expect(event.detail.checkedState).toBeDefined();
@@ -2513,7 +2593,7 @@ describe("EaTree", () => {
 
       await tree.updateComplete;
 
-      tree._handleCheckboxToggle("1$-1");
+      (tree as unknown as EaTreeInternals)._handleCheckboxToggle("1$-1");
 
       const disabledNode = findNodeByPath(tree, "1$-1");
       expect(disabledNode.classList.contains("is-checked")).toBe(false);
@@ -2529,7 +2609,7 @@ describe("EaTree", () => {
 
       const checkbox = findCheckboxByPath(tree, "1$-1");
       expect(checkbox).toBeTruthy();
-      expect(checkbox.disabled).toBe(true);
+      expect(checkbox!.disabled).toBe(true);
     });
   });
 
@@ -2543,7 +2623,7 @@ describe("EaTree", () => {
       await tree.updateComplete;
 
       const checkbox = findCheckboxByPath(tree, "1$-1-1");
-      checkbox.dispatchEvent(
+      checkbox!.dispatchEvent(
         new CustomEvent("change", {
           detail: { checked: true },
           bubbles: true,
@@ -2569,7 +2649,7 @@ describe("EaTree", () => {
       tree.addEventListener("ea-check-change", handler);
 
       const checkbox = findCheckboxByPath(tree, "1$-1-1");
-      checkbox.dispatchEvent(
+      checkbox!.dispatchEvent(
         new CustomEvent("change", {
           detail: { checked: true },
           bubbles: true,
@@ -2589,7 +2669,7 @@ describe("EaTree", () => {
       await tree.updateComplete;
 
       const checkbox = findCheckboxByPath(tree, "1$-1");
-      checkbox.dispatchEvent(
+      checkbox!.dispatchEvent(
         new CustomEvent("change", {
           detail: { checked: true },
           bubbles: true,
@@ -2624,14 +2704,14 @@ describe("EaTree", () => {
 
       await tree.updateComplete;
 
-      const text = tree.shadowRoot.querySelector(".ea-tree__text");
+      const text = tree.shadowRoot!.querySelector(".ea-tree__text");
       expect(text).toBeTruthy();
-      expect(text.textContent).toBe("Simple");
+      expect(text!.textContent).toBe("Simple");
     });
 
     it("data 为 null 时应该正常渲染", async () => {
       const tree = document.createElement("ea-tree");
-      tree.data = null;
+      tree.data = null as unknown as any[];
       container.appendChild(tree);
 
       await tree.updateComplete;
@@ -2641,7 +2721,7 @@ describe("EaTree", () => {
 
     it("data 为 undefined 时应该正常渲染", async () => {
       const tree = document.createElement("ea-tree");
-      tree.data = undefined;
+      tree.data = undefined as unknown as any[];
       container.appendChild(tree);
 
       await tree.updateComplete;
@@ -2656,9 +2736,9 @@ describe("EaTree", () => {
 
       await tree.updateComplete;
 
-      const text = tree.shadowRoot.querySelector(".ea-tree__text");
+      const text = tree.shadowRoot!.querySelector(".ea-tree__text");
       expect(text).toBeTruthy();
-      expect(text.textContent).toBe("");
+      expect(text!.textContent).toBe("");
     });
 
     it("updateKeyChildren 更新子节点后应该更新节点状态", async () => {
@@ -2695,7 +2775,7 @@ describe("EaTree", () => {
 
       await tree.updateComplete;
 
-      tree._handleCheckboxToggle("1$");
+      (tree as unknown as EaTreeInternals)._handleCheckboxToggle("1$");
       expect(findNodeByPath(tree, "1$").classList.contains("is-checked")).toBe(
         true
       );
@@ -2729,8 +2809,8 @@ describe("EaTree", () => {
         tree.data = generateTestData();
         container.appendChild(tree);
         await tree.updateComplete;
-        const containerEl = tree.shadowRoot.querySelector(".ea-tree");
-        expect(containerEl.getAttribute("role")).toBe("tree");
+        const containerEl = tree.shadowRoot!.querySelector(".ea-tree");
+        expect(containerEl!.getAttribute("role")).toBe("tree");
       });
 
       it("设置 label 属性时容器应该有 aria-label", async () => {
@@ -2739,8 +2819,8 @@ describe("EaTree", () => {
         tree.setAttribute("label", "File Tree");
         container.appendChild(tree);
         await tree.updateComplete;
-        const containerEl = tree.shadowRoot.querySelector(".ea-tree");
-        expect(containerEl.getAttribute("aria-label")).toBe("File Tree");
+        const containerEl = tree.shadowRoot!.querySelector(".ea-tree");
+        expect(containerEl!.getAttribute("aria-label")).toBe("File Tree");
       });
 
       it("showCheckbox 时容器应该有 aria-multiselectable=true", async () => {
@@ -2749,8 +2829,8 @@ describe("EaTree", () => {
         tree.data = generateTestData();
         container.appendChild(tree);
         await tree.updateComplete;
-        const containerEl = tree.shadowRoot.querySelector(".ea-tree");
-        expect(containerEl.getAttribute("aria-multiselectable")).toBe("true");
+        const containerEl = tree.shadowRoot!.querySelector(".ea-tree");
+        expect(containerEl!.getAttribute("aria-multiselectable")).toBe("true");
       });
 
       it("不设置 showCheckbox 时容器不应该有 aria-multiselectable", async () => {
@@ -2758,8 +2838,8 @@ describe("EaTree", () => {
         tree.data = generateTestData();
         container.appendChild(tree);
         await tree.updateComplete;
-        const containerEl = tree.shadowRoot.querySelector(".ea-tree");
-        expect(containerEl.hasAttribute("aria-multiselectable")).toBe(false);
+        const containerEl = tree.shadowRoot!.querySelector(".ea-tree");
+        expect(containerEl!.hasAttribute("aria-multiselectable")).toBe(false);
       });
 
       it("节点应该有 role=treeitem", async () => {
@@ -2785,7 +2865,7 @@ describe("EaTree", () => {
         tree.data = generateTestData();
         container.appendChild(tree);
         await tree.updateComplete;
-        tree._expandPath("1$");
+        (tree as unknown as EaTreeInternals)._expandPath("1$");
         const node = findNodeByPath(tree, "1$");
         expect(node.getAttribute("aria-expanded")).toBe("true");
       });
@@ -2804,7 +2884,7 @@ describe("EaTree", () => {
         tree.data = generateTestData();
         container.appendChild(tree);
         await tree.updateComplete;
-        tree._selectPath("1$");
+        (tree as unknown as EaTreeInternals)._selectPath("1$");
         const node = findNodeByPath(tree, "1$");
         expect(node.getAttribute("aria-selected")).toBe("true");
       });
@@ -2824,7 +2904,7 @@ describe("EaTree", () => {
         tree.data = generateIdTestData();
         container.appendChild(tree);
         await tree.updateComplete;
-        tree._handleCheckboxToggle("1$-1-1");
+        (tree as unknown as EaTreeInternals)._handleCheckboxToggle("1$-1-1");
         const node = findNodeByPath(tree, "1$-1-1");
         expect(node.getAttribute("aria-checked")).toBe("true");
       });
@@ -2844,7 +2924,7 @@ describe("EaTree", () => {
         ];
         container.appendChild(tree);
         await tree.updateComplete;
-        tree._handleCheckboxToggle("1$-1");
+        (tree as unknown as EaTreeInternals)._handleCheckboxToggle("1$-1");
         const parentNode = findNodeByPath(tree, "1$");
         expect(parentNode.getAttribute("aria-checked")).toBe("mixed");
       });
@@ -2854,9 +2934,9 @@ describe("EaTree", () => {
         tree.data = generateTestData();
         container.appendChild(tree);
         await tree.updateComplete;
-        tree._expandPath("1$");
+        (tree as unknown as EaTreeInternals)._expandPath("1$");
         const childrenEl = findChildrenByPath(tree, "1$");
-        expect(childrenEl.getAttribute("role")).toBe("group");
+        expect(childrenEl!.getAttribute("role")).toBe("group");
       });
     });
 

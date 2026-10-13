@@ -3,9 +3,9 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import "./index";
 
 describe("EaAffix", () => {
-  let container;
-  let originalScrollY;
-  let originalInnerHeight;
+  let container: HTMLDivElement;
+  let originalScrollY: number;
+  let originalInnerHeight: number;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -46,14 +46,14 @@ describe("EaAffix", () => {
       const el = document.createElement("ea-affix");
       container.appendChild(el);
 
-      expect(el.shadowRoot.querySelector(".ea-affix")).toBeTruthy();
+      expect(el.shadowRoot!.querySelector(".ea-affix")).toBeTruthy();
     });
 
     it("应该包含 container CSS Part", () => {
       const el = document.createElement("ea-affix");
       container.appendChild(el);
 
-      expect(el.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(el.shadowRoot!.querySelector('[part="container"]')).toBeTruthy();
     });
 
     it("应该包含 slot 元素且透传内容", () => {
@@ -61,7 +61,7 @@ describe("EaAffix", () => {
       el.innerHTML = '<button class="demo-btn">Affix</button>';
       container.appendChild(el);
 
-      expect(el.shadowRoot.querySelector("slot")).toBeTruthy();
+      expect(el.shadowRoot!.querySelector("slot")).toBeTruthy();
       expect(el.textContent).toContain("Affix");
     });
   });
@@ -130,8 +130,8 @@ describe("EaAffix", () => {
 
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-affix");
-      expect(containerEl.classList.contains("ea-affix")).toBe(true);
+      const containerEl = el.shadowRoot!.querySelector(".ea-affix");
+      expect(containerEl!.classList.contains("ea-affix")).toBe(true);
     });
 
     it("position 为 top 时容器应包含 modifier 类名", async () => {
@@ -141,8 +141,8 @@ describe("EaAffix", () => {
 
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-affix");
-      expect(containerEl.classList.contains("ea-affix--top")).toBe(true);
+      const containerEl = el.shadowRoot!.querySelector(".ea-affix");
+      expect(containerEl!.classList.contains("ea-affix--top")).toBe(true);
     });
 
     it("position 为 bottom 时容器应包含 modifier 类名", async () => {
@@ -152,8 +152,8 @@ describe("EaAffix", () => {
 
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-affix");
-      expect(containerEl.classList.contains("ea-affix--bottom")).toBe(true);
+      const containerEl = el.shadowRoot!.querySelector(".ea-affix");
+      expect(containerEl!.classList.contains("ea-affix--bottom")).toBe(true);
     });
   });
 
@@ -169,13 +169,13 @@ describe("EaAffix", () => {
         left: 10,
         width: 100,
         height: 40,
-      });
+      } as DOMRect);
 
       window.dispatchEvent(new Event("scroll"));
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-affix");
-      expect(containerEl.classList.contains("is-affix")).toBe(false);
+      const containerEl = el.shadowRoot!.querySelector(".ea-affix");
+      expect(containerEl!.classList.contains("is-affix")).toBe(false);
     });
 
     it("组件顶部超过 offset 后应固定", async () => {
@@ -189,13 +189,13 @@ describe("EaAffix", () => {
         left: 10,
         width: 100,
         height: 40,
-      });
+      } as DOMRect);
 
       window.dispatchEvent(new Event("scroll"));
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-affix");
-      expect(containerEl.classList.contains("is-affix")).toBe(true);
+      const containerEl = el.shadowRoot!.querySelector(".ea-affix");
+      expect(containerEl!.classList.contains("is-affix")).toBe(true);
     });
 
     it("固定后应设置 x/y 变量", async () => {
@@ -209,14 +209,15 @@ describe("EaAffix", () => {
         left: 10,
         width: 100,
         height: 40,
-      });
+      } as DOMRect);
 
       window.dispatchEvent(new Event("scroll"));
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-affix");
-      expect(containerEl.style.getPropertyValue("--ea-affix-x")).toBe("10px");
-      expect(containerEl.style.getPropertyValue("--ea-affix-y")).toBe("120px");
+      const containerEl =
+        el.shadowRoot!.querySelector<HTMLElement>(".ea-affix");
+      expect(containerEl!.style.getPropertyValue("--ea-affix-x")).toBe("10px");
+      expect(containerEl!.style.getPropertyValue("--ea-affix-y")).toBe("120px");
     });
 
     it("未固定时不应设置 x/y 变量", async () => {
@@ -230,14 +231,15 @@ describe("EaAffix", () => {
         left: 10,
         width: 100,
         height: 40,
-      });
+      } as DOMRect);
 
       window.dispatchEvent(new Event("scroll"));
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-affix");
-      expect(containerEl.style.getPropertyValue("--ea-affix-x")).toBe("");
-      expect(containerEl.style.getPropertyValue("--ea-affix-y")).toBe("");
+      const containerEl =
+        el.shadowRoot!.querySelector<HTMLElement>(".ea-affix");
+      expect(containerEl!.style.getPropertyValue("--ea-affix-x")).toBe("");
+      expect(containerEl!.style.getPropertyValue("--ea-affix-y")).toBe("");
     });
 
     it("position 为 bottom 且接近底部时应固定", async () => {
@@ -252,13 +254,13 @@ describe("EaAffix", () => {
         left: 10,
         width: 100,
         height: 40,
-      });
+      } as DOMRect);
 
       window.dispatchEvent(new Event("scroll"));
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-affix");
-      expect(containerEl.classList.contains("is-affix")).toBe(true);
+      const containerEl = el.shadowRoot!.querySelector(".ea-affix");
+      expect(containerEl!.classList.contains("is-affix")).toBe(true);
     });
 
     it("window resize 事件应触发状态重算", async () => {
@@ -272,13 +274,13 @@ describe("EaAffix", () => {
         left: 10,
         width: 100,
         height: 40,
-      });
+      } as DOMRect);
 
       window.dispatchEvent(new Event("resize"));
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-affix");
-      expect(containerEl.classList.contains("is-affix")).toBe(true);
+      const containerEl = el.shadowRoot!.querySelector(".ea-affix");
+      expect(containerEl!.classList.contains("is-affix")).toBe(true);
     });
   });
 
@@ -287,7 +289,7 @@ describe("EaAffix", () => {
       const el = document.createElement("ea-affix");
       container.appendChild(el);
 
-      expect(el.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(el.shadowRoot!.querySelector('[part="container"]')).toBeTruthy();
     });
 
     it("组件断开连接后应该正常移除", () => {

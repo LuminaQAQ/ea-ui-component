@@ -5,7 +5,7 @@ import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y.js";
 import "./index.ts";
 
 describe("EaTooltip Component", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -23,7 +23,7 @@ describe("EaTooltip Component", () => {
       container.appendChild(tooltip);
 
       expect(tooltip.shadowRoot).toBeTruthy();
-      expect(tooltip.shadowRoot.querySelector(".ea-popper")).toBeTruthy();
+      expect(tooltip.shadowRoot!.querySelector(".ea-popper")).toBeTruthy();
     });
 
     it("应该包含 container CSS Part", () => {
@@ -32,7 +32,7 @@ describe("EaTooltip Component", () => {
       container.appendChild(tooltip);
 
       expect(
-        tooltip.shadowRoot.querySelector('[part="container"]')
+        tooltip.shadowRoot!.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
@@ -42,7 +42,7 @@ describe("EaTooltip Component", () => {
       container.appendChild(tooltip);
 
       expect(
-        tooltip.shadowRoot.querySelector('[part="reference"]')
+        tooltip.shadowRoot!.querySelector('[part="reference"]')
       ).toBeTruthy();
     });
 
@@ -52,7 +52,7 @@ describe("EaTooltip Component", () => {
       container.appendChild(tooltip);
 
       expect(
-        tooltip.shadowRoot.querySelector('[part="original"]')
+        tooltip.shadowRoot!.querySelector('[part="original"]')
       ).toBeTruthy();
     });
 
@@ -63,12 +63,12 @@ describe("EaTooltip Component", () => {
 
       await tooltip.updateComplete;
 
-      const contentEl = tooltip.shadowRoot.querySelector(
+      const contentEl = tooltip.shadowRoot!.querySelector(
         ".ea-tooltip__content"
       );
       expect(contentEl).toBeTruthy();
-      expect(contentEl.getAttribute("part")).toBe("content");
-      expect(contentEl.classList.contains("ea-tooltip__content")).toBe(true);
+      expect(contentEl!.getAttribute("part")).toBe("content");
+      expect(contentEl!.classList.contains("ea-tooltip__content")).toBe(true);
     });
 
     it("应该渲染 reference slot", () => {
@@ -76,7 +76,7 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(tooltip);
 
-      const referenceSlot = tooltip.shadowRoot.querySelector(
+      const referenceSlot = tooltip.shadowRoot!.querySelector(
         'slot[name="reference"]'
       );
       expect(referenceSlot).toBeTruthy();
@@ -87,7 +87,7 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      const defaultSlot = tooltip.shadowRoot.querySelector("slot:not([name])");
+      const defaultSlot = tooltip.shadowRoot!.querySelector("slot:not([name])");
       expect(defaultSlot).toBeTruthy();
     });
   });
@@ -137,8 +137,8 @@ describe("EaTooltip Component", () => {
       await tooltip.updateComplete;
 
       const containerEl =
-        tooltip.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-tooltip--dark")).toBe(true);
+        tooltip.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-tooltip--dark")).toBe(true);
     });
 
     it("effect='light' 时容器应包含 ea-tooltip--light 修饰符类", async () => {
@@ -150,8 +150,8 @@ describe("EaTooltip Component", () => {
       await tooltip.updateComplete;
 
       const containerEl =
-        tooltip.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-tooltip--light")).toBe(true);
+        tooltip.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-tooltip--light")).toBe(true);
     });
 
     it("effect='customized' 时容器不应包含 dark 或 light 修饰符类", async () => {
@@ -163,9 +163,9 @@ describe("EaTooltip Component", () => {
       await tooltip.updateComplete;
 
       const containerEl =
-        tooltip.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-tooltip--dark")).toBe(false);
-      expect(containerEl.classList.contains("ea-tooltip--light")).toBe(false);
+        tooltip.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-tooltip--dark")).toBe(false);
+      expect(containerEl!.classList.contains("ea-tooltip--light")).toBe(false);
     });
 
     it("动态切换 effect 应更新容器修饰符类", async () => {
@@ -176,17 +176,17 @@ describe("EaTooltip Component", () => {
       await tooltip.updateComplete;
 
       const containerEl =
-        tooltip.shadowRoot.querySelector('[part="container"]');
+        tooltip.shadowRoot!.querySelector('[part="container"]');
 
       tooltip.setAttribute("effect", "light");
       await tooltip.updateComplete;
-      expect(containerEl.classList.contains("ea-tooltip--light")).toBe(true);
-      expect(containerEl.classList.contains("ea-tooltip--dark")).toBe(false);
+      expect(containerEl!.classList.contains("ea-tooltip--light")).toBe(true);
+      expect(containerEl!.classList.contains("ea-tooltip--dark")).toBe(false);
 
       tooltip.setAttribute("effect", "dark");
       await tooltip.updateComplete;
-      expect(containerEl.classList.contains("ea-tooltip--dark")).toBe(true);
-      expect(containerEl.classList.contains("ea-tooltip--light")).toBe(false);
+      expect(containerEl!.classList.contains("ea-tooltip--dark")).toBe(true);
+      expect(containerEl!.classList.contains("ea-tooltip--light")).toBe(false);
     });
 
     it("从 dark 切换到 customized 应移除 dark 修饰符类", async () => {
@@ -198,13 +198,13 @@ describe("EaTooltip Component", () => {
       await tooltip.updateComplete;
 
       const containerEl =
-        tooltip.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-tooltip--dark")).toBe(true);
+        tooltip.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-tooltip--dark")).toBe(true);
 
       tooltip.setAttribute("effect", "customized");
       await tooltip.updateComplete;
 
-      expect(containerEl.classList.contains("ea-tooltip--dark")).toBe(false);
+      expect(containerEl!.classList.contains("ea-tooltip--dark")).toBe(false);
     });
   });
 
@@ -386,7 +386,7 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      const contentEl = tooltip.shadowRoot.querySelector(
+      const contentEl = tooltip.shadowRoot!.querySelector(
         ".ea-tooltip__content"
       );
       expect(contentEl).toBeTruthy();
@@ -402,11 +402,11 @@ describe("EaTooltip Component", () => {
       tooltip.content = "Hello tooltip";
       await tooltip.updateComplete;
 
-      const contentEl = tooltip.shadowRoot.querySelector(
+      const contentEl = tooltip.shadowRoot!.querySelector(
         ".ea-tooltip__content"
       );
       expect(contentEl).toBeTruthy();
-      expect(contentEl.textContent).toBe("Hello tooltip");
+      expect(contentEl!.textContent).toBe("Hello tooltip");
     });
 
     it("设置 content 后容器应包含 is-has-content 状态类", async () => {
@@ -420,8 +420,8 @@ describe("EaTooltip Component", () => {
       await tooltip.updateComplete;
 
       const containerEl =
-        tooltip.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-has-content")).toBe(true);
+        tooltip.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-has-content")).toBe(true);
     });
 
     it("未设置 content 时容器不应包含 is-has-content 状态类", async () => {
@@ -432,8 +432,8 @@ describe("EaTooltip Component", () => {
       await tooltip.updateComplete;
 
       const containerEl =
-        tooltip.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-has-content")).toBe(false);
+        tooltip.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-has-content")).toBe(false);
     });
 
     it("设置 content 后默认 slot 应被 CSS 隐藏", async () => {
@@ -444,7 +444,7 @@ describe("EaTooltip Component", () => {
       await tooltip.updateComplete;
 
       tooltip.content = "Hello tooltip";
-      const defaultSlot = tooltip.shadowRoot.querySelector(
+      const defaultSlot = tooltip.shadowRoot!.querySelector(
         ".ea-popper__original slot:not([name])"
       );
       expect(defaultSlot).toBeTruthy();
@@ -460,12 +460,12 @@ describe("EaTooltip Component", () => {
       tooltip.content = "Hello tooltip";
       await tooltip.updateComplete;
 
-      const originalEl = tooltip.shadowRoot.querySelector(
+      const originalEl = tooltip.shadowRoot!.querySelector(
         ".ea-popper__original"
       );
-      const contentEl = originalEl.querySelector(".ea-tooltip__content");
+      const contentEl = originalEl!.querySelector(".ea-tooltip__content");
       expect(contentEl).toBeTruthy();
-      expect(contentEl.textContent).toBe("Hello tooltip");
+      expect(contentEl!.textContent).toBe("Hello tooltip");
     });
 
     it("动态更新 content 应更新已有 content 元素的文本", async () => {
@@ -478,15 +478,15 @@ describe("EaTooltip Component", () => {
       tooltip.content = "First content";
       await tooltip.updateComplete;
 
-      const contentEl = tooltip.shadowRoot.querySelector(
+      const contentEl = tooltip.shadowRoot!.querySelector(
         ".ea-tooltip__content"
       );
-      expect(contentEl.textContent).toBe("First content");
+      expect(contentEl!.textContent).toBe("First content");
 
       tooltip.content = "Updated content";
       await tooltip.updateComplete;
 
-      expect(contentEl.textContent).toBe("Updated content");
+      expect(contentEl!.textContent).toBe("Updated content");
     });
 
     it("content 元素应有 part='content'", async () => {
@@ -499,12 +499,12 @@ describe("EaTooltip Component", () => {
       tooltip.content = "Test";
       await tooltip.updateComplete;
 
-      const contentEl = tooltip.shadowRoot.querySelector(
+      const contentEl = tooltip.shadowRoot!.querySelector(
         ".ea-tooltip__content"
       );
       expect(contentEl).toBeTruthy();
-      expect(contentEl.getAttribute("part")).toBe("content");
-      expect(contentEl.classList.contains("ea-tooltip__content")).toBe(true);
+      expect(contentEl!.getAttribute("part")).toBe("content");
+      expect(contentEl!.classList.contains("ea-tooltip__content")).toBe(true);
     });
 
     it("通过 attribute 设置 content 也应更新 content 元素", async () => {
@@ -515,11 +515,11 @@ describe("EaTooltip Component", () => {
 
       await tooltip.updateComplete;
 
-      const contentEl = tooltip.shadowRoot.querySelector(
+      const contentEl = tooltip.shadowRoot!.querySelector(
         ".ea-tooltip__content"
       );
       expect(contentEl).toBeTruthy();
-      expect(contentEl.textContent).toBe("Attr content");
+      expect(contentEl!.textContent).toBe("Attr content");
     });
 
     it("清空 content 后应移除 is-has-content 状态类", async () => {
@@ -533,13 +533,13 @@ describe("EaTooltip Component", () => {
       await tooltip.updateComplete;
 
       const containerEl =
-        tooltip.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-has-content")).toBe(true);
+        tooltip.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-has-content")).toBe(true);
 
       tooltip.content = "";
       await tooltip.updateComplete;
 
-      expect(containerEl.classList.contains("is-has-content")).toBe(false);
+      expect(containerEl!.classList.contains("is-has-content")).toBe(false);
     });
   });
 
@@ -588,8 +588,8 @@ describe("EaTooltip Component", () => {
       await tooltip.updateComplete;
 
       const containerEl =
-        tooltip.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-popper--bottom")).toBe(true);
+        tooltip.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-popper--bottom")).toBe(true);
     });
   });
 
@@ -623,8 +623,8 @@ describe("EaTooltip Component", () => {
       await tooltip.updateComplete;
 
       const containerEl =
-        tooltip.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-show")).toBe(true);
+        tooltip.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-show")).toBe(true);
     });
 
     it("visible 为 false 时容器不应包含 is-show 状态类", async () => {
@@ -636,8 +636,8 @@ describe("EaTooltip Component", () => {
       await tooltip.updateComplete;
 
       const containerEl =
-        tooltip.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-show")).toBe(false);
+        tooltip.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-show")).toBe(false);
     });
   });
 
@@ -698,8 +698,8 @@ describe("EaTooltip Component", () => {
       await tooltip.updateComplete;
 
       const containerEl =
-        tooltip.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-show-arrow")).toBe(false);
+        tooltip.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-show-arrow")).toBe(false);
     });
 
     it("showArrow 为 true 时容器应包含 is-show-arrow 状态类", async () => {
@@ -710,8 +710,8 @@ describe("EaTooltip Component", () => {
       await tooltip.updateComplete;
 
       const containerEl =
-        tooltip.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-show-arrow")).toBe(true);
+        tooltip.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-show-arrow")).toBe(true);
     });
   });
 
@@ -906,8 +906,8 @@ describe("EaTooltip Component", () => {
       await tooltip.updateComplete;
 
       const containerEl =
-        tooltip.shadowRoot.querySelector('[part="container"]');
-      containerEl.dispatchEvent(new Event("transitionend", { bubbles: true }));
+        tooltip.shadowRoot!.querySelector('[part="container"]');
+      containerEl!.dispatchEvent(new Event("transitionend", { bubbles: true }));
       await tooltip.updateComplete;
 
       expect(shownHandler).toHaveBeenCalled();
@@ -925,8 +925,8 @@ describe("EaTooltip Component", () => {
       await tooltip.updateComplete;
 
       const containerEl =
-        tooltip.shadowRoot.querySelector('[part="container"]');
-      containerEl.dispatchEvent(new Event("transitionend", { bubbles: true }));
+        tooltip.shadowRoot!.querySelector('[part="container"]');
+      containerEl!.dispatchEvent(new Event("transitionend", { bubbles: true }));
       await tooltip.updateComplete;
 
       const hiddenHandler = vi.fn();
@@ -935,7 +935,7 @@ describe("EaTooltip Component", () => {
       tooltip.hide();
       await tooltip.updateComplete;
 
-      containerEl.dispatchEvent(new Event("transitionend", { bubbles: true }));
+      containerEl!.dispatchEvent(new Event("transitionend", { bubbles: true }));
       await tooltip.updateComplete;
 
       expect(hiddenHandler).toHaveBeenCalled();
@@ -951,9 +951,9 @@ describe("EaTooltip Component", () => {
       await tooltip.updateComplete;
 
       const containerEl =
-        tooltip.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-popper")).toBe(true);
-      expect(containerEl.classList.contains("ea-tooltip")).toBe(true);
+        tooltip.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-popper")).toBe(true);
+      expect(containerEl!.classList.contains("ea-tooltip")).toBe(true);
     });
 
     it("容器类名应包含 placement 修饰符", async () => {
@@ -965,8 +965,8 @@ describe("EaTooltip Component", () => {
       await tooltip.updateComplete;
 
       const containerEl =
-        tooltip.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-popper--bottom")).toBe(true);
+        tooltip.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-popper--bottom")).toBe(true);
     });
 
     it("容器类名应包含 effect 修饰符", async () => {
@@ -978,8 +978,8 @@ describe("EaTooltip Component", () => {
       await tooltip.updateComplete;
 
       const containerEl =
-        tooltip.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-tooltip--light")).toBe(true);
+        tooltip.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-tooltip--light")).toBe(true);
     });
 
     it("容器类名应包含 showArrow 状态", async () => {
@@ -990,8 +990,8 @@ describe("EaTooltip Component", () => {
       await tooltip.updateComplete;
 
       const containerEl =
-        tooltip.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-show-arrow")).toBe(true);
+        tooltip.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-show-arrow")).toBe(true);
     });
 
     it("visible 为 true 时 className 应包含 is-show 状态", async () => {
@@ -1059,10 +1059,10 @@ describe("EaTooltip Component", () => {
       await tooltip.updateComplete;
 
       const containerEl =
-        tooltip.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-popper--right")).toBe(true);
-      expect(containerEl.classList.contains("ea-tooltip--light")).toBe(true);
-      expect(containerEl.classList.contains("is-show-arrow")).toBe(true);
+        tooltip.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-popper--right")).toBe(true);
+      expect(containerEl!.classList.contains("ea-tooltip--light")).toBe(true);
+      expect(containerEl!.classList.contains("is-show-arrow")).toBe(true);
     });
 
     it("设置 content 后再设置其他属性应保持 content 元素", async () => {
@@ -1079,11 +1079,11 @@ describe("EaTooltip Component", () => {
       tooltip.setAttribute("effect", "light");
       await tooltip.updateComplete;
 
-      const contentEl = tooltip.shadowRoot.querySelector(
+      const contentEl = tooltip.shadowRoot!.querySelector(
         ".ea-tooltip__content"
       );
       expect(contentEl).toBeTruthy();
-      expect(contentEl.textContent).toBe("Hello");
+      expect(contentEl!.textContent).toBe("Hello");
     });
   });
 
@@ -1130,11 +1130,11 @@ describe("EaTooltip Component", () => {
       tooltip.content = "";
       await tooltip.updateComplete;
 
-      const contentEl = tooltip.shadowRoot.querySelector(
+      const contentEl = tooltip.shadowRoot!.querySelector(
         ".ea-tooltip__content"
       );
       expect(contentEl).toBeTruthy();
-      expect(contentEl.textContent).toBe("");
+      expect(contentEl!.textContent).toBe("");
     });
 
     it("先设置 content 再清空应保留 content 元素但文本为空", async () => {
@@ -1147,16 +1147,16 @@ describe("EaTooltip Component", () => {
       tooltip.content = "Hello";
       await tooltip.updateComplete;
 
-      let contentEl = tooltip.shadowRoot.querySelector(".ea-tooltip__content");
+      let contentEl = tooltip.shadowRoot!.querySelector(".ea-tooltip__content");
       expect(contentEl).toBeTruthy();
-      expect(contentEl.textContent).toBe("Hello");
+      expect(contentEl!.textContent).toBe("Hello");
 
       tooltip.content = "";
       await tooltip.updateComplete;
 
-      contentEl = tooltip.shadowRoot.querySelector(".ea-tooltip__content");
+      contentEl = tooltip.shadowRoot!.querySelector(".ea-tooltip__content");
       expect(contentEl).toBeTruthy();
-      expect(contentEl.textContent).toBe("");
+      expect(contentEl!.textContent).toBe("");
     });
   });
 
@@ -1202,13 +1202,13 @@ describe("EaTooltip Component", () => {
       await tooltip.updateComplete;
 
       const containerEl =
-        tooltip.shadowRoot.querySelector('[part="container"]');
+        tooltip.shadowRoot!.querySelector('[part="container"]');
 
       tooltip.setAttribute("placement", "bottom");
       await tooltip.updateComplete;
 
-      expect(containerEl.classList.contains("ea-popper--bottom")).toBe(true);
-      expect(containerEl.classList.contains("ea-popper--top")).toBe(false);
+      expect(containerEl!.classList.contains("ea-popper--bottom")).toBe(true);
+      expect(containerEl!.classList.contains("ea-popper--top")).toBe(false);
     });
 
     it("动态更新 showArrow 应更新容器类名", async () => {
@@ -1219,17 +1219,17 @@ describe("EaTooltip Component", () => {
       await tooltip.updateComplete;
 
       const containerEl =
-        tooltip.shadowRoot.querySelector('[part="container"]');
+        tooltip.shadowRoot!.querySelector('[part="container"]');
 
       tooltip.showArrow = false;
       await tooltip.updateComplete;
 
-      expect(containerEl.classList.contains("is-show-arrow")).toBe(false);
+      expect(containerEl!.classList.contains("is-show-arrow")).toBe(false);
 
       tooltip.showArrow = true;
       await tooltip.updateComplete;
 
-      expect(containerEl.classList.contains("is-show-arrow")).toBe(true);
+      expect(containerEl!.classList.contains("is-show-arrow")).toBe(true);
     });
   });
 
@@ -1251,8 +1251,8 @@ describe("EaTooltip Component", () => {
         el.innerHTML = `<span slot="reference">Hover me</span>`;
         container.appendChild(el);
         await el.updateComplete;
-        const original = el.shadowRoot.querySelector(".ea-popper__original");
-        expect(original.getAttribute("role")).toBe("tooltip");
+        const original = el.shadowRoot!.querySelector(".ea-popper__original");
+        expect(original!.getAttribute("role")).toBe("tooltip");
       });
 
       it("触发器应该有 aria-describedby 指向弹出层", async () => {
@@ -1262,8 +1262,8 @@ describe("EaTooltip Component", () => {
         container.appendChild(el);
         await el.updateComplete;
         const trigger = el.querySelector("[slot='reference']");
-        const original = el.shadowRoot.querySelector(".ea-popper__original");
-        expect(trigger.getAttribute("aria-describedby")).toBe(original.id);
+        const original = el.shadowRoot!.querySelector(".ea-popper__original");
+        expect(trigger!.getAttribute("aria-describedby")).toBe(original!.id);
       });
 
       it("非原生可聚焦触发器应该有 tabindex=0", async () => {
@@ -1273,14 +1273,14 @@ describe("EaTooltip Component", () => {
         container.appendChild(el);
         await el.updateComplete;
         const trigger = el.querySelector("[slot='reference']");
-        expect(trigger.getAttribute("tabindex")).toBe("0");
+        expect(trigger!.getAttribute("tabindex")).toBe("0");
       });
     });
   });
 });
 
 describe("EaTooltip Interaction And Keyboard", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -1302,7 +1302,8 @@ describe("EaTooltip Interaction And Keyboard", () => {
     return tooltip;
   };
 
-  const getTrigger = tooltip => tooltip.querySelector('[slot="reference"]');
+  const getTrigger = (tooltip: HTMLElementTagNameMap["ea-tooltip"]) =>
+    tooltip.querySelector<HTMLElement>('[slot="reference"]')!;
 
   describe("Trigger Event Strategies", () => {
     it("hover 模式鼠标移入应该显示", async () => {

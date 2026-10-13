@@ -4,7 +4,7 @@ import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y";
 import "./index.ts";
 
 describe("EaPageHeader Component", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -31,7 +31,7 @@ describe("EaPageHeader Component", () => {
       container.appendChild(pageHeader);
 
       expect(pageHeader.shadowRoot).toBeDefined();
-      expect(pageHeader.shadowRoot.mode).toBe("open");
+      expect(pageHeader.shadowRoot!.mode).toBe("open");
     });
 
     it("应该渲染容器元素并带有正确的 BEM 类名", () => {
@@ -39,16 +39,16 @@ describe("EaPageHeader Component", () => {
       container.appendChild(pageHeader);
 
       const containerEl =
-        pageHeader.shadowRoot.querySelector(".ea-page-header");
+        pageHeader.shadowRoot!.querySelector(".ea-page-header");
       expect(containerEl).toBeDefined();
-      expect(containerEl.tagName.toLowerCase()).toBe("div");
+      expect(containerEl!.tagName.toLowerCase()).toBe("div");
     });
 
     it("应该渲染 breadcrumb 区域", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const breadcrumb = pageHeader.shadowRoot.querySelector(
+      const breadcrumb = pageHeader.shadowRoot!.querySelector(
         ".ea-page-header__breadcrumb"
       );
       expect(breadcrumb).toBeDefined();
@@ -58,7 +58,7 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const wrapper = pageHeader.shadowRoot.querySelector(
+      const wrapper = pageHeader.shadowRoot!.querySelector(
         ".ea-page-header__wrapper"
       );
       expect(wrapper).toBeDefined();
@@ -68,7 +68,9 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const back = pageHeader.shadowRoot.querySelector(".ea-page-header__back");
+      const back = pageHeader.shadowRoot!.querySelector(
+        ".ea-page-header__back"
+      );
       expect(back).toBeDefined();
     });
 
@@ -76,7 +78,9 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const icon = pageHeader.shadowRoot.querySelector(".ea-page-header__icon");
+      const icon = pageHeader.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-page-header__icon"
+      );
       expect(icon).toBeDefined();
     });
 
@@ -84,7 +88,7 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const heading = pageHeader.shadowRoot.querySelector(
+      const heading = pageHeader.shadowRoot!.querySelector<HTMLElement>(
         ".ea-page-header__heading"
       );
       expect(heading).toBeDefined();
@@ -94,7 +98,7 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const divider = pageHeader.shadowRoot.querySelector(
+      const divider = pageHeader.shadowRoot!.querySelector(
         ".ea-page-header__divider"
       );
       expect(divider).toBeDefined();
@@ -104,7 +108,7 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const content = pageHeader.shadowRoot.querySelector(
+      const content = pageHeader.shadowRoot!.querySelector<HTMLElement>(
         ".ea-page-header__content"
       );
       expect(content).toBeDefined();
@@ -114,7 +118,7 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const extra = pageHeader.shadowRoot.querySelector(
+      const extra = pageHeader.shadowRoot!.querySelector<HTMLElement>(
         ".ea-page-header__extra"
       );
       expect(extra).toBeDefined();
@@ -129,11 +133,11 @@ describe("EaPageHeader Component", () => {
       container.appendChild(pageHeader);
 
       const containerEl =
-        pageHeader.shadowRoot.querySelector(".ea-page-header");
-      const breadcrumb = containerEl.querySelector(
+        pageHeader.shadowRoot!.querySelector(".ea-page-header");
+      const breadcrumb = containerEl!.querySelector(
         ".ea-page-header__breadcrumb"
       );
-      const wrapper = containerEl.querySelector(".ea-page-header__wrapper");
+      const wrapper = containerEl!.querySelector(".ea-page-header__wrapper");
 
       expect(breadcrumb).toBeDefined();
       expect(wrapper).toBeDefined();
@@ -143,13 +147,13 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const wrapper = pageHeader.shadowRoot.querySelector(
+      const wrapper = pageHeader.shadowRoot!.querySelector(
         ".ea-page-header__wrapper"
       );
-      const back = wrapper.querySelector(".ea-page-header__back");
-      const divider = wrapper.querySelector(".ea-page-header__divider");
-      const content = wrapper.querySelector(".ea-page-header__content");
-      const extra = wrapper.querySelector(".ea-page-header__extra");
+      const back = wrapper!.querySelector(".ea-page-header__back");
+      const divider = wrapper!.querySelector(".ea-page-header__divider");
+      const content = wrapper!.querySelector(".ea-page-header__content");
+      const extra = wrapper!.querySelector(".ea-page-header__extra");
 
       expect(back).toBeDefined();
       expect(divider).toBeDefined();
@@ -161,9 +165,11 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const back = pageHeader.shadowRoot.querySelector(".ea-page-header__back");
-      const icon = back.querySelector(".ea-page-header__icon");
-      const heading = back.querySelector(".ea-page-header__heading");
+      const back = pageHeader.shadowRoot!.querySelector(
+        ".ea-page-header__back"
+      );
+      const icon = back!.querySelector(".ea-page-header__icon");
+      const heading = back!.querySelector(".ea-page-header__heading");
 
       expect(icon).toBeDefined();
       expect(heading).toBeDefined();
@@ -174,8 +180,8 @@ describe("EaPageHeader Component", () => {
       container.appendChild(pageHeader);
 
       const containerEl =
-        pageHeader.shadowRoot.querySelector(".ea-page-header");
-      const children = Array.from(containerEl.children);
+        pageHeader.shadowRoot!.querySelector(".ea-page-header");
+      const children = Array.from(containerEl!.children);
 
       const breadcrumbIndex = children.findIndex(c =>
         c.classList.contains("ea-page-header__breadcrumb")
@@ -191,10 +197,10 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const wrapper = pageHeader.shadowRoot.querySelector(
+      const wrapper = pageHeader.shadowRoot!.querySelector(
         ".ea-page-header__wrapper"
       );
-      const children = Array.from(wrapper.children);
+      const children = Array.from(wrapper!.children);
 
       const backIndex = children.findIndex(c =>
         c.classList.contains("ea-page-header__back")
@@ -222,52 +228,54 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const el = pageHeader.shadowRoot.querySelector('[part="container"]');
+      const el = pageHeader.shadowRoot!.querySelector('[part="container"]');
       expect(el).toBeDefined();
-      expect(el.classList.contains("ea-page-header")).toBe(true);
+      expect(el!.classList.contains("ea-page-header")).toBe(true);
     });
 
     it("应该暴露 breadcrumb part", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const el = pageHeader.shadowRoot.querySelector('[part="breadcrumb"]');
+      const el = pageHeader.shadowRoot!.querySelector('[part="breadcrumb"]');
       expect(el).toBeDefined();
-      expect(el.classList.contains("ea-page-header__breadcrumb")).toBe(true);
+      expect(el!.classList.contains("ea-page-header__breadcrumb")).toBe(true);
     });
 
     it("应该暴露 header-wrapper part", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const el = pageHeader.shadowRoot.querySelector('[part="header-wrapper"]');
+      const el = pageHeader.shadowRoot!.querySelector(
+        '[part="header-wrapper"]'
+      );
       expect(el).toBeDefined();
-      expect(el.classList.contains("ea-page-header__wrapper")).toBe(true);
+      expect(el!.classList.contains("ea-page-header__wrapper")).toBe(true);
     });
 
     it("应该暴露 back part", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const el = pageHeader.shadowRoot.querySelector('[part="back"]');
+      const el = pageHeader.shadowRoot!.querySelector('[part="back"]');
       expect(el).toBeDefined();
-      expect(el.classList.contains("ea-page-header__back")).toBe(true);
+      expect(el!.classList.contains("ea-page-header__back")).toBe(true);
     });
 
     it("应该暴露 icon part", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const el = pageHeader.shadowRoot.querySelector('[part="icon"]');
+      const el = pageHeader.shadowRoot!.querySelector('[part="icon"]');
       expect(el).toBeDefined();
-      expect(el.classList.contains("ea-page-header__icon")).toBe(true);
+      expect(el!.classList.contains("ea-page-header__icon")).toBe(true);
     });
 
     it("应该暴露 back-icon part", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const el = pageHeader.shadowRoot.querySelector('[part="back-icon"]');
+      const el = pageHeader.shadowRoot!.querySelector('[part="back-icon"]');
       expect(el).toBeDefined();
     });
 
@@ -275,36 +283,36 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const el = pageHeader.shadowRoot.querySelector('[part="title"]');
+      const el = pageHeader.shadowRoot!.querySelector('[part="title"]');
       expect(el).toBeDefined();
-      expect(el.classList.contains("ea-page-header__heading")).toBe(true);
+      expect(el!.classList.contains("ea-page-header__heading")).toBe(true);
     });
 
     it("应该暴露 divider part", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const el = pageHeader.shadowRoot.querySelector('[part="divider"]');
+      const el = pageHeader.shadowRoot!.querySelector('[part="divider"]');
       expect(el).toBeDefined();
-      expect(el.classList.contains("ea-page-header__divider")).toBe(true);
+      expect(el!.classList.contains("ea-page-header__divider")).toBe(true);
     });
 
     it("应该暴露 content part", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const el = pageHeader.shadowRoot.querySelector('[part="content"]');
+      const el = pageHeader.shadowRoot!.querySelector('[part="content"]');
       expect(el).toBeDefined();
-      expect(el.classList.contains("ea-page-header__content")).toBe(true);
+      expect(el!.classList.contains("ea-page-header__content")).toBe(true);
     });
 
     it("应该暴露 extra part", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const el = pageHeader.shadowRoot.querySelector('[part="extra"]');
+      const el = pageHeader.shadowRoot!.querySelector('[part="extra"]');
       expect(el).toBeDefined();
-      expect(el.classList.contains("ea-page-header__extra")).toBe(true);
+      expect(el!.classList.contains("ea-page-header__extra")).toBe(true);
     });
   });
 
@@ -315,7 +323,7 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const slot = pageHeader.shadowRoot.querySelector(
+      const slot = pageHeader.shadowRoot!.querySelector(
         'slot[name="breadcrumb"]'
       );
       expect(slot).toBeDefined();
@@ -325,7 +333,7 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const slot = pageHeader.shadowRoot.querySelector('slot[name="icon"]');
+      const slot = pageHeader.shadowRoot!.querySelector('slot[name="icon"]');
       expect(slot).toBeDefined();
     });
 
@@ -333,17 +341,18 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const iconSlot = pageHeader.shadowRoot.querySelector('slot[name="icon"]');
-      const defaultIcon = iconSlot.querySelector("ea-icon");
+      const iconSlot =
+        pageHeader.shadowRoot!.querySelector('slot[name="icon"]');
+      const defaultIcon = iconSlot!.querySelector("ea-icon");
       expect(defaultIcon).toBeDefined();
-      expect(defaultIcon.getAttribute("name")).toBe("angle-left");
+      expect(defaultIcon!.getAttribute("name")).toBe("angle-left");
     });
 
     it("应该包含 title 命名插槽", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const slot = pageHeader.shadowRoot.querySelector('slot[name="title"]');
+      const slot = pageHeader.shadowRoot!.querySelector('slot[name="title"]');
       expect(slot).toBeDefined();
     });
 
@@ -352,15 +361,15 @@ describe("EaPageHeader Component", () => {
       container.appendChild(pageHeader);
 
       const titleSlot =
-        pageHeader.shadowRoot.querySelector('slot[name="title"]');
-      expect(titleSlot.textContent.trim()).toBe("Back");
+        pageHeader.shadowRoot!.querySelector('slot[name="title"]');
+      expect(titleSlot!.textContent.trim()).toBe("Back");
     });
 
     it("应该包含 content 命名插槽", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const slot = pageHeader.shadowRoot.querySelector('slot[name="content"]');
+      const slot = pageHeader.shadowRoot!.querySelector('slot[name="content"]');
       expect(slot).toBeDefined();
     });
 
@@ -368,7 +377,7 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const slot = pageHeader.shadowRoot.querySelector('slot[name="extra"]');
+      const slot = pageHeader.shadowRoot!.querySelector('slot[name="extra"]');
       expect(slot).toBeDefined();
     });
 
@@ -376,7 +385,7 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const slot = pageHeader.shadowRoot.querySelector("slot:not([name])");
+      const slot = pageHeader.shadowRoot!.querySelector("slot:not([name])");
       expect(slot).toBeDefined();
     });
 
@@ -385,8 +394,8 @@ describe("EaPageHeader Component", () => {
       container.appendChild(pageHeader);
 
       const containerEl =
-        pageHeader.shadowRoot.querySelector(".ea-page-header");
-      const defaultSlot = containerEl.querySelector("slot:not([name])");
+        pageHeader.shadowRoot!.querySelector(".ea-page-header");
+      const defaultSlot = containerEl!.querySelector("slot:not([name])");
       expect(defaultSlot).toBeDefined();
     });
 
@@ -395,7 +404,7 @@ describe("EaPageHeader Component", () => {
       pageHeader.innerHTML = `<nav slot="breadcrumb">Home / Page</nav>`;
       container.appendChild(pageHeader);
 
-      const slot = pageHeader.shadowRoot.querySelector(
+      const slot = pageHeader.shadowRoot!.querySelector(
         'slot[name="breadcrumb"]'
       );
       expect(slot).toBeDefined();
@@ -406,7 +415,7 @@ describe("EaPageHeader Component", () => {
       pageHeader.innerHTML = `<span slot="icon">Custom Icon</span>`;
       container.appendChild(pageHeader);
 
-      const slot = pageHeader.shadowRoot.querySelector('slot[name="icon"]');
+      const slot = pageHeader.shadowRoot!.querySelector('slot[name="icon"]');
       expect(slot).toBeDefined();
     });
 
@@ -415,7 +424,7 @@ describe("EaPageHeader Component", () => {
       pageHeader.innerHTML = `<span slot="title">Custom Title</span>`;
       container.appendChild(pageHeader);
 
-      const slot = pageHeader.shadowRoot.querySelector('slot[name="title"]');
+      const slot = pageHeader.shadowRoot!.querySelector('slot[name="title"]');
       expect(slot).toBeDefined();
     });
 
@@ -424,7 +433,7 @@ describe("EaPageHeader Component", () => {
       pageHeader.innerHTML = `<span slot="content">Main Content</span>`;
       container.appendChild(pageHeader);
 
-      const slot = pageHeader.shadowRoot.querySelector('slot[name="content"]');
+      const slot = pageHeader.shadowRoot!.querySelector('slot[name="content"]');
       expect(slot).toBeDefined();
     });
 
@@ -433,7 +442,7 @@ describe("EaPageHeader Component", () => {
       pageHeader.innerHTML = `<div slot="extra"><button>Action</button></div>`;
       container.appendChild(pageHeader);
 
-      const slot = pageHeader.shadowRoot.querySelector('slot[name="extra"]');
+      const slot = pageHeader.shadowRoot!.querySelector('slot[name="extra"]');
       expect(slot).toBeDefined();
     });
 
@@ -450,22 +459,22 @@ describe("EaPageHeader Component", () => {
       container.appendChild(pageHeader);
 
       expect(
-        pageHeader.shadowRoot.querySelector('slot[name="breadcrumb"]')
+        pageHeader.shadowRoot!.querySelector('slot[name="breadcrumb"]')
       ).toBeDefined();
       expect(
-        pageHeader.shadowRoot.querySelector('slot[name="icon"]')
+        pageHeader.shadowRoot!.querySelector('slot[name="icon"]')
       ).toBeDefined();
       expect(
-        pageHeader.shadowRoot.querySelector('slot[name="title"]')
+        pageHeader.shadowRoot!.querySelector('slot[name="title"]')
       ).toBeDefined();
       expect(
-        pageHeader.shadowRoot.querySelector('slot[name="content"]')
+        pageHeader.shadowRoot!.querySelector('slot[name="content"]')
       ).toBeDefined();
       expect(
-        pageHeader.shadowRoot.querySelector('slot[name="extra"]')
+        pageHeader.shadowRoot!.querySelector('slot[name="extra"]')
       ).toBeDefined();
       expect(
-        pageHeader.shadowRoot.querySelector("slot:not([name])")
+        pageHeader.shadowRoot!.querySelector("slot:not([name])")
       ).toBeDefined();
     });
   });
@@ -484,9 +493,9 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const iconEl = pageHeader.shadowRoot.querySelector("ea-icon");
+      const iconEl = pageHeader.shadowRoot!.querySelector("ea-icon");
       expect(iconEl).toBeDefined();
-      expect(iconEl.getAttribute("name")).toBe("angle-left");
+      expect(iconEl!.getAttribute("name")).toBe("angle-left");
     });
 
     it("应该通过 HTML attribute 设置 icon", () => {
@@ -504,8 +513,8 @@ describe("EaPageHeader Component", () => {
 
       await pageHeader.updateComplete;
 
-      const iconEl = pageHeader.shadowRoot.querySelector("ea-icon");
-      expect(iconEl.getAttribute("name")).toBe("arrow-left");
+      const iconEl = pageHeader.shadowRoot!.querySelector("ea-icon");
+      expect(iconEl!.getAttribute("name")).toBe("arrow-left");
     });
 
     it("应该支持通过 JS property 设置 icon", async () => {
@@ -546,10 +555,10 @@ describe("EaPageHeader Component", () => {
       await pageHeader.updateComplete;
 
       expect(pageHeader.icon).toBe("");
-      const iconEl = pageHeader.shadowRoot.querySelector(
+      const iconEl = pageHeader.shadowRoot!.querySelector<HTMLElement>(
         ".ea-page-header__icon"
       );
-      expect(iconEl.classList.contains("is-hidden")).toBe(true);
+      expect(iconEl!.classList.contains("is-hidden")).toBe(true);
     });
 
     it("icon 为空字符串时不应渲染 ea-icon", async () => {
@@ -559,7 +568,7 @@ describe("EaPageHeader Component", () => {
 
       await pageHeader.updateComplete;
 
-      const iconEl = pageHeader.shadowRoot.querySelector("ea-icon");
+      const iconEl = pageHeader.shadowRoot!.querySelector("ea-icon");
       expect(iconEl).toBeNull();
     });
 
@@ -570,17 +579,17 @@ describe("EaPageHeader Component", () => {
 
       await pageHeader.updateComplete;
 
-      const iconContainer = pageHeader.shadowRoot.querySelector(
+      const iconContainer = pageHeader.shadowRoot!.querySelector<HTMLElement>(
         ".ea-page-header__icon"
       );
-      expect(iconContainer.classList.contains("is-hidden")).toBe(true);
+      expect(iconContainer!.classList.contains("is-hidden")).toBe(true);
 
       pageHeader.setAttribute("icon", "arrow-left");
       await pageHeader.updateComplete;
 
-      expect(iconContainer.classList.contains("is-hidden")).toBe(false);
-      const iconEl = pageHeader.shadowRoot.querySelector("ea-icon");
-      expect(iconEl.getAttribute("name")).toBe("arrow-left");
+      expect(iconContainer!.classList.contains("is-hidden")).toBe(false);
+      const iconEl = pageHeader.shadowRoot!.querySelector("ea-icon");
+      expect(iconEl!.getAttribute("name")).toBe("arrow-left");
     });
   });
 
@@ -599,8 +608,8 @@ describe("EaPageHeader Component", () => {
       container.appendChild(pageHeader);
 
       const titleSlot =
-        pageHeader.shadowRoot.querySelector('slot[name="title"]');
-      expect(titleSlot.textContent.trim()).toBe("Back");
+        pageHeader.shadowRoot!.querySelector('slot[name="title"]');
+      expect(titleSlot!.textContent.trim()).toBe("Back");
     });
 
     it("应该通过 HTML attribute 设置 heading", () => {
@@ -618,10 +627,10 @@ describe("EaPageHeader Component", () => {
 
       await pageHeader.updateComplete;
 
-      const headingEl = pageHeader.shadowRoot.querySelector(
+      const headingEl = pageHeader.shadowRoot!.querySelector<HTMLElement>(
         ".ea-page-header__heading"
       );
-      expect(headingEl.textContent).toBe("Go Back");
+      expect(headingEl!.textContent).toBe("Go Back");
     });
 
     it("应该支持通过 JS property 设置 heading", async () => {
@@ -634,10 +643,10 @@ describe("EaPageHeader Component", () => {
       await pageHeader.updateComplete;
 
       expect(pageHeader.heading).toBe("JS Property Heading");
-      const headingEl = pageHeader.shadowRoot.querySelector(
+      const headingEl = pageHeader.shadowRoot!.querySelector<HTMLElement>(
         ".ea-page-header__heading"
       );
-      expect(headingEl.textContent).toBe("JS Property Heading");
+      expect(headingEl!.textContent).toBe("JS Property Heading");
     });
 
     it("应该支持动态修改 heading", async () => {
@@ -647,18 +656,19 @@ describe("EaPageHeader Component", () => {
 
       await pageHeader.updateComplete;
 
-      const headingEl = pageHeader.shadowRoot.querySelector(
+      const headingEl = pageHeader.shadowRoot!.querySelector<HTMLElement>(
         ".ea-page-header__heading"
       );
-      expect(headingEl.textContent).toBe("初始标题");
+      expect(headingEl!.textContent).toBe("初始标题");
 
       pageHeader.setAttribute("heading", "更新后的标题");
       await pageHeader.updateComplete;
 
-      const updatedHeadingEl = pageHeader.shadowRoot.querySelector(
-        ".ea-page-header__heading"
-      );
-      expect(updatedHeadingEl.textContent).toBe("更新后的标题");
+      const updatedHeadingEl =
+        pageHeader.shadowRoot!.querySelector<HTMLElement>(
+          ".ea-page-header__heading"
+        );
+      expect(updatedHeadingEl!.textContent).toBe("更新后的标题");
     });
 
     it("heading 设置为空字符串后应恢复 title slot 默认 Back", async () => {
@@ -673,9 +683,9 @@ describe("EaPageHeader Component", () => {
 
       expect(pageHeader.heading).toBe("");
       const titleSlot =
-        pageHeader.shadowRoot.querySelector('slot[name="title"]');
+        pageHeader.shadowRoot!.querySelector('slot[name="title"]');
       expect(titleSlot).toBeDefined();
-      expect(titleSlot.textContent.trim()).toBe("Back");
+      expect(titleSlot!.textContent.trim()).toBe("Back");
     });
 
     it("heading 属性应映射到 HTML attribute heading（非 title）", () => {
@@ -702,10 +712,10 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const contentSlot = pageHeader.shadowRoot.querySelector(
+      const contentSlot = pageHeader.shadowRoot!.querySelector(
         'slot[name="content"]'
       );
-      expect(contentSlot.textContent).toBe("");
+      expect(contentSlot!.textContent).toBe("");
     });
 
     it("应该通过 HTML attribute 设置 content", () => {
@@ -723,10 +733,10 @@ describe("EaPageHeader Component", () => {
 
       await pageHeader.updateComplete;
 
-      const contentEl = pageHeader.shadowRoot.querySelector(
+      const contentEl = pageHeader.shadowRoot!.querySelector<HTMLElement>(
         ".ea-page-header__content"
       );
-      expect(contentEl.textContent).toBe("Page Title");
+      expect(contentEl!.textContent).toBe("Page Title");
     });
 
     it("应该支持通过 JS property 设置 content", async () => {
@@ -739,10 +749,10 @@ describe("EaPageHeader Component", () => {
       await pageHeader.updateComplete;
 
       expect(pageHeader.content).toBe("JS Property Content");
-      const contentEl = pageHeader.shadowRoot.querySelector(
+      const contentEl = pageHeader.shadowRoot!.querySelector<HTMLElement>(
         ".ea-page-header__content"
       );
-      expect(contentEl.textContent).toBe("JS Property Content");
+      expect(contentEl!.textContent).toBe("JS Property Content");
     });
 
     it("应该支持动态修改 content", async () => {
@@ -752,18 +762,19 @@ describe("EaPageHeader Component", () => {
 
       await pageHeader.updateComplete;
 
-      const contentEl = pageHeader.shadowRoot.querySelector(
+      const contentEl = pageHeader.shadowRoot!.querySelector<HTMLElement>(
         ".ea-page-header__content"
       );
-      expect(contentEl.textContent).toBe("初始内容");
+      expect(contentEl!.textContent).toBe("初始内容");
 
       pageHeader.setAttribute("content", "更新后的内容");
       await pageHeader.updateComplete;
 
-      const updatedContentEl = pageHeader.shadowRoot.querySelector(
-        ".ea-page-header__content"
-      );
-      expect(updatedContentEl.textContent).toBe("更新后的内容");
+      const updatedContentEl =
+        pageHeader.shadowRoot!.querySelector<HTMLElement>(
+          ".ea-page-header__content"
+        );
+      expect(updatedContentEl!.textContent).toBe("更新后的内容");
     });
 
     it("content 设置为空字符串后应恢复 content slot", async () => {
@@ -777,7 +788,7 @@ describe("EaPageHeader Component", () => {
       await pageHeader.updateComplete;
 
       expect(pageHeader.content).toBe("");
-      const contentSlot = pageHeader.shadowRoot.querySelector(
+      const contentSlot = pageHeader.shadowRoot!.querySelector(
         'slot[name="content"]'
       );
       expect(contentSlot).toBeDefined();
@@ -796,10 +807,10 @@ describe("EaPageHeader Component", () => {
       const backHandler = vi.fn();
       pageHeader.addEventListener("ea-back", backHandler);
 
-      const backEl = pageHeader.shadowRoot.querySelector(
+      const backEl = pageHeader.shadowRoot!.querySelector<HTMLElement>(
         ".ea-page-header__back"
       );
-      backEl.click();
+      backEl!.click();
 
       expect(backHandler).toHaveBeenCalled();
     });
@@ -813,12 +824,12 @@ describe("EaPageHeader Component", () => {
       const backHandler = vi.fn();
       pageHeader.addEventListener("ea-back", backHandler);
 
-      const backEl = pageHeader.shadowRoot.querySelector(
+      const backEl = pageHeader.shadowRoot!.querySelector<HTMLElement>(
         ".ea-page-header__back"
       );
-      backEl.click();
-      backEl.click();
-      backEl.click();
+      backEl!.click();
+      backEl!.click();
+      backEl!.click();
 
       expect(backHandler).toHaveBeenCalledTimes(3);
     });
@@ -829,20 +840,20 @@ describe("EaPageHeader Component", () => {
 
       await pageHeader.updateComplete;
 
-      let receivedEvent;
+      let receivedEvent: Event | undefined;
       pageHeader.addEventListener("ea-back", e => {
         receivedEvent = e;
       });
 
-      const backEl = pageHeader.shadowRoot.querySelector(
+      const backEl = pageHeader.shadowRoot!.querySelector<HTMLElement>(
         ".ea-page-header__back"
       );
-      backEl.click();
+      backEl!.click();
 
       expect(receivedEvent).toBeDefined();
-      expect(receivedEvent.type).toBe("ea-back");
-      expect(receivedEvent.bubbles).toBe(true);
-      expect(receivedEvent.composed).toBe(true);
+      expect(receivedEvent!.type).toBe("ea-back");
+      expect(receivedEvent!.bubbles).toBe(true);
+      expect(receivedEvent!.composed).toBe(true);
     });
 
     it("点击 icon 区域（back 的子元素）也应该触发 ea-back 事件", async () => {
@@ -854,10 +865,10 @@ describe("EaPageHeader Component", () => {
       const backHandler = vi.fn();
       pageHeader.addEventListener("ea-back", backHandler);
 
-      const iconEl = pageHeader.shadowRoot.querySelector(
+      const iconEl = pageHeader.shadowRoot!.querySelector<HTMLElement>(
         ".ea-page-header__icon"
       );
-      iconEl.click();
+      iconEl!.click();
 
       expect(backHandler).toHaveBeenCalled();
     });
@@ -871,10 +882,10 @@ describe("EaPageHeader Component", () => {
       const backHandler = vi.fn();
       pageHeader.addEventListener("ea-back", backHandler);
 
-      const headingEl = pageHeader.shadowRoot.querySelector(
+      const headingEl = pageHeader.shadowRoot!.querySelector<HTMLElement>(
         ".ea-page-header__heading"
       );
-      headingEl.click();
+      headingEl!.click();
 
       expect(backHandler).toHaveBeenCalled();
     });
@@ -888,10 +899,10 @@ describe("EaPageHeader Component", () => {
       const backHandler = vi.fn();
       pageHeader.addEventListener("ea-back", backHandler);
 
-      const contentEl = pageHeader.shadowRoot.querySelector(
+      const contentEl = pageHeader.shadowRoot!.querySelector<HTMLElement>(
         ".ea-page-header__content"
       );
-      contentEl.click();
+      contentEl!.click();
 
       expect(backHandler).not.toHaveBeenCalled();
     });
@@ -905,10 +916,10 @@ describe("EaPageHeader Component", () => {
       const backHandler = vi.fn();
       pageHeader.addEventListener("ea-back", backHandler);
 
-      const extraEl = pageHeader.shadowRoot.querySelector(
+      const extraEl = pageHeader.shadowRoot!.querySelector<HTMLElement>(
         ".ea-page-header__extra"
       );
-      extraEl.click();
+      extraEl!.click();
 
       expect(backHandler).not.toHaveBeenCalled();
     });
@@ -922,15 +933,15 @@ describe("EaPageHeader Component", () => {
       const backHandler = vi.fn();
       pageHeader.addEventListener("ea-back", backHandler);
 
-      const backEl = pageHeader.shadowRoot.querySelector(
+      const backEl = pageHeader.shadowRoot!.querySelector<HTMLElement>(
         ".ea-page-header__back"
       );
-      backEl.click();
+      backEl!.click();
 
       expect(backHandler).toHaveBeenCalledTimes(1);
 
       pageHeader.removeEventListener("ea-back", backHandler);
-      backEl.click();
+      backEl!.click();
 
       expect(backHandler).toHaveBeenCalledTimes(1);
     });
@@ -958,11 +969,11 @@ describe("EaPageHeader Component", () => {
 
       await pageHeader.updateComplete;
 
-      const headingEl = pageHeader.shadowRoot.querySelector(
+      const headingEl = pageHeader.shadowRoot!.querySelector<HTMLElement>(
         ".ea-page-header__heading"
       );
-      expect(headingEl.textContent).toBe("自定义返回");
-      expect(headingEl.textContent.trim()).not.toBe("Back");
+      expect(headingEl!.textContent).toBe("自定义返回");
+      expect(headingEl!.textContent.trim()).not.toBe("Back");
     });
 
     it("设置 content 后 content 容器内容应为 content 值", async () => {
@@ -972,10 +983,10 @@ describe("EaPageHeader Component", () => {
 
       await pageHeader.updateComplete;
 
-      const contentEl = pageHeader.shadowRoot.querySelector(
+      const contentEl = pageHeader.shadowRoot!.querySelector<HTMLElement>(
         ".ea-page-header__content"
       );
-      expect(contentEl.textContent).toBe("详情页面");
+      expect(contentEl!.textContent).toBe("详情页面");
     });
 
     it("设置 icon 后默认 ea-icon 的 name 应被更新", async () => {
@@ -985,8 +996,8 @@ describe("EaPageHeader Component", () => {
 
       await pageHeader.updateComplete;
 
-      const iconEl = pageHeader.shadowRoot.querySelector("ea-icon");
-      expect(iconEl.getAttribute("name")).toBe("chevron-left");
+      const iconEl = pageHeader.shadowRoot!.querySelector("ea-icon");
+      expect(iconEl!.getAttribute("name")).toBe("chevron-left");
     });
 
     it("多个属性动态更新应该各自正确反映", async () => {
@@ -1104,10 +1115,10 @@ describe("EaPageHeader Component", () => {
 
       await pageHeader.updateComplete;
 
-      const headingEl = pageHeader.shadowRoot.querySelector(
+      const headingEl = pageHeader.shadowRoot!.querySelector<HTMLElement>(
         ".ea-page-header__heading"
       );
-      expect(headingEl.textContent).toBe("Updated Title");
+      expect(headingEl!.textContent).toBe("Updated Title");
     });
 
     it("动态更新 content 应该反映在 UI 上", async () => {
@@ -1120,10 +1131,10 @@ describe("EaPageHeader Component", () => {
 
       await pageHeader.updateComplete;
 
-      const contentEl = pageHeader.shadowRoot.querySelector(
+      const contentEl = pageHeader.shadowRoot!.querySelector<HTMLElement>(
         ".ea-page-header__content"
       );
-      expect(contentEl.textContent).toBe("Updated Content");
+      expect(contentEl!.textContent).toBe("Updated Content");
     });
 
     it("动态更新 icon 应该反映在 UI 上", async () => {
@@ -1136,8 +1147,8 @@ describe("EaPageHeader Component", () => {
 
       await pageHeader.updateComplete;
 
-      const iconEl = pageHeader.shadowRoot.querySelector("ea-icon");
-      expect(iconEl.getAttribute("name")).toBe("chevron-left");
+      const iconEl = pageHeader.shadowRoot!.querySelector("ea-icon");
+      expect(iconEl!.getAttribute("name")).toBe("chevron-left");
     });
   });
 
@@ -1164,10 +1175,10 @@ describe("EaPageHeader Component", () => {
       await pageHeader.updateComplete;
 
       expect(pageHeader.heading).toBe(longText);
-      const headingEl = pageHeader.shadowRoot.querySelector(
+      const headingEl = pageHeader.shadowRoot!.querySelector<HTMLElement>(
         ".ea-page-header__heading"
       );
-      expect(headingEl.textContent).toBe(longText);
+      expect(headingEl!.textContent).toBe(longText);
     });
 
     it("应该处理长文本 content", async () => {
@@ -1180,10 +1191,10 @@ describe("EaPageHeader Component", () => {
       await pageHeader.updateComplete;
 
       expect(pageHeader.content).toBe(longText);
-      const contentEl = pageHeader.shadowRoot.querySelector(
+      const contentEl = pageHeader.shadowRoot!.querySelector<HTMLElement>(
         ".ea-page-header__content"
       );
-      expect(contentEl.textContent).toBe(longText);
+      expect(contentEl!.textContent).toBe(longText);
     });
 
     it("应该通过 html() 安全处理 XSS 内容", async () => {
@@ -1194,10 +1205,10 @@ describe("EaPageHeader Component", () => {
       await pageHeader.updateComplete;
 
       expect(pageHeader.heading).toBe("<script>alert('xss')</script>");
-      const headingEl = pageHeader.shadowRoot.querySelector(
+      const headingEl = pageHeader.shadowRoot!.querySelector<HTMLElement>(
         ".ea-page-header__heading"
       );
-      expect(headingEl.querySelector("script")).toBeNull();
+      expect(headingEl!.querySelector("script")).toBeNull();
     });
 
     it("应该处理 Unicode 字符", () => {
@@ -1252,59 +1263,59 @@ describe("EaPageHeader Component", () => {
       container.appendChild(pageHeader);
 
       const containerEl =
-        pageHeader.shadowRoot.querySelector(".ea-page-header");
+        pageHeader.shadowRoot!.querySelector(".ea-page-header");
       expect(containerEl).toBeDefined();
-      expect(containerEl.classList.contains("ea-page-header")).toBe(true);
+      expect(containerEl!.classList.contains("ea-page-header")).toBe(true);
     });
 
     it("breadcrumb 应该有 ea-page-header__breadcrumb 类名", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const el = pageHeader.shadowRoot.querySelector(
+      const el = pageHeader.shadowRoot!.querySelector(
         ".ea-page-header__breadcrumb"
       );
       expect(el).toBeDefined();
-      expect(el.classList.contains("ea-page-header__breadcrumb")).toBe(true);
+      expect(el!.classList.contains("ea-page-header__breadcrumb")).toBe(true);
     });
 
     it("wrapper 应该有 ea-page-header__wrapper 类名", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const el = pageHeader.shadowRoot.querySelector(
+      const el = pageHeader.shadowRoot!.querySelector(
         ".ea-page-header__wrapper"
       );
       expect(el).toBeDefined();
-      expect(el.classList.contains("ea-page-header__wrapper")).toBe(true);
+      expect(el!.classList.contains("ea-page-header__wrapper")).toBe(true);
     });
 
     it("back 应该有 ea-page-header__back 类名", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const el = pageHeader.shadowRoot.querySelector(".ea-page-header__back");
+      const el = pageHeader.shadowRoot!.querySelector(".ea-page-header__back");
       expect(el).toBeDefined();
-      expect(el.classList.contains("ea-page-header__back")).toBe(true);
+      expect(el!.classList.contains("ea-page-header__back")).toBe(true);
     });
 
     it("icon 应该有 ea-page-header__icon 类名", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const el = pageHeader.shadowRoot.querySelector(".ea-page-header__icon");
+      const el = pageHeader.shadowRoot!.querySelector(".ea-page-header__icon");
       expect(el).toBeDefined();
-      expect(el.classList.contains("ea-page-header__icon")).toBe(true);
+      expect(el!.classList.contains("ea-page-header__icon")).toBe(true);
     });
 
     it("heading 应该有 ea-page-header__heading 类名（非 ea-page-header__title）", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const headingEl = pageHeader.shadowRoot.querySelector(
+      const headingEl = pageHeader.shadowRoot!.querySelector<HTMLElement>(
         ".ea-page-header__heading"
       );
-      const titleEl = pageHeader.shadowRoot.querySelector(
+      const titleEl = pageHeader.shadowRoot!.querySelector(
         ".ea-page-header__title"
       );
       expect(headingEl).toBeDefined();
@@ -1315,31 +1326,31 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const el = pageHeader.shadowRoot.querySelector(
+      const el = pageHeader.shadowRoot!.querySelector(
         ".ea-page-header__divider"
       );
       expect(el).toBeDefined();
-      expect(el.classList.contains("ea-page-header__divider")).toBe(true);
+      expect(el!.classList.contains("ea-page-header__divider")).toBe(true);
     });
 
     it("content 应该有 ea-page-header__content 类名", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const el = pageHeader.shadowRoot.querySelector(
+      const el = pageHeader.shadowRoot!.querySelector<HTMLElement>(
         ".ea-page-header__content"
       );
       expect(el).toBeDefined();
-      expect(el.classList.contains("ea-page-header__content")).toBe(true);
+      expect(el!.classList.contains("ea-page-header__content")).toBe(true);
     });
 
     it("extra 应该有 ea-page-header__extra 类名", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const el = pageHeader.shadowRoot.querySelector(".ea-page-header__extra");
+      const el = pageHeader.shadowRoot!.querySelector(".ea-page-header__extra");
       expect(el).toBeDefined();
-      expect(el.classList.contains("ea-page-header__extra")).toBe(true);
+      expect(el!.classList.contains("ea-page-header__extra")).toBe(true);
     });
   });
 
@@ -1350,20 +1361,20 @@ describe("EaPageHeader Component", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const divider = pageHeader.shadowRoot.querySelector(
+      const divider = pageHeader.shadowRoot!.querySelector(
         ".ea-page-header__divider"
       );
-      expect(divider.tagName.toLowerCase()).toBe("span");
+      expect(divider!.tagName.toLowerCase()).toBe("span");
     });
 
     it("divider 内容应该是 |", () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
-      const divider = pageHeader.shadowRoot.querySelector(
+      const divider = pageHeader.shadowRoot!.querySelector(
         ".ea-page-header__divider"
       );
-      expect(divider.textContent.trim()).toBe("|");
+      expect(divider!.textContent.trim()).toBe("|");
     });
   });
 

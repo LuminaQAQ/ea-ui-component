@@ -3,7 +3,7 @@ import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import "./index";
 
 describe("EaEffects", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -27,7 +27,9 @@ describe("EaEffects", () => {
       const el = document.createElement("ea-effects");
       container.appendChild(el);
 
-      const containerEl = el.shadowRoot.querySelector(".ea-effects");
+      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-effects"
+      );
       expect(containerEl).toBeDefined();
     });
 
@@ -35,7 +37,7 @@ describe("EaEffects", () => {
       const el = document.createElement("ea-effects");
       container.appendChild(el);
 
-      expect(el.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(el.shadowRoot!.querySelector('[part="container"]')).toBeTruthy();
     });
 
     it("应该支持 slot 内容", () => {
@@ -43,7 +45,7 @@ describe("EaEffects", () => {
       el.innerHTML = "<div>Content</div>";
       container.appendChild(el);
 
-      const slot = el.shadowRoot.querySelector("slot");
+      const slot = el.shadowRoot!.querySelector("slot");
       expect(slot).toBeDefined();
       expect(el.textContent).toBe("Content");
     });
@@ -74,8 +76,10 @@ describe("EaEffects", () => {
       el.setAttribute("effect", "fade");
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-effects");
-      expect(containerEl.classList.contains("ea-effects--fade")).toBe(true);
+      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-effects"
+      );
+      expect(containerEl!.classList.contains("ea-effects--fade")).toBe(true);
     });
 
     it("应该支持 zoom-center 效果", () => {
@@ -83,8 +87,10 @@ describe("EaEffects", () => {
       el.setAttribute("effect", "zoom-center");
       container.appendChild(el);
 
-      const containerEl = el.shadowRoot.querySelector(".ea-effects");
-      expect(containerEl.classList.contains("ea-effects--zoom-center")).toBe(
+      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-effects"
+      );
+      expect(containerEl!.classList.contains("ea-effects--zoom-center")).toBe(
         true
       );
     });
@@ -94,8 +100,10 @@ describe("EaEffects", () => {
       el.setAttribute("effect", "slide-top");
       container.appendChild(el);
 
-      const containerEl = el.shadowRoot.querySelector(".ea-effects");
-      expect(containerEl.classList.contains("ea-effects--slide-top")).toBe(
+      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-effects"
+      );
+      expect(containerEl!.classList.contains("ea-effects--slide-top")).toBe(
         true
       );
     });
@@ -105,8 +113,10 @@ describe("EaEffects", () => {
       el.setAttribute("effect", "flip-x");
       container.appendChild(el);
 
-      const containerEl = el.shadowRoot.querySelector(".ea-effects");
-      expect(containerEl.classList.contains("ea-effects--flip-x")).toBe(true);
+      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-effects"
+      );
+      expect(containerEl!.classList.contains("ea-effects--flip-x")).toBe(true);
     });
   });
 
@@ -179,8 +189,10 @@ describe("EaEffects", () => {
       el.setAttribute("duration", "2s");
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-effects");
-      expect(containerEl.style.getPropertyValue("--ea-effects-duration")).toBe(
+      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-effects"
+      );
+      expect(containerEl!.style.getPropertyValue("--ea-effects-duration")).toBe(
         "2s"
       );
     });
@@ -211,8 +223,10 @@ describe("EaEffects", () => {
       el.setAttribute("delay", "0.5s");
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-effects");
-      expect(containerEl.style.getPropertyValue("--ea-effects-delay")).toBe(
+      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-effects"
+      );
+      expect(containerEl!.style.getPropertyValue("--ea-effects-delay")).toBe(
         "0.5s"
       );
     });
@@ -243,9 +257,11 @@ describe("EaEffects", () => {
       el.setAttribute("timing-function", "ease-in");
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-effects");
+      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-effects"
+      );
       expect(
-        containerEl.style.getPropertyValue("--ea-effects-timing-function")
+        containerEl!.style.getPropertyValue("--ea-effects-timing-function")
       ).toBe("ease-in");
     });
   });
@@ -275,9 +291,11 @@ describe("EaEffects", () => {
       el.setAttribute("iteration", "2");
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-effects");
+      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-effects"
+      );
       expect(
-        containerEl.style.getPropertyValue("--ea-effects-iteration-count")
+        containerEl!.style.getPropertyValue("--ea-effects-iteration-count")
       ).toBe("2");
     });
   });
@@ -308,8 +326,10 @@ describe("EaEffects", () => {
 
       expect(el.visible).toBe(true);
 
-      const containerEl = el.shadowRoot.querySelector(".ea-effects");
-      containerEl.click();
+      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-effects"
+      );
+      containerEl!.click();
       await el.updateComplete;
 
       expect(el.visible).toBe(false);
@@ -323,8 +343,10 @@ describe("EaEffects", () => {
 
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-effects");
-      containerEl.click();
+      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-effects"
+      );
+      containerEl!.click();
       await el.updateComplete;
 
       expect(el.visible).toBe(true);
@@ -341,8 +363,10 @@ describe("EaEffects", () => {
 
       expect(el.visible).toBe(false);
 
-      const containerEl = el.shadowRoot.querySelector(".ea-effects");
-      containerEl.dispatchEvent(
+      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-effects"
+      );
+      containerEl!.dispatchEvent(
         new MouseEvent("mouseenter", { bubbles: true })
       );
       await el.updateComplete;
@@ -358,8 +382,10 @@ describe("EaEffects", () => {
 
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-effects");
-      containerEl.dispatchEvent(
+      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-effects"
+      );
+      containerEl!.dispatchEvent(
         new MouseEvent("mouseleave", { bubbles: true })
       );
       await el.updateComplete;
@@ -380,8 +406,10 @@ describe("EaEffects", () => {
 
       expect(el.trigger).toBe("click");
 
-      const containerEl = el.shadowRoot.querySelector(".ea-effects");
-      containerEl.click();
+      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-effects"
+      );
+      containerEl!.click();
       await el.updateComplete;
 
       expect(el.visible).toBe(false);
@@ -430,12 +458,14 @@ describe("EaEffects", () => {
 
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-effects");
+      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-effects"
+      );
 
       el.show();
       await el.updateComplete;
 
-      expect(containerEl.classList.contains("ea-effects--fade-enter")).toBe(
+      expect(containerEl!.classList.contains("ea-effects--fade-enter")).toBe(
         true
       );
     });
@@ -447,13 +477,15 @@ describe("EaEffects", () => {
 
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-effects");
+      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-effects"
+      );
 
       el.hide();
       await el.updateComplete;
 
       expect(
-        containerEl.classList.contains("ea-effects--fade-before-leave")
+        containerEl!.classList.contains("ea-effects--fade-before-leave")
       ).toBe(true);
     });
 
@@ -484,14 +516,16 @@ describe("EaEffects", () => {
 
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-effects");
-      containerEl.classList.add("ea-effects--fade-before-enter");
+      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-effects"
+      );
+      containerEl!.classList.add("ea-effects--fade-before-enter");
 
       el.reset();
       await el.updateComplete;
 
       expect(
-        containerEl.classList.contains("ea-effects--fade-before-enter")
+        containerEl!.classList.contains("ea-effects--fade-before-enter")
       ).toBe(false);
     });
   });
@@ -501,8 +535,10 @@ describe("EaEffects", () => {
       const el = document.createElement("ea-effects");
       container.appendChild(el);
 
-      const containerEl = el.shadowRoot.querySelector(".ea-effects");
-      expect(containerEl.classList.contains("ea-effects")).toBe(true);
+      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-effects"
+      );
+      expect(containerEl!.classList.contains("ea-effects")).toBe(true);
     });
 
     it("effect=zoom-center 应该添加 ea-effects--zoom-center class", () => {
@@ -510,8 +546,10 @@ describe("EaEffects", () => {
       el.setAttribute("effect", "zoom-center");
       container.appendChild(el);
 
-      const containerEl = el.shadowRoot.querySelector(".ea-effects");
-      expect(containerEl.classList.contains("ea-effects--zoom-center")).toBe(
+      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-effects"
+      );
+      expect(containerEl!.classList.contains("ea-effects--zoom-center")).toBe(
         true
       );
     });
@@ -521,8 +559,10 @@ describe("EaEffects", () => {
       el.setAttribute("effect", "slide-top");
       container.appendChild(el);
 
-      const containerEl = el.shadowRoot.querySelector(".ea-effects");
-      expect(containerEl.classList.contains("ea-effects--slide-top")).toBe(
+      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-effects"
+      );
+      expect(containerEl!.classList.contains("ea-effects--slide-top")).toBe(
         true
       );
     });
@@ -536,9 +576,11 @@ describe("EaEffects", () => {
       el.setAttribute("effect", "fade");
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-effects");
-      expect(containerEl.classList.contains("ea-effects--fade")).toBe(true);
-      expect(containerEl.classList.contains("ea-effects--zoom-center")).toBe(
+      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-effects"
+      );
+      expect(containerEl!.classList.contains("ea-effects--fade")).toBe(true);
+      expect(containerEl!.classList.contains("ea-effects--zoom-center")).toBe(
         false
       );
     });
@@ -550,7 +592,7 @@ describe("EaEffects", () => {
       el.innerHTML = "<div>Content</div>";
       container.appendChild(el);
 
-      expect(el.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(el.shadowRoot!.querySelector('[part="container"]')).toBeTruthy();
     });
 
     it("组件断开连接后应该正常移除", () => {
@@ -573,8 +615,10 @@ describe("EaEffects", () => {
       await el.updateComplete;
 
       expect(el.effect).toBe("zoom-center");
-      const containerEl = el.shadowRoot.querySelector(".ea-effects");
-      expect(containerEl.classList.contains("ea-effects--zoom-center")).toBe(
+      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-effects"
+      );
+      expect(containerEl!.classList.contains("ea-effects--zoom-center")).toBe(
         true
       );
     });
@@ -585,15 +629,17 @@ describe("EaEffects", () => {
       const el = document.createElement("ea-effects");
       container.appendChild(el);
 
-      expect(el.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(el.shadowRoot!.querySelector('[part="container"]')).toBeTruthy();
     });
 
     it("无 effect 属性时不应添加任何效果类名", () => {
       const el = document.createElement("ea-effects");
       container.appendChild(el);
 
-      const containerEl = el.shadowRoot.querySelector(".ea-effects");
-      expect(containerEl.className.trim()).toBe("ea-effects");
+      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-effects"
+      );
+      expect(containerEl!.className.trim()).toBe("ea-effects");
     });
 
     it("show() 和 hide() 在没有 effect 时不应报错", async () => {
@@ -631,18 +677,20 @@ describe("EaEffects", () => {
 
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-effects");
-      expect(containerEl.style.getPropertyValue("--ea-effects-duration")).toBe(
+      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-effects"
+      );
+      expect(containerEl!.style.getPropertyValue("--ea-effects-duration")).toBe(
         "0.5s"
       );
-      expect(containerEl.style.getPropertyValue("--ea-effects-delay")).toBe(
+      expect(containerEl!.style.getPropertyValue("--ea-effects-delay")).toBe(
         "0.1s"
       );
       expect(
-        containerEl.style.getPropertyValue("--ea-effects-timing-function")
+        containerEl!.style.getPropertyValue("--ea-effects-timing-function")
       ).toBe("ease-out");
       expect(
-        containerEl.style.getPropertyValue("--ea-effects-iteration-count")
+        containerEl!.style.getPropertyValue("--ea-effects-iteration-count")
       ).toBe("2");
     });
   });

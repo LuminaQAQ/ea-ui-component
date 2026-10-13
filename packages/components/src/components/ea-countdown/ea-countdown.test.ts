@@ -5,7 +5,7 @@ import { waitForRender } from "../../test/utils/waitForRender.js";
 import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y.js";
 
 describe("EaCountdown Component", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -28,7 +28,7 @@ describe("EaCountdown Component", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
 
-      const root = countdown.shadowRoot.querySelector(".ea-countdown");
+      const root = countdown.shadowRoot!.querySelector(".ea-countdown");
       expect(root).toBeTruthy();
     });
 
@@ -37,38 +37,38 @@ describe("EaCountdown Component", () => {
       container.appendChild(countdown);
 
       const containerEl =
-        countdown.shadowRoot.querySelector('[part="container"]');
+        countdown.shadowRoot!.querySelector('[part="container"]');
       expect(containerEl).toBeTruthy();
-      expect(containerEl.classList.contains("ea-countdown")).toBe(true);
+      expect(containerEl!.classList.contains("ea-countdown")).toBe(true);
     });
 
     it("应该渲染 header 元素", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
 
-      const header = countdown.shadowRoot.querySelector(
+      const header = countdown.shadowRoot!.querySelector(
         ".ea-countdown__header"
       );
       expect(header).toBeTruthy();
-      expect(header.tagName.toLowerCase()).toBe("header");
+      expect(header!.tagName.toLowerCase()).toBe("header");
     });
 
     it("应该渲染 content 元素", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
 
-      const content = countdown.shadowRoot.querySelector(
+      const content = countdown.shadowRoot!.querySelector(
         ".ea-countdown__content"
       );
       expect(content).toBeTruthy();
-      expect(content.tagName.toLowerCase()).toBe("main");
+      expect(content!.tagName.toLowerCase()).toBe("main");
     });
 
     it("应该渲染 number 元素", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
 
-      const number = countdown.shadowRoot.querySelector(
+      const number = countdown.shadowRoot!.querySelector(
         ".ea-countdown__number"
       );
       expect(number).toBeTruthy();
@@ -78,7 +78,7 @@ describe("EaCountdown Component", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
 
-      const prefix = countdown.shadowRoot.querySelector(
+      const prefix = countdown.shadowRoot!.querySelector(
         ".ea-countdown__prefix"
       );
       expect(prefix).toBeTruthy();
@@ -88,7 +88,7 @@ describe("EaCountdown Component", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
 
-      const suffix = countdown.shadowRoot.querySelector(
+      const suffix = countdown.shadowRoot!.querySelector(
         ".ea-countdown__suffix"
       );
       expect(suffix).toBeTruthy();
@@ -101,7 +101,7 @@ describe("EaCountdown Component", () => {
       container.appendChild(countdown);
 
       expect(
-        countdown.shadowRoot.querySelector('[part="container"]')
+        countdown.shadowRoot!.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
@@ -109,7 +109,7 @@ describe("EaCountdown Component", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
 
-      expect(countdown.shadowRoot.querySelector('[part="title"]')).toBeTruthy();
+      expect(countdown.shadowRoot!.querySelector('[part="title"]')).toBeTruthy();
     });
 
     it("应该支持 content part", () => {
@@ -117,7 +117,7 @@ describe("EaCountdown Component", () => {
       container.appendChild(countdown);
 
       expect(
-        countdown.shadowRoot.querySelector('[part="content"]')
+        countdown.shadowRoot!.querySelector('[part="content"]')
       ).toBeTruthy();
     });
 
@@ -126,7 +126,7 @@ describe("EaCountdown Component", () => {
       container.appendChild(countdown);
 
       expect(
-        countdown.shadowRoot.querySelector('[part="prefix"]')
+        countdown.shadowRoot!.querySelector('[part="prefix"]')
       ).toBeTruthy();
     });
 
@@ -135,7 +135,7 @@ describe("EaCountdown Component", () => {
       container.appendChild(countdown);
 
       expect(
-        countdown.shadowRoot.querySelector('[part="number"]')
+        countdown.shadowRoot!.querySelector('[part="number"]')
       ).toBeTruthy();
     });
 
@@ -144,7 +144,7 @@ describe("EaCountdown Component", () => {
       container.appendChild(countdown);
 
       expect(
-        countdown.shadowRoot.querySelector('[part="suffix"]')
+        countdown.shadowRoot!.querySelector('[part="suffix"]')
       ).toBeTruthy();
     });
   });
@@ -154,7 +154,7 @@ describe("EaCountdown Component", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
 
-      const root = countdown.shadowRoot.querySelector(".ea-countdown");
+      const root = countdown.shadowRoot!.querySelector(".ea-countdown");
       expect(root).toBeTruthy();
     });
 
@@ -162,7 +162,7 @@ describe("EaCountdown Component", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
 
-      const header = countdown.shadowRoot.querySelector(
+      const header = countdown.shadowRoot!.querySelector(
         ".ea-countdown__header"
       );
       expect(header).toBeTruthy();
@@ -172,7 +172,7 @@ describe("EaCountdown Component", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
 
-      const content = countdown.shadowRoot.querySelector(
+      const content = countdown.shadowRoot!.querySelector(
         ".ea-countdown__content"
       );
       expect(content).toBeTruthy();
@@ -182,7 +182,7 @@ describe("EaCountdown Component", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
 
-      const number = countdown.shadowRoot.querySelector(
+      const number = countdown.shadowRoot!.querySelector(
         ".ea-countdown__number"
       );
       expect(number).toBeTruthy();
@@ -192,7 +192,7 @@ describe("EaCountdown Component", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
 
-      const prefix = countdown.shadowRoot.querySelector(
+      const prefix = countdown.shadowRoot!.querySelector(
         ".ea-countdown__prefix"
       );
       expect(prefix).toBeTruthy();
@@ -202,7 +202,7 @@ describe("EaCountdown Component", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
 
-      const suffix = countdown.shadowRoot.querySelector(
+      const suffix = countdown.shadowRoot!.querySelector(
         ".ea-countdown__suffix"
       );
       expect(suffix).toBeTruthy();
@@ -214,10 +214,10 @@ describe("EaCountdown Component", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
 
-      const content = countdown.shadowRoot.querySelector(
+      const content = countdown.shadowRoot!.querySelector(
         ".ea-countdown__content"
       );
-      const children = Array.from(content.children).map(el =>
+      const children = Array.from(content!.children).map(el =>
         el.tagName.toLowerCase()
       );
       expect(children).toEqual(["span", "span", "span"]);
@@ -227,8 +227,8 @@ describe("EaCountdown Component", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
 
-      const root = countdown.shadowRoot.querySelector(".ea-countdown");
-      const children = Array.from(root.children).map(el =>
+      const root = countdown.shadowRoot!.querySelector(".ea-countdown");
+      const children = Array.from(root!.children).map(el =>
         el.tagName.toLowerCase()
       );
       expect(children[0]).toBe("header");
@@ -358,10 +358,10 @@ describe("EaCountdown Component", () => {
 
       await countdown.updateComplete;
 
-      const header = countdown.shadowRoot.querySelector(
+      const header = countdown.shadowRoot!.querySelector(
         ".ea-countdown__header"
       );
-      expect(header.textContent).toBe("Start to grab");
+      expect(header!.textContent).toBe("Start to grab");
     });
 
     it("动态修改 heading 应该更新 header 文本", async () => {
@@ -374,10 +374,10 @@ describe("EaCountdown Component", () => {
       countdown.setAttribute("heading", "New Title");
       await countdown.updateComplete;
 
-      const header = countdown.shadowRoot.querySelector(
+      const header = countdown.shadowRoot!.querySelector(
         ".ea-countdown__header"
       );
-      expect(header.textContent).toBe("New Title");
+      expect(header!.textContent).toBe("New Title");
       expect(countdown.heading).toBe("New Title");
     });
 
@@ -385,10 +385,10 @@ describe("EaCountdown Component", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
 
-      const header = countdown.shadowRoot.querySelector(
+      const header = countdown.shadowRoot!.querySelector(
         ".ea-countdown__header"
       );
-      expect(header.textContent.trim()).toBe("");
+      expect(header!.textContent.trim()).toBe("");
     });
   });
 
@@ -418,10 +418,10 @@ describe("EaCountdown Component", () => {
 
       await countdown.updateComplete;
 
-      const numberEl = countdown.shadowRoot.querySelector(
+      const numberEl = countdown.shadowRoot!.querySelector(
         ".ea-countdown__number"
       );
-      expect(countdown.displayValue).toBe(numberEl.textContent);
+      expect(countdown.displayValue).toBe(numberEl!.textContent);
     });
 
     it("displayValue 是 JS 属性，不应该映射到 HTML attribute", () => {
@@ -441,7 +441,7 @@ describe("EaCountdown Component", () => {
       container.appendChild(countdown);
 
       const titleSlot =
-        countdown.shadowRoot.querySelector('slot[name="title"]');
+        countdown.shadowRoot!.querySelector('slot[name="title"]');
       expect(titleSlot).toBeTruthy();
     });
 
@@ -450,7 +450,7 @@ describe("EaCountdown Component", () => {
       countdown.innerHTML = `<div slot="prefix">$</div>`;
       container.appendChild(countdown);
 
-      const prefixSlot = countdown.shadowRoot.querySelector(
+      const prefixSlot = countdown.shadowRoot!.querySelector(
         'slot[name="prefix"]'
       );
       expect(prefixSlot).toBeTruthy();
@@ -461,7 +461,7 @@ describe("EaCountdown Component", () => {
       countdown.innerHTML = `<div slot="suffix">%</div>`;
       container.appendChild(countdown);
 
-      const suffixSlot = countdown.shadowRoot.querySelector(
+      const suffixSlot = countdown.shadowRoot!.querySelector(
         'slot[name="suffix"]'
       );
       expect(suffixSlot).toBeTruthy();
@@ -473,7 +473,7 @@ describe("EaCountdown Component", () => {
       container.appendChild(countdown);
 
       const defaultSlot =
-        countdown.shadowRoot.querySelector("slot:not([name])");
+        countdown.shadowRoot!.querySelector("slot:not([name])");
       expect(defaultSlot).toBeTruthy();
     });
 
@@ -482,10 +482,10 @@ describe("EaCountdown Component", () => {
       countdown.innerHTML = `<div slot="title">Slotted Title</div>`;
       container.appendChild(countdown);
 
-      const header = countdown.shadowRoot.querySelector(
+      const header = countdown.shadowRoot!.querySelector(
         ".ea-countdown__header"
       );
-      const titleSlot = header.querySelector('slot[name="title"]');
+      const titleSlot = header!.querySelector('slot[name="title"]');
       expect(titleSlot).toBeTruthy();
     });
 
@@ -494,10 +494,10 @@ describe("EaCountdown Component", () => {
       countdown.innerHTML = `<span>Custom Number</span>`;
       container.appendChild(countdown);
 
-      const number = countdown.shadowRoot.querySelector(
+      const number = countdown.shadowRoot!.querySelector(
         ".ea-countdown__number"
       );
-      const defaultSlot = number.querySelector("slot:not([name])");
+      const defaultSlot = number!.querySelector("slot:not([name])");
       expect(defaultSlot).toBeTruthy();
     });
   });
@@ -510,10 +510,10 @@ describe("EaCountdown Component", () => {
 
       await countdown.updateComplete;
 
-      const numberEl = countdown.shadowRoot.querySelector(
+      const numberEl = countdown.shadowRoot!.querySelector(
         ".ea-countdown__number"
       );
-      expect(numberEl.textContent).toMatch(/\d{2}:\d{2}:\d{2}/);
+      expect(numberEl!.textContent).toMatch(/\d{2}:\d{2}:\d{2}/);
     });
 
     it("倒计时结束时应该显示 00:00:00", async () => {
@@ -523,10 +523,10 @@ describe("EaCountdown Component", () => {
 
       await countdown.updateComplete;
 
-      const numberEl = countdown.shadowRoot.querySelector(
+      const numberEl = countdown.shadowRoot!.querySelector(
         ".ea-countdown__number"
       );
-      expect(numberEl.textContent).toBe("00:00:00");
+      expect(numberEl!.textContent).toBe("00:00:00");
     });
 
     it("value 为空时 number 元素应该为空", async () => {
@@ -535,10 +535,10 @@ describe("EaCountdown Component", () => {
 
       await countdown.updateComplete;
 
-      const numberEl = countdown.shadowRoot.querySelector(
+      const numberEl = countdown.shadowRoot!.querySelector(
         ".ea-countdown__number"
       );
-      expect(numberEl.textContent.trim()).toBe("");
+      expect(numberEl!.textContent.trim()).toBe("");
     });
 
     it("应该支持自定义格式 DD [days] HH:mm:ss", async () => {
@@ -549,10 +549,10 @@ describe("EaCountdown Component", () => {
 
       await countdown.updateComplete;
 
-      const numberEl = countdown.shadowRoot.querySelector(
+      const numberEl = countdown.shadowRoot!.querySelector(
         ".ea-countdown__number"
       );
-      const text = numberEl.textContent;
+      const text = numberEl!.textContent;
       expect(text === "00:00:00" || text.includes("days")).toBe(true);
     });
 
@@ -564,10 +564,10 @@ describe("EaCountdown Component", () => {
 
       await countdown.updateComplete;
 
-      const numberEl = countdown.shadowRoot.querySelector(
+      const numberEl = countdown.shadowRoot!.querySelector(
         ".ea-countdown__number"
       );
-      expect(numberEl.textContent).toMatch(/\d{2}:\d{2}/);
+      expect(numberEl!.textContent).toMatch(/\d{2}:\d{2}/);
     });
 
     it("应该支持 HH:mm 格式", async () => {
@@ -578,10 +578,10 @@ describe("EaCountdown Component", () => {
 
       await countdown.updateComplete;
 
-      const numberEl = countdown.shadowRoot.querySelector(
+      const numberEl = countdown.shadowRoot!.querySelector(
         ".ea-countdown__number"
       );
-      expect(numberEl.textContent).toMatch(/\d{2}:\d{2}/);
+      expect(numberEl!.textContent).toMatch(/\d{2}:\d{2}/);
     });
   });
 
@@ -843,15 +843,15 @@ describe("EaCountdown Component", () => {
       await countdown.updateComplete;
 
       expect(countdown.heading).toBe("Remaining Time");
-      const header = countdown.shadowRoot.querySelector(
+      const header = countdown.shadowRoot!.querySelector(
         ".ea-countdown__header"
       );
-      expect(header.textContent).toBe("Remaining Time");
+      expect(header!.textContent).toBe("Remaining Time");
 
-      const numberEl = countdown.shadowRoot.querySelector(
+      const numberEl = countdown.shadowRoot!.querySelector(
         ".ea-countdown__number"
       );
-      expect(numberEl.textContent).toMatch(/\d{2}:\d{2}:\d{2}/);
+      expect(numberEl!.textContent).toMatch(/\d{2}:\d{2}:\d{2}/);
     });
 
     it("移除 heading 属性应该恢复默认值", async () => {
@@ -889,10 +889,10 @@ describe("EaCountdown Component", () => {
 
       await countdown.updateComplete;
 
-      const numberEl = countdown.shadowRoot.querySelector(
+      const numberEl = countdown.shadowRoot!.querySelector(
         ".ea-countdown__number"
       );
-      expect(numberEl.textContent).toBe("00:00:00");
+      expect(numberEl!.textContent).toBe("00:00:00");
     });
 
     it("value 为过去时间应该显示 00:00:00", async () => {
@@ -902,10 +902,10 @@ describe("EaCountdown Component", () => {
 
       await countdown.updateComplete;
 
-      const numberEl = countdown.shadowRoot.querySelector(
+      const numberEl = countdown.shadowRoot!.querySelector(
         ".ea-countdown__number"
       );
-      expect(numberEl.textContent).toBe("00:00:00");
+      expect(numberEl!.textContent).toBe("00:00:00");
     });
 
     it("value 为无效字符串时应该正常处理", () => {
@@ -923,19 +923,19 @@ describe("EaCountdown Component", () => {
 
       await countdown.updateComplete;
 
-      const headerBefore = countdown.shadowRoot.querySelector(
+      const headerBefore = countdown.shadowRoot!.querySelector(
         ".ea-countdown__header"
       );
-      expect(headerBefore.querySelector('slot[name="title"]')).toBeTruthy();
+      expect(headerBefore!.querySelector('slot[name="title"]')).toBeTruthy();
 
       countdown.setAttribute("heading", "Attribute Title");
       await countdown.updateComplete;
 
       expect(countdown.heading).toBe("Attribute Title");
-      const headerAfter = countdown.shadowRoot.querySelector(
+      const headerAfter = countdown.shadowRoot!.querySelector(
         ".ea-countdown__header"
       );
-      expect(headerAfter.textContent).toBe("Attribute Title");
+      expect(headerAfter!.textContent).toBe("Attribute Title");
     });
 
     it("refreshInterval 为 0 时应该使用默认值 1000 进行计时", () => {
@@ -960,15 +960,15 @@ describe("EaCountdown Component", () => {
       it("number 元素应该有 aria-live='polite'", () => {
         const el = document.createElement("ea-countdown");
         container.appendChild(el);
-        const number = el.shadowRoot.querySelector(".ea-countdown__number");
-        expect(number.getAttribute("aria-live")).toBe("polite");
+        const number = el.shadowRoot!.querySelector(".ea-countdown__number");
+        expect(number!.getAttribute("aria-live")).toBe("polite");
       });
 
       it("number 元素应该有 aria-atomic='true'", () => {
         const el = document.createElement("ea-countdown");
         container.appendChild(el);
-        const number = el.shadowRoot.querySelector(".ea-countdown__number");
-        expect(number.getAttribute("aria-atomic")).toBe("true");
+        const number = el.shadowRoot!.querySelector(".ea-countdown__number");
+        expect(number!.getAttribute("aria-atomic")).toBe("true");
       });
     });
   });

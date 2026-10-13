@@ -23,26 +23,28 @@ function createCarousel(itemCount = 3, attrs = {}) {
   return carousel;
 }
 
-function getContent(carousel) {
-  return carousel.shadowRoot.querySelector(".ea-carousel__content");
+function getContent(carousel: HTMLElementTagNameMap["ea-carousel"]): Element {
+  return carousel.shadowRoot!.querySelector(".ea-carousel__content")!;
 }
 
-function getIndicators(carousel) {
-  return carousel.shadowRoot.querySelectorAll(".ea-carousel__indicator");
+function getIndicators(carousel: HTMLElementTagNameMap["ea-carousel"]) {
+  return carousel.shadowRoot!.querySelectorAll(".ea-carousel__indicator");
 }
 
-function getContainer(carousel) {
-  return carousel.shadowRoot.querySelector(".ea-carousel");
+function getContainer(carousel: HTMLElementTagNameMap["ea-carousel"]): Element {
+  return carousel.shadowRoot!.querySelector(".ea-carousel")!;
 }
 
-async function simulateTransitionEnd(carousel) {
+async function simulateTransitionEnd(
+  carousel: HTMLElementTagNameMap["ea-carousel"]
+) {
   const content = getContent(carousel);
   content.dispatchEvent(new Event("transitionend"));
   await waitForRender();
 }
 
 describe("EaCarousel", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -58,20 +60,20 @@ describe("EaCarousel", () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
       expect(carousel.shadowRoot).toBeDefined();
-      expect(carousel.shadowRoot.querySelector(".ea-carousel")).toBeTruthy();
+      expect(carousel.shadowRoot!.querySelector(".ea-carousel")).toBeTruthy();
     });
 
     it("should render ea-carousel-item with shadow DOM", () => {
       const item = document.createElement("ea-carousel-item");
       container.appendChild(item);
       expect(item.shadowRoot).toBeDefined();
-      expect(item.shadowRoot.querySelector(".ea-carousel-item")).toBeTruthy();
+      expect(item.shadowRoot!.querySelector(".ea-carousel-item")).toBeTruthy();
     });
 
     it("should contain a default slot in ea-carousel-item", () => {
       const item = document.createElement("ea-carousel-item");
       container.appendChild(item);
-      const slot = item.shadowRoot.querySelector("slot");
+      const slot = item.shadowRoot!.querySelector("slot");
       expect(slot).toBeTruthy();
     });
 
@@ -79,34 +81,34 @@ describe("EaCarousel", () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
       expect(
-        carousel.shadowRoot.querySelector('[part="container"]')
+        carousel.shadowRoot!.querySelector('[part="container"]')
       ).toBeTruthy();
       expect(
-        carousel.shadowRoot.querySelector('[part="content"]')
+        carousel.shadowRoot!.querySelector('[part="content"]')
       ).toBeTruthy();
       expect(
-        carousel.shadowRoot.querySelector('[part="indicator-wrap"]')
+        carousel.shadowRoot!.querySelector('[part="indicator-wrap"]')
       ).toBeTruthy();
       expect(
-        carousel.shadowRoot.querySelector('[part="arrow-left"]')
+        carousel.shadowRoot!.querySelector('[part="arrow-left"]')
       ).toBeTruthy();
       expect(
-        carousel.shadowRoot.querySelector('[part="arrow-right"]')
+        carousel.shadowRoot!.querySelector('[part="arrow-right"]')
       ).toBeTruthy();
     });
 
     it("should contain left and right arrow buttons", () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
-      expect(carousel.shadowRoot.querySelector(".arrow-left")).toBeTruthy();
-      expect(carousel.shadowRoot.querySelector(".arrow-right")).toBeTruthy();
+      expect(carousel.shadowRoot!.querySelector(".arrow-left")).toBeTruthy();
+      expect(carousel.shadowRoot!.querySelector(".arrow-right")).toBeTruthy();
     });
 
     it("should contain indicator wrap element", () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
       expect(
-        carousel.shadowRoot.querySelector(".ea-carousel__indicator-wrap")
+        carousel.shadowRoot!.querySelector(".ea-carousel__indicator-wrap")
       ).toBeTruthy();
     });
 
@@ -681,8 +683,9 @@ describe("EaCarousel", () => {
       container.appendChild(carousel);
       await carousel.updateComplete;
 
-      const leftArrow = carousel.shadowRoot.querySelector(".arrow-left");
-      leftArrow.click();
+      const leftArrow =
+        carousel.shadowRoot!.querySelector<HTMLElement>(".arrow-left");
+      leftArrow!.click();
 
       expect(carousel.getAttribute("index")).toBe("0");
     });
@@ -692,8 +695,9 @@ describe("EaCarousel", () => {
       container.appendChild(carousel);
       await carousel.updateComplete;
 
-      const rightArrow = carousel.shadowRoot.querySelector(".arrow-right");
-      rightArrow.click();
+      const rightArrow =
+        carousel.shadowRoot!.querySelector<HTMLElement>(".arrow-right");
+      rightArrow!.click();
 
       expect(carousel.getAttribute("index")).toBe("2");
     });
@@ -703,8 +707,9 @@ describe("EaCarousel", () => {
       container.appendChild(carousel);
       await carousel.updateComplete;
 
-      const rightArrow = carousel.shadowRoot.querySelector(".arrow-right");
-      rightArrow.click();
+      const rightArrow =
+        carousel.shadowRoot!.querySelector<HTMLElement>(".arrow-right");
+      rightArrow!.click();
 
       expect(carousel.getAttribute("index")).toBe("1");
     });
@@ -714,8 +719,9 @@ describe("EaCarousel", () => {
       container.appendChild(carousel);
       await carousel.updateComplete;
 
-      const rightArrow = carousel.shadowRoot.querySelector(".arrow-right");
-      rightArrow.click();
+      const rightArrow =
+        carousel.shadowRoot!.querySelector<HTMLElement>(".arrow-right");
+      rightArrow!.click();
 
       expect(carousel.getAttribute("index")).toBe("1");
     });
@@ -852,7 +858,7 @@ describe("EaCarousel", () => {
         'ea-carousel-item[slot="clone-first"]'
       );
       const firstItem = carousel.querySelector("ea-carousel-item:not([slot])");
-      expect(cloneFirst.textContent).toBe(firstItem.textContent);
+      expect(cloneFirst!.textContent).toBe(firstItem!.textContent);
     });
 
     it("should clone content of last item for clone-last", async () => {
@@ -865,7 +871,7 @@ describe("EaCarousel", () => {
       );
       const items = carousel.querySelectorAll("ea-carousel-item:not([slot])");
       const lastItem = items[items.length - 1];
-      expect(cloneLast.textContent).toBe(lastItem.textContent);
+      expect(cloneLast!.textContent).toBe(lastItem.textContent);
     });
 
     it("should sync clone content when original item changes", async () => {
@@ -874,10 +880,10 @@ describe("EaCarousel", () => {
       await carousel.updateComplete;
 
       const firstItem = carousel.querySelector("ea-carousel-item:not([slot])");
-      firstItem.textContent = "Updated First";
+      firstItem!.textContent = "Updated First";
       await vi.waitFor(() => {
         expect(
-          carousel.querySelector('ea-carousel-item[slot="clone-first"]')
+          carousel.querySelector('ea-carousel-item[slot="clone-first"]')!
             .textContent
         ).toBe("Updated First");
       });
@@ -1209,7 +1215,7 @@ describe("EaCarousel", () => {
       newItem.textContent = "New Item";
       carousel.appendChild(newItem);
 
-      const slot = getContent(carousel).querySelector("slot:not([name])");
+      const slot = getContent(carousel).querySelector("slot:not([name])")!;
       slot.dispatchEvent(new Event("slotchange"));
       await newItem.updateComplete;
 
@@ -1228,7 +1234,7 @@ describe("EaCarousel", () => {
       newItem.textContent = "New Item";
       carousel.appendChild(newItem);
 
-      const slot = getContent(carousel).querySelector("slot:not([name])");
+      const slot = getContent(carousel).querySelector("slot:not([name])")!;
       slot.dispatchEvent(new Event("slotchange"));
       expect(carousel.getAttribute("index")).toBe("0");
     });
@@ -1240,7 +1246,7 @@ describe("EaCarousel", () => {
       container.appendChild(carousel);
       await carousel.updateComplete;
 
-      expect(carousel.shadowRoot.querySelector(".ea-carousel")).toBeTruthy();
+      expect(carousel.shadowRoot!.querySelector(".ea-carousel")).toBeTruthy();
       expect(getContent(carousel)).toBeTruthy();
       expect(getIndicators(carousel).length).toBe(3);
     });
@@ -1273,7 +1279,7 @@ describe("EaCarousel", () => {
       await carousel.updateComplete;
 
       container.appendChild(carousel);
-      expect(carousel.shadowRoot.querySelector(".ea-carousel")).toBeTruthy();
+      expect(carousel.shadowRoot!.querySelector(".ea-carousel")).toBeTruthy();
     });
   });
 
@@ -1350,12 +1356,12 @@ describe("EaCarousel", () => {
       const firstItem = carousel.querySelector("ea-carousel-item:not([slot])");
       const span = document.createElement("span");
       span.textContent = "Updated";
-      firstItem.appendChild(span);
+      firstItem!.appendChild(span);
       await vi.waitFor(() => {
         expect(
-          carousel.querySelector('ea-carousel-item[slot="clone-first"]')
+          carousel.querySelector('ea-carousel-item[slot="clone-first"]')!
             .innerHTML
-        ).toBe(firstItem.innerHTML);
+        ).toBe(firstItem!.innerHTML);
       });
     });
 
@@ -1406,7 +1412,7 @@ describe("EaCarousel", () => {
         el.innerHTML = `<ea-carousel-item>1</ea-carousel-item><ea-carousel-item>2</ea-carousel-item><ea-carousel-item>3</ea-carousel-item>`;
         container.appendChild(el);
         await el.updateComplete;
-        const indicatorWrap = el.shadowRoot.querySelector(
+        const indicatorWrap = el.shadowRoot!.querySelector(
           ".ea-carousel__indicator-wrap"
         );
         if (indicatorWrap) {
@@ -1422,7 +1428,7 @@ describe("EaCarousel", () => {
         el.innerHTML = `<ea-carousel-item>1</ea-carousel-item><ea-carousel-item>2</ea-carousel-item><ea-carousel-item>3</ea-carousel-item>`;
         container.appendChild(el);
         await el.updateComplete;
-        const indicatorWrap = el.shadowRoot.querySelector(
+        const indicatorWrap = el.shadowRoot!.querySelector(
           ".ea-carousel__indicator-wrap"
         );
         if (indicatorWrap) {
@@ -1438,7 +1444,7 @@ describe("EaCarousel", () => {
         el.innerHTML = `<ea-carousel-item>1</ea-carousel-item><ea-carousel-item>2</ea-carousel-item><ea-carousel-item>3</ea-carousel-item>`;
         container.appendChild(el);
         await el.updateComplete;
-        const indicatorWrap = el.shadowRoot.querySelector(
+        const indicatorWrap = el.shadowRoot!.querySelector(
           ".ea-carousel__indicator-wrap"
         );
         if (indicatorWrap) {
@@ -1454,7 +1460,7 @@ describe("EaCarousel", () => {
         el.innerHTML = `<ea-carousel-item>1</ea-carousel-item><ea-carousel-item>2</ea-carousel-item><ea-carousel-item>3</ea-carousel-item>`;
         container.appendChild(el);
         await el.updateComplete;
-        const indicatorWrap = el.shadowRoot.querySelector(
+        const indicatorWrap = el.shadowRoot!.querySelector(
           ".ea-carousel__indicator-wrap"
         );
         if (indicatorWrap) {
@@ -1512,10 +1518,10 @@ describe("EaCarousel", () => {
         const carousel = createCarousel(3);
         container.appendChild(carousel);
         await carousel.updateComplete;
-        const indicatorWrap = carousel.shadowRoot.querySelector(
+        const indicatorWrap = carousel.shadowRoot!.querySelector(
           ".ea-carousel__indicator-wrap"
         );
-        expect(indicatorWrap.getAttribute("role")).toBe("tablist");
+        expect(indicatorWrap!.getAttribute("role")).toBe("tablist");
       });
 
       it("indicator 应该有 role=tab", async () => {
@@ -1554,22 +1560,22 @@ describe("EaCarousel", () => {
         const carousel = createCarousel(3);
         container.appendChild(carousel);
         await carousel.updateComplete;
-        const leftArrow = carousel.shadowRoot.querySelector(".arrow-left");
-        const rightArrow = carousel.shadowRoot.querySelector(".arrow-right");
-        expect(leftArrow.getAttribute("aria-label")).toBeTruthy();
-        expect(rightArrow.getAttribute("aria-label")).toBeTruthy();
+        const leftArrow = carousel.shadowRoot!.querySelector(".arrow-left");
+        const rightArrow = carousel.shadowRoot!.querySelector(".arrow-right");
+        expect(leftArrow!.getAttribute("aria-label")).toBeTruthy();
+        expect(rightArrow!.getAttribute("aria-label")).toBeTruthy();
       });
 
       it("箭头按钮应该有 aria-controls=carousel-content", async () => {
         const carousel = createCarousel(3);
         container.appendChild(carousel);
         await carousel.updateComplete;
-        const leftArrow = carousel.shadowRoot.querySelector(".arrow-left");
-        const rightArrow = carousel.shadowRoot.querySelector(".arrow-right");
-        expect(leftArrow.getAttribute("aria-controls")).toBe(
+        const leftArrow = carousel.shadowRoot!.querySelector(".arrow-left");
+        const rightArrow = carousel.shadowRoot!.querySelector(".arrow-right");
+        expect(leftArrow!.getAttribute("aria-controls")).toBe(
           "carousel-content"
         );
-        expect(rightArrow.getAttribute("aria-controls")).toBe(
+        expect(rightArrow!.getAttribute("aria-controls")).toBe(
           "carousel-content"
         );
       });
@@ -1578,16 +1584,16 @@ describe("EaCarousel", () => {
         const item = document.createElement("ea-carousel-item");
         container.appendChild(item);
         await item.updateComplete;
-        const containerEl = item.shadowRoot.querySelector(".ea-carousel-item");
-        expect(containerEl.getAttribute("role")).toBe("group");
+        const containerEl = item.shadowRoot!.querySelector(".ea-carousel-item");
+        expect(containerEl!.getAttribute("role")).toBe("group");
       });
 
       it("ea-carousel-item 容器应该有 aria-roledescription=slide", async () => {
         const item = document.createElement("ea-carousel-item");
         container.appendChild(item);
         await item.updateComplete;
-        const containerEl = item.shadowRoot.querySelector(".ea-carousel-item");
-        expect(containerEl.getAttribute("aria-roledescription")).toBe("slide");
+        const containerEl = item.shadowRoot!.querySelector(".ea-carousel-item");
+        expect(containerEl!.getAttribute("aria-roledescription")).toBe("slide");
       });
     });
   });

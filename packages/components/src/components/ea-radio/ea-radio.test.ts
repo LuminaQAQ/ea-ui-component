@@ -5,7 +5,7 @@ import { fireKeydown } from "../../test/utils/keyboard.js";
 import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y.js";
 
 describe("EaRadio and EaRadioGroup Components", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -22,14 +22,16 @@ describe("EaRadio and EaRadioGroup Components", () => {
       container.appendChild(radio);
 
       expect(radio.shadowRoot).toBeTruthy();
-      expect(radio.shadowRoot.querySelector(".ea-radio")).toBeTruthy();
+      expect(radio.shadowRoot!.querySelector(".ea-radio")).toBeTruthy();
     });
 
     it("应该包含原生 radio input", () => {
       const radio = document.createElement("ea-radio");
       container.appendChild(radio);
 
-      const input = radio.shadowRoot.querySelector('input[type="radio"]');
+      const input = radio.shadowRoot!.querySelector<HTMLInputElement>(
+        'input[type="radio"]'
+      );
       expect(input).toBeTruthy();
     });
 
@@ -37,18 +39,19 @@ describe("EaRadio and EaRadioGroup Components", () => {
       const radio = document.createElement("ea-radio");
       container.appendChild(radio);
 
-      const inner = radio.shadowRoot.querySelector(".ea-radio__inner");
+      const inner =
+        radio.shadowRoot!.querySelector<HTMLElement>(".ea-radio__inner");
       expect(inner).toBeTruthy();
-      expect(inner.getAttribute("tabindex")).toBe("0");
+      expect(inner!.getAttribute("tabindex")).toBe("0");
     });
 
     it("应该包含 label 元素和 slot", () => {
       const radio = document.createElement("ea-radio");
       container.appendChild(radio);
 
-      const label = radio.shadowRoot.querySelector(".ea-radio__label");
+      const label = radio.shadowRoot!.querySelector(".ea-radio__label");
       expect(label).toBeTruthy();
-      expect(label.querySelector("slot")).toBeTruthy();
+      expect(label!.querySelector("slot")).toBeTruthy();
     });
   });
 
@@ -57,13 +60,15 @@ describe("EaRadio and EaRadioGroup Components", () => {
       const radio = document.createElement("ea-radio");
       container.appendChild(radio);
 
-      expect(radio.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
-      expect(radio.shadowRoot.querySelector('[part="original"]')).toBeTruthy();
-      expect(radio.shadowRoot.querySelector('[part="input"]')).toBeTruthy();
       expect(
-        radio.shadowRoot.querySelector('[part="input-wrap"]')
+        radio.shadowRoot!.querySelector('[part="container"]')
       ).toBeTruthy();
-      expect(radio.shadowRoot.querySelector('[part="label"]')).toBeTruthy();
+      expect(radio.shadowRoot!.querySelector('[part="original"]')).toBeTruthy();
+      expect(radio.shadowRoot!.querySelector('[part="input"]')).toBeTruthy();
+      expect(
+        radio.shadowRoot!.querySelector('[part="input-wrap"]')
+      ).toBeTruthy();
+      expect(radio.shadowRoot!.querySelector('[part="label"]')).toBeTruthy();
     });
   });
 
@@ -81,8 +86,10 @@ describe("EaRadio and EaRadioGroup Components", () => {
       radio.setAttribute("value", "option1");
       container.appendChild(radio);
 
-      const input = radio.shadowRoot.querySelector('input[type="radio"]');
-      expect(input.getAttribute("value")).toBe("option1");
+      const input = radio.shadowRoot!.querySelector<HTMLInputElement>(
+        'input[type="radio"]'
+      );
+      expect(input!.getAttribute("value")).toBe("option1");
     });
   });
 
@@ -107,8 +114,10 @@ describe("EaRadio and EaRadioGroup Components", () => {
       radio.setAttribute("checked", "");
       container.appendChild(radio);
 
-      const input = radio.shadowRoot.querySelector('input[type="radio"]');
-      expect(input.checked).toBe(true);
+      const input = radio.shadowRoot!.querySelector<HTMLInputElement>(
+        'input[type="radio"]'
+      );
+      expect(input!.checked).toBe(true);
     });
 
     it("checked 时应该添加 is-checked 状态类", () => {
@@ -116,8 +125,8 @@ describe("EaRadio and EaRadioGroup Components", () => {
       radio.setAttribute("checked", "");
       container.appendChild(radio);
 
-      const containerEl = radio.shadowRoot.querySelector(".ea-radio");
-      expect(containerEl.classList.contains("is-checked")).toBe(true);
+      const containerEl = radio.shadowRoot!.querySelector(".ea-radio");
+      expect(containerEl!.classList.contains("is-checked")).toBe(true);
     });
   });
 
@@ -142,8 +151,10 @@ describe("EaRadio and EaRadioGroup Components", () => {
       radio.setAttribute("disabled", "");
       container.appendChild(radio);
 
-      const input = radio.shadowRoot.querySelector('input[type="radio"]');
-      expect(input.disabled).toBe(true);
+      const input = radio.shadowRoot!.querySelector<HTMLInputElement>(
+        'input[type="radio"]'
+      );
+      expect(input!.disabled).toBe(true);
     });
 
     it("disabled 时应该添加 is-disabled 状态类", () => {
@@ -151,8 +162,8 @@ describe("EaRadio and EaRadioGroup Components", () => {
       radio.setAttribute("disabled", "");
       container.appendChild(radio);
 
-      const containerEl = radio.shadowRoot.querySelector(".ea-radio");
-      expect(containerEl.classList.contains("is-disabled")).toBe(true);
+      const containerEl = radio.shadowRoot!.querySelector(".ea-radio");
+      expect(containerEl!.classList.contains("is-disabled")).toBe(true);
     });
   });
 
@@ -170,8 +181,8 @@ describe("EaRadio and EaRadioGroup Components", () => {
       container.appendChild(radio);
 
       expect(radio.size).toBe("large");
-      const containerEl = radio.shadowRoot.querySelector(".ea-radio");
-      expect(containerEl.classList.contains("ea-radio--large")).toBe(true);
+      const containerEl = radio.shadowRoot!.querySelector(".ea-radio");
+      expect(containerEl!.classList.contains("ea-radio--large")).toBe(true);
     });
 
     it("应该支持 small 尺寸", () => {
@@ -180,8 +191,8 @@ describe("EaRadio and EaRadioGroup Components", () => {
       container.appendChild(radio);
 
       expect(radio.size).toBe("small");
-      const containerEl = radio.shadowRoot.querySelector(".ea-radio");
-      expect(containerEl.classList.contains("ea-radio--small")).toBe(true);
+      const containerEl = radio.shadowRoot!.querySelector(".ea-radio");
+      expect(containerEl!.classList.contains("ea-radio--small")).toBe(true);
     });
 
     it("应该支持 default 尺寸", () => {
@@ -190,8 +201,8 @@ describe("EaRadio and EaRadioGroup Components", () => {
       container.appendChild(radio);
 
       expect(radio.size).toBe("default");
-      const containerEl = radio.shadowRoot.querySelector(".ea-radio");
-      expect(containerEl.classList.contains("ea-radio--default")).toBe(true);
+      const containerEl = radio.shadowRoot!.querySelector(".ea-radio");
+      expect(containerEl!.classList.contains("ea-radio--default")).toBe(true);
     });
   });
 
@@ -216,8 +227,8 @@ describe("EaRadio and EaRadioGroup Components", () => {
       radio.setAttribute("border", "");
       container.appendChild(radio);
 
-      const containerEl = radio.shadowRoot.querySelector(".ea-radio");
-      expect(containerEl.classList.contains("is-border")).toBe(true);
+      const containerEl = radio.shadowRoot!.querySelector(".ea-radio");
+      expect(containerEl!.classList.contains("is-border")).toBe(true);
     });
   });
 
@@ -235,7 +246,9 @@ describe("EaRadio and EaRadioGroup Components", () => {
       radio.innerHTML = "Slot Label";
       container.appendChild(radio);
 
-      const labelSlot = radio.shadowRoot.querySelector(".ea-radio__label slot");
+      const labelSlot = radio.shadowRoot!.querySelector(
+        ".ea-radio__label slot"
+      );
       expect(labelSlot).toBeTruthy();
     });
   });
@@ -251,9 +264,11 @@ describe("EaRadio and EaRadioGroup Components", () => {
       const changeHandler = vi.fn();
       radio.addEventListener("change", changeHandler);
 
-      const input = radio.shadowRoot.querySelector('input[type="radio"]');
-      input.checked = true;
-      input.dispatchEvent(new Event("change", { bubbles: true }));
+      const input = radio.shadowRoot!.querySelector<HTMLInputElement>(
+        'input[type="radio"]'
+      );
+      input!.checked = true;
+      input!.dispatchEvent(new Event("change", { bubbles: true }));
 
       await radio.updateComplete;
 
@@ -269,18 +284,20 @@ describe("EaRadio and EaRadioGroup Components", () => {
 
       let eventDetail = null;
       radio.addEventListener("change", e => {
-        eventDetail = e.detail;
+        eventDetail = (e as CustomEvent).detail;
       });
 
-      const input = radio.shadowRoot.querySelector('input[type="radio"]');
-      input.checked = true;
-      input.dispatchEvent(new Event("change", { bubbles: true }));
+      const input = radio.shadowRoot!.querySelector<HTMLInputElement>(
+        'input[type="radio"]'
+      );
+      input!.checked = true;
+      input!.dispatchEvent(new Event("change", { bubbles: true }));
 
       await radio.updateComplete;
 
       expect(eventDetail).toBeTruthy();
-      expect(eventDetail.value).toBe("option1");
-      expect(eventDetail.checked).toBe(true);
+      expect(eventDetail!.value).toBe("option1");
+      expect(eventDetail!.checked).toBe(true);
     });
 
     it("change 事件应该冒泡和穿透 Shadow DOM", async () => {
@@ -293,9 +310,11 @@ describe("EaRadio and EaRadioGroup Components", () => {
       const changeHandler = vi.fn();
       document.addEventListener("change", changeHandler);
 
-      const input = radio.shadowRoot.querySelector('input[type="radio"]');
-      input.checked = true;
-      input.dispatchEvent(new Event("change", { bubbles: true }));
+      const input = radio.shadowRoot!.querySelector<HTMLInputElement>(
+        'input[type="radio"]'
+      );
+      input!.checked = true;
+      input!.dispatchEvent(new Event("change", { bubbles: true }));
 
       await radio.updateComplete;
 
@@ -315,8 +334,9 @@ describe("EaRadio and EaRadioGroup Components", () => {
       const focusHandler = vi.fn();
       radio.addEventListener("focus", focusHandler);
 
-      const inner = radio.shadowRoot.querySelector(".ea-radio__inner");
-      inner.dispatchEvent(new Event("focus", { bubbles: true }));
+      const inner =
+        radio.shadowRoot!.querySelector<HTMLElement>(".ea-radio__inner");
+      inner!.dispatchEvent(new Event("focus", { bubbles: true }));
 
       await radio.updateComplete;
 
@@ -335,13 +355,14 @@ describe("EaRadio and EaRadioGroup Components", () => {
         eventDetail = e.detail;
       });
 
-      const inner = radio.shadowRoot.querySelector(".ea-radio__inner");
-      inner.dispatchEvent(new Event("focus", { bubbles: true }));
+      const inner =
+        radio.shadowRoot!.querySelector<HTMLElement>(".ea-radio__inner");
+      inner!.dispatchEvent(new Event("focus", { bubbles: true }));
 
       await radio.updateComplete;
 
       expect(eventDetail).toBeTruthy();
-      expect(eventDetail.value).toBe("option1");
+      expect(eventDetail!.value).toBe("option1");
     });
 
     it("应该触发 blur 事件", async () => {
@@ -354,8 +375,9 @@ describe("EaRadio and EaRadioGroup Components", () => {
       const blurHandler = vi.fn();
       radio.addEventListener("blur", blurHandler);
 
-      const inner = radio.shadowRoot.querySelector(".ea-radio__inner");
-      inner.dispatchEvent(new Event("blur", { bubbles: true }));
+      const inner =
+        radio.shadowRoot!.querySelector<HTMLElement>(".ea-radio__inner");
+      inner!.dispatchEvent(new Event("blur", { bubbles: true }));
 
       await radio.updateComplete;
 
@@ -368,13 +390,14 @@ describe("EaRadio and EaRadioGroup Components", () => {
 
       await radio.updateComplete;
 
-      const inner = radio.shadowRoot.querySelector(".ea-radio__inner");
-      inner.dispatchEvent(new Event("focus", { bubbles: true }));
+      const inner =
+        radio.shadowRoot!.querySelector<HTMLElement>(".ea-radio__inner");
+      inner!.dispatchEvent(new Event("focus", { bubbles: true }));
 
       await radio.updateComplete;
 
-      const containerEl = radio.shadowRoot.querySelector(".ea-radio");
-      expect(containerEl.classList.contains("is-focus")).toBe(true);
+      const containerEl = radio.shadowRoot!.querySelector(".ea-radio");
+      expect(containerEl!.classList.contains("is-focus")).toBe(true);
     });
 
     it("blur 时应该移除 is-focus 状态类", async () => {
@@ -383,15 +406,16 @@ describe("EaRadio and EaRadioGroup Components", () => {
 
       await radio.updateComplete;
 
-      const inner = radio.shadowRoot.querySelector(".ea-radio__inner");
-      inner.dispatchEvent(new Event("focus", { bubbles: true }));
+      const inner =
+        radio.shadowRoot!.querySelector<HTMLElement>(".ea-radio__inner");
+      inner!.dispatchEvent(new Event("focus", { bubbles: true }));
       await radio.updateComplete;
 
-      inner.dispatchEvent(new Event("blur", { bubbles: true }));
+      inner!.dispatchEvent(new Event("blur", { bubbles: true }));
       await radio.updateComplete;
 
-      const containerEl = radio.shadowRoot.querySelector(".ea-radio");
-      expect(containerEl.classList.contains("is-focus")).toBe(false);
+      const containerEl = radio.shadowRoot!.querySelector(".ea-radio");
+      expect(containerEl!.classList.contains("is-focus")).toBe(false);
     });
   });
 
@@ -447,8 +471,8 @@ describe("EaRadio and EaRadioGroup Components", () => {
       const radio = document.createElement("ea-radio");
       container.appendChild(radio);
 
-      const containerEl = radio.shadowRoot.querySelector(".ea-radio");
-      expect(containerEl.classList.contains("ea-radio")).toBe(true);
+      const containerEl = radio.shadowRoot!.querySelector(".ea-radio");
+      expect(containerEl!.classList.contains("ea-radio")).toBe(true);
     });
 
     it("应该生成正确的 modifier 类名", () => {
@@ -456,8 +480,8 @@ describe("EaRadio and EaRadioGroup Components", () => {
       radio.setAttribute("size", "large");
       container.appendChild(radio);
 
-      const containerEl = radio.shadowRoot.querySelector(".ea-radio");
-      expect(containerEl.classList.contains("ea-radio--large")).toBe(true);
+      const containerEl = radio.shadowRoot!.querySelector(".ea-radio");
+      expect(containerEl!.classList.contains("ea-radio--large")).toBe(true);
     });
 
     it("应该生成正确的 state 类名", () => {
@@ -466,9 +490,9 @@ describe("EaRadio and EaRadioGroup Components", () => {
       radio.setAttribute("disabled", "");
       container.appendChild(radio);
 
-      const containerEl = radio.shadowRoot.querySelector(".ea-radio");
-      expect(containerEl.classList.contains("is-checked")).toBe(true);
-      expect(containerEl.classList.contains("is-disabled")).toBe(true);
+      const containerEl = radio.shadowRoot!.querySelector(".ea-radio");
+      expect(containerEl!.classList.contains("is-checked")).toBe(true);
+      expect(containerEl!.classList.contains("is-disabled")).toBe(true);
     });
   });
 
@@ -479,11 +503,12 @@ describe("EaRadio and EaRadioGroup Components", () => {
 
       await radio.updateComplete;
 
-      const inner = radio.shadowRoot.querySelector(".ea-radio__inner");
-      inner.focus = vi.fn();
+      const inner =
+        radio.shadowRoot!.querySelector<HTMLElement>(".ea-radio__inner");
+      inner!.focus = vi.fn();
 
       radio.focus();
-      expect(inner.focus).toHaveBeenCalled();
+      expect(inner!.focus).toHaveBeenCalled();
     });
 
     it("blur() 方法应该使 inner 元素失焦", async () => {
@@ -492,11 +517,12 @@ describe("EaRadio and EaRadioGroup Components", () => {
 
       await radio.updateComplete;
 
-      const inner = radio.shadowRoot.querySelector(".ea-radio__inner");
-      inner.blur = vi.fn();
+      const inner =
+        radio.shadowRoot!.querySelector<HTMLElement>(".ea-radio__inner");
+      inner!.blur = vi.fn();
 
       radio.blur();
-      expect(inner.blur).toHaveBeenCalled();
+      expect(inner!.blur).toHaveBeenCalled();
     });
   });
 
@@ -506,16 +532,18 @@ describe("EaRadio and EaRadioGroup Components", () => {
       container.appendChild(group);
 
       expect(group.shadowRoot).toBeTruthy();
-      expect(group.shadowRoot.querySelector(".ea-radio-group")).toBeTruthy();
+      expect(group.shadowRoot!.querySelector(".ea-radio-group")).toBeTruthy();
     });
 
     it("应该支持 CSS Parts", () => {
       const group = document.createElement("ea-radio-group");
       container.appendChild(group);
 
-      expect(group.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
       expect(
-        group.shadowRoot.querySelector('[part="form-label"]')
+        group.shadowRoot!.querySelector('[part="container"]')
+      ).toBeTruthy();
+      expect(
+        group.shadowRoot!.querySelector('[part="form-label"]')
       ).toBeTruthy();
     });
 
@@ -523,7 +551,7 @@ describe("EaRadio and EaRadioGroup Components", () => {
       const group = document.createElement("ea-radio-group");
       container.appendChild(group);
 
-      const slot = group.shadowRoot.querySelector("slot");
+      const slot = group.shadowRoot!.querySelector("slot");
       expect(slot).toBeTruthy();
     });
 
@@ -671,7 +699,7 @@ describe("EaRadio and EaRadioGroup Components", () => {
       const group = document.createElement("ea-radio-group");
       container.appendChild(group);
 
-      const formLabel = group.shadowRoot.querySelector(
+      const formLabel = group.shadowRoot!.querySelector(
         ".ea-radio-group__form-label"
       );
       expect(formLabel).toBeTruthy();
@@ -690,9 +718,11 @@ describe("EaRadio and EaRadioGroup Components", () => {
       await group.updateComplete;
 
       const radios = group.querySelectorAll("ea-radio");
-      const input = radios[1].shadowRoot.querySelector('input[type="radio"]');
-      input.checked = true;
-      input.dispatchEvent(new Event("change", { bubbles: true }));
+      const input = radios[1].shadowRoot!.querySelector<HTMLInputElement>(
+        'input[type="radio"]'
+      );
+      input!.checked = true;
+      input!.dispatchEvent(new Event("change", { bubbles: true }));
 
       await group.updateComplete;
 
@@ -712,24 +742,28 @@ describe("EaRadio and EaRadioGroup Components", () => {
 
       const radios = group.querySelectorAll("ea-radio");
 
-      const input1 = radios[0].shadowRoot.querySelector('input[type="radio"]');
-      input1.checked = true;
-      input1.dispatchEvent(new Event("change", { bubbles: true }));
+      const input1 = radios[0].shadowRoot!.querySelector<HTMLInputElement>(
+        'input[type="radio"]'
+      );
+      input1!.checked = true;
+      input1!.dispatchEvent(new Event("change", { bubbles: true }));
       await group.updateComplete;
       expect(group.value).toBe("option1");
       expect(radios[0].checked).toBe(true);
       expect(radios[1].checked).toBe(false);
 
-      const input2 = radios[1].shadowRoot.querySelector('input[type="radio"]');
-      input2.checked = true;
-      input2.dispatchEvent(new Event("change", { bubbles: true }));
+      const input2 = radios[1].shadowRoot!.querySelector<HTMLInputElement>(
+        'input[type="radio"]'
+      );
+      input2!.checked = true;
+      input2!.dispatchEvent(new Event("change", { bubbles: true }));
       await group.updateComplete;
       expect(group.value).toBe("option2");
       expect(radios[0].checked).toBe(false);
       expect(radios[1].checked).toBe(true);
 
-      input1.checked = true;
-      input1.dispatchEvent(new Event("change", { bubbles: true }));
+      input1!.checked = true;
+      input1!.dispatchEvent(new Event("change", { bubbles: true }));
       await group.updateComplete;
 
       expect(group.value).toBe("option1");
@@ -787,7 +821,7 @@ describe("EaRadio and EaRadioGroup Components", () => {
       const group = document.createElement("ea-radio-group");
       container.appendChild(group);
 
-      expect(group.shadowRoot.querySelector(".ea-radio-group")).toBeTruthy();
+      expect(group.shadowRoot!.querySelector(".ea-radio-group")).toBeTruthy();
     });
 
     it("应该处理空 value", () => {
@@ -920,7 +954,7 @@ describe("EaRadio and EaRadioGroup Components", () => {
 });
 
 describe("EaRadioGroup Keyboard And Form APIs", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -937,7 +971,10 @@ describe("EaRadioGroup Keyboard And Form APIs", () => {
     <ea-radio value="c">C</ea-radio>
   `;
 
-  async function createGroup(innerHTML, attrs = {}) {
+  async function createGroup(
+    innerHTML: string,
+    attrs: Record<string, string> = {}
+  ) {
     const group = document.createElement("ea-radio-group");
     for (const [key, value] of Object.entries(attrs)) {
       group.setAttribute(key, value);
@@ -1143,7 +1180,7 @@ describe("EaRadioGroup Keyboard And Form APIs", () => {
   });
 
   describe("EaRadio Form APIs", () => {
-    async function createRadio(attrs = {}) {
+    async function createRadio(attrs: Record<string, string> = {}) {
       const radio = document.createElement("ea-radio");
       for (const [key, value] of Object.entries(attrs)) {
         radio.setAttribute(key, value);

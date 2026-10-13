@@ -4,7 +4,7 @@ import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y";
 import "./index";
 
 describe("EaBadge", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -28,7 +28,7 @@ describe("EaBadge", () => {
       const badge = document.createElement("ea-badge");
       container.appendChild(badge);
 
-      const badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
+      const badgeContainer = badge.shadowRoot!.querySelector(".ea-badge");
       expect(badgeContainer).toBeDefined();
     });
 
@@ -36,7 +36,7 @@ describe("EaBadge", () => {
       const badge = document.createElement("ea-badge");
       container.appendChild(badge);
 
-      const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
+      const contentEl = badge.shadowRoot!.querySelector(".ea-badge__content");
       expect(contentEl).toBeDefined();
     });
   });
@@ -49,8 +49,8 @@ describe("EaBadge", () => {
 
       await badge.updateComplete;
 
-      const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
-      expect(contentEl.textContent).toBe("12");
+      const contentEl = badge.shadowRoot!.querySelector(".ea-badge__content");
+      expect(contentEl!.textContent).toBe("12");
     });
 
     it("应该正确显示字符串 value", async () => {
@@ -60,8 +60,8 @@ describe("EaBadge", () => {
 
       await badge.updateComplete;
 
-      const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
-      expect(contentEl.textContent).toBe("new");
+      const contentEl = badge.shadowRoot!.querySelector(".ea-badge__content");
+      expect(contentEl!.textContent).toBe("new");
     });
 
     it("value 属性变化时应该正确更新", async () => {
@@ -71,13 +71,13 @@ describe("EaBadge", () => {
 
       await badge.updateComplete;
 
-      const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
-      expect(contentEl.textContent).toBe("5");
+      const contentEl = badge.shadowRoot!.querySelector(".ea-badge__content");
+      expect(contentEl!.textContent).toBe("5");
 
       badge.setAttribute("value", "10");
       await badge.updateComplete;
 
-      expect(contentEl.textContent).toBe("10");
+      expect(contentEl!.textContent).toBe("10");
     });
 
     it("value 为空字符串时内容应为空", async () => {
@@ -87,8 +87,8 @@ describe("EaBadge", () => {
 
       await badge.updateComplete;
 
-      const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
-      expect(contentEl.textContent).toBe("");
+      const contentEl = badge.shadowRoot!.querySelector(".ea-badge__content");
+      expect(contentEl!.textContent).toBe("");
     });
   });
 
@@ -101,8 +101,8 @@ describe("EaBadge", () => {
 
       await badge.updateComplete;
 
-      const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
-      expect(contentEl.textContent).toBe("99+");
+      const contentEl = badge.shadowRoot!.querySelector(".ea-badge__content");
+      expect(contentEl!.textContent).toBe("99+");
     });
 
     it("未超过 max 时应该显示原值", async () => {
@@ -113,8 +113,8 @@ describe("EaBadge", () => {
 
       await badge.updateComplete;
 
-      const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
-      expect(contentEl.textContent).toBe("50");
+      const contentEl = badge.shadowRoot!.querySelector(".ea-badge__content");
+      expect(contentEl!.textContent).toBe("50");
     });
 
     it("等于 max 时应该显示原值", async () => {
@@ -125,8 +125,8 @@ describe("EaBadge", () => {
 
       await badge.updateComplete;
 
-      const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
-      expect(contentEl.textContent).toBe("99");
+      const contentEl = badge.shadowRoot!.querySelector(".ea-badge__content");
+      expect(contentEl!.textContent).toBe("99");
     });
 
     it("默认 max 应该是 Infinity", async () => {
@@ -136,8 +136,8 @@ describe("EaBadge", () => {
 
       await badge.updateComplete;
 
-      const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
-      expect(contentEl.textContent).toBe("999");
+      const contentEl = badge.shadowRoot!.querySelector(".ea-badge__content");
+      expect(contentEl!.textContent).toBe("999");
     });
 
     it("value 为非数字字符串时 max 不生效", async () => {
@@ -148,8 +148,8 @@ describe("EaBadge", () => {
 
       await badge.updateComplete;
 
-      const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
-      expect(contentEl.textContent).toBe("abc");
+      const contentEl = badge.shadowRoot!.querySelector(".ea-badge__content");
+      expect(contentEl!.textContent).toBe("abc");
     });
   });
 
@@ -166,9 +166,9 @@ describe("EaBadge", () => {
 
           await badge.updateComplete;
 
-          const badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
+          const badgeContainer = badge.shadowRoot!.querySelector(".ea-badge");
           expect(
-            badgeContainer.classList.contains(`ea-badge--${variant}`)
+            badgeContainer!.classList.contains(`ea-badge--${variant}`)
           ).toBe(false);
         });
       } else {
@@ -180,9 +180,9 @@ describe("EaBadge", () => {
 
           await badge.updateComplete;
 
-          const badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
+          const badgeContainer = badge.shadowRoot!.querySelector(".ea-badge");
           expect(
-            badgeContainer.classList.contains(`ea-badge--${variant}`)
+            badgeContainer!.classList.contains(`ea-badge--${variant}`)
           ).toBe(true);
         });
       }
@@ -203,8 +203,8 @@ describe("EaBadge", () => {
 
       await badge.updateComplete;
 
-      const badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
-      expect(badgeContainer.classList.contains("ea-badge--danger")).toBe(false);
+      const badgeContainer = badge.shadowRoot!.querySelector(".ea-badge");
+      expect(badgeContainer!.classList.contains("ea-badge--danger")).toBe(false);
     });
 
     it("variant 属性变化时应该正确更新 class", async () => {
@@ -215,15 +215,15 @@ describe("EaBadge", () => {
 
       await badge.updateComplete;
 
-      let badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
-      expect(badgeContainer.classList.contains("ea-badge--primary")).toBe(true);
+      let badgeContainer = badge.shadowRoot!.querySelector(".ea-badge");
+      expect(badgeContainer!.classList.contains("ea-badge--primary")).toBe(true);
 
       badge.setAttribute("variant", "success");
       await badge.updateComplete;
 
-      badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
-      expect(badgeContainer.classList.contains("ea-badge--success")).toBe(true);
-      expect(badgeContainer.classList.contains("ea-badge--primary")).toBe(false);
+      badgeContainer = badge.shadowRoot!.querySelector(".ea-badge");
+      expect(badgeContainer!.classList.contains("ea-badge--success")).toBe(true);
+      expect(badgeContainer!.classList.contains("ea-badge--primary")).toBe(false);
     });
 
     it("从非默认 variant 切换回 danger 时应移除修饰符类", async () => {
@@ -234,15 +234,15 @@ describe("EaBadge", () => {
 
       await badge.updateComplete;
 
-      let badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
-      expect(badgeContainer.classList.contains("ea-badge--primary")).toBe(true);
+      let badgeContainer = badge.shadowRoot!.querySelector(".ea-badge");
+      expect(badgeContainer!.classList.contains("ea-badge--primary")).toBe(true);
 
       badge.setAttribute("variant", "danger");
       await badge.updateComplete;
 
-      badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
-      expect(badgeContainer.classList.contains("ea-badge--danger")).toBe(false);
-      expect(badgeContainer.classList.contains("ea-badge--primary")).toBe(false);
+      badgeContainer = badge.shadowRoot!.querySelector(".ea-badge");
+      expect(badgeContainer!.classList.contains("ea-badge--danger")).toBe(false);
+      expect(badgeContainer!.classList.contains("ea-badge--primary")).toBe(false);
     });
   });
 
@@ -254,8 +254,8 @@ describe("EaBadge", () => {
 
       await badge.updateComplete;
 
-      const badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
-      expect(badgeContainer.classList.contains("is-dot")).toBe(true);
+      const badgeContainer = badge.shadowRoot!.querySelector(".ea-badge");
+      expect(badgeContainer!.classList.contains("is-dot")).toBe(true);
     });
 
     it("is-dot 为 true 时不显示 value", async () => {
@@ -266,8 +266,8 @@ describe("EaBadge", () => {
 
       await badge.updateComplete;
 
-      const badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
-      expect(badgeContainer.classList.contains("is-dot")).toBe(true);
+      const badgeContainer = badge.shadowRoot!.querySelector(".ea-badge");
+      expect(badgeContainer!.classList.contains("is-dot")).toBe(true);
     });
 
     it("默认 is-dot 应该是 false", () => {
@@ -287,8 +287,8 @@ describe("EaBadge", () => {
 
       await badge.updateComplete;
 
-      const badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
-      expect(badgeContainer.classList.contains("is-hidden")).toBe(true);
+      const badgeContainer = badge.shadowRoot!.querySelector(".ea-badge");
+      expect(badgeContainer!.classList.contains("is-hidden")).toBe(true);
     });
 
     it("data-hidden 属性变化时应该正确更新", async () => {
@@ -298,14 +298,14 @@ describe("EaBadge", () => {
 
       await badge.updateComplete;
 
-      let badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
-      expect(badgeContainer.classList.contains("is-hidden")).toBe(false);
+      let badgeContainer = badge.shadowRoot!.querySelector(".ea-badge");
+      expect(badgeContainer!.classList.contains("is-hidden")).toBe(false);
 
       badge.setAttribute("data-hidden", "");
       await badge.updateComplete;
 
-      badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
-      expect(badgeContainer.classList.contains("is-hidden")).toBe(true);
+      badgeContainer = badge.shadowRoot!.querySelector(".ea-badge");
+      expect(badgeContainer!.classList.contains("is-hidden")).toBe(true);
     });
 
     it("默认 data-hidden 应该是 false", () => {
@@ -324,8 +324,8 @@ describe("EaBadge", () => {
 
       await badge.updateComplete;
 
-      const badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
-      expect(badgeContainer.classList.contains("is-hidden")).toBe(false);
+      const badgeContainer = badge.shadowRoot!.querySelector(".ea-badge");
+      expect(badgeContainer!.classList.contains("is-hidden")).toBe(false);
     });
 
     it("show-zero 为 true 且 value 为 0 时应该显示", async () => {
@@ -336,8 +336,8 @@ describe("EaBadge", () => {
 
       await badge.updateComplete;
 
-      const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
-      expect(contentEl.textContent).toBe("0");
+      const contentEl = badge.shadowRoot!.querySelector(".ea-badge__content");
+      expect(contentEl!.textContent).toBe("0");
     });
 
     it("show-zero 为 false 且 value 为 0 时应该添加 is-hidden 类", async () => {
@@ -350,8 +350,8 @@ describe("EaBadge", () => {
       badge.showZero = false;
       await badge.updateComplete;
 
-      const badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
-      expect(badgeContainer.classList.contains("is-hidden")).toBe(true);
+      const badgeContainer = badge.shadowRoot!.querySelector(".ea-badge");
+      expect(badgeContainer!.classList.contains("is-hidden")).toBe(true);
     });
 
     it("默认 show-zero 应该是 true", () => {
@@ -415,7 +415,7 @@ describe("EaBadge", () => {
       const badge = document.createElement("ea-badge");
       container.appendChild(badge);
 
-      const containerEl = badge.shadowRoot.querySelector('[part="container"]');
+      const containerEl = badge.shadowRoot!.querySelector('[part="container"]');
       expect(containerEl).toBeDefined();
     });
 
@@ -423,7 +423,7 @@ describe("EaBadge", () => {
       const badge = document.createElement("ea-badge");
       container.appendChild(badge);
 
-      const contentEl = badge.shadowRoot.querySelector('[part="content"]');
+      const contentEl = badge.shadowRoot!.querySelector('[part="content"]');
       expect(contentEl).toBeDefined();
     });
   });
@@ -434,7 +434,7 @@ describe("EaBadge", () => {
       badge.innerHTML = "<button>Button</button>";
       container.appendChild(badge);
 
-      const slot = badge.shadowRoot.querySelector("slot");
+      const slot = badge.shadowRoot!.querySelector("slot");
       expect(slot).toBeDefined();
     });
 
@@ -449,7 +449,7 @@ describe("EaBadge", () => {
       `;
       container.appendChild(badge);
 
-      const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
+      const contentEl = badge.shadowRoot!.querySelector(".ea-badge__content");
       expect(contentEl).toBeDefined();
     });
   });
@@ -462,8 +462,8 @@ describe("EaBadge", () => {
 
       await badge.updateComplete;
 
-      const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
-      expect(contentEl.textContent).toBe("5");
+      const contentEl = badge.shadowRoot!.querySelector(".ea-badge__content");
+      expect(contentEl!.textContent).toBe("5");
     });
   });
 
@@ -477,11 +477,11 @@ describe("EaBadge", () => {
 
       await badge.updateComplete;
 
-      const badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
-      const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
+      const badgeContainer = badge.shadowRoot!.querySelector(".ea-badge");
+      const contentEl = badge.shadowRoot!.querySelector(".ea-badge__content");
 
-      expect(contentEl.textContent).toBe("99+");
-      expect(badgeContainer.classList.contains("ea-badge--primary")).toBe(true);
+      expect(contentEl!.textContent).toBe("99+");
+      expect(badgeContainer!.classList.contains("ea-badge--primary")).toBe(true);
       expect(badge.isDot).toBe(false);
       expect(badge.showZero).toBe(true);
     });
@@ -500,11 +500,11 @@ describe("EaBadge", () => {
 
       await badge2.updateComplete;
 
-      const container1 = badge1.shadowRoot.querySelector(".ea-badge");
-      const container2 = badge2.shadowRoot.querySelector(".ea-badge");
+      const container1 = badge1.shadowRoot!.querySelector(".ea-badge");
+      const container2 = badge2.shadowRoot!.querySelector(".ea-badge");
 
-      expect(container1.classList.contains("ea-badge--primary")).toBe(true);
-      expect(container2.classList.contains("ea-badge--success")).toBe(true);
+      expect(container1!.classList.contains("ea-badge--primary")).toBe(true);
+      expect(container2!.classList.contains("ea-badge--success")).toBe(true);
     });
 
     it("应该正确处理动态属性更新", async () => {
@@ -515,18 +515,18 @@ describe("EaBadge", () => {
 
       await badge.updateComplete;
 
-      const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
-      expect(contentEl.textContent).toBe("5");
+      const contentEl = badge.shadowRoot!.querySelector(".ea-badge__content");
+      expect(contentEl!.textContent).toBe("5");
 
       badge.setAttribute("value", "15");
       badge.setAttribute("variant", "warning");
 
       await badge.updateComplete;
 
-      const badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
+      const badgeContainer = badge.shadowRoot!.querySelector(".ea-badge");
 
-      expect(contentEl.textContent).toBe("15");
-      expect(badgeContainer.classList.contains("ea-badge--warning")).toBe(true);
+      expect(contentEl!.textContent).toBe("15");
+      expect(badgeContainer!.classList.contains("ea-badge--warning")).toBe(true);
     });
 
     it("is-dot 和 value 同时存在时 is-dot 优先", async () => {
@@ -537,8 +537,8 @@ describe("EaBadge", () => {
 
       await badge.updateComplete;
 
-      const badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
-      expect(badgeContainer.classList.contains("is-dot")).toBe(true);
+      const badgeContainer = badge.shadowRoot!.querySelector(".ea-badge");
+      expect(badgeContainer!.classList.contains("is-dot")).toBe(true);
     });
 
     it("data-hidden 和 show-zero 为 false 且 value 为 0 时应该隐藏", async () => {
@@ -551,8 +551,8 @@ describe("EaBadge", () => {
       badge.showZero = false;
       await badge.updateComplete;
 
-      const badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
-      expect(badgeContainer.classList.contains("is-hidden")).toBe(true);
+      const badgeContainer = badge.shadowRoot!.querySelector(".ea-badge");
+      expect(badgeContainer!.classList.contains("is-hidden")).toBe(true);
     });
 
     it("data-hidden 为 true 时无论 value 如何都应该隐藏", async () => {
@@ -563,8 +563,8 @@ describe("EaBadge", () => {
 
       await badge.updateComplete;
 
-      const badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
-      expect(badgeContainer.classList.contains("is-hidden")).toBe(true);
+      const badgeContainer = badge.shadowRoot!.querySelector(".ea-badge");
+      expect(badgeContainer!.classList.contains("is-hidden")).toBe(true);
     });
   });
 
@@ -585,9 +585,9 @@ describe("EaBadge", () => {
 
         await badge.updateComplete;
 
-        const supEl = badge.shadowRoot.querySelector("sup");
+        const supEl = badge.shadowRoot!.querySelector("sup");
         expect(supEl).toBeTruthy();
-        expect(supEl.getAttribute("aria-hidden")).toBe("true");
+        expect(supEl!.getAttribute("aria-hidden")).toBe("true");
       });
 
       it("is-dot 模式下 sup 元素仍然有 aria-hidden='true'", async () => {
@@ -597,8 +597,8 @@ describe("EaBadge", () => {
 
         await badge.updateComplete;
 
-        const supEl = badge.shadowRoot.querySelector("sup");
-        expect(supEl.getAttribute("aria-hidden")).toBe("true");
+        const supEl = badge.shadowRoot!.querySelector("sup");
+        expect(supEl!.getAttribute("aria-hidden")).toBe("true");
       });
 
       it("data-hidden 时 sup 元素仍然有 aria-hidden='true'", async () => {
@@ -609,8 +609,8 @@ describe("EaBadge", () => {
 
         await badge.updateComplete;
 
-        const supEl = badge.shadowRoot.querySelector("sup");
-        expect(supEl.getAttribute("aria-hidden")).toBe("true");
+        const supEl = badge.shadowRoot!.querySelector("sup");
+        expect(supEl!.getAttribute("aria-hidden")).toBe("true");
       });
     });
   });

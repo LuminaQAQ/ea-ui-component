@@ -4,7 +4,7 @@ import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y.js";
 import "./index";
 
 describe("EaSplitter", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -27,7 +27,7 @@ describe("EaSplitter", () => {
       container.appendChild(splitter);
 
       expect(splitter.shadowRoot).toBeTruthy();
-      expect(splitter.shadowRoot.querySelector(".ea-splitter")).toBeTruthy();
+      expect(splitter.shadowRoot!.querySelector(".ea-splitter")).toBeTruthy();
     });
 
     it("应该支持 CSS Parts", () => {
@@ -35,7 +35,7 @@ describe("EaSplitter", () => {
       container.appendChild(splitter);
 
       expect(
-        splitter.shadowRoot.querySelector('[part="container"]')
+        splitter.shadowRoot!.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
@@ -112,15 +112,15 @@ describe("EaSplitter", () => {
       const splitter = document.createElement("ea-splitter");
       container.appendChild(splitter);
 
-      const containerEl = splitter.shadowRoot.querySelector(".ea-splitter");
-      expect(containerEl.classList.contains("ea-splitter--horizontal")).toBe(
+      const containerEl = splitter.shadowRoot!.querySelector(".ea-splitter");
+      expect(containerEl!.classList.contains("ea-splitter--horizontal")).toBe(
         true
       );
 
       splitter.setAttribute("layout", "vertical");
       await splitter.updateComplete;
 
-      expect(containerEl.classList.contains("ea-splitter--vertical")).toBe(
+      expect(containerEl!.classList.contains("ea-splitter--vertical")).toBe(
         true
       );
     });
@@ -157,7 +157,7 @@ describe("EaSplitter", () => {
       splitter.addEventListener("ea-panel-resize-start", resizeStartHandler);
 
       const bar = splitter.querySelector("ea-splitter-bar");
-      bar.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+      bar!.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
 
       await splitter.updateComplete;
 
@@ -178,7 +178,7 @@ describe("EaSplitter", () => {
       splitter.addEventListener("ea-panel-resize-start", resizeStartHandler);
 
       const bar = splitter.querySelector("ea-splitter-bar");
-      bar.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+      bar!.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
 
       await splitter.updateComplete;
 
@@ -203,7 +203,7 @@ describe("EaSplitter", () => {
       splitter.addEventListener("ea-panel-resize-end", resizeEndHandler);
 
       const bar = splitter.querySelector("ea-splitter-bar");
-      bar.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+      bar!.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
 
       window.dispatchEvent(new MouseEvent("mouseup"));
 
@@ -226,7 +226,7 @@ describe("EaSplitter", () => {
       splitter.addEventListener("ea-panel-resize-start", resizeStartHandler);
 
       const panel = splitter.querySelector("ea-splitter-panel");
-      panel.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+      panel!.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
 
       await splitter.updateComplete;
 
@@ -263,7 +263,7 @@ describe("EaSplitter", () => {
 });
 
 describe("EaSplitterPanel", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -287,8 +287,8 @@ describe("EaSplitterPanel", () => {
       await splitter.updateComplete;
 
       const panel = splitter.querySelector("ea-splitter-panel");
-      expect(panel.shadowRoot).toBeTruthy();
-      expect(panel.shadowRoot.querySelector(".ea-splitter-panel")).toBeTruthy();
+      expect(panel!.shadowRoot).toBeTruthy();
+      expect(panel!.shadowRoot!.querySelector(".ea-splitter-panel")).toBeTruthy();
     });
 
     it("应该支持 CSS Parts", async () => {
@@ -301,7 +301,7 @@ describe("EaSplitterPanel", () => {
       await splitter.updateComplete;
 
       const panel = splitter.querySelector("ea-splitter-panel");
-      expect(panel.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(panel!.shadowRoot!.querySelector('[part="container"]')).toBeTruthy();
     });
   });
 
@@ -316,7 +316,7 @@ describe("EaSplitterPanel", () => {
       await splitter.updateComplete;
 
       const panel = splitter.querySelector("ea-splitter-panel");
-      expect(panel.size).toBe("");
+      expect(panel!.size).toBe("");
     });
 
     it("应该支持 size 属性（像素）", async () => {
@@ -329,7 +329,7 @@ describe("EaSplitterPanel", () => {
       await splitter.updateComplete;
 
       const panel = splitter.querySelector("ea-splitter-panel");
-      expect(panel.size).toBe("200px");
+      expect(panel!.size).toBe("200px");
     });
 
     it("应该支持 size 属性（百分比）", async () => {
@@ -342,7 +342,7 @@ describe("EaSplitterPanel", () => {
       await splitter.updateComplete;
 
       const panel = splitter.querySelector("ea-splitter-panel");
-      expect(panel.size).toBe("30%");
+      expect(panel!.size).toBe("30%");
     });
 
     it("size 属性变化时应该正确更新", async () => {
@@ -355,11 +355,11 @@ describe("EaSplitterPanel", () => {
       await splitter.updateComplete;
 
       const panel = splitter.querySelector("ea-splitter-panel");
-      panel.setAttribute("size", "50%");
+      panel!.setAttribute("size", "50%");
 
       await splitter.updateComplete;
 
-      expect(panel.size).toBe("50%");
+      expect(panel!.size).toBe("50%");
     });
   });
 
@@ -374,7 +374,7 @@ describe("EaSplitterPanel", () => {
       await splitter.updateComplete;
 
       const panel = splitter.querySelector("ea-splitter-panel");
-      expect(panel.min).toBe("");
+      expect(panel!.min).toBe("");
     });
 
     it("应该支持 min 属性（像素）", async () => {
@@ -387,7 +387,7 @@ describe("EaSplitterPanel", () => {
       await splitter.updateComplete;
 
       const panel = splitter.querySelector("ea-splitter-panel");
-      expect(panel.min).toBe("100px");
+      expect(panel!.min).toBe("100px");
     });
 
     it("应该支持 min 属性（百分比）", async () => {
@@ -400,7 +400,7 @@ describe("EaSplitterPanel", () => {
       await splitter.updateComplete;
 
       const panel = splitter.querySelector("ea-splitter-panel");
-      expect(panel.min).toBe("20%");
+      expect(panel!.min).toBe("20%");
     });
 
     it("min 属性变化时应该正确更新", async () => {
@@ -413,11 +413,11 @@ describe("EaSplitterPanel", () => {
       await splitter.updateComplete;
 
       const panel = splitter.querySelector("ea-splitter-panel");
-      panel.setAttribute("min", "30%");
+      panel!.setAttribute("min", "30%");
 
       await splitter.updateComplete;
 
-      expect(panel.min).toBe("30%");
+      expect(panel!.min).toBe("30%");
     });
   });
 
@@ -432,7 +432,7 @@ describe("EaSplitterPanel", () => {
       await splitter.updateComplete;
 
       const panel = splitter.querySelector("ea-splitter-panel");
-      expect(panel.layout).toBe("horizontal");
+      expect(panel!.layout).toBe("horizontal");
     });
 
     it("应该支持 layout 属性设置为 vertical", async () => {
@@ -446,7 +446,7 @@ describe("EaSplitterPanel", () => {
       await splitter.updateComplete;
 
       const panel = splitter.querySelector("ea-splitter-panel");
-      expect(panel.layout).toBe("vertical");
+      expect(panel!.layout).toBe("vertical");
     });
   });
 
@@ -463,7 +463,7 @@ describe("EaSplitterPanel", () => {
       await splitter.updateComplete;
 
       const panel = splitter.querySelector("ea-splitter-panel");
-      const slot = panel.shadowRoot.querySelector("slot");
+      const slot = panel!.shadowRoot!.querySelector("slot");
       expect(slot).toBeTruthy();
     });
   });
@@ -479,15 +479,15 @@ describe("EaSplitterPanel", () => {
       await splitter.updateComplete;
 
       const panel = splitter.querySelector("ea-splitter-panel");
-      expect(panel.shadowRoot).toBeTruthy();
-      expect(panel.size).toBe("200px");
-      expect(panel.min).toBe("100px");
+      expect(panel!.shadowRoot).toBeTruthy();
+      expect(panel!.size).toBe("200px");
+      expect(panel!.min).toBe("100px");
     });
   });
 });
 
 describe("EaSplitterBar", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -512,8 +512,8 @@ describe("EaSplitterBar", () => {
       await splitter.updateComplete;
 
       const bar = splitter.querySelector("ea-splitter-bar");
-      expect(bar.shadowRoot).toBeTruthy();
-      expect(bar.shadowRoot.querySelector(".ea-splitter-bar")).toBeTruthy();
+      expect(bar!.shadowRoot).toBeTruthy();
+      expect(bar!.shadowRoot!.querySelector(".ea-splitter-bar")).toBeTruthy();
     });
 
     it("应该支持 CSS Parts", async () => {
@@ -527,7 +527,7 @@ describe("EaSplitterBar", () => {
       await splitter.updateComplete;
 
       const bar = splitter.querySelector("ea-splitter-bar");
-      expect(bar.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(bar!.shadowRoot!.querySelector('[part="container"]')).toBeTruthy();
     });
   });
 
@@ -543,7 +543,7 @@ describe("EaSplitterBar", () => {
       await splitter.updateComplete;
 
       const bar = splitter.querySelector("ea-splitter-bar");
-      expect(bar.layout).toBe("horizontal");
+      expect(bar!.layout).toBe("horizontal");
     });
 
     it("vertical 布局时 bar 的 layout 应为 vertical", async () => {
@@ -558,7 +558,7 @@ describe("EaSplitterBar", () => {
       await splitter.updateComplete;
 
       const bar = splitter.querySelector("ea-splitter-bar");
-      expect(bar.layout).toBe("vertical");
+      expect(bar!.layout).toBe("vertical");
     });
   });
 

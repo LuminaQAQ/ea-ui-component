@@ -4,7 +4,7 @@ import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y.js";
 import "./index.ts";
 
 describe("EaPopper Component", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -32,7 +32,7 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      expect(popper.shadowRoot.querySelector(".ea-popper")).toBeTruthy();
+      expect(popper.shadowRoot!.querySelector(".ea-popper")).toBeTruthy();
     });
 
     it("应该渲染 .ea-popper__reference 元素", () => {
@@ -41,7 +41,7 @@ describe("EaPopper Component", () => {
       container.appendChild(popper);
 
       expect(
-        popper.shadowRoot.querySelector(".ea-popper__reference")
+        popper.shadowRoot!.querySelector(".ea-popper__reference")
       ).toBeTruthy();
     });
 
@@ -51,7 +51,7 @@ describe("EaPopper Component", () => {
       container.appendChild(popper);
 
       expect(
-        popper.shadowRoot.querySelector(".ea-popper__original")
+        popper.shadowRoot!.querySelector(".ea-popper__original")
       ).toBeTruthy();
     });
 
@@ -61,12 +61,12 @@ describe("EaPopper Component", () => {
       container.appendChild(popper);
 
       expect(
-        popper.shadowRoot.querySelector('[part="container"]')
+        popper.shadowRoot!.querySelector('[part="container"]')
       ).toBeTruthy();
       expect(
-        popper.shadowRoot.querySelector('[part="reference"]')
+        popper.shadowRoot!.querySelector('[part="reference"]')
       ).toBeTruthy();
-      expect(popper.shadowRoot.querySelector('[part="original"]')).toBeTruthy();
+      expect(popper.shadowRoot!.querySelector('[part="original"]')).toBeTruthy();
     });
 
     it("应该渲染默认 slot", () => {
@@ -77,7 +77,7 @@ describe("EaPopper Component", () => {
       `;
       container.appendChild(popper);
 
-      const defaultSlot = popper.shadowRoot.querySelector("slot:not([name])");
+      const defaultSlot = popper.shadowRoot!.querySelector("slot:not([name])");
       expect(defaultSlot).toBeTruthy();
     });
 
@@ -86,7 +86,7 @@ describe("EaPopper Component", () => {
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
-      const referenceSlot = popper.shadowRoot.querySelector(
+      const referenceSlot = popper.shadowRoot!.querySelector(
         'slot[name="reference"]'
       );
       expect(referenceSlot).toBeTruthy();
@@ -99,8 +99,8 @@ describe("EaPopper Component", () => {
 
       await popper.updateComplete;
 
-      const containerEl = popper.shadowRoot.querySelector(".ea-popper");
-      expect(containerEl.getAttribute("tabindex")).toBe("-1");
+      const containerEl = popper.shadowRoot!.querySelector(".ea-popper");
+      expect(containerEl!.getAttribute("tabindex")).toBe("-1");
     });
 
     it("original 应该有 tabindex=-1", async () => {
@@ -110,10 +110,10 @@ describe("EaPopper Component", () => {
 
       await popper.updateComplete;
 
-      const originalEl = popper.shadowRoot.querySelector(
+      const originalEl = popper.shadowRoot!.querySelector(
         ".ea-popper__original"
       );
-      expect(originalEl.getAttribute("tabindex")).toBe("-1");
+      expect(originalEl!.getAttribute("tabindex")).toBe("-1");
     });
 
     it("reference 应该有 tabindex=-1", async () => {
@@ -123,10 +123,10 @@ describe("EaPopper Component", () => {
 
       await popper.updateComplete;
 
-      const referenceEl = popper.shadowRoot.querySelector(
+      const referenceEl = popper.shadowRoot!.querySelector(
         ".ea-popper__reference"
       );
-      expect(referenceEl.getAttribute("tabindex")).toBe("-1");
+      expect(referenceEl!.getAttribute("tabindex")).toBe("-1");
     });
   });
 
@@ -226,8 +226,8 @@ describe("EaPopper Component", () => {
 
       await popper.updateComplete;
 
-      const containerEl = popper.shadowRoot.querySelector(".ea-popper");
-      expect(containerEl.classList.contains("ea-popper--bottom-start")).toBe(
+      const containerEl = popper.shadowRoot!.querySelector(".ea-popper");
+      expect(containerEl!.classList.contains("ea-popper--bottom-start")).toBe(
         true
       );
     });
@@ -239,14 +239,14 @@ describe("EaPopper Component", () => {
 
       await popper.updateComplete;
 
-      const containerEl = popper.shadowRoot.querySelector(".ea-popper");
-      expect(containerEl.classList.contains("ea-popper--top")).toBe(true);
+      const containerEl = popper.shadowRoot!.querySelector(".ea-popper");
+      expect(containerEl!.classList.contains("ea-popper--top")).toBe(true);
 
       popper.placement = "bottom";
       await popper.updateComplete;
 
-      expect(containerEl.classList.contains("ea-popper--top")).toBe(false);
-      expect(containerEl.classList.contains("ea-popper--bottom")).toBe(true);
+      expect(containerEl!.classList.contains("ea-popper--top")).toBe(false);
+      expect(containerEl!.classList.contains("ea-popper--bottom")).toBe(true);
     });
 
     it("无效的 placement 值应该回退到默认值", () => {
@@ -275,8 +275,8 @@ describe("EaPopper Component", () => {
 
       await popper.updateComplete;
 
-      const containerEl = popper.shadowRoot.querySelector(".ea-popper");
-      expect(containerEl.classList.contains("is-show-arrow")).toBe(true);
+      const containerEl = popper.shadowRoot!.querySelector(".ea-popper");
+      expect(containerEl!.classList.contains("is-show-arrow")).toBe(true);
     });
 
     it("应该支持通过 JS 属性设置 showArrow 为 false", async () => {
@@ -300,8 +300,8 @@ describe("EaPopper Component", () => {
       popper.showArrow = false;
       await popper.updateComplete;
 
-      const containerEl = popper.shadowRoot.querySelector(".ea-popper");
-      expect(containerEl.classList.contains("is-show-arrow")).toBe(false);
+      const containerEl = popper.shadowRoot!.querySelector(".ea-popper");
+      expect(containerEl!.classList.contains("is-show-arrow")).toBe(false);
     });
 
     it("showArrow 变化应该更新 className", async () => {
@@ -311,13 +311,13 @@ describe("EaPopper Component", () => {
 
       await popper.updateComplete;
 
-      const containerEl = popper.shadowRoot.querySelector(".ea-popper");
-      expect(containerEl.classList.contains("is-show-arrow")).toBe(true);
+      const containerEl = popper.shadowRoot!.querySelector(".ea-popper");
+      expect(containerEl!.classList.contains("is-show-arrow")).toBe(true);
 
       popper.showArrow = false;
       await popper.updateComplete;
 
-      expect(containerEl.classList.contains("is-show-arrow")).toBe(false);
+      expect(containerEl!.classList.contains("is-show-arrow")).toBe(false);
     });
 
     it("showArrow 从 false 变为 true 应该重新添加 is-show-arrow 状态类", async () => {
@@ -330,13 +330,13 @@ describe("EaPopper Component", () => {
       popper.showArrow = false;
       await popper.updateComplete;
 
-      const containerEl = popper.shadowRoot.querySelector(".ea-popper");
-      expect(containerEl.classList.contains("is-show-arrow")).toBe(false);
+      const containerEl = popper.shadowRoot!.querySelector(".ea-popper");
+      expect(containerEl!.classList.contains("is-show-arrow")).toBe(false);
 
       popper.showArrow = true;
       await popper.updateComplete;
 
-      expect(containerEl.classList.contains("is-show-arrow")).toBe(true);
+      expect(containerEl!.classList.contains("is-show-arrow")).toBe(true);
     });
   });
 
@@ -368,8 +368,8 @@ describe("EaPopper Component", () => {
       popper.show();
       await popper.updateComplete;
 
-      const containerEl = popper.shadowRoot.querySelector(".ea-popper");
-      expect(containerEl.classList.contains("is-show")).toBe(true);
+      const containerEl = popper.shadowRoot!.querySelector(".ea-popper");
+      expect(containerEl!.classList.contains("is-show")).toBe(true);
     });
 
     it("visible 为 false 时不应有 is-show 类", async () => {
@@ -379,8 +379,8 @@ describe("EaPopper Component", () => {
 
       await popper.updateComplete;
 
-      const containerEl = popper.shadowRoot.querySelector(".ea-popper");
-      expect(containerEl.classList.contains("is-show")).toBe(false);
+      const containerEl = popper.shadowRoot!.querySelector(".ea-popper");
+      expect(containerEl!.classList.contains("is-show")).toBe(false);
     });
 
     it("hide() 应该添加 is-before-hide 类", async () => {
@@ -396,8 +396,8 @@ describe("EaPopper Component", () => {
       popper.hide();
       await popper.updateComplete;
 
-      const containerEl = popper.shadowRoot.querySelector(".ea-popper");
-      expect(containerEl.classList.contains("is-before-hide")).toBe(true);
+      const containerEl = popper.shadowRoot!.querySelector(".ea-popper");
+      expect(containerEl!.classList.contains("is-before-hide")).toBe(true);
     });
 
     it("visible 变化时应该创建新的 AbortController", async () => {
@@ -650,10 +650,10 @@ describe("EaPopper Component", () => {
       popper.showArrow = false;
       await popper.updateComplete;
 
-      const containerEl = popper.shadowRoot.querySelector(".ea-popper");
-      expect(containerEl.classList.contains("ea-popper--bottom")).toBe(true);
-      expect(containerEl.classList.contains("ea-popper--top")).toBe(false);
-      expect(containerEl.classList.contains("is-show-arrow")).toBe(false);
+      const containerEl = popper.shadowRoot!.querySelector(".ea-popper");
+      expect(containerEl!.classList.contains("ea-popper--bottom")).toBe(true);
+      expect(containerEl!.classList.contains("ea-popper--top")).toBe(false);
+      expect(containerEl!.classList.contains("is-show-arrow")).toBe(false);
     });
 
     it("visible 为 true 时 className 应包含 is-show 状态", async () => {
@@ -741,8 +741,8 @@ describe("EaPopper Component", () => {
       popper.show();
       await popper.updateComplete;
 
-      const containerEl = popper.shadowRoot.querySelector(".ea-popper");
-      containerEl.dispatchEvent(new Event("transitionend", { bubbles: true }));
+      const containerEl = popper.shadowRoot!.querySelector(".ea-popper");
+      containerEl!.dispatchEvent(new Event("transitionend", { bubbles: true }));
 
       await popper.updateComplete;
 
@@ -765,8 +765,8 @@ describe("EaPopper Component", () => {
       popper.hide();
       await popper.updateComplete;
 
-      const containerEl = popper.shadowRoot.querySelector(".ea-popper");
-      containerEl.dispatchEvent(new Event("transitionend", { bubbles: true }));
+      const containerEl = popper.shadowRoot!.querySelector(".ea-popper");
+      containerEl!.dispatchEvent(new Event("transitionend", { bubbles: true }));
 
       await popper.updateComplete;
 
@@ -879,13 +879,13 @@ describe("EaPopper Component", () => {
       popper.show();
       await popper.updateComplete;
 
-      const containerEl = popper.shadowRoot.querySelector(".ea-popper");
-      containerEl.dispatchEvent(new Event("transitionend", { bubbles: true }));
+      const containerEl = popper.shadowRoot!.querySelector(".ea-popper");
+      containerEl!.dispatchEvent(new Event("transitionend", { bubbles: true }));
 
       await popper.updateComplete;
 
-      expect(containerEl.classList.contains("is-show")).toBe(true);
-      expect(containerEl.classList.contains("ea-popper--top")).toBe(true);
+      expect(containerEl!.classList.contains("is-show")).toBe(true);
+      expect(containerEl!.classList.contains("ea-popper--top")).toBe(true);
     });
 
     it("ea-hidden 事件后应该调用 updateContainerClasslist 清除过渡类名", async () => {
@@ -901,13 +901,13 @@ describe("EaPopper Component", () => {
       popper.hide();
       await popper.updateComplete;
 
-      const containerEl = popper.shadowRoot.querySelector(".ea-popper");
-      containerEl.dispatchEvent(new Event("transitionend", { bubbles: true }));
+      const containerEl = popper.shadowRoot!.querySelector(".ea-popper");
+      containerEl!.dispatchEvent(new Event("transitionend", { bubbles: true }));
 
       await popper.updateComplete;
 
-      expect(containerEl.classList.contains("is-show")).toBe(false);
-      expect(containerEl.classList.contains("is-before-show")).toBe(false);
+      expect(containerEl!.classList.contains("is-show")).toBe(false);
+      expect(containerEl!.classList.contains("is-before-show")).toBe(false);
     });
   });
 
@@ -925,8 +925,8 @@ describe("EaPopper Component", () => {
       popper.show();
       await popper.updateComplete;
 
-      const containerEl = popper.shadowRoot.querySelector(".ea-popper");
-      expect(containerEl.classList.contains("is-show")).toBe(true);
+      const containerEl = popper.shadowRoot!.querySelector(".ea-popper");
+      expect(containerEl!.classList.contains("is-show")).toBe(true);
     });
 
     it("show() 后容器应该添加 is-before-show 过渡类", async () => {
@@ -942,8 +942,8 @@ describe("EaPopper Component", () => {
       popper.show();
       await popper.updateComplete;
 
-      const containerEl = popper.shadowRoot.querySelector(".ea-popper");
-      expect(containerEl.classList.contains("is-before-show")).toBe(true);
+      const containerEl = popper.shadowRoot!.querySelector(".ea-popper");
+      expect(containerEl!.classList.contains("is-before-show")).toBe(true);
     });
 
     it("hide() 后容器应该添加 is-before-hide 类", async () => {
@@ -959,8 +959,8 @@ describe("EaPopper Component", () => {
       popper.hide();
       await popper.updateComplete;
 
-      const containerEl = popper.shadowRoot.querySelector(".ea-popper");
-      expect(containerEl.classList.contains("is-before-hide")).toBe(true);
+      const containerEl = popper.shadowRoot!.querySelector(".ea-popper");
+      expect(containerEl!.classList.contains("is-before-hide")).toBe(true);
     });
 
     it("快速切换 visible 不应该导致错误", async () => {
@@ -992,8 +992,8 @@ describe("EaPopper Component", () => {
 
       expect(popper.visible).toBe(true);
 
-      const containerEl = popper.shadowRoot.querySelector(".ea-popper");
-      expect(containerEl.classList.contains("is-show")).toBe(true);
+      const containerEl = popper.shadowRoot!.querySelector(".ea-popper");
+      expect(containerEl!.classList.contains("is-show")).toBe(true);
     });
   });
 
@@ -1118,9 +1118,9 @@ describe("EaPopper Component", () => {
       expect(popper.showArrow).toBe(false);
       await popper.updateComplete;
 
-      const containerEl = popper.shadowRoot.querySelector(".ea-popper");
-      expect(containerEl.classList.contains("ea-popper--left")).toBe(true);
-      expect(containerEl.classList.contains("is-show-arrow")).toBe(false);
+      const containerEl = popper.shadowRoot!.querySelector(".ea-popper");
+      expect(containerEl!.classList.contains("ea-popper--left")).toBe(true);
+      expect(containerEl!.classList.contains("is-show-arrow")).toBe(false);
     });
   });
 
@@ -1133,8 +1133,8 @@ describe("EaPopper Component", () => {
 
       await popper.updateComplete;
 
-      const containerEl = popper.shadowRoot.querySelector(".ea-popper");
-      expect(containerEl.classList.contains("ea-popper--bottom")).toBe(true);
+      const containerEl = popper.shadowRoot!.querySelector(".ea-popper");
+      expect(containerEl!.classList.contains("ea-popper--bottom")).toBe(true);
     });
 
     it("组件连接后应该初始化 _originPlacement", () => {
@@ -1196,9 +1196,9 @@ describe("EaPopper Component", () => {
 
       await popper.updateComplete;
 
-      const containerEl = popper.shadowRoot.querySelector(".ea-popper");
-      const referenceEl = containerEl.querySelector(".ea-popper__reference");
-      const originalEl = containerEl.querySelector(".ea-popper__original");
+      const containerEl = popper.shadowRoot!.querySelector(".ea-popper");
+      const referenceEl = containerEl!.querySelector(".ea-popper__reference");
+      const originalEl = containerEl!.querySelector(".ea-popper__original");
 
       expect(containerEl).toBeTruthy();
       expect(referenceEl).toBeTruthy();
@@ -1212,10 +1212,10 @@ describe("EaPopper Component", () => {
 
       await popper.updateComplete;
 
-      const referenceEl = popper.shadowRoot.querySelector(
+      const referenceEl = popper.shadowRoot!.querySelector(
         ".ea-popper__reference"
       );
-      const originalEl = referenceEl.querySelector(".ea-popper__original");
+      const originalEl = referenceEl!.querySelector(".ea-popper__original");
 
       expect(originalEl).toBeTruthy();
     });
@@ -1227,10 +1227,10 @@ describe("EaPopper Component", () => {
 
       await popper.updateComplete;
 
-      const originalEl = popper.shadowRoot.querySelector(
+      const originalEl = popper.shadowRoot!.querySelector(
         ".ea-popper__original"
       );
-      const defaultSlot = originalEl.querySelector("slot:not([name])");
+      const defaultSlot = originalEl!.querySelector("slot:not([name])");
 
       expect(defaultSlot).toBeTruthy();
     });
@@ -1242,10 +1242,10 @@ describe("EaPopper Component", () => {
 
       await popper.updateComplete;
 
-      const referenceEl = popper.shadowRoot.querySelector(
+      const referenceEl = popper.shadowRoot!.querySelector(
         ".ea-popper__reference"
       );
-      const referenceSlot = referenceEl.querySelector('slot[name="reference"]');
+      const referenceSlot = referenceEl!.querySelector('slot[name="reference"]');
 
       expect(referenceSlot).toBeTruthy();
     });
@@ -1305,25 +1305,25 @@ describe("EaPopper Component", () => {
         const popper = document.createElement("ea-popper");
         container.appendChild(popper);
         await popper.updateComplete;
-        const original = popper.shadowRoot.querySelector(
+        const original = popper.shadowRoot!.querySelector(
           ".ea-popper__original"
         );
-        expect(original.hasAttribute("id")).toBe(true);
+        expect(original!.hasAttribute("id")).toBe(true);
       });
 
       it("触发器应该有 aria-controls 指向弹出内容", async () => {
         const popper = document.createElement("ea-popper");
         container.appendChild(popper);
         await popper.updateComplete;
-        const original = popper.shadowRoot.querySelector(
+        const original = popper.shadowRoot!.querySelector(
           ".ea-popper__original"
         );
-        const referenceSlot = popper.shadowRoot.querySelector(
+        const referenceSlot = popper.shadowRoot!.querySelector<HTMLSlotElement>(
           'slot[name="reference"]'
         );
-        const trigger = referenceSlot.assignedElements()[0];
+        const trigger = referenceSlot!.assignedElements()[0];
         if (trigger) {
-          expect(trigger.getAttribute("aria-controls")).toBe(original.id);
+          expect(trigger.getAttribute("aria-controls")).toBe(original!.id);
         }
       });
 
@@ -1331,10 +1331,10 @@ describe("EaPopper Component", () => {
         const popper = document.createElement("ea-popper");
         container.appendChild(popper);
         await popper.updateComplete;
-        const referenceSlot = popper.shadowRoot.querySelector(
+        const referenceSlot = popper.shadowRoot!.querySelector<HTMLSlotElement>(
           'slot[name="reference"]'
         );
-        const trigger = referenceSlot.assignedElements()[0];
+        const trigger = referenceSlot!.assignedElements()[0];
         if (trigger) {
           expect(trigger.hasAttribute("aria-expanded")).toBe(true);
         }
@@ -1344,10 +1344,10 @@ describe("EaPopper Component", () => {
         const popper = document.createElement("ea-popper");
         container.appendChild(popper);
         await popper.updateComplete;
-        const referenceSlot = popper.shadowRoot.querySelector(
+        const referenceSlot = popper.shadowRoot!.querySelector<HTMLSlotElement>(
           'slot[name="reference"]'
         );
-        const trigger = referenceSlot.assignedElements()[0];
+        const trigger = referenceSlot!.assignedElements()[0];
         if (trigger) {
           expect(trigger.getAttribute("aria-expanded")).toBe("false");
         }
@@ -1358,10 +1358,10 @@ describe("EaPopper Component", () => {
         popper.setAttribute("visible", "");
         container.appendChild(popper);
         await popper.updateComplete;
-        const referenceSlot = popper.shadowRoot.querySelector(
+        const referenceSlot = popper.shadowRoot!.querySelector<HTMLSlotElement>(
           'slot[name="reference"]'
         );
-        const trigger = referenceSlot.assignedElements()[0];
+        const trigger = referenceSlot!.assignedElements()[0];
         if (trigger) {
           expect(trigger.getAttribute("aria-expanded")).toBe("true");
         }

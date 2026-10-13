@@ -4,7 +4,7 @@ import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y";
 import "./index.ts";
 
 describe("EaLink", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -28,21 +28,21 @@ describe("EaLink", () => {
       const link = document.createElement("ea-link");
       container.appendChild(link);
 
-      expect(link.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(link.shadowRoot!.querySelector('[part="container"]')).toBeTruthy();
     });
 
     it("应该包含 icon CSS Part", () => {
       const link = document.createElement("ea-link");
       container.appendChild(link);
 
-      expect(link.shadowRoot.querySelector('[part="icon"]')).toBeTruthy();
+      expect(link.shadowRoot!.querySelector('[part="icon"]')).toBeTruthy();
     });
 
     it("应该包含原生 a 元素", () => {
       const link = document.createElement("ea-link");
       container.appendChild(link);
 
-      const anchorElement = link.shadowRoot.querySelector("a.ea-link");
+      const anchorElement = link.shadowRoot!.querySelector("a.ea-link");
       expect(anchorElement).toBeTruthy();
     });
 
@@ -51,7 +51,7 @@ describe("EaLink", () => {
       link.textContent = "点击这里";
       container.appendChild(link);
 
-      const slot = link.shadowRoot.querySelector("slot");
+      const slot = link.shadowRoot!.querySelector("slot");
       expect(slot).toBeTruthy();
     });
   });
@@ -113,8 +113,8 @@ describe("EaLink", () => {
       link.setAttribute("variant", "primary");
       await link.updateComplete;
 
-      const anchorElement = link.shadowRoot.querySelector("a.ea-link");
-      expect(anchorElement.classList.contains("ea-link--primary")).toBe(true);
+      const anchorElement = link.shadowRoot!.querySelector("a.ea-link");
+      expect(anchorElement!.classList.contains("ea-link--primary")).toBe(true);
     });
   });
 
@@ -149,8 +149,8 @@ describe("EaLink", () => {
 
         await link.updateComplete;
 
-        const anchorElement = link.shadowRoot.querySelector("a.ea-link");
-        expect(anchorElement.getAttribute("href")).toBe(href);
+        const anchorElement = link.shadowRoot!.querySelector("a.ea-link");
+        expect(anchorElement!.getAttribute("href")).toBe(href);
         link.remove();
       }
     });
@@ -162,13 +162,13 @@ describe("EaLink", () => {
 
       await link.updateComplete;
 
-      const anchorElement = link.shadowRoot.querySelector("a.ea-link");
-      expect(anchorElement.getAttribute("href")).toBe("https://old.com");
+      const anchorElement = link.shadowRoot!.querySelector("a.ea-link");
+      expect(anchorElement!.getAttribute("href")).toBe("https://old.com");
 
       link.setAttribute("href", "https://new.com");
       await link.updateComplete;
 
-      expect(anchorElement.getAttribute("href")).toBe("https://new.com");
+      expect(anchorElement!.getAttribute("href")).toBe("https://new.com");
     });
   });
 
@@ -189,8 +189,8 @@ describe("EaLink", () => {
       await link.updateComplete;
 
       expect(link.target).toBe("_blank");
-      const anchorElement = link.shadowRoot.querySelector("a.ea-link");
-      expect(anchorElement.getAttribute("target")).toBe("_blank");
+      const anchorElement = link.shadowRoot!.querySelector("a.ea-link");
+      expect(anchorElement!.getAttribute("target")).toBe("_blank");
     });
 
     it("应该支持 target='_self'", async () => {
@@ -201,8 +201,8 @@ describe("EaLink", () => {
 
       await link.updateComplete;
 
-      const anchorElement = link.shadowRoot.querySelector("a.ea-link");
-      expect(anchorElement.getAttribute("target")).toBe("_self");
+      const anchorElement = link.shadowRoot!.querySelector("a.ea-link");
+      expect(anchorElement!.getAttribute("target")).toBe("_self");
     });
 
     it("target 变化时应该正确更新 a 元素", async () => {
@@ -213,13 +213,13 @@ describe("EaLink", () => {
 
       await link.updateComplete;
 
-      const anchorElement = link.shadowRoot.querySelector("a.ea-link");
-      expect(anchorElement.getAttribute("target")).toBe("_blank");
+      const anchorElement = link.shadowRoot!.querySelector("a.ea-link");
+      expect(anchorElement!.getAttribute("target")).toBe("_blank");
 
       link.setAttribute("target", "_self");
       await link.updateComplete;
 
-      expect(anchorElement.getAttribute("target")).toBe("_self");
+      expect(anchorElement!.getAttribute("target")).toBe("_self");
     });
   });
 
@@ -240,8 +240,8 @@ describe("EaLink", () => {
       await link.updateComplete;
 
       expect(link.rel).toBe("noopener noreferrer");
-      const anchorElement = link.shadowRoot.querySelector("a.ea-link");
-      expect(anchorElement.getAttribute("rel")).toBe("noopener noreferrer");
+      const anchorElement = link.shadowRoot!.querySelector("a.ea-link");
+      expect(anchorElement!.getAttribute("rel")).toBe("noopener noreferrer");
     });
 
     it("rel 变化时应该正确更新 a 元素", async () => {
@@ -252,13 +252,13 @@ describe("EaLink", () => {
 
       await link.updateComplete;
 
-      const anchorElement = link.shadowRoot.querySelector("a.ea-link");
-      expect(anchorElement.getAttribute("rel")).toBe("noopener");
+      const anchorElement = link.shadowRoot!.querySelector("a.ea-link");
+      expect(anchorElement!.getAttribute("rel")).toBe("noopener");
 
       link.setAttribute("rel", "noopener noreferrer");
       await link.updateComplete;
 
-      expect(anchorElement.getAttribute("rel")).toBe("noopener noreferrer");
+      expect(anchorElement!.getAttribute("rel")).toBe("noopener noreferrer");
     });
   });
 
@@ -279,8 +279,8 @@ describe("EaLink", () => {
       await link.updateComplete;
 
       expect(link.download).toBe("document.pdf");
-      const anchorElement = link.shadowRoot.querySelector("a.ea-link");
-      expect(anchorElement.getAttribute("download")).toBe("document.pdf");
+      const anchorElement = link.shadowRoot!.querySelector("a.ea-link");
+      expect(anchorElement!.getAttribute("download")).toBe("document.pdf");
     });
 
     it("download 变化时应该正确更新 a 元素", async () => {
@@ -291,13 +291,13 @@ describe("EaLink", () => {
 
       await link.updateComplete;
 
-      const anchorElement = link.shadowRoot.querySelector("a.ea-link");
-      expect(anchorElement.getAttribute("download")).toBe("old.pdf");
+      const anchorElement = link.shadowRoot!.querySelector("a.ea-link");
+      expect(anchorElement!.getAttribute("download")).toBe("old.pdf");
 
       link.setAttribute("download", "new.pdf");
       await link.updateComplete;
 
-      expect(anchorElement.getAttribute("download")).toBe("new.pdf");
+      expect(anchorElement!.getAttribute("download")).toBe("new.pdf");
     });
   });
 
@@ -324,8 +324,8 @@ describe("EaLink", () => {
 
       await link.updateComplete;
 
-      const anchorElement = link.shadowRoot.querySelector("a.ea-link");
-      expect(anchorElement.classList.contains("is-disabled")).toBe(true);
+      const anchorElement = link.shadowRoot!.querySelector("a.ea-link");
+      expect(anchorElement!.classList.contains("is-disabled")).toBe(true);
     });
   });
 
@@ -368,9 +368,9 @@ describe("EaLink", () => {
 
       await link.updateComplete;
 
-      const anchorElement = link.shadowRoot.querySelector("a.ea-link");
+      const anchorElement = link.shadowRoot!.querySelector("a.ea-link");
       expect(
-        anchorElement.classList.contains("ea-link--underline-always")
+        anchorElement!.classList.contains("ea-link--underline-always")
       ).toBe(true);
     });
 
@@ -381,8 +381,8 @@ describe("EaLink", () => {
 
       await link.updateComplete;
 
-      const anchorElement = link.shadowRoot.querySelector("a.ea-link");
-      expect(anchorElement.classList.contains("ea-link--underline-hover")).toBe(
+      const anchorElement = link.shadowRoot!.querySelector("a.ea-link");
+      expect(anchorElement!.classList.contains("ea-link--underline-hover")).toBe(
         true
       );
     });
@@ -403,8 +403,8 @@ describe("EaLink", () => {
 
       await link.updateComplete;
 
-      const iconElement = link.shadowRoot.querySelector("ea-icon");
-      expect(iconElement.getAttribute("name")).toBe("eye");
+      const iconElement = link.shadowRoot!.querySelector("ea-icon");
+      expect(iconElement!.getAttribute("name")).toBe("eye");
     });
 
     it("设置 icon 时应该添加 is-icon 状态类", async () => {
@@ -414,8 +414,8 @@ describe("EaLink", () => {
 
       await link.updateComplete;
 
-      const anchorElement = link.shadowRoot.querySelector("a.ea-link");
-      expect(anchorElement.classList.contains("is-icon")).toBe(true);
+      const anchorElement = link.shadowRoot!.querySelector("a.ea-link");
+      expect(anchorElement!.classList.contains("is-icon")).toBe(true);
     });
 
     it("icon 变化时应该正确更新 ea-icon 元素", async () => {
@@ -425,13 +425,13 @@ describe("EaLink", () => {
 
       await link.updateComplete;
 
-      const iconElement = link.shadowRoot.querySelector("ea-icon");
-      expect(iconElement.getAttribute("name")).toBe("eye");
+      const iconElement = link.shadowRoot!.querySelector("ea-icon");
+      expect(iconElement!.getAttribute("name")).toBe("eye");
 
       link.setAttribute("icon", "share");
       await link.updateComplete;
 
-      expect(iconElement.getAttribute("name")).toBe("share");
+      expect(iconElement!.getAttribute("name")).toBe("share");
     });
   });
 
@@ -464,8 +464,8 @@ describe("EaLink", () => {
 
       await link.updateComplete;
 
-      const iconElement = link.shadowRoot.querySelector("ea-icon");
-      expect(iconElement.getAttribute("name")).toBe("eye");
+      const iconElement = link.shadowRoot!.querySelector("ea-icon");
+      expect(iconElement!.getAttribute("name")).toBe("eye");
       expect(link.underline).toBe("always");
     });
 
@@ -478,10 +478,10 @@ describe("EaLink", () => {
 
       await link.updateComplete;
 
-      const anchorElement = link.shadowRoot.querySelector("a.ea-link");
-      expect(anchorElement.getAttribute("href")).toBe("https://example.com");
-      expect(anchorElement.getAttribute("target")).toBe("_blank");
-      expect(anchorElement.getAttribute("rel")).toBe("noopener noreferrer");
+      const anchorElement = link.shadowRoot!.querySelector("a.ea-link");
+      expect(anchorElement!.getAttribute("href")).toBe("https://example.com");
+      expect(anchorElement!.getAttribute("target")).toBe("_blank");
+      expect(anchorElement!.getAttribute("rel")).toBe("noopener noreferrer");
     });
 
     it("应该同时设置多个属性", () => {
@@ -504,7 +504,7 @@ describe("EaLink", () => {
       link.textContent = "链接文本";
       container.appendChild(link);
 
-      const slot = link.shadowRoot.querySelector("slot");
+      const slot = link.shadowRoot!.querySelector("slot");
       expect(slot).toBeTruthy();
     });
 
@@ -513,7 +513,7 @@ describe("EaLink", () => {
       link.innerHTML = "<strong>粗体链接</strong>";
       container.appendChild(link);
 
-      const slot = link.shadowRoot.querySelector("slot");
+      const slot = link.shadowRoot!.querySelector("slot");
       expect(slot).toBeTruthy();
     });
   });
@@ -526,16 +526,18 @@ describe("EaLink", () => {
 
       await link.updateComplete;
 
-      const anchorElement = link.shadowRoot.querySelector("a.ea-link");
+      const anchorElement = link.shadowRoot!.querySelector<HTMLAnchorElement>(
+        "a.ea-link"
+      );
 
-      const clickPromise = new Promise(resolve => {
-        anchorElement.addEventListener("click", e => {
+      const clickPromise = new Promise<void>(resolve => {
+        anchorElement!.addEventListener("click", e => {
           e.preventDefault();
           resolve();
         });
       });
 
-      anchorElement.click();
+      anchorElement!.click();
 
       await clickPromise;
 
@@ -551,8 +553,8 @@ describe("EaLink", () => {
 
       await link.updateComplete;
 
-      const anchorElement = link.shadowRoot.querySelector("a.ea-link");
-      expect(anchorElement.getAttribute("href")).toBe("");
+      const anchorElement = link.shadowRoot!.querySelector("a.ea-link");
+      expect(anchorElement!.getAttribute("href")).toBe("");
     });
 
     it("空 icon 时应该正确处理", async () => {
@@ -562,8 +564,8 @@ describe("EaLink", () => {
 
       await link.updateComplete;
 
-      const iconElement = link.shadowRoot.querySelector("ea-icon");
-      expect(iconElement.getAttribute("name")).toBe("");
+      const iconElement = link.shadowRoot!.querySelector("ea-icon");
+      expect(iconElement!.getAttribute("name")).toBe("");
     });
 
     it("特殊字符在 href 中应该正确处理", async () => {
@@ -573,8 +575,8 @@ describe("EaLink", () => {
 
       await link.updateComplete;
 
-      const anchorElement = link.shadowRoot.querySelector("a.ea-link");
-      expect(anchorElement.getAttribute("href")).toBe(
+      const anchorElement = link.shadowRoot!.querySelector("a.ea-link");
+      expect(anchorElement!.getAttribute("href")).toBe(
         "/path?query=value&other=test"
       );
     });
@@ -607,7 +609,7 @@ describe("EaLink", () => {
       link.setAttribute("href", "https://example.com");
       container.appendChild(link);
 
-      const anchorElement = link.shadowRoot.querySelector("a.ea-link");
+      const anchorElement = link.shadowRoot!.querySelector("a.ea-link");
       expect(anchorElement).toBeTruthy();
       expect(link.href).toBe("https://example.com");
     });
@@ -665,8 +667,8 @@ describe("EaLink", () => {
         el.textContent = "Link";
         container.appendChild(el);
         await el.updateComplete;
-        const anchor = el.shadowRoot.querySelector("a.ea-link");
-        expect(anchor.getAttribute("role")).toBe("link");
+        const anchor = el.shadowRoot!.querySelector("a.ea-link");
+        expect(anchor!.getAttribute("role")).toBe("link");
       });
 
       it("有 href 时内部 a 元素不应该有 role=link", async () => {
@@ -674,8 +676,8 @@ describe("EaLink", () => {
         el.href = "https://example.com";
         container.appendChild(el);
         await el.updateComplete;
-        const anchor = el.shadowRoot.querySelector("a.ea-link");
-        expect(anchor.getAttribute("role")).toBeNull();
+        const anchor = el.shadowRoot!.querySelector("a.ea-link");
+        expect(anchor!.getAttribute("role")).toBeNull();
       });
     });
   });

@@ -5,7 +5,7 @@ import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y";
 import "./index";
 
 describe("EaAlert", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -30,7 +30,7 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
       expect(containerEl).not.toBeNull();
     });
 
@@ -38,7 +38,7 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      const iconWrap = alert.shadowRoot.querySelector(".ea-alert__icon-wrap");
+      const iconWrap = alert.shadowRoot!.querySelector(".ea-alert__icon-wrap");
       expect(iconWrap).not.toBeNull();
     });
 
@@ -46,7 +46,7 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      const content = alert.shadowRoot.querySelector(".ea-alert__content");
+      const content = alert.shadowRoot!.querySelector(".ea-alert__content");
       expect(content).not.toBeNull();
     });
 
@@ -54,7 +54,7 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      const heading = alert.shadowRoot.querySelector(".ea-alert__heading");
+      const heading = alert.shadowRoot!.querySelector(".ea-alert__heading");
       expect(heading).not.toBeNull();
     });
 
@@ -62,7 +62,7 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      const description = alert.shadowRoot.querySelector(
+      const description = alert.shadowRoot!.querySelector(
         ".ea-alert__description"
       );
       expect(description).not.toBeNull();
@@ -72,7 +72,9 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
       expect(closeBtn).not.toBeNull();
     });
 
@@ -80,33 +82,39 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      expect(closeBtn.tagName).toBe("BUTTON");
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
+      expect(closeBtn!.tagName).toBe("BUTTON");
     });
 
     it("close-btn 应该有 type=button 属性", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      expect(closeBtn.getAttribute("type")).toBe("button");
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
+      expect(closeBtn!.getAttribute("type")).toBe("button");
     });
 
     it("close-btn 应该是容器的直接子元素", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      expect(closeBtn.parentElement).toBe(containerEl);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
+      expect(closeBtn!.parentElement).toBe(containerEl);
     });
 
     it("close-btn 不应该在 content 元素内", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      const content = alert.shadowRoot.querySelector(".ea-alert__content");
-      const closeBtn = content.querySelector(".ea-alert__close-btn");
+      const content = alert.shadowRoot!.querySelector(".ea-alert__content");
+      const closeBtn = content!.querySelector(".ea-alert__close-btn");
       expect(closeBtn).toBeNull();
     });
   });
@@ -116,7 +124,7 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      const iconSlot = alert.shadowRoot.querySelector('slot[name="icon"]');
+      const iconSlot = alert.shadowRoot!.querySelector('slot[name="icon"]');
       expect(iconSlot).not.toBeNull();
     });
 
@@ -124,7 +132,7 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      const headingSlot = alert.shadowRoot.querySelector(
+      const headingSlot = alert.shadowRoot!.querySelector(
         'slot[name="heading"]'
       );
       expect(headingSlot).not.toBeNull();
@@ -134,7 +142,7 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      const defaultSlot = alert.shadowRoot.querySelector(
+      const defaultSlot = alert.shadowRoot!.querySelector(
         ".ea-alert__description slot"
       );
       expect(defaultSlot).not.toBeNull();
@@ -144,8 +152,8 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      const iconWrap = alert.shadowRoot.querySelector(".ea-alert__icon-wrap");
-      const iconSlot = iconWrap.querySelector('slot[name="icon"]');
+      const iconWrap = alert.shadowRoot!.querySelector(".ea-alert__icon-wrap");
+      const iconSlot = iconWrap!.querySelector('slot[name="icon"]');
       expect(iconSlot).not.toBeNull();
     });
 
@@ -153,8 +161,8 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      const headingEl = alert.shadowRoot.querySelector(".ea-alert__heading");
-      const headingSlot = headingEl.querySelector('slot[name="heading"]');
+      const headingEl = alert.shadowRoot!.querySelector(".ea-alert__heading");
+      const headingSlot = headingEl!.querySelector('slot[name="heading"]');
       expect(headingSlot).not.toBeNull();
     });
 
@@ -162,10 +170,10 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      const descriptionEl = alert.shadowRoot.querySelector(
+      const descriptionEl = alert.shadowRoot!.querySelector(
         ".ea-alert__description"
       );
-      const defaultSlot = descriptionEl.querySelector("slot");
+      const defaultSlot = descriptionEl!.querySelector("slot");
       expect(defaultSlot).not.toBeNull();
     });
   });
@@ -175,7 +183,6 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
       expect(alert.heading).toBe("");
     });
 
@@ -184,7 +191,6 @@ describe("EaAlert", () => {
       alert.setAttribute("heading", "Test Heading");
       container.appendChild(alert);
 
-
       expect(alert.heading).toBe("Test Heading");
     });
 
@@ -192,7 +198,6 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("heading", "Initial Heading");
       container.appendChild(alert);
-
 
       expect(alert.heading).toBe("Initial Heading");
 
@@ -206,9 +211,8 @@ describe("EaAlert", () => {
       alert.setAttribute("heading", "My Heading");
       container.appendChild(alert);
 
-
-      const headingEl = alert.shadowRoot.querySelector(".ea-alert__heading");
-      expect(headingEl.textContent).toContain("My Heading");
+      const headingEl = alert.shadowRoot!.querySelector(".ea-alert__heading");
+      expect(headingEl!.textContent).toContain("My Heading");
     });
 
     it("heading 变化时应该更新 heading 元素内容", async () => {
@@ -216,23 +220,21 @@ describe("EaAlert", () => {
       alert.setAttribute("heading", "Old Heading");
       container.appendChild(alert);
 
-
-      const headingEl = alert.shadowRoot.querySelector(".ea-alert__heading");
-      expect(headingEl.textContent).toContain("Old Heading");
+      const headingEl = alert.shadowRoot!.querySelector(".ea-alert__heading");
+      expect(headingEl!.textContent).toContain("Old Heading");
 
       alert.setAttribute("heading", "New Heading");
       await alert.updateComplete;
 
-      expect(headingEl.textContent).toContain("New Heading");
+      expect(headingEl!.textContent).toContain("New Heading");
     });
 
     it("heading 为空时 heading 元素应该包含 slot", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
-      const headingEl = alert.shadowRoot.querySelector(".ea-alert__heading");
-      const slot = headingEl.querySelector('slot[name="heading"]');
+      const headingEl = alert.shadowRoot!.querySelector(".ea-alert__heading");
+      const slot = headingEl!.querySelector('slot[name="heading"]');
       expect(slot).not.toBeNull();
     });
 
@@ -241,14 +243,13 @@ describe("EaAlert", () => {
       alert.setAttribute("heading", "Has Value");
       container.appendChild(alert);
 
-
-      const headingEl = alert.shadowRoot.querySelector(".ea-alert__heading");
-      expect(headingEl.textContent).toContain("Has Value");
+      const headingEl = alert.shadowRoot!.querySelector(".ea-alert__heading");
+      expect(headingEl!.textContent).toContain("Has Value");
 
       alert.setAttribute("heading", "");
       await alert.updateComplete;
 
-      const slot = headingEl.querySelector('slot[name="heading"]');
+      const slot = headingEl!.querySelector('slot[name="heading"]');
       expect(slot).not.toBeNull();
     });
   });
@@ -258,7 +259,6 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
       expect(alert.description).toBe("");
     });
 
@@ -267,7 +267,6 @@ describe("EaAlert", () => {
       alert.setAttribute("description", "Test Description");
       container.appendChild(alert);
 
-
       expect(alert.description).toBe("Test Description");
     });
 
@@ -275,7 +274,6 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("description", "Initial Description");
       container.appendChild(alert);
-
 
       alert.setAttribute("description", "Updated Description");
 
@@ -286,11 +284,10 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
-      const descriptionEl = alert.shadowRoot.querySelector(
+      const descriptionEl = alert.shadowRoot!.querySelector(
         ".ea-alert__description"
       );
-      const slot = descriptionEl.querySelector("slot");
+      const slot = descriptionEl!.querySelector("slot");
       expect(slot).not.toBeNull();
     });
 
@@ -299,11 +296,10 @@ describe("EaAlert", () => {
       alert.setAttribute("description", "My Description");
       container.appendChild(alert);
 
-
-      const descriptionEl = alert.shadowRoot.querySelector(
+      const descriptionEl = alert.shadowRoot!.querySelector(
         ".ea-alert__description"
       );
-      expect(descriptionEl.textContent).toContain("My Description");
+      expect(descriptionEl!.textContent).toContain("My Description");
     });
 
     it("description 从有值变为空时应该恢复 slot", async () => {
@@ -311,16 +307,15 @@ describe("EaAlert", () => {
       alert.setAttribute("description", "Has Value");
       container.appendChild(alert);
 
-
-      const descriptionEl = alert.shadowRoot.querySelector(
+      const descriptionEl = alert.shadowRoot!.querySelector(
         ".ea-alert__description"
       );
-      expect(descriptionEl.textContent).toContain("Has Value");
+      expect(descriptionEl!.textContent).toContain("Has Value");
 
       alert.setAttribute("description", "");
       await alert.updateComplete;
 
-      const slot = descriptionEl.querySelector("slot");
+      const slot = descriptionEl!.querySelector("slot");
       expect(slot).not.toBeNull();
     });
 
@@ -330,8 +325,8 @@ describe("EaAlert", () => {
 
       await alert.updateComplete;
 
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("is-has-description")).toBe(false);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("is-has-description")).toBe(false);
     });
 
     it("description 有值时应该添加 is-has-description 状态 class", async () => {
@@ -341,8 +336,8 @@ describe("EaAlert", () => {
 
       await alert.updateComplete;
 
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("is-has-description")).toBe(true);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("is-has-description")).toBe(true);
     });
 
     it("description 从有值变为空时应该移除 is-has-description 状态 class", async () => {
@@ -352,27 +347,26 @@ describe("EaAlert", () => {
 
       await alert.updateComplete;
 
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("is-has-description")).toBe(true);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("is-has-description")).toBe(true);
 
       alert.setAttribute("description", "");
       await alert.updateComplete;
 
-      expect(containerEl.classList.contains("is-has-description")).toBe(false);
+      expect(containerEl!.classList.contains("is-has-description")).toBe(false);
     });
 
     it("description 从空变为有值时应该添加 is-has-description 状态 class", async () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("is-has-description")).toBe(false);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("is-has-description")).toBe(false);
 
       alert.setAttribute("description", "Now has description");
       await alert.updateComplete;
 
-      expect(containerEl.classList.contains("is-has-description")).toBe(true);
+      expect(containerEl!.classList.contains("is-has-description")).toBe(true);
     });
   });
 
@@ -381,7 +375,6 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
       expect(alert.variant).toBe("info");
     });
 
@@ -389,7 +382,6 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("variant", "primary");
       container.appendChild(alert);
-
 
       expect(alert.variant).toBe("primary");
     });
@@ -402,11 +394,10 @@ describe("EaAlert", () => {
         alert.setAttribute("variant", variant);
         container.appendChild(alert);
 
-
         expect(alert.variant).toBe(variant);
 
-        const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-        expect(containerEl.classList.contains(`ea-alert--${variant}`)).toBe(
+        const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+        expect(containerEl!.classList.contains(`ea-alert--${variant}`)).toBe(
           true
         );
 
@@ -419,15 +410,14 @@ describe("EaAlert", () => {
       alert.setAttribute("variant", "info");
       container.appendChild(alert);
 
-
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("ea-alert--info")).toBe(true);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("ea-alert--info")).toBe(true);
 
       alert.setAttribute("variant", "success");
       await alert.updateComplete;
 
-      expect(containerEl.classList.contains("ea-alert--success")).toBe(true);
-      expect(containerEl.classList.contains("ea-alert--info")).toBe(false);
+      expect(containerEl!.classList.contains("ea-alert--success")).toBe(true);
+      expect(containerEl!.classList.contains("ea-alert--info")).toBe(false);
     });
 
     it("variant 变化时如果 showIcon 为 true 应该更新图标", async () => {
@@ -436,15 +426,14 @@ describe("EaAlert", () => {
       alert.setAttribute("variant", "info");
       container.appendChild(alert);
 
-
-      let iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
-      expect(iconEl.getAttribute("name")).toBe("circle-info");
+      let iconEl = alert.shadowRoot!.querySelector(".ea-alert__icon");
+      expect(iconEl!.getAttribute("name")).toBe("circle-info");
 
       alert.setAttribute("variant", "success");
       await alert.updateComplete;
 
-      iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
-      expect(iconEl.getAttribute("name")).toBe("circle-check");
+      iconEl = alert.shadowRoot!.querySelector(".ea-alert__icon");
+      expect(iconEl!.getAttribute("name")).toBe("circle-check");
     });
 
     it("variant 变化时如果 showIcon 为 false 不应该添加图标", async () => {
@@ -452,14 +441,13 @@ describe("EaAlert", () => {
       alert.setAttribute("variant", "info");
       container.appendChild(alert);
 
-
-      let iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
+      let iconEl = alert.shadowRoot!.querySelector(".ea-alert__icon");
       expect(iconEl).toBeNull();
 
       alert.setAttribute("variant", "success");
       await alert.updateComplete;
 
-      iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
+      iconEl = alert.shadowRoot!.querySelector(".ea-alert__icon");
       expect(iconEl).toBeNull();
     });
   });
@@ -469,7 +457,6 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
       expect(alert.effect).toBe("light");
     });
 
@@ -478,9 +465,8 @@ describe("EaAlert", () => {
       alert.setAttribute("effect", "light");
       container.appendChild(alert);
 
-
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("ea-alert--light")).toBe(true);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("ea-alert--light")).toBe(true);
     });
 
     it("应该正确应用 effect=dark 样式", () => {
@@ -488,9 +474,8 @@ describe("EaAlert", () => {
       alert.setAttribute("effect", "dark");
       container.appendChild(alert);
 
-
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("ea-alert--dark")).toBe(true);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("ea-alert--dark")).toBe(true);
     });
 
     it("effect 变化时应该正确更新 class", async () => {
@@ -498,15 +483,14 @@ describe("EaAlert", () => {
       alert.setAttribute("effect", "light");
       container.appendChild(alert);
 
-
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("ea-alert--light")).toBe(true);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("ea-alert--light")).toBe(true);
 
       alert.setAttribute("effect", "dark");
       await alert.updateComplete;
 
-      expect(containerEl.classList.contains("ea-alert--dark")).toBe(true);
-      expect(containerEl.classList.contains("ea-alert--light")).toBe(false);
+      expect(containerEl!.classList.contains("ea-alert--dark")).toBe(true);
+      expect(containerEl!.classList.contains("ea-alert--light")).toBe(false);
     });
   });
 
@@ -515,7 +499,6 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
       expect(alert.closable).toBe(true);
     });
 
@@ -523,9 +506,10 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      const closeIcon = closeBtn.querySelector(".ea-alert__close-icon");
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
+      const closeIcon = closeBtn!.querySelector(".ea-alert__close-icon");
       expect(closeIcon).not.toBeNull();
     });
 
@@ -533,29 +517,31 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
       alert.closable = false;
       await alert.updateComplete;
 
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      expect(closeBtn.innerHTML).toBe("");
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
+      expect(closeBtn!.innerHTML).toBe("");
     });
 
     it("closable 从 false 变回 true 时应该恢复关闭图标", async () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
       alert.closable = false;
       await alert.updateComplete;
 
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      expect(closeBtn.querySelector(".ea-alert__close-icon")).toBeNull();
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
+      expect(closeBtn!.querySelector(".ea-alert__close-icon")).toBeNull();
 
       alert.closable = true;
       await alert.updateComplete;
 
-      expect(closeBtn.querySelector(".ea-alert__close-icon")).not.toBeNull();
+      expect(closeBtn!.querySelector(".ea-alert__close-icon")).not.toBeNull();
     });
 
     it("closable 为 true 且 closeText 有值时应该显示 closeText", () => {
@@ -563,9 +549,10 @@ describe("EaAlert", () => {
       alert.setAttribute("close-text", "关闭");
       container.appendChild(alert);
 
-
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      expect(closeBtn.textContent).toBe("关闭");
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
+      expect(closeBtn!.textContent).toBe("关闭");
     });
 
     it("closable 从 true 变为 false 时应该清空 closeText 内容", async () => {
@@ -573,14 +560,15 @@ describe("EaAlert", () => {
       alert.setAttribute("close-text", "关闭");
       container.appendChild(alert);
 
-
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      expect(closeBtn.textContent).toBe("关闭");
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
+      expect(closeBtn!.textContent).toBe("关闭");
 
       alert.closable = false;
       await alert.updateComplete;
 
-      expect(closeBtn.innerHTML).toBe("");
+      expect(closeBtn!.innerHTML).toBe("");
     });
 
     it("closable 从 false 变为 true 且 closeText 有值时应该显示 closeText", async () => {
@@ -588,17 +576,18 @@ describe("EaAlert", () => {
       alert.setAttribute("close-text", "知道了");
       container.appendChild(alert);
 
-
       alert.closable = false;
       await alert.updateComplete;
 
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      expect(closeBtn.innerHTML).toBe("");
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
+      expect(closeBtn!.innerHTML).toBe("");
 
       alert.closable = true;
       await alert.updateComplete;
 
-      expect(closeBtn.textContent).toBe("知道了");
+      expect(closeBtn!.textContent).toBe("知道了");
     });
   });
 
@@ -606,7 +595,6 @@ describe("EaAlert", () => {
     it("默认 closeText 应该是空字符串", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
-
 
       expect(alert.closeText).toBe("");
     });
@@ -616,9 +604,10 @@ describe("EaAlert", () => {
       alert.setAttribute("close-text", "关闭");
       container.appendChild(alert);
 
-
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      expect(closeBtn.textContent).toBe("关闭");
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
+      expect(closeBtn!.textContent).toBe("关闭");
     });
 
     it("closeText 变化时应该正确更新", async () => {
@@ -626,14 +615,15 @@ describe("EaAlert", () => {
       alert.setAttribute("close-text", "关闭");
       container.appendChild(alert);
 
-
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      expect(closeBtn.textContent).toBe("关闭");
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
+      expect(closeBtn!.textContent).toBe("关闭");
 
       alert.setAttribute("close-text", "Close");
       await alert.updateComplete;
 
-      expect(closeBtn.textContent).toBe("Close");
+      expect(closeBtn!.textContent).toBe("Close");
     });
 
     it("closeText 有值时应该替代关闭图标", () => {
@@ -641,10 +631,11 @@ describe("EaAlert", () => {
       alert.setAttribute("close-text", "知道了");
       container.appendChild(alert);
 
-
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      expect(closeBtn.textContent).toBe("知道了");
-      expect(closeBtn.querySelector(".ea-alert__close-icon")).toBeNull();
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
+      expect(closeBtn!.textContent).toBe("知道了");
+      expect(closeBtn!.querySelector(".ea-alert__close-icon")).toBeNull();
     });
 
     it("closeText 清空后应该恢复关闭图标", async () => {
@@ -652,15 +643,16 @@ describe("EaAlert", () => {
       alert.setAttribute("close-text", "关闭");
       container.appendChild(alert);
 
-
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      expect(closeBtn.textContent).toBe("关闭");
-      expect(closeBtn.querySelector(".ea-alert__close-icon")).toBeNull();
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
+      expect(closeBtn!.textContent).toBe("关闭");
+      expect(closeBtn!.querySelector(".ea-alert__close-icon")).toBeNull();
 
       alert.setAttribute("close-text", "");
       await alert.updateComplete;
 
-      expect(closeBtn.querySelector(".ea-alert__close-icon")).not.toBeNull();
+      expect(closeBtn!.querySelector(".ea-alert__close-icon")).not.toBeNull();
     });
 
     it("closeText 清空后 closable 为 false 时不应恢复图标", async () => {
@@ -668,17 +660,18 @@ describe("EaAlert", () => {
       alert.setAttribute("close-text", "关闭");
       container.appendChild(alert);
 
-
       alert.closable = false;
       await alert.updateComplete;
 
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      expect(closeBtn.innerHTML).toBe("");
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
+      expect(closeBtn!.innerHTML).toBe("");
 
       alert.setAttribute("close-text", "");
       await alert.updateComplete;
 
-      expect(closeBtn.querySelector(".ea-alert__close-icon")).toBeNull();
+      expect(closeBtn!.querySelector(".ea-alert__close-icon")).toBeNull();
     });
   });
 
@@ -686,7 +679,6 @@ describe("EaAlert", () => {
     it("默认 showIcon 应该是 false", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
-
 
       expect(alert.showIcon).toBe(false);
     });
@@ -696,8 +688,7 @@ describe("EaAlert", () => {
       alert.setAttribute("show-icon", "");
       container.appendChild(alert);
 
-
-      const iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
+      const iconEl = alert.shadowRoot!.querySelector(".ea-alert__icon");
       expect(iconEl).not.toBeNull();
     });
 
@@ -705,14 +696,13 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
-      let iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
+      let iconEl = alert.shadowRoot!.querySelector(".ea-alert__icon");
       expect(iconEl).toBeNull();
 
       alert.setAttribute("show-icon", "");
       await alert.updateComplete;
 
-      iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
+      iconEl = alert.shadowRoot!.querySelector(".ea-alert__icon");
       expect(iconEl).not.toBeNull();
     });
 
@@ -721,9 +711,8 @@ describe("EaAlert", () => {
       alert.setAttribute("show-icon", "");
       container.appendChild(alert);
 
-
-      const iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
-      expect(iconEl.getAttribute("part")).toBe("icon");
+      const iconEl = alert.shadowRoot!.querySelector(".ea-alert__icon");
+      expect(iconEl!.getAttribute("part")).toBe("icon");
     });
 
     it("showIcon 从 true 变为 false 时应该移除图标", async () => {
@@ -731,14 +720,13 @@ describe("EaAlert", () => {
       alert.setAttribute("show-icon", "");
       container.appendChild(alert);
 
-
-      let iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
+      let iconEl = alert.shadowRoot!.querySelector(".ea-alert__icon");
       expect(iconEl).not.toBeNull();
 
       alert.showIcon = false;
       await alert.updateComplete;
 
-      iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
+      iconEl = alert.shadowRoot!.querySelector(".ea-alert__icon");
       expect(iconEl).toBeNull();
     });
   });
@@ -759,10 +747,9 @@ describe("EaAlert", () => {
         alert.setAttribute("show-icon", "");
         container.appendChild(alert);
 
-
-        const iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
+        const iconEl = alert.shadowRoot!.querySelector(".ea-alert__icon");
         expect(iconEl).not.toBeNull();
-        expect(iconEl.getAttribute("name")).toBe(iconName);
+        expect(iconEl!.getAttribute("name")).toBe(iconName);
       });
     });
 
@@ -772,15 +759,14 @@ describe("EaAlert", () => {
       alert.setAttribute("variant", "info");
       container.appendChild(alert);
 
-
-      let iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
-      expect(iconEl.getAttribute("name")).toBe("circle-info");
+      let iconEl = alert.shadowRoot!.querySelector(".ea-alert__icon");
+      expect(iconEl!.getAttribute("name")).toBe("circle-info");
 
       alert.setAttribute("variant", "danger");
       await alert.updateComplete;
 
-      iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
-      expect(iconEl.getAttribute("name")).toBe("circle-xmark");
+      iconEl = alert.shadowRoot!.querySelector(".ea-alert__icon");
+      expect(iconEl!.getAttribute("name")).toBe("circle-xmark");
     });
   });
 
@@ -788,7 +774,6 @@ describe("EaAlert", () => {
     it("默认 center 应该是 false", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
-
 
       expect(alert.center).toBe(false);
     });
@@ -798,32 +783,29 @@ describe("EaAlert", () => {
       alert.setAttribute("center", "");
       container.appendChild(alert);
 
-
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("is-center")).toBe(true);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("is-center")).toBe(true);
     });
 
     it("未设置 center 时不应有 is-center 状态 class", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("is-center")).toBe(false);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("is-center")).toBe(false);
     });
 
     it("center 变化时应该正确更新 class", async () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("is-center")).toBe(false);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("is-center")).toBe(false);
 
       alert.setAttribute("center", "");
       await alert.updateComplete;
 
-      expect(containerEl.classList.contains("is-center")).toBe(true);
+      expect(containerEl!.classList.contains("is-center")).toBe(true);
     });
 
     it("center 从 true 变为 false 时应该移除 is-center class", async () => {
@@ -831,14 +813,13 @@ describe("EaAlert", () => {
       alert.setAttribute("center", "");
       container.appendChild(alert);
 
-
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("is-center")).toBe(true);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("is-center")).toBe(true);
 
       alert.removeAttribute("center");
       await alert.updateComplete;
 
-      expect(containerEl.classList.contains("is-center")).toBe(false);
+      expect(containerEl!.classList.contains("is-center")).toBe(false);
     });
   });
 
@@ -847,11 +828,10 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("ea-alert")).toBe(true);
-      expect(containerEl.classList.contains("ea-alert--info")).toBe(true);
-      expect(containerEl.classList.contains("ea-alert--light")).toBe(true);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("ea-alert")).toBe(true);
+      expect(containerEl!.classList.contains("ea-alert--info")).toBe(true);
+      expect(containerEl!.classList.contains("ea-alert--light")).toBe(true);
     });
 
     it("variant=primary 应该添加 ea-alert--primary class", () => {
@@ -859,9 +839,8 @@ describe("EaAlert", () => {
       alert.setAttribute("variant", "primary");
       container.appendChild(alert);
 
-
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("ea-alert--primary")).toBe(true);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("ea-alert--primary")).toBe(true);
     });
 
     it("effect=dark 应该添加 ea-alert--dark class", () => {
@@ -869,9 +848,8 @@ describe("EaAlert", () => {
       alert.setAttribute("effect", "dark");
       container.appendChild(alert);
 
-
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("ea-alert--dark")).toBe(true);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("ea-alert--dark")).toBe(true);
     });
 
     it("center 应该添加 is-center 状态 class", () => {
@@ -879,9 +857,8 @@ describe("EaAlert", () => {
       alert.setAttribute("center", "");
       container.appendChild(alert);
 
-
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("is-center")).toBe(true);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("is-center")).toBe(true);
     });
 
     it("variant 和 effect 同时变化时 class 应该正确更新", async () => {
@@ -890,19 +867,18 @@ describe("EaAlert", () => {
       alert.setAttribute("effect", "light");
       container.appendChild(alert);
 
-
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("ea-alert--primary")).toBe(true);
-      expect(containerEl.classList.contains("ea-alert--light")).toBe(true);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("ea-alert--primary")).toBe(true);
+      expect(containerEl!.classList.contains("ea-alert--light")).toBe(true);
 
       alert.setAttribute("variant", "danger");
       alert.setAttribute("effect", "dark");
       await alert.updateComplete;
 
-      expect(containerEl.classList.contains("ea-alert--danger")).toBe(true);
-      expect(containerEl.classList.contains("ea-alert--dark")).toBe(true);
-      expect(containerEl.classList.contains("ea-alert--primary")).toBe(false);
-      expect(containerEl.classList.contains("ea-alert--light")).toBe(false);
+      expect(containerEl!.classList.contains("ea-alert--danger")).toBe(true);
+      expect(containerEl!.classList.contains("ea-alert--dark")).toBe(true);
+      expect(containerEl!.classList.contains("ea-alert--primary")).toBe(false);
+      expect(containerEl!.classList.contains("ea-alert--light")).toBe(false);
     });
 
     it("description 有值时应该添加 is-has-description 状态 class", async () => {
@@ -912,8 +888,8 @@ describe("EaAlert", () => {
 
       await alert.updateComplete;
 
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("is-has-description")).toBe(true);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("is-has-description")).toBe(true);
     });
 
     it("description 为空时不应有 is-has-description 状态 class", async () => {
@@ -922,8 +898,8 @@ describe("EaAlert", () => {
 
       await alert.updateComplete;
 
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("is-has-description")).toBe(false);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("is-has-description")).toBe(false);
     });
   });
 
@@ -932,7 +908,7 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      const containerEl = alert.shadowRoot.querySelector('[part="container"]');
+      const containerEl = alert.shadowRoot!.querySelector('[part="container"]');
       expect(containerEl).not.toBeNull();
     });
 
@@ -940,7 +916,7 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      const iconWrap = alert.shadowRoot.querySelector('[part="icon-wrap"]');
+      const iconWrap = alert.shadowRoot!.querySelector('[part="icon-wrap"]');
       expect(iconWrap).not.toBeNull();
     });
 
@@ -948,7 +924,7 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      const contentWrap = alert.shadowRoot.querySelector(
+      const contentWrap = alert.shadowRoot!.querySelector(
         '[part="content-wrap"]'
       );
       expect(contentWrap).not.toBeNull();
@@ -958,7 +934,7 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      const heading = alert.shadowRoot.querySelector('[part="heading"]');
+      const heading = alert.shadowRoot!.querySelector('[part="heading"]');
       expect(heading).not.toBeNull();
     });
 
@@ -966,7 +942,7 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      const description = alert.shadowRoot.querySelector(
+      const description = alert.shadowRoot!.querySelector(
         '[part="description"]'
       );
       expect(description).not.toBeNull();
@@ -976,7 +952,7 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-      const closeBtn = alert.shadowRoot.querySelector('[part="close-btn"]');
+      const closeBtn = alert.shadowRoot!.querySelector('[part="close-btn"]');
       expect(closeBtn).not.toBeNull();
     });
 
@@ -985,8 +961,7 @@ describe("EaAlert", () => {
       alert.setAttribute("show-icon", "");
       container.appendChild(alert);
 
-
-      const icon = alert.shadowRoot.querySelector('[part="icon"]');
+      const icon = alert.shadowRoot!.querySelector('[part="icon"]');
       expect(icon).not.toBeNull();
     });
 
@@ -994,8 +969,7 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
-      const icon = alert.shadowRoot.querySelector('[part="icon"]');
+      const icon = alert.shadowRoot!.querySelector('[part="icon"]');
       expect(icon).toBeNull();
     });
 
@@ -1003,8 +977,7 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
-      const closeIcon = alert.shadowRoot.querySelector('[part="close-icon"]');
+      const closeIcon = alert.shadowRoot!.querySelector('[part="close-icon"]');
       expect(closeIcon).not.toBeNull();
     });
 
@@ -1012,11 +985,10 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
       alert.closable = false;
       await alert.updateComplete;
 
-      const closeIcon = alert.shadowRoot.querySelector('[part="close-icon"]');
+      const closeIcon = alert.shadowRoot!.querySelector('[part="close-icon"]');
       expect(closeIcon).toBeNull();
     });
 
@@ -1025,8 +997,7 @@ describe("EaAlert", () => {
       alert.setAttribute("close-text", "关闭");
       container.appendChild(alert);
 
-
-      const closeIcon = alert.shadowRoot.querySelector('[part="close-icon"]');
+      const closeIcon = alert.shadowRoot!.querySelector('[part="close-icon"]');
       expect(closeIcon).toBeNull();
     });
   });
@@ -1036,27 +1007,29 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
+      closeBtn!.click();
 
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      closeBtn.click();
-
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("is-before-close")).toBe(true);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("is-before-close")).toBe(true);
     });
 
     it("点击关闭按钮后 transitionend 应该触发 ea-close 事件", async () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
       const closeHandler = vi.fn();
       alert.addEventListener("ea-close", closeHandler);
 
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      closeBtn.click();
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
+      closeBtn!.click();
 
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      containerEl.dispatchEvent(
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      containerEl!.dispatchEvent(
         new TransitionEvent("transitionend", {
           bubbles: true,
           propertyName: "filter",
@@ -1072,17 +1045,18 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
       let eventDetail = null;
       alert.addEventListener("ea-close", e => {
-        eventDetail = e.detail;
+        eventDetail = (e as CustomEvent).detail;
       });
 
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      closeBtn.click();
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
+      closeBtn!.click();
 
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      containerEl.dispatchEvent(
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      containerEl!.dispatchEvent(
         new TransitionEvent("transitionend", {
           bubbles: true,
           propertyName: "filter",
@@ -1098,12 +1072,13 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
+      closeBtn!.click();
 
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      closeBtn.click();
-
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      containerEl.dispatchEvent(
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      containerEl!.dispatchEvent(
         new TransitionEvent("transitionend", {
           bubbles: true,
           propertyName: "filter",
@@ -1119,17 +1094,18 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
+      closeBtn!.click();
 
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      closeBtn.click();
-
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("is-before-close")).toBe(true);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("is-before-close")).toBe(true);
 
       const closeHandler = vi.fn();
       alert.addEventListener("ea-close", closeHandler);
 
-      containerEl.dispatchEvent(
+      containerEl!.dispatchEvent(
         new TransitionEvent("transitionend", {
           bubbles: true,
           propertyName: "filter",
@@ -1145,15 +1121,16 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
       alert.closable = false;
       await alert.updateComplete;
 
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      closeBtn.click();
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
+      closeBtn!.click();
 
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("is-before-close")).toBe(false);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("is-before-close")).toBe(false);
     });
 
     it("closable 为 false 且 autoClose 为 0 时不应触发关闭", () => {
@@ -1161,12 +1138,13 @@ describe("EaAlert", () => {
       alert.closable = false;
       container.appendChild(alert);
 
-
       const closeHandler = vi.fn();
       alert.addEventListener("ea-close", closeHandler);
 
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      closeBtn.click();
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
+      closeBtn!.click();
 
       expect(closeHandler).not.toHaveBeenCalled();
     });
@@ -1175,17 +1153,18 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
       let caughtEvent = null;
       alert.addEventListener("ea-close", e => {
         caughtEvent = e;
       });
 
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      closeBtn.click();
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
+      closeBtn!.click();
 
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      containerEl.dispatchEvent(
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      containerEl!.dispatchEvent(
         new TransitionEvent("transitionend", {
           bubbles: true,
           propertyName: "filter",
@@ -1195,8 +1174,8 @@ describe("EaAlert", () => {
       await alert.updateComplete;
 
       expect(caughtEvent).not.toBeNull();
-      expect(caughtEvent.bubbles).toBe(true);
-      expect(caughtEvent.composed).toBe(true);
+      expect(caughtEvent!.bubbles).toBe(true);
+      expect(caughtEvent!.composed).toBe(true);
     });
   });
 
@@ -1233,8 +1212,8 @@ describe("EaAlert", () => {
       await waitForRender(250);
 
       expect(caughtEvent).not.toBeNull();
-      expect(caughtEvent.bubbles).toBe(true);
-      expect(caughtEvent.composed).toBe(true);
+      expect(caughtEvent!.bubbles).toBe(true);
+      expect(caughtEvent!.composed).toBe(true);
     });
   });
 
@@ -1243,7 +1222,6 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
       expect(alert.showAfter).toBe(0);
     });
 
@@ -1251,9 +1229,8 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("is-hide")).toBe(false);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("is-hide")).toBe(false);
     });
 
     it("showAfter 大于 0 时初始应该添加 is-hide 状态 class", async () => {
@@ -1263,8 +1240,8 @@ describe("EaAlert", () => {
 
       await alert.updateComplete;
 
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("is-hide")).toBe(true);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("is-hide")).toBe(true);
     });
 
     it("showAfter 到期后应该移除 is-hide 状态 class", async () => {
@@ -1274,12 +1251,12 @@ describe("EaAlert", () => {
 
       await alert.updateComplete;
 
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("is-hide")).toBe(true);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("is-hide")).toBe(true);
 
       await waitForRender(200);
 
-      expect(containerEl.classList.contains("is-hide")).toBe(false);
+      expect(containerEl!.classList.contains("is-hide")).toBe(false);
     });
 
     it("showAfter 大于 0 时应该延迟触发 ea-open 事件", async () => {
@@ -1307,18 +1284,17 @@ describe("EaAlert", () => {
 
       await alert.updateComplete;
 
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("is-hide")).toBe(true);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("is-hide")).toBe(true);
 
       await waitForRender(200);
 
-      expect(containerEl.classList.contains("is-hide")).toBe(false);
+      expect(containerEl!.classList.contains("is-hide")).toBe(false);
     });
 
     it("设置 show-after=0 时应该立即触发 ea-open 事件", async () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
-
 
       const openHandler = vi.fn();
       alert.addEventListener("ea-open", openHandler);
@@ -1336,14 +1312,14 @@ describe("EaAlert", () => {
 
       await alert.updateComplete;
 
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("is-hide")).toBe(true);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("is-hide")).toBe(true);
 
       alert.setAttribute("variant", "success");
       await alert.updateComplete;
 
-      expect(containerEl.classList.contains("is-hide")).toBe(true);
-      expect(containerEl.classList.contains("ea-alert--success")).toBe(true);
+      expect(containerEl!.classList.contains("is-hide")).toBe(true);
+      expect(containerEl!.classList.contains("ea-alert--success")).toBe(true);
     });
 
     it("重新设置 showAfter 应该清除之前的定时器", async () => {
@@ -1378,12 +1354,12 @@ describe("EaAlert", () => {
 
       await alert.updateComplete;
 
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("is-hide")).toBe(true);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("is-hide")).toBe(true);
 
       await waitForRender(200);
 
-      expect(containerEl.classList.contains("is-hide")).toBe(false);
+      expect(containerEl!.classList.contains("is-hide")).toBe(false);
       expect(openHandler).toHaveBeenCalled();
     });
   });
@@ -1392,7 +1368,6 @@ describe("EaAlert", () => {
     it("默认 autoClose 应该是 0", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
-
 
       expect(alert.autoClose).toBe(0);
     });
@@ -1406,8 +1381,8 @@ describe("EaAlert", () => {
 
       await waitForRender(200);
 
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("is-before-close")).toBe(true);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("is-before-close")).toBe(true);
     });
 
     it("autoClose 大于 0 时应该触发 ea-close 事件", async () => {
@@ -1422,8 +1397,8 @@ describe("EaAlert", () => {
 
       await waitForRender(200);
 
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      containerEl.dispatchEvent(
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      containerEl!.dispatchEvent(
         new TransitionEvent("transitionend", {
           bubbles: true,
           propertyName: "filter",
@@ -1448,8 +1423,8 @@ describe("EaAlert", () => {
       alert.setAttribute("auto-close", "100");
       await waitForRender(200);
 
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("is-before-close")).toBe(true);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("is-before-close")).toBe(true);
     });
 
     it("autoClose 为 0 时不应自动关闭", async () => {
@@ -1461,8 +1436,8 @@ describe("EaAlert", () => {
 
       await waitForRender(200);
 
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("is-before-close")).toBe(false);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("is-before-close")).toBe(false);
     });
 
     it("重新设置 autoClose 应该清除之前的定时器", async () => {
@@ -1477,12 +1452,12 @@ describe("EaAlert", () => {
 
       await waitForRender(150);
 
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("is-before-close")).toBe(false);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("is-before-close")).toBe(false);
 
       await waitForRender(200);
 
-      expect(containerEl.classList.contains("is-before-close")).toBe(true);
+      expect(containerEl!.classList.contains("is-before-close")).toBe(true);
     });
 
     it("设置 autoClose 为 0 应该取消自动关闭定时器", async () => {
@@ -1497,8 +1472,8 @@ describe("EaAlert", () => {
 
       await waitForRender(200);
 
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("is-before-close")).toBe(false);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("is-before-close")).toBe(false);
     });
   });
 
@@ -1507,7 +1482,6 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
       expect(alert.hideAfter).toBe(0);
     });
 
@@ -1515,7 +1489,6 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("hide-after", "200");
       container.appendChild(alert);
-
 
       expect(alert.hideAfter).toBe(200);
     });
@@ -1527,29 +1500,32 @@ describe("EaAlert", () => {
 
       await alert.updateComplete;
 
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      closeBtn.click();
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
+      closeBtn!.click();
 
       await waitForRender(50);
 
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("is-before-close")).toBe(false);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("is-before-close")).toBe(false);
 
       await waitForRender(200);
 
-      expect(containerEl.classList.contains("is-before-close")).toBe(true);
+      expect(containerEl!.classList.contains("is-before-close")).toBe(true);
     });
 
     it("hideAfter 为 0 时应该立即开始关闭动画", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
+      closeBtn!.click();
 
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      closeBtn.click();
-
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("is-before-close")).toBe(true);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("is-before-close")).toBe(true);
     });
 
     it("组件断开连接时应该清理 hideAfter 定时器", async () => {
@@ -1559,8 +1535,10 @@ describe("EaAlert", () => {
 
       await alert.updateComplete;
 
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      closeBtn.click();
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
+      closeBtn!.click();
 
       alert.remove();
 
@@ -1580,7 +1558,6 @@ describe("EaAlert", () => {
       alert.setAttribute("effect", "dark");
       container.appendChild(alert);
 
-
       const className = alert.updateContainerClasslist();
       expect(className).toContain("ea-alert");
       expect(className).toContain("ea-alert--primary");
@@ -1592,7 +1569,6 @@ describe("EaAlert", () => {
       alert.setAttribute("center", "");
       container.appendChild(alert);
 
-
       const className = alert.updateContainerClasslist();
       expect(className).toContain("is-center");
     });
@@ -1600,7 +1576,6 @@ describe("EaAlert", () => {
     it("center 为 false 时返回的类名不应包含 is-center", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
-
 
       const className = alert.updateContainerClasslist();
       expect(className).not.toContain("is-center");
@@ -1622,7 +1597,6 @@ describe("EaAlert", () => {
       alert.setAttribute("variant", "warning");
       alert.setAttribute("effect", "dark");
       container.appendChild(alert);
-
 
       const className = alert.updateContainerClasslist();
       expect(className).toContain("ea-alert--warning");
@@ -1662,15 +1636,14 @@ describe("EaAlert", () => {
       alert.setAttribute("description", "This is a success alert");
       container.appendChild(alert);
 
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("ea-alert--success")).toBe(true);
+      expect(containerEl!.classList.contains("ea-alert--dark")).toBe(true);
+      expect(containerEl!.classList.contains("is-center")).toBe(true);
 
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("ea-alert--success")).toBe(true);
-      expect(containerEl.classList.contains("ea-alert--dark")).toBe(true);
-      expect(containerEl.classList.contains("is-center")).toBe(true);
-
-      const iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
+      const iconEl = alert.shadowRoot!.querySelector(".ea-alert__icon");
       expect(iconEl).not.toBeNull();
-      expect(iconEl.getAttribute("name")).toBe("circle-check");
+      expect(iconEl!.getAttribute("name")).toBe("circle-check");
     });
 
     it("应该正确处理动态属性变化", async () => {
@@ -1678,18 +1651,17 @@ describe("EaAlert", () => {
       alert.setAttribute("variant", "info");
       container.appendChild(alert);
 
-
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("ea-alert--info")).toBe(true);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("ea-alert--info")).toBe(true);
 
       alert.setAttribute("variant", "warning");
       alert.setAttribute("effect", "dark");
       alert.setAttribute("center", "");
       await alert.updateComplete;
 
-      expect(containerEl.classList.contains("ea-alert--warning")).toBe(true);
-      expect(containerEl.classList.contains("ea-alert--dark")).toBe(true);
-      expect(containerEl.classList.contains("is-center")).toBe(true);
+      expect(containerEl!.classList.contains("ea-alert--warning")).toBe(true);
+      expect(containerEl!.classList.contains("ea-alert--dark")).toBe(true);
+      expect(containerEl!.classList.contains("is-center")).toBe(true);
     });
 
     it("应该支持 variant + effect + showIcon 组合", () => {
@@ -1702,12 +1674,11 @@ describe("EaAlert", () => {
         alert.setAttribute("show-icon", "");
         container.appendChild(alert);
 
-
-        const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-        expect(containerEl.classList.contains(`ea-alert--${variant}`)).toBe(
+        const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+        expect(containerEl!.classList.contains(`ea-alert--${variant}`)).toBe(
           true
         );
-        expect(containerEl.classList.contains("ea-alert--dark")).toBe(true);
+        expect(containerEl!.classList.contains("ea-alert--dark")).toBe(true);
 
         container.removeChild(alert);
       }
@@ -1718,10 +1689,11 @@ describe("EaAlert", () => {
       alert.setAttribute("close-text", "知道了");
       container.appendChild(alert);
 
-
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      expect(closeBtn.textContent).toBe("知道了");
-      expect(closeBtn.querySelector(".ea-alert__close-icon")).toBeNull();
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
+      expect(closeBtn!.textContent).toBe("知道了");
+      expect(closeBtn!.querySelector(".ea-alert__close-icon")).toBeNull();
     });
 
     it("应该支持 heading slot 自定义内容", () => {
@@ -1729,8 +1701,7 @@ describe("EaAlert", () => {
       alert.innerHTML = '<span slot="heading">Custom Heading</span>';
       container.appendChild(alert);
 
-
-      const headingSlot = alert.shadowRoot.querySelector(
+      const headingSlot = alert.shadowRoot!.querySelector(
         'slot[name="heading"]'
       );
       expect(headingSlot).not.toBeNull();
@@ -1741,8 +1712,7 @@ describe("EaAlert", () => {
       alert.innerHTML = '<span slot="icon">Custom Icon</span>';
       container.appendChild(alert);
 
-
-      const iconSlot = alert.shadowRoot.querySelector('slot[name="icon"]');
+      const iconSlot = alert.shadowRoot!.querySelector('slot[name="icon"]');
       expect(iconSlot).not.toBeNull();
     });
 
@@ -1751,8 +1721,7 @@ describe("EaAlert", () => {
       alert.innerHTML = "<span>Custom Description</span>";
       container.appendChild(alert);
 
-
-      const defaultSlot = alert.shadowRoot.querySelector(
+      const defaultSlot = alert.shadowRoot!.querySelector(
         ".ea-alert__description slot"
       );
       expect(defaultSlot).not.toBeNull();
@@ -1770,12 +1739,11 @@ describe("EaAlert", () => {
       container.appendChild(alert1);
       container.appendChild(alert2);
 
+      const container1 = alert1.shadowRoot!.querySelector(".ea-alert");
+      const container2 = alert2.shadowRoot!.querySelector(".ea-alert");
 
-      const container1 = alert1.shadowRoot.querySelector(".ea-alert");
-      const container2 = alert2.shadowRoot.querySelector(".ea-alert");
-
-      expect(container1.classList.contains("ea-alert--primary")).toBe(true);
-      expect(container2.classList.contains("ea-alert--success")).toBe(true);
+      expect(container1!.classList.contains("ea-alert--primary")).toBe(true);
+      expect(container2!.classList.contains("ea-alert--success")).toBe(true);
 
       expect(alert1.heading).toBe("Alert 1");
       expect(alert2.heading).toBe("Alert 2");
@@ -1792,7 +1760,6 @@ describe("EaAlert", () => {
       alert.setAttribute("close-text", "OK");
       container.appendChild(alert);
 
-
       expect(alert.variant).toBe("warning");
       expect(alert.effect).toBe("dark");
       expect(alert.showIcon).toBe(true);
@@ -1801,16 +1768,18 @@ describe("EaAlert", () => {
       expect(alert.description).toBe("Be careful");
       expect(alert.closeText).toBe("OK");
 
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("ea-alert--warning")).toBe(true);
-      expect(containerEl.classList.contains("ea-alert--dark")).toBe(true);
-      expect(containerEl.classList.contains("is-center")).toBe(true);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("ea-alert--warning")).toBe(true);
+      expect(containerEl!.classList.contains("ea-alert--dark")).toBe(true);
+      expect(containerEl!.classList.contains("is-center")).toBe(true);
 
-      const iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
-      expect(iconEl.getAttribute("name")).toBe("triangle-exclamation");
+      const iconEl = alert.shadowRoot!.querySelector(".ea-alert__icon");
+      expect(iconEl!.getAttribute("name")).toBe("triangle-exclamation");
 
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      expect(closeBtn.textContent).toBe("OK");
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
+      expect(closeBtn!.textContent).toBe("OK");
     });
   });
 
@@ -1819,43 +1788,47 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      expect(closeBtn.tagName).toBe("BUTTON");
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
+      expect(closeBtn!.tagName).toBe("BUTTON");
     });
 
     it("关闭按钮应该有 type=button 属性", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      expect(closeBtn.getAttribute("type")).toBe("button");
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
+      expect(closeBtn!.getAttribute("type")).toBe("button");
     });
 
     it("关闭按钮应该可以通过键盘聚焦", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      closeBtn.focus();
-      expect(closeBtn).toBe(alert.shadowRoot.activeElement);
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
+      closeBtn!.focus();
+      expect(closeBtn).toBe(alert.shadowRoot!.activeElement);
     });
 
     it("关闭按钮应该可以通过 Enter 键触发关闭", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
       const enterEvent = new KeyboardEvent("keydown", { key: "Enter" });
-      closeBtn.dispatchEvent(enterEvent);
+      closeBtn!.dispatchEvent(enterEvent);
 
-      closeBtn.click();
+      closeBtn!.click();
 
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("is-before-close")).toBe(true);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("is-before-close")).toBe(true);
     });
   });
 
@@ -1865,18 +1838,18 @@ describe("EaAlert", () => {
       alert.setAttribute("variant", "primary");
       container.appendChild(alert);
 
-
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("ea-alert--primary")).toBe(true);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("ea-alert--primary")).toBe(true);
     });
 
     it("组件断开连接时应该清理 AbortController", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      closeBtn.click();
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
+      closeBtn!.click();
 
       alert.remove();
 
@@ -1887,7 +1860,6 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("variant", "success");
       container.appendChild(alert);
-
 
       alert.remove();
 
@@ -1939,9 +1911,8 @@ describe("EaAlert", () => {
       alert.setAttribute("heading", "<script>alert('xss')</script>");
       container.appendChild(alert);
 
-
-      const headingEl = alert.shadowRoot.querySelector(".ea-alert__heading");
-      expect(headingEl.querySelector("script")).toBeNull();
+      const headingEl = alert.shadowRoot!.querySelector(".ea-alert__heading");
+      expect(headingEl!.querySelector("script")).toBeNull();
     });
 
     it("description 设置为 HTML 字符串时应该被安全处理", () => {
@@ -1949,36 +1920,35 @@ describe("EaAlert", () => {
       alert.setAttribute("description", "<script>alert('xss')</script>");
       container.appendChild(alert);
 
-
-      const descriptionEl = alert.shadowRoot.querySelector(
+      const descriptionEl = alert.shadowRoot!.querySelector(
         ".ea-alert__description"
       );
-      expect(descriptionEl.querySelector("script")).toBeNull();
+      expect(descriptionEl!.querySelector("script")).toBeNull();
     });
 
     it("快速连续修改 variant 应该正确反映最终状态", async () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
       alert.setAttribute("variant", "primary");
       alert.setAttribute("variant", "success");
       alert.setAttribute("variant", "danger");
       await alert.updateComplete;
 
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("ea-alert--danger")).toBe(true);
-      expect(containerEl.classList.contains("ea-alert--primary")).toBe(false);
-      expect(containerEl.classList.contains("ea-alert--success")).toBe(false);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("ea-alert--danger")).toBe(true);
+      expect(containerEl!.classList.contains("ea-alert--primary")).toBe(false);
+      expect(containerEl!.classList.contains("ea-alert--success")).toBe(false);
     });
 
     it("closeText 为空字符串且 closable 为 true 时应该显示关闭图标", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      expect(closeBtn.querySelector(".ea-alert__close-icon")).not.toBeNull();
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
+      expect(closeBtn!.querySelector(".ea-alert__close-icon")).not.toBeNull();
     });
 
     it("showIcon 从 false 变为 true 时应该根据当前 variant 显示正确图标", async () => {
@@ -1986,16 +1956,15 @@ describe("EaAlert", () => {
       alert.setAttribute("variant", "danger");
       container.appendChild(alert);
 
-
-      let iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
+      let iconEl = alert.shadowRoot!.querySelector(".ea-alert__icon");
       expect(iconEl).toBeNull();
 
       alert.setAttribute("show-icon", "");
       await alert.updateComplete;
 
-      iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
+      iconEl = alert.shadowRoot!.querySelector(".ea-alert__icon");
       expect(iconEl).not.toBeNull();
-      expect(iconEl.getAttribute("name")).toBe("circle-xmark");
+      expect(iconEl!.getAttribute("name")).toBe("circle-xmark");
     });
 
     it("showIcon 从 true 变为 false 时应该移除图标内容", async () => {
@@ -2003,14 +1972,13 @@ describe("EaAlert", () => {
       alert.setAttribute("show-icon", "");
       container.appendChild(alert);
 
-
-      let iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
+      let iconEl = alert.shadowRoot!.querySelector(".ea-alert__icon");
       expect(iconEl).not.toBeNull();
 
       alert.showIcon = false;
       await alert.updateComplete;
 
-      iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
+      iconEl = alert.shadowRoot!.querySelector(".ea-alert__icon");
       expect(iconEl).toBeNull();
     });
 
@@ -2018,23 +1986,23 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
       alert.closable = false;
       await alert.updateComplete;
 
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      expect(closeBtn.innerHTML).toBe("");
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
+      expect(closeBtn!.innerHTML).toBe("");
     });
 
     it("closable 设为 false 后 close-icon part 不存在", async () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
       alert.closable = false;
       await alert.updateComplete;
 
-      const closeIcon = alert.shadowRoot.querySelector('[part="close-icon"]');
+      const closeIcon = alert.shadowRoot!.querySelector('[part="close-icon"]');
       expect(closeIcon).toBeNull();
     });
 
@@ -2043,9 +2011,10 @@ describe("EaAlert", () => {
       alert.setAttribute("close-text", "<script>alert('xss')</script>");
       container.appendChild(alert);
 
-
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      expect(closeBtn.querySelector("script")).toBeNull();
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
+      expect(closeBtn!.querySelector("script")).toBeNull();
     });
 
     it("heading 设置为安全 HTML 标签时应该保留", () => {
@@ -2053,10 +2022,9 @@ describe("EaAlert", () => {
       alert.setAttribute("heading", "<b>Bold Heading</b>");
       container.appendChild(alert);
 
-
-      const headingEl = alert.shadowRoot.querySelector(".ea-alert__heading");
-      expect(headingEl.querySelector("b")).not.toBeNull();
-      expect(headingEl.textContent).toContain("Bold Heading");
+      const headingEl = alert.shadowRoot!.querySelector(".ea-alert__heading");
+      expect(headingEl!.querySelector("b")).not.toBeNull();
+      expect(headingEl!.textContent).toContain("Bold Heading");
     });
 
     it("description 设置为安全 HTML 标签时应该保留", () => {
@@ -2064,24 +2032,24 @@ describe("EaAlert", () => {
       alert.setAttribute("description", "<em>Italic Description</em>");
       container.appendChild(alert);
 
-
-      const descriptionEl = alert.shadowRoot.querySelector(
+      const descriptionEl = alert.shadowRoot!.querySelector(
         ".ea-alert__description"
       );
-      expect(descriptionEl.querySelector("em")).not.toBeNull();
-      expect(descriptionEl.textContent).toContain("Italic Description");
+      expect(descriptionEl!.querySelector("em")).not.toBeNull();
+      expect(descriptionEl!.textContent).toContain("Italic Description");
     });
 
     it("关闭过程中 AbortController 应该正确管理 transitionend 监听", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
+      closeBtn!.click();
 
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      closeBtn.click();
-
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("is-before-close")).toBe(true);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("is-before-close")).toBe(true);
 
       alert.remove();
 
@@ -2092,16 +2060,17 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
       const closeHandler = vi.fn();
       alert.addEventListener("ea-close", closeHandler);
 
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      closeBtn.click();
-      closeBtn.click();
+      const closeBtn = alert.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-alert__close-btn"
+      );
+      closeBtn!.click();
+      closeBtn!.click();
 
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      containerEl.dispatchEvent(
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      containerEl!.dispatchEvent(
         new TransitionEvent("transitionend", {
           bubbles: true,
           propertyName: "filter",
@@ -2118,9 +2087,8 @@ describe("EaAlert", () => {
       alert.setAttribute("show-after", "0");
       container.appendChild(alert);
 
-
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("is-hide")).toBe(false);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("is-hide")).toBe(false);
     });
 
     it("快速连续修改 showAfter 应该只使用最后一个定时器", async () => {
@@ -2157,12 +2125,12 @@ describe("EaAlert", () => {
 
       await waitForRender(50);
 
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("is-before-close")).toBe(false);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      expect(containerEl!.classList.contains("is-before-close")).toBe(false);
 
       await waitForRender(100);
 
-      expect(containerEl.classList.contains("is-before-close")).toBe(true);
+      expect(containerEl!.classList.contains("is-before-close")).toBe(true);
     });
   });
 
@@ -2171,9 +2139,8 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      const directChildren = Array.from(containerEl.children);
+      const containerEl = alert.shadowRoot!.querySelector(".ea-alert");
+      const directChildren = Array.from(containerEl!.children);
 
       const hasIconWrap = directChildren.some(el =>
         el.classList.contains("ea-alert__icon-wrap")
@@ -2194,10 +2161,9 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
-      const content = alert.shadowRoot.querySelector(".ea-alert__content");
-      const heading = content.querySelector(".ea-alert__heading");
-      const description = content.querySelector(".ea-alert__description");
+      const content = alert.shadowRoot!.querySelector(".ea-alert__content");
+      const heading = content!.querySelector(".ea-alert__heading");
+      const description = content!.querySelector(".ea-alert__description");
 
       expect(heading).not.toBeNull();
       expect(description).not.toBeNull();
@@ -2207,8 +2173,7 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
-      const content = alert.shadowRoot.querySelector(".ea-alert__content");
+      const content = alert.shadowRoot!.querySelector(".ea-alert__content");
       expect(content).not.toBeNull();
     });
 
@@ -2216,9 +2181,8 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
-      const iconWrap = alert.shadowRoot.querySelector(".ea-alert__icon-wrap");
-      const slot = iconWrap.querySelector('slot[name="icon"]');
+      const iconWrap = alert.shadowRoot!.querySelector(".ea-alert__icon-wrap");
+      const slot = iconWrap!.querySelector('slot[name="icon"]');
       expect(slot).not.toBeNull();
     });
 
@@ -2226,9 +2190,8 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
-      const headingEl = alert.shadowRoot.querySelector(".ea-alert__heading");
-      const slot = headingEl.querySelector('slot[name="heading"]');
+      const headingEl = alert.shadowRoot!.querySelector(".ea-alert__heading");
+      const slot = headingEl!.querySelector('slot[name="heading"]');
       expect(slot).not.toBeNull();
     });
 
@@ -2236,11 +2199,10 @@ describe("EaAlert", () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
-
-      const descriptionEl = alert.shadowRoot.querySelector(
+      const descriptionEl = alert.shadowRoot!.querySelector(
         ".ea-alert__description"
       );
-      const slot = descriptionEl.querySelector("slot:not([name])");
+      const slot = descriptionEl!.querySelector("slot:not([name])");
       expect(slot).not.toBeNull();
     });
   });

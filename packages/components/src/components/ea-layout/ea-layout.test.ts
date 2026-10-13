@@ -4,7 +4,7 @@ import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y.js";
 import "./index.ts";
 
 describe("EaLayout Component (EaRow & EaCol)", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -28,7 +28,7 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       const row = document.createElement("ea-row");
       container.appendChild(row);
 
-      expect(row.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(row.shadowRoot!.querySelector('[part="container"]')).toBeTruthy();
     });
 
     it("应该渲染 slot 内容", () => {
@@ -36,7 +36,7 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       row.innerHTML = "<div>Row Content</div>";
       container.appendChild(row);
 
-      const slot = row.shadowRoot.querySelector("slot");
+      const slot = row.shadowRoot!.querySelector("slot");
       expect(slot).toBeTruthy();
     });
 
@@ -44,8 +44,8 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       const row = document.createElement("ea-row");
       container.appendChild(row);
 
-      const containerEl = row.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-row")).toBe(true);
+      const containerEl = row.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-row")).toBe(true);
     });
   });
 
@@ -62,7 +62,7 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       const col = document.createElement("ea-col");
       container.appendChild(col);
 
-      expect(col.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(col.shadowRoot!.querySelector('[part="container"]')).toBeTruthy();
     });
 
     it("应该渲染 slot 内容", () => {
@@ -70,7 +70,7 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       col.innerHTML = "<div>Col Content</div>";
       container.appendChild(col);
 
-      const slot = col.shadowRoot.querySelector("slot");
+      const slot = col.shadowRoot!.querySelector("slot");
       expect(slot).toBeTruthy();
     });
 
@@ -78,8 +78,8 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       const col = document.createElement("ea-col");
       container.appendChild(col);
 
-      const containerEl = col.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-col")).toBe(true);
+      const containerEl = col.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-col")).toBe(true);
     });
   });
 
@@ -246,8 +246,8 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       container.appendChild(row);
 
       expect(row.tag).toBe("div");
-      const containerElement = row.shadowRoot.querySelector('[part="container"]');
-      expect(containerElement.tagName.toLowerCase()).toBe("div");
+      const containerElement = row.shadowRoot!.querySelector('[part="container"]');
+      expect(containerElement!.tagName.toLowerCase()).toBe("div");
     });
 
     it("应该支持自定义 tag", () => {
@@ -256,8 +256,8 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       container.appendChild(row);
 
       expect(row.tag).toBe("section");
-      const containerElement = row.shadowRoot.querySelector('[part="container"]');
-      expect(containerElement.tagName.toLowerCase()).toBe("section");
+      const containerElement = row.shadowRoot!.querySelector('[part="container"]');
+      expect(containerElement!.tagName.toLowerCase()).toBe("section");
     });
   });
 
@@ -423,8 +423,8 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       container.appendChild(col);
 
       expect(col.tag).toBe("div");
-      const containerElement = col.shadowRoot.querySelector('[part="container"]');
-      expect(containerElement.tagName.toLowerCase()).toBe("div");
+      const containerElement = col.shadowRoot!.querySelector('[part="container"]');
+      expect(containerElement!.tagName.toLowerCase()).toBe("div");
     });
 
     it("应该支持自定义 tag", () => {
@@ -433,8 +433,8 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       container.appendChild(col);
 
       expect(col.tag).toBe("article");
-      const containerElement = col.shadowRoot.querySelector('[part="container"]');
-      expect(containerElement.tagName.toLowerCase()).toBe("article");
+      const containerElement = col.shadowRoot!.querySelector('[part="container"]');
+      expect(containerElement!.tagName.toLowerCase()).toBe("article");
     });
   });
 
@@ -639,7 +639,7 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
 
       await row.updateComplete;
 
-      expect(row.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(row.shadowRoot!.querySelector('[part="container"]')).toBeTruthy();
       expect(row.gutter).toBe(20);
       expect(row.justify).toBe("center");
       expect(row.align).toBe("middle");
@@ -656,7 +656,7 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
 
       await col.updateComplete;
 
-      expect(col.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(col.shadowRoot!.querySelector('[part="container"]')).toBeTruthy();
       expect(col.span).toBe(12);
       expect(col.offset).toBe(6);
       expect(col.style.getPropertyValue("--ea-col-span")).toBe("12");

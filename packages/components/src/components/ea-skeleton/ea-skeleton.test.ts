@@ -4,7 +4,7 @@ import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y";
 import "./index";
 
 describe("EaSkeleton Component", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -29,7 +29,7 @@ describe("EaSkeleton Component", () => {
       container.appendChild(skeleton);
 
       expect(
-        skeleton.shadowRoot.querySelector('[part="container"]')
+        skeleton.shadowRoot!.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
@@ -38,7 +38,7 @@ describe("EaSkeleton Component", () => {
       container.appendChild(skeleton);
 
       expect(
-        skeleton.shadowRoot.querySelector('[part="default-slot"]')
+        skeleton.shadowRoot!.querySelector('[part="default-slot"]')
       ).toBeTruthy();
     });
 
@@ -47,7 +47,7 @@ describe("EaSkeleton Component", () => {
       container.appendChild(skeleton);
 
       expect(
-        skeleton.shadowRoot.querySelector('[part="template-slot"]')
+        skeleton.shadowRoot!.querySelector('[part="template-slot"]')
       ).toBeTruthy();
     });
 
@@ -55,19 +55,19 @@ describe("EaSkeleton Component", () => {
       const skeleton = document.createElement("ea-skeleton");
       container.appendChild(skeleton);
 
-      const slot = skeleton.shadowRoot.querySelector(".ea-skeleton__default");
+      const slot = skeleton.shadowRoot!.querySelector(".ea-skeleton__default");
       expect(slot).toBeTruthy();
-      expect(slot.tagName.toLowerCase()).toBe("slot");
+      expect(slot!.tagName.toLowerCase()).toBe("slot");
     });
 
     it("应该包含 template 插槽", () => {
       const skeleton = document.createElement("ea-skeleton");
       container.appendChild(skeleton);
 
-      const slot = skeleton.shadowRoot.querySelector(".ea-skeleton__template");
+      const slot = skeleton.shadowRoot!.querySelector(".ea-skeleton__template");
       expect(slot).toBeTruthy();
-      expect(slot.tagName.toLowerCase()).toBe("slot");
-      expect(slot.getAttribute("name")).toBe("template");
+      expect(slot!.tagName.toLowerCase()).toBe("slot");
+      expect(slot!.getAttribute("name")).toBe("template");
     });
 
     it("容器应该有 ea-skeleton 基础类名", async () => {
@@ -77,8 +77,8 @@ describe("EaSkeleton Component", () => {
       await skeleton.updateComplete;
 
       const containerEl =
-        skeleton.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-skeleton")).toBe(true);
+        skeleton.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-skeleton")).toBe(true);
     });
   });
 
@@ -130,8 +130,8 @@ describe("EaSkeleton Component", () => {
       await skeleton.updateComplete;
 
       const containerEl =
-        skeleton.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-loading")).toBe(true);
+        skeleton.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-loading")).toBe(true);
     });
 
     it("loading 为 false 时容器不应该有 is-loading 状态类", async () => {
@@ -142,8 +142,8 @@ describe("EaSkeleton Component", () => {
       await skeleton.updateComplete;
 
       const containerEl =
-        skeleton.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-loading")).toBe(false);
+        skeleton.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-loading")).toBe(false);
     });
 
     it("切换 loading 状态应该更新容器类名", async () => {
@@ -153,19 +153,19 @@ describe("EaSkeleton Component", () => {
       await skeleton.updateComplete;
 
       const containerEl =
-        skeleton.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-loading")).toBe(true);
+        skeleton.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-loading")).toBe(true);
 
       skeleton.loading = false;
 
       await vi.waitFor(() => {
-        expect(containerEl.classList.contains("is-loading")).toBe(false);
+        expect(containerEl!.classList.contains("is-loading")).toBe(false);
       });
 
       skeleton.loading = true;
 
       await vi.waitFor(() => {
-        expect(containerEl.classList.contains("is-loading")).toBe(true);
+        expect(containerEl!.classList.contains("is-loading")).toBe(true);
       });
     });
 
@@ -251,7 +251,7 @@ describe("EaSkeleton Component", () => {
 
       await skeleton.updateComplete;
 
-      const items = skeleton.shadowRoot.querySelectorAll("ea-skeleton-item");
+      const items = skeleton.shadowRoot!.querySelectorAll("ea-skeleton-item");
       items.forEach(item => {
         expect(item.animated).toBe(true);
       });
@@ -266,7 +266,7 @@ describe("EaSkeleton Component", () => {
       skeleton.animated = true;
       await skeleton.updateComplete;
 
-      const items = skeleton.shadowRoot.querySelectorAll("ea-skeleton-item");
+      const items = skeleton.shadowRoot!.querySelectorAll("ea-skeleton-item");
       items.forEach(item => {
         expect(item.animated).toBe(true);
       });
@@ -324,7 +324,7 @@ describe("EaSkeleton Component", () => {
 
       await skeleton.updateComplete;
 
-      const items = skeleton.shadowRoot.querySelectorAll("ea-skeleton-item");
+      const items = skeleton.shadowRoot!.querySelectorAll("ea-skeleton-item");
       expect(items.length).toBe(3);
     });
 
@@ -337,7 +337,7 @@ describe("EaSkeleton Component", () => {
       skeleton.rows = 5;
       await skeleton.updateComplete;
 
-      const items = skeleton.shadowRoot.querySelectorAll("ea-skeleton-item");
+      const items = skeleton.shadowRoot!.querySelectorAll("ea-skeleton-item");
       expect(items.length).toBe(5);
     });
 
@@ -347,7 +347,7 @@ describe("EaSkeleton Component", () => {
 
       await skeleton.updateComplete;
 
-      const items = skeleton.shadowRoot.querySelectorAll("ea-skeleton-item");
+      const items = skeleton.shadowRoot!.querySelectorAll("ea-skeleton-item");
       items.forEach(item => {
         expect(item.variant).toBe("p");
       });
@@ -469,8 +469,8 @@ describe("EaSkeleton Component", () => {
       await skeleton.updateComplete;
 
       const containerEl =
-        skeleton.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-loading")).toBe(true);
+        skeleton.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-loading")).toBe(true);
 
       vi.useFakeTimers();
 
@@ -478,11 +478,11 @@ describe("EaSkeleton Component", () => {
       await vi.advanceTimersByTimeAsync(50);
 
       expect(skeleton.loading).toBe(false);
-      expect(containerEl.classList.contains("is-loading")).toBe(true);
+      expect(containerEl!.classList.contains("is-loading")).toBe(true);
 
       await vi.advanceTimersByTimeAsync(200);
 
-      expect(containerEl.classList.contains("is-loading")).toBe(false);
+      expect(containerEl!.classList.contains("is-loading")).toBe(false);
 
       vi.useRealTimers();
     });
@@ -496,8 +496,8 @@ describe("EaSkeleton Component", () => {
       await skeleton.updateComplete;
 
       const containerEl =
-        skeleton.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-loading")).toBe(false);
+        skeleton.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-loading")).toBe(false);
 
       vi.useFakeTimers();
 
@@ -505,11 +505,11 @@ describe("EaSkeleton Component", () => {
       await vi.advanceTimersByTimeAsync(50);
 
       expect(skeleton.loading).toBe(true);
-      expect(containerEl.classList.contains("is-loading")).toBe(false);
+      expect(containerEl!.classList.contains("is-loading")).toBe(false);
 
       await vi.advanceTimersByTimeAsync(200);
 
-      expect(containerEl.classList.contains("is-loading")).toBe(true);
+      expect(containerEl!.classList.contains("is-loading")).toBe(true);
 
       vi.useRealTimers();
     });
@@ -523,7 +523,7 @@ describe("EaSkeleton Component", () => {
       await skeleton.updateComplete;
 
       const containerEl =
-        skeleton.shadowRoot.querySelector('[part="container"]');
+        skeleton.shadowRoot!.querySelector('[part="container"]');
 
       vi.useFakeTimers();
 
@@ -533,7 +533,7 @@ describe("EaSkeleton Component", () => {
       skeleton.loading = true;
       await vi.advanceTimersByTimeAsync(250);
 
-      expect(containerEl.classList.contains("is-loading")).toBe(true);
+      expect(containerEl!.classList.contains("is-loading")).toBe(true);
 
       vi.useRealTimers();
     });
@@ -552,7 +552,7 @@ describe("EaSkeleton Component", () => {
       const item = document.createElement("ea-skeleton-item");
       container.appendChild(item);
 
-      expect(item.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(item.shadowRoot!.querySelector('[part="container"]')).toBeTruthy();
     });
 
     it("容器应该有 ea-skeleton-item 基础类名", async () => {
@@ -561,8 +561,8 @@ describe("EaSkeleton Component", () => {
 
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-skeleton-item")).toBe(true);
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-skeleton-item")).toBe(true);
     });
   });
 
@@ -644,20 +644,20 @@ describe("EaSkeleton Component", () => {
 
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
 
       item.variant = "h1";
       await item.updateComplete;
 
-      expect(containerEl.classList.contains("ea-skeleton-item--h1")).toBe(true);
+      expect(containerEl!.classList.contains("ea-skeleton-item--h1")).toBe(true);
 
       item.variant = "button";
       await item.updateComplete;
 
-      expect(containerEl.classList.contains("ea-skeleton-item--button")).toBe(
+      expect(containerEl!.classList.contains("ea-skeleton-item--button")).toBe(
         true
       );
-      expect(containerEl.classList.contains("ea-skeleton-item--h1")).toBe(
+      expect(containerEl!.classList.contains("ea-skeleton-item--h1")).toBe(
         false
       );
     });
@@ -668,8 +668,8 @@ describe("EaSkeleton Component", () => {
 
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-skeleton-item--p")).toBe(true);
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-skeleton-item--p")).toBe(true);
     });
 
     it("image variant 应该渲染 SVG 占位图", async () => {
@@ -679,10 +679,10 @@ describe("EaSkeleton Component", () => {
 
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      const svg = containerEl.querySelector("svg");
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      const svg = containerEl!.querySelector("svg");
       expect(svg).toBeTruthy();
-      expect(svg.getAttribute("part")).toBe("image-svg");
+      expect(svg!.getAttribute("part")).toBe("image-svg");
     });
 
     it("非 image variant 不应该渲染 SVG", async () => {
@@ -692,8 +692,8 @@ describe("EaSkeleton Component", () => {
 
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      const svg = containerEl.querySelector("svg");
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      const svg = containerEl!.querySelector("svg");
       expect(svg).toBeNull();
     });
 
@@ -704,14 +704,14 @@ describe("EaSkeleton Component", () => {
 
       await item.updateComplete;
 
-      let containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.querySelector("svg")).toBeNull();
+      let containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.querySelector("svg")).toBeNull();
 
       item.variant = "image";
       await item.updateComplete;
 
-      containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.querySelector("svg")).toBeTruthy();
+      containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.querySelector("svg")).toBeTruthy();
     });
 
     it("从 image 切换到其他 variant 应该移除 SVG", async () => {
@@ -721,14 +721,14 @@ describe("EaSkeleton Component", () => {
 
       await item.updateComplete;
 
-      let containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.querySelector("svg")).toBeTruthy();
+      let containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.querySelector("svg")).toBeTruthy();
 
       item.variant = "p";
       await item.updateComplete;
 
-      containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.querySelector("svg")).toBeNull();
+      containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.querySelector("svg")).toBeNull();
     });
 
     it("通过 HTML 属性设置 variant 应该生效", () => {
@@ -750,7 +750,7 @@ describe("EaSkeleton Component", () => {
         "image",
         "circle",
         "rect",
-      ];
+      ] as const;
 
       for (const variant of variants) {
         const item = document.createElement("ea-skeleton-item");
@@ -760,9 +760,9 @@ describe("EaSkeleton Component", () => {
         await item.updateComplete;
 
         expect(item.variant).toBe(variant);
-        const containerEl = item.shadowRoot.querySelector('[part="container"]');
+        const containerEl = item.shadowRoot!.querySelector('[part="container"]');
         expect(
-          containerEl.classList.contains(`ea-skeleton-item--${variant}`)
+          containerEl!.classList.contains(`ea-skeleton-item--${variant}`)
         ).toBe(true);
 
         container.removeChild(item);
@@ -801,8 +801,8 @@ describe("EaSkeleton Component", () => {
 
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-animated")).toBe(true);
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-animated")).toBe(true);
     });
 
     it("animated 为 false 时容器不应该有 is-animated 状态类", async () => {
@@ -811,8 +811,8 @@ describe("EaSkeleton Component", () => {
 
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-animated")).toBe(false);
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-animated")).toBe(false);
     });
 
     it("动态切换 animated 应该更新容器类名", async () => {
@@ -821,17 +821,17 @@ describe("EaSkeleton Component", () => {
 
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
 
       item.animated = true;
       await item.updateComplete;
 
-      expect(containerEl.classList.contains("is-animated")).toBe(true);
+      expect(containerEl!.classList.contains("is-animated")).toBe(true);
 
       item.animated = false;
       await item.updateComplete;
 
-      expect(containerEl.classList.contains("is-animated")).toBe(false);
+      expect(containerEl!.classList.contains("is-animated")).toBe(false);
     });
   });
 
@@ -842,8 +842,8 @@ describe("EaSkeleton Component", () => {
 
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.className).toBe(
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.className).toBe(
         "ea-skeleton-item ea-skeleton-item--p"
       );
     });
@@ -855,8 +855,8 @@ describe("EaSkeleton Component", () => {
 
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.className).toBe(
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.className).toBe(
         "ea-skeleton-item ea-skeleton-item--p is-animated"
       );
     });
@@ -869,8 +869,8 @@ describe("EaSkeleton Component", () => {
 
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.className).toBe(
+      const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.className).toBe(
         "ea-skeleton-item ea-skeleton-item--circle is-animated"
       );
     });
@@ -934,8 +934,8 @@ describe("EaSkeleton Component", () => {
       await skeleton.updateComplete;
 
       const containerEl =
-        skeleton.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-loading")).toBe(true);
+        skeleton.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-loading")).toBe(true);
     });
 
     it("loading 为 false 时应该显示真实内容", async () => {
@@ -953,8 +953,8 @@ describe("EaSkeleton Component", () => {
 
       expect(skeleton.textContent).toContain("Real Content");
       const containerEl =
-        skeleton.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-loading")).toBe(false);
+        skeleton.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-loading")).toBe(false);
     });
 
     it("应该支持不同 variant 的 skeleton-item 组合", async () => {
@@ -1005,7 +1005,7 @@ describe("EaSkeleton Component", () => {
       container.appendChild(skeleton);
 
       expect(
-        skeleton.shadowRoot.querySelector('[part="container"]')
+        skeleton.shadowRoot!.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
@@ -1056,20 +1056,20 @@ describe("EaSkeleton Component", () => {
       item.variant = "image";
       await item.updateComplete;
 
-      let containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.querySelector("svg")).toBeTruthy();
+      let containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.querySelector("svg")).toBeTruthy();
 
       item.variant = "rect";
       await item.updateComplete;
 
-      containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.querySelector("svg")).toBeNull();
+      containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.querySelector("svg")).toBeNull();
 
       item.variant = "image";
       await item.updateComplete;
 
-      containerEl = item.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.querySelector("svg")).toBeTruthy();
+      containerEl = item.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.querySelector("svg")).toBeTruthy();
     });
   });
 
@@ -1080,7 +1080,7 @@ describe("EaSkeleton Component", () => {
       container.appendChild(skeleton);
 
       expect(
-        skeleton.shadowRoot.querySelector('[part="container"]')
+        skeleton.shadowRoot!.querySelector('[part="container"]')
       ).toBeTruthy();
       expect(skeleton.rows).toBe(3);
     });
@@ -1173,7 +1173,7 @@ describe("EaSkeleton Component", () => {
       container.appendChild(skeleton);
 
       expect(
-        skeleton.shadowRoot.querySelector('[part="container"]')
+        skeleton.shadowRoot!.querySelector('[part="container"]')
       ).toBeTruthy();
     });
   });
@@ -1241,8 +1241,8 @@ describe("EaSkeleton Component", () => {
         await skeleton.updateComplete;
 
         const containerEl =
-          skeleton.shadowRoot.querySelector('[part="container"]');
-        expect(containerEl.getAttribute("aria-hidden")).toBe("true");
+          skeleton.shadowRoot!.querySelector('[part="container"]');
+        expect(containerEl!.getAttribute("aria-hidden")).toBe("true");
       });
 
       it("loading=true 时容器应该有 aria-busy='true'", async () => {
@@ -1253,8 +1253,8 @@ describe("EaSkeleton Component", () => {
         await skeleton.updateComplete;
 
         const containerEl =
-          skeleton.shadowRoot.querySelector('[part="container"]');
-        expect(containerEl.getAttribute("aria-busy")).toBe("true");
+          skeleton.shadowRoot!.querySelector('[part="container"]');
+        expect(containerEl!.getAttribute("aria-busy")).toBe("true");
       });
 
       it("loading=false 时容器应该有 aria-busy='false'", async () => {
@@ -1265,8 +1265,8 @@ describe("EaSkeleton Component", () => {
         await skeleton.updateComplete;
 
         const containerEl =
-          skeleton.shadowRoot.querySelector('[part="container"]');
-        expect(containerEl.getAttribute("aria-busy")).toBe("false");
+          skeleton.shadowRoot!.querySelector('[part="container"]');
+        expect(containerEl!.getAttribute("aria-busy")).toBe("false");
       });
 
       it("loading 动态变化时 aria-busy 保持初始渲染值", async () => {
@@ -1277,13 +1277,13 @@ describe("EaSkeleton Component", () => {
         await skeleton.updateComplete;
 
         const containerEl =
-          skeleton.shadowRoot.querySelector('[part="container"]');
-        expect(containerEl.getAttribute("aria-busy")).toBe("true");
+          skeleton.shadowRoot!.querySelector('[part="container"]');
+        expect(containerEl!.getAttribute("aria-busy")).toBe("true");
 
         skeleton.loading = false;
         await skeleton.updateComplete;
 
-        expect(containerEl.getAttribute("aria-busy")).toBe("true");
+        expect(containerEl!.getAttribute("aria-busy")).toBe("true");
       });
     });
   });

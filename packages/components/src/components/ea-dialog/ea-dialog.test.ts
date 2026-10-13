@@ -6,7 +6,7 @@ import "../ea-icon/index.ts";
 import "./index.ts";
 
 describe("EaDialog", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -35,33 +35,51 @@ describe("EaDialog", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
-      expect(dialog.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
-      expect(dialog.shadowRoot.querySelector('[part="header"]')).toBeTruthy();
-      expect(dialog.shadowRoot.querySelector('[part="heading"]')).toBeTruthy();
-      expect(dialog.shadowRoot.querySelector('[part="close-icon"]')).toBeTruthy();
-      expect(dialog.shadowRoot.querySelector('[part="content"]')).toBeTruthy();
-      expect(dialog.shadowRoot.querySelector('[part="footer"]')).toBeTruthy();
+      expect(
+        dialog.shadowRoot!.querySelector('[part="container"]')
+      ).toBeTruthy();
+      expect(dialog.shadowRoot!.querySelector('[part="header"]')).toBeTruthy();
+      expect(dialog.shadowRoot!.querySelector('[part="heading"]')).toBeTruthy();
+      expect(
+        dialog.shadowRoot!.querySelector('[part="close-icon"]')
+      ).toBeTruthy();
+      expect(dialog.shadowRoot!.querySelector('[part="content"]')).toBeTruthy();
+      expect(dialog.shadowRoot!.querySelector('[part="footer"]')).toBeTruthy();
     });
 
     it("应该包含遮罩层相关结构", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
-      expect(dialog.shadowRoot.querySelector(".ea-overlay")).toBeTruthy();
-      expect(dialog.shadowRoot.querySelector(".ea-overlay__mask")).toBeTruthy();
-      expect(dialog.shadowRoot.querySelector(".ea-overlay__content")).toBeTruthy();
+      expect(dialog.shadowRoot!.querySelector(".ea-overlay")).toBeTruthy();
+      expect(
+        dialog.shadowRoot!.querySelector(".ea-overlay__mask")
+      ).toBeTruthy();
+      expect(
+        dialog.shadowRoot!.querySelector(".ea-overlay__content")
+      ).toBeTruthy();
     });
 
     it("应该包含对话框主体结构", () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
-      expect(dialog.shadowRoot.querySelector(".ea-dialog")).toBeTruthy();
-      expect(dialog.shadowRoot.querySelector(".ea-dialog__header")).toBeTruthy();
-      expect(dialog.shadowRoot.querySelector(".ea-dialog__heading")).toBeTruthy();
-      expect(dialog.shadowRoot.querySelector(".ea-dialog__close-icon")).toBeTruthy();
-      expect(dialog.shadowRoot.querySelector(".ea-dialog__content")).toBeTruthy();
-      expect(dialog.shadowRoot.querySelector(".ea-dialog__footer")).toBeTruthy();
+      expect(dialog.shadowRoot!.querySelector(".ea-dialog")).toBeTruthy();
+      expect(
+        dialog.shadowRoot!.querySelector(".ea-dialog__header")
+      ).toBeTruthy();
+      expect(
+        dialog.shadowRoot!.querySelector(".ea-dialog__heading")
+      ).toBeTruthy();
+      expect(
+        dialog.shadowRoot!.querySelector(".ea-dialog__close-icon")
+      ).toBeTruthy();
+      expect(
+        dialog.shadowRoot!.querySelector(".ea-dialog__content")
+      ).toBeTruthy();
+      expect(
+        dialog.shadowRoot!.querySelector(".ea-dialog__footer")
+      ).toBeTruthy();
     });
 
     it("应该包含 header、footer 和默认插槽", () => {
@@ -73,7 +91,7 @@ describe("EaDialog", () => {
       `;
       container.appendChild(dialog);
 
-      const slots = dialog.shadowRoot.querySelectorAll("slot");
+      const slots = dialog.shadowRoot!.querySelectorAll("slot");
       expect(slots.length).toBeGreaterThanOrEqual(3);
     });
   });
@@ -86,9 +104,9 @@ describe("EaDialog", () => {
 
       await dialog.updateComplete;
 
-      const headingEl = dialog.shadowRoot.querySelector('[part="heading"]');
+      const headingEl = dialog.shadowRoot!.querySelector('[part="heading"]');
       expect(headingEl).toBeTruthy();
-      expect(headingEl.textContent).toBe("Test Title");
+      expect(headingEl!.textContent).toBe("Test Title");
     });
 
     it("默认 heading 应该为空", async () => {
@@ -98,8 +116,8 @@ describe("EaDialog", () => {
       await dialog.updateComplete;
 
       expect(dialog.heading).toBe("");
-      const headingEl = dialog.shadowRoot.querySelector('[part="heading"]');
-      expect(headingEl.textContent).toBe("");
+      const headingEl = dialog.shadowRoot!.querySelector('[part="heading"]');
+      expect(headingEl!.textContent).toBe("");
     });
 
     it("动态修改 heading 应该更新标题文本", async () => {
@@ -115,8 +133,8 @@ describe("EaDialog", () => {
       await dialog.updateComplete;
 
       expect(dialog.heading).toBe("Updated Title");
-      const headingEl = dialog.shadowRoot.querySelector('[part="heading"]');
-      expect(headingEl.textContent).toBe("Updated Title");
+      const headingEl = dialog.shadowRoot!.querySelector('[part="heading"]');
+      expect(headingEl!.textContent).toBe("Updated Title");
     });
   });
 
@@ -146,7 +164,9 @@ describe("EaDialog", () => {
       await dialog.updateComplete;
 
       expect(dialog.width).toBe("800px");
-      expect(dialog.style.getPropertyValue("--ea-overlay-content-width")).toBe("800px");
+      expect(dialog.style.getPropertyValue("--ea-overlay-content-width")).toBe(
+        "800px"
+      );
     });
   });
 
@@ -175,7 +195,9 @@ describe("EaDialog", () => {
       dialog.setAttribute("top", "10vh");
       await dialog.updateComplete;
 
-      expect(dialog.style.getPropertyValue("--ea-overlay-content-top")).toBe("10vh");
+      expect(dialog.style.getPropertyValue("--ea-overlay-content-top")).toBe(
+        "10vh"
+      );
     });
   });
 
@@ -280,8 +302,8 @@ describe("EaDialog", () => {
 
       await dialog.updateComplete;
 
-      const overlayEl = dialog.shadowRoot.querySelector(".ea-overlay");
-      expect(overlayEl.classList.contains("ea-dialog--center")).toBe(true);
+      const overlayEl = dialog.shadowRoot!.querySelector(".ea-overlay");
+      expect(overlayEl!.classList.contains("ea-dialog--center")).toBe(true);
     });
   });
 
@@ -308,8 +330,8 @@ describe("EaDialog", () => {
 
       await dialog.updateComplete;
 
-      const overlayEl = dialog.shadowRoot.querySelector(".ea-overlay");
-      expect(overlayEl.classList.contains("ea-dialog--fullscreen")).toBe(true);
+      const overlayEl = dialog.shadowRoot!.querySelector(".ea-overlay");
+      expect(overlayEl!.classList.contains("ea-dialog--fullscreen")).toBe(true);
     });
   });
 
@@ -338,8 +360,8 @@ describe("EaDialog", () => {
 
       await dialog.updateComplete;
 
-      const overlayEl = dialog.shadowRoot.querySelector(".ea-overlay");
-      expect(overlayEl.classList.contains("is-modal")).toBe(true);
+      const overlayEl = dialog.shadowRoot!.querySelector(".ea-overlay");
+      expect(overlayEl!.classList.contains("is-modal")).toBe(true);
     });
 
     it("modal 为 false 时不应该添加 is-modal 状态类", async () => {
@@ -351,8 +373,8 @@ describe("EaDialog", () => {
       dialog.removeAttribute("modal");
       await dialog.updateComplete;
 
-      const overlayEl = dialog.shadowRoot.querySelector(".ea-overlay");
-      expect(overlayEl.classList.contains("is-modal")).toBe(false);
+      const overlayEl = dialog.shadowRoot!.querySelector(".ea-overlay");
+      expect(overlayEl!.classList.contains("is-modal")).toBe(false);
     });
   });
 
@@ -379,8 +401,8 @@ describe("EaDialog", () => {
 
       await dialog.updateComplete;
 
-      const overlayEl = dialog.shadowRoot.querySelector(".ea-overlay");
-      expect(overlayEl.classList.contains("ea-dialog--draggable")).toBe(true);
+      const overlayEl = dialog.shadowRoot!.querySelector(".ea-overlay");
+      expect(overlayEl!.classList.contains("ea-dialog--draggable")).toBe(true);
     });
   });
 
@@ -412,8 +434,8 @@ describe("EaDialog", () => {
       dialog.removeAttribute("show-close");
       await dialog.updateComplete;
 
-      const overlayEl = dialog.shadowRoot.querySelector(".ea-overlay");
-      expect(overlayEl.classList.contains("is-close-hidden")).toBe(true);
+      const overlayEl = dialog.shadowRoot!.querySelector(".ea-overlay");
+      expect(overlayEl!.classList.contains("is-close-hidden")).toBe(true);
     });
 
     it("showClose 为 true 时不应该添加 close-hidden 状态类", async () => {
@@ -422,8 +444,8 @@ describe("EaDialog", () => {
 
       await dialog.updateComplete;
 
-      const overlayEl = dialog.shadowRoot.querySelector(".ea-overlay");
-      expect(overlayEl.classList.contains("is-close-hidden")).toBe(false);
+      const overlayEl = dialog.shadowRoot!.querySelector(".ea-overlay");
+      expect(overlayEl!.classList.contains("is-close-hidden")).toBe(false);
     });
   });
 
@@ -450,8 +472,8 @@ describe("EaDialog", () => {
 
       await dialog.updateComplete;
 
-      const overlayEl = dialog.shadowRoot.querySelector(".ea-overlay");
-      expect(overlayEl.classList.contains("is-modal-penetrable")).toBe(true);
+      const overlayEl = dialog.shadowRoot!.querySelector(".ea-overlay");
+      expect(overlayEl!.classList.contains("is-modal-penetrable")).toBe(true);
     });
   });
 
@@ -483,8 +505,9 @@ describe("EaDialog", () => {
       dialog.show();
       expect(dialog.visible).toBe(true);
 
-      const mask = dialog.shadowRoot.querySelector(".ea-overlay__mask");
-      mask.click();
+      const mask =
+        dialog.shadowRoot!.querySelector<HTMLElement>(".ea-overlay__mask");
+      mask!.click();
 
       await dialog.updateComplete;
 
@@ -501,8 +524,9 @@ describe("EaDialog", () => {
       dialog.show();
       expect(dialog.visible).toBe(true);
 
-      const mask = dialog.shadowRoot.querySelector(".ea-overlay__mask");
-      mask.click();
+      const mask =
+        dialog.shadowRoot!.querySelector<HTMLElement>(".ea-overlay__mask");
+      mask!.click();
 
       await dialog.updateComplete;
 
@@ -645,7 +669,7 @@ describe("EaDialog", () => {
       expect(doneFn).toBeTruthy();
       expect(closedHandler).not.toHaveBeenCalled();
 
-      doneFn();
+      doneFn!();
       await dialog.updateComplete;
 
       expect(dialog.visible).toBe(false);
@@ -723,8 +747,10 @@ describe("EaDialog", () => {
       dialog.show();
       expect(dialog.visible).toBe(true);
 
-      const closeIcon = dialog.shadowRoot.querySelector(".ea-dialog__close-icon");
-      closeIcon.click();
+      const closeIcon = dialog.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-dialog__close-icon"
+      );
+      closeIcon!.click();
 
       await dialog.updateComplete;
 
@@ -741,8 +767,10 @@ describe("EaDialog", () => {
       dialog.show();
       expect(dialog.visible).toBe(true);
 
-      const closeIcon = dialog.shadowRoot.querySelector(".ea-dialog__close-icon");
-      closeIcon.click();
+      const closeIcon = dialog.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-dialog__close-icon"
+      );
+      closeIcon!.click();
 
       await dialog.updateComplete;
 
@@ -764,18 +792,24 @@ describe("EaDialog", () => {
 
       await dialog.updateComplete;
 
-      const overlayContent = dialog.shadowRoot.querySelector(".ea-overlay__content");
-      overlayContent.style.left = "100px";
-      overlayContent.style.top = "200px";
+      const overlayContent = dialog.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-overlay__content"
+      );
+      overlayContent!.style.left = "100px";
+      overlayContent!.style.top = "200px";
       dialog.style.setProperty("--ea-overlay-content-left", "100px");
       dialog.style.setProperty("--ea-overlay-content-top", "200px");
 
       dialog.resetPosition();
 
-      expect(overlayContent.style.left).toBe("");
-      expect(overlayContent.style.top).toBe("");
-      expect(dialog.style.getPropertyValue("--ea-overlay-content-left")).toBe("");
-      expect(dialog.style.getPropertyValue("--ea-overlay-content-top")).toBe("");
+      expect(overlayContent!.style.left).toBe("");
+      expect(overlayContent!.style.top).toBe("");
+      expect(dialog.style.getPropertyValue("--ea-overlay-content-left")).toBe(
+        ""
+      );
+      expect(dialog.style.getPropertyValue("--ea-overlay-content-top")).toBe(
+        ""
+      );
     });
   });
 
@@ -827,8 +861,10 @@ describe("EaDialog", () => {
       await new Promise(resolve => requestAnimationFrame(resolve));
       await dialog.updateComplete;
 
-      const overlayContainer = dialog.shadowRoot.querySelector(".ea-overlay");
-      overlayContainer.dispatchEvent(new Event("transitionend", { bubbles: true }));
+      const overlayContainer = dialog.shadowRoot!.querySelector(".ea-overlay");
+      overlayContainer!.dispatchEvent(
+        new Event("transitionend", { bubbles: true })
+      );
 
       await dialog.updateComplete;
 
@@ -850,8 +886,10 @@ describe("EaDialog", () => {
       dialog.visible = false;
       await dialog.updateComplete;
 
-      const overlayContainer = dialog.shadowRoot.querySelector(".ea-overlay");
-      overlayContainer.dispatchEvent(new Event("transitionend", { bubbles: true }));
+      const overlayContainer = dialog.shadowRoot!.querySelector(".ea-overlay");
+      overlayContainer!.dispatchEvent(
+        new Event("transitionend", { bubbles: true })
+      );
 
       await dialog.updateComplete;
 
@@ -891,7 +929,7 @@ describe("EaDialog", () => {
 
       dialog.show();
 
-      const content = dialog.shadowRoot.querySelector('[part="content"]');
+      const content = dialog.shadowRoot!.querySelector('[part="content"]');
       expect(content).toBeTruthy();
     });
 
@@ -901,8 +939,8 @@ describe("EaDialog", () => {
 
       await dialog.updateComplete;
 
-      const headingEl = dialog.shadowRoot.querySelector('[part="heading"]');
-      expect(headingEl.textContent).toBe("");
+      const headingEl = dialog.shadowRoot!.querySelector('[part="heading"]');
+      expect(headingEl!.textContent).toBe("");
     });
 
     it("自定义 header slot 应该生效", async () => {
@@ -915,7 +953,9 @@ describe("EaDialog", () => {
 
       await dialog.updateComplete;
 
-      const headerSlot = dialog.shadowRoot.querySelector('slot[name="header"]');
+      const headerSlot = dialog.shadowRoot!.querySelector(
+        'slot[name="header"]'
+      );
       expect(headerSlot).toBeTruthy();
     });
 
@@ -929,7 +969,9 @@ describe("EaDialog", () => {
 
       await dialog.updateComplete;
 
-      const footerSlot = dialog.shadowRoot.querySelector('slot[name="footer"]');
+      const footerSlot = dialog.shadowRoot!.querySelector(
+        'slot[name="footer"]'
+      );
       expect(footerSlot).toBeTruthy();
     });
 
@@ -972,8 +1014,9 @@ describe("EaDialog", () => {
       dialog.show();
       expect(dialog.visible).toBe(true);
 
-      const dialogContent = dialog.shadowRoot.querySelector(".ea-dialog");
-      dialogContent.click();
+      const dialogContent =
+        dialog.shadowRoot!.querySelector<HTMLElement>(".ea-dialog");
+      dialogContent!.click();
 
       await dialog.updateComplete;
 
@@ -989,7 +1032,9 @@ describe("EaDialog", () => {
 
       await dialog.updateComplete;
 
-      expect(dialog.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(
+        dialog.shadowRoot!.querySelector('[part="container"]')
+      ).toBeTruthy();
       expect(dialog.getAttribute("role")).toBe("dialog");
     });
 
@@ -1052,10 +1097,8 @@ describe("EaDialog", () => {
       const labelledBy = dialog.getAttribute("aria-labelledby");
       expect(labelledBy).not.toBeNull();
 
-      const heading = dialog.shadowRoot.querySelector(
-        '[part="heading"]'
-      );
-      expect(heading.id).toBe(labelledBy);
+      const heading = dialog.shadowRoot!.querySelector('[part="heading"]');
+      expect(heading!.id).toBe(labelledBy);
     });
 
     it("无 heading 时不应有 aria-labelledby 或 aria-label", async () => {
@@ -1085,10 +1128,8 @@ describe("EaDialog", () => {
       const describedBy = dialog.getAttribute("aria-describedby");
       expect(describedBy).not.toBeNull();
 
-      const content = dialog.shadowRoot.querySelector(
-        ".ea-dialog__content"
-      );
-      expect(content.id).toBe(describedBy);
+      const content = dialog.shadowRoot!.querySelector(".ea-dialog__content");
+      expect(content!.id).toBe(describedBy);
     });
 
     it("无 description 时不应有 aria-describedby", async () => {

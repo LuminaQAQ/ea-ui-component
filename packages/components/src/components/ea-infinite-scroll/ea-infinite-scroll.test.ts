@@ -1,38 +1,17 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y.js";
-
-let observerInstances = [];
-
-class MockIntersectionObserver {
-  constructor(callback, options) {
-    this.callback = callback;
-    this.options = options;
-    this.observing = [];
-    observerInstances.push(this);
-  }
-  observe(target) {
-    this.observing.push(target);
-  }
-  unobserve(target) {
-    this.observing = this.observing.filter(el => el !== target);
-  }
-  disconnect() {
-    this.observing = [];
-  }
-  trigger(entries) {
-    this.callback(entries);
-  }
-}
-
-global.IntersectionObserver = MockIntersectionObserver;
+import { ControlledIntersectionObserver } from "../../test/utils/mockIntersectionObserver";
+import type { EaInfiniteScrollLoadmoreEventDetail } from "./events/EaInfiniteScrollLoadmoreEvent";
 
 import "./index.ts";
 
+global.IntersectionObserver = ControlledIntersectionObserver;
+
 describe("EaInfiniteScroll", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
-    observerInstances = [];
+    ControlledIntersectionObserver.reset();
     container = document.createElement("div");
     document.body.appendChild(container);
   });
@@ -54,7 +33,7 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      expect(el.shadowRoot.querySelector(".ea-infinite-scroll")).toBeTruthy();
+      expect(el.shadowRoot!.querySelector(".ea-infinite-scroll")).toBeTruthy();
     });
 
     it("应该包含 content 包裹层 .ea-infinite-scroll__content", () => {
@@ -62,7 +41,7 @@ describe("EaInfiniteScroll", () => {
       container.appendChild(el);
 
       expect(
-        el.shadowRoot.querySelector(".ea-infinite-scroll__content")
+        el.shadowRoot!.querySelector(".ea-infinite-scroll__content")
       ).toBeTruthy();
     });
 
@@ -71,7 +50,7 @@ describe("EaInfiniteScroll", () => {
       container.appendChild(el);
 
       expect(
-        el.shadowRoot.querySelector(".ea-infinite-scroll__placeholder")
+        el.shadowRoot!.querySelector(".ea-infinite-scroll__placeholder")
       ).toBeTruthy();
     });
 
@@ -80,7 +59,7 @@ describe("EaInfiniteScroll", () => {
       container.appendChild(el);
 
       expect(
-        el.shadowRoot.querySelector(".ea-infinite-scroll__loading")
+        el.shadowRoot!.querySelector(".ea-infinite-scroll__loading")
       ).toBeTruthy();
     });
 
@@ -89,7 +68,7 @@ describe("EaInfiniteScroll", () => {
       container.appendChild(el);
 
       expect(
-        el.shadowRoot.querySelector(".ea-infinite-scroll__noMore")
+        el.shadowRoot!.querySelector(".ea-infinite-scroll__noMore")
       ).toBeTruthy();
     });
   });
@@ -99,35 +78,35 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      expect(el.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(el.shadowRoot!.querySelector('[part="container"]')).toBeTruthy();
     });
 
     it("应该包含 content part", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      expect(el.shadowRoot.querySelector('[part="content"]')).toBeTruthy();
+      expect(el.shadowRoot!.querySelector('[part="content"]')).toBeTruthy();
     });
 
     it("应该包含 placeholder part", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      expect(el.shadowRoot.querySelector('[part="placeholder"]')).toBeTruthy();
+      expect(el.shadowRoot!.querySelector('[part="placeholder"]')).toBeTruthy();
     });
 
     it("应该包含 loading part", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      expect(el.shadowRoot.querySelector('[part="loading"]')).toBeTruthy();
+      expect(el.shadowRoot!.querySelector('[part="loading"]')).toBeTruthy();
     });
 
     it("应该包含 noMore part", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      expect(el.shadowRoot.querySelector('[part="noMore"]')).toBeTruthy();
+      expect(el.shadowRoot!.querySelector('[part="noMore"]')).toBeTruthy();
     });
   });
 
@@ -140,10 +119,10 @@ describe("EaInfiniteScroll", () => {
       `;
       container.appendChild(el);
 
-      const contentEl = el.shadowRoot.querySelector(
+      const contentEl = el.shadowRoot!.querySelector(
         ".ea-infinite-scroll__content"
       );
-      const slot = contentEl.querySelector("slot:not([name])");
+      const slot = contentEl!.querySelector("slot:not([name])");
       expect(slot).toBeTruthy();
     });
 
@@ -152,7 +131,7 @@ describe("EaInfiniteScroll", () => {
       el.innerHTML = `<section slot="loading">Loading...</section>`;
       container.appendChild(el);
 
-      const loadingSlot = el.shadowRoot.querySelector('slot[name="loading"]');
+      const loadingSlot = el.shadowRoot!.querySelector('slot[name="loading"]');
       expect(loadingSlot).toBeTruthy();
     });
 
@@ -161,7 +140,7 @@ describe("EaInfiniteScroll", () => {
       el.innerHTML = `<section slot="noMore">No more data</section>`;
       container.appendChild(el);
 
-      const noMoreSlot = el.shadowRoot.querySelector('slot[name="noMore"]');
+      const noMoreSlot = el.shadowRoot!.querySelector('slot[name="noMore"]');
       expect(noMoreSlot).toBeTruthy();
     });
   });
@@ -171,88 +150,92 @@ describe("EaInfiniteScroll", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      const rootEl = el.shadowRoot.querySelector(".ea-infinite-scroll");
-      expect(rootEl.tagName).toBe("SECTION");
+      const rootEl = el.shadowRoot!.querySelector(".ea-infinite-scroll");
+      expect(rootEl!.tagName).toBe("SECTION");
     });
 
     it("content 应为 section 元素", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      const contentEl = el.shadowRoot.querySelector(
+      const contentEl = el.shadowRoot!.querySelector(
         ".ea-infinite-scroll__content"
       );
-      expect(contentEl.tagName).toBe("SECTION");
+      expect(contentEl!.tagName).toBe("SECTION");
     });
 
     it("placeholder 应为 div 元素", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      const placeholder = el.shadowRoot.querySelector(
+      const placeholder = el.shadowRoot!.querySelector(
         ".ea-infinite-scroll__placeholder"
       );
-      expect(placeholder.tagName).toBe("DIV");
+      expect(placeholder!.tagName).toBe("DIV");
     });
 
     it("loading 容器应为 section 元素", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      const loading = el.shadowRoot.querySelector(
+      const loading = el.shadowRoot!.querySelector(
         ".ea-infinite-scroll__loading"
       );
-      expect(loading.tagName).toBe("SECTION");
+      expect(loading!.tagName).toBe("SECTION");
     });
 
     it("noMore 容器应为 section 元素", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      const noMore = el.shadowRoot.querySelector(".ea-infinite-scroll__noMore");
-      expect(noMore.tagName).toBe("SECTION");
+      const noMore = el.shadowRoot!.querySelector(
+        ".ea-infinite-scroll__noMore"
+      );
+      expect(noMore!.tagName).toBe("SECTION");
     });
 
     it("content 应为根容器的子元素", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      const rootEl = el.shadowRoot.querySelector(".ea-infinite-scroll");
-      const contentEl = el.shadowRoot.querySelector(
+      const rootEl = el.shadowRoot!.querySelector(".ea-infinite-scroll");
+      const contentEl = el.shadowRoot!.querySelector(
         ".ea-infinite-scroll__content"
       );
-      expect(contentEl.parentElement).toBe(rootEl);
+      expect(contentEl!.parentElement).toBe(rootEl);
     });
 
     it("placeholder 应为根容器的子元素", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      const rootEl = el.shadowRoot.querySelector(".ea-infinite-scroll");
-      const placeholder = el.shadowRoot.querySelector(
+      const rootEl = el.shadowRoot!.querySelector(".ea-infinite-scroll");
+      const placeholder = el.shadowRoot!.querySelector(
         ".ea-infinite-scroll__placeholder"
       );
-      expect(placeholder.parentElement).toBe(rootEl);
+      expect(placeholder!.parentElement).toBe(rootEl);
     });
 
     it("loading 应为根容器的子元素", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      const rootEl = el.shadowRoot.querySelector(".ea-infinite-scroll");
-      const loading = el.shadowRoot.querySelector(
+      const rootEl = el.shadowRoot!.querySelector(".ea-infinite-scroll");
+      const loading = el.shadowRoot!.querySelector(
         ".ea-infinite-scroll__loading"
       );
-      expect(loading.parentElement).toBe(rootEl);
+      expect(loading!.parentElement).toBe(rootEl);
     });
 
     it("noMore 应为根容器的子元素", () => {
       const el = document.createElement("ea-infinite-scroll");
       container.appendChild(el);
 
-      const rootEl = el.shadowRoot.querySelector(".ea-infinite-scroll");
-      const noMore = el.shadowRoot.querySelector(".ea-infinite-scroll__noMore");
-      expect(noMore.parentElement).toBe(rootEl);
+      const rootEl = el.shadowRoot!.querySelector(".ea-infinite-scroll");
+      const noMore = el.shadowRoot!.querySelector(
+        ".ea-infinite-scroll__noMore"
+      );
+      expect(noMore!.parentElement).toBe(rootEl);
     });
   });
 
@@ -321,8 +304,8 @@ describe("EaInfiniteScroll", () => {
 
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-infinite-scroll");
-      expect(containerEl.classList.contains("is-loading")).toBe(true);
+      const containerEl = el.shadowRoot!.querySelector(".ea-infinite-scroll");
+      expect(containerEl!.classList.contains("is-loading")).toBe(true);
     });
 
     it("status 为 noMore 时容器应有 is-noMore 状态类", async () => {
@@ -332,8 +315,8 @@ describe("EaInfiniteScroll", () => {
 
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-infinite-scroll");
-      expect(containerEl.classList.contains("is-noMore")).toBe(true);
+      const containerEl = el.shadowRoot!.querySelector(".ea-infinite-scroll");
+      expect(containerEl!.classList.contains("is-noMore")).toBe(true);
     });
 
     it("status 为 finished 时容器不应有 is-loading 或 is-noMore 状态类", async () => {
@@ -342,9 +325,9 @@ describe("EaInfiniteScroll", () => {
 
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-infinite-scroll");
-      expect(containerEl.classList.contains("is-loading")).toBe(false);
-      expect(containerEl.classList.contains("is-noMore")).toBe(false);
+      const containerEl = el.shadowRoot!.querySelector(".ea-infinite-scroll");
+      expect(containerEl!.classList.contains("is-loading")).toBe(false);
+      expect(containerEl!.classList.contains("is-noMore")).toBe(false);
     });
 
     it("动态切换 status 应更新容器类名", async () => {
@@ -356,14 +339,14 @@ describe("EaInfiniteScroll", () => {
       el.setAttribute("status", "loading");
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-infinite-scroll");
-      expect(containerEl.classList.contains("is-loading")).toBe(true);
+      const containerEl = el.shadowRoot!.querySelector(".ea-infinite-scroll");
+      expect(containerEl!.classList.contains("is-loading")).toBe(true);
 
       el.setAttribute("status", "noMore");
       await el.updateComplete;
 
-      expect(containerEl.classList.contains("is-loading")).toBe(false);
-      expect(containerEl.classList.contains("is-noMore")).toBe(true);
+      expect(containerEl!.classList.contains("is-loading")).toBe(false);
+      expect(containerEl!.classList.contains("is-noMore")).toBe(true);
     });
 
     it("从 loading 切换到 finished 应移除 is-loading 类", async () => {
@@ -373,13 +356,13 @@ describe("EaInfiniteScroll", () => {
 
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-infinite-scroll");
-      expect(containerEl.classList.contains("is-loading")).toBe(true);
+      const containerEl = el.shadowRoot!.querySelector(".ea-infinite-scroll");
+      expect(containerEl!.classList.contains("is-loading")).toBe(true);
 
       el.setAttribute("status", "finished");
       await el.updateComplete;
 
-      expect(containerEl.classList.contains("is-loading")).toBe(false);
+      expect(containerEl!.classList.contains("is-loading")).toBe(false);
     });
   });
 
@@ -432,7 +415,10 @@ describe("EaInfiniteScroll", () => {
 
       await el.updateComplete;
 
-      const observer = observerInstances[observerInstances.length - 1];
+      const observer =
+        ControlledIntersectionObserver.instances[
+          ControlledIntersectionObserver.instances.length - 1
+        ];
       expect(observer).toBeTruthy();
       expect(observer.options.rootMargin).toBe("150px");
     });
@@ -443,7 +429,10 @@ describe("EaInfiniteScroll", () => {
 
       await el.updateComplete;
 
-      const observer = observerInstances[observerInstances.length - 1];
+      const observer =
+        ControlledIntersectionObserver.instances[
+          ControlledIntersectionObserver.instances.length - 1
+        ];
       expect(observer).toBeTruthy();
       expect(observer.options.rootMargin).toBe("0px");
     });
@@ -454,13 +443,18 @@ describe("EaInfiniteScroll", () => {
 
       await el.updateComplete;
 
-      const initialCount = observerInstances.length;
+      const initialCount = ControlledIntersectionObserver.instances.length;
 
       el.setAttribute("distance", "200");
       await el.updateComplete;
 
-      expect(observerInstances.length).toBeGreaterThan(initialCount);
-      const newObserver = observerInstances[observerInstances.length - 1];
+      expect(ControlledIntersectionObserver.instances.length).toBeGreaterThan(
+        initialCount
+      );
+      const newObserver =
+        ControlledIntersectionObserver.instances[
+          ControlledIntersectionObserver.instances.length - 1
+        ];
       expect(newObserver.options.rootMargin).toBe("200px");
     });
   });
@@ -472,7 +466,9 @@ describe("EaInfiniteScroll", () => {
 
       await el.updateComplete;
 
-      expect(observerInstances.length).toBeGreaterThan(0);
+      expect(ControlledIntersectionObserver.instances.length).toBeGreaterThan(
+        0
+      );
     });
 
     it("IntersectionObserver 应观察 placeholder 元素", async () => {
@@ -481,8 +477,11 @@ describe("EaInfiniteScroll", () => {
 
       await el.updateComplete;
 
-      const observer = observerInstances[observerInstances.length - 1];
-      const placeholder = el.shadowRoot.querySelector(
+      const observer =
+        ControlledIntersectionObserver.instances[
+          ControlledIntersectionObserver.instances.length - 1
+        ];
+      const placeholder = el.shadowRoot!.querySelector(
         ".ea-infinite-scroll__placeholder"
       );
       expect(observer.observing).toContain(placeholder);
@@ -497,8 +496,11 @@ describe("EaInfiniteScroll", () => {
       const loadmoreHandler = vi.fn();
       el.addEventListener("ea-loadmore", loadmoreHandler);
 
-      const observer = observerInstances[observerInstances.length - 1];
-      const placeholder = el.shadowRoot.querySelector(
+      const observer =
+        ControlledIntersectionObserver.instances[
+          ControlledIntersectionObserver.instances.length - 1
+        ];
+      const placeholder = el.shadowRoot!.querySelector(
         ".ea-infinite-scroll__placeholder"
       );
 
@@ -514,8 +516,11 @@ describe("EaInfiniteScroll", () => {
 
       expect(el.status).toBe("finished");
 
-      const observer = observerInstances[observerInstances.length - 1];
-      const placeholder = el.shadowRoot.querySelector(
+      const observer =
+        ControlledIntersectionObserver.instances[
+          ControlledIntersectionObserver.instances.length - 1
+        ];
+      const placeholder = el.shadowRoot!.querySelector(
         ".ea-infinite-scroll__placeholder"
       );
 
@@ -534,8 +539,11 @@ describe("EaInfiniteScroll", () => {
       const loadmoreHandler = vi.fn();
       el.addEventListener("ea-loadmore", loadmoreHandler);
 
-      const observer = observerInstances[observerInstances.length - 1];
-      const placeholder = el.shadowRoot.querySelector(
+      const observer =
+        ControlledIntersectionObserver.instances[
+          ControlledIntersectionObserver.instances.length - 1
+        ];
+      const placeholder = el.shadowRoot!.querySelector(
         ".ea-infinite-scroll__placeholder"
       );
 
@@ -554,8 +562,11 @@ describe("EaInfiniteScroll", () => {
       const loadmoreHandler = vi.fn();
       el.addEventListener("ea-loadmore", loadmoreHandler);
 
-      const observer = observerInstances[observerInstances.length - 1];
-      const placeholder = el.shadowRoot.querySelector(
+      const observer =
+        ControlledIntersectionObserver.instances[
+          ControlledIntersectionObserver.instances.length - 1
+        ];
+      const placeholder = el.shadowRoot!.querySelector(
         ".ea-infinite-scroll__placeholder"
       );
 
@@ -573,8 +584,11 @@ describe("EaInfiniteScroll", () => {
       const loadmoreHandler = vi.fn();
       el.addEventListener("ea-loadmore", loadmoreHandler);
 
-      const observer = observerInstances[observerInstances.length - 1];
-      const placeholder = el.shadowRoot.querySelector(
+      const observer =
+        ControlledIntersectionObserver.instances[
+          ControlledIntersectionObserver.instances.length - 1
+        ];
+      const placeholder = el.shadowRoot!.querySelector(
         ".ea-infinite-scroll__placeholder"
       );
 
@@ -589,8 +603,11 @@ describe("EaInfiniteScroll", () => {
 
       await el.updateComplete;
 
-      const observer = observerInstances[observerInstances.length - 1];
-      const placeholder = el.shadowRoot.querySelector(
+      const observer =
+        ControlledIntersectionObserver.instances[
+          ControlledIntersectionObserver.instances.length - 1
+        ];
+      const placeholder = el.shadowRoot!.querySelector(
         ".ea-infinite-scroll__placeholder"
       );
 
@@ -607,8 +624,11 @@ describe("EaInfiniteScroll", () => {
 
       await el.updateComplete;
 
-      const observer = observerInstances[observerInstances.length - 1];
-      const placeholder = el.shadowRoot.querySelector(
+      const observer =
+        ControlledIntersectionObserver.instances[
+          ControlledIntersectionObserver.instances.length - 1
+        ];
+      const placeholder = el.shadowRoot!.querySelector(
         ".ea-infinite-scroll__placeholder"
       );
 
@@ -633,8 +653,11 @@ describe("EaInfiniteScroll", () => {
         eventType = e.constructor.name;
       });
 
-      const observer = observerInstances[observerInstances.length - 1];
-      const placeholder = el.shadowRoot.querySelector(
+      const observer =
+        ControlledIntersectionObserver.instances[
+          ControlledIntersectionObserver.instances.length - 1
+        ];
+      const placeholder = el.shadowRoot!.querySelector(
         ".ea-infinite-scroll__placeholder"
       );
 
@@ -649,13 +672,16 @@ describe("EaInfiniteScroll", () => {
 
       await el.updateComplete;
 
-      let finishedCallback;
+      let finishedCallback!: () => void;
       el.addEventListener("ea-loadmore", e => {
         finishedCallback = e.detail.finished;
       });
 
-      const observer = observerInstances[observerInstances.length - 1];
-      const placeholder = el.shadowRoot.querySelector(
+      const observer =
+        ControlledIntersectionObserver.instances[
+          ControlledIntersectionObserver.instances.length - 1
+        ];
+      const placeholder = el.shadowRoot!.querySelector(
         ".ea-infinite-scroll__placeholder"
       );
 
@@ -670,13 +696,16 @@ describe("EaInfiniteScroll", () => {
 
       await el.updateComplete;
 
-      let noMoreCallback;
+      let noMoreCallback!: () => void;
       el.addEventListener("ea-loadmore", e => {
         noMoreCallback = e.detail.noMore;
       });
 
-      const observer = observerInstances[observerInstances.length - 1];
-      const placeholder = el.shadowRoot.querySelector(
+      const observer =
+        ControlledIntersectionObserver.instances[
+          ControlledIntersectionObserver.instances.length - 1
+        ];
+      const placeholder = el.shadowRoot!.querySelector(
         ".ea-infinite-scroll__placeholder"
       );
 
@@ -691,13 +720,16 @@ describe("EaInfiniteScroll", () => {
 
       await el.updateComplete;
 
-      let finishedCallback;
+      let finishedCallback!: () => void;
       el.addEventListener("ea-loadmore", e => {
         finishedCallback = e.detail.finished;
       });
 
-      const observer = observerInstances[observerInstances.length - 1];
-      const placeholder = el.shadowRoot.querySelector(
+      const observer =
+        ControlledIntersectionObserver.instances[
+          ControlledIntersectionObserver.instances.length - 1
+        ];
+      const placeholder = el.shadowRoot!.querySelector(
         ".ea-infinite-scroll__placeholder"
       );
 
@@ -715,13 +747,16 @@ describe("EaInfiniteScroll", () => {
 
       await el.updateComplete;
 
-      let noMoreCallback;
+      let noMoreCallback!: () => void;
       el.addEventListener("ea-loadmore", e => {
         noMoreCallback = e.detail.noMore;
       });
 
-      const observer = observerInstances[observerInstances.length - 1];
-      const placeholder = el.shadowRoot.querySelector(
+      const observer =
+        ControlledIntersectionObserver.instances[
+          ControlledIntersectionObserver.instances.length - 1
+        ];
+      const placeholder = el.shadowRoot!.querySelector(
         ".ea-infinite-scroll__placeholder"
       );
 
@@ -739,13 +774,16 @@ describe("EaInfiniteScroll", () => {
 
       await el.updateComplete;
 
-      let finishedCallback;
+      let finishedCallback!: () => void;
       el.addEventListener("ea-loadmore", e => {
         finishedCallback = e.detail.finished;
       });
 
-      const observer = observerInstances[observerInstances.length - 1];
-      const placeholder = el.shadowRoot.querySelector(
+      const observer =
+        ControlledIntersectionObserver.instances[
+          ControlledIntersectionObserver.instances.length - 1
+        ];
+      const placeholder = el.shadowRoot!.querySelector(
         ".ea-infinite-scroll__placeholder"
       );
 
@@ -765,13 +803,16 @@ describe("EaInfiniteScroll", () => {
 
       await el.updateComplete;
 
-      let noMoreCallback;
+      let noMoreCallback!: () => void;
       el.addEventListener("ea-loadmore", e => {
         noMoreCallback = e.detail.noMore;
       });
 
-      const observer = observerInstances[observerInstances.length - 1];
-      const placeholder = el.shadowRoot.querySelector(
+      const observer =
+        ControlledIntersectionObserver.instances[
+          ControlledIntersectionObserver.instances.length - 1
+        ];
+      const placeholder = el.shadowRoot!.querySelector(
         ".ea-infinite-scroll__placeholder"
       );
 
@@ -791,14 +832,17 @@ describe("EaInfiniteScroll", () => {
 
       await el.updateComplete;
 
-      let finishedCallback;
+      let finishedCallback!: () => void;
       const loadmoreHandler = vi.fn(e => {
         finishedCallback = e.detail.finished;
       });
       el.addEventListener("ea-loadmore", loadmoreHandler);
 
-      const observer = observerInstances[observerInstances.length - 1];
-      const placeholder = el.shadowRoot.querySelector(
+      const observer =
+        ControlledIntersectionObserver.instances[
+          ControlledIntersectionObserver.instances.length - 1
+        ];
+      const placeholder = el.shadowRoot!.querySelector(
         ".ea-infinite-scroll__placeholder"
       );
 
@@ -818,14 +862,17 @@ describe("EaInfiniteScroll", () => {
 
       await el.updateComplete;
 
-      let noMoreCallback;
+      let noMoreCallback!: () => void;
       const loadmoreHandler = vi.fn(e => {
         noMoreCallback = e.detail.noMore;
       });
       el.addEventListener("ea-loadmore", loadmoreHandler);
 
-      const observer = observerInstances[observerInstances.length - 1];
-      const placeholder = el.shadowRoot.querySelector(
+      const observer =
+        ControlledIntersectionObserver.instances[
+          ControlledIntersectionObserver.instances.length - 1
+        ];
+      const placeholder = el.shadowRoot!.querySelector(
         ".ea-infinite-scroll__placeholder"
       );
 
@@ -845,8 +892,11 @@ describe("EaInfiniteScroll", () => {
 
       await el.updateComplete;
 
-      const observer = observerInstances[observerInstances.length - 1];
-      const placeholder = el.shadowRoot.querySelector(
+      const observer =
+        ControlledIntersectionObserver.instances[
+          ControlledIntersectionObserver.instances.length - 1
+        ];
+      const placeholder = el.shadowRoot!.querySelector(
         ".ea-infinite-scroll__placeholder"
       );
 
@@ -866,8 +916,11 @@ describe("EaInfiniteScroll", () => {
 
       await el.updateComplete;
 
-      const observer = observerInstances[observerInstances.length - 1];
-      const placeholder = el.shadowRoot.querySelector(
+      const observer =
+        ControlledIntersectionObserver.instances[
+          ControlledIntersectionObserver.instances.length - 1
+        ];
+      const placeholder = el.shadowRoot!.querySelector(
         ".ea-infinite-scroll__placeholder"
       );
 
@@ -946,7 +999,7 @@ describe("EaInfiniteScroll", () => {
       container.appendChild(el);
 
       expect(el.shadowRoot).toBeTruthy();
-      expect(el.shadowRoot.querySelector(".ea-infinite-scroll")).toBeTruthy();
+      expect(el.shadowRoot!.querySelector(".ea-infinite-scroll")).toBeTruthy();
     });
 
     it("组件断开连接后应该正常移除", async () => {
@@ -990,7 +1043,8 @@ describe("EaInfiniteScroll", () => {
 
       await el.updateComplete;
 
-      const firstObserverCount = observerInstances.length;
+      const firstObserverCount =
+        ControlledIntersectionObserver.instances.length;
 
       el.remove();
       await el.updateComplete;
@@ -998,7 +1052,9 @@ describe("EaInfiniteScroll", () => {
       container.appendChild(el);
       await el.updateComplete;
 
-      expect(observerInstances.length).toBeGreaterThan(firstObserverCount);
+      expect(ControlledIntersectionObserver.instances.length).toBeGreaterThan(
+        firstObserverCount
+      );
     });
   });
 
@@ -1118,12 +1174,15 @@ describe("EaInfiniteScroll", () => {
 
       expect(el.status).toBe("finished");
 
-      const observer = observerInstances[observerInstances.length - 1];
-      const placeholder = el.shadowRoot.querySelector(
+      const observer =
+        ControlledIntersectionObserver.instances[
+          ControlledIntersectionObserver.instances.length - 1
+        ];
+      const placeholder = el.shadowRoot!.querySelector(
         ".ea-infinite-scroll__placeholder"
       );
 
-      let finishedCallback;
+      let finishedCallback!: () => void;
       el.addEventListener("ea-loadmore", e => {
         finishedCallback = e.detail.finished;
       });
@@ -1143,12 +1202,15 @@ describe("EaInfiniteScroll", () => {
 
       expect(el.status).toBe("finished");
 
-      const observer = observerInstances[observerInstances.length - 1];
-      const placeholder = el.shadowRoot.querySelector(
+      const observer =
+        ControlledIntersectionObserver.instances[
+          ControlledIntersectionObserver.instances.length - 1
+        ];
+      const placeholder = el.shadowRoot!.querySelector(
         ".ea-infinite-scroll__placeholder"
       );
 
-      let noMoreCallback;
+      let noMoreCallback!: () => void;
       el.addEventListener("ea-loadmore", e => {
         noMoreCallback = e.detail.noMore;
       });
@@ -1167,12 +1229,15 @@ describe("EaInfiniteScroll", () => {
 
       await el.updateComplete;
 
-      const observer = observerInstances[observerInstances.length - 1];
-      const placeholder = el.shadowRoot.querySelector(
+      const observer =
+        ControlledIntersectionObserver.instances[
+          ControlledIntersectionObserver.instances.length - 1
+        ];
+      const placeholder = el.shadowRoot!.querySelector(
         ".ea-infinite-scroll__placeholder"
       );
 
-      let currentCallback;
+      let currentCallback!: EaInfiniteScrollLoadmoreEventDetail;
       el.addEventListener("ea-loadmore", e => {
         currentCallback = e.detail;
       });
@@ -1201,8 +1266,11 @@ describe("EaInfiniteScroll", () => {
       const loadmoreHandler = vi.fn();
       el.addEventListener("ea-loadmore", loadmoreHandler);
 
-      const observer = observerInstances[observerInstances.length - 1];
-      const placeholder = el.shadowRoot.querySelector(
+      const observer =
+        ControlledIntersectionObserver.instances[
+          ControlledIntersectionObserver.instances.length - 1
+        ];
+      const placeholder = el.shadowRoot!.querySelector(
         ".ea-infinite-scroll__placeholder"
       );
 

@@ -1,33 +1,17 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y";
+import { ImmediateIntersectionObserver } from "../../test/utils/mockIntersectionObserver";
 
-class MockIntersectionObserver {
-  constructor(callback) {
-    this.callback = callback;
-  }
-  observe(element) {
-    this.callback([
-      { intersectionRatio: 1, isIntersecting: true, target: element },
-    ]);
-  }
-  unobserve() {}
-  disconnect() {}
-}
-
-if (typeof window !== "undefined" && !window.IntersectionObserver) {
-  window.IntersectionObserver = MockIntersectionObserver;
+if (!window.IntersectionObserver) {
+  window.IntersectionObserver = ImmediateIntersectionObserver;
 }
 
 import "./index";
 
 describe("EaImage Component", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
-    if (!window.IntersectionObserver) {
-      window.IntersectionObserver = MockIntersectionObserver;
-    }
-
     if (!document.activeElement || document.activeElement === document.body) {
       const focusable = document.createElement("button");
       document.body.appendChild(focusable);
@@ -52,19 +36,21 @@ describe("EaImage Component", () => {
     it("应该包含所有 CSS Parts", () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      expect(image.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
-      expect(image.shadowRoot.querySelector('[part="image"]')).toBeTruthy();
-      expect(image.shadowRoot.querySelector('[part="error"]')).toBeTruthy();
       expect(
-        image.shadowRoot.querySelector('[part="placeholder"]')
+        image.shadowRoot!.querySelector('[part="container"]')
       ).toBeTruthy();
-      expect(image.shadowRoot.querySelector('[part="preview"]')).toBeTruthy();
+      expect(image.shadowRoot!.querySelector('[part="image"]')).toBeTruthy();
+      expect(image.shadowRoot!.querySelector('[part="error"]')).toBeTruthy();
+      expect(
+        image.shadowRoot!.querySelector('[part="placeholder"]')
+      ).toBeTruthy();
+      expect(image.shadowRoot!.querySelector('[part="preview"]')).toBeTruthy();
     });
 
     it("应该包含内部 img 元素", () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      const imgElement = image.shadowRoot.querySelector("img.ea-image__image");
+      const imgElement = image.shadowRoot!.querySelector("img.ea-image__image");
       expect(imgElement).toBeTruthy();
     });
 
@@ -73,7 +59,7 @@ describe("EaImage Component", () => {
       container.appendChild(image);
       await image.updateComplete;
 
-      const preview = image.shadowRoot.querySelector("ea-image-preview");
+      const preview = image.shadowRoot!.querySelector("ea-image-preview");
       expect(preview).toBeTruthy();
     });
 
@@ -82,8 +68,8 @@ describe("EaImage Component", () => {
       container.appendChild(image);
       await image.updateComplete;
 
-      const containerEl = image.shadowRoot.querySelector(".ea-image");
-      expect(containerEl.classList.contains("ea-image--error")).toBe(true);
+      const containerEl = image.shadowRoot!.querySelector(".ea-image");
+      expect(containerEl!.classList.contains("ea-image--error")).toBe(true);
     });
 
     it("无 src 时应该隐藏 image 和 placeholder，显示 error", async () => {
@@ -91,14 +77,14 @@ describe("EaImage Component", () => {
       container.appendChild(image);
       await image.updateComplete;
 
-      const containerEl = image.shadowRoot.querySelector(".ea-image");
-      expect(containerEl.classList.contains("ea-image--error")).toBe(true);
+      const containerEl = image.shadowRoot!.querySelector(".ea-image");
+      expect(containerEl!.classList.contains("ea-image--error")).toBe(true);
 
-      const imgEl = image.shadowRoot.querySelector(".ea-image__image");
-      const placeholderEl = image.shadowRoot.querySelector(
+      const imgEl = image.shadowRoot!.querySelector(".ea-image__image");
+      const placeholderEl = image.shadowRoot!.querySelector(
         ".ea-image__placeholder"
       );
-      const errorEl = image.shadowRoot.querySelector(".ea-image__error");
+      const errorEl = image.shadowRoot!.querySelector(".ea-image__error");
 
       expect(imgEl).toBeTruthy();
       expect(placeholderEl).toBeTruthy();
@@ -111,8 +97,8 @@ describe("EaImage Component", () => {
       container.appendChild(image);
       await image.updateComplete;
 
-      const containerEl = image.shadowRoot.querySelector(".ea-image");
-      expect(containerEl.classList.contains("ea-image--loading")).toBe(true);
+      const containerEl = image.shadowRoot!.querySelector(".ea-image");
+      expect(containerEl!.classList.contains("ea-image--loading")).toBe(true);
     });
   });
 
@@ -150,11 +136,11 @@ describe("EaImage Component", () => {
       image.setAttribute("src", "https://example.com/test.jpg");
       await image.updateComplete;
 
-      const containerEl = image.shadowRoot.querySelector(".ea-image");
+      const containerEl = image.shadowRoot!.querySelector(".ea-image");
       expect(
-        containerEl.classList.contains("ea-image--loading") ||
-          containerEl.classList.contains("ea-image--success") ||
-          containerEl.classList.contains("ea-image--error")
+        containerEl!.classList.contains("ea-image--loading") ||
+          containerEl!.classList.contains("ea-image--success") ||
+          containerEl!.classList.contains("ea-image--error")
       ).toBe(true);
     });
   });
@@ -316,8 +302,10 @@ describe("EaImage Component", () => {
       container.appendChild(image);
       await image.updateComplete;
 
-      const imgElement = image.shadowRoot.querySelector("img.ea-image__image");
-      expect(imgElement.alt).toBe("Test alt text");
+      const imgElement = image.shadowRoot!.querySelector<HTMLImageElement>(
+        "img.ea-image__image"
+      );
+      expect(imgElement!.alt).toBe("Test alt text");
     });
   });
 
@@ -341,8 +329,8 @@ describe("EaImage Component", () => {
       container.appendChild(image);
       await image.updateComplete;
 
-      const imgElement = image.shadowRoot.querySelector("img.ea-image__image");
-      expect(imgElement.getAttribute("loading")).toBe("lazy");
+      const imgElement = image.shadowRoot!.querySelector("img.ea-image__image");
+      expect(imgElement!.getAttribute("loading")).toBe("lazy");
     });
   });
 
@@ -375,8 +363,8 @@ describe("EaImage Component", () => {
       await image.updateComplete;
 
       expect(image.referrerpolicy).toBe("no-referrer");
-      const imgElement = image.shadowRoot.querySelector("img.ea-image__image");
-      expect(imgElement.getAttribute("referrerpolicy")).toBe("no-referrer");
+      const imgElement = image.shadowRoot!.querySelector("img.ea-image__image");
+      expect(imgElement!.getAttribute("referrerpolicy")).toBe("no-referrer");
     });
 
     it("默认 crossorigin 应该为空", () => {
@@ -392,8 +380,8 @@ describe("EaImage Component", () => {
       await image.updateComplete;
 
       expect(image.crossorigin).toBe("anonymous");
-      const imgElement = image.shadowRoot.querySelector("img.ea-image__image");
-      expect(imgElement.getAttribute("crossorigin")).toBe("anonymous");
+      const imgElement = image.shadowRoot!.querySelector("img.ea-image__image");
+      expect(imgElement!.getAttribute("crossorigin")).toBe("anonymous");
     });
   });
 
@@ -545,8 +533,8 @@ describe("EaImage Component", () => {
       image.previewSrcList = urls;
       await image.updateComplete;
 
-      const preview = image.shadowRoot.querySelector("ea-image-preview");
-      expect(preview.urlList).toEqual(urls);
+      const preview = image.shadowRoot!.querySelector("ea-image-preview");
+      expect(preview!.urlList).toEqual(urls);
     });
 
     it("未启用 preview 时设置 previewSrcList 应该触发警告", async () => {
@@ -569,7 +557,7 @@ describe("EaImage Component", () => {
       const image = document.createElement("ea-image");
       image.innerHTML = `<div slot="error">Custom Error</div>`;
       container.appendChild(image);
-      const errorSlot = image.shadowRoot.querySelector('slot[name="error"]');
+      const errorSlot = image.shadowRoot!.querySelector('slot[name="error"]');
       expect(errorSlot).toBeTruthy();
     });
 
@@ -577,7 +565,7 @@ describe("EaImage Component", () => {
       const image = document.createElement("ea-image");
       image.innerHTML = `<div slot="placeholder">Loading...</div>`;
       container.appendChild(image);
-      const placeholderSlot = image.shadowRoot.querySelector(
+      const placeholderSlot = image.shadowRoot!.querySelector(
         'slot[name="placeholder"]'
       );
       expect(placeholderSlot).toBeTruthy();
@@ -588,7 +576,7 @@ describe("EaImage Component", () => {
       image.setAttribute("preview", "");
       image.innerHTML = `<div slot="progress">Progress</div>`;
       container.appendChild(image);
-      const progressSlot = image.shadowRoot.querySelector(
+      const progressSlot = image.shadowRoot!.querySelector(
         'slot[name="progress"]'
       );
       expect(progressSlot).toBeTruthy();
@@ -599,7 +587,7 @@ describe("EaImage Component", () => {
       image.setAttribute("preview", "");
       image.innerHTML = `<div slot="toolbar">Toolbar</div>`;
       container.appendChild(image);
-      const toolbarSlot = image.shadowRoot.querySelector(
+      const toolbarSlot = image.shadowRoot!.querySelector(
         'slot[name="toolbar"]'
       );
       expect(toolbarSlot).toBeTruthy();
@@ -612,11 +600,11 @@ describe("EaImage Component", () => {
       container.appendChild(image);
       await image.updateComplete;
 
-      const progressSlot = image.shadowRoot.querySelector(
+      const progressSlot = image.shadowRoot!.querySelector(
         'slot[name="progress"]'
       );
-      expect(progressSlot.hasAttribute("slot")).toBe(true);
-      expect(progressSlot.getAttribute("slot")).toBe("progress");
+      expect(progressSlot!.hasAttribute("slot")).toBe(true);
+      expect(progressSlot!.getAttribute("slot")).toBe("progress");
     });
 
     it("无内容的 progress slot 不应该有 slot 属性", async () => {
@@ -625,10 +613,10 @@ describe("EaImage Component", () => {
       container.appendChild(image);
       await image.updateComplete;
 
-      const progressSlot = image.shadowRoot.querySelector(
+      const progressSlot = image.shadowRoot!.querySelector(
         'slot[name="progress"]'
       );
-      expect(progressSlot.hasAttribute("slot")).toBe(false);
+      expect(progressSlot!.hasAttribute("slot")).toBe(false);
     });
 
     it("有内容的 toolbar slot 应该获得 slot 属性以转发到 preview", async () => {
@@ -638,11 +626,11 @@ describe("EaImage Component", () => {
       container.appendChild(image);
       await image.updateComplete;
 
-      const toolbarSlot = image.shadowRoot.querySelector(
+      const toolbarSlot = image.shadowRoot!.querySelector(
         'slot[name="toolbar"]'
       );
-      expect(toolbarSlot.hasAttribute("slot")).toBe(true);
-      expect(toolbarSlot.getAttribute("slot")).toBe("toolbar");
+      expect(toolbarSlot!.hasAttribute("slot")).toBe(true);
+      expect(toolbarSlot!.getAttribute("slot")).toBe("toolbar");
     });
 
     it("无内容的 toolbar slot 不应该有 slot 属性", async () => {
@@ -651,10 +639,10 @@ describe("EaImage Component", () => {
       container.appendChild(image);
       await image.updateComplete;
 
-      const toolbarSlot = image.shadowRoot.querySelector(
+      const toolbarSlot = image.shadowRoot!.querySelector(
         'slot[name="toolbar"]'
       );
-      expect(toolbarSlot.hasAttribute("slot")).toBe(false);
+      expect(toolbarSlot!.hasAttribute("slot")).toBe(false);
     });
 
     it("error 插槽默认内容应该是 FAILED", async () => {
@@ -662,8 +650,8 @@ describe("EaImage Component", () => {
       container.appendChild(image);
       await image.updateComplete;
 
-      const errorSlot = image.shadowRoot.querySelector('slot[name="error"]');
-      expect(errorSlot.textContent).toContain("FAILED");
+      const errorSlot = image.shadowRoot!.querySelector('slot[name="error"]');
+      expect(errorSlot!.textContent).toContain("FAILED");
     });
   });
 
@@ -695,8 +683,8 @@ describe("EaImage Component", () => {
       image.showPreview();
       await image.updateComplete;
 
-      const preview = image.shadowRoot.querySelector("ea-image-preview");
-      expect(preview.visible).toBe(true);
+      const preview = image.shadowRoot!.querySelector("ea-image-preview");
+      expect(preview!.visible).toBe(true);
     });
 
     it("setActiveItem 在未启用 preview 时应该不执行操作", () => {
@@ -717,12 +705,12 @@ describe("EaImage Component", () => {
       container.appendChild(image);
       await image.updateComplete;
 
-      const preview = image.shadowRoot.querySelector("ea-image-preview");
-      preview.urlList = ["a.jpg", "b.jpg", "c.jpg"];
+      const preview = image.shadowRoot!.querySelector("ea-image-preview");
+      preview!.urlList = ["a.jpg", "b.jpg", "c.jpg"];
       await image.updateComplete;
 
       image.setActiveItem(2);
-      expect(preview.index).toBe(2);
+      expect(preview!.index).toBe(2);
     });
 
     it("reset 应该调用 preview 的 reset", async () => {
@@ -731,13 +719,13 @@ describe("EaImage Component", () => {
       container.appendChild(image);
       await image.updateComplete;
 
-      const preview = image.shadowRoot.querySelector("ea-image-preview");
-      preview.urlList = ["a.jpg", "b.jpg"];
-      preview.scale = 2;
+      const preview = image.shadowRoot!.querySelector("ea-image-preview");
+      preview!.urlList = ["a.jpg", "b.jpg"];
+      preview!.scale = 2;
       await image.updateComplete;
 
       image.reset();
-      expect(preview.scale).toBe(1);
+      expect(preview!.scale).toBe(1);
     });
 
     it("updateContainerClasslist 应该返回正确的 BEM 类名", () => {
@@ -791,8 +779,8 @@ describe("EaImage Component", () => {
       image.dispatchEvent(new Event("load", { bubbles: true, composed: true }));
 
       expect(capturedEvent).toBeTruthy();
-      expect(capturedEvent.bubbles).toBe(true);
-      expect(capturedEvent.composed).toBe(true);
+      expect(capturedEvent!.bubbles).toBe(true);
+      expect(capturedEvent!.composed).toBe(true);
     });
   });
 
@@ -802,12 +790,13 @@ describe("EaImage Component", () => {
       container.appendChild(image);
       await image.updateComplete;
 
-      const imgContainer = image.shadowRoot.querySelector(".ea-image");
-      imgContainer.click();
+      const imgContainer =
+        image.shadowRoot!.querySelector<HTMLElement>(".ea-image");
+      imgContainer!.click();
       await image.updateComplete;
 
-      const preview = image.shadowRoot.querySelector("ea-image-preview");
-      expect(preview.visible).toBe(false);
+      const preview = image.shadowRoot!.querySelector("ea-image-preview");
+      expect(preview!.visible).toBe(false);
     });
 
     it("有 preview 属性时点击应该打开预览", async () => {
@@ -816,12 +805,13 @@ describe("EaImage Component", () => {
       container.appendChild(image);
       await image.updateComplete;
 
-      const imgContainer = image.shadowRoot.querySelector(".ea-image");
-      imgContainer.click();
+      const imgContainer =
+        image.shadowRoot!.querySelector<HTMLElement>(".ea-image");
+      imgContainer!.click();
       await image.updateComplete;
 
-      const preview = image.shadowRoot.querySelector("ea-image-preview");
-      expect(preview.visible).toBe(true);
+      const preview = image.shadowRoot!.querySelector("ea-image-preview");
+      expect(preview!.visible).toBe(true);
     });
   });
 
@@ -833,8 +823,8 @@ describe("EaImage Component", () => {
       container.appendChild(image);
       await image.updateComplete;
 
-      const preview = image.shadowRoot.querySelector("ea-image-preview");
-      expect(preview.zoomRate).toBe(1.5);
+      const preview = image.shadowRoot!.querySelector("ea-image-preview");
+      expect(preview!.zoomRate).toBe(1.5);
     });
 
     it("hideOnClickModal=true 时 preview 的 closeOnClickModal 应该为 false", async () => {
@@ -844,8 +834,8 @@ describe("EaImage Component", () => {
       container.appendChild(image);
       await image.updateComplete;
 
-      const preview = image.shadowRoot.querySelector("ea-image-preview");
-      expect(preview.closeOnClickModal).toBe(false);
+      const preview = image.shadowRoot!.querySelector("ea-image-preview");
+      expect(preview!.closeOnClickModal).toBe(false);
     });
 
     it("hideOnClickModal=false（默认）时 preview 的 closeOnClickModal 应该为 true", async () => {
@@ -854,8 +844,8 @@ describe("EaImage Component", () => {
       container.appendChild(image);
       await image.updateComplete;
 
-      const preview = image.shadowRoot.querySelector("ea-image-preview");
-      expect(preview.closeOnClickModal).toBe(true);
+      const preview = image.shadowRoot!.querySelector("ea-image-preview");
+      expect(preview!.closeOnClickModal).toBe(true);
     });
 
     it("zIndex 应该同步到 preview 子组件", async () => {
@@ -865,8 +855,8 @@ describe("EaImage Component", () => {
       container.appendChild(image);
       await image.updateComplete;
 
-      const preview = image.shadowRoot.querySelector("ea-image-preview");
-      expect(preview.zIndex).toBe("5000");
+      const preview = image.shadowRoot!.querySelector("ea-image-preview");
+      expect(preview!.zIndex).toBe("5000");
     });
 
     it("initialIndex 应该同步到 preview 子组件", async () => {
@@ -876,8 +866,8 @@ describe("EaImage Component", () => {
       container.appendChild(image);
       await image.updateComplete;
 
-      const preview = image.shadowRoot.querySelector("ea-image-preview");
-      expect(preview.initialIndex).toBe(1);
+      const preview = image.shadowRoot!.querySelector("ea-image-preview");
+      expect(preview!.initialIndex).toBe(1);
     });
 
     it("closeOnPressEscape 应该同步到 preview 子组件", async () => {
@@ -886,8 +876,8 @@ describe("EaImage Component", () => {
       container.appendChild(image);
       await image.updateComplete;
 
-      const preview = image.shadowRoot.querySelector("ea-image-preview");
-      expect(preview.closeOnPressEscape).toBe(true);
+      const preview = image.shadowRoot!.querySelector("ea-image-preview");
+      expect(preview!.closeOnPressEscape).toBe(true);
     });
 
     it("infinite 应该同步到 preview 子组件", async () => {
@@ -896,8 +886,8 @@ describe("EaImage Component", () => {
       container.appendChild(image);
       await image.updateComplete;
 
-      const preview = image.shadowRoot.querySelector("ea-image-preview");
-      expect(preview.infinite).toBe(true);
+      const preview = image.shadowRoot!.querySelector("ea-image-preview");
+      expect(preview!.infinite).toBe(true);
     });
 
     it("scale 应该同步到 preview 子组件", async () => {
@@ -907,8 +897,8 @@ describe("EaImage Component", () => {
       container.appendChild(image);
       await image.updateComplete;
 
-      const preview = image.shadowRoot.querySelector("ea-image-preview");
-      expect(preview.scale).toBe(2);
+      const preview = image.shadowRoot!.querySelector("ea-image-preview");
+      expect(preview!.scale).toBe(2);
     });
 
     it("minScale 应该同步到 preview 子组件", async () => {
@@ -918,8 +908,8 @@ describe("EaImage Component", () => {
       container.appendChild(image);
       await image.updateComplete;
 
-      const preview = image.shadowRoot.querySelector("ea-image-preview");
-      expect(preview.minScale).toBe(0.5);
+      const preview = image.shadowRoot!.querySelector("ea-image-preview");
+      expect(preview!.minScale).toBe(0.5);
     });
 
     it("maxScale 应该同步到 preview 子组件", async () => {
@@ -929,8 +919,8 @@ describe("EaImage Component", () => {
       container.appendChild(image);
       await image.updateComplete;
 
-      const preview = image.shadowRoot.querySelector("ea-image-preview");
-      expect(preview.maxScale).toBe(10);
+      const preview = image.shadowRoot!.querySelector("ea-image-preview");
+      expect(preview!.maxScale).toBe(10);
     });
 
     it("showProgress 应该同步到 preview 子组件", async () => {
@@ -940,8 +930,8 @@ describe("EaImage Component", () => {
       container.appendChild(image);
       await image.updateComplete;
 
-      const preview = image.shadowRoot.querySelector("ea-image-preview");
-      expect(preview.showProgress).toBe(true);
+      const preview = image.shadowRoot!.querySelector("ea-image-preview");
+      expect(preview!.showProgress).toBe(true);
     });
 
     it("未启用 preview 时属性不应该同步到子组件", async () => {
@@ -950,8 +940,8 @@ describe("EaImage Component", () => {
       container.appendChild(image);
       await image.updateComplete;
 
-      const preview = image.shadowRoot.querySelector("ea-image-preview");
-      expect(preview.zoomRate).toBe(1.2);
+      const preview = image.shadowRoot!.querySelector("ea-image-preview");
+      expect(preview!.zoomRate).toBe(1.2);
     });
   });
 
@@ -961,8 +951,8 @@ describe("EaImage Component", () => {
       container.appendChild(image);
       await image.updateComplete;
 
-      const containerEl = image.shadowRoot.querySelector(".ea-image");
-      expect(containerEl.classList.contains("ea-image--error")).toBe(true);
+      const containerEl = image.shadowRoot!.querySelector(".ea-image");
+      expect(containerEl!.classList.contains("ea-image--error")).toBe(true);
     });
 
     it("设置有效 src 后状态应该变为 loading", async () => {
@@ -971,11 +961,11 @@ describe("EaImage Component", () => {
       container.appendChild(image);
       await image.updateComplete;
 
-      const containerEl = image.shadowRoot.querySelector(".ea-image");
+      const containerEl = image.shadowRoot!.querySelector(".ea-image");
       expect(
-        containerEl.classList.contains("ea-image--loading") ||
-          containerEl.classList.contains("ea-image--success") ||
-          containerEl.classList.contains("ea-image--error")
+        containerEl!.classList.contains("ea-image--loading") ||
+          containerEl!.classList.contains("ea-image--success") ||
+          containerEl!.classList.contains("ea-image--error")
       ).toBe(true);
     });
 
@@ -985,12 +975,16 @@ describe("EaImage Component", () => {
       container.appendChild(image);
       await image.updateComplete;
 
-      image._states.imageStatus = "success";
+      (
+        image as unknown as {
+          _states: { imageStatus: "loading" | "error" | "success" };
+        }
+      )._states.imageStatus = "success";
       image.updateContainerClasslist();
       await image.updateComplete;
 
-      const containerEl = image.shadowRoot.querySelector(".ea-image");
-      expect(containerEl.classList.contains("ea-image--success")).toBe(true);
+      const containerEl = image.shadowRoot!.querySelector(".ea-image");
+      expect(containerEl!.classList.contains("ea-image--success")).toBe(true);
     });
 
     it("success 状态时背景应该变为透明", async () => {
@@ -998,9 +992,9 @@ describe("EaImage Component", () => {
       container.appendChild(image);
       await image.updateComplete;
 
-      const containerEl = image.shadowRoot.querySelector(".ea-image");
-      containerEl.classList.add("ea-image--success");
-      containerEl.classList.remove("ea-image--error", "ea-image--loading");
+      const containerEl = image.shadowRoot!.querySelector(".ea-image");
+      containerEl!.classList.add("ea-image--success");
+      containerEl!.classList.remove("ea-image--error", "ea-image--loading");
 
       expect(
         getComputedStyle(image).getPropertyValue("--ea-image-background")
@@ -1012,7 +1006,7 @@ describe("EaImage Component", () => {
     it("组件挂载时应该调用 $mount", () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
-      const containerEl = image.shadowRoot.querySelector(".ea-image");
+      const containerEl = image.shadowRoot!.querySelector(".ea-image");
       expect(containerEl).toBeTruthy();
     });
 
@@ -1044,8 +1038,8 @@ describe("EaImage Component", () => {
         el.setAttribute("src", "invalid-image.png");
         container.appendChild(el);
         await el.updateComplete;
-        const error = el.shadowRoot.querySelector('[part="error"]');
-        expect(error.getAttribute("role")).toBe("alert");
+        const error = el.shadowRoot!.querySelector('[part="error"]');
+        expect(error!.getAttribute("role")).toBe("alert");
       });
     });
   });

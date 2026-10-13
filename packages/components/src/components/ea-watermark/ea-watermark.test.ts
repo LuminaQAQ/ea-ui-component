@@ -1,9 +1,20 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import {
+  describe,
+  it,
+  expect,
+  beforeEach,
+  afterEach,
+  vi,
+  type Mock,
+} from "vitest";
 
 import "./index";
 
 class MockImage {
-  static instances = [];
+  static instances: MockImage[] = [];
+  onload: (() => void) | null = null;
+  onerror: (() => void) | null = null;
+  _src: string = "";
 
   constructor() {
     MockImage.instances.push(this);
@@ -11,21 +22,21 @@ class MockImage {
     this.onerror = null;
   }
 
-  set src(value) {
+  set src(value: string) {
     this._src = value;
     if (this.onload) this.onload();
   }
 
-  get src() {
+  get src(): string {
     return this._src;
   }
 }
 
 describe("EaWatermark", () => {
-  let container;
-  let originalGetContext;
-  let originalToDataURL;
-  let originalImage;
+  let container: HTMLDivElement;
+  let originalGetContext: typeof HTMLCanvasElement.prototype.getContext;
+  let originalToDataURL: typeof HTMLCanvasElement.prototype.toDataURL;
+  let originalImage: typeof Image;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -46,13 +57,13 @@ describe("EaWatermark", () => {
       translate: vi.fn(),
       drawImage: vi.fn(),
       fillText: vi.fn(),
-    }));
+    })) as unknown as typeof HTMLCanvasElement.prototype.getContext;
 
     HTMLCanvasElement.prototype.toDataURL = vi.fn(
       () => "data:image/png;base64,mockWatermark"
     );
 
-    global.Image = MockImage;
+    global.Image = MockImage as unknown as typeof Image;
   });
 
   afterEach(() => {
@@ -75,7 +86,7 @@ describe("EaWatermark", () => {
       const el = document.createElement("ea-watermark");
       container.appendChild(el);
 
-      const containerEl = el.shadowRoot.querySelector(".ea-watermark");
+      const containerEl = el.shadowRoot!.querySelector(".ea-watermark");
       expect(containerEl).toBeDefined();
     });
 
@@ -83,8 +94,10 @@ describe("EaWatermark", () => {
       const el = document.createElement("ea-watermark");
       container.appendChild(el);
 
-      expect(el.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
-      expect(el.shadowRoot.querySelector('[part="content"]')).toBeTruthy();
+      expect(el.shadowRoot!.querySelector('[part="container"]')).toBeTruthy();
+      expect(
+        el.shadowRoot!.querySelector<HTMLElement>('[part="content"]')
+      ).toBeTruthy();
     });
 
     it("应该包含 slot 元素", () => {
@@ -92,7 +105,7 @@ describe("EaWatermark", () => {
       el.innerHTML = '<div class="test-content">Content</div>';
       container.appendChild(el);
 
-      const slot = el.shadowRoot.querySelector("slot");
+      const slot = el.shadowRoot!.querySelector("slot");
       expect(slot).toBeDefined();
       expect(el.textContent).toContain("Content");
     });
@@ -103,8 +116,9 @@ describe("EaWatermark", () => {
 
       await el.updateComplete;
 
-      const content = el.shadowRoot.querySelector('[part="content"]');
-      expect(content.style.backgroundImage).toContain("data:image/png");
+      const content =
+        el.shadowRoot!.querySelector<HTMLElement>('[part="content"]');
+      expect(content!.style.backgroundImage).toContain("data:image/png");
     });
   });
 
@@ -134,8 +148,9 @@ describe("EaWatermark", () => {
       expect(el.width).toBe(96);
       expect(el.height).toBe(96);
 
-      const content = el.shadowRoot.querySelector('[part="content"]');
-      expect(content.style.backgroundSize).toBe("96px 96px");
+      const content =
+        el.shadowRoot!.querySelector<HTMLElement>('[part="content"]');
+      expect(content!.style.backgroundSize).toBe("96px 96px");
     });
 
     it("width 变化时应该更新背景尺寸", async () => {
@@ -147,8 +162,9 @@ describe("EaWatermark", () => {
       el.setAttribute("width", "200");
       await el.updateComplete;
 
-      const content = el.shadowRoot.querySelector('[part="content"]');
-      expect(content.style.backgroundSize).toBe("200px 64px");
+      const content =
+        el.shadowRoot!.querySelector<HTMLElement>('[part="content"]');
+      expect(content!.style.backgroundSize).toBe("200px 64px");
     });
   });
 
@@ -183,8 +199,9 @@ describe("EaWatermark", () => {
 
       await el.updateComplete;
 
-      const content = el.shadowRoot.querySelector('[part="content"]');
-      expect(content.style.zIndex).toBe("9");
+      const content =
+        el.shadowRoot!.querySelector<HTMLElement>('[part="content"]');
+      expect(content!.style.zIndex).toBe("9");
     });
 
     it("z-index 变化时应该更新 content 样式", async () => {
@@ -196,8 +213,9 @@ describe("EaWatermark", () => {
       el.setAttribute("z-index", "100");
       await el.updateComplete;
 
-      const content = el.shadowRoot.querySelector('[part="content"]');
-      expect(content.style.zIndex).toBe("100");
+      const content =
+        el.shadowRoot!.querySelector<HTMLElement>('[part="content"]');
+      expect(content!.style.zIndex).toBe("100");
     });
   });
 
@@ -223,13 +241,14 @@ describe("EaWatermark", () => {
 
       await el.updateComplete;
 
-      const contentEl = el.shadowRoot.querySelector('[part="content"]');
-      expect(contentEl.style.backgroundImage).toContain("data:image/png");
+      const contentEl =
+        el.shadowRoot!.querySelector<HTMLElement>('[part="content"]');
+      expect(contentEl!.style.backgroundImage).toContain("data:image/png");
 
       el.content = "Secret";
       await el.updateComplete;
 
-      expect(contentEl.style.backgroundImage).toContain("data:image/png");
+      expect(contentEl!.style.backgroundImage).toContain("data:image/png");
     });
   });
 
@@ -250,9 +269,10 @@ describe("EaWatermark", () => {
 
       await el.updateComplete;
 
-      const content = el.shadowRoot.querySelector('[part="content"]');
-      expect(content.style.backgroundImage).toContain("data:image/png");
-      expect(content.style.backgroundSize).toBe("96px 96px");
+      const content =
+        el.shadowRoot!.querySelector<HTMLElement>('[part="content"]');
+      expect(content!.style.backgroundImage).toContain("data:image/png");
+      expect(content!.style.backgroundSize).toBe("96px 96px");
 
       const lastImage = MockImage.instances[MockImage.instances.length - 1];
       expect(lastImage.src).toBe("https://example.com/watermark.png");
@@ -265,7 +285,9 @@ describe("EaWatermark", () => {
 
       await el.updateComplete;
 
-      const results = HTMLCanvasElement.prototype.getContext.mock.results;
+      const results = (
+        HTMLCanvasElement.prototype.getContext as unknown as Mock
+      ).mock.results;
       const lastCtx = results[results.length - 1].value;
       expect(lastCtx.rotate).toHaveBeenCalledWith((Math.PI / 180) * -22);
       expect(lastCtx.drawImage).toHaveBeenCalled();
@@ -277,15 +299,16 @@ describe("EaWatermark", () => {
 
       await el.updateComplete;
 
-      const content = el.shadowRoot.querySelector('[part="content"]');
-      expect(content.style.backgroundImage).toContain("data:image/png");
+      const content =
+        el.shadowRoot!.querySelector<HTMLElement>('[part="content"]');
+      expect(content!.style.backgroundImage).toContain("data:image/png");
 
       el.setAttribute("image", "https://example.com/new.png");
       await el.updateComplete;
 
       const lastImage = MockImage.instances[MockImage.instances.length - 1];
       expect(lastImage.src).toBe("https://example.com/new.png");
-      expect(content.style.backgroundImage).toContain("data:image/png");
+      expect(content!.style.backgroundImage).toContain("data:image/png");
     });
   });
 
@@ -315,8 +338,9 @@ describe("EaWatermark", () => {
       el.font = { color: "rgba(0, 100, 200, 0.25)", fontSize: 20 };
       await el.updateComplete;
 
-      const content = el.shadowRoot.querySelector('[part="content"]');
-      expect(content.style.backgroundImage).toContain("data:image/png");
+      const content =
+        el.shadowRoot!.querySelector<HTMLElement>('[part="content"]');
+      expect(content!.style.backgroundImage).toContain("data:image/png");
     });
   });
 
@@ -342,8 +366,9 @@ describe("EaWatermark", () => {
 
       await el.updateComplete;
 
-      const content = el.shadowRoot.querySelector('[part="content"]');
-      expect(content.style.backgroundPosition).toBe("100px 100px");
+      const content =
+        el.shadowRoot!.querySelector<HTMLElement>('[part="content"]');
+      expect(content!.style.backgroundPosition).toBe("100px 100px");
     });
 
     it("设置 offset 后背景位置使用自定义偏移", async () => {
@@ -353,8 +378,9 @@ describe("EaWatermark", () => {
 
       await el.updateComplete;
 
-      const content = el.shadowRoot.querySelector('[part="content"]');
-      expect(content.style.backgroundPosition).toBe("30px 40px");
+      const content =
+        el.shadowRoot!.querySelector<HTMLElement>('[part="content"]');
+      expect(content!.style.backgroundPosition).toBe("30px 40px");
     });
   });
 
@@ -363,8 +389,10 @@ describe("EaWatermark", () => {
       const el = document.createElement("ea-watermark");
       container.appendChild(el);
 
-      expect(el.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
-      expect(el.shadowRoot.querySelector('[part="content"]')).toBeTruthy();
+      expect(el.shadowRoot!.querySelector('[part="container"]')).toBeTruthy();
+      expect(
+        el.shadowRoot!.querySelector<HTMLElement>('[part="content"]')
+      ).toBeTruthy();
     });
 
     it("组件断开连接后应该正常移除", () => {

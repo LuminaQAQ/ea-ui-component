@@ -5,7 +5,7 @@ import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y";
 import "./index";
 
 describe("EaCollapse Component", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -29,7 +29,7 @@ describe("EaCollapse Component", () => {
       const collapse = document.createElement("ea-collapse");
       container.appendChild(collapse);
 
-      const containerEl = collapse.shadowRoot.querySelector(".ea-collapse");
+      const containerEl = collapse.shadowRoot!.querySelector(".ea-collapse");
       expect(containerEl).toBeTruthy();
     });
 
@@ -38,7 +38,7 @@ describe("EaCollapse Component", () => {
       container.appendChild(collapse);
 
       expect(
-        collapse.shadowRoot.querySelector('[part="container"]')
+        collapse.shadowRoot!.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
@@ -46,7 +46,7 @@ describe("EaCollapse Component", () => {
       const collapse = document.createElement("ea-collapse");
       container.appendChild(collapse);
 
-      const slot = collapse.shadowRoot.querySelector("slot");
+      const slot = collapse.shadowRoot!.querySelector("slot");
       expect(slot).toBeTruthy();
     });
   });
@@ -129,7 +129,7 @@ describe("EaCollapse Component", () => {
       container.appendChild(collapse);
 
       const item = collapse.querySelector("ea-collapse-item");
-      expect(item.expandIconPosition).toBe("right");
+      expect(item!.expandIconPosition).toBe("right");
     });
 
     it("设置 expand-icon-position 为 left 应该应用到子项", async () => {
@@ -146,7 +146,7 @@ describe("EaCollapse Component", () => {
       await collapse.updateComplete;
 
       const item = collapse.querySelector("ea-collapse-item");
-      expect(item.expandIconPosition).toBe("left");
+      expect(item!.expandIconPosition).toBe("left");
     });
   });
 
@@ -164,10 +164,10 @@ describe("EaCollapse Component", () => {
       collapse.addEventListener("ea-change", changeHandler);
 
       const item = collapse.querySelector("ea-collapse-item");
-      const headerWrap = item.shadowRoot.querySelector(
+      const headerWrap = item!.shadowRoot!.querySelector<HTMLElement>(
         ".ea-collapse-item__header-wrap"
       );
-      headerWrap.click();
+      headerWrap!.click();
 
       await collapse.updateComplete;
 
@@ -189,10 +189,10 @@ describe("EaCollapse Component", () => {
       });
 
       const item = collapse.querySelector("ea-collapse-item");
-      const headerWrap = item.shadowRoot.querySelector(
+      const headerWrap = item!.shadowRoot!.querySelector<HTMLElement>(
         ".ea-collapse-item__header-wrap"
       );
-      headerWrap.click();
+      headerWrap!.click();
 
       await collapse.updateComplete;
 
@@ -200,7 +200,7 @@ describe("EaCollapse Component", () => {
         name: "1",
         target: item,
       });
-      expect(Array.isArray(eventDetail.active)).toBe(true);
+      expect(Array.isArray(eventDetail!.active)).toBe(true);
     });
 
     it("ea-change 事件应该使用 EaCollapseChangeEvent 类", async () => {
@@ -218,17 +218,17 @@ describe("EaCollapse Component", () => {
       });
 
       const item = collapse.querySelector("ea-collapse-item");
-      const headerWrap = item.shadowRoot.querySelector(
+      const headerWrap = item!.shadowRoot!.querySelector<HTMLElement>(
         ".ea-collapse-item__header-wrap"
       );
-      headerWrap.click();
+      headerWrap!.click();
 
       await collapse.updateComplete;
 
       expect(receivedEvent).toBeDefined();
-      expect(receivedEvent.type).toBe("ea-change");
-      expect(receivedEvent.bubbles).toBe(true);
-      expect(receivedEvent.composed).toBe(true);
+      expect(receivedEvent!.type).toBe("ea-change");
+      expect(receivedEvent!.bubbles).toBe(true);
+      expect(receivedEvent!.composed).toBe(true);
     });
   });
 
@@ -248,10 +248,10 @@ describe("EaCollapse Component", () => {
       collapse.addEventListener("ea-change", changeHandler);
 
       const item = collapse.querySelector("ea-collapse-item");
-      const headerWrap = item.shadowRoot.querySelector(
+      const headerWrap = item!.shadowRoot!.querySelector<HTMLElement>(
         ".ea-collapse-item__header-wrap"
       );
-      headerWrap.click();
+      headerWrap!.click();
 
       await collapse.updateComplete;
 
@@ -273,10 +273,10 @@ describe("EaCollapse Component", () => {
       collapse.addEventListener("ea-change", changeHandler);
 
       const item = collapse.querySelector("ea-collapse-item");
-      const headerWrap = item.shadowRoot.querySelector(
+      const headerWrap = item!.shadowRoot!.querySelector<HTMLElement>(
         ".ea-collapse-item__header-wrap"
       );
-      headerWrap.click();
+      headerWrap!.click();
 
       await collapse.updateComplete;
 
@@ -301,10 +301,10 @@ describe("EaCollapse Component", () => {
       collapse.addEventListener("ea-change", changeHandler);
 
       const item = collapse.querySelector("ea-collapse-item");
-      const headerWrap = item.shadowRoot.querySelector(
+      const headerWrap = item!.shadowRoot!.querySelector<HTMLElement>(
         ".ea-collapse-item__header-wrap"
       );
-      headerWrap.click();
+      headerWrap!.click();
 
       await waitForRender(200);
 
@@ -328,10 +328,10 @@ describe("EaCollapse Component", () => {
       collapse.addEventListener("ea-change", changeHandler);
 
       const item = collapse.querySelector("ea-collapse-item");
-      const headerWrap = item.shadowRoot.querySelector(
+      const headerWrap = item!.shadowRoot!.querySelector<HTMLElement>(
         ".ea-collapse-item__header-wrap"
       );
-      headerWrap.click();
+      headerWrap!.click();
 
       await waitForRender(200);
 
@@ -353,10 +353,10 @@ describe("EaCollapse Component", () => {
       collapse.addEventListener("ea-change", changeHandler);
 
       const item = collapse.querySelector("ea-collapse-item");
-      const headerWrap = item.shadowRoot.querySelector(
+      const headerWrap = item!.shadowRoot!.querySelector<HTMLElement>(
         ".ea-collapse-item__header-wrap"
       );
-      headerWrap.click();
+      headerWrap!.click();
 
       await collapse.updateComplete;
 
@@ -417,7 +417,7 @@ describe("EaCollapse Component", () => {
 
       const item = collapse.querySelector("ea-collapse-item");
 
-      item.dispatchEvent(
+      item!.dispatchEvent(
         new CustomEvent("ea-collapse-item-click", {
           detail: { name: "1", target: item },
           bubbles: true,
@@ -427,9 +427,9 @@ describe("EaCollapse Component", () => {
 
       await collapse.updateComplete;
 
-      expect(item.hasAttribute("active")).toBe(true);
+      expect(item!.hasAttribute("active")).toBe(true);
 
-      item.dispatchEvent(
+      item!.dispatchEvent(
         new CustomEvent("ea-collapse-item-click", {
           detail: { name: "1", target: item },
           bubbles: true,
@@ -439,7 +439,7 @@ describe("EaCollapse Component", () => {
 
       await collapse.updateComplete;
 
-      expect(item.hasAttribute("active")).toBe(false);
+      expect(item!.hasAttribute("active")).toBe(false);
     });
   });
 
@@ -493,7 +493,7 @@ describe("EaCollapse Component", () => {
 
       const item = collapse.querySelector("ea-collapse-item");
 
-      item.dispatchEvent(
+      item!.dispatchEvent(
         new CustomEvent("ea-collapse-item-click", {
           detail: { name: "1", target: item },
           bubbles: true,
@@ -503,9 +503,9 @@ describe("EaCollapse Component", () => {
 
       await collapse.updateComplete;
 
-      expect(item.hasAttribute("active")).toBe(true);
+      expect(item!.hasAttribute("active")).toBe(true);
 
-      item.dispatchEvent(
+      item!.dispatchEvent(
         new CustomEvent("ea-collapse-item-click", {
           detail: { name: "1", target: item },
           bubbles: true,
@@ -515,7 +515,7 @@ describe("EaCollapse Component", () => {
 
       await collapse.updateComplete;
 
-      expect(item.hasAttribute("active")).toBe(false);
+      expect(item!.hasAttribute("active")).toBe(false);
     });
   });
 
@@ -592,7 +592,7 @@ describe("EaCollapse Component", () => {
 });
 
 describe("EaCollapseItem Component", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -618,7 +618,7 @@ describe("EaCollapseItem Component", () => {
       const item = document.createElement("ea-collapse-item");
       container.appendChild(item);
 
-      const containerEl = item.shadowRoot.querySelector(".ea-collapse-item");
+      const containerEl = item.shadowRoot!.querySelector(".ea-collapse-item");
       expect(containerEl).toBeTruthy();
     });
 
@@ -626,15 +626,15 @@ describe("EaCollapseItem Component", () => {
       const item = document.createElement("ea-collapse-item");
       container.appendChild(item);
 
-      expect(item.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(item.shadowRoot!.querySelector('[part="container"]')).toBeTruthy();
       expect(
-        item.shadowRoot.querySelector('[part="header-wrap"]')
+        item.shadowRoot!.querySelector('[part="header-wrap"]')
       ).toBeTruthy();
-      expect(item.shadowRoot.querySelector('[part="header"]')).toBeTruthy();
-      expect(item.shadowRoot.querySelector('[part="indicator"]')).toBeTruthy();
-      expect(item.shadowRoot.querySelector('[part="icon"]')).toBeTruthy();
+      expect(item.shadowRoot!.querySelector('[part="header"]')).toBeTruthy();
+      expect(item.shadowRoot!.querySelector('[part="indicator"]')).toBeTruthy();
+      expect(item.shadowRoot!.querySelector('[part="icon"]')).toBeTruthy();
       expect(
-        item.shadowRoot.querySelector('[part="content-wrap"]')
+        item.shadowRoot!.querySelector('[part="content-wrap"]')
       ).toBeTruthy();
     });
   });
@@ -645,7 +645,7 @@ describe("EaCollapseItem Component", () => {
       item.innerHTML = "Content";
       container.appendChild(item);
 
-      const slot = item.shadowRoot.querySelector("slot:not([name])");
+      const slot = item.shadowRoot!.querySelector("slot:not([name])");
       expect(slot).toBeTruthy();
     });
 
@@ -657,7 +657,7 @@ describe("EaCollapseItem Component", () => {
       `;
       container.appendChild(item);
 
-      const headerSlot = item.shadowRoot.querySelector('slot[name="header"]');
+      const headerSlot = item.shadowRoot!.querySelector('slot[name="header"]');
       expect(headerSlot).toBeTruthy();
     });
 
@@ -666,7 +666,7 @@ describe("EaCollapseItem Component", () => {
       item.innerHTML = '<ea-icon slot="icon" name="custom"></ea-icon>';
       container.appendChild(item);
 
-      const iconSlot = item.shadowRoot.querySelector('slot[name="icon"]');
+      const iconSlot = item.shadowRoot!.querySelector('slot[name="icon"]');
       expect(iconSlot).toBeTruthy();
     });
   });
@@ -688,7 +688,7 @@ describe("EaCollapseItem Component", () => {
       `;
       container.appendChild(item);
 
-      const headerSlot = item.shadowRoot.querySelector('slot[name="header"]');
+      const headerSlot = item.shadowRoot!.querySelector('slot[name="header"]');
       expect(headerSlot).toBeTruthy();
     });
   });
@@ -724,8 +724,10 @@ describe("EaCollapseItem Component", () => {
       item.setAttribute("expand-icon-position", "left");
       container.appendChild(item);
 
-      const containerEl = item.shadowRoot.querySelector(".ea-collapse-item");
-      expect(containerEl.classList.contains("ea-collapse-item--indicator-left")).toBe(true);
+      const containerEl = item.shadowRoot!.querySelector(".ea-collapse-item");
+      expect(
+        containerEl!.classList.contains("ea-collapse-item--indicator-left")
+      ).toBe(true);
     });
   });
 
@@ -749,10 +751,10 @@ describe("EaCollapseItem Component", () => {
       const clickHandler = vi.fn();
       item.addEventListener("ea-collapse-item-click", clickHandler);
 
-      const headerWrap = item.shadowRoot.querySelector(
+      const headerWrap = item.shadowRoot!.querySelector<HTMLElement>(
         ".ea-collapse-item__header-wrap"
       );
-      headerWrap.click();
+      headerWrap!.click();
 
       expect(clickHandler).not.toHaveBeenCalled();
     });
@@ -762,8 +764,8 @@ describe("EaCollapseItem Component", () => {
       item.setAttribute("disabled", "");
       container.appendChild(item);
 
-      const containerEl = item.shadowRoot.querySelector(".ea-collapse-item");
-      expect(containerEl.classList.contains("is-disabled")).toBe(true);
+      const containerEl = item.shadowRoot!.querySelector(".ea-collapse-item");
+      expect(containerEl!.classList.contains("is-disabled")).toBe(true);
     });
   });
 
@@ -796,10 +798,10 @@ describe("EaCollapseItem Component", () => {
       const clickHandler = vi.fn();
       item.addEventListener("ea-collapse-item-click", clickHandler);
 
-      const headerWrap = item.shadowRoot.querySelector(
+      const headerWrap = item.shadowRoot!.querySelector<HTMLElement>(
         ".ea-collapse-item__header-wrap"
       );
-      headerWrap.click();
+      headerWrap!.click();
 
       expect(clickHandler).toHaveBeenCalled();
     });
@@ -813,13 +815,13 @@ describe("EaCollapseItem Component", () => {
 
       let eventDetail = null;
       item.addEventListener("ea-collapse-item-click", e => {
-        eventDetail = e.detail;
+        eventDetail = (e as CustomEvent).detail;
       });
 
-      const headerWrap = item.shadowRoot.querySelector(
+      const headerWrap = item.shadowRoot!.querySelector<HTMLElement>(
         ".ea-collapse-item__header-wrap"
       );
-      headerWrap.click();
+      headerWrap!.click();
 
       expect(eventDetail).toMatchObject({
         name: "test-name",
@@ -833,7 +835,7 @@ describe("EaCollapseItem Component", () => {
       const item = document.createElement("ea-collapse-item");
       container.appendChild(item);
 
-      const icon = item.shadowRoot.querySelector("ea-icon[name='angle-down']");
+      const icon = item.shadowRoot!.querySelector("ea-icon[name='angle-down']");
       expect(icon).toBeTruthy();
     });
 
@@ -841,7 +843,9 @@ describe("EaCollapseItem Component", () => {
       const item = document.createElement("ea-collapse-item");
       container.appendChild(item);
 
-      const icon = item.shadowRoot.querySelector(".ea-collapse-item__expand-icon");
+      const icon = item.shadowRoot!.querySelector(
+        ".ea-collapse-item__expand-icon"
+      );
       expect(icon).toBeTruthy();
     });
   });
@@ -861,16 +865,20 @@ describe("EaCollapseItem Component", () => {
         item.setAttribute("header", "Test");
         item.setAttribute("name", "1");
         container.appendChild(item);
-        const headerWrap = item.shadowRoot.querySelector(".ea-collapse-item__header-wrap");
-        expect(headerWrap.getAttribute("role")).toBe("button");
+        const headerWrap = item.shadowRoot!.querySelector(
+          ".ea-collapse-item__header-wrap"
+        );
+        expect(headerWrap!.getAttribute("role")).toBe("button");
       });
 
       it("header-wrap 应该有 tabindex=0", async () => {
         const item = document.createElement("ea-collapse-item");
         item.setAttribute("header", "Test");
         container.appendChild(item);
-        const headerWrap = item.shadowRoot.querySelector(".ea-collapse-item__header-wrap");
-        expect(headerWrap.getAttribute("tabindex")).toBe("0");
+        const headerWrap = item.shadowRoot!.querySelector(
+          ".ea-collapse-item__header-wrap"
+        );
+        expect(headerWrap!.getAttribute("tabindex")).toBe("0");
       });
 
       it("未展开时 header-wrap 应该有 aria-expanded=false", async () => {
@@ -878,8 +886,10 @@ describe("EaCollapseItem Component", () => {
         item.setAttribute("header", "Test");
         container.appendChild(item);
         await item.updateComplete;
-        const headerWrap = item.shadowRoot.querySelector(".ea-collapse-item__header-wrap");
-        expect(headerWrap.getAttribute("aria-expanded")).toBe("false");
+        const headerWrap = item.shadowRoot!.querySelector(
+          ".ea-collapse-item__header-wrap"
+        );
+        expect(headerWrap!.getAttribute("aria-expanded")).toBe("false");
       });
 
       it("展开时 header-wrap 应该有 aria-expanded=true", async () => {
@@ -888,8 +898,10 @@ describe("EaCollapseItem Component", () => {
         item.setAttribute("active", "");
         container.appendChild(item);
         await item.updateComplete;
-        const headerWrap = item.shadowRoot.querySelector(".ea-collapse-item__header-wrap");
-        expect(headerWrap.getAttribute("aria-expanded")).toBe("true");
+        const headerWrap = item.shadowRoot!.querySelector(
+          ".ea-collapse-item__header-wrap"
+        );
+        expect(headerWrap!.getAttribute("aria-expanded")).toBe("true");
       });
 
       it("header-wrap 应该有 aria-controls 指向对应 panel", async () => {
@@ -897,8 +909,10 @@ describe("EaCollapseItem Component", () => {
         item.setAttribute("header", "Test");
         container.appendChild(item);
         await item.updateComplete;
-        const headerWrap = item.shadowRoot.querySelector(".ea-collapse-item__header-wrap");
-        const ariaControls = headerWrap.getAttribute("aria-controls");
+        const headerWrap = item.shadowRoot!.querySelector(
+          ".ea-collapse-item__header-wrap"
+        );
+        const ariaControls = headerWrap!.getAttribute("aria-controls");
         expect(ariaControls).toBeTruthy();
         expect(ariaControls).toContain("-panel");
       });
@@ -908,8 +922,10 @@ describe("EaCollapseItem Component", () => {
         item.setAttribute("header", "Test");
         container.appendChild(item);
         await item.updateComplete;
-        const content = item.shadowRoot.querySelector(".ea-collapse-item__content");
-        expect(content.getAttribute("role")).toBe("region");
+        const content = item.shadowRoot!.querySelector(
+          ".ea-collapse-item__content"
+        );
+        expect(content!.getAttribute("role")).toBe("region");
       });
 
       it("content 应该有 aria-labelledby 指向对应 header", async () => {
@@ -917,8 +933,10 @@ describe("EaCollapseItem Component", () => {
         item.setAttribute("header", "Test");
         container.appendChild(item);
         await item.updateComplete;
-        const content = item.shadowRoot.querySelector(".ea-collapse-item__content");
-        const labelledby = content.getAttribute("aria-labelledby");
+        const content = item.shadowRoot!.querySelector(
+          ".ea-collapse-item__content"
+        );
+        const labelledby = content!.getAttribute("aria-labelledby");
         expect(labelledby).toBeTruthy();
         expect(labelledby).toContain("-header");
       });
@@ -929,8 +947,10 @@ describe("EaCollapseItem Component", () => {
         item.setAttribute("disabled", "");
         container.appendChild(item);
         await item.updateComplete;
-        const headerWrap = item.shadowRoot.querySelector(".ea-collapse-item__header-wrap");
-        expect(headerWrap.getAttribute("aria-disabled")).toBe("true");
+        const headerWrap = item.shadowRoot!.querySelector(
+          ".ea-collapse-item__header-wrap"
+        );
+        expect(headerWrap!.getAttribute("aria-disabled")).toBe("true");
       });
 
       it("disabled 时 header-wrap 应该有 tabindex=-1", async () => {
@@ -939,8 +959,10 @@ describe("EaCollapseItem Component", () => {
         item.setAttribute("disabled", "");
         container.appendChild(item);
         await item.updateComplete;
-        const headerWrap = item.shadowRoot.querySelector(".ea-collapse-item__header-wrap");
-        expect(headerWrap.getAttribute("tabindex")).toBe("-1");
+        const headerWrap = item.shadowRoot!.querySelector(
+          ".ea-collapse-item__header-wrap"
+        );
+        expect(headerWrap!.getAttribute("tabindex")).toBe("-1");
       });
 
       it("未展开时 content 应该有 inert 属性", async () => {
@@ -948,8 +970,10 @@ describe("EaCollapseItem Component", () => {
         item.setAttribute("header", "Test");
         container.appendChild(item);
         await item.updateComplete;
-        const content = item.shadowRoot.querySelector(".ea-collapse-item__content");
-        expect(content.hasAttribute("inert")).toBe(true);
+        const content = item.shadowRoot!.querySelector(
+          ".ea-collapse-item__content"
+        );
+        expect(content!.hasAttribute("inert")).toBe(true);
       });
 
       it("展开时 content 不应该有 inert 属性", async () => {
@@ -958,8 +982,10 @@ describe("EaCollapseItem Component", () => {
         item.setAttribute("active", "");
         container.appendChild(item);
         await item.updateComplete;
-        const content = item.shadowRoot.querySelector(".ea-collapse-item__content");
-        expect(content.hasAttribute("inert")).toBe(false);
+        const content = item.shadowRoot!.querySelector(
+          ".ea-collapse-item__content"
+        );
+        expect(content!.hasAttribute("inert")).toBe(false);
       });
     });
 
@@ -973,11 +999,15 @@ describe("EaCollapseItem Component", () => {
         await collapse.updateComplete;
 
         const item = collapse.querySelector("ea-collapse-item");
-        const headerWrap = item.shadowRoot.querySelector(".ea-collapse-item__header-wrap");
-        headerWrap.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+        const headerWrap = item!.shadowRoot!.querySelector(
+          ".ea-collapse-item__header-wrap"
+        );
+        headerWrap!.dispatchEvent(
+          new KeyboardEvent("keydown", { key: "Enter", bubbles: true })
+        );
         await collapse.updateComplete;
 
-        expect(item.hasAttribute("active")).toBe(true);
+        expect(item!.hasAttribute("active")).toBe(true);
       });
 
       it("Space 键应该展开折叠面板", async () => {
@@ -989,11 +1019,15 @@ describe("EaCollapseItem Component", () => {
         await collapse.updateComplete;
 
         const item = collapse.querySelector("ea-collapse-item");
-        const headerWrap = item.shadowRoot.querySelector(".ea-collapse-item__header-wrap");
-        headerWrap.dispatchEvent(new KeyboardEvent("keydown", { key: " ", bubbles: true }));
+        const headerWrap = item!.shadowRoot!.querySelector(
+          ".ea-collapse-item__header-wrap"
+        );
+        headerWrap!.dispatchEvent(
+          new KeyboardEvent("keydown", { key: " ", bubbles: true })
+        );
         await collapse.updateComplete;
 
-        expect(item.hasAttribute("active")).toBe(true);
+        expect(item!.hasAttribute("active")).toBe(true);
       });
 
       it("Enter 键再次按下应该收起面板", async () => {
@@ -1008,13 +1042,17 @@ describe("EaCollapseItem Component", () => {
         await collapse.updateComplete;
 
         const item = collapse.querySelector("ea-collapse-item");
-        expect(item.hasAttribute("active")).toBe(true);
+        expect(item!.hasAttribute("active")).toBe(true);
 
-        const headerWrap = item.shadowRoot.querySelector(".ea-collapse-item__header-wrap");
-        headerWrap.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+        const headerWrap = item!.shadowRoot!.querySelector(
+          ".ea-collapse-item__header-wrap"
+        );
+        headerWrap!.dispatchEvent(
+          new KeyboardEvent("keydown", { key: "Enter", bubbles: true })
+        );
         await collapse.updateComplete;
 
-        expect(item.hasAttribute("active")).toBe(false);
+        expect(item!.hasAttribute("active")).toBe(false);
       });
 
       it("disabled 时 Enter 键不应该触发展开", async () => {
@@ -1026,11 +1064,15 @@ describe("EaCollapseItem Component", () => {
         await collapse.updateComplete;
 
         const item = collapse.querySelector("ea-collapse-item");
-        const headerWrap = item.shadowRoot.querySelector(".ea-collapse-item__header-wrap");
-        headerWrap.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+        const headerWrap = item!.shadowRoot!.querySelector(
+          ".ea-collapse-item__header-wrap"
+        );
+        headerWrap!.dispatchEvent(
+          new KeyboardEvent("keydown", { key: "Enter", bubbles: true })
+        );
         await collapse.updateComplete;
 
-        expect(item.hasAttribute("active")).toBe(false);
+        expect(item!.hasAttribute("active")).toBe(false);
       });
     });
   });

@@ -4,7 +4,7 @@ import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y.js";
 
 import "./index.ts";
 
-function createDropdown(attrs = {}, innerHTML = "") {
+function createDropdown(attrs: Record<string, string> = {}, innerHTML = "") {
   const el = document.createElement("ea-dropdown");
   for (const [key, value] of Object.entries(attrs)) {
     el.setAttribute(key, value);
@@ -15,7 +15,7 @@ function createDropdown(attrs = {}, innerHTML = "") {
   return el;
 }
 
-function withReference(innerHTML) {
+function withReference(innerHTML?: string) {
   return (
     innerHTML ||
     `<span slot="reference" class="ref">Trigger</span>
@@ -26,7 +26,10 @@ function withReference(innerHTML) {
   );
 }
 
-function createDropdownItem(attrs = {}, textContent = "Test Item") {
+function createDropdownItem(
+  attrs: Record<string, string | true> = {},
+  textContent = "Test Item"
+) {
   const el = document.createElement("ea-dropdown-item");
   for (const [key, value] of Object.entries(attrs)) {
     if (value === "" || value === true) {
@@ -48,7 +51,7 @@ function createDropdownMenu(innerHTML = "") {
 }
 
 describe("EaDropdown Component", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -73,7 +76,7 @@ describe("EaDropdown Component", () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
 
-      expect(dropdown.shadowRoot.querySelector(".ea-popper")).toBeTruthy();
+      expect(dropdown.shadowRoot!.querySelector(".ea-popper")).toBeTruthy();
     });
 
     it("应该渲染 .ea-popper__reference 元素", () => {
@@ -81,7 +84,7 @@ describe("EaDropdown Component", () => {
       container.appendChild(dropdown);
 
       expect(
-        dropdown.shadowRoot.querySelector(".ea-popper__reference")
+        dropdown.shadowRoot!.querySelector(".ea-popper__reference")
       ).toBeTruthy();
     });
 
@@ -90,7 +93,7 @@ describe("EaDropdown Component", () => {
       container.appendChild(dropdown);
 
       expect(
-        dropdown.shadowRoot.querySelector(".ea-popper__original")
+        dropdown.shadowRoot!.querySelector(".ea-popper__original")
       ).toBeTruthy();
     });
 
@@ -99,8 +102,8 @@ describe("EaDropdown Component", () => {
       container.appendChild(dropdown);
       await dropdown.updateComplete;
 
-      const containerEl = dropdown.shadowRoot.querySelector(".ea-popper");
-      expect(containerEl.getAttribute("tabindex")).toBe("-1");
+      const containerEl = dropdown.shadowRoot!.querySelector(".ea-popper");
+      expect(containerEl!.getAttribute("tabindex")).toBe("-1");
     });
 
     it("original 应该有 tabindex=-1", async () => {
@@ -108,10 +111,10 @@ describe("EaDropdown Component", () => {
       container.appendChild(dropdown);
       await dropdown.updateComplete;
 
-      const originalEl = dropdown.shadowRoot.querySelector(
+      const originalEl = dropdown.shadowRoot!.querySelector(
         ".ea-popper__original"
       );
-      expect(originalEl.getAttribute("tabindex")).toBe("-1");
+      expect(originalEl!.getAttribute("tabindex")).toBe("-1");
     });
 
     it("reference 应该有 tabindex=-1", async () => {
@@ -119,10 +122,10 @@ describe("EaDropdown Component", () => {
       container.appendChild(dropdown);
       await dropdown.updateComplete;
 
-      const referenceEl = dropdown.shadowRoot.querySelector(
+      const referenceEl = dropdown.shadowRoot!.querySelector(
         ".ea-popper__reference"
       );
-      expect(referenceEl.getAttribute("tabindex")).toBe("-1");
+      expect(referenceEl!.getAttribute("tabindex")).toBe("-1");
     });
   });
 
@@ -134,7 +137,7 @@ describe("EaDropdown Component", () => {
       container.appendChild(dropdown);
 
       expect(
-        dropdown.shadowRoot.querySelector('[part="container"]')
+        dropdown.shadowRoot!.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
@@ -143,7 +146,7 @@ describe("EaDropdown Component", () => {
       container.appendChild(dropdown);
 
       expect(
-        dropdown.shadowRoot.querySelector('[part="reference"]')
+        dropdown.shadowRoot!.querySelector('[part="reference"]')
       ).toBeTruthy();
     });
 
@@ -152,7 +155,7 @@ describe("EaDropdown Component", () => {
       container.appendChild(dropdown);
 
       expect(
-        dropdown.shadowRoot.querySelector('[part="original"]')
+        dropdown.shadowRoot!.querySelector('[part="original"]')
       ).toBeTruthy();
     });
   });
@@ -165,7 +168,7 @@ describe("EaDropdown Component", () => {
       container.appendChild(dropdown);
       await dropdown.updateComplete;
 
-      const referenceSlot = dropdown.shadowRoot.querySelector(
+      const referenceSlot = dropdown.shadowRoot!.querySelector(
         'slot[name="reference"]'
       );
       expect(referenceSlot).toBeTruthy();
@@ -175,7 +178,8 @@ describe("EaDropdown Component", () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
 
-      const defaultSlot = dropdown.shadowRoot.querySelector("slot:not([name])");
+      const defaultSlot =
+        dropdown.shadowRoot!.querySelector("slot:not([name])");
       expect(defaultSlot).toBeTruthy();
     });
 
@@ -190,7 +194,7 @@ describe("EaDropdown Component", () => {
       container.appendChild(dropdown);
       await dropdown.updateComplete;
 
-      const referenceSlot = dropdown.shadowRoot.querySelector(
+      const referenceSlot = dropdown.shadowRoot!.querySelector(
         'slot[name="reference"]'
       );
       expect(referenceSlot).toBeTruthy();
@@ -334,8 +338,8 @@ describe("EaDropdown Component", () => {
       dropdown.placement = "top";
       await dropdown.updateComplete;
 
-      const containerEl = dropdown.shadowRoot.querySelector(".ea-popper");
-      expect(containerEl.classList.toString()).toContain("ea-popper--top");
+      const containerEl = dropdown.shadowRoot!.querySelector(".ea-popper");
+      expect(containerEl!.classList.toString()).toContain("ea-popper--top");
     });
   });
 
@@ -609,10 +613,10 @@ describe("EaDropdown Component", () => {
       dropdown.addEventListener("ea-command", commandHandler);
 
       const item = dropdown.querySelector("ea-dropdown-item");
-      const content = item.shadowRoot.querySelector(
+      const content = item!.shadowRoot!.querySelector<HTMLElement>(
         ".ea-dropdown-item__content"
       );
-      content.click();
+      content!.click();
 
       expect(commandHandler).toHaveBeenCalled();
       expect(commandHandler.mock.calls[0][0].detail.command).toBe(
@@ -635,10 +639,10 @@ describe("EaDropdown Component", () => {
       dropdown.addEventListener("ea-command", commandHandler);
 
       const item = dropdown.querySelector("ea-dropdown-item");
-      const content = item.shadowRoot.querySelector(
+      const content = item!.shadowRoot!.querySelector<HTMLElement>(
         ".ea-dropdown-item__content"
       );
-      content.click();
+      content!.click();
 
       const event = commandHandler.mock.calls[0][0];
       expect(event.type).toBe("ea-command");
@@ -661,10 +665,10 @@ describe("EaDropdown Component", () => {
       container.addEventListener("ea-dropdown-item-click", clickHandler, true);
 
       const item = dropdown.querySelector("ea-dropdown-item");
-      const content = item.shadowRoot.querySelector(
+      const content = item!.shadowRoot!.querySelector<HTMLElement>(
         ".ea-dropdown-item__content"
       );
-      content.click();
+      content!.click();
 
       expect(clickHandler).toHaveBeenCalled();
     });
@@ -685,10 +689,10 @@ describe("EaDropdown Component", () => {
       expect(dropdown.visible).toBe(true);
 
       const item = dropdown.querySelector("ea-dropdown-item");
-      const content = item.shadowRoot.querySelector(
+      const content = item!.shadowRoot!.querySelector<HTMLElement>(
         ".ea-dropdown-item__content"
       );
-      content.click();
+      content!.click();
       await dropdown.updateComplete;
 
       expect(dropdown.visible).toBe(false);
@@ -712,10 +716,10 @@ describe("EaDropdown Component", () => {
       expect(dropdown.visible).toBe(true);
 
       const item = dropdown.querySelector("ea-dropdown-item");
-      const content = item.shadowRoot.querySelector(
+      const content = item!.shadowRoot!.querySelector<HTMLElement>(
         ".ea-dropdown-item__content"
       );
-      content.click();
+      content!.click();
       await dropdown.updateComplete;
 
       expect(dropdown.visible).toBe(true);
@@ -792,15 +796,15 @@ describe("EaDropdown Component", () => {
 
       expect(dropdown.visible).toBe(false);
 
-      const referenceSlot = dropdown.shadowRoot.querySelector(
+      const referenceSlot = dropdown.shadowRoot!.querySelector(
         'slot[name="reference"]'
       );
-      referenceSlot.dispatchEvent(new Event("click", { bubbles: true }));
+      referenceSlot!.dispatchEvent(new Event("click", { bubbles: true }));
       await dropdown.updateComplete;
 
       expect(dropdown.visible).toBe(true);
 
-      referenceSlot.dispatchEvent(new Event("click", { bubbles: true }));
+      referenceSlot!.dispatchEvent(new Event("click", { bubbles: true }));
       await dropdown.updateComplete;
 
       expect(dropdown.visible).toBe(false);
@@ -851,8 +855,8 @@ describe("EaDropdown Component", () => {
       container.appendChild(dropdown);
       await dropdown.updateComplete;
 
-      const containerEl = dropdown.shadowRoot.querySelector(".ea-popper");
-      expect(containerEl.classList.toString()).toContain("ea-popper--bottom");
+      const containerEl = dropdown.shadowRoot!.querySelector(".ea-popper");
+      expect(containerEl!.classList.toString()).toContain("ea-popper--bottom");
     });
 
     it("show 时应该添加 is-show 状态类", async () => {
@@ -863,8 +867,8 @@ describe("EaDropdown Component", () => {
       dropdown.show();
       await dropdown.updateComplete;
 
-      const containerEl = dropdown.shadowRoot.querySelector(".ea-popper");
-      expect(containerEl.classList.contains("is-show")).toBe(true);
+      const containerEl = dropdown.shadowRoot!.querySelector(".ea-popper");
+      expect(containerEl!.classList.contains("is-show")).toBe(true);
     });
 
     it("showArrow 为 true 时应该包含 show-arrow 状态类", async () => {
@@ -872,8 +876,8 @@ describe("EaDropdown Component", () => {
       container.appendChild(dropdown);
       await dropdown.updateComplete;
 
-      const containerEl = dropdown.shadowRoot.querySelector(".ea-popper");
-      expect(containerEl.classList.contains("is-show-arrow")).toBe(true);
+      const containerEl = dropdown.shadowRoot!.querySelector(".ea-popper");
+      expect(containerEl!.classList.contains("is-show-arrow")).toBe(true);
     });
 
     it("showArrow 为 false 时不应该包含 show-arrow 状态类", async () => {
@@ -883,8 +887,8 @@ describe("EaDropdown Component", () => {
       dropdown.showArrow = false;
       await dropdown.updateComplete;
 
-      const containerEl = dropdown.shadowRoot.querySelector(".ea-popper");
-      expect(containerEl.classList.contains("is-show-arrow")).toBe(false);
+      const containerEl = dropdown.shadowRoot!.querySelector(".ea-popper");
+      expect(containerEl!.classList.contains("is-show-arrow")).toBe(false);
     });
   });
 
@@ -995,10 +999,10 @@ describe("EaDropdown Component", () => {
       container.appendChild(dropdown);
 
       expect(
-        dropdown.shadowRoot.querySelector('slot[name="reference"]')
+        dropdown.shadowRoot!.querySelector('slot[name="reference"]')
       ).toBeTruthy();
       expect(
-        dropdown.shadowRoot.querySelector("slot:not([name])")
+        dropdown.shadowRoot!.querySelector("slot:not([name])")
       ).toBeTruthy();
     });
 
@@ -1042,7 +1046,7 @@ describe("EaDropdown Component", () => {
 // ==================== EaDropdownItem 组件 ====================
 
 describe("EaDropdownItem Component", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -1067,7 +1071,7 @@ describe("EaDropdownItem Component", () => {
       const item = createDropdownItem();
       container.appendChild(item);
 
-      expect(item.shadowRoot.querySelector(".ea-dropdown-item")).toBeTruthy();
+      expect(item.shadowRoot!.querySelector(".ea-dropdown-item")).toBeTruthy();
     });
 
     it("应该渲染 .ea-dropdown-item__divider 元素", () => {
@@ -1075,7 +1079,7 @@ describe("EaDropdownItem Component", () => {
       container.appendChild(item);
 
       expect(
-        item.shadowRoot.querySelector(".ea-dropdown-item__divider")
+        item.shadowRoot!.querySelector(".ea-dropdown-item__divider")
       ).toBeTruthy();
     });
 
@@ -1084,7 +1088,7 @@ describe("EaDropdownItem Component", () => {
       container.appendChild(item);
 
       expect(
-        item.shadowRoot.querySelector(".ea-dropdown-item__content")
+        item.shadowRoot!.querySelector(".ea-dropdown-item__content")
       ).toBeTruthy();
     });
 
@@ -1092,7 +1096,7 @@ describe("EaDropdownItem Component", () => {
       const item = createDropdownItem();
       container.appendChild(item);
 
-      const slot = item.shadowRoot.querySelector("slot");
+      const slot = item.shadowRoot!.querySelector("slot");
       expect(slot).toBeTruthy();
     });
   });
@@ -1104,21 +1108,21 @@ describe("EaDropdownItem Component", () => {
       const item = createDropdownItem();
       container.appendChild(item);
 
-      expect(item.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(item.shadowRoot!.querySelector('[part="container"]')).toBeTruthy();
     });
 
     it("应该支持 divider part", () => {
       const item = createDropdownItem();
       container.appendChild(item);
 
-      expect(item.shadowRoot.querySelector('[part="divider"]')).toBeTruthy();
+      expect(item.shadowRoot!.querySelector('[part="divider"]')).toBeTruthy();
     });
 
     it("应该支持 content part", () => {
       const item = createDropdownItem();
       container.appendChild(item);
 
-      expect(item.shadowRoot.querySelector('[part="content"]')).toBeTruthy();
+      expect(item.shadowRoot!.querySelector('[part="content"]')).toBeTruthy();
     });
   });
 
@@ -1152,8 +1156,8 @@ describe("EaDropdownItem Component", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector(".ea-dropdown-item");
-      expect(containerEl.classList.toString()).toContain(
+      const containerEl = item.shadowRoot!.querySelector(".ea-dropdown-item");
+      expect(containerEl!.classList.toString()).toContain(
         "ea-dropdown-item--disabled"
       );
     });
@@ -1166,15 +1170,15 @@ describe("EaDropdownItem Component", () => {
       item.disabled = true;
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector(".ea-dropdown-item");
-      expect(containerEl.classList.toString()).toContain(
+      const containerEl = item.shadowRoot!.querySelector(".ea-dropdown-item");
+      expect(containerEl!.classList.toString()).toContain(
         "ea-dropdown-item--disabled"
       );
 
       item.disabled = false;
       await item.updateComplete;
 
-      expect(containerEl.classList.toString()).not.toContain(
+      expect(containerEl!.classList.toString()).not.toContain(
         "ea-dropdown-item--disabled"
       );
     });
@@ -1202,8 +1206,8 @@ describe("EaDropdownItem Component", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector(".ea-dropdown-item");
-      expect(containerEl.classList.contains("is-divided")).toBe(true);
+      const containerEl = item.shadowRoot!.querySelector(".ea-dropdown-item");
+      expect(containerEl!.classList.contains("is-divided")).toBe(true);
     });
 
     it("未 divided 时容器不应该包含 divided 状态类名", async () => {
@@ -1211,8 +1215,8 @@ describe("EaDropdownItem Component", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector(".ea-dropdown-item");
-      expect(containerEl.classList.contains("is-divided")).toBe(false);
+      const containerEl = item.shadowRoot!.querySelector(".ea-dropdown-item");
+      expect(containerEl!.classList.contains("is-divided")).toBe(false);
     });
 
     it("动态修改 divided 应该更新类名", async () => {
@@ -1223,13 +1227,13 @@ describe("EaDropdownItem Component", () => {
       item.divided = true;
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector(".ea-dropdown-item");
-      expect(containerEl.classList.contains("is-divided")).toBe(true);
+      const containerEl = item.shadowRoot!.querySelector(".ea-dropdown-item");
+      expect(containerEl!.classList.contains("is-divided")).toBe(true);
 
       item.divided = false;
       await item.updateComplete;
 
-      expect(containerEl.classList.contains("is-divided")).toBe(false);
+      expect(containerEl!.classList.contains("is-divided")).toBe(false);
     });
   });
 
@@ -1272,10 +1276,10 @@ describe("EaDropdownItem Component", () => {
       const clickHandler = vi.fn();
       item.addEventListener("ea-dropdown-item-click", clickHandler);
 
-      const content = item.shadowRoot.querySelector(
+      const content = item.shadowRoot!.querySelector<HTMLElement>(
         ".ea-dropdown-item__content"
       );
-      content.click();
+      content!.click();
 
       expect(clickHandler).toHaveBeenCalled();
     });
@@ -1288,10 +1292,10 @@ describe("EaDropdownItem Component", () => {
       const commandHandler = vi.fn();
       item.addEventListener("ea-command", commandHandler);
 
-      const content = item.shadowRoot.querySelector(
+      const content = item.shadowRoot!.querySelector<HTMLElement>(
         ".ea-dropdown-item__content"
       );
-      content.click();
+      content!.click();
 
       expect(commandHandler).toHaveBeenCalled();
       expect(commandHandler.mock.calls[0][0].detail.command).toBe("my-command");
@@ -1305,10 +1309,10 @@ describe("EaDropdownItem Component", () => {
       const commandHandler = vi.fn();
       item.addEventListener("ea-command", commandHandler);
 
-      const content = item.shadowRoot.querySelector(
+      const content = item.shadowRoot!.querySelector<HTMLElement>(
         ".ea-dropdown-item__content"
       );
-      content.click();
+      content!.click();
 
       const event = commandHandler.mock.calls[0][0];
       expect(event.type).toBe("ea-command");
@@ -1324,10 +1328,10 @@ describe("EaDropdownItem Component", () => {
       const commandHandler = vi.fn();
       item.addEventListener("ea-command", commandHandler);
 
-      const content = item.shadowRoot.querySelector(
+      const content = item.shadowRoot!.querySelector<HTMLElement>(
         ".ea-dropdown-item__content"
       );
-      content.click();
+      content!.click();
 
       expect(commandHandler).not.toHaveBeenCalled();
     });
@@ -1340,10 +1344,10 @@ describe("EaDropdownItem Component", () => {
       const clickHandler = vi.fn();
       item.addEventListener("ea-dropdown-item-click", clickHandler);
 
-      const content = item.shadowRoot.querySelector(
+      const content = item.shadowRoot!.querySelector<HTMLElement>(
         ".ea-dropdown-item__content"
       );
-      content.click();
+      content!.click();
 
       expect(clickHandler).not.toHaveBeenCalled();
     });
@@ -1356,10 +1360,10 @@ describe("EaDropdownItem Component", () => {
       const commandHandler = vi.fn();
       item.addEventListener("ea-command", commandHandler);
 
-      const content = item.shadowRoot.querySelector(
+      const content = item.shadowRoot!.querySelector<HTMLElement>(
         ".ea-dropdown-item__content"
       );
-      content.click();
+      content!.click();
 
       expect(commandHandler).not.toHaveBeenCalled();
     });
@@ -1372,10 +1376,10 @@ describe("EaDropdownItem Component", () => {
       const bubbleHandler = vi.fn();
       container.addEventListener("ea-dropdown-item-click", bubbleHandler);
 
-      const content = item.shadowRoot.querySelector(
+      const content = item.shadowRoot!.querySelector<HTMLElement>(
         ".ea-dropdown-item__content"
       );
-      content.click();
+      content!.click();
 
       expect(bubbleHandler).toHaveBeenCalled();
     });
@@ -1388,10 +1392,10 @@ describe("EaDropdownItem Component", () => {
       const bubbleHandler = vi.fn();
       container.addEventListener("ea-command", bubbleHandler);
 
-      const content = item.shadowRoot.querySelector(
+      const content = item.shadowRoot!.querySelector<HTMLElement>(
         ".ea-dropdown-item__content"
       );
-      content.click();
+      content!.click();
 
       expect(bubbleHandler).toHaveBeenCalled();
     });
@@ -1405,11 +1409,11 @@ describe("EaDropdownItem Component", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector(".ea-dropdown-item");
-      expect(containerEl.classList.toString()).toContain(
+      const containerEl = item.shadowRoot!.querySelector(".ea-dropdown-item");
+      expect(containerEl!.classList.toString()).toContain(
         "ea-dropdown-item--disabled"
       );
-      expect(containerEl.classList.contains("is-divided")).toBe(true);
+      expect(containerEl!.classList.contains("is-divided")).toBe(true);
     });
 
     it("无属性时应该只有基础类名", async () => {
@@ -1417,10 +1421,10 @@ describe("EaDropdownItem Component", () => {
       container.appendChild(item);
       await item.updateComplete;
 
-      const containerEl = item.shadowRoot.querySelector(".ea-dropdown-item");
-      expect(containerEl.classList.contains("ea-dropdown-item")).toBe(true);
-      expect(containerEl.classList.contains("is-divided")).toBe(false);
-      expect(containerEl.classList.toString()).not.toContain(
+      const containerEl = item.shadowRoot!.querySelector(".ea-dropdown-item");
+      expect(containerEl!.classList.contains("ea-dropdown-item")).toBe(true);
+      expect(containerEl!.classList.contains("is-divided")).toBe(false);
+      expect(containerEl!.classList.toString()).not.toContain(
         "ea-dropdown-item--disabled"
       );
     });
@@ -1430,7 +1434,7 @@ describe("EaDropdownItem Component", () => {
 // ==================== EaDropdownMenu 组件 ====================
 
 describe("EaDropdownMenu Component", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -1455,14 +1459,14 @@ describe("EaDropdownMenu Component", () => {
       const menu = createDropdownMenu();
       container.appendChild(menu);
 
-      expect(menu.shadowRoot.querySelector(".ea-dropdown-menu")).toBeTruthy();
+      expect(menu.shadowRoot!.querySelector(".ea-dropdown-menu")).toBeTruthy();
     });
 
     it("应该渲染默认 slot", () => {
       const menu = createDropdownMenu();
       container.appendChild(menu);
 
-      const slot = menu.shadowRoot.querySelector("slot");
+      const slot = menu.shadowRoot!.querySelector("slot");
       expect(slot).toBeTruthy();
     });
   });
@@ -1474,7 +1478,7 @@ describe("EaDropdownMenu Component", () => {
       const menu = createDropdownMenu();
       container.appendChild(menu);
 
-      expect(menu.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(menu.shadowRoot!.querySelector('[part="container"]')).toBeTruthy();
     });
   });
 
@@ -1499,7 +1503,7 @@ describe("EaDropdownMenu Component", () => {
       container.appendChild(menu);
 
       expect(menu.shadowRoot).toBeTruthy();
-      expect(menu.shadowRoot.querySelector(".ea-dropdown-menu")).toBeTruthy();
+      expect(menu.shadowRoot!.querySelector(".ea-dropdown-menu")).toBeTruthy();
     });
 
     it("应该支持嵌套多个菜单项", async () => {
@@ -1520,7 +1524,7 @@ describe("EaDropdownMenu Component", () => {
 // ==================== 组件协作集成测试 ====================
 
 describe("Integration Tests", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -1564,8 +1568,10 @@ describe("Integration Tests", () => {
     dropdown.addEventListener("ea-command", commandHandler);
 
     const item = dropdown.querySelector("ea-dropdown-item");
-    const content = item.shadowRoot.querySelector(".ea-dropdown-item__content");
-    content.click();
+    const content = item!.shadowRoot!.querySelector<HTMLElement>(
+      ".ea-dropdown-item__content"
+    );
+    content!.click();
 
     expect(commandHandler).toHaveBeenCalled();
     expect(commandHandler.mock.calls[0][0].detail.command).toBe("action1");
@@ -1587,8 +1593,10 @@ describe("Integration Tests", () => {
     expect(dropdown.visible).toBe(true);
 
     const item = dropdown.querySelector("ea-dropdown-item");
-    const content = item.shadowRoot.querySelector(".ea-dropdown-item__content");
-    content.click();
+    const content = item!.shadowRoot!.querySelector<HTMLElement>(
+      ".ea-dropdown-item__content"
+    );
+    content!.click();
     await dropdown.updateComplete;
 
     expect(dropdown.visible).toBe(false);
@@ -1611,17 +1619,17 @@ describe("Integration Tests", () => {
 
     const items = dropdown.querySelectorAll("ea-dropdown-item");
 
-    const content1 = items[0].shadowRoot.querySelector(
+    const content1 = items[0].shadowRoot!.querySelector<HTMLElement>(
       ".ea-dropdown-item__content"
     );
-    content1.click();
+    content1!.click();
     expect(commandHandler).toHaveBeenCalledTimes(1);
     expect(commandHandler.mock.calls[0][0].detail.command).toBe("cmd1");
 
-    const content2 = items[1].shadowRoot.querySelector(
+    const content2 = items[1].shadowRoot!.querySelector<HTMLElement>(
       ".ea-dropdown-item__content"
     );
-    content2.click();
+    content2!.click();
     expect(commandHandler).toHaveBeenCalledTimes(2);
     expect(commandHandler.mock.calls[1][0].detail.command).toBe("cmd2");
   });
@@ -1643,16 +1651,16 @@ describe("Integration Tests", () => {
 
     const items = dropdown.querySelectorAll("ea-dropdown-item");
 
-    const disabledContent = items[0].shadowRoot.querySelector(
+    const disabledContent = items[0].shadowRoot!.querySelector<HTMLElement>(
       ".ea-dropdown-item__content"
     );
-    disabledContent.click();
+    disabledContent!.click();
     expect(commandHandler).not.toHaveBeenCalled();
 
-    const enabledContent = items[1].shadowRoot.querySelector(
+    const enabledContent = items[1].shadowRoot!.querySelector<HTMLElement>(
       ".ea-dropdown-item__content"
     );
-    enabledContent.click();
+    enabledContent!.click();
     expect(commandHandler).toHaveBeenCalledTimes(1);
     expect(commandHandler.mock.calls[0][0].detail.command).toBe("enabled-cmd");
   });
@@ -1676,18 +1684,18 @@ describe("Integration Tests", () => {
     expect(dropdown.visible).toBe(true);
 
     const items = dropdown.querySelectorAll("ea-dropdown-item");
-    const content1 = items[0].shadowRoot.querySelector(
+    const content1 = items[0].shadowRoot!.querySelector<HTMLElement>(
       ".ea-dropdown-item__content"
     );
-    content1.click();
+    content1!.click();
     await dropdown.updateComplete;
 
     expect(dropdown.visible).toBe(true);
 
-    const content2 = items[1].shadowRoot.querySelector(
+    const content2 = items[1].shadowRoot!.querySelector<HTMLElement>(
       ".ea-dropdown-item__content"
     );
-    content2.click();
+    content2!.click();
     await dropdown.updateComplete;
 
     expect(dropdown.visible).toBe(true);
@@ -1717,7 +1725,7 @@ describe("Integration Tests", () => {
         await el.updateComplete;
         await el.updateComplete;
         const trigger = el.querySelector('[slot="reference"]');
-        trigger.dispatchEvent(
+        trigger!.dispatchEvent(
           new KeyboardEvent("keydown", { key: "Enter", bubbles: true })
         );
         await el.updateComplete;
@@ -1731,7 +1739,7 @@ describe("Integration Tests", () => {
         await el.updateComplete;
         await el.updateComplete;
         const trigger = el.querySelector('[slot="reference"]');
-        trigger.dispatchEvent(
+        trigger!.dispatchEvent(
           new KeyboardEvent("keydown", { key: " ", bubbles: true })
         );
         await el.updateComplete;

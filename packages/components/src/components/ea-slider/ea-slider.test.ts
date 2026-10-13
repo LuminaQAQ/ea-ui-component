@@ -2,9 +2,10 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y.js";
 
 import "./index.ts";
+import type { EaInputNumber } from "../ea-input-number/index";
 
 describe("EaSlider Component", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -29,7 +30,7 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
 
       expect(
-        slider.shadowRoot.querySelector('[part="container"]')
+        slider.shadowRoot!.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
@@ -37,75 +38,81 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
 
-      expect(slider.shadowRoot.querySelector('[part="runway"]')).toBeTruthy();
+      expect(slider.shadowRoot!.querySelector('[part="runway"]')).toBeTruthy();
     });
 
     it("应该包含 rail CSS Part", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
 
-      expect(slider.shadowRoot.querySelector('[part="rail"]')).toBeTruthy();
+      expect(slider.shadowRoot!.querySelector('[part="rail"]')).toBeTruthy();
     });
 
     it("应该包含 bar CSS Part", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
 
-      expect(slider.shadowRoot.querySelector('[part="bar"]')).toBeTruthy();
+      expect(
+        slider.shadowRoot!.querySelector<HTMLElement>('[part="bar"]')
+      ).toBeTruthy();
     });
 
     it("应该包含 trigger CSS Part（ea-tooltip 元素）", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
 
-      const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
+      const trigger =
+        slider.shadowRoot!.querySelector<HTMLElement>('[part="trigger"]');
       expect(trigger).toBeTruthy();
-      expect(trigger.tagName.toLowerCase()).toBe("ea-tooltip");
+      expect(trigger!.tagName.toLowerCase()).toBe("ea-tooltip");
     });
 
     it("trigger 应该有 trigger=customized 属性", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
 
-      const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
-      expect(trigger.getAttribute("trigger")).toBe("customized");
+      const trigger =
+        slider.shadowRoot!.querySelector<HTMLElement>('[part="trigger"]');
+      expect(trigger!.getAttribute("trigger")).toBe("customized");
     });
 
     it("trigger 应该有 flip=false 属性", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
 
-      const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
-      expect(trigger.hasAttribute("flip")).toBe(true);
+      const trigger =
+        slider.shadowRoot!.querySelector<HTMLElement>('[part="trigger"]');
+      expect(trigger!.hasAttribute("flip")).toBe(true);
     });
 
     it("trigger 初始 placement 应该与组件 placement 一致", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
 
-      const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
-      expect(trigger.getAttribute("placement")).toBe("top");
+      const trigger =
+        slider.shadowRoot!.querySelector<HTMLElement>('[part="trigger"]');
+      expect(trigger!.getAttribute("placement")).toBe("top");
     });
 
     it("应该包含 thumb CSS Part", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
 
-      expect(slider.shadowRoot.querySelector('[part="thumb"]')).toBeTruthy();
+      expect(slider.shadowRoot!.querySelector('[part="thumb"]')).toBeTruthy();
     });
 
     it("应该包含 tooltip CSS Part", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
 
-      expect(slider.shadowRoot.querySelector('[part="tooltip"]')).toBeTruthy();
+      expect(slider.shadowRoot!.querySelector('[part="tooltip"]')).toBeTruthy();
     });
 
     it("应该包含 marks CSS Part", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
 
-      expect(slider.shadowRoot.querySelector('[part="marks"]')).toBeTruthy();
+      expect(slider.shadowRoot!.querySelector('[part="marks"]')).toBeTruthy();
     });
 
     it("应该包含 form-label CSS Part", () => {
@@ -113,7 +120,7 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
 
       expect(
-        slider.shadowRoot.querySelector('[part="form-label"]')
+        slider.shadowRoot!.querySelector('[part="form-label"]')
       ).toBeTruthy();
     });
 
@@ -121,17 +128,18 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
 
-      const input = slider.shadowRoot.querySelector('[part="input"]');
+      const input =
+        slider.shadowRoot!.querySelector<EaInputNumber>('[part="input"]');
       expect(input).toBeTruthy();
-      expect(input.tagName.toLowerCase()).toBe("ea-input-number");
+      expect(input!.tagName.toLowerCase()).toBe("ea-input-number");
     });
 
     it("thumb 元素应该有 slot=reference 属性", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
 
-      const thumb = slider.shadowRoot.querySelector('[part="thumb"]');
-      expect(thumb.getAttribute("slot")).toBe("reference");
+      const thumb = slider.shadowRoot!.querySelector('[part="thumb"]');
+      expect(thumb!.getAttribute("slot")).toBe("reference");
     });
   });
 
@@ -175,8 +183,8 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const tooltip = slider.shadowRoot.querySelector('[part="tooltip"]');
-      expect(tooltip.textContent).toBe("50");
+      const tooltip = slider.shadowRoot!.querySelector('[part="tooltip"]');
+      expect(tooltip!.textContent).toBe("50");
     });
 
     it("value 变化时应该更新 trigger 位置", async () => {
@@ -185,13 +193,14 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
-      expect(trigger.style.left).toBe("0%");
+      const trigger =
+        slider.shadowRoot!.querySelector<HTMLElement>('[part="trigger"]');
+      expect(trigger!.style.left).toBe("0%");
 
       slider.value = 50;
       await slider.updateComplete;
 
-      expect(trigger.style.left).toBe("50%");
+      expect(trigger!.style.left).toBe("50%");
     });
 
     it("value 变化时应该更新 bar 宽度", async () => {
@@ -200,13 +209,13 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const bar = slider.shadowRoot.querySelector('[part="bar"]');
-      expect(bar.style.width).toBe("0%");
+      const bar = slider.shadowRoot!.querySelector<HTMLElement>('[part="bar"]');
+      expect(bar!.style.width).toBe("0%");
 
       slider.value = 50;
       await slider.updateComplete;
 
-      expect(bar.style.width).toBe("50%");
+      expect(bar!.style.width).toBe("50%");
     });
 
     it("value 超过 max 时仍可设置（observer 内部 clamp 用于表单提交）", () => {
@@ -332,13 +341,14 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
-      expect(trigger.style.left).toBe("50%");
+      const trigger =
+        slider.shadowRoot!.querySelector<HTMLElement>('[part="trigger"]');
+      expect(trigger!.style.left).toBe("50%");
 
       slider.max = 200;
       await slider.updateComplete;
 
-      expect(trigger.style.left).toBe("25%");
+      expect(trigger!.style.left).toBe("25%");
     });
 
     it("min/max 变化时应该更新 bar 宽度", async () => {
@@ -349,13 +359,13 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const bar = slider.shadowRoot.querySelector('[part="bar"]');
-      expect(bar.style.width).toBe("50%");
+      const bar = slider.shadowRoot!.querySelector<HTMLElement>('[part="bar"]');
+      expect(bar!.style.width).toBe("50%");
 
       slider.max = 200;
       await slider.updateComplete;
 
-      expect(bar.style.width).toBe("25%");
+      expect(bar!.style.width).toBe("25%");
     });
 
     it("应该支持负数 min", () => {
@@ -377,8 +387,9 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
-      expect(trigger.style.left).toBe("50%");
+      const trigger =
+        slider.shadowRoot!.querySelector<HTMLElement>('[part="trigger"]');
+      expect(trigger!.style.left).toBe("50%");
     });
 
     it("min 等于 max 时应该正常处理", () => {
@@ -468,13 +479,14 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const containerEl = slider.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-disabled")).toBe(false);
+      const containerEl =
+        slider.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-disabled")).toBe(false);
 
       slider.disabled = true;
       await slider.updateComplete;
 
-      expect(containerEl.classList.contains("is-disabled")).toBe(true);
+      expect(containerEl!.classList.contains("is-disabled")).toBe(true);
     });
 
     it("disabled 属性应该可以动态移除", () => {
@@ -496,9 +508,10 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const containerEl = slider.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-disabled")).toBe(true);
-      expect(containerEl.classList.contains("is-show-stops")).toBe(true);
+      const containerEl =
+        slider.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-disabled")).toBe(true);
+      expect(containerEl!.classList.contains("is-show-stops")).toBe(true);
     });
   });
 
@@ -523,13 +536,14 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const containerEl = slider.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-vertical")).toBe(false);
+      const containerEl =
+        slider.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-vertical")).toBe(false);
 
       slider.vertical = true;
       await slider.updateComplete;
 
-      expect(containerEl.classList.contains("is-vertical")).toBe(true);
+      expect(containerEl!.classList.contains("is-vertical")).toBe(true);
     });
 
     it("vertical 模式下 trigger 应该使用 top 定位", async () => {
@@ -539,8 +553,9 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
-      expect(trigger.style.top).toBe("50%");
+      const trigger =
+        slider.shadowRoot!.querySelector<HTMLElement>('[part="trigger"]');
+      expect(trigger!.style.top).toBe("50%");
     });
 
     it("vertical 模式下 trigger 应该设置 left 为 50%", async () => {
@@ -550,8 +565,9 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
-      expect(trigger.style.left).toBe("50%");
+      const trigger =
+        slider.shadowRoot!.querySelector<HTMLElement>('[part="trigger"]');
+      expect(trigger!.style.left).toBe("50%");
     });
 
     it("vertical 模式下 bar 应该使用 height 定位", async () => {
@@ -561,8 +577,8 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const bar = slider.shadowRoot.querySelector('[part="bar"]');
-      expect(bar.style.height).toBe("50%");
+      const bar = slider.shadowRoot!.querySelector<HTMLElement>('[part="bar"]');
+      expect(bar!.style.height).toBe("50%");
     });
 
     it("vertical 模式下 bar 不应该设置 width", async () => {
@@ -572,8 +588,8 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const bar = slider.shadowRoot.querySelector('[part="bar"]');
-      expect(bar.style.width).toBe("");
+      const bar = slider.shadowRoot!.querySelector<HTMLElement>('[part="bar"]');
+      expect(bar!.style.width).toBe("");
     });
 
     it("vertical 模式下 value=0 时 trigger top 应该是 0%", async () => {
@@ -583,8 +599,9 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
-      expect(trigger.style.top).toBe("0%");
+      const trigger =
+        slider.shadowRoot!.querySelector<HTMLElement>('[part="trigger"]');
+      expect(trigger!.style.top).toBe("0%");
     });
 
     it("vertical 模式下 value=100 时 trigger top 应该是 100%", async () => {
@@ -594,8 +611,9 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
-      expect(trigger.style.top).toBe("100%");
+      const trigger =
+        slider.shadowRoot!.querySelector<HTMLElement>('[part="trigger"]');
+      expect(trigger!.style.top).toBe("100%");
     });
 
     it("从 vertical 切换回 horizontal 时应该恢复 left 定位", async () => {
@@ -607,9 +625,10 @@ describe("EaSlider Component", () => {
       slider.vertical = false;
       await slider.updateComplete;
 
-      const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
-      expect(trigger.style.left).toBe("50%");
-      expect(trigger.style.top).toBe("50%");
+      const trigger =
+        slider.shadowRoot!.querySelector<HTMLElement>('[part="trigger"]');
+      expect(trigger!.style.left).toBe("50%");
+      expect(trigger!.style.top).toBe("50%");
     });
 
     it("从 vertical 切换回 horizontal 时 bar 应该恢复 width 定位", async () => {
@@ -621,9 +640,9 @@ describe("EaSlider Component", () => {
       slider.vertical = false;
       await slider.updateComplete;
 
-      const bar = slider.shadowRoot.querySelector('[part="bar"]');
-      expect(bar.style.width).toBe("50%");
-      expect(bar.style.height).toBe("");
+      const bar = slider.shadowRoot!.querySelector<HTMLElement>('[part="bar"]');
+      expect(bar!.style.width).toBe("50%");
+      expect(bar!.style.height).toBe("");
     });
   });
 
@@ -650,8 +669,9 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const containerEl = slider.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-show-tooltip")).toBe(true);
+      const containerEl =
+        slider.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-show-tooltip")).toBe(true);
     });
 
     it("showTooltip 为 false 时容器不应该有 is-show-tooltip class", async () => {
@@ -662,8 +682,9 @@ describe("EaSlider Component", () => {
       slider.showTooltip = false;
       await slider.updateComplete;
 
-      const containerEl = slider.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-show-tooltip")).toBe(false);
+      const containerEl =
+        slider.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-show-tooltip")).toBe(false);
     });
 
     it("动态切换 showTooltip 应该正确更新 class", async () => {
@@ -671,16 +692,17 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const containerEl = slider.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-show-tooltip")).toBe(true);
+      const containerEl =
+        slider.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-show-tooltip")).toBe(true);
 
       slider.showTooltip = false;
       await slider.updateComplete;
-      expect(containerEl.classList.contains("is-show-tooltip")).toBe(false);
+      expect(containerEl!.classList.contains("is-show-tooltip")).toBe(false);
 
       slider.showTooltip = true;
       await slider.updateComplete;
-      expect(containerEl.classList.contains("is-show-tooltip")).toBe(true);
+      expect(containerEl!.classList.contains("is-show-tooltip")).toBe(true);
     });
   });
 
@@ -720,13 +742,14 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
 
-      const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
-      expect(trigger.getAttribute("placement")).toBe("top");
+      const trigger =
+        slider.shadowRoot!.querySelector<HTMLElement>('[part="trigger"]');
+      expect(trigger!.getAttribute("placement")).toBe("top");
 
       slider.placement = "right";
       await slider.updateComplete;
 
-      expect(trigger.getAttribute("placement")).toBe("right");
+      expect(trigger!.getAttribute("placement")).toBe("right");
     });
 
     it("应该支持所有 placement 类型", () => {
@@ -743,7 +766,7 @@ describe("EaSlider Component", () => {
         "right",
         "right-start",
         "right-end",
-      ];
+      ] as const;
 
       for (const placement of placements) {
         const slider = document.createElement("ea-slider");
@@ -760,8 +783,9 @@ describe("EaSlider Component", () => {
       slider.placement = "bottom";
       container.appendChild(slider);
 
-      const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
-      expect(trigger.getAttribute("placement")).toBe("bottom");
+      const trigger =
+        slider.shadowRoot!.querySelector<HTMLElement>('[part="trigger"]');
+      expect(trigger!.getAttribute("placement")).toBe("bottom");
     });
   });
 
@@ -786,13 +810,14 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const containerEl = slider.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-show-stops")).toBe(false);
+      const containerEl =
+        slider.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-show-stops")).toBe(false);
 
       slider.showStops = true;
       await slider.updateComplete;
 
-      expect(containerEl.classList.contains("is-show-stops")).toBe(true);
+      expect(containerEl!.classList.contains("is-show-stops")).toBe(true);
     });
 
     it("showStops 为 true 时应该渲染 stop 节点", async () => {
@@ -802,7 +827,8 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const stops = slider.shadowRoot.querySelectorAll('[part="stop"]');
+      const stops =
+        slider.shadowRoot!.querySelectorAll<HTMLElement>('[part="stop"]');
       expect(stops.length).toBe(5);
     });
 
@@ -811,7 +837,8 @@ describe("EaSlider Component", () => {
       slider.showStops = false;
       container.appendChild(slider);
 
-      const stops = slider.shadowRoot.querySelectorAll('[part="stop"]');
+      const stops =
+        slider.shadowRoot!.querySelectorAll<HTMLElement>('[part="stop"]');
       expect(stops.length).toBe(0);
     });
 
@@ -822,7 +849,8 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const stops = slider.shadowRoot.querySelectorAll('[part="stop"]');
+      const stops =
+        slider.shadowRoot!.querySelectorAll<HTMLElement>('[part="stop"]');
       expect(stops.length).toBe(11);
     });
 
@@ -833,7 +861,8 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const stops = slider.shadowRoot.querySelectorAll('[part="stop"]');
+      const stops =
+        slider.shadowRoot!.querySelectorAll<HTMLElement>('[part="stop"]');
       expect(stops[0].style.left).toBe("0%");
       expect(stops[1].style.left).toBe("50%");
       expect(stops[2].style.left).toBe("100%");
@@ -847,7 +876,8 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const stops = slider.shadowRoot.querySelectorAll('[part="stop"]');
+      const stops =
+        slider.shadowRoot!.querySelectorAll<HTMLElement>('[part="stop"]');
       expect(stops[0].style.top).toBe("0%");
       expect(stops[1].style.top).toBe("50%");
       expect(stops[2].style.top).toBe("100%");
@@ -858,19 +888,20 @@ describe("EaSlider Component", () => {
       slider.step = 25;
       container.appendChild(slider);
 
-      let stops = slider.shadowRoot.querySelectorAll('[part="stop"]');
+      let stops =
+        slider.shadowRoot!.querySelectorAll<HTMLElement>('[part="stop"]');
       expect(stops.length).toBe(0);
 
       slider.showStops = true;
       await slider.updateComplete;
 
-      stops = slider.shadowRoot.querySelectorAll('[part="stop"]');
+      stops = slider.shadowRoot!.querySelectorAll<HTMLElement>('[part="stop"]');
       expect(stops.length).toBe(5);
 
       slider.showStops = false;
       await slider.updateComplete;
 
-      stops = slider.shadowRoot.querySelectorAll('[part="stop"]');
+      stops = slider.shadowRoot!.querySelectorAll<HTMLElement>('[part="stop"]');
       expect(stops.length).toBe(0);
     });
   });
@@ -897,12 +928,13 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const containerEl = slider.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-show-input")).toBe(false);
+      const containerEl =
+        slider.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-show-input")).toBe(false);
 
       slider.showInput = true;
       await slider.updateComplete;
-      expect(containerEl.classList.contains("is-show-input")).toBe(true);
+      expect(containerEl!.classList.contains("is-show-input")).toBe(true);
     });
 
     it("showInput 为 true 时应该同步 value 到 input 元素", async () => {
@@ -912,8 +944,9 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const input = slider.shadowRoot.querySelector('[part="input"]');
-      expect(input.value).toBe(50);
+      const input =
+        slider.shadowRoot!.querySelector<EaInputNumber>('[part="input"]');
+      expect(input!.value).toBe(50);
     });
 
     it("showInput 为 true 时应该同步 min/max/step 到 input 元素", async () => {
@@ -925,10 +958,11 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const input = slider.shadowRoot.querySelector('[part="input"]');
-      expect(input.min).toBe(10);
-      expect(input.max).toBe(200);
-      expect(input.step).toBe(5);
+      const input =
+        slider.shadowRoot!.querySelector<EaInputNumber>('[part="input"]');
+      expect(input!.min).toBe(10);
+      expect(input!.max).toBe(200);
+      expect(input!.step).toBe(5);
     });
 
     it("动态修改 value 时应该同步更新 input 元素", async () => {
@@ -937,16 +971,18 @@ describe("EaSlider Component", () => {
       slider.value = 30;
       container.appendChild(slider);
       await vi.waitFor(() => {
-        expect(slider.shadowRoot.querySelector('[part="input"]').value).toBe(
-          30
-        );
+        expect(
+          slider.shadowRoot!.querySelector<EaInputNumber>('[part="input"]')!
+            .value
+        ).toBe(30);
       });
 
       slider.value = 70;
       await slider.updateComplete;
 
-      const input = slider.shadowRoot.querySelector('[part="input"]');
-      expect(input.value).toBe(70);
+      const input =
+        slider.shadowRoot!.querySelector<EaInputNumber>('[part="input"]');
+      expect(input!.value).toBe(70);
     });
 
     it("showInput 从 true 切换为 false 时应该正确更新容器 class", async () => {
@@ -955,13 +991,14 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const containerEl = slider.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-show-input")).toBe(true);
+      const containerEl =
+        slider.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-show-input")).toBe(true);
 
       slider.showInput = false;
       await slider.updateComplete;
 
-      expect(containerEl.classList.contains("is-show-input")).toBe(false);
+      expect(containerEl!.classList.contains("is-show-input")).toBe(false);
     });
   });
 
@@ -1003,14 +1040,15 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const containerEl = slider.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-slider--small")).toBe(true);
+      const containerEl =
+        slider.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-slider--small")).toBe(true);
 
       slider.size = "large";
       await slider.updateComplete;
 
-      expect(containerEl.classList.contains("ea-slider--large")).toBe(true);
-      expect(containerEl.classList.contains("ea-slider--small")).toBe(false);
+      expect(containerEl!.classList.contains("ea-slider--large")).toBe(true);
+      expect(containerEl!.classList.contains("ea-slider--small")).toBe(false);
     });
 
     it("size 为空时不应有 size 修饰符 class", async () => {
@@ -1018,10 +1056,11 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const containerEl = slider.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-slider--small")).toBe(false);
-      expect(containerEl.classList.contains("ea-slider--default")).toBe(false);
-      expect(containerEl.classList.contains("ea-slider--large")).toBe(false);
+      const containerEl =
+        slider.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("ea-slider--small")).toBe(false);
+      expect(containerEl!.classList.contains("ea-slider--default")).toBe(false);
+      expect(containerEl!.classList.contains("ea-slider--large")).toBe(false);
     });
 
     it("showInput 为 true 时 size 应该同步到 input 元素", async () => {
@@ -1031,8 +1070,9 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const input = slider.shadowRoot.querySelector('[part="input"]');
-      expect(input.getAttribute("size")).toBe("small");
+      const input =
+        slider.shadowRoot!.querySelector<EaInputNumber>('[part="input"]');
+      expect(input!.getAttribute("size")).toBe("small");
     });
 
     it("动态修改 size 时应该同步更新 input 元素", async () => {
@@ -1045,8 +1085,9 @@ describe("EaSlider Component", () => {
       slider.size = "large";
       await slider.updateComplete;
 
-      const input = slider.shadowRoot.querySelector('[part="input"]');
-      expect(input.getAttribute("size")).toBe("large");
+      const input =
+        slider.shadowRoot!.querySelector<EaInputNumber>('[part="input"]');
+      expect(input!.getAttribute("size")).toBe("large");
     });
   });
 
@@ -1071,13 +1112,13 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const labelEl = slider.shadowRoot.querySelector('[part="form-label"]');
-      expect(labelEl.textContent).toBe("");
+      const labelEl = slider.shadowRoot!.querySelector('[part="form-label"]');
+      expect(labelEl!.textContent).toBe("");
 
       slider.label = "Volume";
       await slider.updateComplete;
 
-      expect(labelEl.textContent).toBe("Volume");
+      expect(labelEl!.textContent).toBe("Volume");
     });
 
     it("label 为空时 form-label 应该为空", async () => {
@@ -1089,8 +1130,8 @@ describe("EaSlider Component", () => {
       slider.label = "";
       await slider.updateComplete;
 
-      const labelEl = slider.shadowRoot.querySelector('[part="form-label"]');
-      expect(labelEl.textContent).toBe("");
+      const labelEl = slider.shadowRoot!.querySelector('[part="form-label"]');
+      expect(labelEl!.textContent).toBe("");
     });
 
     it("动态修改 label 应该实时更新", async () => {
@@ -1101,13 +1142,13 @@ describe("EaSlider Component", () => {
       slider.label = "First";
       await slider.updateComplete;
 
-      const labelEl = slider.shadowRoot.querySelector('[part="form-label"]');
-      expect(labelEl.textContent).toBe("First");
+      const labelEl = slider.shadowRoot!.querySelector('[part="form-label"]');
+      expect(labelEl!.textContent).toBe("First");
 
       slider.label = "Second";
       await slider.updateComplete;
 
-      expect(labelEl.textContent).toBe("Second");
+      expect(labelEl!.textContent).toBe("Second");
     });
   });
 
@@ -1164,7 +1205,7 @@ describe("EaSlider Component", () => {
       slider.marks = { 0: "0°C", 50: "50°C", 100: "100°C" };
       await slider.updateComplete;
 
-      const markLabels = slider.shadowRoot.querySelectorAll(
+      const markLabels = slider.shadowRoot!.querySelectorAll(
         ".ea-slider__mark-label"
       );
       expect(markLabels.length).toBe(3);
@@ -1177,7 +1218,7 @@ describe("EaSlider Component", () => {
       slider.marks = { 0: "0°C", 50: "50°C", 100: "100°C" };
       await slider.updateComplete;
 
-      const markStops = slider.shadowRoot.querySelectorAll(
+      const markStops = slider.shadowRoot!.querySelectorAll(
         ".ea-slider__mark-stop"
       );
       expect(markStops.length).toBe(3);
@@ -1190,7 +1231,7 @@ describe("EaSlider Component", () => {
       slider.marks = { 0: "0°C", 50: "50°C", 100: "100°C" };
       await slider.updateComplete;
 
-      let markLabels = slider.shadowRoot.querySelectorAll(
+      let markLabels = slider.shadowRoot!.querySelectorAll(
         ".ea-slider__mark-label"
       );
       expect(markLabels.length).toBe(3);
@@ -1198,7 +1239,9 @@ describe("EaSlider Component", () => {
       slider.marks = null;
       await slider.updateComplete;
 
-      markLabels = slider.shadowRoot.querySelectorAll(".ea-slider__mark-label");
+      markLabels = slider.shadowRoot!.querySelectorAll(
+        ".ea-slider__mark-label"
+      );
       expect(markLabels.length).toBe(0);
     });
 
@@ -1211,7 +1254,7 @@ describe("EaSlider Component", () => {
       slider.marks = { 0: "0°C", 50: "50°C", 150: "150°C" };
       await slider.updateComplete;
 
-      const markLabels = slider.shadowRoot.querySelectorAll(
+      const markLabels = slider.shadowRoot!.querySelectorAll(
         ".ea-slider__mark-label"
       );
       expect(markLabels.length).toBe(2);
@@ -1224,7 +1267,7 @@ describe("EaSlider Component", () => {
       slider.marks = { 0: "0°C", abc: "invalid", 100: "100°C" };
       await slider.updateComplete;
 
-      const markLabels = slider.shadowRoot.querySelectorAll(
+      const markLabels = slider.shadowRoot!.querySelectorAll(
         ".ea-slider__mark-label"
       );
       expect(markLabels.length).toBe(2);
@@ -1238,7 +1281,7 @@ describe("EaSlider Component", () => {
       await slider.updateComplete;
 
       const markElements =
-        slider.shadowRoot.querySelectorAll(".ea-slider__mark");
+        slider.shadowRoot!.querySelectorAll<HTMLElement>(".ea-slider__mark");
       expect(markElements[0].style.left).toBe("0%");
       expect(markElements[1].style.left).toBe("50%");
       expect(markElements[2].style.left).toBe("100%");
@@ -1253,7 +1296,7 @@ describe("EaSlider Component", () => {
       await slider.updateComplete;
 
       const markElements =
-        slider.shadowRoot.querySelectorAll(".ea-slider__mark");
+        slider.shadowRoot!.querySelectorAll<HTMLElement>(".ea-slider__mark");
       expect(markElements[0].style.top).toBe("0%");
       expect(markElements[1].style.top).toBe("50%");
       expect(markElements[2].style.top).toBe("100%");
@@ -1268,8 +1311,8 @@ describe("EaSlider Component", () => {
       slider.marks = { 0: "0°C", 50: "50°C", 100: "100°C" };
       await slider.updateComplete;
 
-      const allStops = slider.shadowRoot.querySelectorAll('[part~="stop"]');
-      const markStops = slider.shadowRoot.querySelectorAll(
+      const allStops = slider.shadowRoot!.querySelectorAll('[part~="stop"]');
+      const markStops = slider.shadowRoot!.querySelectorAll(
         ".ea-slider__mark-stop"
       );
       expect(allStops.length).toBe(5 + 3);
@@ -1283,7 +1326,7 @@ describe("EaSlider Component", () => {
       slider.marks = { 0: "Start", 100: "End" };
       await slider.updateComplete;
 
-      const markLabels = slider.shadowRoot.querySelectorAll(
+      const markLabels = slider.shadowRoot!.querySelectorAll(
         ".ea-slider__mark-label"
       );
       expect(markLabels[0].textContent).toBe("Start");
@@ -1297,7 +1340,7 @@ describe("EaSlider Component", () => {
       slider.marks = { 0: "0°C", 50: "50°C", 100: "100°C" };
       await slider.updateComplete;
 
-      const markStops = slider.shadowRoot.querySelectorAll(
+      const markStops = slider.shadowRoot!.querySelectorAll(
         '[part~="mark-stop"]'
       );
       expect(markStops.length).toBe(3);
@@ -1310,7 +1353,7 @@ describe("EaSlider Component", () => {
       slider.marks = { 0: "0°C", 50: "50°C", 100: "100°C" };
       await slider.updateComplete;
 
-      const markStops = slider.shadowRoot.querySelectorAll('[part~="stop"]');
+      const markStops = slider.shadowRoot!.querySelectorAll('[part~="stop"]');
       expect(markStops.length).toBe(3);
     });
   });
@@ -1340,13 +1383,13 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const tooltip = slider.shadowRoot.querySelector('[part="tooltip"]');
-      expect(tooltip.textContent).toBe("50");
+      const tooltip = slider.shadowRoot!.querySelector('[part="tooltip"]');
+      expect(tooltip!.textContent).toBe("50");
 
       slider.formatTooltip = value => value + "%";
       await slider.updateComplete;
 
-      expect(tooltip.textContent).toBe("50%");
+      expect(tooltip!.textContent).toBe("50%");
     });
 
     it("formatTooltip 应该支持复杂格式化", async () => {
@@ -1357,8 +1400,8 @@ describe("EaSlider Component", () => {
       slider.formatTooltip = value => `¥${value}.00`;
       await slider.updateComplete;
 
-      const tooltip = slider.shadowRoot.querySelector('[part="tooltip"]');
-      expect(tooltip.textContent).toBe("¥75.00");
+      const tooltip = slider.shadowRoot!.querySelector('[part="tooltip"]');
+      expect(tooltip!.textContent).toBe("¥75.00");
     });
 
     it("formatTooltip 变化时 value 变化也应该使用新格式", async () => {
@@ -1371,8 +1414,8 @@ describe("EaSlider Component", () => {
       slider.value = 60;
       await slider.updateComplete;
 
-      const tooltip = slider.shadowRoot.querySelector('[part="tooltip"]');
-      expect(tooltip.textContent).toBe("60km");
+      const tooltip = slider.shadowRoot!.querySelector('[part="tooltip"]');
+      expect(tooltip!.textContent).toBe("60km");
     });
   });
 
@@ -1381,30 +1424,32 @@ describe("EaSlider Component", () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
 
-      const containerEl = slider.shadowRoot.querySelector('[part="container"]');
+      const containerEl =
+        slider.shadowRoot!.querySelector('[part="container"]');
 
       slider.disabled = true;
       await slider.updateComplete;
-      expect(containerEl.classList.contains("is-disabled")).toBe(true);
+      expect(containerEl!.classList.contains("is-disabled")).toBe(true);
 
       slider.disabled = false;
       await slider.updateComplete;
-      expect(containerEl.classList.contains("is-disabled")).toBe(false);
+      expect(containerEl!.classList.contains("is-disabled")).toBe(false);
     });
 
     it("vertical 状态应该正确反映在容器 class 中", async () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
 
-      const containerEl = slider.shadowRoot.querySelector('[part="container"]');
+      const containerEl =
+        slider.shadowRoot!.querySelector('[part="container"]');
 
       slider.vertical = true;
       await slider.updateComplete;
-      expect(containerEl.classList.contains("is-vertical")).toBe(true);
+      expect(containerEl!.classList.contains("is-vertical")).toBe(true);
 
       slider.vertical = false;
       await slider.updateComplete;
-      expect(containerEl.classList.contains("is-vertical")).toBe(false);
+      expect(containerEl!.classList.contains("is-vertical")).toBe(false);
     });
 
     it("showTooltip 状态应该正确反映在容器 class 中", async () => {
@@ -1412,59 +1457,63 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const containerEl = slider.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-show-tooltip")).toBe(true);
+      const containerEl =
+        slider.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-show-tooltip")).toBe(true);
 
       slider.showTooltip = false;
       await slider.updateComplete;
-      expect(containerEl.classList.contains("is-show-tooltip")).toBe(false);
+      expect(containerEl!.classList.contains("is-show-tooltip")).toBe(false);
     });
 
     it("showStops 状态应该正确反映在容器 class 中", async () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
 
-      const containerEl = slider.shadowRoot.querySelector('[part="container"]');
+      const containerEl =
+        slider.shadowRoot!.querySelector('[part="container"]');
 
       slider.showStops = true;
       await slider.updateComplete;
-      expect(containerEl.classList.contains("is-show-stops")).toBe(true);
+      expect(containerEl!.classList.contains("is-show-stops")).toBe(true);
 
       slider.showStops = false;
       await slider.updateComplete;
-      expect(containerEl.classList.contains("is-show-stops")).toBe(false);
+      expect(containerEl!.classList.contains("is-show-stops")).toBe(false);
     });
 
     it("showInput 状态应该正确反映在容器 class 中", async () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
 
-      const containerEl = slider.shadowRoot.querySelector('[part="container"]');
+      const containerEl =
+        slider.shadowRoot!.querySelector('[part="container"]');
 
       slider.showInput = true;
       await slider.updateComplete;
 
-      expect(containerEl.classList.contains("is-show-input")).toBe(true);
+      expect(containerEl!.classList.contains("is-show-input")).toBe(true);
 
       slider.showInput = false;
       await slider.updateComplete;
-      expect(containerEl.classList.contains("is-show-input")).toBe(false);
+      expect(containerEl!.classList.contains("is-show-input")).toBe(false);
     });
 
     it("size 修饰符应该正确反映在容器 class 中", async () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
 
-      const containerEl = slider.shadowRoot.querySelector('[part="container"]');
+      const containerEl =
+        slider.shadowRoot!.querySelector('[part="container"]');
 
       slider.size = "small";
       await slider.updateComplete;
-      expect(containerEl.classList.contains("ea-slider--small")).toBe(true);
+      expect(containerEl!.classList.contains("ea-slider--small")).toBe(true);
 
       slider.size = "large";
       await slider.updateComplete;
-      expect(containerEl.classList.contains("ea-slider--large")).toBe(true);
-      expect(containerEl.classList.contains("ea-slider--small")).toBe(false);
+      expect(containerEl!.classList.contains("ea-slider--large")).toBe(true);
+      expect(containerEl!.classList.contains("ea-slider--small")).toBe(false);
     });
 
     it("多个状态应该可以同时存在", async () => {
@@ -1475,10 +1524,11 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const containerEl = slider.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("is-disabled")).toBe(true);
-      expect(containerEl.classList.contains("is-show-stops")).toBe(true);
-      expect(containerEl.classList.contains("ea-slider--small")).toBe(true);
+      const containerEl =
+        slider.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.classList.contains("is-disabled")).toBe(true);
+      expect(containerEl!.classList.contains("is-show-stops")).toBe(true);
+      expect(containerEl!.classList.contains("ea-slider--small")).toBe(true);
     });
 
     it("updateContainerClasslist 应该返回完整的 class 字符串", () => {
@@ -1501,8 +1551,9 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
-      expect(trigger.style.left).toBe("0%");
+      const trigger =
+        slider.shadowRoot!.querySelector<HTMLElement>('[part="trigger"]');
+      expect(trigger!.style.left).toBe("0%");
     });
 
     it("value=50 时 trigger 应该在 50% 位置", async () => {
@@ -1511,8 +1562,9 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
-      expect(trigger.style.left).toBe("50%");
+      const trigger =
+        slider.shadowRoot!.querySelector<HTMLElement>('[part="trigger"]');
+      expect(trigger!.style.left).toBe("50%");
     });
 
     it("value=100 时 trigger 应该在 100% 位置", async () => {
@@ -1521,8 +1573,9 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
-      expect(trigger.style.left).toBe("100%");
+      const trigger =
+        slider.shadowRoot!.querySelector<HTMLElement>('[part="trigger"]');
+      expect(trigger!.style.left).toBe("100%");
     });
 
     it("value=0 时 bar 宽度应该是 0%", async () => {
@@ -1531,8 +1584,8 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const bar = slider.shadowRoot.querySelector('[part="bar"]');
-      expect(bar.style.width).toBe("0%");
+      const bar = slider.shadowRoot!.querySelector<HTMLElement>('[part="bar"]');
+      expect(bar!.style.width).toBe("0%");
     });
 
     it("value=50 时 bar 宽度应该是 50%", async () => {
@@ -1541,8 +1594,8 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const bar = slider.shadowRoot.querySelector('[part="bar"]');
-      expect(bar.style.width).toBe("50%");
+      const bar = slider.shadowRoot!.querySelector<HTMLElement>('[part="bar"]');
+      expect(bar!.style.width).toBe("50%");
     });
 
     it("value=100 时 bar 宽度应该是 100%", async () => {
@@ -1551,8 +1604,8 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const bar = slider.shadowRoot.querySelector('[part="bar"]');
-      expect(bar.style.width).toBe("100%");
+      const bar = slider.shadowRoot!.querySelector<HTMLElement>('[part="bar"]');
+      expect(bar!.style.width).toBe("100%");
     });
 
     it("自定义 min/max 时位置应该正确计算", async () => {
@@ -1563,8 +1616,9 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
-      expect(trigger.style.left).toBe("50%");
+      const trigger =
+        slider.shadowRoot!.querySelector<HTMLElement>('[part="trigger"]');
+      expect(trigger!.style.left).toBe("50%");
     });
 
     it("自定义 min/max 时 bar 宽度应该正确计算", async () => {
@@ -1575,8 +1629,8 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const bar = slider.shadowRoot.querySelector('[part="bar"]');
-      expect(bar.style.width).toBe("50%");
+      const bar = slider.shadowRoot!.querySelector<HTMLElement>('[part="bar"]');
+      expect(bar!.style.width).toBe("50%");
     });
 
     it("vertical 模式下应该使用 top 定位", async () => {
@@ -1586,9 +1640,10 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
-      expect(trigger.style.top).toBe("50%");
-      expect(trigger.style.left).toBe("50%");
+      const trigger =
+        slider.shadowRoot!.querySelector<HTMLElement>('[part="trigger"]');
+      expect(trigger!.style.top).toBe("50%");
+      expect(trigger!.style.left).toBe("50%");
     });
 
     it("非 vertical 模式下应该使用 left 定位且 top 为 50%", async () => {
@@ -1597,9 +1652,10 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
-      expect(trigger.style.left).toBe("50%");
-      expect(trigger.style.top).toBe("50%");
+      const trigger =
+        slider.shadowRoot!.querySelector<HTMLElement>('[part="trigger"]');
+      expect(trigger!.style.left).toBe("50%");
+      expect(trigger!.style.top).toBe("50%");
     });
 
     it("value 变化时 tooltip 文本应该同步更新", async () => {
@@ -1608,13 +1664,13 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const tooltip = slider.shadowRoot.querySelector('[part="tooltip"]');
-      expect(tooltip.textContent).toBe("0");
+      const tooltip = slider.shadowRoot!.querySelector('[part="tooltip"]');
+      expect(tooltip!.textContent).toBe("0");
 
       slider.value = 75;
       await slider.updateComplete;
 
-      expect(tooltip.textContent).toBe("75");
+      expect(tooltip!.textContent).toBe("75");
     });
 
     it("min=50 max=100 value=75 时位置应该是 50%", async () => {
@@ -1625,8 +1681,9 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
-      expect(trigger.style.left).toBe("50%");
+      const trigger =
+        slider.shadowRoot!.querySelector<HTMLElement>('[part="trigger"]');
+      expect(trigger!.style.left).toBe("50%");
     });
   });
 
@@ -1639,7 +1696,7 @@ describe("EaSlider Component", () => {
 
       let receivedDetail = null;
       slider.addEventListener("input", e => {
-        receivedDetail = e.detail;
+        receivedDetail = (e as CustomEvent).detail;
       });
 
       slider.dispatchEvent(
@@ -1657,7 +1714,7 @@ describe("EaSlider Component", () => {
 
       let receivedDetail = null;
       slider.addEventListener("change", e => {
-        receivedDetail = e.detail;
+        receivedDetail = (e as CustomEvent).detail;
       });
 
       slider.dispatchEvent(
@@ -1708,8 +1765,8 @@ describe("EaSlider Component", () => {
       const handler = vi.fn();
       slider.addEventListener("input", handler);
 
-      const rail = slider.shadowRoot.querySelector('[part="rail"]');
-      rail.dispatchEvent(
+      const rail = slider.shadowRoot!.querySelector('[part="rail"]');
+      rail!.dispatchEvent(
         new MouseEvent("mousedown", {
           clientX: 50,
           clientY: 0,
@@ -1730,8 +1787,8 @@ describe("EaSlider Component", () => {
       const handler = vi.fn();
       slider.addEventListener("input", handler);
 
-      const thumb = slider.shadowRoot.querySelector('[part="thumb"]');
-      thumb.dispatchEvent(
+      const thumb = slider.shadowRoot!.querySelector('[part="thumb"]');
+      thumb!.dispatchEvent(
         new MouseEvent("mousedown", {
           clientX: 50,
           clientY: 0,
@@ -1752,8 +1809,8 @@ describe("EaSlider Component", () => {
       const handler = vi.fn();
       slider.addEventListener("input", handler);
 
-      const rail = slider.shadowRoot.querySelector('[part="rail"]');
-      rail.dispatchEvent(
+      const rail = slider.shadowRoot!.querySelector('[part="rail"]');
+      rail!.dispatchEvent(
         new MouseEvent("mousedown", {
           clientX: 50,
           clientY: 0,
@@ -1774,8 +1831,8 @@ describe("EaSlider Component", () => {
       const handler = vi.fn();
       slider.addEventListener("input", handler);
 
-      const thumb = slider.shadowRoot.querySelector('[part="thumb"]');
-      thumb.dispatchEvent(
+      const thumb = slider.shadowRoot!.querySelector('[part="thumb"]');
+      thumb!.dispatchEvent(
         new MouseEvent("mousedown", {
           clientX: 50,
           clientY: 0,
@@ -1792,10 +1849,11 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
-      const rail = slider.shadowRoot.querySelector('[part="rail"]');
+      const trigger =
+        slider.shadowRoot!.querySelector<HTMLElement>('[part="trigger"]');
+      const rail = slider.shadowRoot!.querySelector('[part="rail"]');
 
-      rail.dispatchEvent(
+      rail!.dispatchEvent(
         new MouseEvent("mousedown", {
           clientX: 50,
           clientY: 0,
@@ -1804,7 +1862,7 @@ describe("EaSlider Component", () => {
         })
       );
 
-      expect(trigger.hasAttribute("visible")).toBe(true);
+      expect(trigger!.hasAttribute("visible")).toBe(true);
     });
 
     it("mouseup 应该触发 change 事件", async () => {
@@ -1815,8 +1873,8 @@ describe("EaSlider Component", () => {
       const changeHandler = vi.fn();
       slider.addEventListener("change", changeHandler);
 
-      const rail = slider.shadowRoot.querySelector('[part="rail"]');
-      rail.dispatchEvent(
+      const rail = slider.shadowRoot!.querySelector('[part="rail"]');
+      rail!.dispatchEvent(
         new MouseEvent("mousedown", {
           clientX: 50,
           clientY: 0,
@@ -1835,10 +1893,11 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
-      const rail = slider.shadowRoot.querySelector('[part="rail"]');
+      const trigger =
+        slider.shadowRoot!.querySelector<HTMLElement>('[part="trigger"]');
+      const rail = slider.shadowRoot!.querySelector('[part="rail"]');
 
-      rail.dispatchEvent(
+      rail!.dispatchEvent(
         new MouseEvent("mousedown", {
           clientX: 50,
           clientY: 0,
@@ -1847,11 +1906,11 @@ describe("EaSlider Component", () => {
         })
       );
 
-      expect(trigger.hasAttribute("visible")).toBe(true);
+      expect(trigger!.hasAttribute("visible")).toBe(true);
 
       document.dispatchEvent(new MouseEvent("mouseup"));
 
-      expect(trigger.hasAttribute("visible")).toBe(false);
+      expect(trigger!.hasAttribute("visible")).toBe(false);
     });
   });
 
@@ -1861,12 +1920,13 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
-      const thumb = slider.shadowRoot.querySelector('[part="thumb"]');
+      const trigger =
+        slider.shadowRoot!.querySelector<HTMLElement>('[part="trigger"]');
+      const thumb = slider.shadowRoot!.querySelector('[part="thumb"]');
 
-      thumb.dispatchEvent(new MouseEvent("mouseenter", { bubbles: true }));
+      thumb!.dispatchEvent(new MouseEvent("mouseenter", { bubbles: true }));
 
-      expect(trigger.hasAttribute("visible")).toBe(true);
+      expect(trigger!.hasAttribute("visible")).toBe(true);
     });
 
     it("鼠标离开 thumb 应该移除 trigger 的 visible 属性", async () => {
@@ -1874,14 +1934,15 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
-      const thumb = slider.shadowRoot.querySelector('[part="thumb"]');
+      const trigger =
+        slider.shadowRoot!.querySelector<HTMLElement>('[part="trigger"]');
+      const thumb = slider.shadowRoot!.querySelector('[part="thumb"]');
 
-      thumb.dispatchEvent(new MouseEvent("mouseenter", { bubbles: true }));
-      expect(trigger.hasAttribute("visible")).toBe(true);
+      thumb!.dispatchEvent(new MouseEvent("mouseenter", { bubbles: true }));
+      expect(trigger!.hasAttribute("visible")).toBe(true);
 
-      thumb.dispatchEvent(new MouseEvent("mouseleave", { bubbles: true }));
-      expect(trigger.hasAttribute("visible")).toBe(false);
+      thumb!.dispatchEvent(new MouseEvent("mouseleave", { bubbles: true }));
+      expect(trigger!.hasAttribute("visible")).toBe(false);
     });
 
     it("disabled 时鼠标进入 thumb 不应该设置 visible", async () => {
@@ -1890,12 +1951,13 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
-      const thumb = slider.shadowRoot.querySelector('[part="thumb"]');
+      const trigger =
+        slider.shadowRoot!.querySelector<HTMLElement>('[part="trigger"]');
+      const thumb = slider.shadowRoot!.querySelector('[part="thumb"]');
 
-      thumb.dispatchEvent(new MouseEvent("mouseenter", { bubbles: true }));
+      thumb!.dispatchEvent(new MouseEvent("mouseenter", { bubbles: true }));
 
-      expect(trigger.hasAttribute("visible")).toBe(false);
+      expect(trigger!.hasAttribute("visible")).toBe(false);
     });
 
     it("disabled 时鼠标离开 thumb 不应该移除 visible", async () => {
@@ -1903,17 +1965,18 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
-      const thumb = slider.shadowRoot.querySelector('[part="thumb"]');
+      const trigger =
+        slider.shadowRoot!.querySelector<HTMLElement>('[part="trigger"]');
+      const thumb = slider.shadowRoot!.querySelector('[part="thumb"]');
 
-      thumb.dispatchEvent(new MouseEvent("mouseenter", { bubbles: true }));
-      expect(trigger.hasAttribute("visible")).toBe(true);
+      thumb!.dispatchEvent(new MouseEvent("mouseenter", { bubbles: true }));
+      expect(trigger!.hasAttribute("visible")).toBe(true);
 
       slider.disabled = true;
       await slider.updateComplete;
 
-      thumb.dispatchEvent(new MouseEvent("mouseleave", { bubbles: true }));
-      expect(trigger.hasAttribute("visible")).toBe(true);
+      thumb!.dispatchEvent(new MouseEvent("mouseleave", { bubbles: true }));
+      expect(trigger!.hasAttribute("visible")).toBe(true);
     });
   });
 
@@ -2047,7 +2110,7 @@ describe("EaSlider Component", () => {
       slider.marks = { 0: "0", 50: "50", 100: "100" };
       await slider.updateComplete;
 
-      const markLabels = slider.shadowRoot.querySelectorAll(
+      const markLabels = slider.shadowRoot!.querySelectorAll(
         ".ea-slider__mark-label"
       );
       expect(markLabels.length).toBe(2);
@@ -2183,11 +2246,13 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
 
       expect(
-        slider.shadowRoot.querySelector('[part="container"]')
+        slider.shadowRoot!.querySelector('[part="container"]')
       ).toBeTruthy();
-      expect(slider.shadowRoot.querySelector('[part="rail"]')).toBeTruthy();
-      expect(slider.shadowRoot.querySelector('[part="thumb"]')).toBeTruthy();
-      expect(slider.shadowRoot.querySelector('[part="bar"]')).toBeTruthy();
+      expect(slider.shadowRoot!.querySelector('[part="rail"]')).toBeTruthy();
+      expect(slider.shadowRoot!.querySelector('[part="thumb"]')).toBeTruthy();
+      expect(
+        slider.shadowRoot!.querySelector<HTMLElement>('[part="bar"]')
+      ).toBeTruthy();
     });
 
     it("组件断开连接后应该正常移除", () => {
@@ -2206,7 +2271,7 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
 
       expect(
-        slider.shadowRoot.querySelector('[part="container"]')
+        slider.shadowRoot!.querySelector('[part="container"]')
       ).toBeTruthy();
     });
 
@@ -2216,11 +2281,12 @@ describe("EaSlider Component", () => {
       container.appendChild(slider);
       await slider.updateComplete;
 
-      const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
-      expect(trigger.style.left).toBe("75%");
+      const trigger =
+        slider.shadowRoot!.querySelector<HTMLElement>('[part="trigger"]');
+      expect(trigger!.style.left).toBe("75%");
 
-      const bar = slider.shadowRoot.querySelector('[part="bar"]');
-      expect(bar.style.width).toBe("75%");
+      const bar = slider.shadowRoot!.querySelector<HTMLElement>('[part="bar"]');
+      expect(bar!.style.width).toBe("75%");
     });
   });
 

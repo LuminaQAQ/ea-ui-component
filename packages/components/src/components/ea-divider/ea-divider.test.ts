@@ -3,7 +3,7 @@ import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import "./index";
 
 describe("EaDivider", () => {
-  let container;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -27,7 +27,7 @@ describe("EaDivider", () => {
       const el = document.createElement("ea-divider");
       container.appendChild(el);
 
-      const containerEl = el.shadowRoot.querySelector(".ea-divider");
+      const containerEl = el.shadowRoot!.querySelector(".ea-divider");
       expect(containerEl).toBeDefined();
     });
 
@@ -35,14 +35,14 @@ describe("EaDivider", () => {
       const el = document.createElement("ea-divider");
       container.appendChild(el);
 
-      expect(el.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(el.shadowRoot!.querySelector('[part="container"]')).toBeTruthy();
     });
 
     it("应该包含 line CSS Part", () => {
       const el = document.createElement("ea-divider");
       container.appendChild(el);
 
-      const lines = el.shadowRoot.querySelectorAll(".ea-divider__line");
+      const lines = el.shadowRoot!.querySelectorAll(".ea-divider__line");
       expect(lines.length).toBe(2);
     });
 
@@ -50,15 +50,15 @@ describe("EaDivider", () => {
       const el = document.createElement("ea-divider");
       container.appendChild(el);
 
-      expect(el.shadowRoot.querySelector('[part="content"]')).toBeTruthy();
+      expect(el.shadowRoot!.querySelector('[part="content"]')).toBeTruthy();
     });
 
     it("应该包含 role='separator' 属性", () => {
       const el = document.createElement("ea-divider");
       container.appendChild(el);
 
-      const containerEl = el.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.getAttribute("role")).toBe("separator");
+      const containerEl = el.shadowRoot!.querySelector('[part="container"]');
+      expect(containerEl!.getAttribute("role")).toBe("separator");
     });
   });
 
@@ -87,9 +87,11 @@ describe("EaDivider", () => {
       el.setAttribute("variant", "dashed");
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-divider");
+      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
+        ".ea-divider"
+      );
       expect(
-        containerEl.style.getPropertyValue("--ea-divider-border-style")
+        containerEl!.style.getPropertyValue("--ea-divider-border-style")
       ).toBe("dashed");
     });
   });
@@ -143,8 +145,8 @@ describe("EaDivider", () => {
 
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-divider");
-      expect(containerEl.classList.contains("is-empty")).toBe(true);
+      const containerEl = el.shadowRoot!.querySelector(".ea-divider");
+      expect(containerEl!.classList.contains("is-empty")).toBe(true);
     });
 
     it("有插槽内容时不应该有 is-empty 类名", async () => {
@@ -154,8 +156,8 @@ describe("EaDivider", () => {
 
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-divider");
-      expect(containerEl.classList.contains("is-empty")).toBe(false);
+      const containerEl = el.shadowRoot!.querySelector(".ea-divider");
+      expect(containerEl!.classList.contains("is-empty")).toBe(false);
     });
 
     it("插槽内容动态变化时应该更新类名", async () => {
@@ -164,14 +166,14 @@ describe("EaDivider", () => {
 
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-divider");
-      expect(containerEl.classList.contains("is-empty")).toBe(true);
+      const containerEl = el.shadowRoot!.querySelector(".ea-divider");
+      expect(containerEl!.classList.contains("is-empty")).toBe(true);
 
       el.textContent = "New Content";
       el.dispatchEvent(new Event("slotchange", { bubbles: true }));
       await el.updateComplete;
 
-      expect(containerEl.classList.contains("is-empty")).toBe(false);
+      expect(containerEl!.classList.contains("is-empty")).toBe(false);
     });
   });
 
@@ -180,7 +182,7 @@ describe("EaDivider", () => {
       const el = document.createElement("ea-divider");
       container.appendChild(el);
 
-      const containerEl = el.shadowRoot.querySelector(".ea-divider");
+      const containerEl = el.shadowRoot!.querySelector(".ea-divider");
       expect(containerEl).toBeTruthy();
     });
 
@@ -191,8 +193,8 @@ describe("EaDivider", () => {
 
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-divider");
-      expect(containerEl.classList.contains("ea-divider--start")).toBe(true);
+      const containerEl = el.shadowRoot!.querySelector(".ea-divider");
+      expect(containerEl!.classList.contains("ea-divider--start")).toBe(true);
     });
 
     it("direction=vertical 时应该添加 ea-divider--vertical class", async () => {
@@ -202,8 +204,8 @@ describe("EaDivider", () => {
 
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot.querySelector(".ea-divider");
-      expect(containerEl.classList.contains("ea-divider--vertical")).toBe(true);
+      const containerEl = el.shadowRoot!.querySelector(".ea-divider");
+      expect(containerEl!.classList.contains("ea-divider--vertical")).toBe(true);
     });
   });
 
@@ -212,11 +214,11 @@ describe("EaDivider", () => {
       const el = document.createElement("ea-divider");
       container.appendChild(el);
 
-      expect(el.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
-      expect(el.shadowRoot.querySelectorAll(".ea-divider__line").length).toBe(
+      expect(el.shadowRoot!.querySelector('[part="container"]')).toBeTruthy();
+      expect(el.shadowRoot!.querySelectorAll(".ea-divider__line").length).toBe(
         2
       );
-      expect(el.shadowRoot.querySelector('[part="content"]')).toBeTruthy();
+      expect(el.shadowRoot!.querySelector('[part="content"]')).toBeTruthy();
     });
 
     it("组件断开连接后应该正常移除", () => {
