@@ -1054,3 +1054,9 @@ export class EaSelect extends EaFormAssociatedBase {
     return this.internals?.reportValidity() ?? true;
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-select": EaSelect;
+  }
+}

@@ -25,3 +25,9 @@ export class EaCarouselItem extends EaBase {
     `;
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-carousel-item": EaCarouselItem;
+  }
+}

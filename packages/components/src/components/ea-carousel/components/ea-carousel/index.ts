@@ -754,3 +754,9 @@ export class EaCarousel extends EaBase {
     this._isMounted = false;
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-carousel": EaCarousel;
+  }
+}

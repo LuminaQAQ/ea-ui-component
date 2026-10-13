@@ -195,3 +195,9 @@ export class EaLoading extends EaBase {
     }
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-loading": EaLoading;
+  }
+}

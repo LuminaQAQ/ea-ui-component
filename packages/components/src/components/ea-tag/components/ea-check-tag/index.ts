@@ -1,4 +1,4 @@
-﻿import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
+import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
 import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { VARIANT_TYPES, type VariantType } from "@constants/variant";
@@ -95,5 +95,11 @@ export class EaCheckTag extends EaBase {
 
   $mount(): void {
     this.updateContainerClasslist();
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-check-tag": EaCheckTag;
   }
 }

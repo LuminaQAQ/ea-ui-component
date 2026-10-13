@@ -199,3 +199,9 @@ export class EaSkeleton extends EaBase {
 }
 
 export default EaSkeleton;
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-skeleton": EaSkeleton;
+  }
+}

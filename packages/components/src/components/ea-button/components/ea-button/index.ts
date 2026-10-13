@@ -1,4 +1,4 @@
-﻿import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
+import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
 import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { VARIANT_TYPES, type VariantType } from "@constants/variant";
@@ -312,3 +312,9 @@ export class EaButton extends EaBase {
 }
 
 export default EaButton;
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-button": EaButton;
+  }
+}

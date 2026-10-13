@@ -166,3 +166,9 @@ export class EaDescriptionsItem extends EaBase {
     }
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-descriptions-item": EaDescriptionsItem;
+  }
+}

@@ -26,3 +26,9 @@ export class EaTimeline extends EaBase {
 }
 
 export default EaTimeline;
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-timeline": EaTimeline;
+  }
+}

@@ -226,3 +226,9 @@ export class EaStep extends EaBase {
 }
 
 export default EaStep;
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-step": EaStep;
+  }
+}

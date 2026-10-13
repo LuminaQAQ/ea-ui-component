@@ -330,3 +330,9 @@ export class EaUploadFileItem extends EaBase {
     return templates[this.listType || "text"]();
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-upload-file-item": EaUploadFileItem;
+  }
+}

@@ -336,3 +336,9 @@ export class EaMenu extends EaBase {
 }
 
 export default EaMenu;
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-menu": EaMenu;
+  }
+}

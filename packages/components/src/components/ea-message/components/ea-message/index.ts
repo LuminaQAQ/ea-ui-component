@@ -284,3 +284,9 @@ export class EaMessageElement extends EaBase {
     this._transitionAbortController?.abort();
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-message": EaMessageElement;
+  }
+}

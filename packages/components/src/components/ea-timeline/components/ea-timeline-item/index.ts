@@ -1,4 +1,4 @@
-﻿import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
+import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
 import { CustomElement, attribute, query } from "@easy-component-ui/core/decorator";
 import { html } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
@@ -193,3 +193,9 @@ export class EaTimelineItem extends EaBase {
 }
 
 export default EaTimelineItem;
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-timeline-item": EaTimelineItem;
+  }
+}

@@ -243,3 +243,9 @@ export class EaTourStep extends EaBase {
 }
 
 export default EaTourStep;
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-tour-step": EaTourStep;
+  }
+}

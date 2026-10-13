@@ -326,3 +326,9 @@ export class EaNotificationElement extends EaBase {
     this._transitionAbortController?.abort();
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-notification": EaNotificationElement;
+  }
+}

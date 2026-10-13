@@ -104,3 +104,9 @@ export class EaOption extends EaBase {
     this.updateContainerClasslist();
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-option": EaOption;
+  }
+}

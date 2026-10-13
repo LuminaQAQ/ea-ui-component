@@ -479,3 +479,9 @@ export class EaImage extends EaBase {
     this._lazyObserver = null;
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-image": EaImage;
+  }
+}

@@ -850,6 +850,5 @@ export class EaTransfer extends EaFormAssociatedBase {
 declare global {
   interface HTMLElementTagNameMap {
     "ea-transfer": EaTransfer;
-    "ea-transfer-panel": EaTransferPanel;
   }
 }

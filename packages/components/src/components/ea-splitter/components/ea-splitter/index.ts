@@ -481,3 +481,9 @@ export class EaSplitter extends EaBase {
     });
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-splitter": EaSplitter;
+  }
+}

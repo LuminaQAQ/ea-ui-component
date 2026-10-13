@@ -89,3 +89,9 @@ export class EaTabPanel extends EaBase {
     this._setupAria();
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-tab-panel": EaTabPanel;
+  }
+}

@@ -271,3 +271,9 @@ export class EaTableColumn extends EaBase {
     }
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-table-column": EaTableColumn;
+  }
+}

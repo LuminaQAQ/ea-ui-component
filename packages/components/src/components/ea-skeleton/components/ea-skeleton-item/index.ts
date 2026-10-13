@@ -92,3 +92,9 @@ export class EaSkeletonItem extends EaBase {
 }
 
 export default EaSkeletonItem;
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-skeleton-item": EaSkeletonItem;
+  }
+}

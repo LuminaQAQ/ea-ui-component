@@ -520,3 +520,9 @@ export class EaTour extends EaBase {
 }
 
 export default EaTour;
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-tour": EaTour;
+  }
+}

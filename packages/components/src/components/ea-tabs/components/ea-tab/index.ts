@@ -171,3 +171,9 @@ export class EaTab extends EaBase {
     this._setupAria();
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-tab": EaTab;
+  }
+}

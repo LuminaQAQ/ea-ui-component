@@ -5,11 +5,3 @@ import type { EaOptionGroup } from "./components/ea-option-group";
 export { EaSelect } from "./components/ea-select";
 export { EaOption } from "./components/ea-option";
 export { EaOptionGroup } from "./components/ea-option-group";
-
-declare global {
-  interface HTMLElementTagNameMap {
-    "ea-select": EaSelect;
-    "ea-option": EaOption;
-    "ea-option-group": EaOptionGroup;
-  }
-}

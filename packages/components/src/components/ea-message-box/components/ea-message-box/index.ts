@@ -594,3 +594,9 @@ export class EaMessageBoxElement extends EaOverlay {
     super.$beforeUnmount?.();
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-message-box": EaMessageBoxElement;
+  }
+}

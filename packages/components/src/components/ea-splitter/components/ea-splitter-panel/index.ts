@@ -65,3 +65,9 @@ export class EaSplitterPanel extends EaBase {
     `;
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-splitter-panel": EaSplitterPanel;
+  }
+}

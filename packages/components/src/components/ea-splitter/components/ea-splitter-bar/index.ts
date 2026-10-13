@@ -99,3 +99,9 @@ export class EaSplitterBar extends EaBase {
     this.setAttribute("aria-valuemax", String(this.valuemax));
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-splitter-bar": EaSplitterBar;
+  }
+}

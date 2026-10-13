@@ -5,3 +5,5 @@ import { EaFooter } from "./components/ea-footer";
 import { EaAside } from "./components/ea-aside";
 
 export { EaContainer, EaHeader, EaMain, EaFooter, EaAside };
+
+export default { EaContainer, EaHeader, EaMain, EaFooter, EaAside };

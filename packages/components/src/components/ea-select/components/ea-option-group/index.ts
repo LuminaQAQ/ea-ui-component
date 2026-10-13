@@ -63,3 +63,9 @@ export class EaOptionGroup extends EaBase {
   $mounted() {
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-option-group": EaOptionGroup;
+  }
+}

@@ -499,3 +499,9 @@ export class EaTabs extends EaBase {
     this._rovingTabindex = undefined;
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-tabs": EaTabs;
+  }
+}

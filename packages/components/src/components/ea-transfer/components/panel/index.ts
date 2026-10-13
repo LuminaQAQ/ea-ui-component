@@ -1,4 +1,4 @@
-﻿import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
+import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
 import { CustomElement, attribute, property, query, listen } from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { i18nManager } from "@/utils/I18nManager";
@@ -697,5 +697,11 @@ export class EaTransferPanel extends EaBase {
           newPlaceholder || i18nManager.t("transfer.filterPlaceholder");
       }
     }
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-transfer-panel": EaTransferPanel;
   }
 }

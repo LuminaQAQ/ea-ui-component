@@ -1168,3 +1168,9 @@ export class EaTable extends EaBase {
     this._selectAbortController?.abort();
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-table": EaTable;
+  }
+}

@@ -5,9 +5,3 @@ import { EaSubMenu } from "./components/ea-sub-menu/index";
 
 export { EaMenu, EaMenuItem, EaMenuItemGroup, EaSubMenu };
 export default { EaMenu, EaMenuItem, EaMenuItemGroup, EaSubMenu };
-
-declare global {
-  interface HTMLElementTagNameMap {
-    "ea-menu": EaMenu;
-  }
-}

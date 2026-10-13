@@ -292,3 +292,9 @@ export class EaRadioGroup extends EaFormAssociatedBase {
     return this.internals?.reportValidity() ?? true;
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-radio-group": EaRadioGroup;
+  }
+}

@@ -1,4 +1,4 @@
-﻿import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
+import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
 import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
 import { timeout } from "@easy-component-ui/core/utils/timeout";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
@@ -204,5 +204,11 @@ export class EaTag extends EaBase {
   $beforeUnmount(): void {
     this._transitionAbortController?.abort();
     clearTimeout(this._closeFallbackTimer);
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-tag": EaTag;
   }
 }

@@ -116,3 +116,9 @@ export class EaBreadcrumb extends EaBase {
 }
 
 export default EaBreadcrumb;
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-breadcrumb": EaBreadcrumb;
+  }
+}
