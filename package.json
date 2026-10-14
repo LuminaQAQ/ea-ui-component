@@ -16,6 +16,7 @@
     "test:run": "pnpm -r test:run",
     "test:browser": "pnpm -r test:browser",
     "check": "tsx packages/cli/src/bin.ts check",
+    "ea": "tsx packages/cli/src/bin.ts",
     "typecheck": "tsc --noEmit",
     "lint": "eslint . --ext .js,.mjs,.cjs,.ts",
     "lint:fix": "eslint . --ext .js,.mjs,.cjs,.ts --fix",

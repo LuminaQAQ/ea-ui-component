@@ -8,7 +8,8 @@
     "ea": "./dist/index.cjs"
   },
   "files": [
-    "dist"
+    "dist",
+    "templates"
   ],
   "exports": {
     ".": "./src/index.ts"

@@ -8,7 +8,6 @@
     ],
     "testDir": "packages/components/src/test"
   },
-  "templates": ".vscode/ea-ts.code-snippets",
   "check": {
     "rootTestWhitelist": ["ea-form-associated-base.test.ts"],
     "ignore": [

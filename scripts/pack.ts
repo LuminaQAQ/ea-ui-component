@@ -15,6 +15,7 @@ interface ExportsConfig {
     | { import?: string; require?: string; default?: string; types?: string };
 }
 
+// [ ] TODO: 后续与 CLI 部分整合.
 export const handleImportModules = (): void => {
   regenerateAggregateEntry(loadConfig(ROOT));
 };
