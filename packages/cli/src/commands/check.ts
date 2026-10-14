@@ -1,9 +1,7 @@
-import fs from "node:fs";
-import path from "node:path";
-
 import { loadConfig, type IgnoreEntry } from "../lib/config";
 import { scanComponentDirs, scanTestRootFiles } from "../lib/scan";
 import { createNameRe } from "../lib/naming";
+import { error, info, success, warn } from "../lib/output";
 
 interface Violation {
   rule: string;
@@ -107,25 +105,25 @@ export function runCheck(options: CheckOptions = {}): void {
   // 输出
   const errors = violations.filter(v => v.level === "error");
   const warnings = violations.filter(v => v.level === "warning");
-  for (const v of errors) console.log(`✗ [${v.rule}] ${v.message}`);
-  for (const v of warnings) console.log(`⚠ [${v.rule}] ${v.message}`);
+  for (const v of errors) error(`✗ [${v.rule}] ${v.message}`);
+  for (const v of warnings) warn(`⚠ [${v.rule}] ${v.message}`);
 
   const activeIgnores = cfg.check.ignore.filter(
     e => cliIgnore.includes(e.name) || !e.rules || e.rules.length > 0
   );
   if (activeIgnores.length) {
     for (const e of activeIgnores) {
-      console.log(`- 豁免 ${e.name}${e.reason ? `：${e.reason}` : ""}`);
+      info(`- 豁免 ${e.name}${e.reason ? `：${e.reason}` : ""}`);
     }
   }
 
   if (errors.length > 0) {
-    console.log(
+    error(
       `\n校验失败：${errors.length} 个错误，${warnings.length} 个警告`
     );
     process.exitCode = 1;
   } else {
-    console.log(
+    success(
       `\n✓ 校验通过（${all.filter(d => d.hasIndex).length} 个组件目录，${warnings.length} 个警告）`
     );
   }

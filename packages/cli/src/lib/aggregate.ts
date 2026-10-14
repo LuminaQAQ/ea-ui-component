@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import * as ts from "typescript";
 import type { ResolvedEaConfig } from "./config";
+import { success } from "./output";
 
 const GENERATED_START = "// @ea-generated:start";
 const GENERATED_END = "// @ea-generated:end";
@@ -29,14 +30,14 @@ function parseValueExports(src: string, filePath: string): string[] {
       if (st.isTypeOnly) continue;
       if (!st.exportClause || !ts.isNamedExports(st.exportClause)) {
         throw new Error(
-          `export * 无法机械投影为具名名单（${filePath}:L${lineOf(st)}）。请改为具名再导出`
+          `export * 无法展开为具名名单（${filePath}:L${lineOf(st)}）。请改为具名再导出`
         );
       }
       for (const el of st.exportClause.elements) {
         if (el.isTypeOnly) continue;
         if (el.propertyName) {
           throw new Error(
-            `export 别名再导出（as）无法机械投影（${filePath}:L${lineOf(el)}）：${el.getText(sf).trim()}。请以原名导出`
+            `export 别名再导出（as）无法自动收录（${filePath}:L${lineOf(el)}）：${el.getText(sf).trim()}。请以原名导出`
           );
         }
         names.push(el.name.text);
@@ -59,7 +60,7 @@ function parseValueExports(src: string, filePath: string): string[] {
           names.push(d.name.text);
         } else {
           throw new Error(
-            `解构导出形态无法机械投影（${filePath}:L${lineOf(d)}）`
+            `解构导出形态无法自动收录（${filePath}:L${lineOf(d)}）`
           );
         }
       }
@@ -95,7 +96,7 @@ function assertNoManualConflict(
   const dup = [...new Set(manual)].filter(n => generated.has(n));
   if (dup.length > 0) {
     throw new Error(
-      `聚合入口手工区存在与生成名单重复的导出：${dup.join("、")}。请删除手工区的重复导出（机械投影已从组件 index.ts 收录同名导出）`
+      `聚合入口手工区存在与生成名单重复的导出：${dup.join("、")}。请删除手工区的重复导出（生成名单已从组件 index.ts 收录同名导出）`
     );
   }
 }
@@ -170,7 +171,7 @@ function guardNoSentinel(
 }
 
 /**
- * 扫描 componentDirs 公开目录（跳过 internal）并机械投影各 index.ts 的具名值导出，
+ * 扫描 componentDirs 公开目录（跳过 internal）并汇总各 index.ts 的具名值导出，
  * 在哨兵分区内重建聚合出口的再导出清单；分区之外的行（手工内容）原位保留，
  * 且手工区导出不得与生成名单重复。无哨兵时执行 diff 防御：含多余行则中止报错，
  * 纯生成形态则全量重建并提示。
@@ -205,7 +206,7 @@ export function regenerateAggregateEntry(config: ResolvedEaConfig): void {
 
   if (!fs.existsSync(entryPath)) {
     fs.writeFileSync(entryPath, generated.join("\n") + "\n");
-    console.log(`✓ 已生成聚合入口 ${entryPath}`);
+    success(`✓ 已生成聚合入口 ${entryPath}`);
     return;
   }
 
@@ -229,7 +230,7 @@ export function regenerateAggregateEntry(config: ResolvedEaConfig): void {
   } else {
     guardNoSentinel(lines, entryPath, generated);
     result = generated;
-    console.log(`✓ 聚合入口无哨兵标记且无手工内容，已全量重建 ${entryPath}`);
+    success(`✓ 聚合入口无哨兵标记且无手工内容，已全量重建 ${entryPath}`);
   }
   while (result.length > 0 && result[result.length - 1] === "") result.pop();
   fs.writeFileSync(entryPath, result.join("\n") + "\n");
