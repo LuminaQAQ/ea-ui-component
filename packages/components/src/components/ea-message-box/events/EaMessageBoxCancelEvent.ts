@@ -8,9 +8,3 @@ export class EaMessageBoxCancelEvent extends Event {
     this.detail = detail ?? {};
   }
 }
-
-declare global {
-  interface GlobalEventHandlersEventMap {
-    "ea-cancel": EaMessageBoxCancelEvent;
-  }
-}

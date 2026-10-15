@@ -18,6 +18,11 @@ import type { EaMessageBoxConfirmEvent } from "../components/ea-message-box/even
 import type { EaPopconfirmConfirmEvent } from "../components/ea-popconfirm/events/EaPopconfirmConfirmEvent";
 import type { EaCalendarSelectEvent } from "../components/ea-calendar/events/EaCalendarSelectEvent";
 import type { EaTableSelectEvent } from "../components/ea-table/events/EaTableSelectEvent";
+import type { EaMessageBoxCancelEvent } from "../components/ea-message-box/events/EaMessageBoxCancelEvent";
+import type { EaPopconfirmCancelEvent } from "../components/ea-popconfirm/events/EaPopconfirmCancelEvent";
+import type { EaDatePickerVisibleChangeEvent } from "../components/ea-date-picker/events/EaDatePickerVisibleChangeEvent";
+import type { EaSelectVisibleChangeEvent } from "../components/ea-select/events/EaSelectVisibleChangeEvent";
+import type { EaTimePickerVisibleChangeEvent } from "../components/ea-time-picker/events/EaTimePickerVisibleChangeEvent";
 
 declare global {
   interface GlobalEventHandlersEventMap {
@@ -41,7 +46,17 @@ declare global {
     "ea-confirm": EaMessageBoxConfirmEvent | EaPopconfirmConfirmEvent;
 
     "ea-select": EaCalendarSelectEvent | EaTableSelectEvent;
+
+    "ea-cancel": EaMessageBoxCancelEvent | EaPopconfirmCancelEvent;
+
+    "ea-visible-change":
+      | EaDatePickerVisibleChangeEvent
+      | EaSelectVisibleChangeEvent
+      | EaTimePickerVisibleChangeEvent;
   }
 }
 
-export {};
+export type EaGlobalCustomEventName = Extract<
+  keyof GlobalEventHandlersEventMap,
+  `ea-${string}`
+>;

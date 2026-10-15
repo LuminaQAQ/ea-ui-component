@@ -14,9 +14,3 @@ export class EaDatePickerVisibleChangeEvent extends Event {
     this.detail = detail;
   }
 }
-
-declare global {
-  interface GlobalEventHandlersEventMap {
-    "ea-visible-change": EaDatePickerVisibleChangeEvent;
-  }
-}
