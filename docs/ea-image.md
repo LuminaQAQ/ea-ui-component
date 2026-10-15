@@ -2,7 +2,7 @@
 import { onMounted } from 'vue'
 
 onMounted(() => {
-  import('../packages/components/dist/components/index.js')
+  import('../packages/components/dist/index.js')
   import('../packages/components/dist/assets/icon.css')
 
   const placeholderExample = {

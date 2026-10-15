@@ -14,7 +14,7 @@ function getEntryFile(directory: string, component: string): string {
 }
 
 const entryConfigs: Record<string, string> = {
-  index: getEntryFile(resolve(process.cwd(), "src/components"), "."),
+  index: getEntryFile(resolve(process.cwd(), "src"), "."),
 };
 
 readdirSync(dir).forEach((file: string) => {

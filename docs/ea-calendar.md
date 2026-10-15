@@ -1,6 +1,6 @@
 ﻿<script setup>
 import { onMounted } from 'vue'
-import "../packages/components/dist/components/index.js"
+import "../packages/components/dist/index.js"
 import "../packages/components/dist/assets/icon.css"
 
 onMounted(() => {

@@ -24,13 +24,13 @@ export const handlePackageExport = (): void => {
   const dir = path.resolve(ROOT, "packages/components/src/components");
   const themesDir = path.resolve(ROOT, "packages/themes/src");
   const entryConfigs: EntryConfigs = {
-    index: path.resolve(ROOT, "packages/components/src/components/index.ts"),
+    index: path.resolve(ROOT, "packages/components/src/index.ts"),
   };
 
   const exportsConfig: ExportsConfig = {
     ".": {
-      import: "./dist/components/index.js",
-      types: "./dist/types/components/index.d.ts",
+      import: "./dist/index.js",
+      types: "./dist/types/index.d.ts",
     },
     "./icon-assets": {
       import: "./dist/assets/icon.css",

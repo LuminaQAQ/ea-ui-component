@@ -1,1 +1,1 @@
-import "./packages/components/src/components/index";
+import "./packages/components/src/index";

@@ -178,6 +178,7 @@ function guardNoSentinel(
  */
 export function regenerateAggregateEntry(config: ResolvedEaConfig): void {
   const entryPath = config.project.entry;
+  const entryDir = path.dirname(entryPath);
 
   const dirs: { name: string; root: string }[] = [];
   for (const root of config.project.componentDirs) {
@@ -197,7 +198,12 @@ export function regenerateAggregateEntry(config: ResolvedEaConfig): void {
     const src = fs.readFileSync(filePath, "utf-8");
     const names = parseValueExports(src, filePath);
     if (names.length > 0) {
-      exportLines.push(`export { ${names.join(", ")} } from "./${name}";`);
+      const rel = path
+        .relative(entryDir, path.join(root, name))
+        .split(path.sep)
+        .join("/");
+      const spec = rel.startsWith(".") ? rel : `./${rel}`;
+      exportLines.push(`export { ${names.join(", ")} } from "${spec}";`);
       exportNames.push(...names);
     }
   }

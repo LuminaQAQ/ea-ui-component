@@ -5,7 +5,7 @@ import { EaMessageBox } from "../packages/components/dist/components/ea-message-
 import PropTag from './components/PropTag.vue'
 
 onMounted(() => {
-  import("../packages/components/dist/components/index.js")
+  import("../packages/components/dist/index.js")
   import("../packages/components/dist/assets/icon.css")
 
   const alertExample = {

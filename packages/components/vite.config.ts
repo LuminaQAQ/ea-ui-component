@@ -52,6 +52,9 @@ export default defineConfig({
           if (chunkInfo.name === "theme") {
             return `themes/controller.js`;
           }
+          if (chunkInfo.name === "index") {
+            return `index.js`;
+          }
           return "components/[name].js";
         },
         chunkFileNames: chunkInfo => {

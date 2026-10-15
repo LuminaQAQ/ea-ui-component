@@ -2,7 +2,7 @@
 import { onMounted } from 'vue'
 
 onMounted(async () => {
-  await import("../packages/components/dist/components/index.js")
+  await import("../packages/components/dist/index.js")
 
   // ------- 区域加载 -------
   const loadingToggle = document.querySelector("#loadingToggle")

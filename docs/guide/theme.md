@@ -120,7 +120,7 @@ document.addEventListener("ea-theme-change", e => {
     <script type="module">
       import "./node_modules/easy-component-ui/dist/themes/source.js";
       import "./node_modules/easy-component-ui/dist/themes/dark.js";
-      import "./node_modules/easy-component-ui/dist/components/index.js";
+      import "./node_modules/easy-component-ui/dist/index.js";
       import {
         initTheme,
         toggleTheme,

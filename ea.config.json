@@ -1,7 +1,7 @@
 {
   "project": {
     "prefix": "ea",
-    "entry": "packages/components/src/components/index.ts",
+    "entry": "packages/components/src/index.ts",
     "componentDirs": [
       "packages/components/src/components",
       { "path": "packages/components/src/common", "internal": true }

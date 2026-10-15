@@ -24,7 +24,7 @@ npm i easy-component-ui
 
 <!-- 引入全部组件 -->
 <script type="module">
-  import "https://unpkg.com/easy-component-ui/dist/components/index.js";
+  import "https://unpkg.com/easy-component-ui/dist/index.js";
 </script>
 
 <!-- 或引入单个组件 -->
@@ -55,7 +55,7 @@ npm i easy-component-ui
 
     <!-- 引入全部组件 -->
     <script type="module">
-      import "./node_modules/easy-component-ui/dist/components/index.js";
+      import "./node_modules/easy-component-ui/dist/index.js";
     </script>
 
     <!-- 或按需引入单个组件 -->
@@ -162,7 +162,7 @@ easy-component-ui/
 
 :::tip
 
-- `dist/components/index.js` - 全部组件入口，引入后会注册所有组件
+- `dist/index.js` - 全部组件入口，引入后会注册所有组件
 - `dist/components/ea-*.js` - 单个组件文件，可按需引入
 - `dist/assets/icon.css` - 图标字体样式，使用图标组件时需要引入
 - `dist/themes/source.js` - 主题基础变量，使用组件前必须引入

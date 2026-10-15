@@ -3,7 +3,7 @@ import { onMounted } from 'vue'
 import { EaNotification } from "../packages/components/dist/components/ea-notification.js";
 
 onMounted(() => {
-  import("../packages/components/dist/components/index.js")
+  import("../packages/components/dist/index.js")
   import("../packages/components/dist/assets/icon.css")
 
   const completeExample = {

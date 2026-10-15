@@ -1,7 +1,7 @@
 ﻿<script setup>
 import { onMounted } from 'vue'
 import PropTag from './components/PropTag.vue'
-import "../packages/components/dist/components/index.js"
+import "../packages/components/dist/index.js"
 import "../packages/components/dist/assets/icon.css"
 
 const fn = (e) => {
