@@ -651,6 +651,8 @@ export class EaInputNumber extends EaFormAssociatedBase {
   }
 }
 
+export default EaInputNumber;
+
 declare global {
   interface HTMLElementTagNameMap {
     "ea-input-number": EaInputNumber;

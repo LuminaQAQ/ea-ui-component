@@ -1,4 +1,4 @@
-import { EaLoading } from "./components/ea-loading/index";
+import { EaLoading } from "./components/ea-loading";
 import { EaLoadingService } from "./utils/EaLoadingInstance";
 
 declare global {

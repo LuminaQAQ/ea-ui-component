@@ -266,6 +266,8 @@ export class EaAvatar extends EaBase {
   }
 }
 
+export default EaAvatar;
+
 declare global {
   interface HTMLElementTagNameMap {
     "ea-avatar": EaAvatar;

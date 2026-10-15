@@ -1,5 +1,5 @@
-import { EaColorPicker } from "./components/ea-color-picker/index";
-import { EaColorPickerPanel } from "./components/ea-color-picker-panel/index";
+import { EaColorPicker } from "./components/ea-color-picker";
+import { EaColorPickerPanel } from "./components/ea-color-picker-panel";
 
 export { EaColorPicker, EaColorPickerPanel };
 

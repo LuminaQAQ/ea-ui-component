@@ -241,6 +241,8 @@ export class EaAffix extends EaBase {
   }
 }
 
+export default EaAffix;
+
 declare global {
   interface HTMLElementTagNameMap {
     "ea-affix": EaAffix;

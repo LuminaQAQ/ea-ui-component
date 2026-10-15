@@ -867,6 +867,8 @@ export class EaDatePicker extends EaFormAssociatedBase {
   }
 }
 
+export default EaDatePicker;
+
 declare global {
   interface HTMLElementTagNameMap {
     "ea-date-picker": EaDatePicker;

@@ -100,6 +100,8 @@ export interface EaThemeToggleEventDetail {
   mode: "light" | "dark";
 }
 
+export default EaThemeToggle;
+
 declare global {
   interface HTMLElementTagNameMap {
     "ea-theme-toggle": EaThemeToggle;

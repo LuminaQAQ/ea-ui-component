@@ -333,6 +333,8 @@ export class EaDialog extends EaOverlay {
   }
 }
 
+export default EaDialog;
+
 declare global {
   interface HTMLElementTagNameMap {
     "ea-dialog": EaDialog;

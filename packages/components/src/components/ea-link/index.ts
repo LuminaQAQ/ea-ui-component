@@ -201,10 +201,10 @@ export class EaLink extends EaBase {
   }
 }
 
+export default EaLink;
+
 declare global {
   interface HTMLElementTagNameMap {
     "ea-link": EaLink;
   }
 }
-
-export default EaLink;

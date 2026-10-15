@@ -449,6 +449,8 @@ export class EaPopconfirm extends EaPopper {
   }
 }
 
+export default EaPopconfirm;
+
 declare global {
   interface HTMLElementTagNameMap {
     "ea-popconfirm": EaPopconfirm;

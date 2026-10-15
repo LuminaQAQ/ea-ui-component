@@ -546,6 +546,8 @@ export class EaImagePreview extends EaOverlay {
   }
 }
 
+export default EaImagePreview;
+
 declare global {
   interface HTMLElementTagNameMap {
     "ea-image-preview": EaImagePreview;

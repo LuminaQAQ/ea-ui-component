@@ -178,6 +178,8 @@ export class EaBorderBeam extends EaBase {
   }
 }
 
+export default EaBorderBeam;
+
 declare global {
   interface HTMLElementTagNameMap {
     "ea-border-beam": EaBorderBeam;

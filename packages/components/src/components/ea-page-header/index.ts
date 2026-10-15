@@ -149,6 +149,8 @@ export class EaPageHeader extends EaBase {
   }
 }
 
+export default EaPageHeader;
+
 declare global {
   interface HTMLElementTagNameMap {
     "ea-page-header": EaPageHeader;

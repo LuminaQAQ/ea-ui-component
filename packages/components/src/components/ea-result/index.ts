@@ -134,6 +134,8 @@ export class EaResult extends EaBase {
   }
 }
 
+export default EaResult;
+
 declare global {
   interface HTMLElementTagNameMap {
     "ea-result": EaResult;

@@ -342,6 +342,8 @@ export class EaEffects extends EaBase {
   }
 }
 
+export default EaEffects;
+
 declare global {
   interface HTMLElementTagNameMap {
     "ea-effects": EaEffects;

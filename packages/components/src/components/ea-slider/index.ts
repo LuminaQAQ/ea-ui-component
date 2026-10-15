@@ -691,6 +691,8 @@ export class EaSlider extends EaFormAssociatedBase {
   }
 }
 
+export default EaSlider;
+
 declare global {
   interface HTMLElementTagNameMap {
     "ea-slider": EaSlider;

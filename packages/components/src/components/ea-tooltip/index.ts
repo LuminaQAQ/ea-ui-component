@@ -316,6 +316,8 @@ export class EaTooltip extends EaPopper {
   }
 }
 
+export default EaTooltip;
+
 declare global {
   interface HTMLElementTagNameMap {
     "ea-tooltip": EaTooltip;

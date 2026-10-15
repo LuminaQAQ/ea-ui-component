@@ -182,6 +182,8 @@ export class EaBadge extends EaBase {
   }
 }
 
+export default EaBadge;
+
 declare global {
   interface HTMLElementTagNameMap {
     "ea-badge": EaBadge;

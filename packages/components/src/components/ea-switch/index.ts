@@ -384,6 +384,8 @@ export class EaSwitch extends EaFormAssociatedBase {
   }
 }
 
+export default EaSwitch;
+
 declare global {
   interface HTMLElementTagNameMap {
     "ea-switch": EaSwitch;

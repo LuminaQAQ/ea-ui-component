@@ -723,10 +723,10 @@ export class EaPagination extends EaBase {
   }
 }
 
+export default EaPagination;
+
 declare global {
   interface HTMLElementTagNameMap {
     "ea-pagination": EaPagination;
   }
 }
-
-export default EaPagination;

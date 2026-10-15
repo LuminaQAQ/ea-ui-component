@@ -193,6 +193,8 @@ export class EaBacktop extends EaBase {
   }
 }
 
+export default EaBacktop;
+
 declare global {
   interface HTMLElementTagNameMap {
     "ea-backtop": EaBacktop;

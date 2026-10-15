@@ -114,6 +114,8 @@ export class EaDivider extends EaBase {
   }
 }
 
+export default EaDivider;
+
 declare global {
   interface HTMLElementTagNameMap {
     "ea-divider": EaDivider;

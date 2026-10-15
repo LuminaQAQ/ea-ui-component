@@ -452,6 +452,8 @@ export class EaPopover extends EaPopper {
   }
 }
 
+export default EaPopover;
+
 declare global {
   interface HTMLElementTagNameMap {
     "ea-popover": EaPopover;

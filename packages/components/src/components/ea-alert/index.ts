@@ -352,6 +352,8 @@ export class EaAlert extends EaBase {
   }
 }
 
+export default EaAlert;
+
 declare global {
   interface HTMLElementTagNameMap {
     "ea-alert": EaAlert;

@@ -897,6 +897,8 @@ export class EaInput extends EaFormAssociatedBase {
   }
 }
 
+export default EaInput;
+
 declare global {
   interface HTMLElementTagNameMap {
     "ea-input": EaInput;

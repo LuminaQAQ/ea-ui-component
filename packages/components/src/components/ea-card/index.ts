@@ -135,6 +135,8 @@ export class EaCard extends EaBase {
   }
 }
 
+export default EaCard;
+
 declare global {
   interface HTMLElementTagNameMap {
     "ea-card": EaCard;

@@ -309,6 +309,8 @@ export class EaWatermark extends EaBase {
   }
 }
 
+export default EaWatermark;
+
 declare global {
   interface HTMLElementTagNameMap {
     "ea-watermark": EaWatermark;

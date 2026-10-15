@@ -245,6 +245,8 @@ export class EaDrawer extends EaOverlay {
   }
 }
 
+export default EaDrawer;
+
 declare global {
   interface HTMLElementTagNameMap {
     "ea-drawer": EaDrawer;

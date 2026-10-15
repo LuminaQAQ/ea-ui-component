@@ -1,4 +1,5 @@
-import { EaRadio } from "./components/ea-radio/index.js";
-import { EaRadioGroup } from "./components/ea-radio-group/index.js";
+import { EaRadio } from "./components/ea-radio";
+import { EaRadioGroup } from "./components/ea-radio-group";
 
 export { EaRadio, EaRadioGroup };
+export default { EaRadio, EaRadioGroup };

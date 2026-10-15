@@ -364,6 +364,8 @@ export class EaScrollbar extends EaBase {
   }
 }
 
+export default EaScrollbar;
+
 declare global {
   interface HTMLElementTagNameMap {
     "ea-scrollbar": EaScrollbar;

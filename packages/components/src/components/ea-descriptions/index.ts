@@ -1,5 +1,5 @@
-import { EaDescriptionsItem } from "./components/ea-descriptions-item/index";
-import { EaDescriptions } from "./components/ea-descriptions/index";
+import { EaDescriptionsItem } from "./components/ea-descriptions-item";
+import { EaDescriptions } from "./components/ea-descriptions";
 
 export { EaDescriptions, EaDescriptionsItem };
 
