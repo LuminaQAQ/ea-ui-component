@@ -38,6 +38,8 @@ export interface RenderContext {
   subImports?: string;
   /** 出口类名列表（entry 模板用，如 EaButton, EaButtonGroup） */
   exportList?: string;
+  /** 单组件值导出段（component 模板用，如 export default EaButton;）；附属/复合主实现留空即省略 */
+  exportDefault?: string;
 }
 
 /** 上下文 → 语义化 token 字面量映射（token 独占整行且值为空时该行一并删除） */
@@ -53,6 +55,7 @@ function tokenMap(ctx: RenderContext): Record<string, string> {
     ___PREFIX_PASCAL___: ctx.prefixPascal,
     ___SUB_IMPORTS___: ctx.subImports ?? "",
     ___EXPORT_LIST___: ctx.exportList ?? "",
+    ___EXPORT_DEFAULT___: ctx.exportDefault ?? "",
   };
 }
 

@@ -325,7 +325,10 @@ function buildPlan(
   } else {
     files.push({
       abs: path.join(dir, "index.ts"),
-      content: renderTemplate("component.ts.tpl", cfg, ctx),
+      content: renderTemplate("component.ts.tpl", cfg, {
+        ...ctx,
+        exportDefault: `export default ${ctx.className};\n`,
+      }),
     });
     files.push(scssOf(dir, ctx));
   }

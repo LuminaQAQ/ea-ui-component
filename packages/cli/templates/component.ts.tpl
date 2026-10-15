@@ -57,11 +57,9 @@ export class ___CLASS_NAME___ extends EaBase {
   }
 }
 
+___EXPORT_DEFAULT___
 declare global {
   interface HTMLElementTagNameMap {
     "___TAG_NAME___": ___CLASS_NAME___;
   }
 }
-
-// @ea-tpl:cut
-export default ___CLASS_NAME___;
