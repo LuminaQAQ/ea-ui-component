@@ -2,6 +2,7 @@ import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
 import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { VARIANT_TYPES, VARIANT_DEFAULT, type VariantType } from "@constants/variant";
+___INTERNAL_DEPS___
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "___TAG_NAME___" as const;
@@ -12,6 +13,7 @@ const bem = createBEM(TAG_NAME);
  * @status stable
  * @since ___VERSION___
  *
+___DEPENDENCY___
  * @slot default - 默认插槽。
  *
  * @csspart container - 容器元素。

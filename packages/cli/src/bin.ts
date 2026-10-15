@@ -39,9 +39,13 @@ program
   .alias("new")
   .alias("gen")
   .description(
-    "生成合规新组件（三件套；--with 生成复合组件；需完整 config 含 prefix）"
+    "生成合规新组件（三件套；--with 生成复合组件、--parts 生成私有组件；需完整 config 含 prefix）"
   )
-  .option("--with <names...>", "附属组件名（kebab-case，可多个）")
+  .option("--with <names...>", "附属组件名（kebab-case，可多个；对外暴露）")
+  .option(
+    "--parts <names...>",
+    "私有子组件名（kebab-case，可多个；生成但不对外导出，仅主实现副作用注册）"
+  )
   .option("--summary <text>", "组件摘要（@summary JSDoc）")
   .option("--internal", "生成到 internal 内部组件目录（不进聚合出口、不对外导出）")
   .option("--dry-run", "仅预览将创建的文件与聚合入口变更，不落盘")

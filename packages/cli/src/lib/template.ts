@@ -40,6 +40,10 @@ export interface RenderContext {
   exportList?: string;
   /** 单组件值导出段（component 模板用，如 export default EaButton;）；附属/复合主实现留空即省略 */
   exportDefault?: string;
+  /** 私有组件副作用注册路径（component 模板用，如 import "./components/x/index";）；无则留空即省略 */
+  internalDeps?: string;
+  /** 私有组件 JSDoc @dependency 块（component 模板用，每行形如 ` * @dependency ea-x-item`）；无则留空即省略 */
+  dependency?: string;
 }
 
 /** 上下文 → 语义化 token 字面量映射（token 独占整行且值为空时该行一并删除） */
@@ -56,6 +60,8 @@ function tokenMap(ctx: RenderContext): Record<string, string> {
     ___SUB_IMPORTS___: ctx.subImports ?? "",
     ___EXPORT_LIST___: ctx.exportList ?? "",
     ___EXPORT_DEFAULT___: ctx.exportDefault ?? "",
+    ___INTERNAL_DEPS___: ctx.internalDeps ?? "",
+    ___DEPENDENCY___: ctx.dependency ?? "",
   };
 }
 

@@ -15,6 +15,7 @@ import { c, info, success, warn } from "../lib/output";
 
 export interface AddOptions {
   with?: string[];
+  parts?: string[];
   summary?: string;
   internal?: boolean;
   dryRun?: boolean;
@@ -31,6 +32,8 @@ interface PlannedFile {
 interface NamedComponent extends NormalizedName {
   /** Pascal 裸类名（去前缀），如 Button */
   pascal: string;
+  /** 是否对外暴露 */
+  expose: boolean;
 }
 
 /** commander variadic 选项按逗号再切一刀，逐项 trim */
@@ -111,9 +114,9 @@ async function ask(
   return prompts(questions);
 }
 
-/** 归一化结果 → 渲染所需的组件信息（补 Pascal 类名） */
-function toComponent(n: NormalizedName): NamedComponent {
-  return { ...n, pascal: toPascalCase(n.bare) };
+/** 归一化结果 → 渲染所需的组件信息（补 Pascal 类名与暴露标记） */
+function toComponent(n: NormalizedName, expose = true): NamedComponent {
+  return { ...n, pascal: toPascalCase(n.bare), expose };
 }
 
 /**
@@ -121,7 +124,8 @@ function toComponent(n: NormalizedName): NamedComponent {
  */
 async function collectInputs(
   rawName: string | undefined,
-  rawWith: string[],
+  publicNames: string[],
+  partNames: string[],
   rawSummary: string | undefined,
   cfg: ResolvedEaConfig,
   prefix: string
@@ -165,23 +169,28 @@ async function collectInputs(
 
   seen.add(main.full);
 
-  // 2. 附属组件名：可选。--with 一次性校验全部；交互逐个询问、可循环添加；非 TTY 视为无附属
-  if (rawWith.length > 0) {
-    for (const raw of rawWith) {
+  // 2. 子组件名：可选。--with = 对外暴露的附属组件；--parts = 私有组件（不暴露）；交互逐个询问后复选暴露
+  const pushFlagged = (list: string[], expose: boolean, label: string) => {
+    for (const raw of list) {
       const normalized = normalizeName(raw, prefix);
 
       if ("error" in normalized)
-        throw new Error(`附属组件名非法：${normalized.error}`);
+        throw new Error(`${label}名非法：${normalized.error}`);
 
       if (seen.has(normalized.full)) {
         throw new Error(
-          `附属组件 ${normalized.full} 与主组件/其他附属组件/现有目录重名`
+          `${label} ${normalized.full} 与主组件/其他子组件/现有目录重名`
         );
       }
 
       seen.add(normalized.full);
-      subs.push(toComponent(normalized));
+      subs.push(toComponent(normalized, expose));
     }
+  };
+
+  if (publicNames.length > 0 || partNames.length > 0) {
+    pushFlagged(publicNames, true, "附属组件");
+    pushFlagged(partNames, false, "私有组件");
   } else if (interactive) {
     const { more } = await prompts({
       type: "confirm",
@@ -206,7 +215,7 @@ async function collectInputs(
       /* v8 ignore next -- validate 已即时拦截非法，此处兜底 */
       if ("error" in normalized) return null;
       seen.add(normalized.full);
-      subs.push(toComponent(normalized));
+      subs.push(toComponent(normalized, true));
 
       const next = await prompts({
         type: "confirm",
@@ -216,6 +225,24 @@ async function collectInputs(
       });
       if (next.next === undefined) return null;
       keepGoing = !!next.next;
+    }
+
+    // 复选对外暴露：勾选 = 公共子元素（进 barrel + 聚合），未选 = 私有组件（仅主实现副作用注册）
+    if (subs.length > 0) {
+      const { exposed } = await prompts({
+        type: "multiselect",
+        name: "exposed",
+        message: "勾选对外暴露的组件（未选择则作为私有组件）",
+        choices: subs.map(s => ({
+          title: s.full,
+          value: s.full,
+          selected: true,
+        })),
+        hint: "空格切换 / a 全选 / i 反选",
+      });
+      if (exposed === undefined) return null;
+      const set = new Set<string>(exposed as string[]);
+      for (const s of subs) s.expose = set.has(s.full);
     }
   }
 
@@ -265,7 +292,7 @@ function makeContext(
   };
 }
 
-/** 生成写入计划：单组件三件套 / 复合组件（entry 薄出口 + components/ 附属实现） */
+/** 生成写入计划：单组件三件套 / 复合组件（entry 薄出口 + components/ 附属实现）/ 含私有组件（--parts，仅主实现副作用注册、不进出口） */
 function buildPlan(
   cfg: ResolvedEaConfig,
   prefix: string,
@@ -283,8 +310,18 @@ function buildPlan(
     );
   }
   const ctx = makeContext(prefix, version, main, summary);
-  const composite = subs.length > 0;
+  const publicSubs = subs.filter(s => s.expose);
+  const internalParts = subs.filter(s => !s.expose);
+  const hasBarrel = publicSubs.length > 0;
   const pascalPrefix = toPascalCase(prefix);
+  // 私有组件：主实现里以副作用 import 注册，并在 JSDoc 追加 @dependency 文档行
+  const internalDeps = internalParts
+    .map(p => `import "./components/${p.full}/index";`)
+    .join("\n");
+  const dependency = internalParts.length
+    ? internalParts.map(p => ` * @dependency ${p.full}`).join("\n") + "\n *"
+    : "";
+  const mainImplCtx: RenderContext = { ...ctx, internalDeps, dependency };
 
   const files: PlannedFile[] = [];
   const scssOf = (implDir: string, implCtx: RenderContext) => ({
@@ -296,12 +333,21 @@ function buildPlan(
     content: renderTemplate("component.ts.tpl", cfg, implCtx, true),
   });
 
-  if (composite) {
-    // 薄主出口：___SUB_IMPORTS___ = 附属组件 import 块，___EXPORT_LIST___ = 主类 + 附属类名列表（复合主目录无顶层 scss）
-    const allClasses = [main, ...subs].map(c => `${pascalPrefix}${c.pascal}`);
+  // 私有组件实现生成器
+  const genPart = (p: NamedComponent) => {
+    const pctx = makeContext(prefix, version, p, "");
+    files.push(implOf(path.join(dir, "components", p.full), pctx));
+    files.push(scssOf(path.join(dir, "components", p.full), pctx));
+  };
+
+  if (hasBarrel) {
+    // 薄主出口：仅聚合主类 + 对外暴露的附属组件
+    const allClasses = [main, ...publicSubs].map(
+      c => `${pascalPrefix}${c.pascal}`
+    );
     const entryCtx: RenderContext = {
       ...ctx,
-      subImports: subs
+      subImports: publicSubs
         .map(
           s =>
             `import { ${pascalPrefix}${s.pascal} } from "./components/${s.full}";`
@@ -309,19 +355,31 @@ function buildPlan(
         .join("\n"),
       exportList: allClasses.join(", "),
     };
-    
+
     files.push({
       abs: path.join(dir, "index.ts"),
       content: renderTemplate("entry.ts.tpl", cfg, entryCtx),
     });
-    // 主实现与附属实现均为截断渲染（保留 TagNameMap 自声明，无值导出段），各自用自身名称上下文
-    files.push(implOf(path.join(dir, "components", main.full), ctx));
-    files.push(scssOf(path.join(dir, "components", main.full), ctx));
-    for (const s of subs) {
+    // 主实现带私有组件副作用注册依赖（保留 TagNameMap 自声明，无值导出段）；附属实现各自独立
+    files.push(implOf(path.join(dir, "components", main.full), mainImplCtx));
+    files.push(scssOf(path.join(dir, "components", main.full), mainImplCtx));
+    for (const s of publicSubs) {
       const sctx = makeContext(prefix, version, s, "");
       files.push(implOf(path.join(dir, "components", s.full), sctx));
       files.push(scssOf(path.join(dir, "components", s.full), sctx));
     }
+    for (const p of internalParts) genPart(p);
+  } else if (internalParts.length > 0) {
+    // 单组件根 + 私有组件：根只具名导出主类，主实现副作用注册私有组件
+    files.push({
+      abs: path.join(dir, "index.ts"),
+      content: renderTemplate("component.ts.tpl", cfg, {
+        ...mainImplCtx,
+        exportDefault: `export default ${ctx.className};\n`,
+      }),
+    });
+    files.push(scssOf(dir, ctx));
+    for (const p of internalParts) genPart(p);
   } else {
     files.push({
       abs: path.join(dir, "index.ts"),
@@ -372,17 +430,28 @@ function renderPreview(
   entryLine: string
 ): string {
   const pascalPrefix = toPascalCase(prefix);
-  const composite = subs.length > 0;
+  const publicSubs = subs.filter(s => s.expose);
+  const internalParts = subs.filter(s => !s.expose);
   const baseDir = path.dirname(files[0].abs);
   // 相对组件根目录的短路径，交由目录树呈现层级，避免整条 cwd 前缀刷屏
   const relPaths = files.map(f =>
     path.relative(baseDir, f.abs).split(path.sep).join("/")
   );
 
+  let kind: string;
+  if (publicSubs.length > 0 && internalParts.length > 0)
+    kind = `复合组件 + ${internalParts.length} 私有组件`;
+  else if (publicSubs.length > 0) kind = "复合组件";
+  else if (internalParts.length > 0)
+    kind = `单组件 + ${internalParts.length} 私有组件`;
+  else kind = "单组件";
+
   const header = `${c.green("✓")} ${c.bold(`${pascalPrefix}${main.pascal}`)} ${c.dim(
     "/"
-  )} ${main.full} ${c.dim("·")} ${composite ? "复合组件" : "单组件"}`;
+  )} ${main.full} ${c.dim("·")} ${kind}`;
   const dirLine = `  ${rel(baseDir)}/`;
+
+  const internalDirs = new Set(internalParts.map(p => p.full));
 
   return [
     "",
@@ -390,15 +459,18 @@ function renderPreview(
     "",
     dirLine,
     "",
-    renderTree(relPaths),
+    renderTree(relPaths, internalDirs),
     "",
     `${c.dim("聚合入口: ")}${entryLine}`,
     "",
   ].join("\n");
 }
 
-/** 由相对路径列表渲染目录树：box-drawing 字符，无外部依赖，颜色仅在 TTY 生效 */
-function renderTree(relPaths: string[]): string {
+/** 由相对路径列表渲染目录树：box-drawing 字符，无外部依赖，颜色仅在 TTY 生效；internalDirs 命中的目录标注“私有组件” */
+function renderTree(
+  relPaths: string[],
+  internalDirs?: Set<string>
+): string {
   interface Node {
     dirs: Map<string, Node>;
     files: string[];
@@ -429,7 +501,8 @@ function renderTree(relPaths: string[]): string {
       const last = idx === entries.length - 1;
       const branch = c.dim(last ? "└── " : "├── ");
       if (e.dir) {
-        lines.push(`${indent}${branch}${c.cyan(`${e.name}/`)}`);
+        const mark = internalDirs?.has(e.name) ? c.dim("  # 私有组件") : "";
+        lines.push(`${indent}${branch}${c.cyan(`${e.name}/`)}${mark}`);
         walk(node.dirs.get(e.name)!, `${indent}${last ? "    " : c.dim("│   ")}`);
       } else {
         lines.push(`${indent}${branch}${e.name}`);
@@ -451,7 +524,9 @@ function previewEntryLine(
   subs: NamedComponent[]
 ): string {
   const pascalPrefix = toPascalCase(prefix);
-  const names = [main, ...subs].map(c => `${pascalPrefix}${c.pascal}`);
+  const names = [main, ...subs.filter(s => s.expose)].map(
+    c => `${pascalPrefix}${c.pascal}`
+  );
   return `export { ${names.join(", ")} } from "./${main.full}";`;
 }
 
@@ -462,9 +537,17 @@ export async function runAdd(
   const cfg = loadConfig();
   const prefix = requirePrefix(cfg);
   const dryRun = !!options.dryRun;
-  const subs = splitNames(options.with);
+  const publicNames = splitNames(options.with);
+  const partNames = splitNames(options.parts);
 
-  const inputs = await collectInputs(name, subs, options.summary, cfg, prefix);
+  const inputs = await collectInputs(
+    name,
+    publicNames,
+    partNames,
+    options.summary,
+    cfg,
+    prefix
+  );
   if (!inputs) {
     info("已取消：交互输入中止，未写入任何文件");
     return;
