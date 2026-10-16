@@ -36,8 +36,8 @@ interface NamedComponent extends NormalizedName {
   expose: boolean;
 }
 
-/** commander variadic 选项按逗号再切一刀，逐项 trim */
-function splitNames(raw?: string[]): string[] {
+/** commander variadic 选项按逗号逐项 trim */
+export function splitNames(raw?: string[]): string[] {
   return (raw ?? [])
     .flatMap(v => v.split(","))
     .map(v => v.trim())
@@ -79,8 +79,8 @@ function detectComponentVersion(startDir: string): string {
   return "unknown";
 }
 
-/** 名称输入项：hint 常驻示例 + validate 即时报错。 */
-function namePrompt(
+/** 名称输入项：hint 常驻示例 + validate 即时报错 */
+export function namePrompt(
   message: string,
   prefix: string,
   taken: () => Set<string>
@@ -417,7 +417,7 @@ function resolveTargetRoot(
   if (!publicDir) {
     throw new Error("componentDirs 中不存在公开组件目录");
   }
-  
+
   return publicDir.path;
 }
 
@@ -467,10 +467,7 @@ function renderPreview(
 }
 
 /** 由相对路径列表渲染目录树：box-drawing 字符，无外部依赖，颜色仅在 TTY 生效；internalDirs 命中的目录标注“私有组件” */
-function renderTree(
-  relPaths: string[],
-  internalDirs?: Set<string>
-): string {
+function renderTree(relPaths: string[], internalDirs?: Set<string>): string {
   interface Node {
     dirs: Map<string, Node>;
     files: string[];
@@ -503,7 +500,10 @@ function renderTree(
       if (e.dir) {
         const mark = internalDirs?.has(e.name) ? c.dim("  # 私有组件") : "";
         lines.push(`${indent}${branch}${c.cyan(`${e.name}/`)}${mark}`);
-        walk(node.dirs.get(e.name)!, `${indent}${last ? "    " : c.dim("│   ")}`);
+        walk(
+          node.dirs.get(e.name)!,
+          `${indent}${last ? "    " : c.dim("│   ")}`
+        );
       } else {
         lines.push(`${indent}${branch}${e.name}`);
       }
@@ -563,12 +563,6 @@ export async function runAdd(
     !!options.internal
   );
   const entryLine = previewEntryLine(prefix, main, inputs.subs);
-
-  // 写盘前防呆：目标组件目录已存在即中止（重名检测后的二次保险，不覆盖存量文件）
-  const dir = path.dirname(files[0].abs);
-  if (fs.existsSync(dir)) {
-    throw new Error(`目标目录已存在：${rel(dir)}，已中止（不覆盖存量文件）`);
-  }
 
   info(renderPreview(prefix, main, inputs.subs, files, entryLine));
 
