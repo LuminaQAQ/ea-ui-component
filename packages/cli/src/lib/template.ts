@@ -71,13 +71,16 @@ function tokenMap(ctx: RenderContext): Record<string, string> {
  * token 独占整行且解析值为空时（如单组件的 ___SUB_IMPORTS___）删除该行本身
  */
 export function renderPlaceholders(text: string, ctx: RenderContext): string {
+  const map = tokenMap(ctx);
   let out = text;
-  for (const [token, value] of Object.entries(tokenMap(ctx))) {
+
+  for (const [token, value] of Object.entries(map)) {
     if (value === "") {
       out = out.replace(new RegExp(`^[ \\t]*${token}[ \\t]*\r?\n`, "gm"), "");
     }
-    out = out.split(token).join(value);
   }
+
+  out = out.replace(/___[A-Z0-9_]+___/g, m => map[m] ?? m);
   out = out.replace(/^[ \t]+$/gm, "");
   return out;
 }
@@ -140,7 +143,9 @@ export function loadTemplate(name: string, cfg: ResolvedEaConfig): string {
   }
   const builtin = path.join(resolveBuiltinTemplatesDir(), fileName);
   if (!fs.existsSync(builtin)) {
-    throw new Error(`模板 ${fileName} 不存在于内置目录（${path.dirname(builtin)}）`);
+    throw new Error(
+      `模板 ${fileName} 不存在于内置目录（${path.dirname(builtin)}）`
+    );
   }
   return fs.readFileSync(builtin, "utf-8");
 }

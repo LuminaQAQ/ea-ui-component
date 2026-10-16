@@ -1,6 +1,9 @@
 /** WC 全名格式：小写字母开头，至少一段连字符 */
 const WC_NAME_RE = /^[a-z][a-z0-9]*(-[a-z0-9]+)+$/;
 
+/** 全名长度上限：255 为同目录 <name>.test.ts 文件名段长上限 */
+const MAX_TAG_NAME_LENGTH = 246;
+
 /** WC 规范保留标签名（HTML 标准已占用，组件库不可注册） */
 export const RESERVED_TAG_NAMES = new Set([
   "annotation-xml",
@@ -46,21 +49,34 @@ export function normalizeName(
 ): NormalizedName | { error: string } {
   const trimmed = input.trim();
   if (!trimmed) return { error: "名称不能为空" };
+
   if (/[A-Z]/.test(trimmed)) {
-    return { error: `"${trimmed}" 含大写字母，请使用 kebab-case（如 color-picker）` };
+    return {
+      error: `"${trimmed}" 含大写字母，请使用 kebab-case（如 color-picker）`,
+    };
   }
+
   if (trimmed === prefix) {
     return { error: `请输入组件名而非前缀（"${prefix}" 是命名空间前缀）` };
   }
+
   const bare = trimmed.startsWith(`${prefix}-`)
     ? trimmed.slice(prefix.length + 1)
     : trimmed;
   if (!bare) {
     return { error: `"${trimmed}" 剥离前缀后裸名为空，请输入完整组件名` };
   }
+
   const full = `${prefix}-${bare}`;
+  if (full.length > MAX_TAG_NAME_LENGTH) {
+    return {
+      error: `"${trimmed}" 归一化后全名 ${full.length} 字符超长（上限 ${MAX_TAG_NAME_LENGTH}，为同目录 ${full}.test.ts 文件名预留 255 段长）`,
+    };
+  }
+
   const wcError = validateWcFull(full);
   if (wcError) return { error: wcError };
+
   return { bare, full };
 }
 
@@ -72,8 +88,10 @@ export function validateWcFull(full: string): string | null {
   if (!WC_NAME_RE.test(full)) {
     return `"${full}" 不符合 Web Components 命名规范（小写字母/数字，至少一段连字符，不以连字符开头或结尾）`;
   }
+
   if (RESERVED_TAG_NAMES.has(full)) {
     return `"${full}" 是 HTML 规范保留标签名，不可作为组件名`;
   }
+
   return null;
 }
