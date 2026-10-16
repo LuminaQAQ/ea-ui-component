@@ -12,11 +12,6 @@
     "rootTestWhitelist": ["ea-form-associated-base.test.ts"],
     "ignore": [
       {
-        "name": "ea-anchor",
-        "rules": ["missing-test"],
-        "reason": "组件开发中（WIP），完成后删除本条"
-      },
-      {
         "name": "ea-theme-toggle",
         "rules": ["missing-test"],
         "reason": "存量缺口：无测试文件，待补"

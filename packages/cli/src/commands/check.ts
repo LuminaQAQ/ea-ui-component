@@ -102,6 +102,40 @@ export function runCheck(options: CheckOptions = {}): void {
     }
   }
 
+  // 豁免条目腐化检测：对象目录已删除、豁免规则已不再命中任何可豁免违规、
+  // 或缺失 reason ⇒ warning 提示复查（不影响退出码，对应设计计划 §7 P2 豁免时效提醒）
+  for (const e of cfg.check.ignore) {
+    if (!e.reason) {
+      violations.push({
+        rule: "ignore-reason",
+        level: "warning",
+        message: `豁免 ${e.name} 缺少 reason（建议补填豁免原因）`,
+      });
+    }
+
+    const target = all.find(d => d.name === e.name);
+    if (!target) {
+      violations.push({
+        rule: "ignore-stale",
+        level: "warning",
+        message: `豁免 ${e.name} 对应组件目录不存在（建议删除该豁免条目）`,
+      });
+      continue;
+    }
+
+    const rules = e.rules ?? ["missing-test", "orphan-test"];
+    const hit =
+      (rules.includes("missing-test") && target.hasIndex && !target.testFile) ||
+      (rules.includes("orphan-test") && target.testFile && !target.hasIndex);
+    if (!hit) {
+      violations.push({
+        rule: "ignore-stale",
+        level: "warning",
+        message: `豁免 ${e.name} 未命中任何可豁免违规（建议复查是否仍需豁免）`,
+      });
+    }
+  }
+
   // 输出
   const errors = violations.filter(v => v.level === "error");
   const warnings = violations.filter(v => v.level === "warning");
@@ -118,9 +152,7 @@ export function runCheck(options: CheckOptions = {}): void {
   }
 
   if (errors.length > 0) {
-    error(
-      `\n校验失败：${errors.length} 个错误，${warnings.length} 个警告`
-    );
+    error(`\n校验失败：${errors.length} 个错误，${warnings.length} 个警告`);
     process.exitCode = 1;
   } else {
     success(
