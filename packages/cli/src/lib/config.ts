@@ -82,9 +82,17 @@ const CONFIG_SKELETON = `\
  */
 export function loadConfig(cwd = process.cwd()): ResolvedEaConfig {
   const file = path.join(cwd, "ea.config.json");
-  const raw = fs.existsSync(file)
-    ? (JSON.parse(fs.readFileSync(file, "utf8")) as Partial<EaConfig>)
-    : {};
+  let raw: Partial<EaConfig> = {};
+  if (fs.existsSync(file)) {
+    const text = fs.readFileSync(file, "utf8");
+    try {
+      raw = JSON.parse(text) as Partial<EaConfig>;
+    } catch (error) {
+      throw new Error(
+        `ea.config.json 解析失败：${error instanceof Error ? error.message : String(error)}\n\n${CONFIG_SKELETON}`
+      );
+    }
+  }
 
   const project: Partial<EaConfig["project"]> = raw.project ?? {};
   const missing: string[] = [];
@@ -106,9 +114,17 @@ export function loadConfig(cwd = process.cwd()): ResolvedEaConfig {
     );
   }
 
-  const dirs = (
-    typeof rawDirs === "string" ? [rawDirs] : rawDirs
-  ) as ComponentDirConfig[];
+  const dirs = typeof rawDirs === "string" ? [rawDirs] : rawDirs;
+  const validDirEntry = (d: unknown): boolean =>
+    typeof d === "string" ||
+    (typeof d === "object" &&
+      d !== null &&
+      typeof (d as { path?: unknown }).path === "string");
+  if (!Array.isArray(dirs) || !dirs.every(validDirEntry)) {
+    throw new Error(
+      `ea.config.json project.componentDirs 类型不匹配：须为目录字符串或对象数组（当前为 ${JSON.stringify(rawDirs)}）\n\n${CONFIG_SKELETON}`
+    );
+  }
 
   return {
     project: {
