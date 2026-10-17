@@ -155,6 +155,30 @@ describe("regenerateAggregateEntry", () => {
     ).toHaveLength(1);
   });
 
+  it("CRLF 换行的聚合入口仍能识别哨兵并重建（Windows）", () => {
+    silence();
+    const root = temp();
+    writeFile(root, "components/ea-button/index.ts", "export const a = 1;\n");
+    const entryAbs = writeFile(
+      root,
+      "components/index.ts",
+      [
+        "// header manual",
+        "// @ea-generated:start",
+        'export { OLD } from "./old";',
+        "// @ea-generated:end",
+      ].join("\r\n") + "\r\n"
+    );
+    const config = cfg(root, "components/index.ts");
+
+    regenerateAggregateEntry(config);
+
+    const lines = readLf(entryAbs).split("\n");
+    expect(lines).toContain("// header manual");
+    expect(lines).not.toContain('export { OLD } from "./old";');
+    expect(entryHasLine(lines, 'export { a } from "./ea-button";')).toBe(true);
+  });
+
   it("export * 中止并带行号", () => {
     const root = temp();
     writeFile(root, "components/ea-bad/index.ts", 'export * from "./x";\n');

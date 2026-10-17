@@ -216,7 +216,7 @@ export function regenerateAggregateEntry(config: ResolvedEaConfig): void {
     return;
   }
 
-  const lines = fs.readFileSync(entryPath, "utf-8").split("\n");
+  const lines = fs.readFileSync(entryPath, "utf-8").split(/\r?\n/);
   const markers = locateMarkers(lines);
 
   let result: string[];
