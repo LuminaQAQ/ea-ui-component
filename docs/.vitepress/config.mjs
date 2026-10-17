@@ -252,10 +252,12 @@ export default defineConfig({
         resolveId(id, importer, options) {
           // 只在 SSR 构建阶段替换 Web Components 模块
           // 通过 options.ssr 判断是否在 SSR 环境中
+          // 聚合入口 dist/index.js 同样会导出并注册自定义元素，需一并替换
+          const normalizedId = id.replace(/\\/g, "/");
           if (
             options?.ssr &&
-            (id.includes("/dist/components/") ||
-              id.includes("\\dist\\components\\"))
+            (normalizedId.includes("/dist/components/") ||
+              normalizedId.endsWith("/dist/index.js"))
           ) {
             return `__web-component-${id.replace(/[^a-zA-Z0-9]/g, "_")}`;
           }
