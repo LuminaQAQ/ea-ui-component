@@ -40,5 +40,13 @@ jobs:
       - run: pnpm publish --provenance --access public --no-git-checks
         working-directory: packages/components
       # mcp-server 版本独立演进，不参与 lockstep
-      - run: pnpm publish --provenance --access public --no-git-checks
+      # 该版本若已存在于 npm 则跳过，避免重复发布导致 E403 失败
+      - name: 发布 mcp-server（已发布则跳过）
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          if npm view "ea-ui-mcp-server@$VERSION" version >/dev/null 2>&1; then
+            echo "ea-ui-mcp-server@$VERSION 已存在于 npm，跳过发布"
+          else
+            pnpm publish --provenance --access public --no-git-checks
+          fi
         working-directory: packages/mcp-server
