@@ -1,6 +1,7 @@
 // @ea-generated:start
 export { EaAffix } from "./components/ea-affix";
 export { EaAlert } from "./components/ea-alert";
+export { EaAnchor, EaAnchorLink } from "./components/ea-anchor";
 export { EaAvatar } from "./components/ea-avatar";
 export { EaBacktop } from "./components/ea-backtop";
 export { EaBadge } from "./components/ea-badge";

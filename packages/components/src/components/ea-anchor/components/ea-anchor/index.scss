@@ -1,0 +1,81 @@
+$name: ea-anchor;
+
+:host {
+  --#{$name}-font-size: var(--font-size-md);
+  --#{$name}-text-color: var(--grey-700);
+  --#{$name}-text-color-active: var(--blue-500);
+  --#{$name}-marker-color: var(--blue-500);
+  --#{$name}-marker-width: 2px;
+  --#{$name}-marker-offset: 0px;
+  --#{$name}-marker-size: 0px;
+  --#{$name}-offset: 0px;
+  --#{$name}-transition: var(--transition-normal);
+
+  display: block;
+  font-size: var(--#{$name}-font-size);
+}
+
+:host([direction="horizontal"]) {
+  display: inline-block;
+  width: 100%;
+}
+
+:host([affix]) {
+  position: sticky;
+  top: var(--#{$name}-offset);
+  z-index: 1;
+}
+
+:host([affix][direction="horizontal"]) {
+  top: auto;
+  left: var(--#{$name}-offset);
+}
+
+@include block($name) {
+  position: relative;
+  display: flex;
+
+  @include element(marker) {
+    position: absolute;
+    z-index: 1;
+    opacity: 0;
+    background-color: var(--#{$name}-marker-color);
+    transition:
+      top var(--#{$name}-transition),
+      left var(--#{$name}-transition),
+      width var(--#{$name}-transition),
+      height var(--#{$name}-transition);
+  }
+
+  @include modifier(vertical) {
+    flex-direction: column;
+
+    &.is-marker-visible {
+      .#{$name}__marker {
+        top: var(--#{$name}-marker-offset);
+        left: 0;
+        width: var(--#{$name}-marker-width);
+        height: var(--#{$name}-marker-size);
+      }
+    }
+  }
+
+  @include modifier(horizontal) {
+    flex-direction: row;
+
+    &.is-marker-visible {
+      .#{$name}__marker {
+        bottom: 0;
+        left: var(--#{$name}-marker-offset);
+        width: var(--#{$name}-marker-size);
+        height: var(--#{$name}-marker-width);
+      }
+    }
+  }
+
+  @include state(marker-visible) {
+    .#{$name}__marker {
+      opacity: 1;
+    }
+  }
+}

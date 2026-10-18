@@ -113,6 +113,10 @@
       "import": "./dist/components/ea-alert.js",
       "types": "./dist/types/components/ea-alert/index.d.ts"
     },
+    "./ea-anchor": {
+      "import": "./dist/components/ea-anchor.js",
+      "types": "./dist/types/components/ea-anchor/index.d.ts"
+    },
     "./ea-avatar": {
       "import": "./dist/components/ea-avatar.js",
       "types": "./dist/types/components/ea-avatar/index.d.ts"

@@ -95,3 +95,41 @@ export const throttle = <T extends (...args: any[]) => void>(
 
   return Object.assign(throttled, { cancel });
 };
+
+/**
+ * @description rAF 节流：同一帧内的多次调用合并为一次，在下一帧执行回调
+ * @param fn 要执行的回调
+ * @returns 节流后的函数，附带 `cancel` 方法用于取消尚未执行的帧回调
+ *
+ * @example
+ * ```ts
+ * const onScroll = rafThrottle(() => {
+ *   // ...
+ * });
+ * window.addEventListener("scroll", onScroll);
+ * onScroll.cancel();
+ * ```
+ */
+export const rafThrottle = <T extends (...args: any[]) => void>(
+  fn: T
+): ((...args: Parameters<T>) => void) & { cancel: () => void } => {
+  let rafId: number | null = null;
+
+  const cancel = (): void => {
+    if (rafId !== null) {
+      cancelAnimationFrame(rafId);
+      rafId = null;
+    }
+  };
+
+  const throttled = function (this: unknown, ...args: Parameters<T>): void {
+    if (rafId !== null) return;
+
+    rafId = requestAnimationFrame(() => {
+      rafId = null;
+      fn.apply(this, args);
+    });
+  };
+
+  return Object.assign(throttled, { cancel });
+};

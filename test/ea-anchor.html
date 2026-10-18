@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>anchor</title>
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+      }
+
+      .layout {
+        display: flex;
+        gap: 1.5rem;
+      }
+
+      .content {
+        flex: 1;
+        min-width: 0;
+        padding: 1.5rem;
+      }
+
+      .sidebar {
+        flex: 0 0 200px;
+        width: 200px;
+        padding: 1.5rem 1.5rem 1.5rem 0;
+      }
+
+      .section {
+        min-height: 360px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        border: 1px solid var(--grey-200, #e4e7ed);
+        border-radius: 6px;
+      }
+
+      .section > h2 {
+        margin-top: 0;
+      }
+
+      .desc {
+        margin: 0 0 1rem;
+        color: var(--grey-600, #909399);
+      }
+
+      ea-anchor[direction="horizontal"]::part(container) {
+        gap: 1rem;
+      }
+
+      .scroll-box {
+        height: 260px;
+        padding: 0 1rem;
+        overflow-y: auto;
+        border: 1px solid var(--grey-200, #e4e7ed);
+        border-radius: 4px;
+      }
+
+      .block {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 220px;
+        margin-bottom: 1rem;
+        border-radius: 4px;
+        background: #f5f7fa;
+        color: var(--grey-700, #606266);
+      }
+    </style>
+  </head>
+
+  <body>
+    <script
+      type="module"
+      src="../packages/components/src/components/ea-anchor/index.ts"
+    ></script>
+
+    <div class="layout">
+      <main class="content">
+        <!--  基础用法  -->
+        <!-- #region -->
+        <section id="basic" class="section">
+          <h2>基础用法</h2>
+          <p class="desc">
+            默认垂直排列。滚动页面时高亮随当前示例联动，点击链接平滑滚动到对应示例位置。
+          </p>
+          <ea-anchor>
+            <ea-anchor-link href="#basic" heading="基础用法"></ea-anchor-link>
+            <ea-anchor-link href="#offset" heading="指定偏移"></ea-anchor-link>
+            <ea-anchor-link
+              href="#horizontal"
+              heading="水平方向"
+            ></ea-anchor-link>
+            <ea-anchor-link href="#nested" heading="嵌套目录"></ea-anchor-link>
+            <ea-anchor-link href="#affix" heading="吸附导航"></ea-anchor-link>
+            <ea-anchor-link
+              href="#disabled"
+              heading="禁用链接"
+            ></ea-anchor-link>
+          </ea-anchor>
+        </section>
+        <!-- #endregion -->
+
+        <!--  指定偏移  -->
+        <!-- #region -->
+        <section id="offset" class="section">
+          <h2>指定偏移</h2>
+          <p class="desc">
+            设置 offset="64"，点击链接后目标示例停在距页面顶部 64px 处。
+          </p>
+          <ea-anchor offset="64">
+            <ea-anchor-link href="#basic" heading="基础用法"></ea-anchor-link>
+            <ea-anchor-link href="#offset" heading="指定偏移"></ea-anchor-link>
+            <ea-anchor-link
+              href="#horizontal"
+              heading="水平方向"
+            ></ea-anchor-link>
+            <ea-anchor-link href="#nested" heading="嵌套目录"></ea-anchor-link>
+            <ea-anchor-link href="#affix" heading="吸附导航"></ea-anchor-link>
+            <ea-anchor-link
+              href="#disabled"
+              heading="禁用链接"
+            ></ea-anchor-link>
+          </ea-anchor>
+        </section>
+        <!-- #endregion -->
+
+        <!--  水平方向  -->
+        <!-- #region -->
+        <section id="horizontal" class="section">
+          <h2>水平方向</h2>
+          <p class="desc">
+            设置 direction="horizontal"，链接横向排列，marker
+            为底部下划线；滚动轴由容器实际可滚动方向自动判定，页面纵向滚动时同样联动高亮。
+          </p>
+          <ea-anchor direction="horizontal">
+            <ea-anchor-link href="#basic" heading="基础用法"></ea-anchor-link>
+            <ea-anchor-link href="#offset" heading="指定偏移"></ea-anchor-link>
+            <ea-anchor-link
+              href="#horizontal"
+              heading="水平方向"
+            ></ea-anchor-link>
+            <ea-anchor-link href="#nested" heading="嵌套目录"></ea-anchor-link>
+            <ea-anchor-link href="#affix" heading="吸附导航"></ea-anchor-link>
+            <ea-anchor-link
+              href="#disabled"
+              heading="禁用链接"
+            ></ea-anchor-link>
+          </ea-anchor>
+        </section>
+        <!-- #endregion -->
+
+        <!--  嵌套目录  -->
+        <!-- #region -->
+        <section id="nested" class="section">
+          <h2>嵌套目录</h2>
+          <p class="desc">
+            父级链接包含子级时，子级高亮会联动父级；此处按分组组织同一套示例链接。
+          </p>
+          <ea-anchor>
+            <ea-anchor-link href="#basic" heading="基础用法">
+              <ea-anchor-link
+                href="#offset"
+                heading="指定偏移"
+              ></ea-anchor-link>
+              <ea-anchor-link
+                href="#horizontal"
+                heading="水平方向"
+              ></ea-anchor-link>
+            </ea-anchor-link>
+            <ea-anchor-link href="#nested" heading="嵌套目录">
+              <ea-anchor-link href="#affix" heading="吸附导航"></ea-anchor-link>
+              <ea-anchor-link
+                href="#disabled"
+                heading="禁用链接"
+              ></ea-anchor-link>
+            </ea-anchor-link>
+          </ea-anchor>
+        </section>
+        <!-- #endregion -->
+
+        <!--  吸附导航  -->
+        <!-- #region -->
+        <section id="affix" class="section">
+          <h2>吸附导航</h2>
+          <p class="desc">
+            设置 affix + offset="20"，导航随页面滚动吸附在距顶部 20px 处。
+          </p>
+          <p class="desc">
+            本示例的吸附导航为页面右侧的固定侧边目录，请滚动整页观察其全程吸附效果。
+          </p>
+        </section>
+        <!-- #endregion -->
+
+        <!--  禁用链接  -->
+        <!-- #region -->
+        <section id="disabled" class="section">
+          <h2>禁用链接</h2>
+          <p class="desc">
+            此处将「吸附导航」一项设为 disabled，点击与高亮均不响应。
+          </p>
+          <ea-anchor>
+            <ea-anchor-link href="#basic" heading="基础用法"></ea-anchor-link>
+            <ea-anchor-link href="#offset" heading="指定偏移"></ea-anchor-link>
+            <ea-anchor-link
+              href="#horizontal"
+              heading="水平方向"
+            ></ea-anchor-link>
+            <ea-anchor-link href="#nested" heading="嵌套目录"></ea-anchor-link>
+            <ea-anchor-link
+              href="#affix"
+              heading="吸附导航"
+              disabled
+            ></ea-anchor-link>
+            <ea-anchor-link
+              href="#disabled"
+              heading="禁用链接"
+            ></ea-anchor-link>
+          </ea-anchor>
+        </section>
+        <!-- #endregion -->
+
+        <!--  指定滚动容器（特定示例）  -->
+        <!-- #region -->
+        <section id="container" class="section">
+          <h2>指定滚动容器</h2>
+          <p class="desc">
+            设置
+            target="#container-scroll"，锚点随容器内滚动联动，而不是页面滚动。
+          </p>
+          <ea-anchor target="#container-scroll">
+            <ea-anchor-link
+              href="#container-api"
+              heading="API"
+            ></ea-anchor-link>
+            <ea-anchor-link
+              href="#container-theme"
+              heading="主题"
+            ></ea-anchor-link>
+            <ea-anchor-link
+              href="#container-faq"
+              heading="常见问题"
+            ></ea-anchor-link>
+          </ea-anchor>
+          <div class="scroll-box" id="container-scroll">
+            <section id="container-api" class="block">API · 容器内滚动</section>
+            <section id="container-theme" class="block">
+              主题 · 容器内滚动
+            </section>
+            <section id="container-faq" class="block">
+              常见问题 · 容器内滚动
+            </section>
+          </div>
+        </section>
+        <!-- #endregion -->
+      </main>
+
+      <aside class="sidebar">
+        <ea-anchor affix offset="20">
+          <ea-anchor-link href="#basic" heading="基础用法"></ea-anchor-link>
+          <ea-anchor-link href="#offset" heading="指定偏移"></ea-anchor-link>
+          <ea-anchor-link
+            href="#horizontal"
+            heading="水平方向"
+          ></ea-anchor-link>
+          <ea-anchor-link href="#nested" heading="嵌套目录"></ea-anchor-link>
+          <ea-anchor-link href="#affix" heading="吸附导航"></ea-anchor-link>
+          <ea-anchor-link href="#disabled" heading="禁用链接"></ea-anchor-link>
+        </ea-anchor>
+      </aside>
+    </div>
+  </body>
+</html>

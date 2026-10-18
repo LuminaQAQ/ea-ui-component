@@ -10,5 +10,5 @@ export {
 } from "@decorator";
 export { html } from "@utils/html";
 export { createBEM as createBem } from "@utils/bem";
-export { debounce, throttle } from "@utils/performance";
+export { debounce, throttle, rafThrottle } from "@utils/performance";
 export { timeout } from "@utils/timeout";

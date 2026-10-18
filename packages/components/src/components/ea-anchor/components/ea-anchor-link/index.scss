@@ -1,0 +1,59 @@
+$name: ea-anchor-link;
+
+:host {
+  --#{$name}-text-color: var(--grey-700);
+  --#{$name}-text-color-active: var(--blue-500);
+  --#{$name}-text-color-disabled: var(--grey-400);
+  --#{$name}-indent: var(--spacing-lg);
+  --#{$name}-marker-gap: var(--spacing-lg);
+  --#{$name}-transition: var(--transition-fast);
+
+  display: block;
+}
+
+:host([direction="horizontal"]) {
+  display: inline-block;
+}
+
+:host(:not([has-children])) .#{$name}__children {
+  display: none;
+}
+
+:host([direction="horizontal"]) .#{$name}__link {
+  padding: 0 var(--spacing-md) var(--#{$name}-marker-gap);
+  white-space: nowrap;
+}
+
+@include block($name) {
+  display: flex;
+  flex-direction: column;
+
+  @include element(link) {
+    display: block;
+    padding: var(--spacing-sm) 0 var(--spacing-sm) var(--#{$name}-marker-gap);
+    color: var(--#{$name}-text-color);
+    text-decoration: none;
+    transition: color var(--#{$name}-transition);
+  }
+
+  @include element(heading) {
+    display: inline-block;
+  }
+
+  @include element(children) {
+    margin-left: var(--#{$name}-indent);
+  }
+
+  @include state(active) {
+    .#{$name}__link {
+      color: var(--#{$name}-text-color-active);
+    }
+  }
+
+  @include state(disabled) {
+    .#{$name}__link {
+      color: var(--#{$name}-text-color-disabled);
+      cursor: not-allowed;
+    }
+  }
+}

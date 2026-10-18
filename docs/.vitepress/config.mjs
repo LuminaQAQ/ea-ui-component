@@ -187,7 +187,7 @@ export default defineConfig({
         text: "Navigation 导航",
         items: [
           { text: "Affix 固钉", link: "/ea-affix" },
-          // { text: "Anchor 锚点", link: "/ea-anchor" },
+          { text: "Anchor 锚点", link: "/ea-anchor" },
           { text: "Backtop 回到顶部", link: "/ea-backtop" },
           { text: "Breadcrumb 面包屑", link: "/ea-breadcrumb" },
           { text: "Dropdown 下拉菜单", link: "/ea-dropdown" },
