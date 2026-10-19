@@ -138,7 +138,7 @@ describe("runAdd — 非交互（参数给全）", () => {
     // 附属实现不含值导出段（cut 截断）
     const subImpl = readLf(path.join(base, "components", "ea-bar", "index.ts"));
     expect(subImpl).not.toContain("export default EaBar;");
-    // 但保留 TagNameMap 自声明（v1.16：谁注册 TAG_NAME 谁自声明，附属亦如此）
+    // 但保留 TagNameMap 自声明（谁注册 TAG_NAME 谁自声明，附属组件亦如此）
     expect(subImpl).toContain("declare global");
     expect(subImpl).toContain('"ea-bar": EaBar');
 

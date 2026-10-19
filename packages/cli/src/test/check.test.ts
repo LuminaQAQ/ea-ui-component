@@ -187,7 +187,7 @@ describe("runCheck", () => {
     expect(out()).not.toContain("[naming]");
   });
 
-  it("未配置 prefix 时 R3 仅当根区文件名精确等于组件全名才违规", () => {
+  it("未配置 prefix 时 test-root-violation 仅当根区文件名精确等于组件全名才违规", () => {
     const root = setup({ prefix: undefined });
     writeFile(root, "components/my-widget/index.ts", "export const a = 1;");
     writeFile(root, "components/my-widget/my-widget.test.ts", "// t");
@@ -202,7 +202,7 @@ describe("runCheck", () => {
     expect(out()).not.toContain("utils.test.ts（");
   });
 
-  it("R3 违规不受 --ignore 影响（实现仅对 R1/R2 按名蔑免，R3 只走白名单）", () => {
+  it("test-root-violation 不受 --ignore 影响（仅 missing-test/orphan-test 按名豁免，test-root-violation 只走白名单）", () => {
     const root = setup({ prefix: "ea" });
     writeFile(root, "components/ea-button/index.ts", "export const a = 1;");
     writeFile(root, "components/ea-button/ea-button.test.ts", "// t");
@@ -210,7 +210,7 @@ describe("runCheck", () => {
 
     runCheck({ ignore: ["ea-button"] });
 
-    // --ignore 不覆盖 R3：仍报违规（区别于已测的 rootTestWhitelist 路径）
+    // --ignore 不覆盖 test-root-violation：仍报违规（区别于已测的 rootTestWhitelist 路径）
     expect(out()).toContain("[test-root-violation]");
   });
 
