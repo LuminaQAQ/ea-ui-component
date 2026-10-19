@@ -6,7 +6,11 @@ export {
   type IgnoreEntry,
   type ComponentDirConfig,
 } from "./lib/config";
-export { regenerateAggregateEntry } from "./lib/aggregate";
+export {
+  regenerateAggregateEntry,
+  diffAggregateEntry,
+  type AggregateDiff,
+} from "./lib/aggregate";
 export {
   scanComponentDirs,
   scanTestRootFiles,
@@ -34,3 +38,4 @@ export {
 export { runCheck, type CheckOptions } from "./commands/check";
 export { runAdd, type AddOptions } from "./commands/add";
 export { runInit, runInitTemplates, type InitOptions } from "./commands/init";
+export { runSync, type SyncOptions } from "./commands/sync";

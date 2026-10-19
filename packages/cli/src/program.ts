@@ -3,6 +3,7 @@ import pkg from "../package.json";
 import { runCheck } from "./commands/check";
 import { runAdd } from "./commands/add";
 import { runInit } from "./commands/init";
+import { runSync } from "./commands/sync";
 import { fail, c } from "./lib/output";
 
 /** 构建 CLI 命令树（每次新建实例，保证 main 可重复进程内调用） */
@@ -63,6 +64,14 @@ function createProgram(): Command {
       "跳过写盘前确认，直接落盘（脚本/CI 非交互场景，需已用参数提供全部输入）"
     )
     .action((name: string | undefined, options) => runAdd(name, options));
+
+  program
+    .command("sync")
+    .description(
+      "重建聚合出口清单（提交进仓的 barrel，命令独占写；取代旧构建期自动再生）"
+    )
+    .option("--dry-run", "仅预览聚合入口将变更的 export 行，不落盘")
+    .action(options => runSync(options));
 
   program
     .command("init")

@@ -1,6 +1,7 @@
 import { loadConfig, type IgnoreEntry } from "../lib/config";
 import { scanComponentDirs, scanTestRootFiles } from "../lib/scan";
 import { createNameRe } from "../lib/naming";
+import { diffAggregateEntry } from "../lib/aggregate";
 import { error, info, success, warn } from "../lib/output";
 
 interface Violation {
@@ -103,7 +104,7 @@ export function runCheck(options: CheckOptions = {}): void {
   }
 
   // 豁免条目腐化检测：对象目录已删除、豁免规则已不再命中任何可豁免违规、
-  // 或缺失 reason ⇒ warning 提示复查（不影响退出码，对应设计计划 §7 P2 豁免时效提醒）
+  // 或缺失 reason ⇒ warning 提示复查（不影响退出码）
   for (const e of cfg.check.ignore) {
     if (!e.reason) {
       violations.push({
@@ -134,6 +135,17 @@ export function runCheck(options: CheckOptions = {}): void {
         message: `豁免 ${e.name} 未命中任何可豁免违规（建议复查是否仍需豁免）`,
       });
     }
+  }
+
+  // 聚合入口漂移：哨兵区内容须与目录投影逐行一致（聚合入口由 CLI 命令维护），
+  // 只读校验不修复（修复=ea sync）；入口尚不存在时跳过（交由 add/sync 生成）
+  const agg = diffAggregateEntry(cfg);
+  if (agg.status === "drift" || agg.status === "error") {
+    violations.push({
+      rule: "aggregate-drift",
+      level: "error",
+      message: agg.message,
+    });
   }
 
   // 输出

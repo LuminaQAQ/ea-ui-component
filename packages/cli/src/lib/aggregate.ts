@@ -171,15 +171,14 @@ function guardNoSentinel(
 }
 
 /**
- * 扫描 componentDirs 公开目录（跳过 internal）并汇总各 index.ts 的具名值导出，
- * 在哨兵分区内重建聚合出口的再导出清单；分区之外的行（手工内容）原位保留，
- * 且手工区导出不得与生成名单重复。无哨兵时执行 diff 防御：含多余行则中止报错，
- * 纯生成形态则全量重建并提示。
+ * 扫描公开组件目录（跳过 internal）并汇总各 index.ts 的具名值导出，构建聚合
+ * 再导出清单与名单（相对 entry 目录、按目录名排序）。解析遇到未识别 export 形态时抛错。
  */
-export function regenerateAggregateEntry(config: ResolvedEaConfig): void {
-  const entryPath = config.project.entry;
-  const entryDir = path.dirname(entryPath);
-
+function buildAggregateProjection(config: ResolvedEaConfig): {
+  exportLines: string[];
+  exportNames: string[];
+} {
+  const entryDir = path.dirname(config.project.entry);
   const dirs: { name: string; root: string }[] = [];
   for (const root of config.project.componentDirs) {
     if (root.internal || !fs.existsSync(root.path)) continue;
@@ -207,6 +206,119 @@ export function regenerateAggregateEntry(config: ResolvedEaConfig): void {
       exportNames.push(...names);
     }
   }
+  return { exportLines, exportNames };
+}
+
+/** 去掉尾部空行 */
+function trimTail(lines: string[]): string[] {
+  const out = [...lines];
+  while (out.length > 0 && out[out.length - 1] === "") out.pop();
+  return out;
+}
+
+/** 逐元素数组相等 */
+function arraysEqual(a: string[], b: string[]): boolean {
+  if (a.length !== b.length) return false;
+  return a.every((v, i) => v === b[i]);
+}
+
+/** 聚合入口与目录投影的只读比对结果 */
+export interface AggregateDiff {
+  /** ok=一致；drift=不一致；error=无法判定；skip=入口尚不存在（交由 add/sync 生成） */
+  status: "ok" | "drift" | "error" | "skip";
+  message: string;
+  expected: string[];
+  current: string[];
+  /** 投影有、入口无的行 */
+  missing: string[];
+  /** 入口有、投影无的行 */
+  extra: string[];
+}
+
+function diff(
+  status: AggregateDiff["status"],
+  message: string,
+  expected: string[] = [],
+  current: string[] = []
+): AggregateDiff {
+  return { status, message, expected, current, missing: [], extra: [] };
+}
+
+/**
+ * 只读校验聚合入口哨兵区是否与目录投影逐行一致（不写盘）。
+ * 入口不存在→skip；有入口无哨兵且投影非空→drift；标记异常/解析失败→error；
+ * 哨兵区与投影顺序与内容一致→ok，否则 drift 并给出增删行明细。
+ */
+export function diffAggregateEntry(config: ResolvedEaConfig): AggregateDiff {
+  const entryPath = config.project.entry;
+  let projection: { exportLines: string[] };
+  try {
+    projection = buildAggregateProjection(config);
+  } catch (e) {
+    return diff("error", `无法计算目录投影：${(e as Error).message}`);
+  }
+  const expected = trimTail(projection.exportLines);
+
+  if (!fs.existsSync(entryPath)) {
+    return diff(
+      "skip",
+      `聚合入口尚不存在，跳过一致性校验（运行 ea sync 生成）`,
+      expected
+    );
+  }
+
+  const lines = fs.readFileSync(entryPath, "utf-8").split(/\r?\n/);
+  let markers: { start: number; end: number } | null;
+  try {
+    markers = locateMarkers(lines);
+  } catch (e) {
+    return diff("error", (e as Error).message, expected);
+  }
+
+  if (!markers) {
+    if (expected.length === 0)
+      return diff(
+        "ok",
+        "聚合入口无生成清单且目录无对外导出，视为一致",
+        expected
+      );
+    return diff(
+      "drift",
+      `聚合入口 ${entryPath} 缺哨兵标记，无法确认与目录投影一致（运行 ea sync 植入标记并重建）`,
+      expected
+    );
+  }
+
+  const current = trimTail(lines.slice(markers.start + 1, markers.end));
+  if (arraysEqual(current, expected))
+    return diff("ok", "聚合入口与目录投影一致", expected, current);
+
+  const curSet = new Set(current);
+  const expSet = new Set(expected);
+  const missing = expected.filter(l => !curSet.has(l));
+  const extra = current.filter(l => !expSet.has(l));
+  const parts: string[] = [];
+  if (missing.length) parts.push(`缺 ${missing.length} 行（目录有、入口无）`);
+  if (extra.length) parts.push(`多 ${extra.length} 行（入口有、目录无）`);
+  if (!missing.length && !extra.length) parts.push("行顺序不一致");
+  return {
+    status: "drift",
+    message: `聚合入口与目录投影不一致：${parts.join("，")}（运行 ea sync 重建）`,
+    expected,
+    current,
+    missing,
+    extra,
+  };
+}
+
+/**
+ * 扫描公开目录汇总具名值导出（buildAggregateProjection），在哨兵分区内重建聚合出口的再导出清单；
+ * 分区之外的行（手工内容）原位保留，且手工区导出不得与生成名单重复。
+ * 无哨兵时执行 diff 防御：含多余行则中止报错，纯生成形态则全量重建并提示。
+ */
+export function regenerateAggregateEntry(config: ResolvedEaConfig): void {
+  const entryPath = config.project.entry;
+  const { exportLines, exportNames } = buildAggregateProjection(config);
 
   const generated = [GENERATED_START, ...exportLines, GENERATED_END];
 
