@@ -8,7 +8,10 @@ import {
   type ResolvedEaConfig,
   type ResolvedComponentDir,
 } from "../lib/config";
-import { regenerateAggregateEntry } from "../lib/aggregate";
+import {
+  aggregateLineForSource,
+  regenerateAggregateEntry,
+} from "../lib/aggregate";
 import {
   normalizeName,
   toPascalCase,
@@ -24,6 +27,10 @@ export interface AddOptions {
   internal?: boolean;
   /** 目标组件目录：匹配 componentDirs 候选的 label 或 path（多候选非交互场景必填） */
   dir?: string;
+  /** 追加模式：向已存在组件追加附属组件 */
+  under?: string;
+  /** 追加模式下的附属可见性（公开进薄出口 export 列表；缺省私有） */
+  public?: boolean;
   dryRun?: boolean;
   yes?: boolean;
 }
@@ -556,6 +563,7 @@ export function renderTree(
   return lines.join("\n");
 }
 
+/** 绝对路径 → 相对 cwd 的展示路径（统一正斜杠） */
 export function rel(abs: string): string {
   return path.relative(process.cwd(), abs).split(path.sep).join("/");
 }
@@ -573,6 +581,410 @@ function previewEntryLine(
   return `export { ${names.join(", ")} } from "./${main.full}";`;
 }
 
+/* ------------------------------------------------------------------ *
+ * 追加模式（--under）：向已存在组件追加附属组件
+ * ------------------------------------------------------------------ */
+
+/** 全库组件目录查找：目标可位于任何 componentDirs（公开或 internal） */
+function findComponentDirAnywhere(
+  cfg: ResolvedEaConfig,
+  full: string
+): string | null {
+  for (const root of cfg.project.componentDirs) {
+    const candidate = path.join(root.path, full);
+    if (fs.existsSync(candidate) && fs.statSync(candidate).isDirectory())
+      return candidate;
+  }
+  return null;
+}
+
+/** 目标组件全名解析：输入原样或归一化后命中现有目录均可 */
+function resolveExistingName(
+  cfg: ResolvedEaConfig,
+  raw: string,
+  prefix: string
+): string {
+  const trimmed = raw.trim();
+  const candidates = [trimmed];
+  const normalized = normalizeName(trimmed, prefix);
+  if (!("error" in normalized)) candidates.push(normalized.full);
+  for (const candidate of candidates) {
+    if (findComponentDirAnywhere(cfg, candidate)) return candidate;
+  }
+  throw new Error(
+    `追加对象 ${trimmed} 不存在（--under 要求目标组件已存在；新组件请用普通 ea add）`
+  );
+}
+
+/** 目标根 index.ts 是否为薄根出口（复合组件）：引用 ./components 且不含类实现 */
+function isThinBarrel(src: string): boolean {
+  return /["']\.\/components\//.test(src) && !/export\s+class\s/.test(src);
+}
+
+/** 向 `export { ... }` / `export default { ... }` 行的花括号列表追加名字；无花括号返回 null */
+function addNameToBraces(line: string, name: string): string | null {
+  const open = line.indexOf("{");
+  const close = line.lastIndexOf("}");
+  if (open === -1 || close === -1 || close < open) return null;
+  const inner = line
+    .slice(open + 1, close)
+    .trim()
+    .replace(/,\s*$/, "");
+  return `${line.slice(0, open + 1)} ${inner ? `${inner}, ` : ""}${name} ${line.slice(close)}`;
+}
+
+const isLocalNamedExport = (line: string): boolean =>
+  /^\s*export\s*\{/.test(line) && !/\bfrom\b/.test(line);
+const isDefaultObjectExport = (line: string): boolean =>
+  /^\s*export\s+default\s*\{/.test(line);
+
+/** 薄根追加附属组件：公开进具名 import 与出口列表，私有仅侧效应 import 注册 */
+function appendSubToBarrel(
+  src: string,
+  sub: NamedComponent,
+  isPublic: boolean,
+  pascalPrefix: string
+): string {
+  const subClass = `${pascalPrefix}${sub.pascal}`;
+  const importLine = isPublic
+    ? `import { ${subClass} } from "./components/${sub.full}";`
+    : `import "./components/${sub.full}";`;
+
+  const eol = src.includes("\r\n") ? "\r\n" : "\n";
+  const lines = src.split(/\r?\n/);
+
+  let insertAt = 0;
+  lines.forEach((line, i) => {
+    if (/^\s*import\b/.test(line) && /["']\.\/components\//.test(line))
+      insertAt = i + 1;
+  });
+  if (insertAt === 0) {
+    const firstImport = lines.findIndex(l => /^\s*import\b/.test(l));
+    insertAt = firstImport === -1 ? 0 : firstImport + 1;
+  }
+  lines.splice(insertAt, 0, importLine);
+
+  if (isPublic) {
+    const namedIdx = lines.findIndex(isLocalNamedExport);
+    if (namedIdx === -1) {
+      throw new Error(
+        "薄根出口缺少具名导出列表（export { ... }），无法追加公开附属组件；请手工调整薄根或改用私有（默认）"
+      );
+    }
+    lines[namedIdx] =
+      addNameToBraces(lines[namedIdx], subClass) ?? lines[namedIdx];
+    const defaultIdx = lines.findIndex(isDefaultObjectExport);
+    if (defaultIdx !== -1)
+      lines[defaultIdx] =
+        addNameToBraces(lines[defaultIdx], subClass) ?? lines[defaultIdx];
+  }
+  return lines.join(eol);
+}
+
+/** 相对导入说明符深度下移：./x → ../../x、../x → ../../../x；./index.scss?inline 随实现同迁不改写 */
+function shiftRelativeSpec(spec: string): string {
+  if (spec === "./index.scss?inline") return spec;
+  if (spec.startsWith("./")) return `../../${spec.slice(2)}`;
+  if (spec.startsWith("../")) return `../../${spec}`;
+  return spec;
+}
+
+/** 改写源码中静态相对 import/export 说明符深度；返回改写后文本与被改写的说明符 */
+function rewriteRelativeImports(src: string): {
+  text: string;
+  changed: string[];
+} {
+  const changed: string[] = [];
+  const text = src.replace(
+    /(\bfrom\s*|\bimport\s*)(["'])(\.\.?\/[^"']+)\2/g,
+    (_m, keyword: string, quote: string, spec: string) => {
+      const next = shiftRelativeSpec(spec);
+      if (next !== spec) changed.push(`${spec} → ${next}`);
+      return `${keyword}${quote}${next}${quote}`;
+    }
+  );
+  return { text, changed };
+}
+
+/** 按需复合化时无法安全改写的动态相对导入行（require/动态 import），命中即中止 */
+function detectUnrewritableDynamicImports(src: string): string[] {
+  const hits: string[] = [];
+  const re = /(?:require\s*\(\s*|import\s*\(\s*)(["'])(\.\.?\/[^"']+)\1/g;
+  for (const m of src.matchAll(re)) hits.push(m[0]);
+  return hits;
+}
+
+interface UnderPlan {
+  /** barrel=目标已是薄根复合（纯增量追加）；single=单组件（按需复合化转换） */
+  shape: "barrel" | "single";
+  dir: string;
+  subClass: string;
+  mainClass: string;
+  /** 目录搬迁（仅 single 形态非空） */
+  moves: { from: string; to: string }[];
+  /** 搬迁后需删除的原位置文件（仅 single 形态可能有） */
+  deletes: string[];
+  /** 将写入的文件（含薄根 index.ts 终态） */
+  files: PlannedFile[];
+  rootPath: string;
+  rootContent: string;
+  /** 相对导入深度改写记录（预览展示） */
+  rewrites: string[];
+  /** 落盘后聚合入口的再导出行（私有附属不影响，保持原值） */
+  entryLine: string | null;
+}
+
+/** 追加模式写入计划：薄根纯增量追加 / 单组件按需复合化（实现下移 + 生成薄根） */
+function buildUnderPlan(
+  cfg: ResolvedEaConfig,
+  prefix: string,
+  existing: string,
+  sub: NamedComponent,
+  isPublic: boolean,
+  summary: string
+): UnderPlan {
+  const dir = findComponentDirAnywhere(cfg, existing);
+  if (!dir)
+    throw new Error(
+      `追加对象 ${existing} 不存在（--under 要求目标组件已存在）`
+    );
+  const rootPath = path.join(dir, "index.ts");
+  if (!fs.existsSync(rootPath))
+    throw new Error(`目标组件 ${existing} 缺少 ${rel(rootPath)}`);
+
+  const version = detectComponentVersion(dir);
+  if (version === "unknown") {
+    warn(
+      "⚠ 未找到组件所在包的 package.json version，@since 写入 unknown，请生成后手动补全"
+    );
+  }
+
+  const pascalPrefix = toPascalCase(prefix);
+  const subClass = `${pascalPrefix}${sub.pascal}`;
+  const subCtx = makeContext(prefix, version, sub, summary);
+  const files: PlannedFile[] = [
+    {
+      abs: path.join(dir, "components", sub.full, "index.ts"),
+      content: renderTemplate("component.ts.tpl", cfg, subCtx, true),
+    },
+    {
+      abs: path.join(dir, "components", sub.full, "index.scss"),
+      content: renderTemplate("component.scss.tpl", cfg, subCtx),
+    },
+  ];
+
+  const src = fs.readFileSync(rootPath, "utf-8");
+  const moves: { from: string; to: string }[] = [];
+  const deletes: string[] = [];
+  const rewrites: string[] = [];
+  let mainClass: string;
+  let rootContent: string;
+
+  if (isThinBarrel(src)) {
+    const mainMatch =
+      /import\s*\{\s*([A-Za-z0-9_$]+)\s*\}\s*from\s*["']\.\/components\//.exec(
+        src
+      );
+    mainClass = mainMatch ? mainMatch[1] : "";
+    rootContent = appendSubToBarrel(src, sub, isPublic, pascalPrefix);
+  } else {
+    const classMatch = /export\s+class\s+([A-Za-z0-9_$]+)/.exec(src);
+    if (!classMatch) {
+      throw new Error(
+        `无法识别 ${rel(rootPath)} 的主组件类声明，按需复合化中止（请手工调整或改用普通 ea add）`
+      );
+    }
+    mainClass = classMatch[1];
+
+    const unrewritable = detectUnrewritableDynamicImports(src);
+    if (unrewritable.length > 0) {
+      throw new Error(
+        [
+          `${rel(rootPath)} 含无法自动改写的动态相对导入，按需复合化中止以免生成坏引用。请手工处理后重试：`,
+          ...unrewritable.map(line => `  ${line}`),
+        ].join("\n")
+      );
+    }
+
+    const { text: movedImpl, changed } = rewriteRelativeImports(src);
+    rewrites.push(...changed);
+
+    const implDir = path.join(dir, "components", existing);
+    moves.push({ from: rootPath, to: path.join(implDir, "index.ts") });
+    files.push({ abs: path.join(implDir, "index.ts"), content: movedImpl });
+
+    const rootScss = path.join(dir, "index.scss");
+    if (fs.existsSync(rootScss)) {
+      const target = path.join(implDir, "index.scss");
+      moves.push({ from: rootScss, to: target });
+      files.push({ abs: target, content: fs.readFileSync(rootScss, "utf-8") });
+      deletes.push(rootScss);
+    }
+
+    const bare = existing.startsWith(`${prefix}-`)
+      ? existing.slice(prefix.length + 1)
+      : existing;
+    const entryCtx: RenderContext = {
+      tagName: existing,
+      className: mainClass,
+      summary: "",
+      version,
+      name: bare,
+      namePascal: toPascalCase(bare),
+      prefix,
+      prefixPascal: pascalPrefix,
+      subImports: isPublic
+        ? `import { ${subClass} } from "./components/${sub.full}";`
+        : `import "./components/${sub.full}";`,
+      exportList: isPublic ? `${mainClass}, ${subClass}` : mainClass,
+    };
+    rootContent = renderTemplate("entry.ts.tpl", cfg, entryCtx);
+  }
+
+  files.push({ abs: rootPath, content: rootContent });
+  const entryLine = aggregateLineForSource(cfg, dir, rootContent);
+
+  return {
+    shape: isThinBarrel(src) ? "barrel" : "single",
+    dir,
+    subClass,
+    mainClass,
+    moves,
+    deletes,
+    files,
+    rootPath,
+    rootContent,
+    rewrites,
+    entryLine,
+  };
+}
+
+/** 追加模式预览：形态、目录搬迁、文件树、薄根终态与聚合入口变化 */
+function renderUnderPreview(
+  plan: UnderPlan,
+  existing: string,
+  sub: NamedComponent,
+  isPublic: boolean
+): string {
+  const kind =
+    plan.shape === "single"
+      ? "单组件按需复合化转换"
+      : isPublic
+        ? "薄根复合 · 追加公开附属"
+        : "薄根复合 · 追加私有附属";
+  const header = `${c.green("✓")} ${c.bold(plan.subClass)} ${c.dim("/")} ${sub.full} ${c.dim("·")} 追加到 ${existing} ${c.dim(`（${kind}）`)}`;
+
+  const relPaths = plan.files
+    .filter(f => f.abs.startsWith(plan.dir + path.sep))
+    .map(f => path.relative(plan.dir, f.abs).split(path.sep).join("/"));
+
+  const sections: string[] = ["", header, ""];
+
+  if (plan.moves.length > 0) {
+    sections.push(c.dim("目录搬迁:"));
+    for (const m of plan.moves)
+      sections.push(`  ${rel(m.from)} ${c.dim("→")} ${rel(m.to)}`);
+    if (plan.rewrites.length > 0) {
+      sections.push(c.dim("相对导入深度改写:"));
+      for (const r of plan.rewrites) sections.push(`  ${r}`);
+    }
+    sections.push("");
+  }
+
+  sections.push(
+    c.dim("新增文件:"),
+    `  ${rel(plan.dir)}/`,
+    "",
+    renderTree(relPaths),
+    ""
+  );
+
+  if (plan.shape === "single") {
+    sections.push(
+      c.dim(`薄根 ${rel(plan.rootPath)} 终态:`),
+      ...plan.rootContent
+        .replace(/\s+$/, "")
+        .split("\n")
+        .map(l => `  ${l}`),
+      ""
+    );
+  }
+
+  const entryText = isPublic
+    ? (plan.entryLine ?? c.dim("（无具名值导出）"))
+    : c.dim("（私有附属不进聚合出口，标签仍由自身 TagNameMap 全局可用）");
+  sections.push(`${c.dim("聚合入口: ")}${entryText}`, "");
+
+  return sections.join("\n");
+}
+
+/** ea add <sub> --under <existing>：向已存在组件追加附属组件（默认私有，--public 公开） */
+async function runAddUnder(
+  cfg: ResolvedEaConfig,
+  prefix: string,
+  rawSub: string,
+  options: AddOptions,
+  dryRun: boolean
+): Promise<void> {
+  const existing = resolveExistingName(cfg, options.under!, prefix);
+  const normalized = normalizeName(rawSub, prefix);
+  if ("error" in normalized)
+    throw new Error(`附属组件名非法：${normalized.error}`);
+
+  const dir = findComponentDirAnywhere(cfg, existing)!;
+  if (existingComponentNames(cfg).has(normalized.full)) {
+    throw new Error(`附属组件 ${normalized.full} 与现有组件目录重名`);
+  }
+  if (fs.existsSync(path.join(dir, "components", normalized.full))) {
+    throw new Error(`${existing}/components/${normalized.full} 已存在`);
+  }
+
+  const isPublic = !!options.public;
+  const sub = toComponent(normalized, isPublic);
+  const plan = buildUnderPlan(
+    cfg,
+    prefix,
+    existing,
+    sub,
+    isPublic,
+    options.summary ?? ""
+  );
+
+  info(renderUnderPreview(plan, existing, sub, isPublic));
+
+  if (dryRun) {
+    info("\n--dry-run：未写入任何文件");
+    return;
+  }
+
+  if (!options.yes) {
+    const { confirmed } = await ask({
+      type: "confirm",
+      name: "confirmed",
+      message: `确认追加 ${sub.full} 到 ${existing}？`,
+      initial: true,
+    });
+    if (!confirmed) {
+      /* v8 ignore next -- 非 TTY 时 ask 已报错，此处仅处理用户主动拒绝写入 */
+      info("已取消写入，未写入任何文件");
+      return;
+    }
+  }
+
+  for (const del of plan.deletes) fs.rmSync(del, { force: true });
+  for (const f of plan.files) {
+    fs.mkdirSync(path.dirname(f.abs), { recursive: true });
+    fs.writeFileSync(f.abs, f.content);
+  }
+  for (const m of plan.moves) success(`✓ ${rel(m.from)} → ${rel(m.to)}`);
+  for (const f of plan.files) success(`✓ 已写入 ${rel(f.abs)}`);
+
+  regenerateAggregateEntry(cfg);
+  success(
+    `✓ 附属组件 ${sub.full} 已追加到 ${existing}（${isPublic ? "公开，进聚合出口" : "私有，仅注册不进聚合出口"}）`
+  );
+}
+
 export async function runAdd(
   name: string | undefined,
   options: AddOptions = {}
@@ -582,6 +994,21 @@ export async function runAdd(
   const dryRun = !!options.dryRun;
   const publicNames = splitNames(options.with);
   const partNames = splitNames(options.parts);
+
+  if (options.under) {
+    if (publicNames.length > 0 || partNames.length > 0) {
+      throw new Error(
+        "--under 与 --with/--parts 互斥：追加模式一次只追加一个附属组件"
+      );
+    }
+    if (!name) {
+      throw new Error(
+        "追加模式需要附属组件名：ea add <sub> --under <existing>"
+      );
+    }
+    await runAddUnder(cfg, prefix, name, options, dryRun);
+    return;
+  }
 
   const targetRoot = await resolveTargetRoot(
     cfg,

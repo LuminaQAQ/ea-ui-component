@@ -693,6 +693,241 @@ describe("runAdd — 目标目录选择（--dir）", () => {
   });
 });
 
+describe("runAdd — 追加模式（--under）", () => {
+  /** 建一个薄根复合目标组件：根出口 + components/ 主实现 */
+  function makeBarrelTarget(root: string, name = "ea-base"): void {
+    writeFile(
+      root,
+      `components/${name}/index.ts`,
+      `import { EaBase } from "./components/${name}";\n\n` +
+        "export { EaBase };\n" +
+        "export default { EaBase };\n"
+    );
+    writeFile(root, `components/${name}/${name}.test.ts`, "// t");
+    writeFile(
+      root,
+      `components/${name}/components/${name}/index.ts`,
+      `const TAG_NAME = "${name}" as const;\n` +
+        `@CustomElement(TAG_NAME)\n` +
+        "export class EaBase {}\n"
+    );
+    writeFile(
+      root,
+      `components/${name}/components/${name}/index.scss`,
+      "// s\n"
+    );
+  }
+
+  it("目标已是薄根复合：--public 增量追加 import + 出口列表 + 聚合加行", async () => {
+    setTTY(false);
+    const root = setup();
+    makeBarrelTarget(root);
+
+    await runAdd("extra", {
+      under: "ea-base",
+      public: true,
+      yes: true,
+      summary: "追加",
+    });
+
+    const rootTs = readLf(path.join(root, "components", "ea-base", "index.ts"));
+    expect(rootTs).toContain(
+      'import { EaExtra } from "./components/ea-extra";'
+    );
+    expect(rootTs).toContain("export { EaBase, EaExtra };");
+    expect(rootTs).toContain("export default { EaBase, EaExtra };");
+    expect(
+      fs.existsSync(
+        path.join(
+          root,
+          "components",
+          "ea-base",
+          "components",
+          "ea-extra",
+          "index.ts"
+        )
+      )
+    ).toBe(true);
+
+    const agg = readLf(path.join(root, "components", "index.ts"));
+    expect(agg).toContain('export { EaBase, EaExtra } from "./ea-base";');
+  });
+
+  it("默认私有：仅侧效应 import，不进薄根出口与聚合", async () => {
+    setTTY(false);
+    const root = setup();
+    makeBarrelTarget(root);
+
+    await runAdd("extra", { under: "ea-base", yes: true, summary: "追加" });
+
+    const rootTs = readLf(path.join(root, "components", "ea-base", "index.ts"));
+    expect(rootTs).toContain('import "./components/ea-extra";');
+    expect(rootTs).not.toContain("EaExtra");
+
+    const agg = readLf(path.join(root, "components", "index.ts"));
+    expect(agg).toContain('export { EaBase } from "./ea-base";');
+    expect(agg).not.toContain("EaExtra");
+  });
+
+  it("目标为单组件：按需复合化（实现下移 + 薄根生成 + 相对导入深度改写）", async () => {
+    setTTY(false);
+    const root = setup();
+    writeFile(
+      root,
+      "components/ea-solo/index.ts",
+      'import stylesheet from "./index.scss?inline";\n' +
+        'import { helper } from "./helper";\n\n' +
+        "export class EaSolo {}\n" +
+        "export default EaSolo;\n"
+    );
+    writeFile(root, "components/ea-solo/index.scss", "// scss\n");
+    writeFile(
+      root,
+      "components/ea-solo/helper.ts",
+      "export const helper = 1;\n"
+    );
+    writeFile(root, "components/ea-solo/ea-solo.test.ts", "// t");
+
+    await runAdd("part", {
+      under: "ea-solo",
+      public: true,
+      yes: true,
+      summary: "追加",
+    });
+
+    const impl = readLf(
+      path.join(
+        root,
+        "components",
+        "ea-solo",
+        "components",
+        "ea-solo",
+        "index.ts"
+      )
+    );
+    expect(impl).toContain('import stylesheet from "./index.scss?inline";');
+    expect(impl).toContain('from "../../helper"');
+    expect(impl).toContain("export class EaSolo");
+
+    const rootTs = readLf(path.join(root, "components", "ea-solo", "index.ts"));
+    expect(rootTs).toContain('import { EaSolo } from "./components/ea-solo";');
+    expect(rootTs).toContain('import { EaPart } from "./components/ea-part";');
+    expect(rootTs).toContain("export { EaSolo, EaPart };");
+    expect(rootTs).toContain("export default { EaSolo, EaPart };");
+
+    expect(
+      fs.existsSync(path.join(root, "components", "ea-solo", "index.scss"))
+    ).toBe(false);
+    expect(
+      fs.existsSync(
+        path.join(
+          root,
+          "components",
+          "ea-solo",
+          "components",
+          "ea-solo",
+          "index.scss"
+        )
+      )
+    ).toBe(true);
+    expect(
+      fs.existsSync(path.join(root, "components", "ea-solo", "ea-solo.test.ts"))
+    ).toBe(true);
+
+    const agg = readLf(path.join(root, "components", "index.ts"));
+    expect(agg).toContain('export { EaSolo, EaPart } from "./ea-solo";');
+  });
+
+  it("--dry-run 预览转型不落盘", async () => {
+    setTTY(false);
+    const root = setup();
+    writeFile(root, "components/ea-solo/index.ts", "export class EaSolo {}\n");
+    writeFile(root, "components/ea-solo/index.scss", "// scss\n");
+    writeFile(root, "components/ea-solo/ea-solo.test.ts", "// t");
+
+    await runAdd("part", { under: "ea-solo", dryRun: true });
+
+    expect(out()).toContain("目录搬迁:");
+    expect(out()).toContain("--dry-run：未写入任何文件");
+    expect(
+      fs.existsSync(path.join(root, "components", "ea-solo", "components"))
+    ).toBe(false);
+  });
+
+  it("目标不存在时报错", async () => {
+    setTTY(false);
+    setup();
+
+    await expect(
+      runAdd("part", { under: "ea-nope", yes: true })
+    ).rejects.toThrow("追加对象 ea-nope 不存在");
+  });
+
+  it("--under 与 --with 互斥", async () => {
+    setTTY(false);
+    setup();
+
+    await expect(
+      runAdd("part", { under: "ea-base", with: ["x"], yes: true })
+    ).rejects.toThrow("--under 与 --with/--parts 互斥");
+  });
+
+  it("附属名与现有组件目录重名时报错", async () => {
+    setTTY(false);
+    const root = setup();
+    makeBarrelTarget(root);
+    writeFile(
+      root,
+      "components/ea-extra/index.ts",
+      "export class EaExtra {}\n"
+    );
+
+    await expect(
+      runAdd("extra", { under: "ea-base", yes: true })
+    ).rejects.toThrow("与现有组件目录重名");
+  });
+
+  it("单组件含动态相对导入时中止并打印待手工处理行", async () => {
+    setTTY(false);
+    const root = setup();
+    writeFile(
+      root,
+      "components/ea-solo/index.ts",
+      'const m = require("./helper");\n' + "export class EaSolo {}\n"
+    );
+    writeFile(root, "components/ea-solo/ea-solo.test.ts", "// t");
+
+    await expect(
+      runAdd("part", { under: "ea-solo", yes: true })
+    ).rejects.toThrow("含无法自动改写的动态相对导入");
+  });
+
+  it("--under 缺少附属组件名时报错", async () => {
+    setTTY(false);
+    setup();
+
+    await expect(
+      runAdd(undefined, { under: "ea-base", yes: true })
+    ).rejects.toThrow("追加模式需要附属组件名");
+  });
+
+  it("--under 交互拒绝确认时不落盘", async () => {
+    setTTY(true);
+    const root = setup();
+    makeBarrelTarget(root);
+    promptsMock.mockResolvedValueOnce({ confirmed: false });
+
+    await runAdd("extra", { under: "ea-base", summary: "追加" });
+
+    expect(out()).toContain("已取消写入，未写入任何文件");
+    expect(
+      fs.existsSync(
+        path.join(root, "components", "ea-base", "components", "ea-extra")
+      )
+    ).toBe(false);
+  });
+});
+
 describe("runAdd — 目标目录选择（--dir）取消路径", () => {
   it("多候选 TTY 下取消目录选择 → 中止不落盘", async () => {
     setTTY(true);

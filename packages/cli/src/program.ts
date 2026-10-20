@@ -49,6 +49,14 @@ function createProgram(): Command {
     .description(
       "生成合规新组件（三件套；--with 生成复合组件、--parts 生成私有组件；需完整 config 含 prefix）"
     )
+    .option(
+      "--under <existing>",
+      "追加模式：向已存在组件追加附属组件（目标为单组件时按需复合化转换）"
+    )
+    .option(
+      "--public",
+      "追加模式下附属组件对外公开（进薄出口 export 列表与聚合；缺省私有）"
+    )
     .option("--with <names...>", "附属组件名（kebab-case，可多个；对外暴露）")
     .option(
       "--parts <names...>",
