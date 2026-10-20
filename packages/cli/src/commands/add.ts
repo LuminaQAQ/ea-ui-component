@@ -103,7 +103,7 @@ export function namePrompt(
 }
 
 /** prompts 环节统一入口：无 TTY 时不得挂起等待，直接报错退出（--dry-run 任何环境可预览的前提是参数已给全） */
-async function ask(
+export async function ask(
   questions: prompts.PromptObject<string> | prompts.PromptObject<string>[]
 ): Promise<Record<string, unknown>> {
   if (!process.stdin.isTTY) {
@@ -467,7 +467,10 @@ function renderPreview(
 }
 
 /** 由相对路径列表渲染目录树：box-drawing 字符，无外部依赖，颜色仅在 TTY 生效；internalDirs 命中的目录标注“私有组件” */
-function renderTree(relPaths: string[], internalDirs?: Set<string>): string {
+export function renderTree(
+  relPaths: string[],
+  internalDirs?: Set<string>
+): string {
   interface Node {
     dirs: Map<string, Node>;
     files: string[];
@@ -513,7 +516,7 @@ function renderTree(relPaths: string[], internalDirs?: Set<string>): string {
   return lines.join("\n");
 }
 
-function rel(abs: string): string {
+export function rel(abs: string): string {
   return path.relative(process.cwd(), abs).split(path.sep).join("/");
 }
 

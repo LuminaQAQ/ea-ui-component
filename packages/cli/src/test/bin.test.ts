@@ -262,6 +262,24 @@ describe("bin.ts 子命令端到端退出码", () => {
     expect(r.stdout).toContain("ea init --templates");
   });
 
+  it("remove --dry-run 预览删除且退出码 0；rm 别名等价", async () => {
+    const root = project({ buttonWithTest: true });
+    const r = await run(["remove", "ea-button", "--dry-run"], root);
+    expect(r.status).toBe(0);
+    expect(r.stdout).toContain("删除预览");
+
+    const alias = await run(["rm", "ea-button", "--dry-run"], root);
+    expect(alias.status).toBe(0);
+    expect(alias.stdout).toContain("删除预览");
+  });
+
+  it("sync --dry-run 预览聚合变更退出码 0", async () => {
+    const root = project({ buttonWithTest: true });
+    const r = await run(["sync", "--dry-run"], root);
+    expect(r.status).toBe(0);
+    expect(r.stdout).toContain("聚合入口");
+  });
+
   it("init --templates --dir 落盘模板且退出码 0", async () => {
     const root = temp();
     const r = await run(["init", "--templates", "--dir", "my-tpl"], root);

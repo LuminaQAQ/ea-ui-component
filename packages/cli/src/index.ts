@@ -38,4 +38,5 @@ export {
 export { runCheck, type CheckOptions } from "./commands/check";
 export { runAdd, type AddOptions } from "./commands/add";
 export { runInit, runInitTemplates, type InitOptions } from "./commands/init";
+export { runRemove, type RemoveOptions } from "./commands/remove";
 export { runSync, type SyncOptions } from "./commands/sync";

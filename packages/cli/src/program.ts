@@ -3,6 +3,7 @@ import pkg from "../package.json";
 import { runCheck } from "./commands/check";
 import { runAdd } from "./commands/add";
 import { runInit } from "./commands/init";
+import { runRemove } from "./commands/remove";
 import { runSync } from "./commands/sync";
 import { fail, c } from "./lib/output";
 
@@ -64,6 +65,23 @@ function createProgram(): Command {
       "跳过写盘前确认，直接落盘（脚本/CI 非交互场景，需已用参数提供全部输入）"
     )
     .action((name: string | undefined, options) => runAdd(name, options));
+
+  program
+    .command("remove <name>")
+    .alias("rm")
+    .description(
+      "删除组件目录并同步重建聚合出口（不自动改写引用方；需完整 config）"
+    )
+    .option(
+      "--internal",
+      "从 internal 内部组件目录移除（与 add 的 --internal 对称）"
+    )
+    .option(
+      "--dry-run",
+      "仅预览将删除的文件与聚合入口将移除的 export 行，不落盘"
+    )
+    .option("--yes", "跳过删除前确认，直接删除（脚本/CI 非交互场景）")
+    .action((name: string, options) => runRemove(name, options));
 
   program
     .command("sync")
