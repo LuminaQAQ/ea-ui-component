@@ -1,3 +1,6 @@
+import fs from "node:fs";
+import path from "node:path";
+
 import { loadConfig, type IgnoreEntry } from "../lib/config";
 import { scanComponentDirs, scanTestRootFiles } from "../lib/scan";
 import { createNameRe } from "../lib/naming";
@@ -15,7 +18,9 @@ type RuleName =
   | "test-root-violation"
   | "orphan-test"
   | "naming"
-  | "missing-type-declaration";
+  | "missing-type-declaration"
+  | "aggregate-drift"
+  | "sub-ownership";
 
 /** 豁免判定：config ignore 条目（rules 缺省 = 全豁免）叠加 CLI --ignore（全规则豁免） */
 function isIgnored(
@@ -146,6 +151,33 @@ export function runCheck(options: CheckOptions = {}): void {
       level: "error",
       message: agg.message,
     });
+  }
+
+  // 附属组件归属只读提醒（warning）：薄根 components/ 下注册了自定义元素、
+  // 却未被薄根 import 引用的目录；只读报告不修复
+  for (const d of all) {
+    if (!d.hasIndex) continue;
+    const subRoot = path.join(d.dir, "components");
+    if (!fs.existsSync(subRoot)) continue;
+    if (isIgnored(cfg.check.ignore, d.name, "sub-ownership", cliIgnore))
+      continue;
+
+    const rootSrc = fs.readFileSync(path.join(d.dir, "index.ts"), "utf-8");
+    for (const entry of fs
+      .readdirSync(subRoot, { withFileTypes: true })
+      .sort((a, b) => a.name.localeCompare(b.name))) {
+      if (!entry.isDirectory()) continue;
+      const subIndex = path.join(subRoot, entry.name, "index.ts");
+      if (!fs.existsSync(subIndex)) continue;
+      if (!fs.readFileSync(subIndex, "utf-8").includes("@CustomElement"))
+        continue;
+      if (rootSrc.includes(`./components/${entry.name}`)) continue;
+      violations.push({
+        rule: "sub-ownership",
+        level: "warning",
+        message: `${d.name}/components/${entry.name} 注册了自定义元素但未被薄根引用（未注册），请补 import 或删除该目录`,
+      });
+    }
   }
 
   // 输出

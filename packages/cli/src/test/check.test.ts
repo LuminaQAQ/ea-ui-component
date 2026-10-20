@@ -340,3 +340,128 @@ describe("runCheck", () => {
     expect(out()).toContain("1 个错误，1 个警告");
   });
 });
+
+describe("runCheck — 附属组件归属只读提醒", () => {
+  it("注册了自定义元素的附属目录未被薄根引用时报警告", () => {
+    const root = setup({ prefix: "ea" });
+    writeFile(
+      root,
+      "components/ea-button/index.ts",
+      'import { EaButton } from "./components/ea-button";\n'
+    );
+    writeFile(root, "components/ea-button/ea-button.test.ts", "// t");
+    writeFile(
+      root,
+      "components/ea-button/components/ea-button/index.ts",
+      "@CustomElement('ea-button')\nexport class EaButton {}\n"
+    );
+    writeFile(
+      root,
+      "components/ea-button/components/ea-button-group/index.ts",
+      "@CustomElement('ea-button-group')\nexport class EaButtonGroup {}\n"
+    );
+
+    runCheck();
+
+    expect(process.exitCode).not.toBe(1);
+    expect(out()).toContain("[sub-ownership]");
+    expect(out()).toContain(
+      "components/ea-button-group 注册了自定义元素但未被薄根引用"
+    );
+  });
+
+  it("已引用的附属目录不报警告", () => {
+    const root = setup({ prefix: "ea" });
+    writeFile(
+      root,
+      "components/ea-button/index.ts",
+      'import { EaButton } from "./components/ea-button";\n' +
+        'import "./components/ea-button-group";\n'
+    );
+    writeFile(root, "components/ea-button/ea-button.test.ts", "// t");
+    writeFile(
+      root,
+      "components/ea-button/components/ea-button/index.ts",
+      "@CustomElement('ea-button')\nexport class EaButton {}\n"
+    );
+    writeFile(
+      root,
+      "components/ea-button/components/ea-button-group/index.ts",
+      "@CustomElement('ea-button-group')\nexport class EaButtonGroup {}\n"
+    );
+
+    runCheck();
+
+    expect(out()).not.toContain("[sub-ownership]");
+    expect(out()).toContain("校验通过");
+  });
+
+  it("非自定义元素渲染工具目录（无 @CustomElement）不报警告", () => {
+    const root = setup({ prefix: "ea" });
+    writeFile(
+      root,
+      "components/ea-table/index.ts",
+      "export class EaTable {}\n"
+    );
+    writeFile(root, "components/ea-table/ea-table.test.ts", "// t");
+    writeFile(
+      root,
+      "components/ea-table/components/thead/index.ts",
+      "export const h = () => null;\n"
+    );
+
+    runCheck();
+
+    expect(out()).not.toContain("[sub-ownership]");
+    expect(out()).toContain("校验通过");
+  });
+
+  it("豁免规则命中时该组件的附属归属提醒被抑制", () => {
+    const root = setup({
+      prefix: "ea",
+      ignore: [{ name: "ea-button", rules: ["sub-ownership"], reason: "WIP" }],
+    });
+    writeFile(
+      root,
+      "components/ea-button/index.ts",
+      'import { EaButton } from "./components/ea-button";\n'
+    );
+    writeFile(root, "components/ea-button/ea-button.test.ts", "// t");
+    writeFile(
+      root,
+      "components/ea-button/components/ea-button/index.ts",
+      "@CustomElement('ea-button')\nexport class EaButton {}\n"
+    );
+    writeFile(
+      root,
+      "components/ea-button/components/ea-button-group/index.ts",
+      "@CustomElement('ea-button-group')\nexport class EaButtonGroup {}\n"
+    );
+
+    runCheck();
+
+    expect(out()).not.toContain("[sub-ownership]");
+  });
+
+  it("components/ 下的普通文件与无 index.ts 的子目录不触提醒", () => {
+    const root = setup({ prefix: "ea" });
+    writeFile(
+      root,
+      "components/ea-button/index.ts",
+      'import { EaButton } from "./components/ea-button";\n'
+    );
+    writeFile(root, "components/ea-button/ea-button.test.ts", "// t");
+    writeFile(
+      root,
+      "components/ea-button/components/ea-button/index.ts",
+      "@CustomElement('ea-button')\nexport class EaButton {}\n"
+    );
+    writeFile(root, "components/ea-button/components/notes.md", "x");
+    writeFile(root, "components/ea-button/components/noidx/readme.ts", "x");
+
+    runCheck();
+
+    expect(out()).not.toContain("[sub-ownership]");
+    expect(out()).toContain("校验通过");
+  });
+});
