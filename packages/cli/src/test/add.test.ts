@@ -7,7 +7,9 @@ import { makeTempRoot, removeTempRoot, writeFile, readLf } from "./helpers";
 
 interface SetupOpts {
   prefix?: string;
-  componentDirs?: (string | { path: string; internal?: boolean })[];
+  componentDirs?: (
+    string | { path: string; internal?: boolean; label?: string }
+  )[];
 }
 
 const promptsMock = vi.hoisted(() => vi.fn());
@@ -611,6 +613,100 @@ describe("runAdd — 交互式附属组件收集（无 --with 时 prompts 逐个
 
     const index = readLf(path.join(root, "components", "ea-foo", "index.ts"));
     expect(index).toContain("@summary 摘要内容");
+  });
+});
+
+describe("runAdd — 目标目录选择（--dir）", () => {
+  const twoDirs = [
+    { path: "a", label: "A组" },
+    { path: "b", label: "B组" },
+  ];
+
+  it("多候选非交互且无 --dir 时前置报错", async () => {
+    setTTY(false);
+    setup({ componentDirs: twoDirs });
+
+    await expect(runAdd("foo", { yes: true })).rejects.toThrow(
+      "--dir <label|path> 指定目标目录"
+    );
+  });
+
+  it("--dir 按 label 定档", async () => {
+    setTTY(false);
+    const root = setup({ componentDirs: twoDirs });
+
+    await runAdd("foo", { yes: true, dir: "B组" });
+
+    expect(fs.existsSync(path.join(root, "b", "ea-foo", "index.ts"))).toBe(
+      true
+    );
+    expect(fs.existsSync(path.join(root, "a", "ea-foo"))).toBe(false);
+  });
+
+  it("--dir 按相对路径定档", async () => {
+    setTTY(false);
+    const root = setup({ componentDirs: ["a", "b"] });
+
+    await runAdd("foo", { yes: true, dir: "a" });
+
+    expect(fs.existsSync(path.join(root, "a", "ea-foo", "index.ts"))).toBe(
+      true
+    );
+  });
+
+  it("--dir 无匹配时报错并列出候选文案", async () => {
+    setTTY(false);
+    setup({ componentDirs: twoDirs });
+
+    await expect(runAdd("foo", { yes: true, dir: "nope" })).rejects.toThrow(
+      "未匹配任何候选组件目录（可选：A组、B组）"
+    );
+  });
+
+  it("多候选 TTY 下走单选 prompt（选项文案用 label）", async () => {
+    setTTY(true);
+    const root = setup({ componentDirs: twoDirs });
+    promptsMock
+      .mockResolvedValueOnce({ picked: path.join(root, "b") })
+      .mockResolvedValueOnce({ more: false });
+
+    await runAdd("foo", { yes: true, summary: "x" });
+
+    const choices = (
+      promptsMock.mock.calls[0][0] as {
+        choices: { title: string; value: string }[];
+      }
+    ).choices;
+    expect(choices.map(c => c.title)).toEqual(["A组", "B组"]);
+    expect(fs.existsSync(path.join(root, "b", "ea-foo", "index.ts"))).toBe(
+      true
+    );
+  });
+
+  it("--internal 无 internal 目录时报错", async () => {
+    setTTY(false);
+    setup({ componentDirs: ["a"] });
+
+    await expect(runAdd("foo", { yes: true, internal: true })).rejects.toThrow(
+      "internal: true 的内部组件目录"
+    );
+  });
+});
+
+describe("runAdd — 目标目录选择（--dir）取消路径", () => {
+  it("多候选 TTY 下取消目录选择 → 中止不落盘", async () => {
+    setTTY(true);
+    setup({
+      componentDirs: [
+        { path: "a", label: "A组" },
+        { path: "b", label: "B组" },
+      ],
+    });
+    promptsMock.mockResolvedValueOnce({ picked: undefined });
+
+    await runAdd("foo", { yes: true, summary: "x" });
+
+    expect(out()).toContain("已取消：交互输入中止");
   });
 });
 

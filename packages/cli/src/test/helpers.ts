@@ -5,7 +5,10 @@ import path from "node:path";
 /** 测试专用最小 config 形态（写入临时 ea.config.json 用） */
 export interface TestConfigInput {
   prefix?: string;
-  componentDirs?: (string | { path: string; internal?: boolean })[];
+  componentDirs?: (
+    | string
+    | { path: string; internal?: boolean; label?: string }
+  )[];
   testDir?: string;
   entry?: string;
   templates?: string;

@@ -59,6 +59,10 @@ function createProgram(): Command {
       "--internal",
       "生成到 internal 内部组件目录（不进聚合出口、不对外导出）"
     )
+    .option(
+      "--dir <label|path>",
+      "目标组件目录：匹配 componentDirs 候选的 label 或 path（多候选非交互场景必填）"
+    )
     .option("--dry-run", "仅预览将创建的文件与聚合入口变更，不落盘")
     .option(
       "--yes",

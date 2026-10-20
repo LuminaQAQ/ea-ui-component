@@ -3,7 +3,11 @@ import path from "node:path";
 
 import prompts from "prompts";
 
-import { loadConfig, type ResolvedEaConfig } from "../lib/config";
+import {
+  loadConfig,
+  type ResolvedEaConfig,
+  type ResolvedComponentDir,
+} from "../lib/config";
 import { regenerateAggregateEntry } from "../lib/aggregate";
 import {
   normalizeName,
@@ -18,6 +22,8 @@ export interface AddOptions {
   parts?: string[];
   summary?: string;
   internal?: boolean;
+  /** 目标组件目录：匹配 componentDirs 候选的 label 或 path（多候选非交互场景必填） */
+  dir?: string;
   dryRun?: boolean;
   yes?: boolean;
 }
@@ -299,9 +305,8 @@ function buildPlan(
   main: NamedComponent,
   subs: NamedComponent[],
   summary: string,
-  useInternal: boolean
+  targetRoot: string
 ): PlannedFile[] {
-  const targetRoot = resolveTargetRoot(cfg, useInternal);
   const dir = path.join(targetRoot, main.full);
   const version = detectComponentVersion(dir);
   if (version === "unknown") {
@@ -398,27 +403,62 @@ function buildPlan(
   return files;
 }
 
-/** 目标根目录：--internal 取第一个 internal 目录，否则第一个公开目录 */
-function resolveTargetRoot(
+/** 候选组件目录的显示文案：对象项优先 label，缺省回落相对 cwd 的路径 */
+function dirLabel(d: ResolvedComponentDir): string {
+  return d.label ?? rel(d.path);
+}
+
+/**
+ * 目标组件目录解析：按 --internal 分流候选集，--dir 按 label 或 path 匹配；
+ * 唯一候选直接采用，多候选 TTY 单选、非交互缺 --dir 报错；取消返回 null。
+ */
+async function resolveTargetRoot(
   cfg: ResolvedEaConfig,
-  useInternal: boolean
-): string {
-  if (useInternal) {
-    const internal = cfg.project.componentDirs.find(d => d.internal);
-    if (!internal) {
+  useInternal: boolean,
+  dirArg?: string
+): Promise<string | null> {
+  const candidates = cfg.project.componentDirs.filter(
+    d => d.internal === useInternal
+  );
+  if (candidates.length === 0) {
+    throw new Error(
+      useInternal
+        ? "--internal 需要 componentDirs 中配置 internal: true 的内部组件目录"
+        : "componentDirs 中不存在公开组件目录"
+    );
+  }
+
+  if (dirArg) {
+    const abs = path.resolve(process.cwd(), dirArg);
+    const hit = candidates.find(d => dirLabel(d) === dirArg || d.path === abs);
+    if (!hit) {
       throw new Error(
-        "--internal 需要 componentDirs 中配置 internal: true 的内部组件目录"
+        `--dir "${dirArg}" 未匹配任何候选组件目录（可选：${candidates
+          .map(dirLabel)
+          .join("、")}）`
       );
     }
-    return internal.path;
+    return hit.path;
   }
 
-  const publicDir = cfg.project.componentDirs.find(d => !d.internal);
-  if (!publicDir) {
-    throw new Error("componentDirs 中不存在公开组件目录");
+  if (candidates.length === 1) return candidates[0].path;
+
+  if (!process.stdin.isTTY) {
+    throw new Error(
+      `存在多个候选组件目录（${candidates
+        .map(dirLabel)
+        .join("、")}），非交互环境需用 --dir <label|path> 指定目标目录`
+    );
   }
 
-  return publicDir.path;
+  const { picked } = await ask({
+    type: "select",
+    name: "picked",
+    message: "选择目标组件目录",
+    choices: candidates.map(d => ({ title: dirLabel(d), value: d.path })),
+  });
+  if (picked === undefined) return null;
+  return picked as string;
 }
 
 /** 整体预览：归一化回显 + 相对组件根目录的文件树 + 聚合入口新增行（与 confirm / --dry-run 同构复用） */
@@ -543,6 +583,16 @@ export async function runAdd(
   const publicNames = splitNames(options.with);
   const partNames = splitNames(options.parts);
 
+  const targetRoot = await resolveTargetRoot(
+    cfg,
+    !!options.internal,
+    options.dir
+  );
+  if (targetRoot === null) {
+    info("已取消：交互输入中止，未写入任何文件");
+    return;
+  }
+
   const inputs = await collectInputs(
     name,
     publicNames,
@@ -557,14 +607,7 @@ export async function runAdd(
   }
   const { main, summary } = inputs;
 
-  const files = buildPlan(
-    cfg,
-    prefix,
-    main,
-    inputs.subs,
-    summary,
-    !!options.internal
-  );
+  const files = buildPlan(cfg, prefix, main, inputs.subs, summary, targetRoot);
   const entryLine = previewEntryLine(prefix, main, inputs.subs);
 
   info(renderPreview(prefix, main, inputs.subs, files, entryLine));

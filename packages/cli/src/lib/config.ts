@@ -10,8 +10,9 @@ export interface IgnoreEntry {
   reason?: string;
 }
 
-/** 组件目录条目：字符串（公开组件目录）或对象（internal 标记内部组件目录） */
-export type ComponentDirConfig = string | { path: string; internal?: boolean };
+/** 组件目录条目：字符串（公开组件目录）或对象（internal 标记内部组件目录，label 作目录选择显示文案） */
+export type ComponentDirConfig =
+  string | { path: string; internal?: boolean; label?: string };
 
 /** ea.config.json 的 JSON 书写形态（相对路径基于 config 所在目录解析） */
 export interface EaConfig {
@@ -34,10 +35,12 @@ export interface EaConfig {
   };
 }
 
-/** 解析后的组件目录：绝对路径 + internal 布尔化 */
+/** 解析后的组件目录：绝对路径 + internal 布尔化 + 可选 label（目录选择显示文案） */
 export interface ResolvedComponentDir {
   path: string;
   internal: boolean;
+  /** 多同类目录时的选择显示文案（ea add 目录选择用）；缺省回落 path */
+  label?: string;
 }
 
 /** loadConfig 产物：路径全部解析为绝对路径、componentDirs 展开为数组，供下游直接消费 */
@@ -68,10 +71,11 @@ const CONFIG_SKELETON = `\
 }
 // componentDirs 扩展写法：单字符串简写等价单元素数组；数组元素可为字符串
 // （公开组件目录，进聚合出口、生成独立 exports）或对象 { "path": "...", "internal": true }
-// （内部组件目录，不进聚合出口、不生成独立 exports）。monorepo 多包示例：
+// （内部组件目录，不进聚合出口、不生成独立 exports；可选 "label" 作 ea add 目录选择显示文案）。
+// monorepo 多包示例：
 //   "componentDirs": [
 //     "packages/components/src/components",
-//     { "path": "packages/components/src/common", "internal": true }
+//     { "path": "packages/components/src/common", "internal": true, "label": "内部件" }
 //   ]
 `;
 
@@ -119,7 +123,11 @@ export function loadConfig(cwd = process.cwd()): ResolvedEaConfig {
     typeof d === "string" ||
     (typeof d === "object" &&
       d !== null &&
-      typeof (d as { path?: unknown }).path === "string");
+      typeof (d as { path?: unknown }).path === "string" &&
+      ((d as { internal?: unknown }).internal === undefined ||
+        typeof (d as { internal?: unknown }).internal === "boolean") &&
+      ((d as { label?: unknown }).label === undefined ||
+        typeof (d as { label?: unknown }).label === "string"));
   if (!Array.isArray(dirs) || !dirs.every(validDirEntry)) {
     throw new Error(
       `ea.config.json project.componentDirs 类型不匹配：须为目录字符串或对象数组（当前为 ${JSON.stringify(rawDirs)}）\n\n${CONFIG_SKELETON}`
@@ -132,7 +140,11 @@ export function loadConfig(cwd = process.cwd()): ResolvedEaConfig {
       componentDirs: dirs.map(d =>
         typeof d === "string"
           ? { path: path.resolve(cwd, d), internal: false }
-          : { path: path.resolve(cwd, d.path), internal: !!d.internal }
+          : {
+              path: path.resolve(cwd, d.path),
+              internal: !!d.internal,
+              label: d.label,
+            }
       ),
       testDir: path.resolve(cwd, project.testDir!),
       entry: path.resolve(cwd, project.entry!),
