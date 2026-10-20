@@ -4,8 +4,9 @@ import * as ts from "typescript";
 import type { ResolvedEaConfig } from "./config";
 import { success } from "./output";
 
-const GENERATED_START = "// @ea-generated:start";
-const GENERATED_END = "// @ea-generated:end";
+/** 聚合入口生成区哨兵标记（init 骨架生成与再生命令共用） */
+export const GENERATED_START = "// @ea-generated:start";
+export const GENERATED_END = "// @ea-generated:end";
 
 /** 判断声明节点是否带 export 修饰符 */
 function hasExportModifier(st: ts.Node): boolean {
@@ -170,6 +171,20 @@ function guardNoSentinel(
   }
 }
 
+/** 单个组件目录的聚合再导出行（模块说明符相对 entry 目录）；无具名值导出返回 null */
+function exportLineFor(
+  entryDir: string,
+  dirPath: string
+): { line: string; names: string[] } | null {
+  const filePath = path.join(dirPath, "index.ts");
+  const src = fs.readFileSync(filePath, "utf-8");
+  const names = parseValueExports(src, filePath);
+  if (names.length === 0) return null;
+  const rel = path.relative(entryDir, dirPath).split(path.sep).join("/");
+  const spec = rel.startsWith(".") ? rel : `./${rel}`;
+  return { line: `export { ${names.join(", ")} } from "${spec}";`, names };
+}
+
 /**
  * 扫描公开组件目录（跳过 internal）并汇总各 index.ts 的具名值导出，构建聚合
  * 再导出清单与名单（相对 entry 目录、按目录名排序）。解析遇到未识别 export 形态时抛错。
@@ -193,20 +208,41 @@ function buildAggregateProjection(config: ResolvedEaConfig): {
   const exportLines: string[] = [];
   const exportNames: string[] = [];
   for (const { name, root } of dirs) {
-    const filePath = path.join(root, name, "index.ts");
-    const src = fs.readFileSync(filePath, "utf-8");
-    const names = parseValueExports(src, filePath);
-    if (names.length > 0) {
-      const rel = path
-        .relative(entryDir, path.join(root, name))
-        .split(path.sep)
-        .join("/");
-      const spec = rel.startsWith(".") ? rel : `./${rel}`;
-      exportLines.push(`export { ${names.join(", ")} } from "${spec}";`);
-      exportNames.push(...names);
+    const entry = exportLineFor(entryDir, path.join(root, name));
+    if (entry) {
+      exportLines.push(entry.line);
+      exportNames.push(...entry.names);
     }
   }
   return { exportLines, exportNames };
+}
+
+/**
+ * 单个组件目录在聚合入口中的再导出行（目录不存在或缺 index.ts 时返回 null）。
+ * 供 ea remove 预览「将消失的 export 行」等只读场景复用。
+ */
+export function aggregateLineFor(
+  config: ResolvedEaConfig,
+  dirPath: string
+): string | null {
+  if (!fs.existsSync(path.join(dirPath, "index.ts"))) return null;
+  return (
+    exportLineFor(path.dirname(config.project.entry), dirPath)?.line ?? null
+  );
+}
+
+/** 由源码文本计算组件目录的聚合再导出行（不读盘，供命令在落盘前预览聚合变化） */
+export function aggregateLineForSource(
+  config: ResolvedEaConfig,
+  dirPath: string,
+  src: string
+): string | null {
+  const entryDir = path.dirname(config.project.entry);
+  const names = parseValueExports(src, path.join(dirPath, "index.ts"));
+  if (names.length === 0) return null;
+  const rel = path.relative(entryDir, dirPath).split(path.sep).join("/");
+  const spec = rel.startsWith(".") ? rel : `./${rel}`;
+  return `export { ${names.join(", ")} } from "${spec}";`;
 }
 
 /** 去掉尾部空行 */
@@ -323,6 +359,7 @@ export function regenerateAggregateEntry(config: ResolvedEaConfig): void {
   const generated = [GENERATED_START, ...exportLines, GENERATED_END];
 
   if (!fs.existsSync(entryPath)) {
+    fs.mkdirSync(path.dirname(entryPath), { recursive: true });
     fs.writeFileSync(entryPath, generated.join("\n") + "\n");
     success(`✓ 已生成聚合入口 ${entryPath}`);
     return;

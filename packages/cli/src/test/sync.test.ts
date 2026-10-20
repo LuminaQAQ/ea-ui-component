@@ -124,6 +124,29 @@ describe("diffAggregateEntry", () => {
     expect(d.status).toBe("drift");
     expect(d.message).toContain("缺哨兵标记");
   });
+
+  it("组件导出形态无法解析 → error", () => {
+    const root = project();
+    writeFile(root, "components/ea-bad/index.ts", 'export * from "./x";\n');
+    const d = diffAggregateEntry(loadConfig(root));
+    expect(d.status).toBe("error");
+    expect(d.message).toContain("无法计算目录投影");
+  });
+
+  it("哨兵标记重复 → error", () => {
+    const entry =
+      "// @ea-generated:start\n// @ea-generated:end\n// @ea-generated:start\n";
+    const root = project({}, { entry });
+    const d = diffAggregateEntry(loadConfig(root));
+    expect(d.status).toBe("error");
+    expect(d.message).toContain("哨兵标记重复");
+  });
+
+  it("无哨兵且目录无对外导出 → ok", () => {
+    const root = project({}, { button: false, entry: "// 手工清单\n" });
+    const d = diffAggregateEntry(loadConfig(root));
+    expect(d.status).toBe("ok");
+  });
 });
 
 describe("runSync", () => {
