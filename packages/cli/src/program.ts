@@ -105,7 +105,13 @@ function createProgram(): Command {
 
   program
     .command("init")
-    .description("项目初始化：--templates 将内置模板落盘到项目（二次开发起点）")
+    .description(
+      "项目初始化：交互式生成 ea.config.json 与聚合入口哨兵骨架（--defaults 采探测默认值；--templates 落盘内置模板）"
+    )
+    .option(
+      "--defaults",
+      "配置向导非交互模式：采用探测默认值，不覆盖既有 ea.config.json"
+    )
     .option("--templates", "写出内置组件模板到项目模板目录")
     .option(
       "--dir <path>",

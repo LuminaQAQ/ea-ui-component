@@ -254,12 +254,28 @@ describe("bin.ts 子命令端到端退出码", () => {
     expect(r.stderr).toContain("unknown option");
   });
 
-  it("init 解析至向导引导（无 --templates 打印最小引导）", async () => {
+  it("init --defaults 生成 ea.config.json 与聚合入口哨兵骨架，退出码 0", async () => {
+    const root = temp();
+    require("node:fs").mkdirSync(path.join(root, "src", "components"), {
+      recursive: true,
+    });
+    const r = await run(["init", "--defaults"], root);
+    expect(r.status).toBe(0);
+    expect(
+      require("node:fs").existsSync(path.join(root, "ea.config.json"))
+    ).toBe(true);
+    const entry = require("node:fs").readFileSync(
+      path.join(root, "src", "components", "index.ts"),
+      "utf-8"
+    );
+    expect(entry).toContain("// @ea-generated:start");
+  });
+
+  it("init 无 --defaults 且非交互时报错退出 1", async () => {
     const root = temp();
     const r = await run(["init"], root);
-    expect(r.status).toBe(0);
-    expect(r.stdout).toContain("交互式配置向导暂未实现");
-    expect(r.stdout).toContain("ea init --templates");
+    expect(r.status).toBe(1);
+    expect(r.stderr).toContain("ea init --defaults");
   });
 
   it("remove --dry-run 预览删除且退出码 0；rm 别名等价", async () => {

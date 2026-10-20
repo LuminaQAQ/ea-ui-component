@@ -108,7 +108,8 @@ export function loadConfig(cwd = process.cwd()): ResolvedEaConfig {
   if (!project.entry) missing.push("project.entry");
   if (missing.length > 0) {
     throw new Error(
-      `ea.config.json 缺少必配路径：${missing.join("、")}\n\n${CONFIG_SKELETON}`
+      `ea.config.json 缺少必配路径：${missing.join("、")}\n` +
+        `运行 "ea init" 交互式生成配置（或 "ea init --defaults" 采用探测默认值），也可参考以下最小骨架手工创建：\n\n${CONFIG_SKELETON}`
     );
   }
 
