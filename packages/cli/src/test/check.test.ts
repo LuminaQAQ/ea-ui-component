@@ -465,3 +465,77 @@ describe("runCheck — 附属组件归属只读提醒", () => {
     expect(out()).toContain("校验通过");
   });
 });
+
+describe("runCheck — 豁免语义（决策 28）", () => {
+  it("config 显式 rules:['naming'] 可豁免命名违规", () => {
+    const root = setup({
+      prefix: "ea",
+      ignore: [{ name: "badname", rules: ["naming"], reason: "历史遗留" }],
+    });
+    writeFile(root, "components/badname/index.ts", "export const a = 1;");
+    writeFile(root, "components/badname/badname.test.ts", "// t");
+
+    runCheck();
+
+    expect(out()).not.toContain("[naming]");
+    expect(out()).not.toContain("[ignore-stale]");
+  });
+
+  it("--ignore 可豁免命名违规", () => {
+    const root = setup({ prefix: "ea" });
+    writeFile(root, "components/badname/index.ts", "export const a = 1;");
+    writeFile(root, "components/badname/badname.test.ts", "// t");
+
+    runCheck({ ignore: ["badname"] });
+
+    expect(out()).not.toContain("[naming]");
+    expect(out()).toContain("校验通过");
+  });
+
+  it("无 rules 的宽豁免未命中违规时不提示 ignore-stale（长期许可）", () => {
+    const root = setup({
+      prefix: "ea",
+      ignore: [{ name: "ea-button", reason: "长期许可" }],
+    });
+    writeFile(root, "components/ea-button/index.ts", "export const a = 1;");
+    writeFile(root, "components/ea-button/ea-button.test.ts", "// t");
+
+    runCheck();
+
+    expect(out()).not.toContain("[ignore-stale]");
+    expect(out()).toContain("校验通过");
+  });
+
+  it("显式 rules 未命中任何违规仍提示 ignore-stale", () => {
+    const root = setup({
+      prefix: "ea",
+      ignore: [{ name: "ea-button", rules: ["naming"], reason: "WIP" }],
+    });
+    writeFile(root, "components/ea-button/index.ts", "export const a = 1;");
+    writeFile(root, "components/ea-button/ea-button.test.ts", "// t");
+
+    runCheck();
+
+    expect(out()).toContain("[ignore-stale]");
+    expect(out()).toContain("未命中任何可豁免违规");
+  });
+
+  it("aggregate-drift 为全局规则，不可按名豁免", () => {
+    const root = setup({
+      prefix: "ea",
+      ignore: [{ name: "ea-button", reason: "长期许可" }],
+    });
+    writeFile(root, "components/ea-button/index.ts", "export class EaButton {}");
+    writeFile(root, "components/ea-button/ea-button.test.ts", "// t");
+    writeFile(
+      root,
+      "components/index.ts",
+      "// @ea-generated:start\n// @ea-generated:end\n"
+    );
+
+    runCheck();
+
+    expect(process.exitCode).toBe(1);
+    expect(out()).toContain("[aggregate-drift]");
+  });
+});
