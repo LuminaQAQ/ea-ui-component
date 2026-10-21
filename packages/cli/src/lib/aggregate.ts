@@ -4,7 +4,24 @@ import * as ts from "typescript";
 import type { ResolvedEaConfig } from "./config";
 import { success } from "./output";
 
-/** 聚合入口生成区哨兵标记（init 骨架生成与再生命令共用） */
+/** 聚合入口与目录投影的只读比对结果 */
+export interface AggregateDiff {
+  /** ok=一致；
+   * drift=不一致；
+   * error=无法判定；
+   * skip=入口尚不存在（交由 add/sync 生成）
+   */
+  status: "ok" | "drift" | "error" | "skip";
+  message: string;
+  expected: string[];
+  current: string[];
+  /** 投影有、入口无的行 */
+  missing: string[];
+  /** 入口有、投影无的行 */
+  extra: string[];
+}
+
+/** 聚合入口生成区哨兵标记 */
 export const GENERATED_START = "// @ea-generated:start";
 export const GENERATED_END = "// @ea-generated:end";
 
@@ -258,19 +275,6 @@ function arraysEqual(a: string[], b: string[]): boolean {
   return a.every((v, i) => v === b[i]);
 }
 
-/** 聚合入口与目录投影的只读比对结果 */
-export interface AggregateDiff {
-  /** ok=一致；drift=不一致；error=无法判定；skip=入口尚不存在（交由 add/sync 生成） */
-  status: "ok" | "drift" | "error" | "skip";
-  message: string;
-  expected: string[];
-  current: string[];
-  /** 投影有、入口无的行 */
-  missing: string[];
-  /** 入口有、投影无的行 */
-  extra: string[];
-}
-
 function diff(
   status: AggregateDiff["status"],
   message: string,
@@ -282,7 +286,9 @@ function diff(
 
 /**
  * 只读校验聚合入口哨兵区是否与目录投影逐行一致（不写盘）。
- * 入口不存在→skip；有入口无哨兵且投影非空→drift；标记异常/解析失败→error；
+ * 入口不存在→skip；
+ * 有入口无哨兵且投影非空→drift；
+ * 标记异常/解析失败→error；
  * 哨兵区与投影顺序与内容一致→ok，否则 drift 并给出增删行明细。
  */
 export function diffAggregateEntry(config: ResolvedEaConfig): AggregateDiff {
@@ -348,7 +354,7 @@ export function diffAggregateEntry(config: ResolvedEaConfig): AggregateDiff {
 }
 
 /**
- * 扫描公开目录汇总具名值导出（buildAggregateProjection），在哨兵分区内重建聚合出口的再导出清单；
+ * 扫描公开目录汇总具名值导出，在哨兵分区内重建聚合出口的再导出清单；
  * 分区之外的行（手工内容）原位保留，且手工区导出不得与生成名单重复。
  * 无哨兵时执行 diff 防御：含多余行则中止报错，纯生成形态则全量重建并提示。
  */

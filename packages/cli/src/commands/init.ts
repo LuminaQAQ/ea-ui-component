@@ -26,8 +26,30 @@ export interface InitOptions {
   defaults?: boolean;
 }
 
+interface WizardValues {
+  prefix?: string;
+  componentDirs: string;
+  testDir: string;
+  entry: string;
+}
+
 /** 未配置 templates 时的默认输出目录 */
 const DEFAULT_TEMPLATES_DIR = "ea-templates";
+
+/** 探测候选：单包形态优先，其次 monorepo 形态 */
+const COMPONENT_DIR_CANDIDATES = [
+  "src/components",
+  "packages/components/src/components",
+  "components",
+];
+const TEST_DIR_CANDIDATES = [
+  "src/test",
+  "packages/components/src/test",
+  "test",
+];
+
+/** prefix 格式（与 config 校验一致） */
+const PREFIX_RE = /^[a-z][a-z0-9]*$/;
 
 /** 尽力读取已配置的项目模板目录（config 缺失/不完整时返回 undefined，不抛错） */
 function readConfiguredTemplatesDir(): string | undefined {
@@ -76,32 +98,10 @@ export function runInitTemplates(targetDir: string, force = false): void {
   for (const f of written) info(`  + ${relDir}/${f}`);
   for (const f of skipped) info(`  = ${relDir}/${f}（已存在，--force 覆盖）`);
   info(
-    `\n后续：参照 ${relDir}/${TEMPLATE_DOC_FILE} 编辑以上 .tpl 后，` +
+    `\n后续参照 ${relDir}/${TEMPLATE_DOC_FILE} 编辑以上 .tpl 后，` +
       `在 ea.config.json 增加 "templates": "${relDir}"，` +
-      `ea add 将优先采用项目模板（未覆盖的文件回落内置）`
+      `ea add 将优先采用项目模板`
   );
-}
-
-/** 探测候选：单包形态优先，其次 monorepo 形态 */
-const COMPONENT_DIR_CANDIDATES = [
-  "src/components",
-  "packages/components/src/components",
-  "components",
-];
-const TEST_DIR_CANDIDATES = [
-  "src/test",
-  "packages/components/src/test",
-  "test",
-];
-
-/** prefix 格式（与 config 校验一致） */
-const PREFIX_RE = /^[a-z][a-z0-9]*$/;
-
-interface WizardValues {
-  prefix?: string;
-  componentDirs: string;
-  testDir: string;
-  entry: string;
 }
 
 /** 由组件目录推导同包测试目录（src/components → src/test；…/src/components → …/src/test） */
