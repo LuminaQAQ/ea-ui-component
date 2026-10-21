@@ -13,6 +13,16 @@ import {
   regenerateAggregateEntry,
 } from "../lib/aggregate";
 import {
+  findBarrelMainClass,
+  findClassNames,
+  findComponentsImportLine,
+  findDefaultObjectExportLine,
+  findDynamicRelativeImports,
+  findLocalNamedExportLine,
+  isThinBarrel,
+  rewriteRelativeSpecifierDepths,
+} from "../lib/source";
+import {
   normalizeName,
   toPascalCase,
   type NormalizedName,
@@ -47,6 +57,26 @@ interface NamedComponent extends NormalizedName {
   pascal: string;
   /** 是否对外暴露 */
   expose: boolean;
+}
+
+interface UnderPlan {
+  /** barrel=目标已是薄根复合（纯增量追加）；single=单组件（按需复合化转换） */
+  shape: "barrel" | "single";
+  dir: string;
+  subClass: string;
+  mainClass: string;
+  /** 目录搬迁（仅 single 形态非空） */
+  moves: { from: string; to: string }[];
+  /** 搬迁后需删除的原位置文件（仅 single 形态可能有） */
+  deletes: string[];
+  /** 将写入的文件（含薄根 index.ts 终态） */
+  files: PlannedFile[];
+  rootPath: string;
+  rootContent: string;
+  /** 相对导入深度改写记录（预览展示） */
+  rewrites: string[];
+  /** 落盘后聚合入口的再导出行（私有附属不影响，保持原值） */
+  entryLine: string | null;
 }
 
 /** commander variadic 选项按逗号逐项 trim */
@@ -581,10 +611,6 @@ function previewEntryLine(
   return `export { ${names.join(", ")} } from "./${main.full}";`;
 }
 
-/* ------------------------------------------------------------------ *
- * 追加模式（--under）：向已存在组件追加附属组件
- * ------------------------------------------------------------------ */
-
 /** 全库组件目录查找：目标可位于任何 componentDirs（公开或 internal） */
 function findComponentDirAnywhere(
   cfg: ResolvedEaConfig,
@@ -616,11 +642,6 @@ function resolveExistingName(
   );
 }
 
-/** 目标根 index.ts 是否为薄根出口（复合组件）：引用 ./components 且不含类实现 */
-function isThinBarrel(src: string): boolean {
-  return /["']\.\/components\//.test(src) && !/export\s+class\s/.test(src);
-}
-
 /** 向 `export { ... }` / `export default { ... }` 行的花括号列表追加名字；无花括号返回 null */
 function addNameToBraces(line: string, name: string): string | null {
   const open = line.indexOf("{");
@@ -632,11 +653,6 @@ function addNameToBraces(line: string, name: string): string | null {
     .replace(/,\s*$/, "");
   return `${line.slice(0, open + 1)} ${inner ? `${inner}, ` : ""}${name} ${line.slice(close)}`;
 }
-
-const isLocalNamedExport = (line: string): boolean =>
-  /^\s*export\s*\{/.test(line) && !/\bfrom\b/.test(line);
-const isDefaultObjectExport = (line: string): boolean =>
-  /^\s*export\s+default\s*\{/.test(line);
 
 /** 薄根追加附属组件：公开进具名 import 与出口列表，私有仅侧效应 import 注册 */
 function appendSubToBarrel(
@@ -653,19 +669,17 @@ function appendSubToBarrel(
   const eol = src.includes("\r\n") ? "\r\n" : "\n";
   const lines = src.split(/\r?\n/);
 
-  let insertAt = 0;
-  lines.forEach((line, i) => {
-    if (/^\s*import\b/.test(line) && /["']\.\/components\//.test(line))
-      insertAt = i + 1;
-  });
-  if (insertAt === 0) {
-    const firstImport = lines.findIndex(l => /^\s*import\b/.test(l));
-    insertAt = firstImport === -1 ? 0 : firstImport + 1;
-  }
+  // AST 定位插入点与出口行；插入 import 后其后的行号 +1
+  const lastComponentsImport = findComponentsImportLine(src);
+  const insertAt = lastComponentsImport >= 0 ? lastComponentsImport + 1 : 0;
+  let namedIdx = findLocalNamedExportLine(src);
+  let defaultIdx = findDefaultObjectExportLine(src);
+  if (namedIdx >= insertAt) namedIdx += 1;
+  if (defaultIdx >= insertAt) defaultIdx += 1;
+
   lines.splice(insertAt, 0, importLine);
 
   if (isPublic) {
-    const namedIdx = lines.findIndex(isLocalNamedExport);
     if (namedIdx === -1) {
       throw new Error(
         "薄根出口缺少具名导出列表（export { ... }），无法追加公开附属组件；请手工调整薄根或改用私有（默认）"
@@ -673,65 +687,11 @@ function appendSubToBarrel(
     }
     lines[namedIdx] =
       addNameToBraces(lines[namedIdx], subClass) ?? lines[namedIdx];
-    const defaultIdx = lines.findIndex(isDefaultObjectExport);
     if (defaultIdx !== -1)
       lines[defaultIdx] =
         addNameToBraces(lines[defaultIdx], subClass) ?? lines[defaultIdx];
   }
   return lines.join(eol);
-}
-
-/** 相对导入说明符深度下移：./x → ../../x、../x → ../../../x；./index.scss?inline 随实现同迁不改写 */
-function shiftRelativeSpec(spec: string): string {
-  if (spec === "./index.scss?inline") return spec;
-  if (spec.startsWith("./")) return `../../${spec.slice(2)}`;
-  if (spec.startsWith("../")) return `../../${spec}`;
-  return spec;
-}
-
-/** 改写源码中静态相对 import/export 说明符深度；返回改写后文本与被改写的说明符 */
-function rewriteRelativeImports(src: string): {
-  text: string;
-  changed: string[];
-} {
-  const changed: string[] = [];
-  const text = src.replace(
-    /(\bfrom\s*|\bimport\s*)(["'])(\.\.?\/[^"']+)\2/g,
-    (_m, keyword: string, quote: string, spec: string) => {
-      const next = shiftRelativeSpec(spec);
-      if (next !== spec) changed.push(`${spec} → ${next}`);
-      return `${keyword}${quote}${next}${quote}`;
-    }
-  );
-  return { text, changed };
-}
-
-/** 按需复合化时无法安全改写的动态相对导入行（require/动态 import），命中即中止 */
-function detectUnrewritableDynamicImports(src: string): string[] {
-  const hits: string[] = [];
-  const re = /(?:require\s*\(\s*|import\s*\(\s*)(["'])(\.\.?\/[^"']+)\1/g;
-  for (const m of src.matchAll(re)) hits.push(m[0]);
-  return hits;
-}
-
-interface UnderPlan {
-  /** barrel=目标已是薄根复合（纯增量追加）；single=单组件（按需复合化转换） */
-  shape: "barrel" | "single";
-  dir: string;
-  subClass: string;
-  mainClass: string;
-  /** 目录搬迁（仅 single 形态非空） */
-  moves: { from: string; to: string }[];
-  /** 搬迁后需删除的原位置文件（仅 single 形态可能有） */
-  deletes: string[];
-  /** 将写入的文件（含薄根 index.ts 终态） */
-  files: PlannedFile[];
-  rootPath: string;
-  rootContent: string;
-  /** 相对导入深度改写记录（预览展示） */
-  rewrites: string[];
-  /** 落盘后聚合入口的再导出行（私有附属不影响，保持原值） */
-  entryLine: string | null;
 }
 
 /** 追加模式写入计划：薄根纯增量追加 / 单组件按需复合化（实现下移 + 生成薄根） */
@@ -781,22 +741,18 @@ function buildUnderPlan(
   let rootContent: string;
 
   if (isThinBarrel(src)) {
-    const mainMatch =
-      /import\s*\{\s*([A-Za-z0-9_$]+)\s*\}\s*from\s*["']\.\/components\//.exec(
-        src
-      );
-    mainClass = mainMatch ? mainMatch[1] : "";
+    mainClass = findBarrelMainClass(src);
     rootContent = appendSubToBarrel(src, sub, isPublic, pascalPrefix);
   } else {
-    const classMatch = /export\s+class\s+([A-Za-z0-9_$]+)/.exec(src);
-    if (!classMatch) {
+    const exportedClasses = findClassNames(src, true);
+    if (exportedClasses.length === 0) {
       throw new Error(
         `无法识别 ${rel(rootPath)} 的主组件类声明，按需复合化中止（请手工调整或改用普通 ea add）`
       );
     }
-    mainClass = classMatch[1];
+    mainClass = exportedClasses[0];
 
-    const unrewritable = detectUnrewritableDynamicImports(src);
+    const unrewritable = findDynamicRelativeImports(src);
     if (unrewritable.length > 0) {
       throw new Error(
         [
@@ -806,7 +762,7 @@ function buildUnderPlan(
       );
     }
 
-    const { text: movedImpl, changed } = rewriteRelativeImports(src);
+    const { text: movedImpl, changed } = rewriteRelativeSpecifierDepths(src);
     rewrites.push(...changed);
 
     const implDir = path.join(dir, "components", existing);
