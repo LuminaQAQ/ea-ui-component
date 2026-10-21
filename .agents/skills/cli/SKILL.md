@@ -178,6 +178,12 @@ ea init [--templates] [--dir <path>] [--force]
 | 测试 / 文档     | `test`、`doc`                                              |
 | 信息 / 安全     | `custom-element`（JSDoc）、`html-safe`、`type-declaration` |
 
+## 代码组织约定（维护 CLI 自身时）
+
+- **文件布局**：`import` → 类型/接口 → 模块级常量 → 函数；类型与常量置顶，局部量就近（详见 `Project.md`「代码文件布局规范」）。
+- **源码结构探测统一走 `lib/source.ts`（TS AST）**：判断 import、导出类、装饰器（如 `@CustomElement`）、相对说明符等**不要用字符串 `includes` / 正则**，避免注释、JSDoc 示例串与模板字符串误判；写回采用 AST 定位 + 按 span 文本手术（不整树重印，保手工格式）。
+- **校验规则**：`ea check` 的规则集中在 `commands/check.ts` 的规则注册表（`RULES`），新增规则 = 追加一项，豁免过滤与输出由 `runCheck` 统一处理。
+
 ## 常见陷阱
 
 1. **不要手写新组件骨架**——`ea add` 已内置注册 / JSDoc / TagNameMap / 测试 / BEM 骨架，手写必漏。

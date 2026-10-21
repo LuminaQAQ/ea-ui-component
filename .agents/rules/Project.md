@@ -251,6 +251,21 @@ import stylesheet from "./index.scss?inline";
 - 仅导入当前组件实际使用的装饰器
 - 装饰器按 `CustomElement → attribute → property → query → queryAll → children → listen` 顺序排列
 
+### 代码文件布局规范
+
+单个 TS 源文件按以下顺序组织，便于一目了然地看出依赖的类型与常量：
+
+1. `import`（组内按「导入顺序规范」排列）
+2. 类型 / 接口（`interface`、`type`、`enum`）
+3. 模块级常量（`const`：查找表、正则、候选数组等）
+4. 函数 / 类实现
+
+**关键规则：**
+
+- 类型与模块级常量一律**置于文件顶部**（`import` 之后），不要夹在函数之间
+- 仅供单个函数使用的局部常量/类型，留在该函数内就近声明
+- 该约定由评审遵守，**不配置 lint 规则强制**
+
 ### 组件类 JSDoc 注释规范
 
 每个组件类必须添加 JSDoc 注释，描述组件的元信息、插槽、事件、CSS Part 和 CSS 自定义属性：
