@@ -102,7 +102,9 @@ describe("renderCut", () => {
 describe("resolveBuiltinTemplatesDir", () => {
   it("定位到含内置模板的目录", () => {
     const dir = resolveBuiltinTemplatesDir();
-    expect(fs.existsSync(path.join(dir, "component.ts.tpl"))).toBe(true);
+    expect(fs.existsSync(path.join(dir, "component", "component.ts.tpl"))).toBe(
+      true
+    );
     for (const f of BUILTIN_TEMPLATE_FILES) {
       expect(fs.existsSync(path.join(dir, f))).toBe(true);
     }
@@ -112,7 +114,11 @@ describe("resolveBuiltinTemplatesDir", () => {
 describe("loadTemplate", () => {
   it("config.templates 命中项目自定义模板", () => {
     const root = temp();
-    writeFile(root, "mytpl/component.ts.tpl", "// custom ___TAG_NAME___\n");
+    writeFile(
+      root,
+      "mytpl/component/component.ts.tpl",
+      "// custom ___TAG_NAME___\n"
+    );
     const text = loadTemplate(
       "component.ts.tpl",
       cfgWithTemplates(path.join(root, "mytpl"))
@@ -121,7 +127,7 @@ describe("loadTemplate", () => {
   });
   it("补全 .tpl 后缀", () => {
     const root = temp();
-    writeFile(root, "mytpl/widget.tpl", "ENTRY");
+    writeFile(root, "mytpl/component/widget.tpl", "ENTRY");
     expect(
       loadTemplate("widget", cfgWithTemplates(path.join(root, "mytpl")))
     ).toBe("ENTRY");
@@ -166,7 +172,11 @@ describe("renderTemplate", () => {
   it("loadTemplate 渲染链路：config 命中 + 内置回落并存", () => {
     const root = temp();
     // 只覆盖 entry，component 走内置
-    writeFile(root, "ovr/entry.tpl", "// overridden ___TAG_NAME___\n");
+    writeFile(
+      root,
+      "ovr/component/entry.tpl",
+      "// overridden ___TAG_NAME___\n"
+    );
     const cfg = cfgWithTemplates(path.join(root, "ovr"));
     expect(loadTemplate("entry.tpl", cfg)).toBe(
       "// overridden ___TAG_NAME___\n"
@@ -182,7 +192,7 @@ describe("renderTemplate cut 行为", () => {
     const root = temp();
     writeFile(
       root,
-      "t/component.ts.tpl",
+      "t/component/component.ts.tpl",
       [
         `class ___CLASS_NAME___ {}`,
         TPL_CUT_MARKER,
@@ -202,7 +212,7 @@ describe("renderTemplate cut 行为", () => {
     const root = temp();
     writeFile(
       root,
-      "t/component.ts.tpl",
+      "t/component/component.ts.tpl",
       [
         `class ___CLASS_NAME___ {}`,
         TPL_CUT_MARKER,

@@ -46,7 +46,10 @@ describe("runInitTemplates", () => {
       expect(fs.existsSync(path.join(target, f))).toBe(true);
     }
     expect(fs.existsSync(path.join(target, TEMPLATE_DOC_FILE))).toBe(true);
-    const ts = fs.readFileSync(path.join(target, "component.ts.tpl"), "utf-8");
+    const ts = fs.readFileSync(
+      path.join(target, "component", "component.ts.tpl"),
+      "utf-8"
+    );
     expect(ts).toContain("___CLASS_NAME___");
   });
 
@@ -55,7 +58,7 @@ describe("runInitTemplates", () => {
     const target = path.join(root, "out");
     runInitTemplates(target);
     // 篡改其一
-    const touched = path.join(target, "component.ts.tpl");
+    const touched = path.join(target, "component", "component.ts.tpl");
     fs.writeFileSync(touched, "// customized");
 
     runInitTemplates(target); // 无 force
@@ -75,7 +78,9 @@ describe("runInit", () => {
     await runInit({ templates: true, dir: "custom-tpl" });
 
     expect(
-      fs.existsSync(path.join(root, "custom-tpl", "component.ts.tpl"))
+      fs.existsSync(
+        path.join(root, "custom-tpl", "component", "component.ts.tpl")
+      )
     ).toBe(true);
   });
 
@@ -95,7 +100,9 @@ describe("runInit", () => {
     await runInit({ templates: true });
 
     expect(
-      fs.existsSync(path.join(root, "tpl-from-config", "entry.ts.tpl"))
+      fs.existsSync(
+        path.join(root, "tpl-from-config", "component", "entry.ts.tpl")
+      )
     ).toBe(true);
   });
 
@@ -106,7 +113,9 @@ describe("runInit", () => {
     await runInit({ templates: true });
 
     expect(
-      fs.existsSync(path.join(root, "ea-templates", "component.ts.tpl"))
+      fs.existsSync(
+        path.join(root, "ea-templates", "component", "component.ts.tpl")
+      )
     ).toBe(true);
   });
 
@@ -121,7 +130,9 @@ describe("runInit", () => {
 
     runInitTemplates(target);
 
-    expect(fs.existsSync(path.join(target, "component.ts.tpl"))).toBe(true);
+    expect(
+      fs.existsSync(path.join(target, "component", "component.ts.tpl"))
+    ).toBe(true);
     expect(fs.existsSync(path.join(target, "README.md"))).toBe(false);
     expect(out()).toContain("README.md 编辑以上 .tpl 后");
   });
@@ -314,7 +325,9 @@ describe("runInit", () => {
 
     await runInit({ templates: true, dir: "." });
 
-    expect(fs.existsSync(path.join(root, "component.ts.tpl"))).toBe(true);
-    expect(out()).toContain("./component.ts.tpl");
+    expect(
+      fs.existsSync(path.join(root, "component", "component.ts.tpl"))
+    ).toBe(true);
+    expect(out()).toContain("./component/component.ts.tpl");
   });
 });

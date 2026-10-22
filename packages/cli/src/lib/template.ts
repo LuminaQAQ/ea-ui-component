@@ -6,12 +6,15 @@ import type { ResolvedEaConfig } from "./config";
 /** 主/附属组件模板出口段截断标记：cut 行之前为类实现 + TagNameMap 自声明，之后为值导出段 */
 export const TPL_CUT_MARKER = "// @ea-tpl:cut";
 
-/** 内置模板随包发布的文件名（init --templates 与 loadTemplate 共用） */
+/** 组件模板子目录（与 project/ 平级） */
+export const TEMPLATE_COMPONENT_DIR = "component";
+
+/** 内置组件模板（相对 templates/ 的路径，随包发布；init --templates 按路径 eject） */
 export const BUILTIN_TEMPLATE_FILES = [
-  "component.ts.tpl",
-  "entry.ts.tpl",
-  "component.scss.tpl",
-  "component.test.ts.tpl",
+  "component/component.ts.tpl",
+  "component/entry.ts.tpl",
+  "component/component.scss.tpl",
+  "component/component.test.ts.tpl",
 ] as const;
 
 /** 随模板一同 eject 的维护契约文档（init --templates 会拷贝；非 .tpl，不参与渲染） */
@@ -124,7 +127,10 @@ export function resolveBuiltinTemplatesDir(): string {
     /* import.meta 不可用（CJS 环境）时忽略该候选 */
   }
   for (const dir of candidates) {
-    if (fs.existsSync(path.join(dir, "component.ts.tpl"))) return dir;
+    if (
+      fs.existsSync(path.join(dir, TEMPLATE_COMPONENT_DIR, "component.ts.tpl"))
+    )
+      return dir;
   }
   throw new Error(
     `未找到内置模板目录（已探测：${candidates.join("、") || "无"}）。运行 ea init --templates 初始化模板`
@@ -137,15 +143,14 @@ export function resolveBuiltinTemplatesDir(): string {
  */
 export function loadTemplate(name: string, cfg: ResolvedEaConfig): string {
   const fileName = name.endsWith(".tpl") ? name : `${name}.tpl`;
+  const rel = path.join(TEMPLATE_COMPONENT_DIR, fileName);
   if (cfg.templates) {
-    const custom = path.resolve(process.cwd(), cfg.templates, fileName);
+    const custom = path.resolve(process.cwd(), cfg.templates, rel);
     if (fs.existsSync(custom)) return fs.readFileSync(custom, "utf-8");
   }
-  const builtin = path.join(resolveBuiltinTemplatesDir(), fileName);
+  const builtin = path.join(resolveBuiltinTemplatesDir(), rel);
   if (!fs.existsSync(builtin)) {
-    throw new Error(
-      `模板 ${fileName} 不存在于内置目录（${path.dirname(builtin)}）`
-    );
+    throw new Error(`模板 ${rel} 不存在于内置目录（${path.dirname(builtin)}）`);
   }
   return fs.readFileSync(builtin, "utf-8");
 }

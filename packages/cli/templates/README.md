@@ -1,15 +1,19 @@
 # 组件模板维护
 
-`ea add` 的默认模板。修改此处 `*.tpl` 文件即定制生成结果；也可经 `ea init --templates` 只覆盖个别文件。
+`ea add` 的默认组件模板位于 `component/` 子目录。修改其中的 `*.tpl` 即定制生成结果；也可经 `ea init --templates` 只覆盖个别文件。
+
+> `project/` 是 `ea create` 使用的**真实单包项目模板**（不做 token 渲染，复制后仅改写 name/prefix）。
 
 ## 文件 → 产物
 
-| 模板                    | 渲染为             | 用途                                                                                                                              |
-| ----------------------- | ------------------ | --------------------------------------------------------------------------------------------------------------------------------- |
-| `component.ts.tpl`      | `index.ts`         | 组件骨架，主/附属通用（值导出 `___EXPORT_DEFAULT___`、私有组件注册 `___INTERNAL_DEPS___`、`@dependency` 文档 `___DEPENDENCY___`） |
-| `entry.ts.tpl`          | `index.ts`         | 复合主出口薄壳（`--with` 时用）                                                                                                   |
-| `component.scss.tpl`    | `index.scss`       | 样式骨架（SCSS 变量 + BEM mixin）                                                                                                 |
-| `component.test.ts.tpl` | `<标签名>.test.ts` | Vitest 用例骨架                                                                                                                   |
+| 模板                             | 渲染为             | 用途                                                                                                                              |
+| -------------------------------- | ------------------ | --------------------------------------------------------------------------------------------------------------------------------- |
+| `component/component.ts.tpl`     | `index.ts`         | 组件骨架，主/附属通用（值导出 `___EXPORT_DEFAULT___`、私有组件注册 `___INTERNAL_DEPS___`、`@dependency` 文档 `___DEPENDENCY___`） |
+| `component/entry.ts.tpl`         | `index.ts`         | 复合主出口薄壳（`--with` 时用）                                                                                                   |
+| `component/component.scss.tpl`   | `index.scss`       | 样式骨架（SCSS 变量 + BEM mixin）                                                                                                 |
+| `component/component.test.ts.tpl` | `<标签名>.test.ts` | Vitest 用例骨架                                                                                                                   |
+
+- 项目自定义模板需保持同样的 `component/` 子路径，如 `my-tpl/component/component.ts.tpl`；`ea init --templates` 亦按该结构 eject。
 
 ## 占位符（token）
 
@@ -36,7 +40,7 @@
 
 ## 值导出与 cut 标记
 
-- 内置 `component.ts.tpl` 用 `___EXPORT_DEFAULT___` token 控制值导出：单组件填 `export default <类名>;`，附属 / 复合主实现留空即整行省略，仅保留 `declare global` 自声明。
+- 内置 `component/component.ts.tpl` 用 `___EXPORT_DEFAULT___` token 控制值导出：单组件填 `export default <类名>;`，附属 / 复合主实现留空即整行省略，仅保留 `declare global` 自声明。
 - 兼容机制：模板若使用 `// @ea-tpl:cut` 哨兵行，截断渲染（附属 / 复合主实现）会丢弃该行及其后的值导出段，全文渲染（单组件）仅剥离该注释行。自定义模板可二选一。
 
 ## 公共子元素与私有组件（`--with` / `--parts`）

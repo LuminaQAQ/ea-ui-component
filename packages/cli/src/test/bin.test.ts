@@ -301,7 +301,9 @@ describe("bin.ts 子命令端到端退出码", () => {
     const r = await run(["init", "--templates", "--dir", "my-tpl"], root);
     expect(r.status).toBe(0);
     expect(
-      require("node:fs").existsSync(path.join(root, "my-tpl", "entry.ts.tpl"))
+      require("node:fs").existsSync(
+        path.join(root, "my-tpl", "component", "entry.ts.tpl")
+      )
     ).toBe(true);
   });
 

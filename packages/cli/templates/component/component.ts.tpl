@@ -1,7 +1,5 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
 import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
-import { Enum } from "@easy-component-ui/core/utils/Enum";
-import { VARIANT_TYPES, VARIANT_DEFAULT, type VariantType } from "@constants/variant";
 ___INTERNAL_DEPS___
 import stylesheet from "./index.scss?inline";
 
@@ -24,16 +22,16 @@ export class ___CLASS_NAME___ extends EaBase {
   private _container!: HTMLElement;
 
   @attribute({
-    type: Enum([...VARIANT_TYPES]),
-    default: VARIANT_DEFAULT,
-    observer(this: ___CLASS_NAME___) {
+    type: Boolean,
+    default: false,
+    observer(this: ___CLASS_NAME___, newVal: boolean) {
       this.updateContainerClasslist();
     },
   })
-  variant: VariantType = VARIANT_DEFAULT;
+  disabled = false;
 
   updateContainerClasslist(): string {
-    const className = bem({ [this.variant]: true });
+    const className = bem({ disabled: this.disabled });
 
     if (this._container) this._container.className = className;
 

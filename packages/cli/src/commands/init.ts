@@ -83,12 +83,13 @@ export function runInitTemplates(targetDir: string, force = false): void {
   const written: string[] = [];
   const skipped: string[] = [];
   for (const file of ejectFiles) {
-    const to = path.join(targetDir, file);
+    const to = path.join(targetDir, ...file.split("/"));
     if (fs.existsSync(to) && !force) {
       skipped.push(file);
       continue;
     }
-    fs.copyFileSync(path.join(srcDir, file), to);
+    fs.mkdirSync(path.dirname(to), { recursive: true });
+    fs.copyFileSync(path.join(srcDir, ...file.split("/")), to);
     written.push(file);
   }
 
