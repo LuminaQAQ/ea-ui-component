@@ -152,8 +152,8 @@ describe("runCheck", () => {
     expect(out()).not.toContain("[missing-test]");
   });
 
-  it("config.ignore rules 缺省豁免该组件全部可蔑免规则", () => {
-    // naming 规则不受 ignore 蔑免（需合规命名），故用合法名 + 缺测试场景验证 missing-test 被全蔑免
+  it("config.ignore rules 缺省豁免该组件全部可豁免规则", () => {
+    // naming 规则不受 ignore 豁免（需合规命名），故用合法名 + 缺测试场景验证 missing-test 被全豁免
     const root = setup({ prefix: "ea", ignore: [{ name: "ea-x" }] });
     writeFile(root, "components/ea-x/index.ts", "export const a = 1;");
 
@@ -525,7 +525,11 @@ describe("runCheck — 豁免语义（决策 28）", () => {
       prefix: "ea",
       ignore: [{ name: "ea-button", reason: "长期许可" }],
     });
-    writeFile(root, "components/ea-button/index.ts", "export class EaButton {}");
+    writeFile(
+      root,
+      "components/ea-button/index.ts",
+      "export class EaButton {}"
+    );
     writeFile(root, "components/ea-button/ea-button.test.ts", "// t");
     writeFile(
       root,
