@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Easy Project</title>
+  <link rel="stylesheet" href="/assets/style.css" />
+</head>
+
+<body>
+  <main class="landing">
+    <h1 class="eyebrow">Easy CLI</h1>
+    <p class="intro">
+      基于 Web Components 的组件库工程脚手架。
+    </p>
+    <ul class="intro">
+      <li>用 <code>ea create</code> 初始化项目</li>
+      <li>用 <code>ea add</code> 生成组件</li>
+      <li>用 <code>ea check</code> 保持目录规范</li>
+    </ul>
+
+    <div class="stepper" role="group" aria-label="简易数字输入">
+      <ea-button id="minus" disabled aria-label="减少">−</ea-button>
+      <output id="value" aria-label="当前数值">0</output>
+      <ea-button id="plus" aria-label="增加">+</ea-button>
+    </div>
+  </main>
+  <script type="module" src="/main.ts"></script>
+</body>
+
+</html>

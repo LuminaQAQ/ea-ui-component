@@ -5,6 +5,7 @@ import { runAdd } from "./commands/add";
 import { runInit } from "./commands/init";
 import { runRemove } from "./commands/remove";
 import { runSync } from "./commands/sync";
+import { runCreate } from "./commands/create";
 import { fail, c } from "./lib/output";
 
 /** 构建 CLI 命令树（每次新建实例，保证 main 可重复进程内调用） */
@@ -102,6 +103,16 @@ function createProgram(): Command {
     )
     .option("--dry-run", "仅预览聚合入口将变更的 export 行，不落盘")
     .action(options => runSync(options));
+
+  program
+    .command("create [name]")
+    .description(
+      "脚手架单包组件库项目（仅单包模式；复制内置 project 模板并替换名称/前缀）"
+    )
+    .option("--dir <path>", "目标目录（缺省为 ./<name>）")
+    .option("--prefix <p>", "组件命名空间前缀（非交互必填）")
+    .option("--dry-run", "仅预览将创建的文件，不落盘")
+    .action((name: string | undefined, options) => runCreate(name, options));
 
   program
     .command("init")

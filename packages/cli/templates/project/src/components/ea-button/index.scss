@@ -1,0 +1,29 @@
+$name: ea-button;
+
+:host {
+  display: inline-block;
+}
+
+:host([disabled]) {
+  cursor: not-allowed;
+}
+
+:host([disabled]) .#{$name} {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@include block($name) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border: 1px solid var(--border-color, #d0d7de);
+  border-radius: var(--border-radius-sm, 4px);
+  background: var(--bg-color, #ffffff);
+  color: var(--text-color, #1f2328);
+  font: inherit;
+  cursor: pointer;
+  user-select: none;
+}

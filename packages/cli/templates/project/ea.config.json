@@ -1,0 +1,12 @@
+{
+  "project": {
+    "prefix": "ea",
+    "componentDirs": "src/components",
+    "testDir": "src/test",
+    "entry": "src/index.ts"
+  },
+  "check": {
+    "rootTestWhitelist": [],
+    "ignore": []
+  }
+}
