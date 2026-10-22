@@ -47,6 +47,11 @@ function listTemplateFiles(root: string): string[] {
   return out.sort();
 }
 
+/** 模板中的 gitignore 以无点文件名入库，生成时还原为 .gitignore */
+function toProjectRel(rel: string): string {
+  return rel === "gitignore" ? ".gitignore" : rel;
+}
+
 /** 目标目录不存在或为空 */
 function isDirEmpty(dir: string): boolean {
   return !fs.existsSync(dir) || fs.readdirSync(dir).length === 0;
@@ -164,14 +169,14 @@ export async function runCreate(
     info(
       `将创建项目 ${projectName}（prefix=${prefix}）到 ${relTarget(target)}/：`
     );
-    for (const rel of files) info(`  + ${rel}`);
+    for (const rel of files) info(`  + ${toProjectRel(rel)}`);
     return;
   }
 
   // 模板即真实项目：原样复制
   for (const rel of files) {
     const srcAbs = path.join(root, ...rel.split("/"));
-    const destAbs = path.join(target, ...rel.split("/"));
+    const destAbs = path.join(target, ...toProjectRel(rel).split("/"));
     fs.mkdirSync(path.dirname(destAbs), { recursive: true });
     fs.copyFileSync(srcAbs, destAbs);
   }

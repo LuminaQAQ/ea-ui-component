@@ -78,6 +78,8 @@ describe("runCreate", () => {
     expect(main).toContain('getElementById("minus")');
     expect(fs.existsSync(path.join(target, "main.ts"))).toBe(true);
     expect(fs.existsSync(path.join(target, "assets", "style.css"))).toBe(true);
+    expect(fs.existsSync(path.join(target, ".gitignore"))).toBe(true);
+    expect(fs.existsSync(path.join(target, "gitignore"))).toBe(false);
     expect(fs.existsSync(path.join(target, "pnpm-workspace.yaml"))).toBe(true);
 
     const readme = readLf(path.join(target, "README.md"));
