@@ -11,6 +11,7 @@ description: "ea-ui-component 工程 CLI（ea add / ea check / ea init）：新�
 | ----------------------------------- | ------------------------------------------------------------------------------ |
 | `ea add [name]`（别名 `new`/`gen`） | **生成合规新组件**（三件套；支持复合组件 / 私有组件）                          |
 | `ea check`                          | 校验组件目录规范（同名测试 / 孤儿测试 / 命名 / 共享测试区），有 error 退出码 1 |
+| `ea create [name]`                  | 脚手架单包组件库项目（仅单包模式，复制内置 `project` 模板）                    |
 | `ea init`                           | 将内置模板落盘到项目（二次开发起点，`--templates`）                            |
 
 > **核心约定：新建组件一律先走 `ea add`，不要手写组件骨架。** 手写会漏掉注册、同名测试、聚合出口等机械环节，属于规范漂移的根源。
@@ -127,10 +128,23 @@ ea check [--ignore <name...>]
 ea init [--templates] [--dir <path>] [--force]
 ```
 
-- `--templates`：把内置模板（`packages/cli/templates/*.tpl` + `README.md`）写到项目模板目录，作为二次开发起点；
+- `--templates`：把内置组件模板（`packages/cli/templates/component/*.tpl` + `README.md`）写到项目模板目录，作为二次开发起点；
 - `--dir`：输出目录（缺省取 `ea.config.json` 的 `templates`，再回落 `ea-templates/`）；
 - `--force`：覆盖已存在同名模板（默认跳过）。
 - 落盘后在 `ea.config.json` 配置 `"templates": "<目录>"`，`ea add` 会优先用项目模板（未覆盖的文件回落内置）。
+
+## `ea create`（单包脚手架）
+
+```text
+ea create [name] [--dir <path>] [--prefix <p>] [--dry-run]
+```
+
+- 仅**单包模式**：`templates/project/` **本身就是真实可运行项目**（含示例组件 `src/components/ea-button`、演示页 `index.html` / 根 `main.ts` / `assets/`，`dev` 即 `vite`）。
+- 复制后改写 `package.json.name` 与 `ea.config.json.prefix`；prefix ≠ `ea` 时同步改写示例组件的目录/标签/类名及 demo 标签（保证 `ea check` naming 合规）。
+- **不随项目分发本仓库 `constants`**：内置组件模板只有一份通用版（`disabled` 布尔属性示例），不含 variant/constants。
+- `--prefix` 非交互必填（不静默注入前缀）；`--dir` 缺省 `./<name>`；目标目录非空则拒绝。
+- 落盘后自动对齐聚合入口骨架；依赖 **`^x.y.z` range**（core/themes，与 create-vite 一致，用户 install 时拿到 minor/patch 最新）+ `pnpm-workspace.yaml` 的 `allowBuilds` 放行 esbuild/@parcel/watcher（pnpm 11）。已实测仓外 `pnpm install` → `typecheck`/`test`/`build` 全绿；`pnpm dev` 可看演示页。
+- 模板依赖由 `.github/dependabot.yml` 监控（`versioning-strategy: increase`，allow `@easy-component-ui/*`），core/themes 发版后自动提 PR 提升 range 下限；`create` 复制时忽略 lockfile（模板不携带）。
 
 ## `ea.config.json`（契约）
 
