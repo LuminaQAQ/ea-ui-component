@@ -1,22 +1,39 @@
 const STORAGE_KEY = "ea-theme";
 const DARK_CLASS = "dark";
 
+const GlobalLocalStorage: globalThis.Storage =
+  typeof globalThis.localStorage !== "undefined"
+    ? globalThis.localStorage
+    : (new (class {
+        readonly length: number = 0;
+        clear = () => undefined;
+        getItem = () => undefined;
+        key = () => undefined;
+        removeItem = () => undefined;
+        setItem = () => undefined;
+        [key: string]: any;
+      })() as unknown as Storage);
+
 export type ThemeMode = "light" | "dark" | "auto";
 export type ThemeValue = "light" | "dark";
 
 function getSystemPreference(): boolean {
-  return window.matchMedia("(prefers-color-scheme: dark)").matches;
+  return globalThis.matchMedia?.("(prefers-color-scheme: dark)")?.matches;
 }
 
 function getStoredTheme(): ThemeMode | null {
-  return localStorage.getItem(STORAGE_KEY) as ThemeMode | null;
+  return GlobalLocalStorage.getItem(STORAGE_KEY) as ThemeMode | null;
 }
 
 function applyTheme(isDark: boolean): void {
+  if (typeof globalThis.document === "undefined") return;
+
   document.documentElement.classList.toggle(DARK_CLASS, isDark);
 }
 
 function dispatchThemeChange(): void {
+  if (typeof globalThis.document === "undefined") return;
+
   document.dispatchEvent(
     new CustomEvent("ea-theme-change", {
       detail: { mode: getCurrentTheme() },
@@ -35,9 +52,9 @@ export function initTheme(): void {
   const shouldBeDark = stored === "dark" || (stored !== "light" && systemDark);
   applyTheme(shouldBeDark);
 
-  window
-    .matchMedia("(prefers-color-scheme: dark)")
-    .addEventListener("change", e => {
+  globalThis
+    .matchMedia?.("(prefers-color-scheme: dark)")
+    ?.addEventListener("change", e => {
       if (!getStoredTheme() || getStoredTheme() === "auto") {
         applyTheme(e.matches);
         dispatchThemeChange();
@@ -51,10 +68,10 @@ export function initTheme(): void {
  */
 export function setTheme(mode: ThemeMode): void {
   if (mode === "auto") {
-    localStorage.removeItem(STORAGE_KEY);
+    GlobalLocalStorage.removeItem(STORAGE_KEY);
     applyTheme(getSystemPreference());
   } else {
-    localStorage.setItem(STORAGE_KEY, mode);
+    GlobalLocalStorage.setItem(STORAGE_KEY, mode);
     applyTheme(mode === "dark");
   }
   dispatchThemeChange();
@@ -65,6 +82,8 @@ export function setTheme(mode: ThemeMode): void {
  * @returns 'light' 或 'dark'
  */
 export function getCurrentTheme(): ThemeValue {
+  if (typeof globalThis.document === "undefined") return "light";
+
   return document.documentElement.classList.contains(DARK_CLASS)
     ? "dark"
     : "light";
