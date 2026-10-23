@@ -10,9 +10,9 @@ declare global {
   }
 }
 
-window.$alert = EaMessageBox.alert;
-window.$confirm = EaMessageBox.confirm;
-window.$prompt = EaMessageBox.prompt;
-window.$msgbox = EaMessageBox;
+(globalThis as any).$alert = EaMessageBox.alert;
+(globalThis as any).$confirm = EaMessageBox.confirm;
+(globalThis as any).$prompt = EaMessageBox.prompt;
+(globalThis as any).$msgbox = EaMessageBox;
 
 export { EaMessageBox, EaMessageBoxElement };

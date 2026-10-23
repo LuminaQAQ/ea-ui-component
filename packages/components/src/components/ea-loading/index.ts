@@ -7,6 +7,6 @@ declare global {
   }
 }
 
-window.$loading = EaLoadingService;
+(globalThis as any).$loading = EaLoadingService;
 
 export { EaLoading, EaLoadingService };
