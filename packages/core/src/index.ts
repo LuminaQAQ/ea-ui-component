@@ -12,3 +12,4 @@ export { html } from "@utils/html";
 export { createBEM as createBem } from "@utils/bem";
 export { debounce, throttle, rafThrottle } from "@utils/performance";
 export { timeout } from "@utils/timeout";
+export { GlobalCustomElements, GlobalLocalStorage } from "@utils/env";

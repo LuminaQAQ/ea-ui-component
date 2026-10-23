@@ -1,6 +1,11 @@
 import EaBase from "@core/EaBase";
 import { attribute } from "@decorator/attribute";
 import { CustomElement } from "@decorator/custom-element";
+import {
+  GlobalHTMLElement,
+  GlobalHTMLFormElement,
+  GlobalValidityState,
+} from "@utils/env";
 
 /**
  * 表单关联基类
@@ -19,12 +24,12 @@ export class EaFormAssociatedBase extends EaBase {
    * 字段名称
    */
   @attribute({
-    type: HTMLFormElement,
+    type: GlobalHTMLFormElement,
     default: function (this: EaFormAssociatedBase) {
       return this.internals.form;
     },
   })
-  form: HTMLFormElement | null = null;
+  form: GlobalHTMLFormElement | null = null;
 
   /**
    * 字段名称
@@ -50,12 +55,12 @@ export class EaFormAssociatedBase extends EaBase {
    * 验证状态
    */
   @attribute({
-    type: ValidityState,
+    type: GlobalValidityState,
     default: function (this: EaFormAssociatedBase) {
       return this.internals?.validity ?? null;
     },
   })
-  validity: ValidityState | null = null;
+  validity: GlobalValidityState | null = null;
 
   /**
    * 获取内部验证消息
@@ -182,7 +187,7 @@ export class EaFormAssociatedBase extends EaBase {
    * 获取验证目标元素，需子组件实现
    * @returns 验证目标元素
    */
-  get validationTarget(): HTMLElement | null | undefined {
+  get validationTarget(): GlobalHTMLElement | null | undefined {
     return undefined;
   }
 
@@ -203,7 +208,7 @@ export class EaFormAssociatedBase extends EaBase {
    * 获取关联的表单元素
    * @returns 表单元素或 null
    */
-  getForm(): HTMLFormElement | null {
+  getForm(): GlobalHTMLFormElement | null {
     return this.internals?.form ?? null;
   }
 
@@ -241,7 +246,7 @@ export class EaFormAssociatedBase extends EaBase {
       } else {
         const flags: Record<string, boolean> = {};
         for (const key in validity) {
-          if (validity[key as keyof ValidityState] && key !== "valid") {
+          if (validity[key as keyof GlobalValidityState] && key !== "valid") {
             flags[key] = true;
           }
         }
@@ -308,7 +313,7 @@ export class EaFormAssociatedBase extends EaBase {
    * @param message - 自定义错误消息，空字符串表示清除错误
    */
   setCustomValidity(message: string): void {
-    const target = this.validationTarget as HTMLElement | undefined;
+    const target = this.validationTarget as GlobalHTMLElement | undefined;
     if (
       target &&
       target !== this &&
@@ -338,7 +343,7 @@ export class EaFormAssociatedBase extends EaBase {
       this.internals.setValidity({}, "", this.validationTarget ?? undefined);
     }
 
-    const target = this.validationTarget as HTMLElement | undefined;
+    const target = this.validationTarget as GlobalHTMLElement | undefined;
     if (
       target &&
       target !== this &&
@@ -351,7 +356,7 @@ export class EaFormAssociatedBase extends EaBase {
   // ==================== 生命周期 ====================
 
   private static _formSubmitControllers: WeakMap<
-    HTMLFormElement,
+    GlobalHTMLFormElement,
     { controller: AbortController; registered: boolean }
   > = new WeakMap();
 
@@ -359,7 +364,7 @@ export class EaFormAssociatedBase extends EaBase {
    * 表单关联回调，处理表单提交事件
    * @param form - 关联的表单元素
    */
-  formAssociatedCallback(form: HTMLFormElement | null): void {
+  formAssociatedCallback(form: GlobalHTMLFormElement | null): void {
     if (!form) return;
 
     form.noValidate = true;

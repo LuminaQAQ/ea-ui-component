@@ -1,6 +1,13 @@
 import createDOMPurify from "dompurify";
 
-const DOMPurify = createDOMPurify(window);
+const getPurifier = () => {
+  const w = globalThis.window as any;
+  if (!w?.document) return null;
+
+  return createDOMPurify(w);
+};
+
+let DOMPurify = getPurifier();
 
 /**
  * 清洗 HTML 字符串，防止 XSS 攻击
@@ -8,6 +15,8 @@ const DOMPurify = createDOMPurify(window);
  * @returns 清洗后的安全 HTML
  */
 export const html = (dirtyHTML: string): string => {
+  if (!DOMPurify) return dirtyHTML;
+
   const slotPlaceholders: string[] = [];
   const protectedHTML = dirtyHTML.replace(/<\/?slot\b[^>]*>/g, match => {
     const placeholder = `___SLOT_${slotPlaceholders.length}___`;

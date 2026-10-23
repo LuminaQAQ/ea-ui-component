@@ -1,4 +1,5 @@
-﻿import type { EaElement } from "../types/index";
+﻿import { GlobalHTMLElement } from "@utils/env";
+import type { EaElement } from "../types/index";
 
 export interface ListenOptions {
   capture?: boolean;
@@ -16,7 +17,7 @@ export interface ListenOptions {
 function createEventHandler(
   selector: string | undefined,
   callback: (e: Event) => void,
-  element: EaElement & HTMLElement
+  element: EaElement & GlobalHTMLElement
 ): (e: Event) => void {
   if (
     !selector ||
@@ -51,7 +52,7 @@ function createEventHandler(
  */
 function getEventTarget(
   selector: string | undefined,
-  element: EaElement & HTMLElement
+  element: EaElement & GlobalHTMLElement
 ): EventTarget {
   if (selector === "window") {
     return window;
@@ -77,7 +78,7 @@ function getEventTarget(
  * 值：该实例上所有 @listen 绑定的 AbortController 集合
  */
 const ElementListenersMap: WeakMap<
-  EaElement & HTMLElement,
+  EaElement & GlobalHTMLElement,
   Set<AbortController>
 > = new WeakMap();
 
@@ -90,7 +91,7 @@ const ElementListenersMap: WeakMap<
  * @param options 监听选项
  */
 function setupEventListener(
-  element: EaElement & HTMLElement,
+  element: EaElement & GlobalHTMLElement,
   eventName: string,
   selector: string | undefined,
   callback: (e: Event) => void,
@@ -118,7 +119,7 @@ function setupEventListener(
  * 清理事件监听
  * @param element 组件实例
  */
-function cleanupEventListener(element: EaElement & HTMLElement): void {
+function cleanupEventListener(element: EaElement & GlobalHTMLElement): void {
   const controllers = ElementListenersMap.get(element);
   if (controllers) {
     controllers.forEach(controller => controller.abort());
@@ -138,7 +139,7 @@ function getPrototypeCallback(
 ): Function | undefined {
   if (target[methodName]) return target[methodName];
   const proto = Object.getPrototypeOf(target);
-  if (proto && proto !== HTMLElement.prototype) {
+  if (proto && proto !== GlobalHTMLElement.prototype) {
     return getPrototypeCallback(proto, methodName);
   }
   return undefined;
@@ -190,7 +191,9 @@ export function listen(
         const originalConnected = this.connectedCallback;
         const originalDisconnected = this.disconnectedCallback;
 
-        this.connectedCallback = function (this: EaElement & HTMLElement) {
+        this.connectedCallback = function (
+          this: EaElement & GlobalHTMLElement
+        ) {
           originalConnected?.call(this);
           setupEventListener(
             this,
@@ -201,7 +204,9 @@ export function listen(
           );
         };
 
-        this.disconnectedCallback = function (this: EaElement & HTMLElement) {
+        this.disconnectedCallback = function (
+          this: EaElement & GlobalHTMLElement
+        ) {
           cleanupEventListener(this);
           originalDisconnected?.call(this);
         };
@@ -233,7 +238,9 @@ export function listen(
       );
 
       // 在事件触发时从实例上动态获取方法
-      target.connectedCallback = function (this: EaElement & HTMLElement) {
+      target.connectedCallback = function (
+        this: EaElement & GlobalHTMLElement
+      ) {
         originalConnected?.call(this);
         setupEventListener(
           this,
@@ -255,7 +262,9 @@ export function listen(
         );
       };
 
-      target.disconnectedCallback = function (this: EaElement & HTMLElement) {
+      target.disconnectedCallback = function (
+        this: EaElement & GlobalHTMLElement
+      ) {
         cleanupEventListener(this);
         originalDisconnected?.call(this);
       };

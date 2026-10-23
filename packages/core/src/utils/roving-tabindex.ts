@@ -1,3 +1,5 @@
+import { GlobalHTMLElement } from "./env";
+
 /**
  * Roving Tabindex 管理器
  * 实现 WAI-ARIA 的 Roving Tabindex 模式，用于管理复合组件内的焦点导航
@@ -13,7 +15,7 @@
  * @see https://www.w3.org/WAI/ARIA/apg/practices/keyboard-interface/#kbd_roving_tabindex
  */
 export class RovingTabindex {
-  private _items: HTMLElement[] = [];
+  private _items: GlobalHTMLElement[] = [];
   private _currentIndex: number = 0;
   private _orientation: "horizontal" | "vertical" | "both";
   private _loop: boolean;
@@ -32,7 +34,7 @@ export class RovingTabindex {
     this._onFocus = options.onFocus;
   }
 
-  setItems(items: HTMLElement[]): void {
+  setItems(items: GlobalHTMLElement[]): void {
     this._items = items;
     this._currentIndex = 0;
     this._updateTabindices();
@@ -46,13 +48,19 @@ export class RovingTabindex {
 
     switch (key) {
       case "ArrowRight":
-        if (this._orientation === "horizontal" || this._orientation === "both") {
+        if (
+          this._orientation === "horizontal" ||
+          this._orientation === "both"
+        ) {
           handled = true;
           this._moveToNext();
         }
         break;
       case "ArrowLeft":
-        if (this._orientation === "horizontal" || this._orientation === "both") {
+        if (
+          this._orientation === "horizontal" ||
+          this._orientation === "both"
+        ) {
           handled = true;
           this._moveToPrev();
         }

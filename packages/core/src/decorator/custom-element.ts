@@ -14,6 +14,7 @@ import type {
   EaElement,
   EaElementConstructor,
 } from "../types/index";
+import { GlobalCustomElements, GlobalHTMLElement } from "@utils/env";
 
 /**
  * @description ea-ui 自定义元素装饰器选项
@@ -42,7 +43,10 @@ type CustomElementDecorator = (
  * 键：组件实例
  * 值：被显式置为 false 的属性名集合
  */
-const BooleanFalseAttrsMap: WeakMap<HTMLElement, Set<string>> = new WeakMap();
+const BooleanFalseAttrsMap: WeakMap<
+  GlobalHTMLElement,
+  Set<string>
+> = new WeakMap();
 
 /**
  * 获取自定义元素类的原型链（不含 HTMLElement），按基类到派生类排序
@@ -52,7 +56,7 @@ const BooleanFalseAttrsMap: WeakMap<HTMLElement, Set<string>> = new WeakMap();
 function getClassChain(customElementClass: any): any[] {
   const chain: any[] = [];
   let current: any = customElementClass;
-  while (current && current !== HTMLElement) {
+  while (current && current !== GlobalHTMLElement) {
     chain.unshift(current);
     current = Object.getPrototypeOf(current);
   }
@@ -105,7 +109,7 @@ function createAttributeGetter(
 ) {
   const attrName = camelToKebab(name);
 
-  return function (this: EaElement & HTMLElement) {
+  return function (this: EaElement & GlobalHTMLElement) {
     const attrValue = this.getAttribute(attrName);
 
     if (type === Boolean) {
@@ -131,8 +135,8 @@ function createAttributeGetter(
 function createAttributeSetter(name: string) {
   const attrName = camelToKebab(name);
 
-  return function (this: EaElement & HTMLElement, newVal: any) {
-    if (!(this instanceof HTMLElement)) return;
+  return function (this: EaElement & GlobalHTMLElement, newVal: any) {
+    if (!(this instanceof GlobalHTMLElement)) return;
 
     if (typeof newVal === "boolean") {
       if (newVal) {
@@ -388,7 +392,7 @@ function applyStyles(classChain: any[], shadowRoot: ShadowRoot | null): void {
  * @param shadowRoot 组件的 ShadowRoot
  */
 function renderTemplate(
-  element: EaElement & HTMLElement,
+  element: EaElement & GlobalHTMLElement,
   shadowRoot: ShadowRoot | null
 ): void {
   if (!shadowRoot) return;
@@ -409,7 +413,10 @@ function renderTemplate(
  * @param element 组件实例
  * @param classChain 组件类的原型链
  */
-function mount(element: EaElement & HTMLElement, classChain: any[]): void {
+function mount(
+  element: EaElement & GlobalHTMLElement,
+  classChain: any[]
+): void {
   const shadowRoot = element.shadowRoot;
   if (!shadowRoot) return;
 
@@ -610,8 +617,8 @@ function CustomElement(
       }
     }
 
-    if (autoDefine && !window.customElements.get(elementName)) {
-      window.customElements.define(elementName, EaCustomElement);
+    if (autoDefine && !GlobalCustomElements.get(elementName)) {
+      GlobalCustomElements.define(elementName, EaCustomElement);
     }
   };
 }

@@ -1,4 +1,5 @@
-﻿import type { EaElement } from "../types/index";
+﻿import { GlobalHTMLElement } from "@utils/env";
+import type { EaElement } from "../types/index";
 
 /**
  * @description 自动从 shadowRoot 中查询 DOM 元素的装饰器
@@ -31,9 +32,7 @@ export function query(selector: string) {
 
       context.addInitializer(function (this: any) {
         Object.defineProperty(this, name, {
-          get: function (
-            this: EaElement & HTMLElement
-          ): Element | null {
+          get: function (this: EaElement & GlobalHTMLElement): Element | null {
             return this.shadowRoot?.querySelector(selector) ?? null;
           },
           enumerable: true,
@@ -48,7 +47,7 @@ export function query(selector: string) {
       const propertyKey = propertyKeyOrContext as string | symbol;
 
       const getter = function (
-        this: EaElement & HTMLElement
+        this: EaElement & GlobalHTMLElement
       ): Element | null {
         return this.shadowRoot?.querySelector(selector) ?? null;
       };
@@ -93,7 +92,7 @@ export function queryAll(selector: string) {
       context.addInitializer(function (this: any) {
         Object.defineProperty(this, name, {
           get: function (
-            this: EaElement & HTMLElement
+            this: EaElement & GlobalHTMLElement
           ): NodeListOf<Element> | null {
             return this.shadowRoot?.querySelectorAll(selector) ?? null;
           },
@@ -109,7 +108,7 @@ export function queryAll(selector: string) {
       const propertyKey = propertyKeyOrContext as string | symbol;
 
       const getter = function (
-        this: EaElement & HTMLElement
+        this: EaElement & GlobalHTMLElement
       ): NodeListOf<Element> | null {
         return this.shadowRoot?.querySelectorAll(selector) ?? null;
       };

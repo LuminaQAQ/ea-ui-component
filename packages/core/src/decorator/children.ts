@@ -1,4 +1,5 @@
-﻿import type { EaElement } from "../types/index";
+﻿import { GlobalHTMLElement } from "@utils/env";
+import type { EaElement } from "../types/index";
 
 /**
  * @description 自动从 Light DOM 中查询所有匹配子元素的装饰器
@@ -29,7 +30,7 @@ export function children(selector: string) {
       context.addInitializer(function (this: any) {
         Object.defineProperty(this, name, {
           get: function (
-            this: EaElement & HTMLElement
+            this: EaElement & GlobalHTMLElement
           ): NodeListOf<Element> | null {
             return this.querySelectorAll(selector) ?? null;
           },
@@ -44,7 +45,7 @@ export function children(selector: string) {
       const propertyKey = propertyKeyOrContext as string | symbol;
 
       const getter = function (
-        this: EaElement & HTMLElement
+        this: EaElement & GlobalHTMLElement
       ): NodeListOf<Element> | null {
         return this.querySelectorAll(selector) ?? null;
       };

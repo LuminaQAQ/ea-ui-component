@@ -3,6 +3,7 @@ import type { EaElement } from "../types/index";
 import { createBEM } from "@utils/bem";
 import { attribute } from "@decorator/attribute";
 import { CustomElement } from "@decorator/custom-element";
+import { GlobalHTMLElement } from "@utils/env";
 
 export { createBEM };
 
@@ -11,7 +12,7 @@ export { createBEM };
  * 提供基础生命周期、事件系统、本地化支持
  */
 @CustomElement("ea-base", { styles: [variable], autoDefine: false })
-export default class EaBase extends HTMLElement implements EaElement {
+export default class EaBase extends GlobalHTMLElement {
   // ==================== 属性定义 ====================
 
   private _isRendered: Promise<void> | null = null;
@@ -197,17 +198,17 @@ export default class EaBase extends HTMLElement implements EaElement {
    */
   $getFocusableElements(
     scope: "shadow" | "light" | "all" = "shadow"
-  ): HTMLElement[] {
+  ): GlobalHTMLElement[] {
     const selector =
       'a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])';
     const shadowFocusable = Array.from(
       this.shadowRoot?.querySelectorAll(selector) ?? []
-    ) as HTMLElement[];
+    ) as GlobalHTMLElement[];
     if (scope === "shadow") return shadowFocusable;
 
     const lightFocusable = Array.from(
       this.querySelectorAll(selector)
-    ) as HTMLElement[];
+    ) as GlobalHTMLElement[];
     if (scope === "light") return lightFocusable;
 
     return [...shadowFocusable, ...lightFocusable];

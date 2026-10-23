@@ -1,10 +1,12 @@
+import { GlobalHTMLElement } from "@utils/env";
+
 /**
  * @description ea-ui 基础组件类接口
  * 所有使用 @customElement 装饰器的组件类都应该实现这个接口
  */
 export interface EaElementConstructor {
-  new (): EaElement & HTMLElement;
-  prototype: EaElement & HTMLElement;
+  new (): EaElement & GlobalHTMLElement;
+  prototype: EaElement & GlobalHTMLElement;
   observedAttributes?: string[];
 }
 
@@ -12,7 +14,7 @@ export interface EaElementConstructor {
  * @description ea-ui 基础组件实例接口
  * 所有使用 @customElement 装饰器的组件实例都应该实现这个接口
  */
-export interface EaElement extends HTMLElement {
+export interface EaElement extends GlobalHTMLElement {
   /** @abstract 组件连接时调用 */
   connectedCallback?(): void;
   /** @abstract 组件断开时调用 */

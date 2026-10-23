@@ -1,5 +1,7 @@
 // ==================== HTML 全局类型声明 ====================
 
+import { GlobalHTMLElement, GlobalHTMLFormElement, GlobalValidityState } from "@utils/env";
+
 declare global {
   interface HTMLElementTagNameMap {
     "ea-form-associated-base": EaFormAssociatedBaseElement;
@@ -9,7 +11,7 @@ declare global {
 /**
  * ea-form-associated-base 组件的 HTML 接口
  */
-export interface EaFormAssociatedBaseElement extends HTMLElement {
+export interface EaFormAssociatedBaseElement extends GlobalHTMLElement {
   /** 字段名称 */
   name: string;
   /** 字段值 */
@@ -31,11 +33,11 @@ export interface EaFormAssociatedBaseElement extends HTMLElement {
   /** 验证消息（只读） */
   readonly validationMessage: string;
   /** 关联的表单元素 */
-  readonly form: HTMLFormElement | null;
+  readonly form: GlobalHTMLFormElement | null;
   /** 组件类型 */
   readonly type: string;
   /** 验证状态 */
-  readonly validity: ValidityState | null;
+  readonly validity: GlobalValidityState | null;
   /** 是否将参与验证 */
   readonly willValidate: boolean;
   /** 关联的标签元素列表 */
@@ -45,7 +47,7 @@ export interface EaFormAssociatedBaseElement extends HTMLElement {
    * 获取关联的表单元素
    * @returns 表单元素或 null
    */
-  getForm(): HTMLFormElement | null;
+  getForm(): GlobalHTMLFormElement | null;
 
   /**
    * 设置表单值

@@ -1,14 +1,16 @@
+import { GlobalHTMLFormElement, GlobalValidityState } from "@utils/env";
+
 /**
  * @description 枚举类型构造器
  */
 export type EnumConstructor = any[];
 
 export interface HTMLFormElementConstructor {
-  new (): HTMLFormElement;
+  new (): GlobalHTMLFormElement;
 }
 
 export interface HTMLFormValidityConstructor {
-  new (): ValidityState;
+  new (): GlobalValidityState;
 }
 
 /**
