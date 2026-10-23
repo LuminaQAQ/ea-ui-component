@@ -33,20 +33,22 @@ jobs:
       - run: pnpm -r build
       # 发布走 OIDC Trusted Publishing（无需 NPM_TOKEN，需在 npm 各包 Settings 配置 trusted publisher）
       # 顺序遵循依赖方向 themes → core → components，pnpm publish 会将 workspace:* 替换为真实版本
-      - run: pnpm publish --provenance --access public --no-git-checks
-        working-directory: packages/themes
-      - run: pnpm publish --provenance --access public --no-git-checks
-        working-directory: packages/core
-      - run: pnpm publish --provenance --access public --no-git-checks
-        working-directory: packages/components
-      # mcp-server 版本独立演进，不参与 lockstep
-      # 该版本若已存在于 npm 则跳过，避免重复发布导致 E403 失败
-      - name: 发布 mcp-server（已发布则跳过）
+      # CLI 与 mcp-server 版本独立演进，不参与 lockstep
+      # 已存在的版本自动跳过，避免重复发布导致 E403，并保证失败后可直接重跑
+      - name: 发布各包（已存在则跳过）
         run: |
-          VERSION=$(node -p "require('./package.json').version")
-          if npm view "ea-ui-mcp-server@$VERSION" version >/dev/null 2>&1; then
-            echo "ea-ui-mcp-server@$VERSION 已存在于 npm，跳过发布"
-          else
-            pnpm publish --provenance --access public --no-git-checks
-          fi
-        working-directory: packages/mcp-server
+          publish() {
+            local dir="$1" name="$2"
+            local version
+            version=$(node -p "require('./$dir/package.json').version")
+            if npm view "$name@$version" version >/dev/null 2>&1; then
+              echo "$name@$version 已存在于 npm，跳过发布"
+            else
+              (cd "$dir" && pnpm publish --provenance --access public --no-git-checks)
+            fi
+          }
+          publish packages/themes "@easy-component-ui/themes"
+          publish packages/core "@easy-component-ui/core"
+          publish packages/components "easy-component-ui"
+          publish packages/cli "@easy-component-ui/cli"
+          publish packages/mcp-server "ea-ui-mcp-server"
