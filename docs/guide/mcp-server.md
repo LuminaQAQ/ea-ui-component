@@ -19,16 +19,16 @@ MCP Server 让 AI 助手能够实时检索 Easy UI 组件信息，无需翻阅�
 
 ## 安装
 
-安装 `easy-component-ui` 后自动包含 MCP Server，无需额外安装：
+MCP Server 是独立发布的包，与 `easy-component-ui` 分开安装：
 
 ```bash
-npm install easy-component-ui
+npm install ea-ui-mcp-server
 ```
 
 或直接通过 npx 使用，无需安装：
 
 ```bash
-npx ea-ui-mcp
+npx ea-ui-mcp-server
 ```
 
 ## 配置
@@ -42,7 +42,7 @@ npx ea-ui-mcp
   "mcpServers": {
     "ea-ui-component": {
       "command": "npx",
-      "args": ["ea-ui-mcp"]
+      "args": ["ea-ui-mcp-server"]
     }
   }
 }
@@ -64,7 +64,7 @@ npx ea-ui-mcp
   "mcpServers": {
     "ea-ui-component": {
       "command": "npx",
-      "args": ["ea-ui-mcp"]
+      "args": ["ea-ui-mcp-server"]
     }
   }
 }
@@ -79,7 +79,7 @@ npx ea-ui-mcp
   "mcpServers": {
     "ea-ui-component": {
       "command": "npx",
-      "args": ["ea-ui-mcp"]
+      "args": ["ea-ui-mcp-server"]
     }
   }
 }
@@ -168,6 +168,8 @@ AI 会自动调用 MCP Tool 查询组件信息并回答。
 - Dependencies — 依赖的其他组件
 - Examples — 使用示例（标题、类型、代码）
 
+子组件标签（如 `ea-col`、`ea-button-group`）同样作为独立条目存在，可直接按名称查询。
+
 ### search_components
 
 按关键词模糊搜索组件。
@@ -192,13 +194,14 @@ AI 会自动调用 MCP Tool 查询组件信息并回答。
 
 ## 本地开发
 
-如果你在本地开发 ea-ui-component，可以直接从源码运行 MCP Server：
+在仓库根目录安装依赖后，进入 MCP Server 包构建：
 
 ```bash
-cd mcp-server
-npm install
-npm run mcp:build   # 构建并生成组件元数据缓存（含示例预提取）
-npm run mcp:start   # 启动 MCP Server
+pnpm install
+
+cd packages/mcp-server
+pnpm run mcp:build   # 扫描组件源码生成元数据缓存（含示例预提取）并编译
+pnpm run mcp:start   # 启动 MCP Server
 ```
 
 本地开发时，配置指向源码编译产物：
@@ -214,4 +217,8 @@ npm run mcp:start   # 启动 MCP Server
 }
 ```
 
-当组件源码变更后，重新运行 `npm run mcp:build` 更新缓存即可。
+组件源码变更后重新运行 `pnpm run mcp:build` 即可更新缓存。该命令会先扫描源码生成组件元数据，再编译包内代码，因此缓存始终与当前源码一致。
+
+## 相关
+
+编辑器侧的类型提示与补全参见 [IDE 类型提示](./ide-support)。

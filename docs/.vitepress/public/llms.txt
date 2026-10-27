@@ -1,0 +1,131 @@
+# Easy UI
+
+> 使用 WebComponent 编写的原生组件库
+
+共 100 个自定义元素标签，按分类列出，链接指向对应组件的文档页。
+
+## 基础
+
+- [ea-button](https://luminaqaq.github.io/ea-ui-component/ea-button): 按钮组件，用于触发操作，支持多种变体、尺寸和状态。
+- [ea-button-group](https://luminaqaq.github.io/ea-ui-component/ea-button): 按钮组组件，用于组合多个按钮，统一管理尺寸和变体。
+- [ea-divider](https://luminaqaq.github.io/ea-ui-component/ea-divider): 分隔线组件，用于分隔内容区块，支持水平 / 垂直方向、不同分隔线样式和文案位置。
+- [ea-icon](https://luminaqaq.github.io/ea-ui-component/ea-icon): 图标组件，基于 Font Awesome 提供常用图标集合，支持多种家族、样式、颜色和大小配置。
+- [ea-link](https://luminaqaq.github.io/ea-ui-component/ea-link): 文字链接组件，用于文字超链接场景，支持多种类型、下划线控制、图标和原生链接属性。
+- [ea-scrollbar](https://luminaqaq.github.io/ea-ui-component/ea-scrollbar): 滚动条组件，用于替换浏览器原生滚动条，支持自定义滚动条样式。
+- [ea-space](https://luminaqaq.github.io/ea-ui-component/ea-space): 间距组件，用于在子元素之间提供统一的间距，支持方向、对齐、换行和填充等布局功能。
+- [ea-text](https://luminaqaq.github.io/ea-ui-component/ea-text): 文本组件，用于文本的常见操作，支持多种类型、尺寸、截断和标签覆盖。
+
+## 表单
+
+- [ea-checkbox](https://luminaqaq.github.io/ea-ui-component/ea-checkbox): 多选框组件，用于在多个备选项中进行多选，支持禁用、半选、边框等状态。
+- [ea-checkbox-group](https://luminaqaq.github.io/ea-ui-component/ea-checkbox): 多选框组组件，用于将多个多选框绑定到同一个数组，支持 min/max 限制和禁用。
+- [ea-color-picker](https://luminaqaq.github.io/ea-ui-component/ea-color-picker): 颜色选择器组件，支持多种颜色格式、透明度选择和预定义颜色。
+- [ea-color-picker-panel](https://luminaqaq.github.io/ea-ui-component/ea-color-picker): 颜色选择器面板组件，提供饱和度/亮度选择、色调滑块、透明度滑块和颜色输入。
+- [ea-date-picker](https://luminaqaq.github.io/ea-ui-component/ea-date-picker): 日期选择器组件，用于选择或输入日期，支持日期、月份、年份三种模式。
+- [ea-input](https://luminaqaq.github.io/ea-ui-component/ea-input): 输入框组件，支持多种输入类型、可清空、密码显示切换、字数统计等功能。
+- [ea-input-number](https://luminaqaq.github.io/ea-ui-component/ea-input-number): 计数器组件，仅允许输入标准的数字值，可定义范围和步进。
+- [ea-option](https://luminaqaq.github.io/ea-ui-component/ea-select): 下拉选择器选项组件，用于定义选择器的可选项。
+- [ea-option-group](https://luminaqaq.github.io/ea-ui-component/ea-select): 选项分组组件，用于将下拉选择器的选项进行分组展示。
+- [ea-radio](https://luminaqaq.github.io/ea-ui-component/ea-radio): 单选框组件，用于在多个备选项中进行单选，支持禁用、边框和多种尺寸。
+- [ea-radio-group](https://luminaqaq.github.io/ea-ui-component/ea-radio): 单选框组组件，用于将多个单选框绑定到同一个值，支持禁用和尺寸控制。
+- [ea-rate](https://luminaqaq.github.io/ea-ui-component/ea-rate): 评分组件，支持自定义图标、悬停提示和可配置最大值。
+- [ea-select](https://luminaqaq.github.io/ea-ui-component/ea-select): 下拉选择器组件，支持单选、多选、可搜索、可清空、分组选项等功能。
+- [ea-slider](https://luminaqaq.github.io/ea-ui-component/ea-slider): 滑块组件，通过拖动滑块在固定区间内进行选择，支持离散值、标记点和输入框。
+- [ea-switch](https://luminaqaq.github.io/ea-ui-component/ea-switch): 开关组件，表示两种相互对立的状态间的切换，多用于触发开/关，支持自定义值、尺寸和禁用状态。
+- [ea-time-picker](https://luminaqaq.github.io/ea-ui-component/ea-time-picker): 时间选择器组件，用于选择或输入时间，支持限制时间范围和多种对齐方式。
+- [ea-transfer](https://luminaqaq.github.io/ea-ui-component/ea-transfer): 穿梭框组件，用于在两个面板之间移动数据项，支持搜索过滤、自定义渲染和多选操作。
+- [ea-transfer-panel](https://luminaqaq.github.io/ea-ui-component/ea-transfer): 穿梭框面板子组件，用于展示单侧数据列表，支持全选、搜索过滤和自定义空状态。
+- [ea-upload](https://luminaqaq.github.io/ea-ui-component/ea-upload): 文件上传组件，支持拖拽上传、多文件上传、自定义文件列表类型、上传进度展示、图片预览等功能。
+- [ea-upload-file-item](https://luminaqaq.github.io/ea-ui-component/ea-upload): 上传文件列表项组件，支持 text / picture / picture-card 三种列表类型。
+
+## 数据展示
+
+- [ea-avatar](https://luminaqaq.github.io/ea-ui-component/ea-avatar): 头像组件，以图标、图片或字符的形式展示用户或实体的标识信息。
+- [ea-badge](https://luminaqaq.github.io/ea-ui-component/ea-badge): 徽标组件，出现在按钮、图标旁的数字或状态标记，支持多种类型、最大值和小圆点模式。
+- [ea-calendar](https://luminaqaq.github.io/ea-ui-component/ea-calendar): 日历组件，用于显示和选择日期，支持按钮/下拉控制器和国际化。
+- [ea-check-tag](https://luminaqaq.github.io/ea-ui-component/ea-tag): 可选中标签组件，用于类似复选框的标签选择场景，支持选中状态切换和多种类型。
+- [ea-countdown](https://luminaqaq.github.io/ea-ui-component/ea-countdown): 倒计时组件，用于显示剩余时间，支持多种时间格式和自定义刷新间隔。
+- [ea-descriptions](https://luminaqaq.github.io/ea-ui-component/ea-descriptions): 描述列表组件，以表格形式展示多个字段信息，支持边框、垂直布局和多种尺寸。
+- [ea-descriptions-item](https://luminaqaq.github.io/ea-ui-component/ea-descriptions): 描述列表项组件，用于定义描述列表中的单个字段项，支持跨行跨列和自定义对齐。
+- [ea-empty](https://luminaqaq.github.io/ea-ui-component/ea-empty): 空状态组件，用于展示空数据时的占位提示，支持自定义图片、描述文字和底部内容。
+- [ea-image](https://luminaqaq.github.io/ea-ui-component/ea-image): 图片组件，在保留原生 img 特性下，支持懒加载、自定义占位、加载失败和图片预览功能。
+- [ea-image-preview](https://luminaqaq.github.io/ea-ui-component/ea-image-preview): 图片预览组件，用于全屏预览图片，支持缩放、旋转、切换和拖拽移动。
+- [ea-progress](https://luminaqaq.github.io/ea-ui-component/ea-progress): 进度条组件，用于展示操作进度，支持直线、环形和仪表盘三种形态。
+- [ea-skeleton](https://luminaqaq.github.io/ea-ui-component/ea-skeleton): 骨架屏组件，在需要等待加载内容的位置提供占位效果，支持自定义模板和节流防抖。
+- [ea-skeleton-item](https://luminaqaq.github.io/ea-ui-component/ea-skeleton): 骨架屏条目组件，用于渲染不同类型的占位图单元，支持多种变体和动画效果。
+- [ea-statistic](https://luminaqaq.github.io/ea-ui-component/ea-statistic)
+- [ea-table](https://luminaqaq.github.io/ea-ui-component/ea-table): 表格组件，用于展示结构化数据，支持排序、选择、固定列、斑马纹、合计行等功能。
+- [ea-table-column](https://luminaqaq.github.io/ea-ui-component/ea-table): 表格列组件，用于定义表格的列配置，支持多级表头、排序和固定列。
+- [ea-tag](https://luminaqaq.github.io/ea-ui-component/ea-tag): 标签组件，用于标记和选择，支持多种类型、尺寸、主题效果和可关闭功能。
+- [ea-tree](https://luminaqaq.github.io/ea-ui-component/ea-tree): 树形控件，用于展示层次结构数据，支持展开折叠、复选框选择、右键菜单等功能。
+
+## 导航
+
+- [ea-breadcrumb](https://luminaqaq.github.io/ea-ui-component/ea-breadcrumb): 面包屑导航组件，显示当前页面的路径，快速返回之前的任意页面。
+- [ea-breadcrumb-item](https://luminaqaq.github.io/ea-ui-component/ea-breadcrumb): 面包屑项组件，用于面包屑导航中的每一级路径项。
+- [ea-dropdown](https://luminaqaq.github.io/ea-ui-component/ea-dropdown): 下拉菜单组件，将动作或菜单折叠到下拉菜单中，支持多种触发方式和位置。
+- [ea-dropdown-item](https://luminaqaq.github.io/ea-ui-component/ea-dropdown): 下拉菜单项组件，用于展示下拉菜单中的单个选项，支持分割线、禁用和指令事件。
+- [ea-dropdown-menu](https://luminaqaq.github.io/ea-ui-component/ea-dropdown): 下拉菜单容器组件，用于包裹下拉菜单项。
+- [ea-menu](https://luminaqaq.github.io/ea-ui-component/ea-menu): 导航菜单组件，为网站提供导航功能，支持水平和垂直两种模式。
+- [ea-menu-item](https://luminaqaq.github.io/ea-ui-component/ea-menu): 菜单项组件，用于展示单个菜单条目，支持激活和禁用状态。
+- [ea-menu-item-group](https://luminaqaq.github.io/ea-ui-component/ea-menu): 菜单项分组组件，用于将菜单项按组分类，显示分组标题。
+- [ea-page-header](https://luminaqaq.github.io/ea-ui-component/ea-page-header): 页头组件，用于页面的路径导航，支持返回按钮、面包屑、标题内容和额外操作区。
+- [ea-pagination](https://luminaqaq.github.io/ea-ui-component/ea-pagination): 分页组件，用于数据量过多时的分页处理，支持多种布局和交互模式。
+- [ea-step](https://luminaqaq.github.io/ea-ui-component/ea-steps): 步骤条子组件，表示单个步骤，支持状态、图标、描述等功能。
+- [ea-steps](https://luminaqaq.github.io/ea-ui-component/ea-steps): 步骤条组件，引导用户按照流程完成任务的分步导航条。
+- [ea-sub-menu](https://luminaqaq.github.io/ea-ui-component/ea-menu): 子菜单组件，支持展开/收起和嵌套，用于构建多级导航菜单。
+- [ea-tab](https://luminaqaq.github.io/ea-ui-component/ea-tabs): 标签项组件，用于在 ea-tabs 中定义单个标签，支持禁用、可关闭等状态。
+- [ea-tab-panel](https://luminaqaq.github.io/ea-ui-component/ea-tabs): 标签面板组件，用于在 ea-tabs 中定义单个面板内容区域。
+- [ea-tabs](https://luminaqaq.github.io/ea-ui-component/ea-tabs): 标签页组件，用于分隔内容上有关联但属于不同类别的数据集合。
+
+## 反馈
+
+- [ea-alert](https://luminaqaq.github.io/ea-ui-component/ea-alert): 警告提示组件，用于展示重要的提示信息，支持多种类型和可关闭功能。
+- [ea-dialog](https://luminaqaq.github.io/ea-ui-component/ea-dialog): 对话框组件，用于弹出交互层，显示重要信息或要求用户确认/输入，支持拖拽、全屏、居中等模式。
+- [ea-drawer](https://luminaqaq.github.io/ea-ui-component/ea-drawer): 抽屉组件，用于从屏幕边缘滑出的临时面板，支持多方向打开、头部控制、关闭拦截等功能。
+- [ea-loading](https://luminaqaq.github.io/ea-ui-component/ea-loading): 加载组件，用于在数据加载过程中展示加载动画，支持区域遮罩、全屏模式和滚动锁定。
+- [ea-message](https://luminaqaq.github.io/ea-ui-component/ea-message): 消息提示组件，常用于主动操作后的反馈提示，支持多种状态和可关闭功能。
+- [ea-message-box](https://luminaqaq.github.io/ea-ui-component/ea-message-box): 模态消息框组件，用于消息提示（alert）、确认（confirm）和提交（prompt），支持拖拽、HTML 内容和关闭拦截。
+- [ea-notification](https://luminaqaq.github.io/ea-ui-component/ea-notification): 通知组件，用于系统级通知或轻量级提醒，支持多种类型、自定义位置和自动关闭。
+- [ea-popconfirm](https://luminaqaq.github.io/ea-ui-component/ea-popconfirm): 气泡确认框组件，点击元素弹出确认气泡，支持自定义图标、按钮和位置。
+- [ea-popover](https://luminaqaq.github.io/ea-ui-component/ea-popover): 弹出框组件，基于 EaPopper 扩展，支持标题、内容和多种触发方式。
+- [ea-result](https://luminaqaq.github.io/ea-ui-component/ea-result): 结果组件，用于展示操作结果或异常状态反馈，支持多种类型和自定义图标。
+- [ea-tooltip](https://luminaqaq.github.io/ea-ui-component/ea-tooltip): 文字提示组件，常用于展示鼠标 hover 时的提示信息，支持多种主题、触发方式和位置。
+- [ea-tour](https://luminaqaq.github.io/ea-ui-component/ea-tour): 引导组件，用于分步骤引导用户了解界面功能，支持遮罩、自定义位置和多种弹出方向。
+- [ea-tour-step](https://luminaqaq.github.io/ea-ui-component/ea-tour): 引导步骤组件，用于定义引导的每个步骤内容、标题和位置，支持自定义插槽。
+
+## 布局与容器
+
+- [ea-affix](https://luminaqaq.github.io/ea-ui-component/ea-affix): 固钉组件，将页面元素固定在可视范围内，常用于侧边导航或操作按钮。
+- [ea-aside](https://luminaqaq.github.io/ea-ui-component/ea-container): 侧边栏容器组件，用于布局的侧边区域。
+- [ea-backtop](https://luminaqaq.github.io/ea-ui-component/ea-backtop): 回到顶部组件，用于快速返回页面顶部的操作按钮，支持自定义滚动目标、显示阈值和平滑滚动。
+- [ea-border-beam](https://luminaqaq.github.io/ea-ui-component/ea-border-beam): 边框光束动画组件，用于为元素添加动态的边框光束扫描效果，支持多条光束和悬停触发。
+- [ea-card](https://luminaqaq.github.io/ea-ui-component/ea-card): 卡片容器组件，将信息聚合在卡片容器中展示，支持标题、内容、页脚区域和阴影效果。
+- [ea-carousel](https://luminaqaq.github.io/ea-ui-component/ea-carousel): 走马灯组件，在有限空间内循环播放同一类型的内容，支持自动播放、循环、方向切换等功能。
+- [ea-carousel-item](https://luminaqaq.github.io/ea-ui-component/ea-carousel): 走马灯子项组件，用于放置轮播内容。
+- [ea-col](https://luminaqaq.github.io/ea-ui-component/ea-layout): 栅格列组件，基于 24 分栏的 Flex 子项，支持列宽、偏移、推拉和自定义标签。
+- [ea-collapse](https://luminaqaq.github.io/ea-ui-component/ea-collapse): 折叠面板组件，通过折叠面板收纳内容区域，支持手风琴模式和普通模式。
+- [ea-collapse-item](https://luminaqaq.github.io/ea-ui-component/ea-collapse): 折叠面板子项组件，用于展示可折叠的内容区域，支持自定义标题和图标。
+- [ea-container](https://luminaqaq.github.io/ea-ui-component/ea-container): 布局容器组件，当子元素中包含 ea-header 或 ea-footer 时自动垂直排列，否则水平排列。
+- [ea-effects](https://luminaqaq.github.io/ea-ui-component/ea-effects): 动画效果组件，用于为子元素添加进入/离开动画效果，支持缩放、淡入淡出、滑动、翻转等多种效果。
+- [ea-footer](https://luminaqaq.github.io/ea-ui-component/ea-container): 底栏容器组件，用于布局的底部区域。
+- [ea-header](https://luminaqaq.github.io/ea-ui-component/ea-container): 顶栏容器组件，用于布局的顶部区域。
+- [ea-infinite-scroll](https://luminaqaq.github.io/ea-ui-component/ea-infinite-scroll): 无限滚动组件，滚动至底部时自动加载更多数据，遵循 WAI-ARIA Feed 模式。
+- [ea-main](https://luminaqaq.github.io/ea-ui-component/ea-container): 主要区域容器组件，用于布局的主要内容区域。
+- [ea-row](https://luminaqaq.github.io/ea-ui-component/ea-layout): 栅格行组件，基于 24 分栏的 Flex 布局容器，支持列间距、对齐方式和自定义标签。
+- [ea-segmented](https://luminaqaq.github.io/ea-ui-component/ea-segmented): 分段选择器组件，用于在一组互斥的选项中进行选择，支持多种尺寸、方向和自定义字段映射。
+- [ea-splitter](https://luminaqaq.github.io/ea-ui-component/ea-splitter): 分隔面板组件，可将区域水平或垂直分隔，并支持拖动调整各区域大小。
+- [ea-splitter-bar](https://luminaqaq.github.io/ea-ui-component/ea-splitter): 分隔条组件，用于在分隔面板之间提供可拖动的分隔线。
+- [ea-splitter-panel](https://luminaqaq.github.io/ea-ui-component/ea-splitter): 分隔面板子组件，用于放置在 ea-splitter 中作为各区域的内容容器。
+- [ea-theme-toggle](https://luminaqaq.github.io/ea-ui-component/ea-theme-toggle): 主题切换组件，基于 ea-switch 封装，支持日间/夜间模式切换。
+- [ea-timeline](https://luminaqaq.github.io/ea-ui-component/ea-timeline): 时间线组件，用于可视化地呈现时间流信息。
+- [ea-timeline-item](https://luminaqaq.github.io/ea-ui-component/ea-timeline): 时间线项组件，用于展示单个时间线节点，支持自定义样式、图标和颜色。
+- [ea-watermark](https://luminaqaq.github.io/ea-ui-component/ea-watermark): 水印组件，用于在容器上叠加文字或图片水印，防止内容被随意转载。
+
+## 指南
+
+- [安装](https://luminaqaq.github.io/ea-ui-component/guide/install)
+- [使用指南](https://luminaqaq.github.io/ea-ui-component/guide/Usage)
+- [主题定制](https://luminaqaq.github.io/ea-ui-component/guide/theme)
+- [MCP Server](https://luminaqaq.github.io/ea-ui-component/guide/mcp-server)
+- [IDE 类型提示](https://luminaqaq.github.io/ea-ui-component/guide/ide-support)
