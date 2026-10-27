@@ -1,5 +1,11 @@
 # @easy-component-ui/core
 
+## 4.1.0
+
+### Patch Changes
+
+- @easy-component-ui/themes@4.1.0
+
 ## 4.0.8
 
 ### Patch Changes

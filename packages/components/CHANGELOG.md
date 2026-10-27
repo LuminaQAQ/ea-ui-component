@@ -1,5 +1,20 @@
 # easy-component-ui
 
+## 4.1.0
+
+### Minor Changes
+
+- a9eca96: 新增编辑器与 AI 场景的元数据产物。
+
+  - 新增 `easy-component-ui/vue`、`easy-component-ui/jsx`、`easy-component-ui/events` 三个类型入口，分别提供 Vue 模板、React JSX 与原生 `addEventListener` 的类型推断
+  - 构建时生成 Custom Elements Manifest、web-types、VS Code custom data、`llms.txt` 与 `llms-full.txt`
+  - 修正 `ea-upload` 四个事件名与实现不一致的问题
+
+### Patch Changes
+
+- @easy-component-ui/core@4.1.0
+  - @easy-component-ui/themes@4.1.0
+
 ## 4.0.8
 
 ### Patch Changes
