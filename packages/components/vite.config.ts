@@ -29,6 +29,8 @@ export default defineConfig({
       : []),
     dtsPlugin({
       outDir: "dist/types",
+      // 同步复制手写的 .d.ts（如 ea-upload/type.d.ts），避免产物里 import 断链
+      copyDtsFiles: true,
       exclude: [
         "**/node_modules/**",
         "src/test/**",

@@ -4,6 +4,9 @@
   "description": "使用 WebComponent 编写的原生组件库",
   "main": "dist/index.js",
   "module": "dist/index.js",
+  "types": "dist/types/index.d.ts",
+  "customElements": "dist/custom-elements.json",
+  "web-types": "./dist/web-types.json",
   "type": "module",
   "files": [
     "dist",
@@ -11,7 +14,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsx ../../scripts/index.ts && vite build",
+    "build": "tsx ../../scripts/index.ts && vite build && tsx ../../scripts/gen-ide-metadata.ts",
     "test:run": "vitest run",
     "test:browser": "vitest run --config vitest.browser.config.ts",
     "test:coverage": "vitest run --coverage",
@@ -87,6 +90,18 @@
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/types/index.d.ts"
+    },
+    "./vue": {
+      "import": "./dist/vue.js",
+      "types": "./dist/vue.d.ts"
+    },
+    "./jsx": {
+      "import": "./dist/jsx.js",
+      "types": "./dist/jsx.d.ts"
+    },
+    "./events": {
+      "import": "./dist/events.js",
+      "types": "./dist/events.d.ts"
     },
     "./icon-assets": {
       "import": "./dist/assets/icon.css",

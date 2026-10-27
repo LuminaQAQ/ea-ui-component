@@ -26,6 +26,18 @@ export const handlePackageExport = (): void => {
       import: "./dist/index.js",
       types: "./dist/types/index.d.ts",
     },
+    "./vue": {
+      import: "./dist/vue.js",
+      types: "./dist/vue.d.ts",
+    },
+    "./jsx": {
+      import: "./dist/jsx.js",
+      types: "./dist/jsx.d.ts",
+    },
+    "./events": {
+      import: "./dist/events.js",
+      types: "./dist/events.d.ts",
+    },
     "./icon-assets": {
       import: "./dist/assets/icon.css",
       require: "./dist/assets/icon.css",
