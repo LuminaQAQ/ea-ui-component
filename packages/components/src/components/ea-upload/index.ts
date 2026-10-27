@@ -54,10 +54,10 @@ const bem = createBEM(TAG_NAME);
  * @slot tip - 提示信息插槽，显示在文件列表上方。
  *
  * @event change - 文件列表变化时触发，detail: `{ uploadFile: FileItem | undefined, uploadFiles: FileItem[] }`。
- * @event remove - 文件被移除时触发，detail: `{ uploadFile: FileItem, uploadFiles: FileItem[] }`。
- * @event ea-ajax-error - 上传请求失败时触发，detail: `{ error: EaUploadAjaxError, uploadFile: FileItem | FileItem[], uploadFiles: FileItem[] }`。
- * @event ea-progress - 上传进度更新时触发，detail: `{ event: ProgressEvent, uploadFile: FileItem | FileItem[], uploadFiles: FileItem[] }`。
- * @event ea-success - 上传成功时触发，detail: `{ response: any, uploadFile: FileItem | FileItem[], uploadFiles: FileItem[] }`。
+ * @event ea-upload-remove - 文件被移除时触发，detail: `{ uploadFile: FileItem, uploadFiles: FileItem[] }`。
+ * @event ea-upload-error - 上传请求失败时触发，detail: `{ error: EaUploadAjaxError, uploadFile: FileItem | FileItem[], uploadFiles: FileItem[] }`。
+ * @event ea-upload-progress - 上传进度更新时触发，detail: `{ event: ProgressEvent, uploadFile: FileItem | FileItem[], uploadFiles: FileItem[] }`。
+ * @event ea-upload-success - 上传成功时触发，detail: `{ response: any, uploadFile: FileItem | FileItem[], uploadFiles: FileItem[] }`。
  *
  * @csspart container - 容器。
  * @csspart content - 上传触发区域容器。
