@@ -5,42 +5,44 @@
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
+  "types": "./dist/types/index.d.ts",
+  "sideEffects": false,
   "files": [
     "dist",
     "README.md"
   ],
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/types/index.d.ts"
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/index.js"
     },
     "./core/EaBase": {
-      "import": "./dist/core/EaBase.js",
-      "types": "./dist/types/core/EaBase.d.ts"
+      "types": "./dist/types/core/EaBase.d.ts",
+      "import": "./dist/core/EaBase.js"
     },
     "./core/EaFormAssociatedBase": {
-      "import": "./dist/core/EaFormAssociatedBase.js",
-      "types": "./dist/types/core/EaFormAssociatedBase.d.ts"
+      "types": "./dist/types/core/EaFormAssociatedBase.d.ts",
+      "import": "./dist/core/EaFormAssociatedBase.js"
     },
     "./decorator": {
-      "import": "./dist/decorator/index.js",
-      "types": "./dist/types/decorator/index.d.ts"
+      "types": "./dist/types/decorator/index.d.ts",
+      "import": "./dist/decorator/index.js"
     },
     "./decorator/*": {
-      "import": "./dist/decorator/*.js",
-      "types": "./dist/types/decorator/*.d.ts"
+      "types": "./dist/types/decorator/*.d.ts",
+      "import": "./dist/decorator/*.js"
     },
     "./utils/*": {
-      "import": "./dist/utils/*.js",
-      "types": "./dist/types/utils/*.d.ts"
+      "types": "./dist/types/utils/*.d.ts",
+      "import": "./dist/utils/*.js"
     },
     "./stores/*": {
-      "import": "./dist/stores/*.js",
-      "types": "./dist/types/stores/*.d.ts"
+      "types": "./dist/types/stores/*.d.ts",
+      "import": "./dist/stores/*.js"
     }
   },
   "scripts": {
-    "build": "vite build",
+    "build": "vite build && tsx ../../scripts/fix-dts-extensions.ts",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
     "typecheck": "tsc --noEmit"

@@ -26,14 +26,12 @@ const namedSubpaths = Object.entries(pkg.exports).filter(
 describe.skipIf(!existsSync(distDir))(
   "包根入口与导出映射（需先 build）",
   () => {
-    it.fails(
-      "P0-1：exports['.'].import 指向的运行时文件存在（当前缺失，属于已知缺陷）",
-      () => {
-        const target = resolveTarget(pkg.exports["."]);
-        expect(target).toBeDefined();
-        expect(existsSync(resolve(pkgRoot, target as string))).toBe(true);
-      }
-    );
+    it("根入口的运行时文件存在", () => {
+      const target = resolveTarget(pkg.exports["."]);
+    
+      expect(target).toBeDefined();
+      expect(existsSync(resolve(pkgRoot, target as string))).toBe(true);
+    });
 
     it("其余具名子路径的运行时文件都存在", () => {
       const missing = namedSubpaths
@@ -44,7 +42,7 @@ describe.skipIf(!existsSync(distDir))(
       expect(missing).toEqual([]);
     });
 
-    it("根入口的类型声明已生成（与运行时入口缺失形成对照）", () => {
+    it("根入口的类型声明已生成", () => {
       const typesTarget = pkg.exports["."];
       const types =
         typeof typesTarget === "string" ? undefined : typesTarget.types;

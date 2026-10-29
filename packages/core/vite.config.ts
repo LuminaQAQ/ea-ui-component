@@ -16,7 +16,9 @@ const srcDir = resolve(__dirname, "src");
 
 const sourceDirs = ["core", "decorator", "utils", "stores"];
 
-const entryConfigs: Record<string, string> = {};
+const entryConfigs: Record<string, string> = {
+  index: resolve(srcDir, "index.ts"),
+};
 sourceDirs.forEach(dir => {
   const dirPath = resolve(srcDir, dir);
   readdirSync(dirPath).forEach((file: string) => {
@@ -39,6 +41,7 @@ export default defineConfig({
     }),
   ],
   build: {
+    sourcemap: false,
     lib: {
       entry: entryConfigs,
       formats: ["es"],
