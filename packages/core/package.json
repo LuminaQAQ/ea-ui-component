@@ -41,6 +41,8 @@
   },
   "scripts": {
     "build": "vite build",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "typecheck": "tsc --noEmit"
   },
   "keywords": [
@@ -66,9 +68,12 @@
   },
   "devDependencies": {
     "@types/node": "^24.0.14",
+    "@vitest/coverage-v8": "^4.1.0",
+    "jsdom": "^29.0.1",
     "sass": "^1.77.2",
     "typescript": "^5.8.3",
     "vite": "^6.4.3",
-    "vite-plugin-dts": "^4.5.4"
+    "vite-plugin-dts": "^4.5.4",
+    "vitest": "^4.1.0"
   }
 }

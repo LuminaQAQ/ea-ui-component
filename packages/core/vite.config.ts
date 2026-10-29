@@ -21,6 +21,8 @@ sourceDirs.forEach(dir => {
   const dirPath = resolve(srcDir, dir);
   readdirSync(dirPath).forEach((file: string) => {
     if (!file.endsWith(".ts")) return;
+    // 测试与手写声明不是构建入口（测试已集中到 src/test，此处作第二道防线）
+    if (file.endsWith(".test.ts") || file.endsWith(".d.ts")) return;
     const filePath = resolve(dirPath, file);
     if (!statSync(filePath).isFile()) return;
     entryConfigs[`${dir}/${file.replace(/\.ts$/, "")}`] = filePath;
@@ -29,7 +31,13 @@ sourceDirs.forEach(dir => {
 
 export default defineConfig({
   esbuild: createEsbuildOptions({ target: "es2020" }),
-  plugins: [dtsPlugin({ outDir: "dist/types" })],
+  plugins: [
+    dtsPlugin({
+      outDir: "dist/types",
+      // dts 插件扫描全部源码，必须显式排除测试（目录迁移无法避免）
+      exclude: ["**/*.test.ts", "**/test/**"],
+    }),
+  ],
   build: {
     lib: {
       entry: entryConfigs,

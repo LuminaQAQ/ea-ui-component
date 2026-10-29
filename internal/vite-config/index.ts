@@ -1,6 +1,9 @@
 import { resolve } from "node:path";
 
-import type { Alias } from "vite";
+export interface SourceAlias {
+  find: string | RegExp;
+  replacement: string;
+}
 
 export const RESOLVE_EXTENSIONS = [
   ".mjs",
@@ -39,7 +42,7 @@ export function createScssOptions(stylesDir: string) {
   };
 }
 
-export function coreSourceAliases(coreSrcDir: string): Alias[] {
+export function coreSourceAliases(coreSrcDir: string): SourceAlias[] {
   return [
     { find: "@core", replacement: resolve(coreSrcDir, "core") },
     { find: "@decorator", replacement: resolve(coreSrcDir, "decorator") },
@@ -48,7 +51,9 @@ export function coreSourceAliases(coreSrcDir: string): Alias[] {
   ];
 }
 
-export function componentsSourceAliases(componentsSrcDir: string): Alias[] {
+export function componentsSourceAliases(
+  componentsSrcDir: string
+): SourceAlias[] {
   return [
     { find: "@", replacement: componentsSrcDir },
     {
@@ -66,7 +71,7 @@ export function workspaceSourceAliases({
 }: {
   coreSrcDir: string;
   themesSrcDir: string;
-}): Alias[] {
+}): SourceAlias[] {
   return [
     {
       find: /^@easy-component-ui\/themes\/([\w-]+)\.scss(\?.*)?$/,
@@ -82,7 +87,9 @@ export const TEST_TIMEOUTS = {
   hookTimeout: 15000,
 };
 
-export function createTestDefaults({ maxWorkers = 4 }: { maxWorkers?: number } = {}) {
+export function createTestDefaults({
+  maxWorkers = 4,
+}: { maxWorkers?: number } = {}) {
   return {
     environment: "jsdom" as const,
     globals: true,
