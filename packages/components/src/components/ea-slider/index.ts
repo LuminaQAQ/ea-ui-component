@@ -265,7 +265,6 @@ export class EaSlider extends EaFormAssociatedBase {
   @property({
     type: Function,
     default: (value: number) => value,
-    rawFunction: true,
     observer(this: EaSlider) {
       this._updateSlider();
     },

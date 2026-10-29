@@ -157,7 +157,6 @@ export class EaTransferPanel extends EaBase {
   @property({
     type: Function,
     default: null,
-    rawFunction: true,
   })
   filterMethod: ((query: string, item: any) => boolean) | null = null;
 

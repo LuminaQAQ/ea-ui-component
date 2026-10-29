@@ -190,7 +190,7 @@ export class EaTable extends EaBase {
 
   @property({
     type: Function,
-    default: () => (index: number) => index,
+    default: (index: number) => index,
   })
   indexMethod: ((index: number) => number) | null = null;
 

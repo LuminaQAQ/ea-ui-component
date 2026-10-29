@@ -177,7 +177,6 @@ export class EaTransfer extends EaFormAssociatedBase {
   @property({
     type: Function,
     default: null,
-    rawFunction: true,
   })
   filterMethod: ((query: string, item: any) => boolean) | null = null;
 

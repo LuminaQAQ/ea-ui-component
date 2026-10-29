@@ -146,7 +146,8 @@ export class EaCarousel extends EaBase {
       this.emit("ea-change", {
         detail: {
           current: emittedNewVal,
-          prev: emittedOldVal,
+          // 首次变化时 previous 为 null，事件契约仍保持 number
+          prev: emittedOldVal ?? 0,
         },
       });
     },
