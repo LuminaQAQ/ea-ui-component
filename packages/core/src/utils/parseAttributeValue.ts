@@ -73,6 +73,8 @@ export function parseAttributeValue(
       return value;
     }
     case Number: {
+      // 空串对数值类型无意义，按“未设置”处理（Number("") === 0）
+      if (value === "") return parseDefaultValue(thisArg, defaultVal);
       const num = Number(value);
       return isNaN(num) ? parseDefaultValue(thisArg, defaultVal) : num;
     }
@@ -80,12 +82,14 @@ export function parseAttributeValue(
       return value === "true" || value === "";
     }
     case Date: {
+      if (value === "") return parseDefaultValue(thisArg, defaultVal);
       const date = new Date(value);
       return isNaN(date.getTime())
         ? parseDefaultValue(thisArg, defaultVal)
         : date;
     }
     case Array: {
+      if (value === "") return parseDefaultValue(thisArg, defaultVal);
       try {
         return JSON.parse(value);
       } catch {
@@ -93,6 +97,7 @@ export function parseAttributeValue(
       }
     }
     case RegExp: {
+      if (value === "") return parseDefaultValue(thisArg, defaultVal);
       try {
         return new RegExp(value);
       } catch {

@@ -160,7 +160,7 @@ describe("@attribute 读写与类型解析", () => {
     await tick();
 
     expect(EaTestWidget.observed).toEqual([
-      [7, 5],
+      [7, null],
       [9, 7],
     ]);
   });

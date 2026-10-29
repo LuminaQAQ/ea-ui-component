@@ -29,8 +29,21 @@ export type CustomElementAttributeTypes =
 export interface A11yOption {
   /** @description 同步到的 ARIA 属性名（如 'aria-disabled'、'aria-expanded'） */
   ariaAttr: string;
-  /** @description 目标元素选择器，默认 ':host' 表示组件宿主元素 */
+  /** @description 目标元素：':host'（默认）、同名实例成员或选择器 */
   target?: string;
+  /** @description 值映射函数，返回 null 时移除属性 */
+  map?: (val: any) => string | null;
+}
+
+/**
+ * @description 属性值转发选项
+ * 把属性值同步到宿主或内部元素的同名/指定标签属性
+ */
+export interface ForwardOption {
+  /** @description 目标元素：':host'（默认）、同名实例成员或选择器 */
+  target?: string;
+  /** @description 转发到的属性名 */
+  attr: string;
   /** @description 值映射函数，返回 null 时移除属性 */
   map?: (val: any) => string | null;
 }
@@ -49,6 +62,8 @@ export interface AttributeOptions {
   default?: any;
   /** @description 观察者回调 */
   observer?: ((this: any, newVal: any, oldVal: any) => void) | undefined;
+  /** @description 属性值转发配置 */
+  forward?: ForwardOption;
   /** @description 无障碍属性同步配置 */
   a11y?: A11yOption;
 }

@@ -229,6 +229,53 @@ function createPropertySetter(
 }
 
 /**
+ * 解析属性同步的目标元素
+ * @param instance 组件实例
+ * @param target ':host'（默认）、同名实例成员或选择器
+ * @returns 目标元素
+ */
+function resolveTargetElement(instance: any, target?: string): any {
+  if (!target || target === ":host") return instance;
+
+  const member = instance[target];
+  if (member instanceof GlobalHTMLElement) return member;
+
+  return instance.shadowRoot?.querySelector(target) ?? null;
+}
+
+/**
+ * 把一个值同步为元素的属性
+ * @param instance 组件实例
+ * @param target 目标元素描述
+ * @param attr 属性名
+ * @param value 当前值
+ * @param map 值映射函数，返回 null 时移除属性
+ * @param sourceAttr 源属性名，用于避开回写自身
+ */
+function forwardAttribute(
+  instance: any,
+  target: string | undefined,
+  attr: string,
+  value: any,
+  map?: (val: any) => string | null,
+  sourceAttr?: string
+): void {
+  const targetEl = resolveTargetElement(instance, target);
+  if (!targetEl) return;
+
+  // 转发回自身的同名属性会重复触发回调
+  if (targetEl === instance && attr === sourceAttr) return;
+
+  const next = value == null ? null : map ? map(value) : String(value);
+
+  if (next == null) {
+    targetEl.removeAttribute(attr);
+  } else {
+    targetEl.setAttribute(attr, next);
+  }
+}
+
+/**
  * 将 a11y 配置同步到目标元素的 ARIA 属性
  * @param instance 组件实例
  * @param a11y a11y 配置
@@ -239,16 +286,7 @@ function syncA11yAttribute(
   a11y: NonNullable<AttributeOptions["a11y"]>,
   value: any
 ): void {
-  const { ariaAttr, target = ":host", map } = a11y;
-  const ariaValue = map ? map(value) : String(value);
-  const targetEl =
-    target === ":host" ? instance : instance.shadowRoot?.querySelector(target);
-  if (!targetEl) return;
-  if (ariaValue === null) {
-    targetEl.removeAttribute(ariaAttr);
-  } else {
-    targetEl.setAttribute(ariaAttr, ariaValue);
-  }
+  forwardAttribute(instance, a11y.target, a11y.ariaAttr, value, a11y.map);
 }
 
 /**
@@ -565,7 +603,7 @@ function CustomElement(
 
             if (option.type === Boolean) {
               newValue = newVal !== null && newVal !== "false";
-              oldValue = oldVal !== null && oldVal !== "false";
+              oldValue = oldVal === null ? null : oldVal !== "false";
             } else {
               newValue = parseAttributeValue(
                 this,
@@ -573,12 +611,15 @@ function CustomElement(
                 option.type,
                 option.default
               );
-              oldValue = parseAttributeValue(
-                this,
-                oldVal,
-                option.type,
-                option.default
-              );
+              oldValue =
+                oldVal === null
+                  ? null
+                  : parseAttributeValue(
+                      this,
+                      oldVal,
+                      option.type,
+                      option.default
+                    );
             }
 
             if (typeof parentProto.attributeChangedCallback === "function") {
@@ -594,6 +635,17 @@ function CustomElement(
 
             if (option.a11y) {
               syncA11yAttribute(this, option.a11y, newValue);
+            }
+
+            if (option.forward) {
+              forwardAttribute(
+                this,
+                option.forward.target,
+                option.forward.attr,
+                newValue,
+                option.forward.map,
+                actualName
+              );
             }
 
             found = true;

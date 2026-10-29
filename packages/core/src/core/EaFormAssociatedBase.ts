@@ -24,24 +24,13 @@ export class EaFormAssociatedBase extends EaBase {
    * 字段名称
    */
   @attribute({
-    type: GlobalHTMLFormElement,
-    default: function (this: EaFormAssociatedBase) {
-      return this.internals.form;
-    },
-  })
-  form: GlobalHTMLFormElement | null = null;
-
-  /**
-   * 字段名称
-   */
-  @attribute({
     type: String,
     default: "",
   })
   name: string = "";
 
   /**
-   * 字段名称
+   * 字段类型，默认为标签名（可写，组件可覆盖）
    */
   @attribute({
     type: String,
@@ -52,37 +41,32 @@ export class EaFormAssociatedBase extends EaBase {
   type: string = "";
 
   /**
-   * 验证状态
+   * 关联的表单元素（只读派生值）
    */
-  @attribute({
-    type: GlobalValidityState,
-    default: function (this: EaFormAssociatedBase) {
-      return this.internals?.validity ?? null;
-    },
-  })
-  validity: GlobalValidityState | null = null;
+  get form(): GlobalHTMLFormElement | null {
+    return this.internals?.form ?? null;
+  }
 
   /**
-   * 获取内部验证消息
+   * 验证状态（只读派生值）
    */
-  @attribute({
-    type: String,
-    default: function (this: EaFormAssociatedBase) {
-      return this.internals?.validationMessage ?? "";
-    },
-  })
-  validationMessage: string = "";
+  get validity(): GlobalValidityState | null {
+    return this.internals?.validity ?? null;
+  }
 
   /**
-   * 是否将参与验证
+   * 验证消息（只读派生值）
    */
-  @attribute({
-    type: Boolean,
-    default: function (this: EaFormAssociatedBase) {
-      return this.internals?.willValidate ?? false;
-    },
-  })
-  willValidate: boolean = false;
+  get validationMessage(): string {
+    return this.internals?.validationMessage ?? "";
+  }
+
+  /**
+   * 是否参与验证（只读派生值，禁用时不参与）
+   */
+  get willValidate(): boolean {
+    return !this.disabled && (this.internals?.willValidate ?? false);
+  }
 
   /**
    * 禁用状态
@@ -103,7 +87,7 @@ export class EaFormAssociatedBase extends EaBase {
       this.internals?.setFormValue(newVal);
     },
   })
-  value: string | any = "";
+  value: string | number | boolean | unknown[] | null = "";
 
   /**
    * 必填状态
@@ -111,8 +95,10 @@ export class EaFormAssociatedBase extends EaBase {
   @attribute({
     type: Boolean,
     default: false,
-    observer(this: EaFormAssociatedBase, newVal: boolean) {
-      this.validationTarget?.toggleAttribute("required", newVal);
+    forward: {
+      target: "validationTarget",
+      attr: "required",
+      map: value => (value ? "" : null),
     },
   })
   required: boolean = false;
@@ -122,10 +108,7 @@ export class EaFormAssociatedBase extends EaBase {
    */
   @attribute({
     type: Number,
-    default: 0,
-    observer(this: EaFormAssociatedBase, newVal: number) {
-      this.validationTarget?.setAttribute("minlength", String(newVal));
-    },
+    forward: { target: "validationTarget", attr: "minlength" },
   })
   minlength: number | string | null = null;
 
@@ -134,10 +117,7 @@ export class EaFormAssociatedBase extends EaBase {
    */
   @attribute({
     type: Number,
-    default: 0,
-    observer(this: EaFormAssociatedBase, newVal: number) {
-      this.validationTarget?.setAttribute("maxlength", String(newVal));
-    },
+    forward: { target: "validationTarget", attr: "maxlength" },
   })
   maxlength: number | string | null = null;
 
@@ -146,10 +126,7 @@ export class EaFormAssociatedBase extends EaBase {
    */
   @attribute({
     type: Number,
-    default: 0,
-    observer(this: EaFormAssociatedBase, newVal: number) {
-      this.validationTarget?.setAttribute("min", String(newVal));
-    },
+    forward: { target: "validationTarget", attr: "min" },
   })
   min: number | string | null = null;
 
@@ -158,10 +135,7 @@ export class EaFormAssociatedBase extends EaBase {
    */
   @attribute({
     type: Number,
-    default: 0,
-    observer(this: EaFormAssociatedBase, newVal: number) {
-      this.validationTarget?.setAttribute("max", String(newVal));
-    },
+    forward: { target: "validationTarget", attr: "max" },
   })
   max: number | string | null = null;
 
@@ -170,14 +144,7 @@ export class EaFormAssociatedBase extends EaBase {
    */
   @attribute({
     type: String,
-    default: "",
-    observer(this: EaFormAssociatedBase, newVal: string) {
-      if (newVal) {
-        this.validationTarget?.setAttribute("pattern", newVal);
-      } else {
-        this.validationTarget?.removeAttribute("pattern");
-      }
-    },
+    forward: { target: "validationTarget", attr: "pattern" },
   })
   pattern: string | null = null;
 
@@ -355,56 +322,154 @@ export class EaFormAssociatedBase extends EaBase {
 
   // ==================== 生命周期 ====================
 
-  private static _formSubmitControllers: WeakMap<
+  /** 每个表单的提交监听与 noValidate 快照 */
+  private static _formStates = new WeakMap<
     GlobalHTMLFormElement,
-    { controller: AbortController; registered: boolean }
-  > = new WeakMap();
+    { count: number; noValidate: boolean; controller: AbortController }
+  >();
+
+  /** 当前关联的表单 */
+  private _associatedForm: GlobalHTMLFormElement | null = null;
+
+  /** 首次连接时的值，用于表单重置 */
+  private _resetValue: unknown;
+
+  /** 是否已记录重置值 */
+  private _resetCaptured = false;
+
+  connectedCallback(): void {
+    if (!this._resetCaptured) {
+      this._resetCaptured = true;
+      this._resetValue = this.value;
+    }
+
+    super.connectedCallback();
+  }
+
+  disconnectedCallback(): void {
+    this._releaseForm();
+    super.disconnectedCallback();
+  }
+
+  /**
+   * 收集表单内的本库字段
+   * @param form 表单元素
+   * @returns 字段列表
+   */
+  private static _collectFields(
+    form: GlobalHTMLFormElement
+  ): EaFormAssociatedBase[] {
+    const fields = new Set<EaFormAssociatedBase>();
+
+    for (const el of Array.from(form.elements ?? [])) {
+      if (el instanceof EaFormAssociatedBase) fields.add(el);
+    }
+
+    form.querySelectorAll("*").forEach(el => {
+      if (el instanceof EaFormAssociatedBase) fields.add(el);
+    });
+
+    const formId = form.getAttribute("id");
+    if (formId) {
+      document.querySelectorAll(`[form="${formId}"]`).forEach(el => {
+        if (el instanceof EaFormAssociatedBase) fields.add(el);
+      });
+    }
+
+    return [...fields];
+  }
+
+  /**
+   * 校验表单内的本库字段，首个无效字段阻断提交
+   * @param form 表单元素
+   * @param e 提交事件
+   */
+  private static _onSubmit(
+    form: GlobalHTMLFormElement,
+    e: Event
+  ): void {
+    const fields = EaFormAssociatedBase._collectFields(form);
+    let firstInvalid: EaFormAssociatedBase | null = null;
+
+    for (const el of fields) {
+      el.setCustomValidity("");
+      el.updateValidity();
+
+      const valid =
+        typeof el.internals?.checkValidity === "function"
+          ? el.internals.checkValidity()
+          : true;
+
+      if (!valid && !firstInvalid) {
+        firstInvalid = el;
+      }
+    }
+
+    if (firstInvalid) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      firstInvalid.reportValidity();
+    }
+  }
+
+  /**
+   * 关联表单：登记提交监听并关闭原生校验
+   * @param form 表单元素
+   */
+  private _associateForm(form: GlobalHTMLFormElement): void {
+    if (this._associatedForm === form) return;
+
+    this._releaseForm();
+    this._associatedForm = form;
+
+    let state = EaFormAssociatedBase._formStates.get(form);
+    if (!state) {
+      const controller = new AbortController();
+      state = { count: 0, noValidate: form.noValidate, controller };
+      EaFormAssociatedBase._formStates.set(form, state);
+
+      form.addEventListener(
+        "submit",
+        (e: Event) => EaFormAssociatedBase._onSubmit(form, e),
+        { signal: controller.signal }
+      );
+    }
+
+    state.count += 1;
+    form.noValidate = true;
+  }
+
+  /**
+   * 解除表单关联：最后一个字段离开时恢复 noValidate 并注销监听
+   */
+  private _releaseForm(): void {
+    const form = this._associatedForm;
+    this._associatedForm = null;
+
+    if (!form) return;
+
+    const state = EaFormAssociatedBase._formStates.get(form);
+    if (!state) return;
+
+    state.count -= 1;
+    if (state.count > 0) return;
+
+    state.controller.abort();
+    form.noValidate = state.noValidate;
+    EaFormAssociatedBase._formStates.delete(form);
+  }
 
   /**
    * 表单关联回调，处理表单提交事件
    * @param form - 关联的表单元素
    */
   formAssociatedCallback(form: GlobalHTMLFormElement | null): void {
-    if (!form) return;
-
-    form.noValidate = true;
-
-    let entry = EaFormAssociatedBase._formSubmitControllers.get(form);
-    if (!entry) {
-      entry = { controller: new AbortController(), registered: false };
-      EaFormAssociatedBase._formSubmitControllers.set(form, entry);
+    if (!form) {
+      this._releaseForm();
+      return;
     }
 
-    if (!entry.registered) {
-      entry.registered = true;
-      form.addEventListener(
-        "submit",
-        (e: Event) => {
-          const allElements = Array.from(
-            form.querySelectorAll("*")
-          ) as EaFormAssociatedBase[];
-          const sorted = allElements.filter(
-            el => el instanceof EaFormAssociatedBase
-          );
-
-          let firstInvalid: EaFormAssociatedBase | null = null;
-          for (const el of sorted) {
-            el.setCustomValidity("");
-            el.updateValidity();
-            if (!el.checkValidity() && !firstInvalid) {
-              firstInvalid = el;
-            }
-          }
-
-          if (firstInvalid) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            firstInvalid.reportValidity();
-          }
-        },
-        { signal: entry.controller.signal }
-      );
-    }
+    this._associateForm(form);
   }
 
   /**
@@ -417,10 +482,10 @@ export class EaFormAssociatedBase extends EaBase {
   }
 
   /**
-   * 表单重置回调，处理表单重置事件
+   * 表单重置回调，恢复到首次连接时的值
    */
   formResetCallback(): void {
-    this.value = "";
+    this.value = (this._resetValue as any) ?? "";
     this.setValidity({});
   }
 }
