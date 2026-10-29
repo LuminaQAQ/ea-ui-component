@@ -10,6 +10,7 @@
     "dev:doc": "vitepress dev docs --host 0.0.0.0",
     "build": "pnpm run ea sync && pnpm -r build && tsx scripts/copy-assets.ts",
     "build:doc": "tsx scripts/copy-doc-assets.ts --index-css && vitepress build docs && tsx scripts/copy-doc-assets.ts",
+    "build:all": "pnpm build && pnpm build:doc",
     "preview:doc": "cross-env VITEPRESS_BASE=___EMPTY___ && tsx scripts/copy-doc-assets.ts --index-css && vitepress build docs && tsx scripts/copy-doc-assets.ts && vitepress preview docs",
     "preview": "vite preview",
     "test": "pnpm -r test:run && pnpm run check",
