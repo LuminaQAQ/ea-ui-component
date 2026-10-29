@@ -99,7 +99,7 @@
     "gh-pages": "^6.1.1",
     "globals": "^16.5.0",
     "husky": "^9.1.7",
-    "lint-staged": "^16.1.2",
+    "lint-staged": "^17.6.0",
     "prettier": "^3.7.4",
     "publint": "^0.3.25",
     "sass": "^1.77.2",
