@@ -15,6 +15,9 @@ build
 dist
 test.html
 
+# MCP 组件元数据缓存：由 `ea-ui-mcp-server` 的 build（gen-mcp-cache → prepare-examples）生成
+packages/mcp-server/src/cache/components-meta.json
+
 # Logs
 logs
 *.log
