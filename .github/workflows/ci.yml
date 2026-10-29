@@ -20,5 +20,9 @@ jobs:
       - run: pnpm run typecheck
       - run: pnpm -r typecheck
       - run: pnpm test
+      - run: pnpm --filter @easy-component-ui/core build
+      - run: pnpm run check:dist
+      - run: pnpm run check:publint
+      - run: pnpm run check:attw
       - run: pnpm --filter easy-component-ui exec playwright install --with-deps chromium
       - run: pnpm test:browser
