@@ -14,7 +14,11 @@ import type {
   EaElement,
   EaElementConstructor,
 } from "../types/index";
-import { GlobalCustomElements, GlobalHTMLElement } from "@utils/env";
+import {
+  GlobalCustomElements,
+  GlobalHTMLElement,
+  isDevelopment,
+} from "@utils/env";
 
 /**
  * @description ea-ui 自定义元素装饰器选项
@@ -608,7 +612,7 @@ function CustomElement(
             );
           }
         } catch (e) {
-          if (process.env.NODE_ENV === "development") {
+          if (isDevelopment()) {
             console.error(e, this);
           }
         } finally {

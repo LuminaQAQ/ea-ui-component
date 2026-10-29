@@ -45,3 +45,15 @@ export const GlobalLocalStorage: globalThis.Storage =
         setItem = () => undefined;
         [key: string]: any;
       })() as unknown as Storage);
+
+/**
+ * @description 是否为开发环境
+ * @returns 读到 NODE_ENV 且为 development 时返回 true
+ */
+export const isDevelopment = (): boolean => {
+  const env = (
+    globalThis as { process?: { env?: Record<string, string | undefined> } }
+  ).process?.env;
+
+  return env?.NODE_ENV === "development";
+};
