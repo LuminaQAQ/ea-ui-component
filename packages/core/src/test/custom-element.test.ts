@@ -116,7 +116,7 @@ describe("@CustomElement 注册与包装类", () => {
     expect(observed).toContain("state");
     expect(observed).toContain("showIcon");
     expect(observed).toContain("show-icon");
-    // 特征测试：HTML 属性名会被小写化，camelCase 条目是死条目（P1-3）
+    // HTML 属性名会被小写化，camelCase 条目不会命中
     expect(observed).not.toContain("showicon");
   });
 
@@ -178,14 +178,14 @@ describe("@attribute 读写与类型解析", () => {
     expect(el.hasAttribute("open")).toBe(true);
   });
 
-  it("特征测试：移除属性后 observer 收到默认值（P0-4）", async () => {
+  it("移除属性后 observer 收到默认值", async () => {
     const el = await mountWidget();
     el.setAttribute("count", "9");
     await tick();
     el.removeAttribute("count");
     await tick();
 
-    // 当前契约：newVal 为默认值 5，而不是 null / undefined
+    // count 声明了 default: 5，移除后 newVal 为 5
     expect(EaTestWidget.observed[EaTestWidget.observed.length - 1]).toEqual([
       5, 9,
     ]);
@@ -247,7 +247,7 @@ describe("渲染与生命周期", () => {
   });
 });
 
-describe("异步 $mount 的时序（P1-1 特征）", () => {
+describe("异步 $mount 的时序", () => {
   it("$mount 未完成时属性 observer 已经执行", async () => {
     let releaseMount: (() => void) | undefined;
     const calls: unknown[] = [];
@@ -282,7 +282,7 @@ describe("异步 $mount 的时序（P1-1 特征）", () => {
     el.setAttribute("value", "b");
     await tick();
 
-    // 特征测试：attributeChangedCallback 只等 _isRendered（$mount 被调用），不等挂载完成
+    // attributeChangedCallback 只等 _isRendered（$mount 已调用），不等挂载完成
     expect(calls).toEqual(["b"]);
 
     releaseMount?.();

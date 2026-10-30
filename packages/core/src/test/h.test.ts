@@ -8,7 +8,7 @@ describe("h", () => {
     );
   });
 
-  it("无类名与属性时仍保留模板中的空格（特征测试：现实现会产出 `<div >`）", () => {
+  it("无类名与属性时仍保留模板中的空格（产出 `<div >`）", () => {
     expect(h("div", "", {}, "x")).toBe("<div >x</div>");
     expect(h("div", "", undefined, "x")).toBe("<div >x</div>");
   });
@@ -52,7 +52,7 @@ describe("h", () => {
     );
   });
 
-  it("不转义属性值（仅用于可信模板，P2-6）", () => {
+  it("不转义属性值（仅用于可信模板）", () => {
     const out = h("div", "", { title: '" onmouseover="x' });
     expect(out).toContain('title="" onmouseover="x"');
   });

@@ -37,7 +37,7 @@ describe("@query / @queryAll / @children", () => {
   it("渲染前：@query 返回 null，@queryAll / @children 返回空 NodeList", () => {
     const el = document.createElement("ea-test-query") as EaTestQuery;
     expect(el.inner).toBeNull();
-    // 特征测试：类型声明为 `NodeListOf<Element> | null`，但 shadowRoot 已存在的实际返回值是空 NodeList
+    // 类型声明为 `NodeListOf<Element> | null`，但 shadowRoot 已存在时返回空 NodeList
     expect(el.items?.length).toBe(0);
     expect(el.lightSpans?.length).toBe(0);
   });

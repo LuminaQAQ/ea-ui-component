@@ -34,7 +34,7 @@ describe("timeout", () => {
     const spy = vi.fn();
     const id = timeout(spy, 50);
 
-    // 特征测试：类型声明为 `number`，但返回值其实是平台原样返回的句柄
+    // 类型声明为 `number`，返回值实际是平台原样返回的句柄
     // （浏览器为 number，jsdom + fake timers 下是 sinon 的 Timeout 对象）
     expect(id).toBeDefined();
     vi.advanceTimersByTime(50);

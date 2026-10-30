@@ -139,7 +139,7 @@ describe("RovingTabindex", () => {
     expect(event.defaultPrevented).toBe(false);
   });
 
-  it("特征测试：destroy() 只清空列表，不移除已有 tabindex（P2-6）", () => {
+  it("destroy() 只清空列表，不移除已有 tabindex", () => {
     const items = mountItems(2);
     const roving = new RovingTabindex({});
     roving.setItems(items);

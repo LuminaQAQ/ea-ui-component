@@ -71,7 +71,7 @@ describe("EaFormAssociatedBase 属性默认值", () => {
     expect(el.getForm()).toBeNull();
   });
 
-  it("willValidate / validity / validationMessage 直接读取 internals（P1-3）", async () => {
+  it("willValidate / validity / validationMessage 直接读取 internals", async () => {
     const el = await mount();
 
     expect(el.willValidate).toBe(el.internals.willValidate);
@@ -79,7 +79,7 @@ describe("EaFormAssociatedBase 属性默认值", () => {
     expect(el.validationMessage).toBe(el.internals.validationMessage);
   });
 
-  it("HTML 属性无法伪造只读派生值（P1-3）", async () => {
+  it("HTML 属性不影响只读派生值", async () => {
     const el = await mount();
     const before = el.validity?.valid;
 
@@ -127,7 +127,7 @@ describe("约束下发（初始 / 设置 / 移除）", () => {
     expect(el.validationTarget.getAttribute("pattern")).toBe("\\d+");
   });
 
-  it("移除后清除目标元素上的同名约束（P0-4）", async () => {
+  it("移除约束后清除目标元素上的同名属性", async () => {
     const el = await mount();
 
     el.min = 3;
@@ -141,7 +141,7 @@ describe("约束下发（初始 / 设置 / 移除）", () => {
     expect(el.validationTarget.hasAttribute("min")).toBe(false);
   });
 
-  it("空串按未设置处理：maxlength=\"\" 不锁死输入（P2-9）", async () => {
+  it("空串按未设置处理：maxlength=\"\" 不锁死输入", async () => {
     const el = await mount();
 
     el.setAttribute("maxlength", "");
@@ -168,7 +168,7 @@ describe("约束下发（初始 / 设置 / 移除）", () => {
   });
 });
 
-describe("observer 入参（D4）", () => {
+describe("observer 入参", () => {
   it("只归一化 value，previous 初次为 null，移除时 value 为 null", async () => {
     const el = await mountObserver();
 
@@ -221,7 +221,7 @@ describe("校验与表单值", () => {
 });
 
 describe("表单生命周期回调", () => {
-  it("formAssociatedCallback 关闭原生校验，最后一个字段离开时恢复（P1-4）", async () => {
+  it("formAssociatedCallback 关闭原生校验，最后一个字段离开时恢复", async () => {
     const form = document.createElement("form");
     const first = document.createElement("ea-test-field") as EaTestField;
     const second = document.createElement("ea-test-field") as EaTestField;
@@ -272,7 +272,7 @@ describe("表单生命周期回调", () => {
     expect(secondSpy).toHaveBeenCalledTimes(2);
   });
 
-  it("外置控件（form 属性指向表单）也纳入提交校验（P1-4）", async () => {
+  it("外置控件（form 属性指向表单）也纳入提交校验", async () => {
     const form = document.createElement("form");
     form.id = "ea-external-form";
     document.body.append(form);
@@ -293,7 +293,7 @@ describe("表单生命周期回调", () => {
     expect(submit.defaultPrevented).toBe(true);
   });
 
-  it("formResetCallback 恢复到首次连接时的值（P1-4）", async () => {
+  it("formResetCallback 恢复到首次连接时的值", async () => {
     const el = document.createElement("ea-test-field") as EaTestField;
     el.setAttribute("value", "初始值");
     document.body.append(el);

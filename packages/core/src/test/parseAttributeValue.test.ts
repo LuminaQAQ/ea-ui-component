@@ -36,7 +36,7 @@ describe("parseAttributeValue", () => {
   });
 
   it("字符串形式的类型名与构造器等价（未在文档中公开）", () => {
-    // 特征测试：实现支持 "String"/"Number"/"Boolean" 字符串，但类型声明里没有这两个字面量
+    // 实现支持 "String"/"Number"/"Boolean" 字符串，类型声明里没有这些字面量
     expect(parseAttributeValue(ctx, "abc", "String" as never)).toBe("abc");
     expect(parseAttributeValue(ctx, "42", "Number" as never)).toBe(42);
     expect(parseAttributeValue(ctx, "true", "Boolean" as never)).toBe(true);
@@ -50,7 +50,7 @@ describe("parseAttributeValue", () => {
   it("Number：可解析则返回数字，空串与非法值回落默认值", () => {
     expect(parseAttributeValue(ctx, "42", Number)).toBe(42);
     expect(parseAttributeValue(ctx, "-1.5", Number)).toBe(-1.5);
-    // 空串对数值类型无意义，按“未设置”处理（P2-9）
+    // 空串对数值类型无意义，按“未设置”处理
     expect(parseAttributeValue(ctx, "", Number)).toBeNull();
     expect(parseAttributeValue(ctx, "", Number, 9)).toBe(9);
     expect(parseAttributeValue(ctx, "abc", Number, 9)).toBe(9);

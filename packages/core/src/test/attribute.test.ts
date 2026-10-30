@@ -39,7 +39,7 @@ describe("@attribute 注册", () => {
   });
 
   it("同一类的多次声明会累积到同一张表", () => {
-    // 特征测试：registerPropertyMap 每次都基于已有表展开写入
+    // registerPropertyMap 每次都基于已有表展开写入
     const table = ElementAttributesMap.get(Child) ?? {};
     expect(table["disabled"]).toBeDefined();
     expect(table["size"]).toBeDefined();

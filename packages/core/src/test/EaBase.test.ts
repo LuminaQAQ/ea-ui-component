@@ -126,7 +126,7 @@ describe("EaBase 事件系统", () => {
     document.removeEventListener("ea-custom", listener);
   });
 
-  it("默认 $updated 会把属性变更派发为 updated 事件（P1-2 特征）", async () => {
+  it("默认 $updated 会把属性变更派发为 updated 事件", async () => {
     const el = await mount();
     const listener = vi.fn();
     document.addEventListener("updated", listener);
@@ -151,8 +151,7 @@ describe("EaBase 生命周期", () => {
   it("断连时依次调用 $beforeUnmount / $unmounted 并派发同名事件", async () => {
     const el = await mount();
 
-    // 特征测试：事件在 disconnectedCallback 内派发，此时元素已脱离文档树，
-    // 所以只能在本元素上监听到，document 上的冒泡监听器收不到（P2-5）
+    // 事件在 disconnectedCallback 内派发，元素已脱离文档树：只能在本元素上监听，document 上的冒泡监听器收不到
     const beforeUnmount = vi.fn();
     const unmounted = vi.fn();
     el.addEventListener("beforeUnmount", beforeUnmount);
@@ -186,7 +185,7 @@ describe("EaBase 生命周期", () => {
     ]);
   });
 
-  it("特征测试：断连后 _isRendered 置空且重连不重建（P1-1）", async () => {
+  it("断连后 _isRendered 置空且重连不重建", async () => {
     const el = await mount();
     const internals = el as unknown as { _isRendered: Promise<void> | null };
     expect(internals._isRendered).toBeInstanceOf(Promise);
