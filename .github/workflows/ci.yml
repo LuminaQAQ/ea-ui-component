@@ -8,7 +8,8 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    # 固定镜像：ubuntu-latest 已开始迁移到 26，Playwright 尚未支持
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -24,5 +25,6 @@ jobs:
       - run: pnpm run check:dist
       - run: pnpm run check:publint
       - run: pnpm run check:attw
+      - run: pnpm --filter easy-component-ui exec playwright --version
       - run: pnpm --filter easy-component-ui exec playwright install --with-deps chromium
       - run: pnpm test:browser
