@@ -1,7 +1,13 @@
 import "@/components/ea-input";
 import "@/components/ea-icon/index";
 import { EaFormAssociatedBase } from "@easy-component-ui/core/core/EaFormAssociatedBase";
-import { CustomElement, attribute, property, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  property,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { createBEM } from "@easy-component-ui/core/utils/bem";
 import { EaSelectChangeEvent } from "../../events/EaSelectChangeEvent";
@@ -195,7 +201,7 @@ export class EaSelect extends EaFormAssociatedBase {
     default: false,
     a11y: {
       ariaAttr: "aria-autocomplete",
-      map: v => v ? "both" : null,
+      map: v => (v ? "both" : null),
     },
     observer(this: EaSelect, newVal: boolean) {
       this._abortControllerStates.inputFilterAbortController?.abort();
@@ -1000,7 +1006,7 @@ export class EaSelect extends EaFormAssociatedBase {
     this._abortControllerStates.closeAbortController?.abort();
   }
 
-  async $mount() {
+  $mount(): void {
     this.setAttribute("role", "combobox");
     this.tabIndex = 0;
     this.setAttribute("aria-haspopup", "listbox");
@@ -1012,9 +1018,6 @@ export class EaSelect extends EaFormAssociatedBase {
     this.setAttribute("aria-controls", this._dropdownId);
 
     this.updateContainerClasslist();
-
-    await customElements.whenDefined("ea-input");
-    await customElements.whenDefined("ea-option");
 
     if (!this.name) this.name = Math.random().toString(36).substring(2, 15);
   }

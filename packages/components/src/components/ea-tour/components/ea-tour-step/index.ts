@@ -1,5 +1,10 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { html } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import "@/components/ea-icon/index";
@@ -11,10 +16,18 @@ const TAG_NAME = "ea-tour-step" as const;
 const bem = createBEM(TAG_NAME);
 
 const PLACEMENT_TYPES = [
-  "top", "top-start", "top-end",
-  "bottom", "bottom-start", "bottom-end",
-  "left", "left-start", "left-end",
-  "right", "right-start", "right-end",
+  "top",
+  "top-start",
+  "top-end",
+  "bottom",
+  "bottom-start",
+  "bottom-end",
+  "left",
+  "left-start",
+  "left-end",
+  "right",
+  "right-start",
+  "right-end",
 ] as const;
 
 type PlacementType = (typeof PLACEMENT_TYPES)[number];
@@ -230,9 +243,7 @@ export class EaTourStep extends EaBase {
     }
   }
 
-  async $mount() {
-    await customElements.whenDefined("ea-tour");
-
+  $mount(): void {
     this._abortController?.abort();
     this._abortController = new AbortController();
   }
