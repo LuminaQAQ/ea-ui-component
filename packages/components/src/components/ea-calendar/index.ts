@@ -1,5 +1,10 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { html } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { i18nManager } from "@/utils/I18nManager";
@@ -486,8 +491,11 @@ export class EaCalendar extends EaBase {
 
     const weekStart = refDate.startOf("week").get("day");
 
+    // 相对周起始日的偏移，周日在周一起始的月份里偏移为 6
+    const weekOffset = (day: number) => (day - weekStart + 7) % 7;
+
     const prevMonthRemainingDays = Array.from(
-      { length: currentMonthFirstDay - weekStart },
+      { length: weekOffset(currentMonthFirstDay) },
       (_, i) => prevMonthTotalDays - i
     ).reverse();
     const currentMonthDays = Array.from(
@@ -495,7 +503,7 @@ export class EaCalendar extends EaBase {
       (_, i) => i + 1
     );
     const nextMonthRemainingDays = Array.from(
-      { length: 6 - currentMonthLastDay + weekStart },
+      { length: 6 - weekOffset(currentMonthLastDay) },
       (_, i) => i + 1
     );
 
