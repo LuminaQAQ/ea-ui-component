@@ -66,11 +66,9 @@ export interface AttributeOptions {
   forward?: ForwardOption;
   /** @description 无障碍属性同步配置 */
   a11y?: A11yOption;
+  /**
+   * @description 观察的 HTML attribute
+   * 不写则按属性名转成小写连字符；写 false 表示不观察
+   */
+  attribute?: string | boolean;
 }
-
-/**
- * @description 属性映射表
- * 键：类构造函数
- * 值：属性名到选项的映射
- */
-export type PropertyMap = WeakMap<Function, Record<string, AttributeOptions>>;

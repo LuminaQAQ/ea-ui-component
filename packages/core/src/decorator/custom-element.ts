@@ -1,16 +1,12 @@
 ﻿import parseAttributeValue, {
   parseDefaultValue,
 } from "../utils/parseAttributeValue";
-import {
-  ElementAttributesMap,
-  ElementPropertiesMap,
-  StylesheetCache,
-} from "../stores";
+import { StylesheetCache } from "../stores";
+import { attributeOf, finalize } from "../schema";
+import type { ClassMeta, DeclaredType } from "../schema";
 import { html } from "../utils/html";
-import { camelToKebab, kebabToCamel } from "../utils/case-convert";
 import type {
-  AttributeOptions,
-  PropertyOptions,
+  A11yOption,
   EaElement,
   EaElementConstructor,
 } from "../types/index";
@@ -68,51 +64,16 @@ function getClassChain(customElementClass: any): any[] {
 }
 
 /**
- * 查找属性配置，支持驼峰命名和连字符命名的自动转换
- * @param options 属性配置映射
- * @param name 属性名（可能是驼峰命名或连字符命名）
- * @returns 找到的属性配置和实际属性名
- */
-function findPropertyOption(
-  options: Record<string, AttributeOptions>,
-  name: string
-): {
-  option: AttributeOptions | undefined;
-  actualName: string;
-} {
-  // 1. 直接匹配
-  if (options[name]) {
-    return { option: options[name], actualName: name };
-  }
-
-  // 2. 尝试将连字符命名转换为驼峰命名后匹配
-  const camelName = kebabToCamel(name);
-  if (options[camelName]) {
-    return { option: options[camelName], actualName: camelName };
-  }
-
-  // 3. 尝试将驼峰命名转换为连字符命名后匹配
-  const kebabName = camelToKebab(name);
-  if (options[kebabName]) {
-    return { option: options[kebabName], actualName: kebabName };
-  }
-
-  return { option: undefined, actualName: name };
-}
-
-/**
  * 创建属性的 getter 函数（映射到 HTML attribute）
+ * @param attrName 读取的 attribute 名
  * @param defaultValue 默认值
- * @param name 属性名（可能是驼峰命名）
  * @param type 属性类型
  */
 function createAttributeGetter(
+  attrName: string,
   defaultValue: any,
-  name: string,
-  type: AttributeOptions["type"] | PropertyOptions["type"]
+  type: DeclaredType
 ) {
-  const attrName = camelToKebab(name);
-
   return function (this: EaElement & GlobalHTMLElement) {
     const attrValue = this.getAttribute(attrName);
 
@@ -134,11 +95,9 @@ function createAttributeGetter(
 
 /**
  * 创建属性的 setter 函数（映射到 HTML attribute）
- * @param name 属性名（可能是驼峰命名）
+ * @param attrName 要读写的 attribute 名
  */
-function createAttributeSetter(name: string) {
-  const attrName = camelToKebab(name);
-
+function createAttributeSetter(attrName: string) {
   return function (this: EaElement & GlobalHTMLElement, newVal: any) {
     if (!(this instanceof GlobalHTMLElement)) return;
 
@@ -191,7 +150,7 @@ function createPropertyGetter(name: string, defaultValue: any) {
 function createPropertySetter(
   name: string,
   observer?: (newVal: any, oldVal: any) => void,
-  a11y?: AttributeOptions["a11y"]
+  a11y?: A11yOption
 ) {
   const storageKey = getPropertyStorageKey(name);
   return function (this: any, newVal: any) {
@@ -281,11 +240,7 @@ function forwardAttribute(
  * @param a11y a11y 配置
  * @param value 当前属性值
  */
-function syncA11yAttribute(
-  instance: any,
-  a11y: NonNullable<AttributeOptions["a11y"]>,
-  value: any
-): void {
+function syncA11yAttribute(instance: any, a11y: A11yOption, value: any): void {
   forwardAttribute(instance, a11y.target, a11y.ariaAttr, value, a11y.map);
 }
 
@@ -293,13 +248,15 @@ function syncA11yAttribute(
  * 定义响应式属性（映射到 HTML attribute）
  * @param instance 组件实例
  * @param name 属性名
+ * @param attrName 观察的 attribute 名
  * @param type 属性类型
  * @param defaultValue 默认值
  */
 function defineReactiveAttribute(
   instance: any,
   name: string,
-  type: AttributeOptions["type"] | PropertyOptions["type"],
+  attrName: string,
+  type: DeclaredType,
   defaultValue: any
 ): void {
   if (Object.getOwnPropertyDescriptor(instance, name)) {
@@ -307,8 +264,8 @@ function defineReactiveAttribute(
   }
 
   Object.defineProperty(instance, name, {
-    get: createAttributeGetter(defaultValue, name, type),
-    set: createAttributeSetter(name),
+    get: createAttributeGetter(attrName, defaultValue, type),
+    set: createAttributeSetter(attrName),
     configurable: true,
     enumerable: true,
   });
@@ -317,44 +274,32 @@ function defineReactiveAttribute(
 /**
  * 初始化布尔属性的默认值
  * @param instance 组件实例
- * @param classChain 组件类的原型链
+ * @param meta 类元数据
  */
-function initBooleanDefaults(instance: any, classChain: any[]) {
-  classChain.forEach(cls => {
-    const attrs = ElementAttributesMap.get(cls);
-    if (!attrs) return;
+function initBooleanDefaults(instance: any, meta: ClassMeta): void {
+  for (const [name, decl] of meta.props) {
+    const attrName = attributeOf(name, decl);
 
-    Object.keys(attrs).forEach(name => {
-      const { type, default: defaultValue } = attrs[name];
-      if (type === Boolean && defaultValue === true) {
-        const attrName = camelToKebab(name);
-        if (BooleanFalseAttrsMap.get(instance)?.has(attrName)) return;
-        if (!instance.hasAttribute(attrName)) {
-          instance.toggleAttribute(attrName, true);
-        }
-      }
-    });
-  });
+    if (!attrName || decl.type !== Boolean || decl.default !== true) continue;
+    if (BooleanFalseAttrsMap.get(instance)?.has(attrName)) continue;
+
+    if (!instance.hasAttribute(attrName)) {
+      instance.toggleAttribute(attrName, true);
+    }
+  }
 }
 
 /**
- * 初始化 @attribute 的 a11y 同步（首次 connectedCallback 时调用）
+ * 首次同步声明式 a11y 属性
  * @param instance 组件实例
- * @param classChain 组件类的原型链
+ * @param meta 类元数据
  */
-function initA11yAttributes(instance: any, classChain: any[]) {
-  classChain.forEach(cls => {
-    const attrs = ElementAttributesMap.get(cls);
-    if (!attrs) return;
+function initA11yAttributes(instance: any, meta: ClassMeta): void {
+  for (const [name, decl] of meta.props) {
+    if (!decl.a11y) continue;
 
-    Object.keys(attrs).forEach(name => {
-      const { a11y } = attrs[name];
-      if (a11y) {
-        const currentValue = instance[name];
-        syncA11yAttribute(instance, a11y, currentValue);
-      }
-    });
-  });
+    syncA11yAttribute(instance, decl.a11y, instance[name]);
+  }
 }
 
 /**
@@ -370,7 +315,7 @@ function defineReactiveProperty(
   name: string,
   defaultValue: any,
   observer?: (newVal: any, oldVal: any) => void,
-  a11y?: AttributeOptions["a11y"]
+  a11y?: A11yOption
 ): void {
   if (Object.getOwnPropertyDescriptor(instance, name)) {
     delete instance[name];
@@ -470,36 +415,22 @@ function mount(
 
 /**
  * 解析并声明自定义元素的 observedAttributes
- * 同时覆盖属性名的连字符与驼峰两种形式
+ * 名字来自合并后的元数据，只含小写连字符
  * @param customElementClass 自定义元素类
  * @param options 装饰器选项
+ * @param meta 类元数据
  * @returns 观察的属性名列表
  */
 function setupObservedAttributes(
   customElementClass: EaElementConstructor,
-  options: CustomElementOptions
+  options: CustomElementOptions,
+  meta: ClassMeta
 ): string[] {
-  const attributeOptions = ElementAttributesMap.get(customElementClass);
+  const extra = (Array.isArray(options.extraAttr) ? options.extraAttr : [])
+    .map(attr => attr.toLowerCase())
+    .filter(Boolean);
 
-  const superAttributes = customElementClass.observedAttributes || [];
-  const attributeNames = Object.keys(attributeOptions || {});
-
-  const allAttributeNames = attributeNames.flatMap(name => {
-    const kebabName = camelToKebab(name);
-    const camelName = kebabToCamel(name);
-    const names = [name];
-    if (kebabName !== name) names.push(kebabName);
-    if (camelName !== name && camelName !== kebabName) names.push(camelName);
-    return names;
-  });
-
-  const observedAttributes = [
-    ...new Set([
-      ...superAttributes,
-      ...allAttributeNames,
-      ...(options.extraAttr || []),
-    ]),
-  ];
+  const observedAttributes = [...new Set([...meta.observed, ...extra])];
 
   Object.defineProperty(customElementClass, "observedAttributes", {
     get: () => observedAttributes,
@@ -533,9 +464,11 @@ function CustomElement(
   ) => {
     (CustomElementClass as any).customElementOptions = options;
 
+    const meta = finalize(CustomElementClass);
     const observedAttributes = setupObservedAttributes(
       CustomElementClass,
-      options
+      options,
+      meta
     );
     const classChain = getClassChain(CustomElementClass);
 
@@ -547,32 +480,35 @@ function CustomElement(
       constructor() {
         super();
 
-        classChain.forEach(cls => {
-          const attrs = ElementAttributesMap.get(cls);
-          const props = ElementPropertiesMap.get(cls);
+        for (const [name, decl] of meta.props) {
+          const attrName = attributeOf(name, decl);
 
-          if (attrs) {
-            Object.keys(attrs).forEach(name => {
-              const { type, default: defaultValue } = attrs[name];
-              defineReactiveAttribute(this, name, type, defaultValue);
-            });
+          if (attrName !== null) {
+            defineReactiveAttribute(
+              this,
+              name,
+              attrName,
+              decl.type,
+              decl.default
+            );
+          } else {
+            defineReactiveProperty(
+              this,
+              name,
+              decl.default,
+              decl.observer,
+              decl.a11y
+            );
           }
-
-          if (props) {
-            Object.keys(props).forEach(name => {
-              const { default: defaultValue, observer, a11y } = props[name];
-              defineReactiveProperty(this, name, defaultValue, observer, a11y);
-            });
-          }
-        });
+        }
       }
 
       connectedCallback() {
-        initBooleanDefaults(this, classChain);
+        initBooleanDefaults(this, meta);
 
         mount(this, classChain);
 
-        initA11yAttributes(this, classChain);
+        initA11yAttributes(this, meta);
 
         const parentProto: any = CustomElementClass.prototype;
         if (typeof parentProto.connectedCallback === "function") {
@@ -589,15 +525,11 @@ function CustomElement(
 
         try {
           const parentProto: any = CustomElementClass.prototype;
-          let found = false;
+          const actualName = meta.attrToProp.get(name);
+          const option =
+            actualName !== undefined ? meta.props.get(actualName) : undefined;
 
-          for (let i = classChain.length - 1; i >= 0; i--) {
-            const clsAttrs = ElementAttributesMap.get(classChain[i]);
-            if (!clsAttrs) continue;
-
-            const { option, actualName } = findPropertyOption(clsAttrs, name);
-            if (!option) continue;
-
+          if (option && actualName !== undefined) {
             let newValue: any;
             let oldValue: any;
 
@@ -647,13 +579,7 @@ function CustomElement(
                 actualName
               );
             }
-
-            found = true;
-            break;
-          }
-
-          if (
-            !found &&
+          } else if (
             typeof parentProto.attributeChangedCallback === "function"
           ) {
             await parentProto.attributeChangedCallback.call(

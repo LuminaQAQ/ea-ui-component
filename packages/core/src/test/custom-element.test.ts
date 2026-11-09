@@ -106,7 +106,7 @@ describe("@CustomElement 注册与包装类", () => {
     );
   });
 
-  it("observedAttributes 同时包含 kebab 与 camel 两种写法（camel 条目实际匹配不到）", () => {
+  it("observedAttributes 只含小写连字符名", () => {
     const observed = (
       customElements.get("ea-test-widget") as unknown as {
         observedAttributes: string[];
@@ -114,10 +114,20 @@ describe("@CustomElement 注册与包装类", () => {
     ).observedAttributes;
 
     expect(observed).toContain("state");
-    expect(observed).toContain("showIcon");
     expect(observed).toContain("show-icon");
-    // HTML 属性名会被小写化，camelCase 条目不会命中
+    expect(observed).not.toContain("showIcon");
     expect(observed).not.toContain("showicon");
+  });
+
+  it("attributeChangedCallback 按连字符名命中驼峰属性", async () => {
+    const el = document.createElement("ea-test-widget") as EaTestWidget;
+    document.body.append(el);
+    await flushMount();
+
+    el.setAttribute("show-icon", "");
+    await el.updateComplete;
+
+    expect(el.showIcon).toBe(true);
   });
 
   it("子类继承父类的 observedAttributes 并追加自身属性", () => {

@@ -1,3 +1,5 @@
+import type { A11yOption } from "./attribute";
+
 /**
  * @description Property 装饰器支持的类型
  */
@@ -24,15 +26,10 @@ export interface PropertyOptions {
   /** @description 观察者回调 - 当属性值变化时触发 */
   observer?: ((this: any, newVal: any, oldVal: any) => void) | undefined;
   /** @description 无障碍属性同步配置 */
-  a11y?: import('./attribute').A11yOption;
+  a11y?: A11yOption;
+  /**
+   * @description 观察的 HTML attribute
+   * 不写则不观察；写 true 或字符串时进入 observedAttributes
+   */
+  attribute?: string | boolean;
 }
-
-/**
- * @description Property 属性映射表
- * 键：类构造函数
- * 值：属性名到 PropertyOptions 的映射
- */
-export type ElementPropertyMap = WeakMap<
-  Function,
-  Record<string, PropertyOptions>
->;

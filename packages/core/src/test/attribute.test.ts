@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { attribute } from "@decorator/attribute";
-import { ElementAttributesMap } from "@stores/element-attributes";
+import { finalize } from "../schema";
 
 const a11y = { ariaAttr: "aria-disabled" };
 const observer = () => undefined;
@@ -18,30 +18,46 @@ class Child extends Base {
   size: number = 0;
 }
 
-describe("@attribute 注册", () => {
-  it("按类写入 ElementAttributesMap，保留全部选项", () => {
-    expect(ElementAttributesMap.get(Base)).toMatchObject({
-      name: { type: String, default: "base" },
-    });
+describe("@attribute 声明", () => {
+  it("元数据保留全部选项，并默认观察", () => {
+    const meta = finalize(Child);
 
-    expect(ElementAttributesMap.get(Child)).toMatchObject({
-      disabled: { type: Boolean, default: false, observer, a11y },
-      size: { type: Number },
+    expect(meta.props.get("disabled")).toMatchObject({
+      type: Boolean,
+      default: false,
+      observer,
+      a11y,
+      attribute: true,
     });
+    expect(meta.props.get("size")).toMatchObject({ type: Number });
   });
 
-  it("每个类只记录自身声明的属性（继承由包装类沿原型链合并）", () => {
-    expect(Object.keys(ElementAttributesMap.get(Base) ?? {})).toEqual(["name"]);
-    expect(Object.keys(ElementAttributesMap.get(Child) ?? {}).sort()).toEqual([
+  it("沿原型链合并父类声明，子类只拥有自身部分", () => {
+    expect(finalize(Base).props.has("name")).toBe(true);
+    expect(finalize(Base).props.has("disabled")).toBe(false);
+
+    expect(finalize(Child).props.get("name")).toMatchObject({
+      type: String,
+      default: "base",
+    });
+    expect([...finalize(Child).props.keys()].sort()).toEqual([
       "disabled",
+      "name",
       "size",
     ]);
   });
 
-  it("同一类的多次声明会累积到同一张表", () => {
-    // registerPropertyMap 每次都基于已有表展开写入
-    const table = ElementAttributesMap.get(Child) ?? {};
-    expect(table["disabled"]).toBeDefined();
-    expect(table["size"]).toBeDefined();
+  it("观察名只含小写连字符形式", () => {
+    class Kebab {
+      @attribute({ type: Boolean })
+      showIcon = false;
+    }
+
+    expect(finalize(Kebab).observed).toEqual(["show-icon"]);
+    expect(finalize(Kebab).attrToProp.get("show-icon")).toBe("showIcon");
+  });
+
+  it("元数据幂等，重复获取返回同一对象", () => {
+    expect(finalize(Child)).toBe(finalize(Child));
   });
 });
