@@ -38,7 +38,6 @@ export type AlignType = (typeof ALIGN_TYPES)[number];
 export class EaRow extends EaBase {
   @attribute({
     type: Number,
-    default: 0,
     observer(this: EaRow, newVal: number) {
       this.style.setProperty("--ea-row-gutter", newVal / 2 + "px");
     },
@@ -47,7 +46,6 @@ export class EaRow extends EaBase {
 
   @attribute({
     type: Enum(JUSTIFY_TYPES),
-    default: "start",
     observer(this: EaRow, newVal: JustifyType) {
       this.style.setProperty("--ea-row-justify", newVal);
     },
@@ -56,7 +54,6 @@ export class EaRow extends EaBase {
 
   @attribute({
     type: Enum(ALIGN_TYPES),
-    default: "top",
     observer(this: EaRow, newVal: AlignType) {
       this.style.setProperty("--ea-row-align", newVal);
     },
@@ -65,7 +62,6 @@ export class EaRow extends EaBase {
 
   @attribute({
     type: String,
-    default: "div",
   })
   tag: string = "div";
 

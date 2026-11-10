@@ -1,6 +1,11 @@
 import { EaPopper } from "@common/ea-popper/index";
 import { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { EaPopconfirmConfirmEvent } from "./events/EaPopconfirmConfirmEvent";
 import { EaPopconfirmCancelEvent } from "./events/EaPopconfirmCancelEvent";
@@ -77,7 +82,6 @@ export class EaPopconfirm extends EaPopper {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaPopconfirm, newVal: string) {
       if (this._titleContent) {
         this._titleContent.innerText = newVal;
@@ -88,7 +92,6 @@ export class EaPopconfirm extends EaPopper {
 
   @attribute({
     type: String,
-    default: "circle-question",
     observer(this: EaPopconfirm, newVal: string) {
       if (this._titleIcon) {
         this._titleIcon.setAttribute("name", newVal);
@@ -99,7 +102,6 @@ export class EaPopconfirm extends EaPopper {
 
   @attribute({
     type: String,
-    default: "rgb(255, 153, 0)",
     observer(this: EaPopconfirm, newVal: string) {
       if (!CSS.supports("color", newVal))
         return console.warn(
@@ -113,7 +115,6 @@ export class EaPopconfirm extends EaPopper {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaPopconfirm) {
       this.updateContainerClasslist();
     },
@@ -122,7 +123,6 @@ export class EaPopconfirm extends EaPopper {
 
   @attribute({
     type: String,
-    default: "确定",
     observer(this: EaPopconfirm, newVal: string) {
       if (this._confirmButton) {
         this._confirmButton.textContent = newVal;
@@ -133,7 +133,6 @@ export class EaPopconfirm extends EaPopper {
 
   @attribute({
     type: String,
-    default: "取消",
     observer(this: EaPopconfirm, newVal: string) {
       if (this._cancelButton) {
         this._cancelButton.textContent = newVal;
@@ -144,7 +143,6 @@ export class EaPopconfirm extends EaPopper {
 
   @attribute({
     type: Enum(BUTTON_TYPE_OPTIONS),
-    default: "primary",
     observer(this: EaPopconfirm, newVal: string) {
       if (this._confirmButton) {
         this._confirmButton.setAttribute("variant", newVal);
@@ -155,7 +153,6 @@ export class EaPopconfirm extends EaPopper {
 
   @attribute({
     type: Enum(BUTTON_TYPE_OPTIONS),
-    default: "normal",
     observer(this: EaPopconfirm, newVal: string) {
       if (this._cancelButton) {
         this._cancelButton.setAttribute("variant", newVal);
@@ -303,9 +300,8 @@ export class EaPopconfirm extends EaPopper {
         }
 
         if (el.shadowRoot) {
-          const shadowFocusable = el.shadowRoot.querySelector<HTMLElement>(
-            FOCUSABLE_SELECTOR
-          );
+          const shadowFocusable =
+            el.shadowRoot.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
           if (shadowFocusable) {
             result.push(el);
           }
@@ -331,9 +327,8 @@ export class EaPopconfirm extends EaPopper {
   /** 聚焦元素，如果是自定义元素则聚焦其 Shadow DOM 内第一个可聚焦元素 */
   private _focusElement(el: HTMLElement): void {
     if (el.shadowRoot) {
-      const inner = el.shadowRoot.querySelector<HTMLElement>(
-        FOCUSABLE_SELECTOR
-      );
+      const inner =
+        el.shadowRoot.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
       if (inner) {
         inner.focus();
         return;

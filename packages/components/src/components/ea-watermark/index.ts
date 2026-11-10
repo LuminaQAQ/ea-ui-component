@@ -1,5 +1,10 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, property, query } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  property,
+  query,
+} from "@easy-component-ui/core/decorator";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-watermark" as const;
@@ -65,7 +70,6 @@ export class EaWatermark extends EaBase {
 
   @attribute({
     type: Number,
-    default: 120,
     observer(this: EaWatermark) {
       this._renderWatermark();
     },
@@ -74,7 +78,6 @@ export class EaWatermark extends EaBase {
 
   @attribute({
     type: Number,
-    default: 64,
     observer(this: EaWatermark) {
       this._renderWatermark();
     },
@@ -83,7 +86,6 @@ export class EaWatermark extends EaBase {
 
   @attribute({
     type: Number,
-    default: -22,
     observer(this: EaWatermark) {
       this._renderWatermark();
     },
@@ -92,7 +94,6 @@ export class EaWatermark extends EaBase {
 
   @attribute({
     type: Number,
-    default: 9,
     observer(this: EaWatermark, newVal: number) {
       if (this._content) this._content.style.zIndex = String(newVal);
     },
@@ -101,7 +102,6 @@ export class EaWatermark extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaWatermark) {
       this._renderWatermark();
     },
@@ -110,7 +110,6 @@ export class EaWatermark extends EaBase {
 
   @attribute({
     type: String,
-    default: "watermark",
     observer(this: EaWatermark) {
       this._renderWatermark();
     },
@@ -119,7 +118,6 @@ export class EaWatermark extends EaBase {
 
   @property({
     type: Object,
-    default: { ...DEFAULT_FONT },
     observer(this: EaWatermark) {
       this._renderWatermark();
     },
@@ -128,7 +126,6 @@ export class EaWatermark extends EaBase {
 
   @property({
     type: Array,
-    default: [100, 100],
     observer(this: EaWatermark) {
       this._renderWatermark();
     },
@@ -137,7 +134,6 @@ export class EaWatermark extends EaBase {
 
   @property({
     type: Array,
-    default: null,
     observer(this: EaWatermark) {
       this._renderWatermark();
     },

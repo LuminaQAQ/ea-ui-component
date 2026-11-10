@@ -1,5 +1,10 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { EaInfiniteScrollLoadmoreEvent } from "./events/EaInfiniteScrollLoadmoreEvent";
 import stylesheet from "./index.scss?inline";
@@ -43,7 +48,6 @@ export class EaInfiniteScroll extends EaBase {
 
   @attribute({
     type: Enum(["finished", "loading", "noMore"]),
-    default: "finished",
     a11y: {
       ariaAttr: "aria-busy",
       map: v => (v === "loading" ? "true" : null),
@@ -56,7 +60,6 @@ export class EaInfiniteScroll extends EaBase {
 
   @attribute({
     type: Number,
-    default: 0,
     observer(this: EaInfiniteScroll) {
       this._recreateObserver();
     },
@@ -65,7 +68,6 @@ export class EaInfiniteScroll extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     a11y: {
       ariaAttr: "aria-label",
       map: v => v || null,

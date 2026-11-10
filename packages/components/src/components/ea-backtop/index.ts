@@ -1,5 +1,10 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-backtop" as const;
@@ -36,19 +41,16 @@ export class EaBacktop extends EaBase {
 
   @attribute({
     type: String,
-    default: "window",
   })
   target: string = "window";
 
   @attribute({
     type: Number,
-    default: 200,
   })
   visibilityHeight: number = 200;
 
   @attribute({
     type: String,
-    default: "40px",
     observer(this: EaBacktop, newVal: string) {
       this.style.setProperty("--ea-backtop-right", newVal);
     },
@@ -57,7 +59,6 @@ export class EaBacktop extends EaBase {
 
   @attribute({
     type: String,
-    default: "40px",
     observer(this: EaBacktop, newVal: string) {
       this.style.setProperty("--ea-backtop-bottom", newVal);
     },
@@ -66,7 +67,6 @@ export class EaBacktop extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: true,
   })
   smooth: boolean = true;
 

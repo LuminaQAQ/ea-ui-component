@@ -1,5 +1,9 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import stylesheet from "./index.scss?inline";
 
@@ -46,7 +50,6 @@ export class EaSpace extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaSpace) {
       this.updateContainerClasslist();
     },
@@ -55,7 +58,6 @@ export class EaSpace extends EaBase {
 
   @attribute({
     type: Enum(ALIGNMENT_TYPES),
-    default: "",
     observer(this: EaSpace, newVal: AlignmentType) {
       if (newVal && !CSS.supports("align-items", newVal)) {
         console.warn(`[ea-space] Invalid alignment value: ${newVal}`);
@@ -68,7 +70,6 @@ export class EaSpace extends EaBase {
 
   @attribute({
     type: Enum(DIRECTION_TYPES),
-    default: "horizontal",
     observer(this: EaSpace) {
       this.updateContainerClasslist();
     },
@@ -77,7 +78,6 @@ export class EaSpace extends EaBase {
 
   @attribute({
     type: String,
-    default: "default",
     observer(this: EaSpace, newVal: string) {
       if (SIZE_TYPES.includes(newVal as SizeType)) {
         this.updateContainerClasslist();
@@ -94,7 +94,6 @@ export class EaSpace extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaSpace, newVal: string) {
       const existingSpacers = this.querySelectorAll('[part="spacer"]');
       existingSpacers.forEach(spacer => spacer.remove());
@@ -116,7 +115,6 @@ export class EaSpace extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaSpace) {
       this.updateContainerClasslist();
     },
@@ -125,7 +123,6 @@ export class EaSpace extends EaBase {
 
   @attribute({
     type: Number,
-    default: 100,
     observer(this: EaSpace, newVal: number) {
       if (!Number.isNaN(Number(newVal))) {
         this.fill = true;

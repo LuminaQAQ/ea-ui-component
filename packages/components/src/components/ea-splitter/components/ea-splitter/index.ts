@@ -1,5 +1,10 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { cssLengthToNumber } from "@easy-component-ui/core/utils/css-length";
 import { EaSplitterPanelResizeStartEvent } from "./events/EaSplitterPanelResizeStartEvent";
@@ -46,7 +51,6 @@ export class EaSplitter extends EaBase {
 
   @attribute({
     type: Enum(["horizontal", "vertical"] as const),
-    default: "horizontal",
     observer(this: EaSplitter, newVal: SplitterLayoutType) {
       this._container.style.setProperty(
         "--ea-splitter-direction",
@@ -228,10 +232,12 @@ export class EaSplitter extends EaBase {
       this.layout === "vertical"
         ? this._container.clientHeight
         : this._container.clientWidth;
-    const panelSize = prePanel.getBoundingClientRect()[
-      this.layout === "vertical" ? "height" : "width"
-    ];
-    const percentage = containerSize > 0 ? Math.round((panelSize / containerSize) * 100) : 50;
+    const panelSize =
+      prePanel.getBoundingClientRect()[
+        this.layout === "vertical" ? "height" : "width"
+      ];
+    const percentage =
+      containerSize > 0 ? Math.round((panelSize / containerSize) * 100) : 50;
     bar.valuenow = percentage;
   }
 
@@ -306,11 +312,12 @@ export class EaSplitter extends EaBase {
 
     if (preSize > minPreSize) {
       (splitterBar as any)._prevPreSize = preSize;
-      (splitterBar as any)._prevNextSize = nextChild.getBoundingClientRect()[dimension];
+      (splitterBar as any)._prevNextSize =
+        nextChild.getBoundingClientRect()[dimension];
 
       this._dispatchResizeEvent(EaSplitterPanelResizeStartEvent);
       preChild.size = minPreSize + "px";
-      nextChild.size = (containerSize - minPreSize) + "px";
+      nextChild.size = containerSize - minPreSize + "px";
       this._updateBarA11y(splitterBar, preChild);
       this._dispatchResizeEvent(EaSplitterPanelResizeEvent);
       this._dispatchResizeEvent(EaSplitterPanelResizeEndEvent);
@@ -351,7 +358,7 @@ export class EaSplitter extends EaBase {
 
     if (toMin) {
       preChild.size = minPreSize + "px";
-      nextChild.size = (containerSize - minPreSize) + "px";
+      nextChild.size = containerSize - minPreSize + "px";
     } else {
       const maxPreSize = containerSize - minNextSize;
       preChild.size = maxPreSize + "px";
@@ -467,7 +474,9 @@ export class EaSplitter extends EaBase {
         }
 
         if (index < panels.length - 1) {
-          const splitterBar = document.createElement("ea-splitter-bar") as EaSplitterBar;
+          const splitterBar = document.createElement(
+            "ea-splitter-bar"
+          ) as EaSplitterBar;
           this.insertBefore(splitterBar, panel.nextSibling);
 
           const barIndex = [...this.children].indexOf(splitterBar);

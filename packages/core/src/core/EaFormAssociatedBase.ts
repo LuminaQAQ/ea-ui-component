@@ -25,7 +25,6 @@ export class EaFormAssociatedBase extends EaBase {
    */
   @attribute({
     type: String,
-    default: "",
   })
   name: string = "";
 
@@ -73,7 +72,6 @@ export class EaFormAssociatedBase extends EaBase {
    */
   @attribute({
     type: Boolean,
-    default: false,
   })
   disabled: boolean = false;
 
@@ -82,7 +80,6 @@ export class EaFormAssociatedBase extends EaBase {
    */
   @attribute({
     type: String,
-    default: "",
     observer(this: EaFormAssociatedBase, newVal: string) {
       this.internals?.setFormValue(newVal);
     },
@@ -94,7 +91,6 @@ export class EaFormAssociatedBase extends EaBase {
    */
   @attribute({
     type: Boolean,
-    default: false,
     forward: {
       target: "validationTarget",
       attr: "required",
@@ -384,10 +380,7 @@ export class EaFormAssociatedBase extends EaBase {
    * @param form 表单元素
    * @param e 提交事件
    */
-  private static _onSubmit(
-    form: GlobalHTMLFormElement,
-    e: Event
-  ): void {
+  private static _onSubmit(form: GlobalHTMLFormElement, e: Event): void {
     const fields = EaFormAssociatedBase._collectFields(form);
     let firstInvalid: EaFormAssociatedBase | null = null;
 

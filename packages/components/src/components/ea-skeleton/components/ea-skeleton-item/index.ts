@@ -1,5 +1,9 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { html } from "@easy-component-ui/core/utils/html";
 import { skeletonImageSVG } from "./assets/imageSVG";
@@ -46,7 +50,6 @@ export class EaSkeletonItem extends EaBase {
 
   @attribute({
     type: Enum(SKELETON_ITEM_VARIANTS),
-    default: "p",
     observer(this: EaSkeletonItem, newVal: SkeletonItemVariant) {
       if (newVal === "image") {
         this._container.innerHTML = html(skeletonImageSVG);
@@ -60,7 +63,6 @@ export class EaSkeletonItem extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaSkeletonItem) {
       this.updateContainerClasslist();
     },

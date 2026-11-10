@@ -38,7 +38,6 @@ export default class EaBase extends GlobalHTMLElement {
    */
   @attribute({
     type: String,
-    default: "en-US",
     observer(this: EaBase, locale: string) {
       this.$updateLocalization(locale);
     },

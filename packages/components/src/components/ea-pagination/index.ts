@@ -1,5 +1,11 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, property, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  property,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { html } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { i18nManager } from "@/utils/I18nManager";
@@ -17,13 +23,7 @@ const bem = createBEM(TAG_NAME);
 
 export type PaginationSize = "large" | "default" | "small";
 export type PaginationLayoutItem =
-  | "prev"
-  | "pager"
-  | "next"
-  | "jumper"
-  | "total"
-  | "sizes"
-  | "->";
+  "prev" | "pager" | "next" | "jumper" | "total" | "sizes" | "->";
 
 const LAYOUT_TEMPLATE: Record<string, string> = {
   prev: `<ea-icon class="${bem.e("icon")} ${bem.e("icon")}--prev" name="angle-left" part="icon prev-icon" tabindex="0" aria-label="Previous page"></ea-icon>`,
@@ -112,7 +112,6 @@ export class EaPagination extends EaBase {
 
   @attribute({
     type: Number,
-    default: 10,
     observer(this: EaPagination) {
       if (!this._isFirstRender) this._handlePaginationItemChange();
     },
@@ -136,13 +135,11 @@ export class EaPagination extends EaBase {
 
   @attribute({
     type: Number,
-    default: 7,
   })
   pagerCount: number = 7;
 
   @attribute({
     type: Number,
-    default: 0,
     observer(this: EaPagination) {
       if (this._pagination && this.layout.includes("pager"))
         this._handlePaginationItemChange();
@@ -154,7 +151,6 @@ export class EaPagination extends EaBase {
 
   @attribute({
     type: Number,
-    default: 1,
     observer(this: EaPagination, newVal: number) {
       if (this._isFirstRender) return;
 
@@ -178,7 +174,6 @@ export class EaPagination extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaPagination) {
       this.updateContainerClasslist();
     },
@@ -187,7 +182,6 @@ export class EaPagination extends EaBase {
 
   @attribute({
     type: Enum(["large", "default", "small"]),
-    default: "",
     observer(this: EaPagination, newVal: string) {
       if (this._sizes && newVal) {
         this._sizes.setAttribute("size", newVal);
@@ -204,7 +198,6 @@ export class EaPagination extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaPagination) {
       this.updateContainerClasslist();
     },
@@ -213,7 +206,6 @@ export class EaPagination extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: {
       ariaAttr: "aria-disabled",
       map: v => String(v),
@@ -234,7 +226,6 @@ export class EaPagination extends EaBase {
 
   @property({
     type: Array,
-    default: [10, 20, 30, 40, 50, 100],
     observer(this: EaPagination) {
       if (!this._isFirstRender) this._handlePaginationItemChange();
     },
@@ -243,7 +234,6 @@ export class EaPagination extends EaBase {
 
   @property({
     type: Array,
-    default: ["prev", "pager", "next", "jumper", "->", "total"],
     observer(this: EaPagination) {
       if (!this._isFirstRender) this._handlePaginationItemChange();
     },

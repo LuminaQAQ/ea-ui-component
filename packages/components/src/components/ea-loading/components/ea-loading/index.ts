@@ -1,5 +1,9 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+} from "@easy-component-ui/core/decorator";
 import { html } from "@easy-component-ui/core/utils/html";
 import stylesheet from "./index.scss?inline";
 import "@/components/ea-icon/index";
@@ -47,7 +51,6 @@ export class EaLoading extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: {
       ariaAttr: "inert",
       target: ".ea-loading__content",
@@ -62,7 +65,6 @@ export class EaLoading extends EaBase {
 
   @attribute({
     type: String,
-    default: "spinner",
     observer(this: EaLoading, newVal: string) {
       if (this._spinnerIcon) {
         this._spinnerIcon.setAttribute("name", newVal);
@@ -73,7 +75,6 @@ export class EaLoading extends EaBase {
 
   @attribute({
     type: Number,
-    default: 0,
     observer(this: EaLoading, newVal: number) {
       if (newVal > 0) {
         this.style.setProperty("--ea-loading-spinner-size", `${newVal}px`);
@@ -86,7 +87,6 @@ export class EaLoading extends EaBase {
 
   @attribute({
     type: String,
-    default: "hsla(0, 0%, 100%, 0.9)",
     observer(this: EaLoading, newVal: string) {
       this.style.setProperty("--ea-loading-background", newVal);
     },
@@ -95,7 +95,6 @@ export class EaLoading extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaLoading) {
       this._updateText();
     },
@@ -104,7 +103,6 @@ export class EaLoading extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaLoading) {
       this.updateContainerClasslist();
       this._handleLock();
@@ -114,7 +112,6 @@ export class EaLoading extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaLoading) {
       this._handleLock();
     },

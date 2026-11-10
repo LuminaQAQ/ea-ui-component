@@ -19,17 +19,17 @@ class Child extends Base {
 }
 
 describe("@attribute 声明", () => {
-  it("元数据保留全部选项，并默认观察", () => {
+  it("元数据保留全部选项，并归一化为 attribute 名", () => {
     const meta = finalize(Child);
 
     expect(meta.props.get("disabled")).toMatchObject({
-      type: Boolean,
-      default: false,
-      observer,
-      a11y,
-      attribute: true,
+      attributeName: "disabled",
+      decl: { type: Boolean, default: false, observer, a11y },
     });
-    expect(meta.props.get("size")).toMatchObject({ type: Number });
+    expect(meta.props.get("size")).toMatchObject({
+      attributeName: "size",
+      decl: { type: Number },
+    });
   });
 
   it("沿原型链合并父类声明，子类只拥有自身部分", () => {
@@ -37,8 +37,7 @@ describe("@attribute 声明", () => {
     expect(finalize(Base).props.has("disabled")).toBe(false);
 
     expect(finalize(Child).props.get("name")).toMatchObject({
-      type: String,
-      default: "base",
+      decl: { type: String, default: "base" },
     });
     expect([...finalize(Child).props.keys()].sort()).toEqual([
       "disabled",
@@ -55,6 +54,16 @@ describe("@attribute 声明", () => {
 
     expect(finalize(Kebab).observed).toEqual(["show-icon"]);
     expect(finalize(Kebab).attrToProp.get("show-icon")).toBe("showIcon");
+  });
+
+  it("可用 name 指定映射的 attribute 名", () => {
+    class Renamed {
+      @attribute({ type: String, name: "Data-Label" })
+      label = "";
+    }
+
+    expect(finalize(Renamed).observed).toEqual(["data-label"]);
+    expect(finalize(Renamed).attrToProp.get("data-label")).toBe("label");
   });
 
   it("元数据幂等，重复获取返回同一对象", () => {

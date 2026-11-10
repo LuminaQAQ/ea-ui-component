@@ -1,5 +1,11 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, property, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  property,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { timeout } from "@easy-component-ui/core/utils/timeout";
 import "@components/ea-checkbox";
 import "@components/ea-icon";
@@ -80,7 +86,6 @@ export class EaTree extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaTree) {
       this._updateCheckboxVisibility();
       this._updateTreeAriaAttrs();
@@ -90,19 +95,16 @@ export class EaTree extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
   })
   checkStrictly: boolean = false;
 
   @attribute({
     type: String,
-    default: "",
   })
   nodeKey: string = "";
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaTree) {
       this._updateTreeAriaAttrs();
     },
@@ -111,13 +113,11 @@ export class EaTree extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
   })
   expandOnIconClick: boolean = false;
 
   @property({
     type: Array,
-    default: [],
     observer(this: EaTree, newVal: any[]) {
       this._handleDataChange(newVal);
     },
@@ -126,7 +126,6 @@ export class EaTree extends EaBase {
 
   @property({
     type: Object,
-    default: { children: "children", label: "label", disabled: "disabled" },
   })
   dataProps: Record<string, string> = {
     children: "children",
@@ -136,13 +135,11 @@ export class EaTree extends EaBase {
 
   @property({
     type: Array,
-    default: [],
   })
   defaultExpandedKeys: any[] = [];
 
   @property({
     type: Array,
-    default: [],
   })
   defaultCheckedKeys: any[] = [];
 
@@ -245,17 +242,18 @@ export class EaTree extends EaBase {
         const ariaChecked = this.showCheckbox
           ? ` aria-checked="${state.checked || state.indeterminate ? (state.indeterminate ? "mixed" : String(state.checked)) : "false"}"`
           : "";
-        const tabindex = isFirstNode && !this._focusedPath ? 'tabindex="0"' : 'tabindex="-1"';
+        const tabindex =
+          isFirstNode && !this._focusedPath ? 'tabindex="0"' : 'tabindex="-1"';
 
         return `
 <div class="${bem.e("node")} ${stateClasses}" data-path="${path}" role="treeitem" aria-label="${text}"${hasChildren ? ` aria-expanded="${state.expanded}"` : ""}${ariaSelected}${ariaChecked}>
   <div class="${bem.e("label")}" data-path="${path}" ${tabindex}>
     ${toggleIconHTML}
     <ea-checkbox class="${bem.e("checkbox")}"${
-          state.checked ? " checked" : ""
-        }${state.indeterminate ? " indeterminate" : ""}${
-          isDisabled ? " disabled" : ""
-        }></ea-checkbox>
+      state.checked ? " checked" : ""
+    }${state.indeterminate ? " indeterminate" : ""}${
+      isDisabled ? " disabled" : ""
+    }></ea-checkbox>
     <span class="${bem.e("text")}">${text}</span>
   </div>
   ${childrenHTML}
@@ -335,7 +333,9 @@ export class EaTree extends EaBase {
     nodeEl.setAttribute("aria-selected", String(state.selected));
 
     if (this.showCheckbox) {
-      const ariaCheckedValue = state.indeterminate ? "mixed" : String(state.checked);
+      const ariaCheckedValue = state.indeterminate
+        ? "mixed"
+        : String(state.checked);
       nodeEl.setAttribute("aria-checked", ariaCheckedValue);
     } else {
       nodeEl.removeAttribute("aria-checked");
@@ -343,10 +343,7 @@ export class EaTree extends EaBase {
 
     const labelEl = this._getLabelElement(path);
     if (labelEl) {
-      labelEl.setAttribute(
-        "tabindex",
-        this._focusedPath === path ? "0" : "-1"
-      );
+      labelEl.setAttribute("tabindex", this._focusedPath === path ? "0" : "-1");
     }
 
     const checkboxEl = this._getCheckboxElement(path);

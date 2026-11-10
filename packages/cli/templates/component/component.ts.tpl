@@ -23,7 +23,6 @@ export class ___CLASS_NAME___ extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: ___CLASS_NAME___, newVal: boolean) {
       this.updateContainerClasslist();
     },

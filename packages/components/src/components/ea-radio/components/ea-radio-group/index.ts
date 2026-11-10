@@ -43,7 +43,6 @@ export class EaRadioGroup extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     a11y: { ariaAttr: "aria-label", map: v => v || null },
     observer(this: EaRadioGroup, newVal: string) {
       if (this._label) this._label.textContent = newVal;
@@ -53,7 +52,6 @@ export class EaRadioGroup extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaRadioGroup) {
       this._updateRadioChildrenName();
     },
@@ -62,7 +60,6 @@ export class EaRadioGroup extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaRadioGroup) {
       this._updateRadioChildrenValue();
       this.setValue(this.value);
@@ -73,7 +70,6 @@ export class EaRadioGroup extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaRadioGroup, newVal: boolean) {
       this._radioItems?.forEach(radio => {
         radio.toggleAttribute("disabled", newVal);
@@ -84,7 +80,6 @@ export class EaRadioGroup extends EaFormAssociatedBase {
 
   @attribute({
     type: Enum(["", "small", "default", "large"]),
-    default: "",
     observer(this: EaRadioGroup) {
       this._updateChildrenSize();
     },
@@ -93,7 +88,6 @@ export class EaRadioGroup extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaRadioGroup, newVal: boolean) {
       this._radioItems?.forEach(radio => {
         radio.toggleAttribute("border", newVal);
@@ -104,7 +98,6 @@ export class EaRadioGroup extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: { ariaAttr: "aria-required" },
   })
   required: boolean = false;

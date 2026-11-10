@@ -77,7 +77,6 @@ export class EaTabs extends EaBase {
 
   @attribute({
     type: Enum(["", "card", "border-card"]),
-    default: "",
     observer(this: EaTabs) {
       this.updateContainerClasslist();
 
@@ -94,7 +93,6 @@ export class EaTabs extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaTabs, newVal: string) {
       this._updateTabsActive(newVal);
       this._syncRovingTabindex(newVal);
@@ -106,7 +104,6 @@ export class EaTabs extends EaBase {
 
   @attribute({
     type: Enum(["top", "bottom", "left", "right"]),
-    default: "top",
     a11y: {
       ariaAttr: "aria-orientation",
       map: (v: TabPosition) =>
@@ -131,7 +128,6 @@ export class EaTabs extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaTabs, newVal: boolean) {
       this._updateTabEditable(newVal);
     },

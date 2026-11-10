@@ -77,7 +77,6 @@ export class EaTransfer extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: {
       ariaAttr: "aria-disabled",
       map: v => String(v),
@@ -91,7 +90,6 @@ export class EaTransfer extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaTransfer, newVal: boolean) {
       this._handleFilterableUpdate(newVal);
     },
@@ -100,7 +98,6 @@ export class EaTransfer extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "请输入搜索内容",
     observer(this: EaTransfer, newVal: string) {
       this._updateFilterPlaceholder(newVal);
     },
@@ -109,7 +106,6 @@ export class EaTransfer extends EaFormAssociatedBase {
 
   @property({
     type: Array,
-    default: [],
     observer(this: EaTransfer, newVal: any[]) {
       if (!this._states.isPanelDefined) {
         customElements.whenDefined("ea-transfer-panel").then(() => {
@@ -125,7 +121,6 @@ export class EaTransfer extends EaFormAssociatedBase {
 
   @property({
     type: Array,
-    default: [],
     observer(this: EaTransfer, newVal: any[]) {
       if (!this._states.isPanelDefined) {
         customElements.whenDefined("ea-transfer-panel").then(() => {
@@ -145,7 +140,6 @@ export class EaTransfer extends EaFormAssociatedBase {
 
   @property({
     type: Object,
-    default: { key: "key", label: "label", disabled: "disabled" },
     observer(this: EaTransfer, newVal: Record<string, string>) {
       this._updateFieldMapping(newVal);
     },
@@ -158,7 +152,6 @@ export class EaTransfer extends EaFormAssociatedBase {
 
   @property({
     type: Array,
-    default: [],
     observer(this: EaTransfer, newVal: string[]) {
       this._updateTitles(newVal);
     },
@@ -167,7 +160,6 @@ export class EaTransfer extends EaFormAssociatedBase {
 
   @property({
     type: Array,
-    default: [],
     observer(this: EaTransfer, newVal: string[]) {
       this._updateButtonTexts(newVal);
     },
@@ -176,19 +168,16 @@ export class EaTransfer extends EaFormAssociatedBase {
 
   @property({
     type: Function,
-    default: null,
   })
   filterMethod: ((query: string, item: any) => boolean) | null = null;
 
   @property({
     type: Array,
-    default: [],
   })
   leftDefaultChecked: any[] = [];
 
   @property({
     type: Array,
-    default: [],
   })
   rightDefaultChecked: any[] = [];
 

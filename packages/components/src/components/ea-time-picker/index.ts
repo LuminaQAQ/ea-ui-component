@@ -1,7 +1,12 @@
 import { EaFormAssociatedBase } from "@easy-component-ui/core/core/EaFormAssociatedBase";
 import { createBEM } from "@easy-component-ui/core/utils/bem";
 
-import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { timeout } from "@easy-component-ui/core/utils/timeout";
@@ -87,7 +92,6 @@ export class EaTimePicker extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaTimePicker, newVal: string) {
       if (this._input) {
         (this._input as any).label = newVal;
@@ -98,7 +102,6 @@ export class EaTimePicker extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "Select time",
     observer(this: EaTimePicker, newVal: string) {
       if (this._input) {
         (this._input as any).placeholder = newVal;
@@ -109,7 +112,6 @@ export class EaTimePicker extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaTimePicker, newVal: string) {
       this.setValue(newVal);
       if (newVal) {
@@ -123,7 +125,6 @@ export class EaTimePicker extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaTimePicker, newVal: string) {
       if (this._container) {
         this._container.style.setProperty("--ea-time-picker-width", newVal);
@@ -134,7 +135,6 @@ export class EaTimePicker extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: {
       ariaAttr: "aria-disabled",
       map: v => String(v),
@@ -154,7 +154,6 @@ export class EaTimePicker extends EaFormAssociatedBase {
 
   @attribute({
     type: Enum(["left", "center", "right"]),
-    default: "left",
     observer(this: EaTimePicker) {
       this.updateContainerClasslist();
     },
@@ -163,7 +162,6 @@ export class EaTimePicker extends EaFormAssociatedBase {
 
   @attribute({
     type: Enum(["large", "default", "small"]),
-    default: "default",
     observer(this: EaTimePicker, newVal: string) {
       if (this._input) {
         this._input.setAttribute("size", newVal);
@@ -174,7 +172,6 @@ export class EaTimePicker extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "00:00:00",
     observer(this: EaTimePicker) {
       this._applyLimitRange();
     },
@@ -183,7 +180,6 @@ export class EaTimePicker extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "23:59:59",
     observer(this: EaTimePicker) {
       this._applyLimitRange();
     },
@@ -192,7 +188,6 @@ export class EaTimePicker extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaTimePicker, newVal: boolean) {
       if (this._input) {
         this._input.toggleAttribute("required", newVal);

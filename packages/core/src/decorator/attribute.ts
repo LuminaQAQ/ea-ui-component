@@ -1,10 +1,10 @@
 ﻿import type { AttributeOptions } from "../types/index";
-import { declareProperty } from "../schema";
+import { declareAttribute } from "../schema";
 
 /**
  * @attribute 装饰器 - 声明映射到 HTML attribute 的属性
  *
- * 声明写入类定义期的登记簿，由 finalize() 合并为元数据
+ * 声明写入 `static attributes` 对应的登记簿，由 finalize() 合并为元数据
  *
  * @param options - 属性配置选项
  * @returns 装饰器函数
@@ -19,10 +19,7 @@ function attribute(options: AttributeOptions) {
       return;
     }
 
-    declareProperty(target.constructor, String(name), {
-      ...options,
-      attribute: options.attribute ?? true,
-    });
+    declareAttribute(target.constructor, String(name), { ...options });
   };
 }
 

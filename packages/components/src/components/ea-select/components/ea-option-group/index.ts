@@ -1,5 +1,9 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+} from "@easy-component-ui/core/decorator";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-option-group" as const;
@@ -33,7 +37,6 @@ export class EaOptionGroup extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     a11y: {
       ariaAttr: "aria-label",
       target: bem.ce("content"),
@@ -60,8 +63,7 @@ export class EaOptionGroup extends EaBase {
     `;
   }
 
-  $mounted() {
-  }
+  $mounted() {}
 }
 
 declare global {

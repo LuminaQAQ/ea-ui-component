@@ -27,9 +27,4 @@ export interface PropertyOptions {
   observer?: ((this: any, newVal: any, oldVal: any) => void) | undefined;
   /** @description 无障碍属性同步配置 */
   a11y?: A11yOption;
-  /**
-   * @description 观察的 HTML attribute
-   * 不写则不观察；写 true 或字符串时进入 observedAttributes
-   */
-  attribute?: string | boolean;
 }

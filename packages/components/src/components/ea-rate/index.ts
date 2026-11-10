@@ -1,7 +1,13 @@
 import { EaFormAssociatedBase } from "@easy-component-ui/core/core/EaFormAssociatedBase";
 import { createBEM } from "@easy-component-ui/core/utils/bem";
 
-import { CustomElement, attribute, property, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  property,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 
 import { html } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
@@ -53,7 +59,6 @@ export class EaRate extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     a11y: {
       ariaAttr: "aria-label",
       map: v => v || null,
@@ -66,7 +71,6 @@ export class EaRate extends EaFormAssociatedBase {
 
   @attribute({
     type: Number,
-    default: 0,
     observer(this: EaRate, newVal: number) {
       this.setValue(newVal ? newVal.toString() : null);
       this._setRateStatus(newVal - 1);
@@ -76,13 +80,11 @@ export class EaRate extends EaFormAssociatedBase {
 
   @attribute({
     type: Number,
-    default: 0,
   })
   min: number = 0;
 
   @attribute({
     type: Number,
-    default: 5,
     observer(this: EaRate) {
       this._renderRateEl(this.getSymbol, this.value);
       this._setRateStatus(this.value - 1);
@@ -92,7 +94,6 @@ export class EaRate extends EaFormAssociatedBase {
 
   @attribute({
     type: Enum(["large", "default", "small"]),
-    default: "",
     observer(this: EaRate) {
       this.updateContainerClasslist();
     },
@@ -101,14 +102,12 @@ export class EaRate extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: { ariaAttr: "aria-readonly" },
   })
   readonly: boolean = false;
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: {
       ariaAttr: "aria-disabled",
       map: v => String(v),

@@ -1,6 +1,12 @@
 import EaFormAssociatedBase from "@easy-component-ui/core/core/EaFormAssociatedBase";
 import { createBEM } from "@easy-component-ui/core/utils/bem";
-import { CustomElement, attribute, property, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  property,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { EaInputNumberChangeEvent } from "./events/EaInputNumberChangeEvent";
 import { EaInputNumberFocusEvent } from "./events/EaInputNumberFocusEvent";
@@ -79,23 +85,22 @@ export class EaInputNumber extends EaFormAssociatedBase {
 
   // ==================== @property 属性 ====================
 
-  @property({ type: Number, default: 0 })
+  @property({ type: Number })
   defaultValue: number = 0;
 
-  @property({ type: Boolean, default: false })
+  @property({ type: Boolean })
   _isFocus: boolean = false;
 
-  @property({ type: Boolean, default: false })
+  @property({ type: Boolean })
   _isMin: boolean = false;
 
-  @property({ type: Boolean, default: false })
+  @property({ type: Boolean })
   _isMax: boolean = false;
 
   // ==================== @attribute 属性 ====================
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaInputNumber, newVal: string) {
       this._label.textContent = newVal;
       if (this._inputEl) {
@@ -107,7 +112,6 @@ export class EaInputNumber extends EaFormAssociatedBase {
 
   @attribute({
     type: Number,
-    default: 0,
     a11y: {
       ariaAttr: "aria-valuenow",
       target: bem.ce("inner"),
@@ -138,7 +142,6 @@ export class EaInputNumber extends EaFormAssociatedBase {
 
   @attribute({
     type: Number,
-    default: Number.MIN_SAFE_INTEGER,
     a11y: {
       ariaAttr: "aria-valuemin",
       target: bem.ce("inner"),
@@ -152,7 +155,6 @@ export class EaInputNumber extends EaFormAssociatedBase {
 
   @attribute({
     type: Number,
-    default: Number.MAX_SAFE_INTEGER,
     a11y: {
       ariaAttr: "aria-valuemax",
       target: bem.ce("inner"),
@@ -166,7 +168,6 @@ export class EaInputNumber extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaInputNumber, newVal: boolean) {
       if (this._inputEl) this._inputEl.required = newVal;
     },
@@ -175,25 +176,21 @@ export class EaInputNumber extends EaFormAssociatedBase {
 
   @attribute({
     type: Number,
-    default: 1,
   })
   step: number = 1;
 
   @attribute({
     type: Boolean,
-    default: false,
   })
   stepStrictly: boolean = false;
 
   @attribute({
     type: Number,
-    default: 0,
   })
   precision: number = 0;
 
   @attribute({
     type: Enum(["large", "default", "small"] as const),
-    default: "default",
     observer(this: EaInputNumber) {
       this.updateContainerClasslist();
     },
@@ -202,7 +199,6 @@ export class EaInputNumber extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaInputNumber, newVal: boolean) {
       if (this._inputEl) this._inputEl.readOnly = newVal;
     },
@@ -211,7 +207,6 @@ export class EaInputNumber extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: {
       ariaAttr: "aria-disabled",
       map: v => String(v),
@@ -225,7 +220,6 @@ export class EaInputNumber extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: true,
     a11y: {
       ariaAttr: "inert",
       target: ".ea-input-number__decrease, .ea-input-number__increase",
@@ -239,13 +233,11 @@ export class EaInputNumber extends EaFormAssociatedBase {
 
   @attribute({
     type: Number,
-    default: undefined,
   })
   valueOnClear: number | null = null;
 
   @attribute({
     type: Enum(["left", "center", "right"] as const),
-    default: "center",
     observer(this: EaInputNumber) {
       this.updateContainerClasslist();
     },
@@ -254,7 +246,6 @@ export class EaInputNumber extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaInputNumber, newVal: string) {
       if (this._inputEl) this._inputEl.setAttribute("name", newVal);
     },
@@ -263,7 +254,6 @@ export class EaInputNumber extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaInputNumber, newVal: string) {
       if (this._inputEl) this._inputEl.setAttribute("placeholder", newVal);
     },
@@ -272,7 +262,6 @@ export class EaInputNumber extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaInputNumber, newVal: string) {
       if (this._inputEl) this._inputEl.setAttribute("inputmode", newVal);
     },

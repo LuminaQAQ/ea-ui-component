@@ -1,6 +1,11 @@
 import { EaFormAssociatedBase } from "@easy-component-ui/core/core/EaFormAssociatedBase";
 import { createBEM } from "@easy-component-ui/core/utils/bem";
-import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { EaCheckboxBlurEvent } from "../../events/EaCheckboxBlurEvent";
 import { EaCheckboxChangeEvent } from "../../events/EaCheckboxChangeEvent";
@@ -58,7 +63,6 @@ export class EaCheckbox extends EaFormAssociatedBase {
 
   @attribute({
     type: Enum(["small", "default", "large"]),
-    default: "default",
     observer(this: EaCheckbox) {
       this.updateContainerClasslist();
     },
@@ -67,7 +71,6 @@ export class EaCheckbox extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaCheckbox, newVal: string) {
       if (this._original) this._original.value = newVal;
       this._updateCheckboxValue();
@@ -77,7 +80,6 @@ export class EaCheckbox extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaCheckbox, newVal: string) {
       if (this._labelSlot) this._labelSlot.textContent = newVal;
     },
@@ -86,7 +88,6 @@ export class EaCheckbox extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaCheckbox, newVal: boolean) {
       if (this._original) this._original.checked = newVal;
       this._updateCheckboxValue();
@@ -98,7 +99,6 @@ export class EaCheckbox extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaCheckbox, newVal: boolean) {
       if (this._original) this._original.disabled = newVal;
       this.updateContainerClasslist();
@@ -109,7 +109,6 @@ export class EaCheckbox extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaCheckbox, newVal: boolean) {
       if (this._original) this._original.indeterminate = newVal;
       this.updateContainerClasslist();
@@ -120,7 +119,6 @@ export class EaCheckbox extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaCheckbox) {
       this.updateContainerClasslist();
     },
@@ -129,7 +127,6 @@ export class EaCheckbox extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaCheckbox, newVal: boolean) {
       if (this._original) this._original.disabled = newVal;
       this.updateContainerClasslist();
@@ -140,7 +137,6 @@ export class EaCheckbox extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: { ariaAttr: "aria-required", map: v => String(v) },
     observer(this: EaCheckbox, newVal: boolean) {
       if (this._original) this._original.toggleAttribute("required", newVal);

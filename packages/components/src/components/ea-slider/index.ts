@@ -2,7 +2,13 @@ import "@/components/ea-input-number/index";
 import "@/components/ea-tooltip";
 import { createBEM } from "@easy-component-ui/core/core/EaBase";
 import { EaFormAssociatedBase } from "@easy-component-ui/core/core/EaFormAssociatedBase";
-import { CustomElement, attribute, listen, property, query } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  listen,
+  property,
+  query,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { html } from "@easy-component-ui/core/utils/html";
 import { EaSliderChangeEvent } from "./events/EaSliderChangeEvent";
@@ -108,7 +114,6 @@ export class EaSlider extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     a11y: {
       ariaAttr: "aria-label",
       map: v => v || null,
@@ -121,7 +126,6 @@ export class EaSlider extends EaFormAssociatedBase {
 
   @attribute({
     type: Number,
-    default: 0,
     a11y: { ariaAttr: "aria-valuenow" },
     observer(this: EaSlider, newVal: number) {
       const clampedValue = Math.max(this.min, Math.min(this.max, newVal));
@@ -133,7 +137,6 @@ export class EaSlider extends EaFormAssociatedBase {
 
   @attribute({
     type: Number,
-    default: 0,
     a11y: { ariaAttr: "aria-valuemin" },
     observer(this: EaSlider) {
       this._updateSlider();
@@ -143,7 +146,6 @@ export class EaSlider extends EaFormAssociatedBase {
 
   @attribute({
     type: Number,
-    default: 100,
     a11y: { ariaAttr: "aria-valuemax" },
     observer(this: EaSlider) {
       this._updateSlider();
@@ -153,7 +155,6 @@ export class EaSlider extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaSlider) {
       this.updateContainerClasslist();
       this._renderStops();
@@ -163,7 +164,6 @@ export class EaSlider extends EaFormAssociatedBase {
 
   @attribute({
     type: Number,
-    default: 1,
     observer(this: EaSlider) {
       this._updateSlider();
     },
@@ -172,7 +172,6 @@ export class EaSlider extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: {
       ariaAttr: "aria-disabled",
       map: v => String(v),
@@ -185,7 +184,6 @@ export class EaSlider extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: {
       ariaAttr: "aria-orientation",
       map: v => (v ? "vertical" : null),
@@ -198,7 +196,6 @@ export class EaSlider extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: true,
     observer(this: EaSlider) {
       this._updateSlider();
     },
@@ -220,7 +217,6 @@ export class EaSlider extends EaFormAssociatedBase {
       "right-start",
       "right-end",
     ]),
-    default: "top",
     observer(this: EaSlider, newVal: SliderPlacement) {
       if (this._trigger) this._trigger.setAttribute("placement", newVal);
     },
@@ -229,7 +225,6 @@ export class EaSlider extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaSlider, newVal: boolean) {
       void this._handleShowInputChange(newVal);
     },
@@ -238,7 +233,6 @@ export class EaSlider extends EaFormAssociatedBase {
 
   @attribute({
     type: Enum(["large", "default", "small"]),
-    default: "",
     observer(this: EaSlider, newVal: string) {
       this.updateContainerClasslist();
       if (this.showInput && this._input)
@@ -249,13 +243,11 @@ export class EaSlider extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
   })
   required: boolean = false;
 
   @property({
     type: Object,
-    default: null,
     observer(this: EaSlider) {
       this._renderMarks();
     },
@@ -264,7 +256,6 @@ export class EaSlider extends EaFormAssociatedBase {
 
   @property({
     type: Function,
-    default: (value: number) => value,
     observer(this: EaSlider) {
       this._updateSlider();
     },

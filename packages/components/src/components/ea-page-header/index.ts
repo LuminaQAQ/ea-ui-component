@@ -1,5 +1,10 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { html } from "@easy-component-ui/core/utils/html";
 import { EaPageHeaderBackEvent } from "./events/EaPageHeaderBackEvent";
 import stylesheet from "./index.scss?inline";
@@ -59,7 +64,6 @@ export class EaPageHeader extends EaBase {
 
   @attribute({
     type: String,
-    default: "angle-left",
     observer(this: EaPageHeader) {
       this._updateIcon();
     },
@@ -68,7 +72,6 @@ export class EaPageHeader extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaPageHeader) {
       this._updateHeading();
     },
@@ -77,7 +80,6 @@ export class EaPageHeader extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaPageHeader) {
       this._updateContent();
     },

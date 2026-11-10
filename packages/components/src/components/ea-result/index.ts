@@ -1,5 +1,9 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import {
   VARIANT_TYPES,
@@ -57,7 +61,6 @@ export class EaResult extends EaBase {
 
   @attribute({
     type: Enum(VARIANT_TYPES),
-    default: "",
     observer(this: EaResult) {
       this.updateContainerClasslist();
       this._updateIcon();
@@ -67,7 +70,6 @@ export class EaResult extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaResult) {
       this._updateHeading();
     },
@@ -76,7 +78,6 @@ export class EaResult extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaResult) {
       this._updateSubTitle();
     },
@@ -85,7 +86,6 @@ export class EaResult extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaResult) {
       this._updateIcon();
     },

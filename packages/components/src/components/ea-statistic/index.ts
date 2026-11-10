@@ -26,7 +26,6 @@ export class EaStatistic extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaStatistic, newVal: string) {
       this._header.textContent = newVal;
     },
@@ -35,7 +34,6 @@ export class EaStatistic extends EaBase {
 
   @attribute({
     type: Number,
-    default: 0,
     observer(this: EaStatistic, newVal: number) {
       this._number.textContent = newVal.toLocaleString();
     },

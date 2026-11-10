@@ -1,5 +1,11 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, property, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  property,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import type { EaCollapseItem } from "../ea-collapse-item/index";
 import { EaCollapseChangeEvent } from "./events/EaCollapseChangeEvent";
@@ -41,13 +47,11 @@ export class EaCollapse extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
   })
   accordion: boolean = false;
 
   @property({
     type: Array,
-    default: [],
     observer(this: EaCollapse, newVal: ActiveValue) {
       if (!this._isSettingActiveNames) {
         this.setActiveNames(newVal);
@@ -58,7 +62,6 @@ export class EaCollapse extends EaBase {
 
   @attribute({
     type: Enum(["left", "right"] as const),
-    default: "right",
     observer(this: EaCollapse, newVal: "left" | "right") {
       this.querySelectorAll("ea-collapse-item").forEach(item => {
         (item as EaCollapseItem).expandIconPosition = newVal;
@@ -69,7 +72,6 @@ export class EaCollapse extends EaBase {
 
   @property({
     type: Function,
-    default: null,
   })
   beforeCollapse: BeforeCollapseCallback | null = null;
 

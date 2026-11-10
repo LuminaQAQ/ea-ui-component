@@ -1,8 +1,17 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, property, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  property,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { html } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
-import { cssLengthToNumber, numberToCssLength } from "@easy-component-ui/core/utils/css-length";
+import {
+  cssLengthToNumber,
+  numberToCssLength,
+} from "@easy-component-ui/core/utils/css-length";
 import { VARIANT_ICON_MAP } from "@constants/variant";
 import stylesheet from "./index.scss?inline";
 import "@/components/ea-icon/index";
@@ -17,7 +26,8 @@ const NOTIFICATION_VARIANT_TYPES = [
   "info",
   "error",
 ] as const;
-export type NotificationVariantType = (typeof NOTIFICATION_VARIANT_TYPES)[number];
+export type NotificationVariantType =
+  (typeof NOTIFICATION_VARIANT_TYPES)[number];
 
 const PLACEMENT_TYPES = [
   "top-right",
@@ -90,7 +100,6 @@ export class EaNotificationElement extends EaBase {
 
   @attribute({
     type: Enum(NOTIFICATION_VARIANT_TYPES),
-    default: "info",
     observer(this: EaNotificationElement, newVal: NotificationVariantType) {
       this._notificationIcon.setAttribute(
         "name",
@@ -103,7 +112,6 @@ export class EaNotificationElement extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaNotificationElement, newVal: string) {
       this._title.textContent = newVal;
     },
@@ -112,7 +120,6 @@ export class EaNotificationElement extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaNotificationElement, newVal: boolean) {
       this._transitionAbortController?.abort();
       this._transitionAbortController = new AbortController();
@@ -154,7 +161,6 @@ export class EaNotificationElement extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaNotificationElement, newVal: string) {
       if (this.dangerouslyUseHTMLString) {
         this._main.innerHTML = html(newVal);
@@ -167,7 +173,6 @@ export class EaNotificationElement extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaNotificationElement, newVal: boolean) {
       this.updateContainerClasslist();
 
@@ -180,7 +185,6 @@ export class EaNotificationElement extends EaBase {
 
   @attribute({
     type: String,
-    default: "xmark",
     observer(this: EaNotificationElement, newVal: string) {
       if (this.showClose) {
         this._closeIcon.setAttribute("name", newVal);
@@ -191,7 +195,6 @@ export class EaNotificationElement extends EaBase {
 
   @attribute({
     type: Enum(PLACEMENT_TYPES),
-    default: "top-right",
     observer(this: EaNotificationElement) {
       this.updateContainerClasslist();
     },
@@ -200,7 +203,6 @@ export class EaNotificationElement extends EaBase {
 
   @attribute({
     type: Number,
-    default: 0,
     observer(this: EaNotificationElement, newVal: number) {
       this._container.style.setProperty("--z-index", String(newVal));
     },
@@ -209,7 +211,6 @@ export class EaNotificationElement extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaNotificationElement, newVal: string) {
       this._notificationIcon.setAttribute(
         "name",
@@ -222,7 +223,6 @@ export class EaNotificationElement extends EaBase {
 
   @property({
     type: Boolean,
-    default: false,
   })
   dangerouslyUseHTMLString: boolean = false;
 
@@ -284,7 +284,9 @@ export class EaNotificationElement extends EaBase {
     this.style.setProperty(
       "--ea-notification-y",
       numberToCssLength(
-        (cssLengthToNumber(lastPosition) || 0) + lastEaNotificationRect.height + 8
+        (cssLengthToNumber(lastPosition) || 0) +
+          lastEaNotificationRect.height +
+          8
       )
     );
   }

@@ -17,4 +17,9 @@ export { RovingTabindex } from "@utils/roving-tabindex";
 export { debounce, throttle, rafThrottle } from "@utils/performance";
 export { timeout } from "@utils/timeout";
 export { GlobalCustomElements, GlobalLocalStorage } from "@utils/env";
-export type { ClassMeta, PropertyDecl } from "./schema";
+export type {
+  AttributeDecl,
+  ClassMeta,
+  PropMeta,
+  PropertyDecl,
+} from "./schema";

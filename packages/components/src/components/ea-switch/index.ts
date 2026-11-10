@@ -1,6 +1,12 @@
 import { EaFormAssociatedBase } from "@easy-component-ui/core/core/EaFormAssociatedBase";
 import { createBEM } from "@easy-component-ui/core/utils/bem";
-import { CustomElement, attribute, property, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  property,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { EaSwitchChangeEvent } from "./events/EaSwitchChangeEvent";
 import stylesheet from "./index.scss?inline";
@@ -60,7 +66,6 @@ export class EaSwitch extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaSwitch, newVal: string) {
       if (this._label) this._label.textContent = newVal;
     },
@@ -69,7 +74,6 @@ export class EaSwitch extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaSwitch, newVal: string) {
       if (this._container) this._container.setAttribute("for", newVal);
       if (this._originalInput) {
@@ -99,7 +103,6 @@ export class EaSwitch extends EaFormAssociatedBase {
         return typeof value === "string";
       },
     },
-    default: false,
     observer(this: EaSwitch, newVal: number | boolean | string) {
       this._handleValueChange(newVal);
     },
@@ -128,7 +131,6 @@ export class EaSwitch extends EaFormAssociatedBase {
 
   @attribute({
     type: Enum(["large", "default", "small"]),
-    default: "default",
     observer(this: EaSwitch) {
       this.updateContainerClasslist();
     },
@@ -137,7 +139,6 @@ export class EaSwitch extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaSwitch, newVal: string) {
       if (this._labelLeftSlot) this._labelLeftSlot.textContent = newVal;
     },
@@ -146,7 +147,6 @@ export class EaSwitch extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaSwitch, newVal: string) {
       this.style.setProperty("--ea-switch-inactive-bg-color", newVal);
     },
@@ -155,7 +155,6 @@ export class EaSwitch extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaSwitch, newVal: string) {
       if (this._labelRightSlot) this._labelRightSlot.textContent = newVal;
     },
@@ -164,7 +163,6 @@ export class EaSwitch extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaSwitch, newVal: string) {
       this.style.setProperty("--ea-switch-active-bg-color", newVal);
     },
@@ -173,7 +171,6 @@ export class EaSwitch extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: { ariaAttr: "aria-disabled", map: v => String(v) },
     observer(this: EaSwitch, newVal: boolean) {
       if (this._originalInput)
@@ -185,7 +182,6 @@ export class EaSwitch extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaSwitch, newVal: boolean) {
       if (this._originalInput)
         this._originalInput.toggleAttribute("required", newVal);
@@ -195,7 +191,6 @@ export class EaSwitch extends EaFormAssociatedBase {
 
   @property({
     type: Function,
-    default: null,
   })
   beforeChange: (() => Promise<boolean>) | null = null;
 
@@ -311,7 +306,9 @@ export class EaSwitch extends EaFormAssociatedBase {
 
     e.preventDefault();
     const isChecked = this._parseValue(this.value) === this._parsedActiveValue;
-    const newValue = isChecked ? this._parsedInactiveValue : this._parsedActiveValue;
+    const newValue = isChecked
+      ? this._parsedInactiveValue
+      : this._parsedActiveValue;
 
     if (this.beforeChange && typeof this.beforeChange === "function") {
       this.beforeChange()

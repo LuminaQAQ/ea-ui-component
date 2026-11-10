@@ -1,8 +1,17 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, property, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  property,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { html } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
-import { cssLengthToNumber, numberToCssLength } from "@easy-component-ui/core/utils/css-length";
+import {
+  cssLengthToNumber,
+  numberToCssLength,
+} from "@easy-component-ui/core/utils/css-length";
 import {
   VARIANT_TYPES,
   VARIANT_DEFAULT,
@@ -76,7 +85,6 @@ export class EaMessageElement extends EaBase {
 
   @attribute({
     type: Enum(VARIANT_TYPES),
-    default: VARIANT_DEFAULT,
     observer(this: EaMessageElement, newVal: VariantType) {
       this._messageIcon.setAttribute(
         "name",
@@ -89,7 +97,6 @@ export class EaMessageElement extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaMessageElement, newVal: boolean) {
       this._transitionAbortController?.abort();
       this._transitionAbortController = new AbortController();
@@ -131,7 +138,6 @@ export class EaMessageElement extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaMessageElement, newVal: string) {
       if (this.dangerouslyUseHTMLString) {
         this._messageContent.innerHTML = html(newVal);
@@ -144,7 +150,6 @@ export class EaMessageElement extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaMessageElement) {
       this.updateContainerClasslist();
     },
@@ -153,7 +158,6 @@ export class EaMessageElement extends EaBase {
 
   @attribute({
     type: Enum(PLACEMENT_TYPES),
-    default: "top",
     observer(this: EaMessageElement) {
       this.updateContainerClasslist();
     },
@@ -162,7 +166,6 @@ export class EaMessageElement extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaMessageElement, newVal: string) {
       this._messageIcon.setAttribute(
         "name",
@@ -175,7 +178,6 @@ export class EaMessageElement extends EaBase {
 
   @attribute({
     type: Number,
-    default: 0,
     observer(this: EaMessageElement, newVal: number) {
       this.style.setProperty("--ea-message-y", `${newVal}px`);
     },
@@ -184,7 +186,6 @@ export class EaMessageElement extends EaBase {
 
   @property({
     type: Boolean,
-    default: false,
   })
   dangerouslyUseHTMLString: boolean = false;
 
@@ -262,8 +263,12 @@ export class EaMessageElement extends EaBase {
 
     els.forEach(message => {
       const posi =
-        cssLengthToNumber(message.style.getPropertyValue("--ea-message-y")) || 0;
-      message.style.setProperty("--ea-message-y", numberToCssLength(posi - height - 8));
+        cssLengthToNumber(message.style.getPropertyValue("--ea-message-y")) ||
+        0;
+      message.style.setProperty(
+        "--ea-message-y",
+        numberToCssLength(posi - height - 8)
+      );
     });
   }
 

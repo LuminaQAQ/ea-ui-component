@@ -1,5 +1,9 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { VARIANT_TYPES } from "@constants/variant";
 import stylesheet from "./index.scss?inline";
@@ -51,7 +55,6 @@ export class EaText extends EaBase {
 
   @attribute({
     type: Enum(TEXT_VARIANT_TYPES),
-    default: "normal",
     observer(this: EaText) {
       this.updateContainerClasslist();
     },
@@ -60,7 +63,6 @@ export class EaText extends EaBase {
 
   @attribute({
     type: Enum(TEXT_SIZE_TYPES),
-    default: "medium",
     observer(this: EaText) {
       this.updateContainerClasslist();
     },
@@ -69,7 +71,6 @@ export class EaText extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaText) {
       this.updateContainerClasslist();
       this._updateTitle();
@@ -79,7 +80,6 @@ export class EaText extends EaBase {
 
   @attribute({
     type: Number,
-    default: 0,
     observer(this: EaText, newVal: number) {
       this.style.setProperty("--ea-text-line-clamp", String(newVal));
       this.updateContainerClasslist();
@@ -90,7 +90,6 @@ export class EaText extends EaBase {
 
   @attribute({
     type: Enum(ALLOWED_TAGS),
-    default: "span",
     observer(this: EaText) {
       this._reRender();
     },

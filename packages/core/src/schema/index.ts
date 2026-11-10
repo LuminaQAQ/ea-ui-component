@@ -1,3 +1,14 @@
-export { declareProperty, takeDeclarations } from "./declarations";
-export { attributeOf, finalize, isFinalized } from "./finalize";
-export type { ClassMeta, DeclaredType, PropertyDecl } from "./types";
+export {
+  declareAttribute,
+  declareProperty,
+  takeDeclarations,
+} from "./declarations";
+export type { DeclBuffer } from "./declarations";
+export { finalize, isFinalized, resolveDefault } from "./finalize";
+export type {
+  AttributeDecl,
+  ClassMeta,
+  DeclaredType,
+  PropMeta,
+  PropertyDecl,
+} from "./types";

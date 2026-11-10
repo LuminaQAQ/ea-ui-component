@@ -1,7 +1,17 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, listen } from "@easy-component-ui/core/decorator";
-import { setTheme, getCurrentTheme } from "@easy-component-ui/themes/controller";
-import type { ThemeMode, ThemeValue } from "@easy-component-ui/themes/controller";
+import {
+  CustomElement,
+  attribute,
+  listen,
+} from "@easy-component-ui/core/decorator";
+import {
+  setTheme,
+  getCurrentTheme,
+} from "@easy-component-ui/themes/controller";
+import type {
+  ThemeMode,
+  ThemeValue,
+} from "@easy-component-ui/themes/controller";
 import "@/components/ea-switch/index";
 import "@/components/ea-icon/index";
 import stylesheet from "./index.scss?inline";
@@ -29,7 +39,6 @@ export class EaThemeToggle extends EaBase {
 
   @attribute({
     type: String,
-    default: "auto",
     observer(this: EaThemeToggle, newVal: string) {
       setTheme(newVal as ThemeMode);
       this._syncSwitchState();

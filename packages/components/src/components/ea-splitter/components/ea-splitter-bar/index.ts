@@ -1,5 +1,10 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, property, query } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  property,
+  query,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import stylesheet from "./index.scss?inline";
 
@@ -24,7 +29,6 @@ export class EaSplitterBar extends EaBase {
 
   @attribute({
     type: Enum(["horizontal", "vertical"] as const),
-    default: "horizontal",
     a11y: {
       ariaAttr: "aria-orientation",
       map: (v: "horizontal" | "vertical") =>
@@ -38,7 +42,6 @@ export class EaSplitterBar extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     a11y: {
       ariaAttr: "aria-label",
       map: (v: string) => v || null,
@@ -48,13 +51,11 @@ export class EaSplitterBar extends EaBase {
 
   @attribute({
     type: Number,
-    default: 10,
   })
   step: number = 10;
 
   @property({
     type: Number,
-    default: 50,
     observer(this: EaSplitterBar, newVal: number) {
       this.setAttribute("aria-valuenow", String(newVal));
     },
@@ -63,7 +64,6 @@ export class EaSplitterBar extends EaBase {
 
   @property({
     type: Number,
-    default: 0,
     observer(this: EaSplitterBar, newVal: number) {
       this.setAttribute("aria-valuemin", String(newVal));
     },
@@ -72,7 +72,6 @@ export class EaSplitterBar extends EaBase {
 
   @property({
     type: Number,
-    default: 100,
     observer(this: EaSplitterBar, newVal: number) {
       this.setAttribute("aria-valuemax", String(newVal));
     },

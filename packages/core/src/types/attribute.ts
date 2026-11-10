@@ -67,8 +67,8 @@ export interface AttributeOptions {
   /** @description 无障碍属性同步配置 */
   a11y?: A11yOption;
   /**
-   * @description 观察的 HTML attribute
-   * 不写则按属性名转成小写连字符；写 false 表示不观察
+   * @description 映射的 HTML attribute 名
+   * 不写则按属性名转成小写连字符
    */
-  attribute?: string | boolean;
+  name?: string;
 }

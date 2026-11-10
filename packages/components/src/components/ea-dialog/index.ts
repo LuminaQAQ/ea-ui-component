@@ -1,6 +1,11 @@
 import { EaOverlay } from "@/common/ea-overlay";
 import { EaOverlayClosedEvent } from "@/common/ea-overlay/events/EaOverlayClosedEvent";
-import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { createBEM } from "@easy-component-ui/core/utils/bem";
 import stylesheet from "./index.scss?inline";
 import "@/components/ea-icon/index";
@@ -65,7 +70,6 @@ export class EaDialog extends EaOverlay {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaDialog, newVal: string) {
       if (this._heading) this._heading.textContent = newVal;
       this._updateAriaLabelledBy();
@@ -75,7 +79,6 @@ export class EaDialog extends EaOverlay {
 
   @attribute({
     type: String,
-    default: "50%",
     observer(this: EaDialog, newVal: string) {
       this.style.setProperty("--ea-overlay-content-width", newVal);
     },
@@ -84,7 +87,6 @@ export class EaDialog extends EaOverlay {
 
   @attribute({
     type: String,
-    default: "50%",
     observer(this: EaDialog, newVal: string) {
       this.style.setProperty("--ea-overlay-content-top", newVal);
     },
@@ -93,7 +95,6 @@ export class EaDialog extends EaOverlay {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaDialog) {
       this.updateContainerClasslist();
     },
@@ -102,7 +103,6 @@ export class EaDialog extends EaOverlay {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaDialog) {
       this.updateContainerClasslist();
     },
@@ -111,17 +111,15 @@ export class EaDialog extends EaOverlay {
 
   @attribute({
     type: Boolean,
-    default: false,
   })
   appendToBody: boolean = false;
 
   @attribute({
     type: Boolean,
-    default: true,
     a11y: {
       ariaAttr: "inert",
       target: ".ea-dialog__close-icon",
-      map: v => v ? null : "",
+      map: v => (v ? null : ""),
     },
     observer(this: EaDialog) {
       this.updateContainerClasslist();
@@ -131,7 +129,6 @@ export class EaDialog extends EaOverlay {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaDialog) {
       this.updateContainerClasslist();
     },
@@ -140,7 +137,6 @@ export class EaDialog extends EaOverlay {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaDialog) {
       this.updateContainerClasslist();
     },
@@ -149,7 +145,6 @@ export class EaDialog extends EaOverlay {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaDialog) {
       this._updateRole();
     },
@@ -158,7 +153,6 @@ export class EaDialog extends EaOverlay {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaDialog) {
       this._updateAriaDescribedBy();
     },

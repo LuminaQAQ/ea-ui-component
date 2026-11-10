@@ -124,7 +124,6 @@ export class EaTable extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaTable) {
       this.updateContainerClasslist();
     },
@@ -133,7 +132,6 @@ export class EaTable extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaTable) {
       this.updateContainerClasslist();
     },
@@ -142,7 +140,6 @@ export class EaTable extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaTable, newVal: string) {
       this.style.setProperty("--ea-table-height", newVal);
       this.updateContainerClasslist();
@@ -152,7 +149,6 @@ export class EaTable extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaTable, newVal: string) {
       this.style.setProperty("--ea-table-max-height", newVal);
       this.updateContainerClasslist();
@@ -162,19 +158,16 @@ export class EaTable extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
   })
   highlightCurrentRow: boolean = false;
 
   @attribute({
     type: Boolean,
-    default: false,
   })
   showSummary: boolean = false;
 
   @property({
     type: Array,
-    default: [],
     async observer(this: EaTable, newVal: unknown[]) {
       this._states.originData = newVal;
       await this.setData(newVal);
@@ -184,7 +177,6 @@ export class EaTable extends EaBase {
 
   @property({
     type: Function,
-    default: null,
   })
   selectable: ((row: unknown) => boolean) | null = null;
 
@@ -196,7 +188,6 @@ export class EaTable extends EaBase {
 
   @property({
     type: Function,
-    default: null,
   })
   summaryMethod:
     | ((param: {
@@ -262,9 +253,7 @@ export class EaTable extends EaBase {
     dataIndex: new WeakMap<object, HTMLElement>(),
 
     rowStyleHandler: null as
-      | ((param: { row: unknown; rowIndex: number }) => string)
-      | string
-      | null,
+      ((param: { row: unknown; rowIndex: number }) => string) | string | null,
   };
 
   html(): string {
@@ -479,7 +468,10 @@ export class EaTable extends EaBase {
     this._handleFixedColumn();
     this._handleScroll();
 
-    this._container.setAttribute("aria-rowcount", String(dataSource.length + theadRowCount));
+    this._container.setAttribute(
+      "aria-rowcount",
+      String(dataSource.length + theadRowCount)
+    );
     this._container.setAttribute("aria-colcount", String(columns.length));
 
     this.updateContainerClasslist();
@@ -1056,7 +1048,10 @@ export class EaTable extends EaBase {
           desc: sortableEl.querySelector('[part="desc-icon"]'),
         };
         sortableEl.setAttribute("data-order", newOrder);
-        sortableEl.setAttribute("aria-sort", newOrder === "asc" ? "ascending" : "descending");
+        sortableEl.setAttribute(
+          "aria-sort",
+          newOrder === "asc" ? "ascending" : "descending"
+        );
         sortableEl.querySelectorAll(".ea-table__sort-icon").forEach(icon => {
           icon.classList.toggle("is-active", orderEls[newOrder] === icon);
         });

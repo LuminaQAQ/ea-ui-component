@@ -75,7 +75,6 @@ export class EaDescriptions extends EaBase {
 
   @attribute({
     type: Number,
-    default: 3,
     observer(this: EaDescriptions) {
       this._render();
     },
@@ -84,7 +83,6 @@ export class EaDescriptions extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaDescriptions, newVal: string) {
       if (this._captionSlot) this._captionSlot.textContent = newVal;
     },
@@ -93,7 +91,6 @@ export class EaDescriptions extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaDescriptions) {
       this.updateContainerClasslist();
       this._render();
@@ -103,7 +100,6 @@ export class EaDescriptions extends EaBase {
 
   @attribute({
     type: Enum(DIRECTION_TYPES),
-    default: "horizontal",
     observer(this: EaDescriptions) {
       this.updateContainerClasslist();
       this._render();
@@ -113,7 +109,6 @@ export class EaDescriptions extends EaBase {
 
   @attribute({
     type: Enum(SIZE_TYPES),
-    default: "default",
     observer(this: EaDescriptions) {
       this.updateContainerClasslist();
     },
@@ -122,7 +117,6 @@ export class EaDescriptions extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaDescriptions, newVal: string) {
       this.style.setProperty("--ea-descriptions-label-width", newVal);
     },

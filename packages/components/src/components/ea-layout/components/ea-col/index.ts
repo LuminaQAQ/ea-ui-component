@@ -25,7 +25,6 @@ const bem = createBEM(TAG_NAME);
 export class EaCol extends EaBase {
   @attribute({
     type: Number,
-    default: 24,
     observer(this: EaCol, newVal: number) {
       this.style.setProperty("--ea-col-span", String(newVal));
     },
@@ -34,7 +33,6 @@ export class EaCol extends EaBase {
 
   @attribute({
     type: Number,
-    default: 0,
     observer(this: EaCol, newVal: number) {
       this.style.setProperty("--ea-col-offset", String(newVal));
     },
@@ -43,7 +41,6 @@ export class EaCol extends EaBase {
 
   @attribute({
     type: Number,
-    default: 0,
     observer(this: EaCol, newVal: number) {
       this.style.setProperty("--ea-col-push", String(newVal));
     },
@@ -52,7 +49,6 @@ export class EaCol extends EaBase {
 
   @attribute({
     type: Number,
-    default: 0,
     observer(this: EaCol, newVal: number) {
       this.style.setProperty("--ea-col-pull", String(newVal));
     },
@@ -61,7 +57,6 @@ export class EaCol extends EaBase {
 
   @attribute({
     type: String,
-    default: "div",
   })
   tag: string = "div";
 

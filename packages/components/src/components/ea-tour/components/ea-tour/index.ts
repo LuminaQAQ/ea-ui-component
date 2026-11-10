@@ -1,5 +1,10 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import stylesheet from "./index.scss?inline";
 
@@ -7,10 +12,18 @@ const TAG_NAME = "ea-tour" as const;
 const bem = createBEM(TAG_NAME);
 
 const PLACEMENT_TYPES = [
-  "top", "top-start", "top-end",
-  "bottom", "bottom-start", "bottom-end",
-  "left", "left-start", "left-end",
-  "right", "right-start", "right-end",
+  "top",
+  "top-start",
+  "top-end",
+  "bottom",
+  "bottom-start",
+  "bottom-end",
+  "left",
+  "left-start",
+  "left-end",
+  "right",
+  "right-start",
+  "right-end",
 ] as const;
 
 type PlacementType = (typeof PLACEMENT_TYPES)[number];
@@ -75,7 +88,6 @@ export class EaTour extends EaBase {
 
   @attribute({
     type: String,
-    default: "body",
     observer(this: EaTour, newVal: string) {
       this._handleAppendTo(newVal);
     },
@@ -84,7 +96,6 @@ export class EaTour extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaTour, newVal: boolean) {
       if (!this._states.isChildrenLoaded) {
         customElements.whenDefined("ea-tour-step").then(() => {
@@ -123,13 +134,11 @@ export class EaTour extends EaBase {
 
   @attribute({
     type: Number,
-    default: 6,
   })
   gap: number = 6;
 
   @attribute({
     type: Number,
-    default: 0,
     observer(this: EaTour, newVal: number) {
       if (!this._states.isChildrenLoaded) {
         customElements.whenDefined("ea-tour-step").then(() => {
@@ -164,7 +173,6 @@ export class EaTour extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: true,
     observer(this: EaTour) {
       this.updateContainerClasslist();
     },
@@ -173,7 +181,6 @@ export class EaTour extends EaBase {
 
   @attribute({
     type: Enum(["default", "primary"]),
-    default: "default",
     observer(this: EaTour, newVal: "default" | "primary") {
       this.querySelectorAll("ea-tour-step").forEach(item => {
         if (newVal === "primary") item.setAttribute("variant", newVal);
@@ -185,7 +192,6 @@ export class EaTour extends EaBase {
 
   @attribute({
     type: Enum(PLACEMENT_TYPES),
-    default: "bottom",
     observer(this: EaTour, newVal: string) {
       this.querySelectorAll("ea-tour-step").forEach(item => {
         if (!item.getAttribute("placement")) {
@@ -491,9 +497,13 @@ export class EaTour extends EaBase {
     this.addEventListener(
       "ea-show",
       () => {
-        const children = [...this.querySelectorAll("ea-tour-step")] as HTMLElement[];
+        const children = [
+          ...this.querySelectorAll("ea-tour-step"),
+        ] as HTMLElement[];
         if (children[this.current]) {
-          const stepContainer = children[this.current].shadowRoot?.querySelector(".ea-tour-step") as HTMLElement;
+          const stepContainer = children[
+            this.current
+          ].shadowRoot?.querySelector(".ea-tour-step") as HTMLElement;
           if (stepContainer) {
             stepContainer.focus();
           }

@@ -1,5 +1,10 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { VARIANT_TYPES, type VariantType } from "@constants/variant";
 import stylesheet from "./index.scss?inline";
@@ -37,7 +42,6 @@ export class EaLink extends EaBase {
 
   @attribute({
     type: Enum([...VARIANT_TYPES, "normal"]),
-    default: "normal",
     observer(this: EaLink) {
       this.updateContainerClasslist();
     },
@@ -46,7 +50,6 @@ export class EaLink extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: {
       ariaAttr: "aria-disabled",
       map: v => String(v),
@@ -60,7 +63,6 @@ export class EaLink extends EaBase {
 
   @attribute({
     type: Enum(UNDERLINE_TYPES),
-    default: "",
     observer(this: EaLink) {
       this.updateContainerClasslist();
     },
@@ -69,7 +71,6 @@ export class EaLink extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaLink, newVal: string) {
       if (this._container) this._container.href = newVal;
       this._updateLinkRole();
@@ -80,7 +81,6 @@ export class EaLink extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaLink, newVal: string) {
       if (this._container) this._container.target = newVal;
     },
@@ -89,7 +89,6 @@ export class EaLink extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaLink, newVal: string) {
       if (this._container) this._container.rel = newVal;
     },
@@ -98,7 +97,6 @@ export class EaLink extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaLink, newVal: string) {
       if (this._container) this._container.download = newVal;
     },
@@ -107,7 +105,6 @@ export class EaLink extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaLink, newVal: string) {
       if (this._icon) this._icon.setAttribute("name", newVal);
       this.updateContainerClasslist();

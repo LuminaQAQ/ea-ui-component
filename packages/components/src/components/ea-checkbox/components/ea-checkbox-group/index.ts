@@ -44,7 +44,6 @@ export class EaCheckboxGroup extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaCheckboxGroup, newVal: string) {
       if (this._label) this._label.textContent = newVal;
     },
@@ -53,7 +52,6 @@ export class EaCheckboxGroup extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaCheckboxGroup) {
       this._updateCheckboxChildrenName();
     },
@@ -62,7 +60,6 @@ export class EaCheckboxGroup extends EaFormAssociatedBase {
 
   @property({
     type: Array,
-    default: [],
     observer(this: EaCheckboxGroup) {
       this._updateCheckboxChildrenValue();
       this._updateLimitStatus();
@@ -72,7 +69,6 @@ export class EaCheckboxGroup extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaCheckboxGroup, newVal: boolean) {
       this._checkboxItems?.forEach(checkbox => {
         checkbox.toggleAttribute("disabled", newVal);
@@ -83,7 +79,6 @@ export class EaCheckboxGroup extends EaFormAssociatedBase {
 
   @attribute({
     type: Number,
-    default: 0,
     observer(this: EaCheckboxGroup) {
       this._updateLimitStatus();
     },
@@ -92,7 +87,6 @@ export class EaCheckboxGroup extends EaFormAssociatedBase {
 
   @attribute({
     type: Number,
-    default: Infinity,
     observer(this: EaCheckboxGroup) {
       this._updateLimitStatus();
     },
@@ -101,7 +95,6 @@ export class EaCheckboxGroup extends EaFormAssociatedBase {
 
   @attribute({
     type: Enum(["", "small", "default", "large"]),
-    default: "",
     observer(this: EaCheckboxGroup) {
       this._updateChildrenSize();
     },
@@ -110,7 +103,6 @@ export class EaCheckboxGroup extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
   })
   required: boolean = false;
 

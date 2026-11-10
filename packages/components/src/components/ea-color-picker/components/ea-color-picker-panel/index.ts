@@ -90,7 +90,6 @@ export class EaColorPickerPanel extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaColorPickerPanel, newVal: string) {
       this._states.lastValidValue = newVal;
       if (newVal) {
@@ -105,7 +104,6 @@ export class EaColorPickerPanel extends EaBase {
 
   @attribute({
     type: Enum(COLOR_FORMATS),
-    default: "hex",
     observer(this: EaColorPickerPanel, _newVal: string) {
       if (this.value) {
         this.value = this._states.color.toString(this._getEffectiveFormat());
@@ -116,7 +114,6 @@ export class EaColorPickerPanel extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaColorPickerPanel) {
       this.updateContainerClasslist();
       if (this.value) {
@@ -129,7 +126,6 @@ export class EaColorPickerPanel extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaColorPickerPanel) {
       this.updateContainerClasslist();
     },
@@ -138,7 +134,6 @@ export class EaColorPickerPanel extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaColorPickerPanel) {
       this.updateContainerClasslist();
     },
@@ -147,7 +142,6 @@ export class EaColorPickerPanel extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: true,
     observer(this: EaColorPickerPanel) {
       this._updateTextDisplayMode();
     },
@@ -156,7 +150,6 @@ export class EaColorPickerPanel extends EaBase {
 
   @property({
     type: Array,
-    default: [],
     observer(this: EaColorPickerPanel, newVal: string[]) {
       this._renderPredefineColors(newVal);
     },

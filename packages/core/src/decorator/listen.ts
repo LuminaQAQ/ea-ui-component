@@ -8,6 +8,16 @@ export interface ListenOptions {
 }
 
 /**
+ * 元素级事件监听控制器存储
+ * 键：组件实例
+ * 值：该实例上所有 @listen 绑定的 AbortController 集合
+ */
+const ElementListenersMap: WeakMap<
+  EaElement & GlobalHTMLElement,
+  Set<AbortController>
+> = new WeakMap();
+
+/**
  * 创建事件处理器
  * @param selector CSS 选择器
  * @param callback 回调函数
@@ -71,16 +81,6 @@ function getEventTarget(
   }
   return element.shadowRoot!;
 }
-
-/**
- * 元素级事件监听控制器存储
- * 键：组件实例
- * 值：该实例上所有 @listen 绑定的 AbortController 集合
- */
-const ElementListenersMap: WeakMap<
-  EaElement & GlobalHTMLElement,
-  Set<AbortController>
-> = new WeakMap();
 
 /**
  * 设置事件监听

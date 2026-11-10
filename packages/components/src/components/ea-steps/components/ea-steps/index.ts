@@ -1,5 +1,10 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import type { EaStep } from "../ea-step";
 import stylesheet from "./index.scss?inline";
@@ -8,17 +13,9 @@ const TAG_NAME = "ea-steps" as const;
 const bem = createBEM(TAG_NAME);
 
 export type StepsProcessStatus =
-  | "wait"
-  | "process"
-  | "finish"
-  | "error"
-  | "success";
+  "wait" | "process" | "finish" | "error" | "success";
 export type StepsFinishStatus =
-  | "wait"
-  | "process"
-  | "finish"
-  | "error"
-  | "success";
+  "wait" | "process" | "finish" | "error" | "success";
 export type StepsDirection = "vertical" | "horizontal";
 
 /**
@@ -43,7 +40,6 @@ export class EaSteps extends EaBase {
 
   @attribute({
     type: String,
-    default: "50%",
     observer(this: EaSteps, newVal: string) {
       this.style.setProperty("--ea-step-tail-spacing", newVal);
     },
@@ -52,7 +48,6 @@ export class EaSteps extends EaBase {
 
   @attribute({
     type: Number,
-    default: 0,
     observer(this: EaSteps, newVal: number) {
       this._updateStepStatus(newVal);
     },
@@ -61,19 +56,16 @@ export class EaSteps extends EaBase {
 
   @attribute({
     type: Enum(["wait", "process", "finish", "error", "success"]),
-    default: "process",
   })
   processStatus: StepsProcessStatus = "process";
 
   @attribute({
     type: Enum(["wait", "process", "finish", "error", "success"]),
-    default: "finish",
   })
   finishStatus: StepsFinishStatus = "finish";
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaSteps, newVal: boolean) {
       const steps = [...this.querySelectorAll("ea-step")] as EaStep[];
       steps.forEach(step => {
@@ -86,7 +78,6 @@ export class EaSteps extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaSteps, newVal: boolean) {
       const steps = [...this.querySelectorAll("ea-step")] as EaStep[];
       steps.forEach(step => {
@@ -101,7 +92,6 @@ export class EaSteps extends EaBase {
 
   @attribute({
     type: Enum(["vertical", "horizontal"]),
-    default: "horizontal",
     observer(this: EaSteps, newVal: StepsDirection) {
       const steps = [...this.querySelectorAll("ea-step")] as EaStep[];
       steps.forEach(step => {

@@ -1,5 +1,10 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 
 import stylesheet from "./index.scss?inline";
@@ -40,13 +45,11 @@ export class EaTab extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
   })
   panel: string = "";
 
   @attribute({
     type: Enum(["", "card", "border-card"]),
-    default: "",
     observer(this: EaTab) {
       this.updateContainerClasslist();
     },
@@ -55,7 +58,6 @@ export class EaTab extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: {
       ariaAttr: "aria-disabled",
       map: v => String(v),
@@ -68,7 +70,6 @@ export class EaTab extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: {
       ariaAttr: "aria-selected",
       target: ".ea-tab",
@@ -82,7 +83,6 @@ export class EaTab extends EaBase {
 
   @attribute({
     type: String,
-    default: "top",
     observer(this: EaTab) {
       this.updateContainerClasslist();
     },
@@ -91,7 +91,6 @@ export class EaTab extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaTab) {
       this.updateContainerClasslist();
     },
@@ -100,7 +99,6 @@ export class EaTab extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaTab) {
       this.updateContainerClasslist();
     },
@@ -138,7 +136,10 @@ export class EaTab extends EaBase {
   private _setupAria(): void {
     this._container.setAttribute("role", "tab");
     if (this.panel) {
-      this._container.setAttribute("aria-controls", `ea-tab-panel-${this.panel}`);
+      this._container.setAttribute(
+        "aria-controls",
+        `ea-tab-panel-${this.panel}`
+      );
     }
     this._container.id = `ea-tab-${this._uniqueId}`;
     this.id = `ea-tab-${this._uniqueId}`;

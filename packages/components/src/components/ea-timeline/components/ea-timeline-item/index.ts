@@ -1,5 +1,9 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+} from "@easy-component-ui/core/decorator";
 import { html } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { VARIANT_TYPES, type VariantType } from "@constants/variant";
@@ -47,7 +51,6 @@ export class EaTimelineItem extends EaBase {
 
   @attribute({
     type: Enum(VARIANT_TYPES),
-    default: "",
     observer(this: EaTimelineItem) {
       this.updateContainerClasslist();
     },
@@ -56,7 +59,6 @@ export class EaTimelineItem extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaTimelineItem, newVal: string) {
       this._timestampSlot.textContent = newVal;
     },
@@ -65,7 +67,6 @@ export class EaTimelineItem extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaTimelineItem) {
       this.updateContainerClasslist();
     },
@@ -74,7 +75,6 @@ export class EaTimelineItem extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaTimelineItem, newVal: string) {
       if (!newVal) {
         this.style.removeProperty("--ea-timeline-item-dot-color");
@@ -95,7 +95,6 @@ export class EaTimelineItem extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaTimelineItem) {
       this.updateContainerClasslist();
     },
@@ -104,7 +103,6 @@ export class EaTimelineItem extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaTimelineItem, newVal: string) {
       if (newVal) {
         this._dot.innerHTML = html(
@@ -119,7 +117,6 @@ export class EaTimelineItem extends EaBase {
 
   @attribute({
     type: Enum(["normal", "large"]),
-    default: "",
     observer(this: EaTimelineItem) {
       this.updateContainerClasslist();
     },
@@ -128,7 +125,6 @@ export class EaTimelineItem extends EaBase {
 
   @attribute({
     type: Enum(["top", "bottom"]),
-    default: "",
     observer(this: EaTimelineItem) {
       this.updateContainerClasslist();
     },
@@ -137,7 +133,6 @@ export class EaTimelineItem extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaTimelineItem) {
       this.updateContainerClasslist();
     },

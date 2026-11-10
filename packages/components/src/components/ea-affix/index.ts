@@ -1,5 +1,10 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import stylesheet from "./index.scss?inline";
 
@@ -53,7 +58,6 @@ export class EaAffix extends EaBase {
 
   @attribute({
     type: Number,
-    default: 0,
     observer(this: EaAffix) {
       this._handleScroll();
     },
@@ -62,7 +66,6 @@ export class EaAffix extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaAffix, newVal: string) {
       this._targetElement = document.querySelector(
         newVal
@@ -74,7 +77,6 @@ export class EaAffix extends EaBase {
 
   @attribute({
     type: Enum(["top", "bottom"]),
-    default: "top",
     observer(this: EaAffix) {
       this._handleScroll();
     },

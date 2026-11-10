@@ -1,5 +1,10 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { html } from "@easy-component-ui/core/utils/html";
 import stylesheet from "./index.scss?inline";
 
@@ -42,7 +47,6 @@ export class EaAnchorLink extends EaBase {
    */
   @attribute({
     type: String,
-    default: "",
     observer(this: EaAnchorLink, newVal: string) {
       if (this._anchor) this._anchor.setAttribute("href", newVal);
     },
@@ -55,7 +59,6 @@ export class EaAnchorLink extends EaBase {
    */
   @attribute({
     type: String,
-    default: "",
     observer(this: EaAnchorLink) {
       this._updateHeading();
     },
@@ -68,7 +71,6 @@ export class EaAnchorLink extends EaBase {
    */
   @attribute({
     type: Boolean,
-    default: false,
     a11y: {
       ariaAttr: "aria-disabled",
       target: "a",
@@ -83,7 +85,6 @@ export class EaAnchorLink extends EaBase {
    */
   @attribute({
     type: Boolean,
-    default: false,
     a11y: {
       ariaAttr: "aria-current",
       target: "a",
@@ -136,7 +137,8 @@ export class EaAnchorLink extends EaBase {
       return;
     }
 
-    if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey)
+      return;
 
     e.preventDefault();
 

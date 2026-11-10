@@ -1,5 +1,10 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, listen, query } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  listen,
+  query,
+} from "@easy-component-ui/core/decorator";
 import { EaDropdownCommandEvent } from "../../events/EaDropdownCommandEvent";
 import stylesheet from "./index.scss?inline";
 
@@ -35,7 +40,6 @@ export class EaDropdownItem extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaDropdownItem) {
       this.updateContainerClasslist();
     },
@@ -44,7 +48,6 @@ export class EaDropdownItem extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: {
       ariaAttr: "aria-disabled",
       map: v => String(v),
@@ -57,7 +60,6 @@ export class EaDropdownItem extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
   })
   command: string = "";
 

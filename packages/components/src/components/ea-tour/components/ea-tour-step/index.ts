@@ -94,7 +94,6 @@ export class EaTourStep extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaTourStep, newVal: string) {
       this._title.textContent = newVal;
     },
@@ -103,7 +102,6 @@ export class EaTourStep extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaTourStep, newVal: string) {
       if (newVal === "") return;
 
@@ -120,7 +118,6 @@ export class EaTourStep extends EaBase {
 
   @attribute({
     type: Enum(["default", "primary"]),
-    default: "default",
     observer(this: EaTourStep, newVal: "default" | "primary") {
       this._handleBtnTypeChange(newVal);
       this.updateContainerClasslist();
@@ -130,7 +127,6 @@ export class EaTourStep extends EaBase {
 
   @attribute({
     type: Enum(PLACEMENT_TYPES),
-    default: "bottom",
   })
   placement: PlacementType = "bottom";
 

@@ -1,6 +1,11 @@
 import { EaFormAssociatedBase } from "@easy-component-ui/core/core/EaFormAssociatedBase";
 import { createBEM } from "@easy-component-ui/core/utils/bem";
-import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { EaRadioChangeEvent } from "../../events/EaRadioChangeEvent";
 import { EaRadioFocusEvent } from "../../events/EaRadioFocusEvent";
@@ -61,7 +66,6 @@ export class EaRadio extends EaFormAssociatedBase {
 
   @attribute({
     type: Enum(["small", "default", "large"]),
-    default: "default",
     observer(this: EaRadio) {
       this.updateContainerClasslist();
     },
@@ -70,7 +74,6 @@ export class EaRadio extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaRadio, newVal: string) {
       if (this._original) this._original.value = newVal;
     },
@@ -79,7 +82,6 @@ export class EaRadio extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaRadio, newVal: string) {
       if (this._labelSlot) this._labelSlot.textContent = newVal;
     },
@@ -88,7 +90,6 @@ export class EaRadio extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: { ariaAttr: "aria-checked", map: v => String(!!v) },
     observer(this: EaRadio, newVal: boolean) {
       if (this._original) this._original.checked = newVal;
@@ -106,7 +107,6 @@ export class EaRadio extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: { ariaAttr: "aria-disabled", map: v => String(v) },
     observer(this: EaRadio, newVal: boolean) {
       if (this._original) this._original.disabled = newVal;
@@ -117,7 +117,6 @@ export class EaRadio extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaRadio) {
       this.updateContainerClasslist();
     },

@@ -1,5 +1,10 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import stylesheet from "./index.scss?inline";
 
@@ -32,7 +37,6 @@ export class EaContainer extends EaBase {
 
   @attribute({
     type: Enum(DIRECTION_TYPES),
-    default: "horizontal",
     observer(this: EaContainer) {
       this.updateContainerClasslist();
     },
@@ -59,8 +63,8 @@ export class EaContainer extends EaBase {
   private _handleSlotChange(): void {
     if (this.hasAttribute("direction")) return;
 
-    const children = [...this.querySelectorAll("& > *")].map(
-      (item) => item.tagName.toLowerCase()
+    const children = [...this.querySelectorAll("& > *")].map(item =>
+      item.tagName.toLowerCase()
     );
 
     if (children.includes("ea-header") || children.includes("ea-footer")) {

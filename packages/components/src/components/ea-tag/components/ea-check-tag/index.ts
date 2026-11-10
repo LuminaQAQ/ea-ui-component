@@ -1,5 +1,10 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { VARIANT_TYPES, type VariantType } from "@constants/variant";
 import { EaCheckTagChangeEvent } from "../../events/EaCheckTagChangeEvent";
@@ -26,7 +31,6 @@ export class EaCheckTag extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: {
       ariaAttr: "aria-checked",
       map: v => String(!!v),
@@ -39,7 +43,6 @@ export class EaCheckTag extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: {
       ariaAttr: "aria-disabled",
       map: v => String(v),
@@ -52,7 +55,6 @@ export class EaCheckTag extends EaBase {
 
   @attribute({
     type: Enum(VARIANT_TYPES),
-    default: "primary",
     observer(this: EaCheckTag) {
       this.updateContainerClasslist();
     },

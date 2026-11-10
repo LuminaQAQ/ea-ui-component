@@ -1,6 +1,12 @@
 import { EaOverlay } from "@/common/ea-overlay";
 import { EaOverlayClosedEvent } from "@/common/ea-overlay/events/EaOverlayClosedEvent";
-import { CustomElement, attribute, property, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  property,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { createBEM } from "@easy-component-ui/core/utils/bem";
 import { html } from "@easy-component-ui/core/utils/html";
 import "../ea-image/components/ea-image/index";
@@ -75,7 +81,6 @@ export class EaImagePreview extends EaOverlay {
 
   @attribute({
     type: Number,
-    default: 0,
     observer(this: EaImagePreview, newVal: number) {
       this.index = newVal;
     },
@@ -84,7 +89,6 @@ export class EaImagePreview extends EaOverlay {
 
   @attribute({
     type: Number,
-    default: 0,
     observer(this: EaImagePreview, newVal: number, oldVal: number) {
       if (this._states.dirtyUpdate) return (this._states.dirtyUpdate = false);
 
@@ -107,25 +111,21 @@ export class EaImagePreview extends EaOverlay {
 
   @attribute({
     type: Boolean,
-    default: true,
   })
   infinite: boolean = true;
 
   @attribute({
     type: Number,
-    default: 1,
   })
   zoom: number = 1;
 
   @attribute({
     type: Number,
-    default: 1.2,
   })
   zoomRate: number = 1.2;
 
   @attribute({
     type: Number,
-    default: 1,
     observer(this: EaImagePreview, newVal: number, oldVal: number) {
       if (newVal < this.minScale || newVal > this.maxScale)
         return (this.scale = oldVal);
@@ -140,19 +140,16 @@ export class EaImagePreview extends EaOverlay {
 
   @attribute({
     type: Number,
-    default: 0.2,
   })
   minScale: number = 0.2;
 
   @attribute({
     type: Number,
-    default: 7,
   })
   maxScale: number = 7;
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaImagePreview) {
       this.updateContainerClasslist();
     },
@@ -161,7 +158,6 @@ export class EaImagePreview extends EaOverlay {
 
   @property({
     type: Array,
-    default: [],
     observer(this: EaImagePreview, newVal: string[]) {
       this._states.isUrlListInit = false;
 

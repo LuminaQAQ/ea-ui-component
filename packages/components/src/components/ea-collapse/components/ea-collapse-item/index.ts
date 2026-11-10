@@ -1,5 +1,11 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query, listen, property } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+  listen,
+  property,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import stylesheet from "./index.scss?inline";
 import "@/components/ea-icon/index";
@@ -63,7 +69,6 @@ export class EaCollapseItem extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaCollapseItem, newVal: string) {
       if (this._headerSlot) {
         this._headerSlot.textContent = newVal;
@@ -74,13 +79,11 @@ export class EaCollapseItem extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
   })
   name: string = "";
 
   @attribute({
     type: Enum(["left", "right"] as const),
-    default: "right",
     observer(this: EaCollapseItem) {
       this.updateContainerClasslist();
     },
@@ -89,7 +92,6 @@ export class EaCollapseItem extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: {
       ariaAttr: "aria-disabled",
       target: ".ea-collapse-item__header-wrap",
@@ -106,7 +108,6 @@ export class EaCollapseItem extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: {
       ariaAttr: "aria-expanded",
       target: ".ea-collapse-item__header-wrap",
@@ -120,7 +121,6 @@ export class EaCollapseItem extends EaBase {
 
   @property({
     type: Boolean,
-    default: false,
     a11y: {
       ariaAttr: "inert",
       target: ".ea-collapse-item__content",

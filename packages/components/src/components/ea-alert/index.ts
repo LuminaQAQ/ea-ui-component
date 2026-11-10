@@ -1,5 +1,11 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query, listen, property } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+  listen,
+  property,
+} from "@easy-component-ui/core/decorator";
 import { html } from "@easy-component-ui/core/utils/html";
 import { timeout } from "@easy-component-ui/core/utils/timeout";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
@@ -85,7 +91,6 @@ export class EaAlert extends EaBase {
 
   @property({
     type: Boolean,
-    default: false,
     a11y: {
       ariaAttr: "inert",
       target: ".ea-alert",
@@ -96,7 +101,6 @@ export class EaAlert extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaAlert) {
       this._updateHeading();
     },
@@ -105,7 +109,6 @@ export class EaAlert extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaAlert) {
       this._updateDescription();
     },
@@ -114,7 +117,6 @@ export class EaAlert extends EaBase {
 
   @attribute({
     type: Enum(VARIANT_TYPES),
-    default: VARIANT_DEFAULT,
     observer(this: EaAlert) {
       this.updateContainerClasslist();
       this._updateIcon();
@@ -124,7 +126,6 @@ export class EaAlert extends EaBase {
 
   @attribute({
     type: Enum(EFFECT_TYPES),
-    default: "light",
     observer(this: EaAlert) {
       this.updateContainerClasslist();
     },
@@ -133,7 +134,6 @@ export class EaAlert extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaAlert) {
       this._updateCloseBtn();
     },
@@ -142,7 +142,6 @@ export class EaAlert extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: true,
     a11y: {
       ariaAttr: "inert",
       target: ".ea-alert__close-btn",
@@ -156,7 +155,6 @@ export class EaAlert extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaAlert) {
       this._updateIcon();
     },
@@ -165,7 +163,6 @@ export class EaAlert extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaAlert) {
       this.updateContainerClasslist();
     },
@@ -174,7 +171,6 @@ export class EaAlert extends EaBase {
 
   @attribute({
     type: Number,
-    default: 0,
     observer(this: EaAlert, newVal: number) {
       clearTimeout(this._showAfterTimer);
       newVal = Math.abs(newVal);
@@ -192,7 +188,6 @@ export class EaAlert extends EaBase {
 
   @attribute({
     type: Number,
-    default: 0,
     observer(this: EaAlert, newVal: number) {
       clearTimeout(this._autoCloseTimer);
       if (newVal) {
@@ -204,7 +199,6 @@ export class EaAlert extends EaBase {
 
   @attribute({
     type: Number,
-    default: 0,
   })
   hideAfter: number = 0;
 

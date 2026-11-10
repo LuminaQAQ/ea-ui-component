@@ -1,6 +1,12 @@
 import { EaOverlay } from "@/common/ea-overlay";
 import { EaOverlayClosedEvent } from "@/common/ea-overlay/events/EaOverlayClosedEvent";
-import { CustomElement, attribute, query, listen, property } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+  listen,
+  property,
+} from "@easy-component-ui/core/decorator";
 import { createBEM } from "@easy-component-ui/core/utils/bem";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import stylesheet from "./index.scss?inline";
@@ -60,7 +66,6 @@ export class EaDrawer extends EaOverlay {
 
   @attribute({
     type: Enum(DIRECTION_TYPES),
-    default: "rtl",
     observer(this: EaDrawer) {
       this.updateContainerClasslist();
     },
@@ -69,7 +74,6 @@ export class EaDrawer extends EaOverlay {
 
   @attribute({
     type: Boolean,
-    default: true,
     observer(this: EaDrawer) {
       this.updateContainerClasslist();
     },
@@ -78,7 +82,6 @@ export class EaDrawer extends EaOverlay {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaDrawer, newVal: string) {
       if (this._heading) this._heading.textContent = newVal;
       this._updateAriaLabelledBy();
@@ -88,11 +91,10 @@ export class EaDrawer extends EaOverlay {
 
   @attribute({
     type: Boolean,
-    default: true,
     a11y: {
       ariaAttr: "inert",
       target: ".ea-drawer-main__close-icon",
-      map: v => v ? null : "",
+      map: v => (v ? null : ""),
     },
     observer(this: EaDrawer) {
       this.updateContainerClasslist();
@@ -102,7 +104,6 @@ export class EaDrawer extends EaOverlay {
 
   @attribute({
     type: String,
-    default: "30%",
     observer(this: EaDrawer, newVal: string) {
       this.style.setProperty("--ea-drawer-size", newVal);
     },
@@ -111,13 +112,11 @@ export class EaDrawer extends EaOverlay {
 
   @property({
     type: Function,
-    default: null,
   })
   beforeClose: ((done: (cancel?: boolean) => void) => void) | null = null;
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaDrawer) {
       this._updateAriaDescribedBy();
     },

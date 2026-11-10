@@ -56,6 +56,24 @@ interface ScanContext {
   warnings: string[];
 }
 
+/** JSDoc 解析结果 */
+interface ParsedJsDoc {
+  /** 首段说明（或 @summary） */
+  summary: string;
+  /** 标签名 → 文本（同名标签聚合为数组） */
+  tags: Map<string, string[]>;
+}
+
+/** 事件类信息（从 events/ 目录解析） */
+interface EventClassInfo {
+  /** 事件类名 */
+  className: string;
+  /** 事件名（来自 constructor 里的 super 调用） */
+  eventName: string;
+  /** detail 属性类型文本 */
+  detailType: string;
+}
+
 /** 递归收集源文件（排除声明文件与测试） */
 function collectSourceFiles(dir: string): string[] {
   const out: string[] = [];
@@ -128,7 +146,12 @@ function resolveStringArray(
       if (ts.isStringLiteral(element)) {
         values.push(element.text);
       } else if (ts.isSpreadElement(element)) {
-        const spread = resolveStringArray(element.expression, ctx, scan, depth + 1);
+        const spread = resolveStringArray(
+          element.expression,
+          ctx,
+          scan,
+          depth + 1
+        );
         if (spread) values.push(...spread);
       } else if (ts.isAsExpression(element)) {
         const inner = unwrapExpression(element);
@@ -237,14 +260,6 @@ function getJsDocText(node: ts.Node, sf: ts.SourceFile): string {
   return raw.replace(/^\/\*\*/, "").replace(/\*\/$/, "");
 }
 
-/** JSDoc 解析结果 */
-interface ParsedJsDoc {
-  /** 首段说明（或 @summary） */
-  summary: string;
-  /** 标签名 → 文本（同名标签聚合为数组） */
-  tags: Map<string, string[]>;
-}
-
 /** 逐行解析 JSDoc，提取描述与自定义标签 */
 function parseJsDoc(text: string): ParsedJsDoc {
   const tags = new Map<string, string[]>();
@@ -295,16 +310,6 @@ function buildSlots(doc: ParsedJsDoc): SlotMeta[] {
     const { name, description } = splitNameAndDesc(item);
     return { name: name === "default" ? "" : name, description };
   });
-}
-
-/** 事件类信息（从 events/ 目录解析） */
-interface EventClassInfo {
-  /** 事件类名 */
-  className: string;
-  /** 事件名（来自 constructor 里的 super 调用） */
-  eventName: string;
-  /** detail 属性类型文本 */
-  detailType: string;
 }
 
 /** 递归查找所有 events 目录 */
@@ -414,10 +419,7 @@ function resolveEventDir(file: string, componentsDir: string): string | null {
 }
 
 /** 从 JSDoc 标签构建事件列表，并合并独立事件类信息 */
-function buildEvents(
-  doc: ParsedJsDoc,
-  infos: EventClassInfo[]
-): EventMeta[] {
+function buildEvents(doc: ParsedJsDoc, infos: EventClassInfo[]): EventMeta[] {
   const byName = new Map(infos.map(info => [info.eventName, info]));
   return (doc.tags.get("event") ?? [])
     .map(item => splitNameAndDesc(item))
@@ -471,6 +473,19 @@ function getOptionValue(
   return null;
 }
 
+/** 取显式写的 default，写成 undefined 视同未写 */
+function getDeclaredDefault(
+  options: ts.ObjectLiteralExpression | null | undefined
+): ts.Expression | null {
+  const expr = options ? getOptionValue(options, "default") : null;
+  if (!expr) return null;
+  const node = unwrapExpression(expr);
+  const isEmpty =
+    (ts.isIdentifier(node) && node.text === "undefined") ||
+    ts.isVoidExpression(node);
+  return isEmpty ? null : expr;
+}
+
 /** 解析 a11y 配置 */
 function parseA11y(
   options: ts.ObjectLiteralExpression,
@@ -501,7 +516,9 @@ function isPublicMember(member: ts.ClassElement, sf: ts.SourceFile): boolean {
   const name = member.name?.getText(sf) ?? "";
   if (!name) return false;
   if (name.startsWith("_") || name.startsWith("#")) return false;
-  const modifiers = ts.canHaveModifiers(member) ? ts.getModifiers(member) : undefined;
+  const modifiers = ts.canHaveModifiers(member)
+    ? ts.getModifiers(member)
+    : undefined;
   return !modifiers?.some(
     item =>
       item.kind === ts.SyntaxKind.PrivateKeyword ||
@@ -521,7 +538,7 @@ function collectAttributes(
     if (!isPublicMember(member, ctx.sf)) continue;
 
     const decorators = ts.canHaveDecorators(member)
-      ? ts.getDecorators(member) ?? []
+      ? (ts.getDecorators(member) ?? [])
       : [];
     const decorator = decorators.find(d => getDecoratorName(d) === "attribute");
     if (!decorator) continue;
@@ -538,7 +555,9 @@ function collectAttributes(
         })()
       : { kind: "unknown" as ValueKind };
 
-    const defaultExpr = options ? getOptionValue(options, "default") : null;
+    // 显式 default 优先，未写时取字段初始化器
+    const defaultExpr =
+      getDeclaredDefault(options) ?? member.initializer ?? null;
     const jsdoc = parseJsDoc(getJsDocText(member, ctx.sf));
 
     result.push({
@@ -568,7 +587,7 @@ function collectProperties(
     if (!isPublicMember(member, ctx.sf)) continue;
 
     const decorators = ts.canHaveDecorators(member)
-      ? ts.getDecorators(member) ?? []
+      ? (ts.getDecorators(member) ?? [])
       : [];
     if (!decorators.some(d => getDecoratorName(d) === "property")) continue;
 
@@ -581,7 +600,9 @@ function collectProperties(
     const typeInfo = typeExpr
       ? resolveTypeOption(typeExpr, ctx, scan)
       : { kind: "unknown" as ValueKind };
-    const defaultExpr = options ? getOptionValue(options, "default") : null;
+    // 显式 default 优先，未写时取字段初始化器
+    const defaultExpr =
+      getDeclaredDefault(options) ?? member.initializer ?? null;
     const jsdoc = parseJsDoc(getJsDocText(member, ctx.sf));
 
     result.push({
@@ -612,7 +633,9 @@ function collectMethods(
 
     result.push({
       name,
-      params: member.parameters.map(item => item.getText(ctx.sf).trim()).join(", "),
+      params: member.parameters
+        .map(item => item.getText(ctx.sf).trim())
+        .join(", "),
       parameters: member.parameters.map(param => ({
         name: param.name.getText(ctx.sf),
         type: param.type?.getText(ctx.sf) ?? "any",
@@ -775,7 +798,7 @@ export function scanComponents(options: {
           // 事件类匹配：同级优先，其次顶层组件目录
           const eventDir = resolveEventDir(file, options.componentsDir);
           const componentEventClasses = eventDir
-            ? eventClasses.get(eventDir) ?? []
+            ? (eventClasses.get(eventDir) ?? [])
             : [];
           const events = buildEvents(doc, componentEventClasses);
 

@@ -44,7 +44,6 @@ export class EaBorderBeam extends EaBase {
 
   @attribute({
     type: Number,
-    default: 1,
     observer(this: EaBorderBeam, newVal: number) {
       this._updateIndicators(newVal);
     },
@@ -53,7 +52,6 @@ export class EaBorderBeam extends EaBase {
 
   @attribute({
     type: Enum(["", "hover"]),
-    default: "",
     observer(this: EaBorderBeam, newVal: string) {
       this.updateContainerClasslist();
     },
@@ -62,7 +60,6 @@ export class EaBorderBeam extends EaBase {
 
   @attribute({
     type: Number,
-    default: 100,
     observer(this: EaBorderBeam, newVal: number) {
       this._container?.style.setProperty(
         `--${TAG_NAME}-indicator-size`,
@@ -74,7 +71,6 @@ export class EaBorderBeam extends EaBase {
 
   @attribute({
     type: Number,
-    default: 1,
     observer(this: EaBorderBeam, newVal: number) {
       this._container?.style.setProperty(
         `--${TAG_NAME}-indicator-line-width`,
@@ -86,7 +82,6 @@ export class EaBorderBeam extends EaBase {
 
   @attribute({
     type: Number,
-    default: 10,
     observer(this: EaBorderBeam, newVal: number) {
       this._container?.style.setProperty(
         `--${TAG_NAME}-duration`,
@@ -99,7 +94,6 @@ export class EaBorderBeam extends EaBase {
   /** 光束动画开始延迟，单位 s */
   @attribute({
     type: Number,
-    default: 0,
     observer(this: EaBorderBeam, newVal: number) {
       this._container?.style.setProperty(
         `--${TAG_NAME}-start-delay`,

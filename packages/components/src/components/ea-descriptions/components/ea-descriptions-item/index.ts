@@ -1,5 +1,9 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import stylesheet from "./index.scss?inline";
 
@@ -34,7 +38,6 @@ export class EaDescriptionsItem extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaDescriptionsItem, newVal: string) {
       this._label.textContent = newVal;
       this._notifyParent();
@@ -44,7 +47,6 @@ export class EaDescriptionsItem extends EaBase {
 
   @attribute({
     type: Number,
-    default: 1,
     observer(this: EaDescriptionsItem) {
       this._notifyParent();
     },
@@ -53,7 +55,6 @@ export class EaDescriptionsItem extends EaBase {
 
   @attribute({
     type: Number,
-    default: 1,
     observer(this: EaDescriptionsItem) {
       this._notifyParent();
     },
@@ -62,7 +63,6 @@ export class EaDescriptionsItem extends EaBase {
 
   @attribute({
     type: Enum(ALIGN_TYPES),
-    default: "",
     observer(this: EaDescriptionsItem) {
       this._notifyParent();
     },
@@ -71,7 +71,6 @@ export class EaDescriptionsItem extends EaBase {
 
   @attribute({
     type: Enum(ALIGN_TYPES),
-    default: "",
     observer(this: EaDescriptionsItem) {
       this._notifyParent();
     },
@@ -80,7 +79,6 @@ export class EaDescriptionsItem extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaDescriptionsItem) {
       this._notifyParent();
     },
@@ -89,7 +87,6 @@ export class EaDescriptionsItem extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaDescriptionsItem) {
       this._notifyParent();
     },
@@ -98,7 +95,6 @@ export class EaDescriptionsItem extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaDescriptionsItem) {
       this._notifyParent();
     },
@@ -107,7 +103,6 @@ export class EaDescriptionsItem extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaDescriptionsItem) {
       this._notifyParent();
     },

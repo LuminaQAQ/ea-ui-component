@@ -1,5 +1,10 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import stylesheet from "./index.scss?inline";
 
@@ -41,7 +46,6 @@ export class EaDivider extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaDivider, newVal: string) {
       this._container?.style.setProperty(
         `--${TAG_NAME}-border-style`,
@@ -53,7 +57,6 @@ export class EaDivider extends EaBase {
 
   @attribute({
     type: Enum(["start", "end", "center"]),
-    default: "center",
     observer(this: EaDivider, newVal: string) {
       this.updateContainerClasslist();
     },
@@ -62,7 +65,6 @@ export class EaDivider extends EaBase {
 
   @attribute({
     type: Enum(["horizontal", "vertical"]),
-    default: "horizontal",
     observer(this: EaDivider, newVal: string) {
       this.updateContainerClasslist();
     },

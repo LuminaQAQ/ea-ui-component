@@ -78,7 +78,6 @@ export class EaAnchor extends EaBase {
    */
   @attribute({
     type: String,
-    default: WINDOW_TARGET,
     observer(this: EaAnchor) {
       this._bindTargetScroll();
     },
@@ -91,7 +90,6 @@ export class EaAnchor extends EaBase {
    */
   @attribute({
     type: Number,
-    default: 0,
     observer(this: EaAnchor, newVal: number) {
       this.style.setProperty(`--${TAG_NAME}-offset`, `${newVal}px`);
     },
@@ -104,7 +102,6 @@ export class EaAnchor extends EaBase {
    */
   @attribute({
     type: Number,
-    default: 15,
     observer(this: EaAnchor) {
       if (this._isMounted && !this._isScrolling) this._runSpy();
     },
@@ -115,7 +112,7 @@ export class EaAnchor extends EaBase {
    * 滚动动画时长（毫秒），0 表示瞬时跳转
    * @default 300
    */
-  @attribute({ type: Number, default: 300 })
+  @attribute({ type: Number })
   duration: number = 300;
 
   /**
@@ -124,7 +121,6 @@ export class EaAnchor extends EaBase {
    */
   @attribute({
     type: String,
-    default: DIRECTIONS[0],
     observer(this: EaAnchor) {
       this._syncLinks();
       this.updateContainerClasslist();
@@ -139,7 +135,6 @@ export class EaAnchor extends EaBase {
    */
   @attribute({
     type: Boolean,
-    default: true,
     observer(this: EaAnchor) {
       this._updateMarker(this.active);
     },
@@ -152,7 +147,6 @@ export class EaAnchor extends EaBase {
    */
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaAnchor) {
       this.updateContainerClasslist();
     },
@@ -163,7 +157,7 @@ export class EaAnchor extends EaBase {
    * 点击后使用 replaceState 同步 hash
    * @default false
    */
-  @attribute({ type: Boolean, default: false })
+  @attribute({ type: Boolean })
   replace: boolean = false;
 
   /**
@@ -172,7 +166,6 @@ export class EaAnchor extends EaBase {
    */
   @attribute({
     type: String,
-    default: "",
     observer(this: EaAnchor, newVal: string) {
       this._updateActive(newVal);
 

@@ -1,5 +1,9 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import stylesheet from "./index.scss?inline";
 import "@/components/ea-icon/index";
@@ -8,12 +12,7 @@ const TAG_NAME = "ea-step" as const;
 const bem = createBEM(TAG_NAME);
 
 export type StepStatus =
-  | ""
-  | "wait"
-  | "process"
-  | "finish"
-  | "error"
-  | "success";
+  "" | "wait" | "process" | "finish" | "error" | "success";
 export type StepDirection = "vertical" | "horizontal";
 
 /**
@@ -77,7 +76,6 @@ export class EaStep extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaStep, newVal: string) {
       this._headingSlot.textContent = newVal;
     },
@@ -86,7 +84,6 @@ export class EaStep extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaStep, newVal: string) {
       this._descriptionSlot.textContent = newVal;
     },
@@ -95,7 +92,6 @@ export class EaStep extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaStep, newVal: string) {
       this._stepIcon.setAttribute("name", newVal);
     },
@@ -104,7 +100,6 @@ export class EaStep extends EaBase {
 
   @attribute({
     type: Enum(["", "wait", "process", "finish", "error", "success"]),
-    default: "",
     observer(this: EaStep, newVal: StepStatus) {
       this.updateContainerClasslist();
       this._updateAriaCurrent(newVal);
@@ -116,13 +111,11 @@ export class EaStep extends EaBase {
 
   @attribute({
     type: Number,
-    default: 0,
   })
   index: number = 0;
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaStep) {
       this.updateContainerClasslist();
     },
@@ -131,7 +124,6 @@ export class EaStep extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaStep) {
       this.updateContainerClasslist();
     },
@@ -140,7 +132,6 @@ export class EaStep extends EaBase {
 
   @attribute({
     type: String,
-    default: "horizontal",
     observer(this: EaStep) {
       this.updateContainerClasslist();
     },

@@ -1,5 +1,9 @@
 import { EaPopper } from "@common/ea-popper";
-import { CustomElement, attribute, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import stylesheet from "./index.scss?inline";
 
@@ -41,7 +45,6 @@ export class EaDropdown extends EaPopper {
 
   @attribute({
     type: Enum(TRIGGER_TYPES),
-    default: "hover",
     observer(this: EaDropdown) {
       this._setupTrigger();
     },
@@ -50,13 +53,11 @@ export class EaDropdown extends EaPopper {
 
   @attribute({
     type: Boolean,
-    default: true,
   })
   hideOnClick: boolean = true;
 
   @attribute({
     type: Enum(SIZE_TYPES),
-    default: "",
   })
   size: SizeType | "" = "";
 
@@ -176,8 +177,11 @@ export class EaDropdown extends EaPopper {
     const target = e.target as HTMLElement;
     const trigger = this._getReferenceTrigger();
     const items = this._getDropdownItems();
-    const isOnTrigger = trigger && (target === trigger || trigger.contains(target));
-    const currentItem = target.closest?.("ea-dropdown-item") as HTMLElement | null;
+    const isOnTrigger =
+      trigger && (target === trigger || trigger.contains(target));
+    const currentItem = target.closest?.(
+      "ea-dropdown-item"
+    ) as HTMLElement | null;
 
     if (e.key === "Escape" && this.visible) {
       e.preventDefault();

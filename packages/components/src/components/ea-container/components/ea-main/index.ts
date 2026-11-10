@@ -20,7 +20,6 @@ const bem = createBEM(TAG_NAME);
 export class EaMain extends EaBase {
   @attribute({
     type: String,
-    default: "",
     a11y: {
       ariaAttr: "aria-label",
       target: ".ea-main",

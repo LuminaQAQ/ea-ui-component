@@ -1,5 +1,9 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { VARIANT_TYPES, type VariantType } from "@constants/variant";
 import stylesheet from "./index.scss?inline";
@@ -39,7 +43,6 @@ export class EaBadge extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaBadge, newVal: string) {
       if (this.isDot) return;
       this._updateContent(newVal);
@@ -49,13 +52,11 @@ export class EaBadge extends EaBase {
 
   @attribute({
     type: Number,
-    default: Infinity,
   })
   max: number = Infinity;
 
   @attribute({
     type: Enum(VARIANT_TYPES),
-    default: BADGE_VARIANT_DEFAULT,
     observer(this: EaBadge) {
       this.updateContainerClasslist();
     },
@@ -64,7 +65,6 @@ export class EaBadge extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaBadge, newVal: string) {
       this.style.setProperty("--ea-badge-color", newVal);
     },
@@ -73,7 +73,6 @@ export class EaBadge extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaBadge) {
       this.updateContainerClasslist();
     },
@@ -82,7 +81,6 @@ export class EaBadge extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaBadge, newVal: boolean) {
       this._content.ariaHidden = String(newVal);
       this._content.hidden = newVal;
@@ -93,7 +91,6 @@ export class EaBadge extends EaBase {
 
   @attribute({
     type: Number,
-    default: 0,
     observer(this: EaBadge, newVal: number) {
       this.style.setProperty("--ea-badge-offset-x", -newVal + "px");
     },
@@ -102,7 +99,6 @@ export class EaBadge extends EaBase {
 
   @attribute({
     type: Number,
-    default: 0,
     observer(this: EaBadge, newVal: number) {
       this.style.setProperty("--ea-badge-offset-y", newVal + "px");
     },
@@ -111,7 +107,6 @@ export class EaBadge extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: true,
     observer(this: EaBadge) {
       this.updateContainerClasslist();
     },

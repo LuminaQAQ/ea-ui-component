@@ -2,7 +2,7 @@
   parseDefaultValue,
 } from "../utils/parseAttributeValue";
 import { StylesheetCache } from "../stores";
-import { attributeOf, finalize } from "../schema";
+import { finalize, resolveDefault } from "../schema";
 import type { ClassMeta, DeclaredType } from "../schema";
 import { html } from "../utils/html";
 import type {
@@ -47,6 +47,11 @@ const BooleanFalseAttrsMap: WeakMap<
   GlobalHTMLElement,
   Set<string>
 > = new WeakMap();
+
+/**
+ * 已完成字段初值捕获的类元数据，每个类只捕获一次
+ */
+const CapturedMetas = new WeakSet<ClassMeta>();
 
 /**
  * 获取自定义元素类的原型链（不含 HTMLElement），按基类到派生类排序
@@ -272,15 +277,37 @@ function defineReactiveAttribute(
 }
 
 /**
+ * 在 accessor 安装前捕获字段初值，作为未写 `default` 时的默认值
+ *
+ * 存在 own descriptor 说明该字段写了初始化器；只读值，不写回宿主 attribute。
+ * @param instance 组件实例（字段初始化已完成）
+ * @param meta 类元数据
+ */
+function captureFieldDefaults(instance: any, meta: ClassMeta): void {
+  if (CapturedMetas.has(meta)) return;
+
+  CapturedMetas.add(meta);
+
+  for (const name of meta.props.keys()) {
+    const descriptor = Object.getOwnPropertyDescriptor(instance, name);
+
+    if (!descriptor || !("value" in descriptor)) continue;
+
+    meta.inferred.set(name, descriptor.value);
+  }
+}
+
+/**
  * 初始化布尔属性的默认值
  * @param instance 组件实例
  * @param meta 类元数据
  */
 function initBooleanDefaults(instance: any, meta: ClassMeta): void {
-  for (const [name, decl] of meta.props) {
-    const attrName = attributeOf(name, decl);
+  for (const [name, entry] of meta.props) {
+    const attrName = entry.attributeName;
 
-    if (!attrName || decl.type !== Boolean || decl.default !== true) continue;
+    if (!attrName || entry.decl.type !== Boolean) continue;
+    if (resolveDefault(meta, name) !== true) continue;
     if (BooleanFalseAttrsMap.get(instance)?.has(attrName)) continue;
 
     if (!instance.hasAttribute(attrName)) {
@@ -295,10 +322,10 @@ function initBooleanDefaults(instance: any, meta: ClassMeta): void {
  * @param meta 类元数据
  */
 function initA11yAttributes(instance: any, meta: ClassMeta): void {
-  for (const [name, decl] of meta.props) {
-    if (!decl.a11y) continue;
+  for (const [name, entry] of meta.props) {
+    if (!entry.decl.a11y) continue;
 
-    syncA11yAttribute(instance, decl.a11y, instance[name]);
+    syncA11yAttribute(instance, entry.decl.a11y, instance[name]);
   }
 }
 
@@ -329,9 +356,8 @@ function defineReactiveProperty(
   });
 
   if (a11y) {
-    const initialValue =
-      defaultValue !== undefined ? defaultValue : instance[name];
-    syncA11yAttribute(instance, a11y, initialValue);
+    // accessor 已安装，取值即默认值
+    syncA11yAttribute(instance, a11y, instance[name]);
   }
 }
 
@@ -480,24 +506,28 @@ function CustomElement(
       constructor() {
         super();
 
-        for (const [name, decl] of meta.props) {
-          const attrName = attributeOf(name, decl);
+        // 字段初始化已完成、accessor 尚未安装，此时字段初值仍是普通 own property
+        captureFieldDefaults(this, meta);
+
+        for (const [name, entry] of meta.props) {
+          const attrName = entry.attributeName;
+          const defaultValue = resolveDefault(meta, name);
 
           if (attrName !== null) {
             defineReactiveAttribute(
               this,
               name,
               attrName,
-              decl.type,
-              decl.default
+              entry.decl.type,
+              defaultValue
             );
           } else {
             defineReactiveProperty(
               this,
               name,
-              decl.default,
-              decl.observer,
-              decl.a11y
+              defaultValue,
+              entry.decl.observer,
+              entry.decl.a11y
             );
           }
         }
@@ -526,32 +556,29 @@ function CustomElement(
         try {
           const parentProto: any = CustomElementClass.prototype;
           const actualName = meta.attrToProp.get(name);
-          const option =
+          const entry =
             actualName !== undefined ? meta.props.get(actualName) : undefined;
 
-          if (option && actualName !== undefined) {
+          if (entry && actualName !== undefined) {
+            const decl = entry.decl;
+            const defaultValue = resolveDefault(meta, actualName);
             let newValue: any;
             let oldValue: any;
 
-            if (option.type === Boolean) {
+            if (decl.type === Boolean) {
               newValue = newVal !== null && newVal !== "false";
               oldValue = oldVal === null ? null : oldVal !== "false";
             } else {
               newValue = parseAttributeValue(
                 this,
                 newVal,
-                option.type,
-                option.default
+                decl.type,
+                defaultValue
               );
               oldValue =
                 oldVal === null
                   ? null
-                  : parseAttributeValue(
-                      this,
-                      oldVal,
-                      option.type,
-                      option.default
-                    );
+                  : parseAttributeValue(this, oldVal, decl.type, defaultValue);
             }
 
             if (typeof parentProto.attributeChangedCallback === "function") {
@@ -563,19 +590,19 @@ function CustomElement(
               );
             }
 
-            await option.observer?.call(this, newValue, oldValue);
+            await decl.observer?.call(this, newValue, oldValue);
 
-            if (option.a11y) {
-              syncA11yAttribute(this, option.a11y, newValue);
+            if (decl.a11y) {
+              syncA11yAttribute(this, decl.a11y, newValue);
             }
 
-            if (option.forward) {
+            if (decl.forward) {
               forwardAttribute(
                 this,
-                option.forward.target,
-                option.forward.attr,
+                decl.forward.target,
+                decl.forward.attr,
                 newValue,
-                option.forward.map,
+                decl.forward.map,
                 actualName
               );
             }

@@ -1,5 +1,9 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+} from "@easy-component-ui/core/decorator";
 import { emptyStatusSVG } from "./assets/emptyStatusSVG";
 import stylesheet from "./index.scss?inline";
 
@@ -39,7 +43,6 @@ export class EaEmpty extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaEmpty, newVal: string) {
       this._updateImage(newVal);
     },
@@ -48,7 +51,6 @@ export class EaEmpty extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaEmpty, newVal: string) {
       if (!newVal) {
         this.style.removeProperty("--ea-empty-size");
@@ -67,7 +69,6 @@ export class EaEmpty extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaEmpty, newVal: string) {
       this._updateDescription(newVal);
     },

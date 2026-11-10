@@ -1,5 +1,11 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, property, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  property,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-option" as const;
@@ -23,19 +29,16 @@ export class EaOption extends EaBase {
 
   @attribute({
     type: String,
-    default: null,
   })
   value: string | null = null;
 
   @attribute({
     type: String,
-    default: null,
   })
   label: string | null = null;
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: { ariaAttr: "aria-selected", map: (v: boolean) => String(v) },
     observer(this: EaOption) {
       this.updateContainerClasslist();
@@ -45,7 +48,6 @@ export class EaOption extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: { ariaAttr: "aria-disabled", map: (v: boolean) => String(v) },
     observer(this: EaOption) {
       this.updateContainerClasslist();
@@ -55,7 +57,6 @@ export class EaOption extends EaBase {
 
   @property({
     type: Boolean,
-    default: false,
     observer(this: EaOption) {
       this.updateContainerClasslist();
     },

@@ -1,5 +1,10 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { VARIANT_TYPES, type VariantType } from "@constants/variant";
 import stylesheet from "./index.scss?inline";
@@ -38,7 +43,6 @@ export class EaButton extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: { ariaAttr: "aria-disabled", map: v => String(v) },
     observer(this: EaButton) {
       this.updateContainerClasslist();
@@ -48,7 +52,6 @@ export class EaButton extends EaBase {
 
   @attribute({
     type: Enum([...VARIANT_TYPES, "normal"]),
-    default: "normal",
     observer(this: EaButton) {
       this.updateContainerClasslist();
     },
@@ -57,7 +60,6 @@ export class EaButton extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaButton) {
       this.updateContainerClasslist();
     },
@@ -66,7 +68,6 @@ export class EaButton extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaButton) {
       this.updateContainerClasslist();
     },
@@ -75,7 +76,6 @@ export class EaButton extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaButton) {
       this.updateContainerClasslist();
     },
@@ -84,7 +84,6 @@ export class EaButton extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaButton) {
       this.updateContainerClasslist();
     },
@@ -93,7 +92,6 @@ export class EaButton extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaButton) {
       this._renderContainer();
       this.updateContainerClasslist();
@@ -103,7 +101,6 @@ export class EaButton extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaButton, newVal: string) {
       this.updateContainerClasslist();
       if (this._container && newVal) {
@@ -115,7 +112,6 @@ export class EaButton extends EaBase {
 
   @attribute({
     type: ["small", "medium", "large"] as const,
-    default: "medium",
     observer(this: EaButton) {
       if (this._loadingIcon) {
         this._loadingIcon.setAttribute("size", this.size);
@@ -127,7 +123,6 @@ export class EaButton extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: { ariaAttr: "aria-busy", map: v => String(v) },
     observer(this: EaButton, newVal: boolean) {
       this.toggleAttribute("disabled", newVal === true);
@@ -143,7 +138,6 @@ export class EaButton extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaButton, newVal: string) {
       if (this._icon) {
         this._icon.setAttribute("name", newVal);
@@ -156,7 +150,6 @@ export class EaButton extends EaBase {
 
   @attribute({
     type: Enum(["button", "submit", "reset"]),
-    default: "button",
     observer(this: EaButton, newVal: string) {
       if (this._container && !this.link) {
         this._container.setAttribute("type", newVal);
@@ -167,7 +160,6 @@ export class EaButton extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaButton, newVal: string) {
       if (this._container && this.link) {
         (this._container as HTMLAnchorElement).target = newVal;
@@ -178,7 +170,6 @@ export class EaButton extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaButton, newVal: string) {
       if (this._container && this.link) {
         (this._container as HTMLAnchorElement).rel = newVal;
@@ -189,7 +180,6 @@ export class EaButton extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaButton, newVal: string) {
       if (this._container && this.link) {
         (this._container as HTMLAnchorElement).download = newVal;
@@ -200,7 +190,6 @@ export class EaButton extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: {
       ariaAttr: "aria-pressed",
       map: v => String(v),

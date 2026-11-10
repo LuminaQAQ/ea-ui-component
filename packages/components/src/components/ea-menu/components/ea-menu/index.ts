@@ -1,5 +1,10 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import stylesheet from "./index.scss?inline";
 
@@ -37,7 +42,6 @@ export class EaMenu extends EaBase {
 
   @attribute({
     type: Enum(["horizontal", "vertical"]),
-    default: "vertical",
     observer(this: EaMenu, newVal: string) {
       this._updateChildrenMode(newVal);
       this.updateContainerClasslist();
@@ -47,7 +51,6 @@ export class EaMenu extends EaBase {
 
   @attribute({
     type: String,
-    default: "#ffffff",
     observer(this: EaMenu, newVal: string) {
       if (this._container) {
         this._container.style.setProperty("--ea-menu-bg-color", newVal);
@@ -58,7 +61,6 @@ export class EaMenu extends EaBase {
 
   @attribute({
     type: String,
-    default: "#303133",
     observer(this: EaMenu, newVal: string) {
       if (this._container) {
         this._container.style.setProperty("--ea-menu-text-color", newVal);
@@ -69,7 +71,6 @@ export class EaMenu extends EaBase {
 
   @attribute({
     type: String,
-    default: "#409eff",
     observer(this: EaMenu, newVal: string) {
       if (this._container) {
         this._container.style.setProperty(
@@ -83,13 +84,11 @@ export class EaMenu extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
   })
   defaultActive: string = "";
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaMenu, newVal: string) {
       this._activateItem(newVal);
     },
@@ -98,7 +97,6 @@ export class EaMenu extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
   })
   collapse: boolean = false;
 

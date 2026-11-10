@@ -1,5 +1,9 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import stylesheet from "./index.scss?inline";
 import faStylesheet from "@fortawesome/fontawesome-free/css/all.min.css?inline";
@@ -52,7 +56,6 @@ export class EaIcon extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaIcon) {
       this._updateIconClass();
     },
@@ -61,7 +64,6 @@ export class EaIcon extends EaBase {
 
   @attribute({
     type: Enum(["classic", "sharp", "brands"] as const),
-    default: "classic",
     observer(this: EaIcon) {
       this._updateIconClass();
     },
@@ -70,7 +72,6 @@ export class EaIcon extends EaBase {
 
   @attribute({
     type: Enum(["solid", "regular", "light", "thin", "duotone"] as const),
-    default: "solid",
     observer(this: EaIcon) {
       this._updateIconClass();
     },
@@ -79,7 +80,6 @@ export class EaIcon extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaIcon, newVal: string) {
       this.style.setProperty("--ea-icon-color", newVal);
     },
@@ -88,7 +88,6 @@ export class EaIcon extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaIcon, newVal: string) {
       const sizeMap: Record<string, string> = {
         large: "14px",
@@ -103,7 +102,6 @@ export class EaIcon extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaIcon) {
       this._updateIconClass();
     },

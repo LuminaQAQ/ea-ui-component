@@ -1,5 +1,10 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, property, query } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  property,
+  query,
+} from "@easy-component-ui/core/decorator";
 import { html } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { cssLengthToNumber } from "@easy-component-ui/core/utils/css-length";
@@ -20,9 +25,7 @@ type ProgressStatus = (typeof PROGRESS_STATUS_TYPES)[number] | "";
 
 type ProgressColorItem = { color: string; percentage: number };
 type ProgressColor =
-  | string
-  | ProgressColorItem[]
-  | ((percentage: number) => string);
+  string | ProgressColorItem[] | ((percentage: number) => string);
 
 const STATUS_ICON_MAP: Record<string, string> = {
   success: "circle-check",
@@ -78,19 +81,20 @@ export class EaProgress extends EaBase {
 
   @attribute({
     type: Enum(PROGRESS_VARIANT_TYPES),
-    default: "line",
     observer(this: EaProgress) {
       this._render();
       this.updateContainerClasslist();
       this._updatePercentage();
-      this.setAttribute("role", this.variant === "dashboard" ? "meter" : "progressbar");
+      this.setAttribute(
+        "role",
+        this.variant === "dashboard" ? "meter" : "progressbar"
+      );
     },
   })
   variant: ProgressVariant = "line";
 
   @attribute({
     type: Number,
-    default: 0,
     a11y: { ariaAttr: "aria-valuenow" },
     observer(this: EaProgress, newVal: number) {
       this._updatePercentage(newVal);
@@ -100,7 +104,6 @@ export class EaProgress extends EaBase {
 
   @attribute({
     type: Enum(PROGRESS_STATUS_TYPES),
-    default: "",
     observer(this: EaProgress) {
       this.updateContainerClasslist();
       this._updateStatusText();
@@ -110,7 +113,6 @@ export class EaProgress extends EaBase {
 
   @attribute({
     type: String,
-    default: "8px",
     observer(this: EaProgress, newVal: string) {
       if (!CSS.supports("width", newVal))
         return console.warn(
@@ -124,7 +126,6 @@ export class EaProgress extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaProgress, newVal: boolean) {
       try {
         if (newVal) {
@@ -143,7 +144,6 @@ export class EaProgress extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaProgress) {
       this.updateContainerClasslist();
     },
@@ -152,7 +152,6 @@ export class EaProgress extends EaBase {
 
   @attribute({
     type: Number,
-    default: 3,
     observer(this: EaProgress, newVal: number) {
       this._container?.style.setProperty(
         "--ea-progress-animation-duration",
@@ -164,7 +163,6 @@ export class EaProgress extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaProgress) {
       this.updateContainerClasslist();
     },
@@ -173,7 +171,6 @@ export class EaProgress extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaProgress) {
       this.updateContainerClasslist();
     },
@@ -182,7 +179,6 @@ export class EaProgress extends EaBase {
 
   @attribute({
     type: String,
-    default: "126px",
     observer(this: EaProgress, newVal: string) {
       if (this.variant === "line") return;
 
@@ -193,7 +189,6 @@ export class EaProgress extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: true,
     observer(this: EaProgress) {
       this.updateContainerClasslist();
     },
@@ -202,7 +197,6 @@ export class EaProgress extends EaBase {
 
   @property({
     type: Object,
-    default: "",
     observer(this: EaProgress, newVal: any) {
       this._handleColorChange(newVal, newVal);
     },
@@ -362,7 +356,10 @@ export class EaProgress extends EaBase {
   }
 
   $mount(): void {
-    this.setAttribute("role", this.variant === "dashboard" ? "meter" : "progressbar");
+    this.setAttribute(
+      "role",
+      this.variant === "dashboard" ? "meter" : "progressbar"
+    );
     this.setAttribute("aria-valuemin", "0");
     this.setAttribute("aria-valuemax", "100");
 

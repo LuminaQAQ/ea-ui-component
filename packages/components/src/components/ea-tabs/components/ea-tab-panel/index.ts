@@ -1,5 +1,9 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 
 import stylesheet from "./index.scss?inline";
@@ -31,13 +35,11 @@ export class EaTabPanel extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
   })
   name: string = "";
 
   @attribute({
     type: Enum(["", "card", "border-card"]),
-    default: "",
     observer(this: EaTabPanel) {
       this.updateContainerClasslist();
     },
@@ -46,10 +48,9 @@ export class EaTabPanel extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: {
       ariaAttr: "inert",
-      map: v => v ? null : "",
+      map: v => (v ? null : ""),
     },
   })
   active: boolean = false;
@@ -78,7 +79,9 @@ export class EaTabPanel extends EaBase {
     this._container.id = `ea-tab-panel-${this.name}`;
     this._container.setAttribute("tabindex", "0");
 
-    const tab = this.closest("ea-tabs")?.querySelector(`ea-tab[panel="${this.name}"]`);
+    const tab = this.closest("ea-tabs")?.querySelector(
+      `ea-tab[panel="${this.name}"]`
+    );
     if (tab?.id) {
       this._container.setAttribute("aria-labelledby", tab.id);
     }

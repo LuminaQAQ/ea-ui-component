@@ -129,7 +129,6 @@ export class EaCalendar extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaCalendar, newVal: string) {
       if (newVal) {
         this._displayDate = dayjs(newVal);
@@ -141,7 +140,6 @@ export class EaCalendar extends EaBase {
 
   @attribute({
     type: Enum(["button", "select"] as const),
-    default: "button",
     observer(this: EaCalendar, newVal: ControllerType) {
       this._handleControllerRender(newVal);
     },

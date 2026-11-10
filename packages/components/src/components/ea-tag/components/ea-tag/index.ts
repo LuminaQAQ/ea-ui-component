@@ -1,5 +1,10 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { timeout } from "@easy-component-ui/core/utils/timeout";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import {
@@ -49,7 +54,6 @@ export class EaTag extends EaBase {
 
   @attribute({
     type: Enum(VARIANT_TYPES),
-    default: VARIANT_DEFAULT,
     observer(this: EaTag) {
       this.updateContainerClasslist();
     },
@@ -58,7 +62,6 @@ export class EaTag extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaTag) {
       this.updateContainerClasslist();
     },
@@ -67,13 +70,11 @@ export class EaTag extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
   })
   disableTransitions: boolean = false;
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaTag, newVal: string) {
       this._updateCustomColor(newVal);
     },
@@ -82,7 +83,6 @@ export class EaTag extends EaBase {
 
   @attribute({
     type: Enum(TAG_SIZES),
-    default: "default",
     observer(this: EaTag) {
       this.updateContainerClasslist();
     },
@@ -91,7 +91,6 @@ export class EaTag extends EaBase {
 
   @attribute({
     type: Enum(TAG_EFFECTS),
-    default: "light",
     observer(this: EaTag) {
       this.updateContainerClasslist();
     },
@@ -100,7 +99,6 @@ export class EaTag extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaTag) {
       this.updateContainerClasslist();
     },

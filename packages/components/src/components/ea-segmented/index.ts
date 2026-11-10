@@ -66,7 +66,6 @@ export class EaSegmented extends EaBase {
 
   @property({
     type: Array,
-    default: [],
     observer(this: EaSegmented, newVal: SegmentedOption[]) {
       if (!this.hasAttribute("name")) {
         this.setAttribute(
@@ -83,7 +82,6 @@ export class EaSegmented extends EaBase {
 
   @property({
     type: Object,
-    default: { label: "label", value: "value", disabled: "disabled" },
   })
   propsConfiguration: PropsConfiguration = {
     label: "label",
@@ -93,7 +91,6 @@ export class EaSegmented extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaSegmented, newVal: string) {
       this._updateIndicatorPosition(newVal);
       this._updateActiveDescendant();
@@ -103,7 +100,6 @@ export class EaSegmented extends EaBase {
 
   @attribute({
     type: Enum(["large", "default", "small"]),
-    default: "",
     observer(this: EaSegmented) {
       this.updateContainerClasslist();
       this._updateIndicatorPosition(this.value);
@@ -113,7 +109,6 @@ export class EaSegmented extends EaBase {
 
   @attribute({
     type: Enum(["horizontal", "vertical"]),
-    default: "",
     observer(this: EaSegmented) {
       this.updateContainerClasslist();
       this._updateIndicatorPosition(this.value);
@@ -123,7 +118,6 @@ export class EaSegmented extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: { ariaAttr: "aria-disabled", map: v => String(v) },
     observer(this: EaSegmented) {
       this.updateContainerClasslist();
@@ -133,7 +127,6 @@ export class EaSegmented extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaSegmented) {
       this.updateContainerClasslist();
     },
@@ -142,7 +135,6 @@ export class EaSegmented extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
   })
   name: string = "";
 

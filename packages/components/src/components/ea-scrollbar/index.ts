@@ -1,5 +1,10 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-scrollbar" as const;
@@ -68,7 +73,6 @@ export class EaScrollbar extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaScrollbar, newVal: string) {
       if (this._container) {
         this._container.style.height = newVal || "100%";
@@ -79,7 +83,6 @@ export class EaScrollbar extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaScrollbar) {
       this.updateContainerClasslist();
     },
@@ -88,7 +91,6 @@ export class EaScrollbar extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaScrollbar) {
       this.updateContainerClasslist();
     },
@@ -97,7 +99,6 @@ export class EaScrollbar extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaScrollbar) {
       this.updateContainerClasslist();
     },

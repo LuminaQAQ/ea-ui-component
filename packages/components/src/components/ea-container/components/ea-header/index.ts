@@ -21,7 +21,6 @@ const bem = createBEM(TAG_NAME);
 export class EaHeader extends EaBase {
   @attribute({
     type: String,
-    default: "",
     a11y: {
       ariaAttr: "aria-label",
       target: ".ea-header",
@@ -32,7 +31,6 @@ export class EaHeader extends EaBase {
 
   @attribute({
     type: String,
-    default: "60px",
     observer(this: EaHeader, newVal: string) {
       if (newVal && CSS.supports("height", newVal)) {
         this.style.setProperty("--ea-header-height", newVal);

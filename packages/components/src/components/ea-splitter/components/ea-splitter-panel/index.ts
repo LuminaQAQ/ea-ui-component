@@ -1,5 +1,9 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import stylesheet from "./index.scss?inline";
 
@@ -27,7 +31,6 @@ export class EaSplitterPanel extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaSplitterPanel, newVal: string) {
       if (!CSS.supports("width", newVal)) return;
       this.style.setProperty("--ea-splitter-panel-size", newVal);
@@ -37,7 +40,6 @@ export class EaSplitterPanel extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaSplitterPanel, newVal: string) {
       if (!CSS.supports("width", newVal)) return;
       this.style.setProperty("--ea-splitter-panel-min-size", newVal);
@@ -47,7 +49,6 @@ export class EaSplitterPanel extends EaBase {
 
   @attribute({
     type: Enum(["horizontal", "vertical"] as const),
-    default: "horizontal",
   })
   layout: SplitterLayoutType = "horizontal";
 

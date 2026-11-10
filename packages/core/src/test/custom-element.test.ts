@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import EaBase from "@core/EaBase";
 import { CustomElement } from "@decorator/custom-element";
 import { attribute } from "@decorator/attribute";
+import { finalize, resolveDefault } from "../schema";
 
 type ObserverCall = [newValue: unknown, oldValue: unknown];
 
@@ -69,6 +70,38 @@ class EaTestWidget extends EaBase {
 class EaTestWidgetChild extends EaTestWidget {
   @attribute({ type: String, default: "child" })
   extra: string = "child";
+}
+
+/** 只写字段初值、不写 default，验证默认值推断 */
+@CustomElement("ea-test-infer")
+class EaTestInfer extends EaBase {
+  @attribute({ type: String })
+  state: string = "idle";
+
+  @attribute({ type: Number })
+  count: number = 5;
+
+  @attribute({ type: Boolean })
+  open: boolean = true;
+
+  @attribute({ type: Boolean })
+  pressed: boolean = false;
+
+  @attribute({ type: String, default: "explicit" })
+  label: string = "field";
+}
+
+/** 父子同名声明，验证推断值不跨界 */
+@CustomElement("ea-test-infer-parent")
+class EaTestInferParent extends EaBase {
+  @attribute({ type: Number })
+  size: number = 1;
+}
+
+@CustomElement("ea-test-infer-child")
+class EaTestInferChild extends EaTestInferParent {
+  @attribute({ type: Number })
+  size: number = 2;
 }
 
 /** 只挂载，不等待（用于观察“同步渲染、异步挂载”的时序） */
@@ -254,6 +287,77 @@ describe("渲染与生命周期", () => {
     await flushMount();
     expect(el.state).toBe("active");
     expect(el.shadowRoot?.querySelector(".inner")?.textContent).toBe("idle");
+  });
+});
+
+describe("default 跟随字段初值", () => {
+  it("不写 default 时读取字段初值", () => {
+    const el = document.createElement("ea-test-infer") as EaTestInfer;
+
+    expect(el.state).toBe("idle");
+    expect(el.count).toBe(5);
+    expect(el.open).toBe(true);
+    expect(el.pressed).toBe(false);
+  });
+
+  it("显式 default 优先于字段初值", () => {
+    const el = document.createElement("ea-test-infer") as EaTestInfer;
+    const meta = finalize(el.constructor);
+
+    expect(el.label).toBe("explicit");
+    expect(resolveDefault(meta, "label")).toBe("explicit");
+    expect(resolveDefault(meta, "state")).toBe("idle");
+  });
+
+  it("默认值不写到宿主的 attribute 上", async () => {
+    const el = document.createElement("ea-test-infer") as EaTestInfer;
+    document.body.append(el);
+    await flushMount();
+
+    expect(el.hasAttribute("state")).toBe(false);
+    expect(el.hasAttribute("count")).toBe(false);
+    expect(el.hasAttribute("pressed")).toBe(false);
+  });
+
+  it("移除属性后回落到字段初值", async () => {
+    const el = document.createElement("ea-test-infer") as EaTestInfer;
+    document.body.append(el);
+    await flushMount();
+
+    el.setAttribute("count", "9");
+    expect(el.count).toBe(9);
+
+    el.removeAttribute("count");
+    expect(el.count).toBe(5);
+  });
+
+  it("布尔字段初值为 true 时，连接后宿主带上该 attribute", async () => {
+    const el = document.createElement("ea-test-infer") as EaTestInfer;
+    document.body.append(el);
+    await flushMount();
+
+    expect(el.hasAttribute("open")).toBe(true);
+    expect(el.open).toBe(true);
+  });
+
+  it("推断值按类固定，子类不污染父类", () => {
+    const child = document.createElement(
+      "ea-test-infer-child"
+    ) as EaTestInferChild;
+    const parent = document.createElement(
+      "ea-test-infer-parent"
+    ) as EaTestInferParent;
+
+    expect(child.size).toBe(2);
+    expect(parent.size).toBe(1);
+    expect(finalize(EaTestInferChild).inferred.get("size")).toBe(2);
+    expect(finalize(EaTestInferParent).inferred.get("size")).toBe(1);
+  });
+
+  it("EaBase 的 locale 同样靠字段初值推断", () => {
+    const el = document.createElement("ea-test-infer") as EaTestInfer;
+
+    expect(el.locale).toBe("en-US");
   });
 });
 

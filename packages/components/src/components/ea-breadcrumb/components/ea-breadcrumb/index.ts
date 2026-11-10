@@ -1,5 +1,10 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-breadcrumb" as const;
@@ -27,7 +32,6 @@ export class EaBreadcrumb extends EaBase {
 
   @attribute({
     type: String,
-    default: "/",
     observer(this: EaBreadcrumb) {
       this._renderSeparator();
     },
@@ -49,9 +53,14 @@ export class EaBreadcrumb extends EaBase {
    * @param defaultSeparator - 默认分隔符文本
    * @returns 分隔符 DOM 元素
    */
-  private _getSeparatorItem(defaultSeparator: string = this.separator): HTMLElement {
-    const separatorSlot = this.shadowRoot!.querySelector("#separatorSlot") as HTMLSlotElement;
-    let separator = separatorSlot?.assignedElements()[0] as HTMLElement | undefined;
+  private _getSeparatorItem(
+    defaultSeparator: string = this.separator
+  ): HTMLElement {
+    const separatorSlot = this.shadowRoot!.querySelector(
+      "#separatorSlot"
+    ) as HTMLSlotElement;
+    let separator = separatorSlot?.assignedElements()[0] as
+      HTMLElement | undefined;
 
     if (!separator) {
       separator = document.createElement("span");
@@ -66,11 +75,13 @@ export class EaBreadcrumb extends EaBase {
    * 渲染分隔符到非末尾的面包屑项中，并标记最后一项为当前页
    */
   private _renderSeparator(): void {
-    const defaultSlot = this.shadowRoot!.querySelector("#defaultSlot") as HTMLSlotElement;
+    const defaultSlot = this.shadowRoot!.querySelector(
+      "#defaultSlot"
+    ) as HTMLSlotElement;
     if (!defaultSlot) return;
 
     const breadcrumbItems = [...defaultSlot.assignedElements()].filter(
-      (item) => item.tagName.toLowerCase() === "ea-breadcrumb-item"
+      item => item.tagName.toLowerCase() === "ea-breadcrumb-item"
     );
 
     const separator = this._getSeparatorItem(this.separator);

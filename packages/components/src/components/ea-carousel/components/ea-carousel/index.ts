@@ -101,7 +101,6 @@ export class EaCarousel extends EaBase {
 
   @attribute({
     type: String,
-    default: "100%",
     observer(this: EaCarousel, value: string) {
       this.style.setProperty("--ea-carousel-height", value);
     },
@@ -110,7 +109,6 @@ export class EaCarousel extends EaBase {
 
   @attribute({
     type: Enum(["horizontal", "vertical"]),
-    default: "horizontal",
     observer(this: EaCarousel) {
       this.updateContainerClasslist();
       this._updateArrowInert();
@@ -120,7 +118,6 @@ export class EaCarousel extends EaBase {
 
   @attribute({
     type: Number,
-    default: 0,
     observer(this: EaCarousel, newVal: number, oldVal: number) {
       this._updateCarouselPosition(newVal);
       if (this._states.isEnd) {
@@ -156,13 +153,11 @@ export class EaCarousel extends EaBase {
 
   @attribute({
     type: Enum(["click", "hover"]),
-    default: "hover",
   })
   trigger: TriggerType = "hover";
 
   @attribute({
     type: Number,
-    default: 3000,
     observer(this: EaCarousel) {
       this._handleTimerClear();
 
@@ -175,7 +170,6 @@ export class EaCarousel extends EaBase {
 
   @attribute({
     type: Enum(["never", "always", "hover"]),
-    default: "hover",
     observer(this: EaCarousel) {
       this.updateContainerClasslist();
       this._updateArrowInert();
@@ -185,7 +179,6 @@ export class EaCarousel extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: true,
     observer(this: EaCarousel, newVal: boolean) {
       this._handleTimerClear();
 
@@ -201,19 +194,16 @@ export class EaCarousel extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: true,
   })
   loop: boolean = true;
 
   @attribute({
     type: Boolean,
-    default: true,
   })
   pauseOnHover: boolean = true;
 
   @attribute({
     type: Enum(["", "none", "outside"]),
-    default: "",
     observer(this: EaCarousel) {
       this.updateContainerClasslist();
       this._updateIndicatorInert();

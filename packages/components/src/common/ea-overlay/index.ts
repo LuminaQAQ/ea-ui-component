@@ -1,5 +1,11 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, property, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  property,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { EaOverlayOpenEvent } from "./events/EaOverlayOpenEvent";
 import { EaOverlayOpenedEvent } from "./events/EaOverlayOpenedEvent";
 import { EaOverlayCloseEvent } from "./events/EaOverlayCloseEvent";
@@ -53,7 +59,6 @@ export class EaOverlay extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaOverlay, newVal: boolean) {
       if (this._inBeforeClose) return;
       if (this._waitingBeforeClose) return;
@@ -78,7 +83,6 @@ export class EaOverlay extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: true,
     observer(this: EaOverlay) {
       this.updateContainerClasslist();
     },
@@ -87,19 +91,16 @@ export class EaOverlay extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: true,
   })
   closeOnClickModal: boolean = true;
 
   @attribute({
     type: Boolean,
-    default: true,
   })
   closeOnPressEscape: boolean = true;
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaOverlay) {
       this._appendHandled = false;
       this._handleAppendTo();
@@ -109,7 +110,6 @@ export class EaOverlay extends EaBase {
 
   @attribute({
     type: String,
-    default: "body",
     observer(this: EaOverlay) {
       this._appendHandled = false;
       this._handleAppendTo();
@@ -119,7 +119,6 @@ export class EaOverlay extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaOverlay, newVal: string) {
       this.style.setProperty("--ea-overlay-z-index", newVal);
     },
@@ -128,7 +127,6 @@ export class EaOverlay extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaOverlay, newVal: string) {
       this.style.setProperty("--ea-overlay-background-color", newVal);
     },
@@ -137,7 +135,6 @@ export class EaOverlay extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaOverlay, newVal: string) {
       this.style.setProperty("--ea-overlay-content-width", newVal);
     },
@@ -146,7 +143,6 @@ export class EaOverlay extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaOverlay, newVal: string) {
       this.style.setProperty("--ea-overlay-content-max-width", newVal);
     },
@@ -155,7 +151,6 @@ export class EaOverlay extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaOverlay, newVal: string) {
       this.style.setProperty("--ea-overlay-content-height", newVal);
     },
@@ -164,8 +159,10 @@ export class EaOverlay extends EaBase {
 
   @property({
     type: Function,
-    default: null,
-    observer(this: EaOverlay, newVal: ((done: (cancel?: boolean) => void) => void) | null) {
+    observer(
+      this: EaOverlay,
+      newVal: ((done: (cancel?: boolean) => void) => void) | null
+    ) {
       if (newVal === null) {
         this._waitingBeforeClose = false;
       }

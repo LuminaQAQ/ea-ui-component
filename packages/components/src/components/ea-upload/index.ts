@@ -1,6 +1,12 @@
 import EaFormAssociatedBase from "@easy-component-ui/core/core/EaFormAssociatedBase";
 import { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query, listen, property } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+  listen,
+  property,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import stylesheet from "./index.scss?inline";
 
@@ -97,39 +103,38 @@ export class EaUpload extends EaFormAssociatedBase {
 
   private _dragEnterCount: number = 0;
 
-  @attribute({ type: Boolean, default: false })
+  @attribute({ type: Boolean })
   disabled: boolean = false;
 
-  @attribute({ type: String, default: "" })
+  @attribute({ type: String })
   action: string = "";
 
-  @attribute({ type: Object, default: {} })
+  @attribute({ type: Object })
   headers: Headers | Record<string, string> = {};
 
-  @attribute({ type: Enum(["GET", "POST", "PUT", "DELETE"]), default: "POST" })
+  @attribute({ type: Enum(["GET", "POST", "PUT", "DELETE"]) })
   method: Method = "POST";
 
-  @attribute({ type: Boolean, default: false })
+  @attribute({ type: Boolean })
   multiple: boolean = false;
 
-  @attribute({ type: String, default: "" })
+  @attribute({ type: String })
   name: string = "";
 
-  @attribute({ type: Boolean, default: false })
+  @attribute({ type: Boolean })
   withCredentials: boolean = false;
 
-  @attribute({ type: Boolean, default: true })
+  @attribute({ type: Boolean })
   showFileList: boolean = true;
 
-  @attribute({ type: String, default: "" })
+  @attribute({ type: String })
   accept: string = "";
 
-  @attribute({ type: Enum(["", "anonymous", "use-credentials"]), default: "" })
+  @attribute({ type: Enum(["", "anonymous", "use-credentials"]) })
   crossorigin: Crossorigin = "";
 
   @attribute({
     type: String,
-    default: "text",
     observer(this: EaUpload) {
       this.updateContainerClasslist();
       if (this._listElement) this._renderFileList();
@@ -137,24 +142,22 @@ export class EaUpload extends EaFormAssociatedBase {
   })
   listType: ListType = "text";
 
-  @attribute({ type: Boolean, default: true })
+  @attribute({ type: Boolean })
   autoUpload: boolean = true;
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaUpload) {
       this.updateContainerClasslist();
     },
   })
   drag: boolean = false;
 
-  @attribute({ type: Number, default: Number.MAX_SAFE_INTEGER })
+  @attribute({ type: Number })
   limit: number = Number.MAX_SAFE_INTEGER;
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaUpload) {
       if (this._originalInput) {
         this._originalInput.webkitdirectory = this.directory;
@@ -163,12 +166,11 @@ export class EaUpload extends EaFormAssociatedBase {
   })
   directory: boolean = false;
 
-  @property({ type: Object, default: {} })
+  @property({ type: Object })
   data: Record<string, any> = {};
 
   @property({
     type: Array,
-    default: [],
     observer: function (this: EaUpload, newVal: FileItem[]) {
       for (const item of newVal) {
         if (!item.uid) {
@@ -189,14 +191,13 @@ export class EaUpload extends EaFormAssociatedBase {
 
   @property({
     type: Array,
-    default: [],
     observer: function (this: EaUpload, newVal: DefaultFileItem[]) {
       this._mergeDefaultFileList();
     },
   })
   defaultFileList: DefaultFileItem[] = [];
 
-  @property({ type: Function, default: createUploadRequest })
+  @property({ type: Function })
   httpRequest: (options: UploadRequestOptions) => UploadRequestResult =
     createUploadRequest;
 
@@ -232,7 +233,7 @@ export class EaUpload extends EaFormAssociatedBase {
   })
   onSuccess: EaUploadSuccessCallback | null = null;
 
-  @property({ type: Function, default: null })
+  @property({ type: Function })
   beforeRemove: EaUploadBeforeRemoveCallback | null = null;
 
   @property({

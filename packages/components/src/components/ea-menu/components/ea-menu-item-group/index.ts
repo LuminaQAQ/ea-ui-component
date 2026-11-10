@@ -1,5 +1,9 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+} from "@easy-component-ui/core/decorator";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-menu-item-group" as const;
@@ -39,7 +43,6 @@ export class EaMenuItemGroup extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaMenuItemGroup, newVal: string) {
       if (this._titleSlot) {
         this._titleSlot.textContent = newVal;

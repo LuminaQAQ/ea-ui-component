@@ -1,5 +1,9 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { EaPopperShowEvent } from "./events/EaPopperShowEvent";
 import { EaPopperShownEvent } from "./events/EaPopperShownEvent";
@@ -116,7 +120,6 @@ export class EaPopper extends EaBase {
 
   @attribute({
     type: Number,
-    default: 150,
     observer(this: EaPopper, newVal: number) {
       this.style.setProperty("--ea-popper-width", `${newVal}px`);
     },
@@ -125,7 +128,6 @@ export class EaPopper extends EaBase {
 
   @attribute({
     type: Enum(PLACEMENT_TYPES),
-    default: "top",
     observer(this: EaPopper) {
       if (this._container) {
         this.updateContainerClasslist();
@@ -136,7 +138,6 @@ export class EaPopper extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: true,
     observer(this: EaPopper) {
       if (this._container) {
         this.updateContainerClasslist();
@@ -147,7 +148,6 @@ export class EaPopper extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaPopper, newVal: boolean) {
       this._visibleAbortController?.abort();
       this._visibleAbortController = new AbortController();
@@ -165,7 +165,6 @@ export class EaPopper extends EaBase {
 
   @attribute({
     type: String,
-    default: "0 0",
     observer(this: EaPopper, newVal: string) {
       try {
         let [x, y] = newVal.split(" ").map(_ => Number(_.trim()));
@@ -191,7 +190,6 @@ export class EaPopper extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: true,
   })
   flip: boolean = true;
 

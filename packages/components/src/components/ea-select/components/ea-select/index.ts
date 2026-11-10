@@ -97,7 +97,6 @@ export class EaSelect extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     a11y: { ariaAttr: "aria-label", map: v => v || null },
     observer(this: EaSelect, newVal: string) {
       this._updateInputAttribute("label", newVal);
@@ -107,7 +106,6 @@ export class EaSelect extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaSelect, newVal: string) {
       this._updateInputAttribute("name", newVal);
     },
@@ -116,7 +114,6 @@ export class EaSelect extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaSelect, newVal: string) {
       this._updateInputAttribute("placeholder", newVal);
     },
@@ -125,7 +122,6 @@ export class EaSelect extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: { ariaAttr: "aria-disabled", map: v => String(v) },
     observer(this: EaSelect, newVal: boolean) {
       this._updateInputAttribute("disabled", newVal);
@@ -141,7 +137,6 @@ export class EaSelect extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaSelect, newVal: boolean) {
       this._abortControllerStates.inputClearAbortController?.abort();
       this.updateContainerClasslist();
@@ -155,7 +150,6 @@ export class EaSelect extends EaFormAssociatedBase {
 
   @attribute({
     type: Enum(["large", "default", "small"]),
-    default: "default",
     observer(this: EaSelect, newVal: SelectSize) {
       this._updateInputAttribute("size", newVal);
       this.updateContainerClasslist();
@@ -165,7 +159,6 @@ export class EaSelect extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: {
       ariaAttr: "aria-multiselectable",
       target: bem.ce("dropdown"),
@@ -180,7 +173,6 @@ export class EaSelect extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaSelect) {
       this._handleCollapseTagsChange();
     },
@@ -189,7 +181,6 @@ export class EaSelect extends EaFormAssociatedBase {
 
   @attribute({
     type: Number,
-    default: 1,
     observer(this: EaSelect) {
       this._handleCollapseTagsChange();
     },
@@ -198,7 +189,6 @@ export class EaSelect extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: {
       ariaAttr: "aria-autocomplete",
       map: v => (v ? "both" : null),
@@ -212,21 +202,18 @@ export class EaSelect extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: { ariaAttr: "aria-required", map: v => String(v) },
   })
   required: boolean = false;
 
   @property({
     type: Function,
-    default: (_query: string) => {},
     observer(this: EaSelect) {},
   })
   filterMethod: (query: string) => void = (_query: string) => {};
 
   @property({
     type: Object,
-    default: "",
     observer(
       this: EaSelect,
       newVal: string | number | boolean | (string | number | boolean)[]

@@ -1,5 +1,10 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, property, query } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  property,
+  query,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { html } from "@easy-component-ui/core/utils/html";
 import type { ColumnOption } from "../../types";
@@ -49,7 +54,6 @@ export class EaTableColumn extends EaBase {
 
   @attribute({
     type: Enum(["selection", "index"]),
-    default: "",
     observer(this: EaTableColumn, newVal: string) {
       if (newVal === "selection" && !customElements.get("ea-checkbox")) {
         import("@components/ea-checkbox/index.js");
@@ -61,7 +65,6 @@ export class EaTableColumn extends EaBase {
 
   @attribute({
     type: Enum(["left", "center", "right"]),
-    default: "left",
     observer(this: EaTableColumn) {
       this._notifyParent();
     },
@@ -70,7 +73,6 @@ export class EaTableColumn extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaTableColumn) {
       if (this._label) this._label.textContent = `${this.label}[$${this.prop}]`;
       this._notifyParent();
@@ -80,7 +82,6 @@ export class EaTableColumn extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaTableColumn) {
       if (this._label) this._label.textContent = `${this.label}[$${this.prop}]`;
       this._notifyParent();
@@ -90,7 +91,6 @@ export class EaTableColumn extends EaBase {
 
   @attribute({
     type: Number,
-    default: undefined,
     observer(this: EaTableColumn) {
       this._notifyParent();
     },
@@ -99,7 +99,6 @@ export class EaTableColumn extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaTableColumn) {
       this._notifyParent();
     },
@@ -108,7 +107,6 @@ export class EaTableColumn extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaTableColumn) {
       this._notifyParent();
     },
@@ -117,7 +115,6 @@ export class EaTableColumn extends EaBase {
 
   @attribute({
     type: Enum(["left", "right", "false", ""]),
-    default: "false",
     observer(this: EaTableColumn) {
       this._notifyParent();
     },
@@ -126,7 +123,6 @@ export class EaTableColumn extends EaBase {
 
   @property({
     type: Object,
-    default: {},
     observer(this: EaTableColumn) {
       this._notifyParent();
     },

@@ -1,5 +1,11 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, property, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  property,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { html } from "@easy-component-ui/core/utils/html";
 import stylesheet from "./index.scss?inline";
 import type { FileItem, ListType } from "../../type";
@@ -54,10 +60,10 @@ export class EaUploadFileItem extends EaBase {
   @query(`.${bem()}`)
   private _container!: HTMLElement;
 
-  @property({ type: Object, default: null })
+  @property({ type: Object })
   item: FileItem | null = null;
 
-  @attribute({ type: String, default: "text" })
+  @attribute({ type: String })
   listType: ListType = "text";
 
   /**

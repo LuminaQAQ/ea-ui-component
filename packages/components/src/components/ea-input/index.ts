@@ -1,6 +1,12 @@
 import EaFormAssociatedBase from "@easy-component-ui/core/core/EaFormAssociatedBase";
 import { createBEM } from "@easy-component-ui/core/utils/bem";
-import { CustomElement, attribute, property, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  property,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { html } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { EaInputClearEvent } from "./events/EaClearEvent";
@@ -132,17 +138,16 @@ export class EaInput extends EaFormAssociatedBase {
   @query(bem.ce("form-label"))
   private _label!: HTMLElement;
 
-  @property({ type: Boolean, default: false })
+  @property({ type: Boolean })
   _isFocus: boolean = false;
 
-  @property({ type: Number, default: 0 })
+  @property({ type: Number })
   _originTextareaHeight: number = 0;
 
   private _originalAbortController: AbortController | null = null;
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaInput, newVal: string) {
       this._label.textContent = newVal;
     },
@@ -151,7 +156,6 @@ export class EaInput extends EaFormAssociatedBase {
 
   @attribute({
     type: Enum(INPUT_TYPES),
-    default: "text",
     observer(this: EaInput, newVal: InputType, oldVal: InputType) {
       const oldIsTextarea = oldVal === "textarea";
       const newIsTextarea = newVal === "textarea";
@@ -177,7 +181,6 @@ export class EaInput extends EaFormAssociatedBase {
 
   @attribute({
     type: Enum(["large", "default", "small"]),
-    default: "default",
     observer(this: EaInput) {
       this.updateContainerClasslist();
     },
@@ -186,7 +189,6 @@ export class EaInput extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaInput, newVal: string | null) {
       newVal = typeof newVal === "string" && newVal === "" ? null : newVal;
 
@@ -208,7 +210,6 @@ export class EaInput extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: {
       ariaAttr: "aria-required",
       target: bem.ce("original"),
@@ -222,7 +223,6 @@ export class EaInput extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaInput, newVal: string) {
       this._original.placeholder = newVal;
     },
@@ -231,7 +231,6 @@ export class EaInput extends EaFormAssociatedBase {
 
   @attribute({
     type: Number,
-    default: undefined,
     observer(this: EaInput, newVal: number) {
       if (this.hasAttribute("maxlength")) this._original.maxLength = newVal;
     },
@@ -240,7 +239,6 @@ export class EaInput extends EaFormAssociatedBase {
 
   @attribute({
     type: Number,
-    default: undefined,
     observer(this: EaInput, newVal: number) {
       if (newVal > 0) this._original.minLength = newVal;
     },
@@ -249,7 +247,6 @@ export class EaInput extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaInput) {
       this.updateContainerClasslist();
     },
@@ -258,7 +255,6 @@ export class EaInput extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "xmark",
     observer(this: EaInput, newVal: string) {
       if (this.clearable) this._clearIcon.setAttribute("name", newVal);
     },
@@ -267,7 +263,6 @@ export class EaInput extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: {
       ariaAttr: "aria-disabled",
       target: ".ea-input__original",
@@ -282,7 +277,6 @@ export class EaInput extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaInput, newVal: boolean) {
       if (this.type === "textarea") return;
 
@@ -301,7 +295,6 @@ export class EaInput extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaInput, newVal: string) {
       if (newVal)
         this._prefixSlot.innerHTML = html(
@@ -313,7 +306,6 @@ export class EaInput extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaInput, newVal: string) {
       if (newVal)
         this._suffixIcon.innerHTML = html(
@@ -325,7 +317,6 @@ export class EaInput extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaInput, newVal: boolean) {
       if (this.type !== "textarea" && this.type !== "text") return;
 
@@ -340,7 +331,6 @@ export class EaInput extends EaFormAssociatedBase {
 
   @attribute({
     type: Number,
-    default: 2,
     observer(this: EaInput, newVal: number) {
       if (this.type !== "textarea") return;
 
@@ -353,7 +343,6 @@ export class EaInput extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaInput, _newVal: boolean) {
       if (this.type !== "textarea") return;
 
@@ -378,7 +367,6 @@ export class EaInput extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "off",
     observer(this: EaInput, newVal: AutoFill) {
       this._original.autocomplete = newVal;
     },
@@ -387,7 +375,6 @@ export class EaInput extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaInput, newVal: string) {
       this._original.name = newVal;
     },
@@ -396,7 +383,6 @@ export class EaInput extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaInput, newVal: boolean) {
       this._original.readOnly = newVal;
     },
@@ -427,7 +413,6 @@ export class EaInput extends EaFormAssociatedBase {
 
   @attribute({
     type: Number,
-    default: 1,
     observer(this: EaInput, newVal: string) {
       if (this._original instanceof HTMLInputElement) {
         this._original.step = newVal;
@@ -453,13 +438,11 @@ export class EaInput extends EaFormAssociatedBase {
 
   @attribute({
     type: Enum(["none", "both", "horizontal", "vertical"]),
-    default: "vertical",
   })
   resize: ResizeType = "vertical";
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaInput, newVal: boolean) {
       this._original.autofocus = newVal;
     },
@@ -479,7 +462,6 @@ export class EaInput extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaInput, newVal: string) {
       this._original.tabIndex = newVal ? parseInt(newVal) : 0;
     },
@@ -488,7 +470,6 @@ export class EaInput extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaInput, newVal: string) {
       this._original.inputMode = newVal;
     },

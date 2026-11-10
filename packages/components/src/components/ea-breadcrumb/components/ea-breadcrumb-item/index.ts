@@ -1,5 +1,9 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+} from "@easy-component-ui/core/decorator";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-breadcrumb-item" as const;
@@ -35,7 +39,6 @@ export class EaBreadcrumbItem extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaBreadcrumbItem) {
       this._renderContent();
     },

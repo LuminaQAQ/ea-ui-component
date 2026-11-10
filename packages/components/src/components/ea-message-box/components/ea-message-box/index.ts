@@ -1,6 +1,12 @@
 import { EaOverlay } from "@common/ea-overlay";
 import "@/components/ea-input/index";
-import { CustomElement, attribute, property, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  property,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { createBEM } from "@easy-component-ui/core/utils/bem";
 import { html } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
@@ -15,7 +21,12 @@ const TAG_NAME = "ea-message-box" as const;
 const bem = createBEM(TAG_NAME);
 const bemMain = createBEM("ea-message-box-main");
 
-const BOX_TYPES: any[] = Enum(["alert", "confirm", "prompt", "personalized"] as const);
+const BOX_TYPES: any[] = Enum([
+  "alert",
+  "confirm",
+  "prompt",
+  "personalized",
+] as const);
 const MESSAGE_VARIANT_TYPES: any[] = Enum([
   "primary",
   "success",
@@ -104,7 +115,6 @@ export class EaMessageBoxElement extends EaOverlay {
 
   @attribute({
     type: BOX_TYPES,
-    default: "personalized",
     observer(this: EaMessageBoxElement) {
       this.updateContainerClasslist();
     },
@@ -113,7 +123,6 @@ export class EaMessageBoxElement extends EaOverlay {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaMessageBoxElement, newVal: string) {
       if (this._title) this._title.textContent = newVal;
       this._updateAriaLabelledBy();
@@ -123,7 +132,6 @@ export class EaMessageBoxElement extends EaOverlay {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaMessageBoxElement, newVal: string) {
       if (!this._description) return;
       if (this.dangerouslyUseHTMLString) {
@@ -138,7 +146,6 @@ export class EaMessageBoxElement extends EaOverlay {
 
   @attribute({
     type: MESSAGE_VARIANT_TYPES,
-    default: "",
     observer(this: EaMessageBoxElement, newVal: string) {
       if (newVal && VARIANT_ICON_MAP[newVal]) {
         this.icon = VARIANT_ICON_MAP[newVal];
@@ -150,7 +157,6 @@ export class EaMessageBoxElement extends EaOverlay {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaMessageBoxElement, newVal: string) {
       if (this._typeIcon) this._typeIcon.setAttribute("name", newVal);
     },
@@ -159,7 +165,6 @@ export class EaMessageBoxElement extends EaOverlay {
 
   @attribute({
     type: String,
-    default: "xmark",
     observer(this: EaMessageBoxElement, newVal: string) {
       if (this._closeIcon) this._closeIcon.setAttribute("name", newVal);
     },
@@ -168,7 +173,6 @@ export class EaMessageBoxElement extends EaOverlay {
 
   @attribute({
     type: Boolean,
-    default: true,
     observer(this: EaMessageBoxElement) {
       this.updateContainerClasslist();
     },
@@ -177,7 +181,6 @@ export class EaMessageBoxElement extends EaOverlay {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaMessageBoxElement) {
       this.updateContainerClasslist();
     },
@@ -186,7 +189,6 @@ export class EaMessageBoxElement extends EaOverlay {
 
   @attribute({
     type: Boolean,
-    default: true,
     observer(this: EaMessageBoxElement) {
       this.updateContainerClasslist();
     },
@@ -195,7 +197,6 @@ export class EaMessageBoxElement extends EaOverlay {
 
   @attribute({
     type: String,
-    default: "OK",
     observer(this: EaMessageBoxElement, newVal: string) {
       if (this._confirmButton) this._confirmButton.textContent = newVal;
     },
@@ -204,7 +205,6 @@ export class EaMessageBoxElement extends EaOverlay {
 
   @attribute({
     type: String,
-    default: "Cancel",
     observer(this: EaMessageBoxElement, newVal: string) {
       if (this._cancelButton) this._cancelButton.textContent = newVal;
     },
@@ -213,7 +213,6 @@ export class EaMessageBoxElement extends EaOverlay {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaMessageBoxElement) {
       this.updateContainerClasslist();
     },
@@ -222,7 +221,6 @@ export class EaMessageBoxElement extends EaOverlay {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaMessageBoxElement, newVal: boolean) {
       if (this._confirmButton)
         this._confirmButton.setAttribute("round", String(newVal));
@@ -234,7 +232,6 @@ export class EaMessageBoxElement extends EaOverlay {
 
   @attribute({
     type: BUTTON_SIZES,
-    default: "medium",
     observer(this: EaMessageBoxElement, newVal: string) {
       if (this._confirmButton) this._confirmButton.setAttribute("size", newVal);
       if (this._cancelButton) this._cancelButton.setAttribute("size", newVal);
@@ -244,7 +241,6 @@ export class EaMessageBoxElement extends EaOverlay {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaMessageBoxElement) {
       this.updateContainerClasslist();
       this._syncInputProps();
@@ -254,7 +250,6 @@ export class EaMessageBoxElement extends EaOverlay {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaMessageBoxElement, newVal: string) {
       if (this._input) this._input.setAttribute("placeholder", newVal);
     },
@@ -263,7 +258,6 @@ export class EaMessageBoxElement extends EaOverlay {
 
   @attribute({
     type: String,
-    default: "text",
     observer(this: EaMessageBoxElement, newVal: string) {
       if (this._input) this._input.setAttribute("type", newVal);
     },
@@ -272,7 +266,6 @@ export class EaMessageBoxElement extends EaOverlay {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaMessageBoxElement, newVal: string) {
       if (this._input) this._input.setAttribute("value", newVal);
     },
@@ -281,19 +274,16 @@ export class EaMessageBoxElement extends EaOverlay {
 
   @attribute({
     type: String,
-    default: "",
   })
   inputPattern: string = "";
 
   @attribute({
     type: String,
-    default: "",
   })
   inputErrorMessage: string = "";
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaMessageBoxElement) {
       this.updateContainerClasslist();
     },
@@ -302,21 +292,18 @@ export class EaMessageBoxElement extends EaOverlay {
 
   @property({
     type: Function,
-    default: null,
   })
   inputValidator:
-    | ((value: string) => boolean | string | Promise<boolean | string>)
-    | null = null;
+    ((value: string) => boolean | string | Promise<boolean | string>) | null =
+    null;
 
   @property({
     type: Boolean,
-    default: false,
   })
   dangerouslyUseHTMLString: boolean = false;
 
   @property({
     type: Boolean,
-    default: false,
     observer(this: EaMessageBoxElement, newVal: boolean) {
       if (this._confirmButton) {
         if (this._input) this._input.disabled = newVal;
@@ -328,7 +315,6 @@ export class EaMessageBoxElement extends EaOverlay {
 
   @property({
     type: Boolean,
-    default: false,
   })
   distinguishCancelAndClose: boolean = false;
 

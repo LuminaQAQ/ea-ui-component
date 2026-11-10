@@ -2,7 +2,7 @@
 
 > 使用 WebComponent 编写的原生组件库
 
-生成时间：2026-10-27
+生成时间：2026-11-10
 
 全部标签：ea-affix, ea-alert, ea-aside, ea-avatar, ea-backtop, ea-badge, ea-border-beam, ea-breadcrumb, ea-breadcrumb-item, ea-button, ea-button-group, ea-calendar, ea-card, ea-carousel, ea-carousel-item, ea-check-tag, ea-checkbox, ea-checkbox-group, ea-col, ea-collapse, ea-collapse-item, ea-color-picker, ea-color-picker-panel, ea-container, ea-countdown, ea-date-picker, ea-descriptions, ea-descriptions-item, ea-dialog, ea-divider, ea-drawer, ea-dropdown, ea-dropdown-item, ea-dropdown-menu, ea-effects, ea-empty, ea-footer, ea-header, ea-icon, ea-image, ea-image-preview, ea-infinite-scroll, ea-input, ea-input-number, ea-link, ea-loading, ea-main, ea-menu, ea-menu-item, ea-menu-item-group, ea-message, ea-message-box, ea-notification, ea-option, ea-option-group, ea-page-header, ea-pagination, ea-popconfirm, ea-popover, ea-progress, ea-radio, ea-radio-group, ea-rate, ea-result, ea-row, ea-scrollbar, ea-segmented, ea-select, ea-skeleton, ea-skeleton-item, ea-slider, ea-space, ea-splitter, ea-splitter-bar, ea-splitter-panel, ea-statistic, ea-step, ea-steps, ea-sub-menu, ea-switch, ea-tab, ea-tab-panel, ea-table, ea-table-column, ea-tabs, ea-tag, ea-text, ea-theme-toggle, ea-time-picker, ea-timeline, ea-timeline-item, ea-tooltip, ea-tour, ea-tour-step, ea-transfer, ea-transfer-panel, ea-tree, ea-upload, ea-upload-file-item, ea-watermark
 
@@ -611,30 +611,18 @@
 
 ### 属性
 - `locale: string = "en-US"` — 语言设置
-- `form: unknown = function (this: EaFormAssociatedBase) {
-      return this.internals.form;
-    }` — 字段名称
 - `name: string = ""` — 字段名称
 - `type: string = function (this: EaFormAssociatedBase) {
       return this.localName;
-    }` — 字段名称
-- `validity: unknown = function (this: EaFormAssociatedBase) {
-      return this.internals?.validity ?? null;
-    }` — 验证状态
-- `validation-message: string = function (this: EaFormAssociatedBase) {
-      return this.internals?.validationMessage ?? "";
-    }` — 获取内部验证消息
-- `will-validate: boolean = function (this: EaFormAssociatedBase) {
-      return this.internals?.willValidate ?? false;
-    }` — 是否将参与验证
+    }` — 字段类型，默认为标签名（可写，组件可覆盖）
 - `disabled: boolean = false`
 - `value: string = ""`
 - `required: boolean = false`
-- `minlength: number = 0` — 最小长度
-- `maxlength: number = 0` — 最大长度
-- `min: number = 0` — 最小值
-- `max: number = 0` — 最大值
-- `pattern: string = ""` — 模式匹配
+- `minlength: number = null` — 最小长度
+- `maxlength: number = null` — 最大长度
+- `min: number = null` — 最小值
+- `max: number = null` — 最大值
+- `pattern: string = null` — 模式匹配
 - `size: 'small' | 'default' | 'large' = "default"`
 - `label: string = ""`
 - `checked: boolean = false`
@@ -695,30 +683,18 @@
 
 ### 属性
 - `locale: string = "en-US"` — 语言设置
-- `form: unknown = function (this: EaFormAssociatedBase) {
-      return this.internals.form;
-    }` — 字段名称
 - `name: string = ""`
 - `type: string = function (this: EaFormAssociatedBase) {
       return this.localName;
-    }` — 字段名称
-- `validity: unknown = function (this: EaFormAssociatedBase) {
-      return this.internals?.validity ?? null;
-    }` — 验证状态
-- `validation-message: string = function (this: EaFormAssociatedBase) {
-      return this.internals?.validationMessage ?? "";
-    }` — 获取内部验证消息
-- `will-validate: boolean = function (this: EaFormAssociatedBase) {
-      return this.internals?.willValidate ?? false;
-    }` — 是否将参与验证
+    }` — 字段类型，默认为标签名（可写，组件可覆盖）
 - `disabled: boolean = false`
 - `value: string = ""` — 字段值
 - `required: boolean = false`
-- `minlength: number = 0` — 最小长度
-- `maxlength: number = 0` — 最大长度
+- `minlength: number = null` — 最小长度
+- `maxlength: number = null` — 最大长度
 - `min: number = 0`
 - `max: number = Infinity`
-- `pattern: string = ""` — 模式匹配
+- `pattern: string = null` — 模式匹配
 - `label: string = ""`
 - `size: '' | 'small' | 'default' | 'large' = ""`
 
@@ -860,30 +836,18 @@
 
 ### 属性
 - `locale: string = "en-US"` — 语言设置
-- `form: unknown = function (this: EaFormAssociatedBase) {
-      return this.internals.form;
-    }` — 字段名称
 - `name: string = ""` — 字段名称
 - `type: string = function (this: EaFormAssociatedBase) {
       return this.localName;
-    }` — 字段名称
-- `validity: unknown = function (this: EaFormAssociatedBase) {
-      return this.internals?.validity ?? null;
-    }` — 验证状态
-- `validation-message: string = function (this: EaFormAssociatedBase) {
-      return this.internals?.validationMessage ?? "";
-    }` — 获取内部验证消息
-- `will-validate: boolean = function (this: EaFormAssociatedBase) {
-      return this.internals?.willValidate ?? false;
-    }` — 是否将参与验证
+    }` — 字段类型，默认为标签名（可写，组件可覆盖）
 - `disabled: boolean = false`
 - `value: string = ""`
 - `required: boolean = false`
-- `minlength: number = 0` — 最小长度
-- `maxlength: number = 0` — 最大长度
-- `min: number = 0` — 最小值
-- `max: number = 0` — 最大值
-- `pattern: string = ""` — 模式匹配
+- `minlength: number = null` — 最小长度
+- `maxlength: number = null` — 最大长度
+- `min: number = null` — 最小值
+- `max: number = null` — 最大值
+- `pattern: string = null` — 模式匹配
 - `label: string = ""`
 - `clearable: boolean = false`
 - `size: 'small' | 'medium' | 'large' = ""`
@@ -1066,30 +1030,18 @@
 
 ### 属性
 - `locale: string = "en-US"` — 语言设置
-- `form: unknown = function (this: EaFormAssociatedBase) {
-      return this.internals.form;
-    }` — 字段名称
 - `name: string = ""` — 字段名称
 - `type: string = function (this: EaFormAssociatedBase) {
       return this.localName;
-    }` — 字段名称
-- `validity: unknown = function (this: EaFormAssociatedBase) {
-      return this.internals?.validity ?? null;
-    }` — 验证状态
-- `validation-message: string = function (this: EaFormAssociatedBase) {
-      return this.internals?.validationMessage ?? "";
-    }` — 获取内部验证消息
-- `will-validate: boolean = function (this: EaFormAssociatedBase) {
-      return this.internals?.willValidate ?? false;
-    }` — 是否将参与验证
+    }` — 字段类型，默认为标签名（可写，组件可覆盖）
 - `disabled: boolean = false`
 - `value: string = ""`
 - `required: boolean = false`
-- `minlength: number = 0` — 最小长度
-- `maxlength: number = 0` — 最大长度
-- `min: number = 0` — 最小值
-- `max: number = 0` — 最大值
-- `pattern: string = ""` — 模式匹配
+- `minlength: number = null` — 最小长度
+- `maxlength: number = null` — 最大长度
+- `min: number = null` — 最小值
+- `max: number = null` — 最大值
+- `pattern: string = null` — 模式匹配
 - `label: string = ""`
 - `width: string = "auto"`
 - `placeholder: string = ""`
@@ -1787,25 +1739,13 @@
 
 ### 属性
 - `locale: string = "en-US"` — 语言设置
-- `form: unknown = function (this: EaFormAssociatedBase) {
-      return this.internals.form;
-    }` — 字段名称
 - `name: string = ""`
 - `type: 'textarea' | 'text' | 'button' | 'checkbox' | 'color' | 'date' | 'datetime-local' | 'email' | 'file' | 'hidden' | 'image' | 'month' | 'number' | 'password' | 'radio' | 'range' | 'reset' | 'search' | 'submit' | 'tel' | 'time' | 'url' | 'week' = "text"`
-- `validity: unknown = function (this: EaFormAssociatedBase) {
-      return this.internals?.validity ?? null;
-    }` — 验证状态
-- `validation-message: string = function (this: EaFormAssociatedBase) {
-      return this.internals?.validationMessage ?? "";
-    }` — 获取内部验证消息
-- `will-validate: boolean = function (this: EaFormAssociatedBase) {
-      return this.internals?.willValidate ?? false;
-    }` — 是否将参与验证
 - `disabled: boolean = false`
 - `value: string = ""`
 - `required: boolean = false`
-- `minlength: number = undefined`
-- `maxlength: number = undefined`
+- `minlength: number = null`
+- `maxlength: number = null`
 - `min: number = Number.MIN_SAFE_INTEGER`
 - `max: number = Number.MAX_SAFE_INTEGER`
 - `pattern: string = ""`
@@ -1905,30 +1845,18 @@
 
 ### 属性
 - `locale: string = "en-US"` — 语言设置
-- `form: unknown = function (this: EaFormAssociatedBase) {
-      return this.internals.form;
-    }` — 字段名称
 - `name: string = ""`
 - `type: string = function (this: EaFormAssociatedBase) {
       return this.localName;
-    }` — 字段名称
-- `validity: unknown = function (this: EaFormAssociatedBase) {
-      return this.internals?.validity ?? null;
-    }` — 验证状态
-- `validation-message: string = function (this: EaFormAssociatedBase) {
-      return this.internals?.validationMessage ?? "";
-    }` — 获取内部验证消息
-- `will-validate: boolean = function (this: EaFormAssociatedBase) {
-      return this.internals?.willValidate ?? false;
-    }` — 是否将参与验证
+    }` — 字段类型，默认为标签名（可写，组件可覆盖）
 - `disabled: boolean = false`
 - `value: number = 0`
 - `required: boolean = false`
-- `minlength: number = 0` — 最小长度
-- `maxlength: number = 0` — 最大长度
+- `minlength: number = null` — 最小长度
+- `maxlength: number = null` — 最大长度
 - `min: number = Number.MIN_SAFE_INTEGER`
 - `max: number = Number.MAX_SAFE_INTEGER`
-- `pattern: string = ""` — 模式匹配
+- `pattern: string = null` — 模式匹配
 - `label: string = ""`
 - `step: number = 1`
 - `step-strictly: boolean = false`
@@ -1936,7 +1864,7 @@
 - `size: 'large' | 'default' | 'small' = "default"`
 - `readonly: boolean = false`
 - `controls: boolean = true`
-- `value-on-clear: number = undefined`
+- `value-on-clear: number = null`
 - `align: 'left' | 'center' | 'right' = "center"`
 - `placeholder: string = ""`
 - `inputmode: string = ""`
@@ -2679,30 +2607,18 @@
 
 ### 属性
 - `locale: string = "en-US"` — 语言设置
-- `form: unknown = function (this: EaFormAssociatedBase) {
-      return this.internals.form;
-    }` — 字段名称
 - `name: string = ""` — 字段名称
 - `type: string = function (this: EaFormAssociatedBase) {
       return this.localName;
-    }` — 字段名称
-- `validity: unknown = function (this: EaFormAssociatedBase) {
-      return this.internals?.validity ?? null;
-    }` — 验证状态
-- `validation-message: string = function (this: EaFormAssociatedBase) {
-      return this.internals?.validationMessage ?? "";
-    }` — 获取内部验证消息
-- `will-validate: boolean = function (this: EaFormAssociatedBase) {
-      return this.internals?.willValidate ?? false;
-    }` — 是否将参与验证
+    }` — 字段类型，默认为标签名（可写，组件可覆盖）
 - `disabled: boolean = false`
 - `value: string = ""`
 - `required: boolean = false` — 必填状态
-- `minlength: number = 0` — 最小长度
-- `maxlength: number = 0` — 最大长度
-- `min: number = 0` — 最小值
-- `max: number = 0` — 最大值
-- `pattern: string = ""` — 模式匹配
+- `minlength: number = null` — 最小长度
+- `maxlength: number = null` — 最大长度
+- `min: number = null` — 最小值
+- `max: number = null` — 最大值
+- `pattern: string = null` — 模式匹配
 - `size: 'small' | 'default' | 'large' = "default"`
 - `label: string = ""`
 - `checked: boolean = false`
@@ -2761,30 +2677,18 @@
 
 ### 属性
 - `locale: string = "en-US"` — 语言设置
-- `form: unknown = function (this: EaFormAssociatedBase) {
-      return this.internals.form;
-    }` — 字段名称
 - `name: string = ""`
 - `type: string = function (this: EaFormAssociatedBase) {
       return this.localName;
-    }` — 字段名称
-- `validity: unknown = function (this: EaFormAssociatedBase) {
-      return this.internals?.validity ?? null;
-    }` — 验证状态
-- `validation-message: string = function (this: EaFormAssociatedBase) {
-      return this.internals?.validationMessage ?? "";
-    }` — 获取内部验证消息
-- `will-validate: boolean = function (this: EaFormAssociatedBase) {
-      return this.internals?.willValidate ?? false;
-    }` — 是否将参与验证
+    }` — 字段类型，默认为标签名（可写，组件可覆盖）
 - `disabled: boolean = false`
 - `value: string = ""`
 - `required: boolean = false`
-- `minlength: number = 0` — 最小长度
-- `maxlength: number = 0` — 最大长度
-- `min: number = 0` — 最小值
-- `max: number = 0` — 最大值
-- `pattern: string = ""` — 模式匹配
+- `minlength: number = null` — 最小长度
+- `maxlength: number = null` — 最大长度
+- `min: number = null` — 最小值
+- `max: number = null` — 最大值
+- `pattern: string = null` — 模式匹配
 - `label: string = ""`
 - `size: '' | 'small' | 'default' | 'large' = ""`
 - `border: boolean = false`
@@ -2822,30 +2726,18 @@
 
 ### 属性
 - `locale: string = "en-US"` — 语言设置
-- `form: unknown = function (this: EaFormAssociatedBase) {
-      return this.internals.form;
-    }` — 字段名称
 - `name: string = ""` — 字段名称
 - `type: string = function (this: EaFormAssociatedBase) {
       return this.localName;
-    }` — 字段名称
-- `validity: unknown = function (this: EaFormAssociatedBase) {
-      return this.internals?.validity ?? null;
-    }` — 验证状态
-- `validation-message: string = function (this: EaFormAssociatedBase) {
-      return this.internals?.validationMessage ?? "";
-    }` — 获取内部验证消息
-- `will-validate: boolean = function (this: EaFormAssociatedBase) {
-      return this.internals?.willValidate ?? false;
-    }` — 是否将参与验证
+    }` — 字段类型，默认为标签名（可写，组件可覆盖）
 - `disabled: boolean = false`
 - `value: number = 0`
 - `required: boolean = false` — 必填状态
-- `minlength: number = 0` — 最小长度
-- `maxlength: number = 0` — 最大长度
+- `minlength: number = null` — 最小长度
+- `maxlength: number = null` — 最大长度
 - `min: number = 0`
 - `max: number = 5`
-- `pattern: string = ""` — 模式匹配
+- `pattern: string = null` — 模式匹配
 - `label: string = ""`
 - `size: 'large' | 'default' | 'small' = ""`
 - `readonly: boolean = false`
@@ -3051,30 +2943,18 @@
 
 ### 属性
 - `locale: string = "en-US"` — 语言设置
-- `form: unknown = function (this: EaFormAssociatedBase) {
-      return this.internals.form;
-    }` — 字段名称
 - `name: string = ""`
 - `type: string = function (this: EaFormAssociatedBase) {
       return this.localName;
-    }` — 字段名称
-- `validity: unknown = function (this: EaFormAssociatedBase) {
-      return this.internals?.validity ?? null;
-    }` — 验证状态
-- `validation-message: string = function (this: EaFormAssociatedBase) {
-      return this.internals?.validationMessage ?? "";
-    }` — 获取内部验证消息
-- `will-validate: boolean = function (this: EaFormAssociatedBase) {
-      return this.internals?.willValidate ?? false;
-    }` — 是否将参与验证
+    }` — 字段类型，默认为标签名（可写，组件可覆盖）
 - `disabled: boolean = false`
 - `value: string = ""` — 字段值
 - `required: boolean = false`
-- `minlength: number = 0` — 最小长度
-- `maxlength: number = 0` — 最大长度
-- `min: number = 0` — 最小值
-- `max: number = 0` — 最大值
-- `pattern: string = ""` — 模式匹配
+- `minlength: number = null` — 最小长度
+- `maxlength: number = null` — 最大长度
+- `min: number = null` — 最小值
+- `max: number = null` — 最大值
+- `pattern: string = null` — 模式匹配
 - `label: string = ""`
 - `placeholder: string = ""`
 - `clearable: boolean = false`
@@ -3198,30 +3078,18 @@
 
 ### 属性
 - `locale: string = "en-US"` — 语言设置
-- `form: unknown = function (this: EaFormAssociatedBase) {
-      return this.internals.form;
-    }` — 字段名称
 - `name: string = ""` — 字段名称
 - `type: string = function (this: EaFormAssociatedBase) {
       return this.localName;
-    }` — 字段名称
-- `validity: unknown = function (this: EaFormAssociatedBase) {
-      return this.internals?.validity ?? null;
-    }` — 验证状态
-- `validation-message: string = function (this: EaFormAssociatedBase) {
-      return this.internals?.validationMessage ?? "";
-    }` — 获取内部验证消息
-- `will-validate: boolean = function (this: EaFormAssociatedBase) {
-      return this.internals?.willValidate ?? false;
-    }` — 是否将参与验证
+    }` — 字段类型，默认为标签名（可写，组件可覆盖）
 - `disabled: boolean = false`
 - `value: number = 0`
 - `required: boolean = false`
-- `minlength: number = 0` — 最小长度
-- `maxlength: number = 0` — 最大长度
+- `minlength: number = null` — 最小长度
+- `maxlength: number = null` — 最大长度
 - `min: number = 0`
 - `max: number = 100`
-- `pattern: string = ""` — 模式匹配
+- `pattern: string = null` — 模式匹配
 - `label: string = ""`
 - `show-stops: boolean = false`
 - `step: number = 1`
@@ -3544,30 +3412,18 @@
 
 ### 属性
 - `locale: string = "en-US"` — 语言设置
-- `form: unknown = function (this: EaFormAssociatedBase) {
-      return this.internals.form;
-    }` — 字段名称
 - `name: string = ""`
 - `type: string = function (this: EaFormAssociatedBase) {
       return this.localName;
-    }` — 字段名称
-- `validity: unknown = function (this: EaFormAssociatedBase) {
-      return this.internals?.validity ?? null;
-    }` — 验证状态
-- `validation-message: string = function (this: EaFormAssociatedBase) {
-      return this.internals?.validationMessage ?? "";
-    }` — 获取内部验证消息
-- `will-validate: boolean = function (this: EaFormAssociatedBase) {
-      return this.internals?.willValidate ?? false;
-    }` — 是否将参与验证
+    }` — 字段类型，默认为标签名（可写，组件可覆盖）
 - `disabled: boolean = false`
 - `value: unknown = false`
 - `required: boolean = false`
-- `minlength: number = 0` — 最小长度
-- `maxlength: number = 0` — 最大长度
-- `min: number = 0` — 最小值
-- `max: number = 0` — 最大值
-- `pattern: string = ""` — 模式匹配
+- `minlength: number = null` — 最小长度
+- `maxlength: number = null` — 最大长度
+- `min: number = null` — 最小值
+- `max: number = null` — 最大值
+- `pattern: string = null` — 模式匹配
 - `label: string = ""`
 - `active-value: string = "true"`
 - `inactive-value: string = "false"`
@@ -3933,30 +3789,18 @@
 
 ### 属性
 - `locale: string = "en-US"` — 语言设置
-- `form: unknown = function (this: EaFormAssociatedBase) {
-      return this.internals.form;
-    }` — 字段名称
 - `name: string = ""` — 字段名称
 - `type: string = function (this: EaFormAssociatedBase) {
       return this.localName;
-    }` — 字段名称
-- `validity: unknown = function (this: EaFormAssociatedBase) {
-      return this.internals?.validity ?? null;
-    }` — 验证状态
-- `validation-message: string = function (this: EaFormAssociatedBase) {
-      return this.internals?.validationMessage ?? "";
-    }` — 获取内部验证消息
-- `will-validate: boolean = function (this: EaFormAssociatedBase) {
-      return this.internals?.willValidate ?? false;
-    }` — 是否将参与验证
+    }` — 字段类型，默认为标签名（可写，组件可覆盖）
 - `disabled: boolean = false`
 - `value: string = ""`
 - `required: boolean = false`
-- `minlength: number = 0` — 最小长度
-- `maxlength: number = 0` — 最大长度
-- `min: number = 0` — 最小值
-- `max: number = 0` — 最大值
-- `pattern: string = ""` — 模式匹配
+- `minlength: number = null` — 最小长度
+- `maxlength: number = null` — 最大长度
+- `min: number = null` — 最小值
+- `max: number = null` — 最大值
+- `pattern: string = null` — 模式匹配
 - `label: string = ""`
 - `placeholder: string = "Select time"`
 - `width: string = ""`
@@ -4193,30 +4037,18 @@
 
 ### 属性
 - `locale: string = "en-US"` — 语言设置
-- `form: unknown = function (this: EaFormAssociatedBase) {
-      return this.internals.form;
-    }` — 字段名称
 - `name: string = ""` — 字段名称
 - `type: string = function (this: EaFormAssociatedBase) {
       return this.localName;
-    }` — 字段名称
-- `validity: unknown = function (this: EaFormAssociatedBase) {
-      return this.internals?.validity ?? null;
-    }` — 验证状态
-- `validation-message: string = function (this: EaFormAssociatedBase) {
-      return this.internals?.validationMessage ?? "";
-    }` — 获取内部验证消息
-- `will-validate: boolean = function (this: EaFormAssociatedBase) {
-      return this.internals?.willValidate ?? false;
-    }` — 是否将参与验证
+    }` — 字段类型，默认为标签名（可写，组件可覆盖）
 - `disabled: boolean = false`
 - `value: string = ""` — 字段值
 - `required: boolean = false` — 必填状态
-- `minlength: number = 0` — 最小长度
-- `maxlength: number = 0` — 最大长度
-- `min: number = 0` — 最小值
-- `max: number = 0` — 最大值
-- `pattern: string = ""` — 模式匹配
+- `minlength: number = null` — 最小长度
+- `maxlength: number = null` — 最大长度
+- `min: number = null` — 最小值
+- `max: number = null` — 最大值
+- `pattern: string = null` — 模式匹配
 - `filterable: boolean = false`
 - `filter-placeholder: string = "请输入搜索内容"`
 
@@ -4397,30 +4229,18 @@
 
 ### 属性
 - `locale: string = "en-US"` — 语言设置
-- `form: unknown = function (this: EaFormAssociatedBase) {
-      return this.internals.form;
-    }` — 字段名称
 - `name: string = ""`
 - `type: string = function (this: EaFormAssociatedBase) {
       return this.localName;
-    }` — 字段名称
-- `validity: unknown = function (this: EaFormAssociatedBase) {
-      return this.internals?.validity ?? null;
-    }` — 验证状态
-- `validation-message: string = function (this: EaFormAssociatedBase) {
-      return this.internals?.validationMessage ?? "";
-    }` — 获取内部验证消息
-- `will-validate: boolean = function (this: EaFormAssociatedBase) {
-      return this.internals?.willValidate ?? false;
-    }` — 是否将参与验证
+    }` — 字段类型，默认为标签名（可写，组件可覆盖）
 - `disabled: boolean = false`
 - `value: string = ""` — 字段值
 - `required: boolean = false` — 必填状态
-- `minlength: number = 0` — 最小长度
-- `maxlength: number = 0` — 最大长度
-- `min: number = 0` — 最小值
-- `max: number = 0` — 最大值
-- `pattern: string = ""` — 模式匹配
+- `minlength: number = null` — 最小长度
+- `maxlength: number = null` — 最大长度
+- `min: number = null` — 最小值
+- `max: number = null` — 最大值
+- `pattern: string = null` — 模式匹配
 - `action: string = ""`
 - `headers: unknown = {}`
 - `method: 'GET' | 'POST' | 'PUT' | 'DELETE' = "POST"`

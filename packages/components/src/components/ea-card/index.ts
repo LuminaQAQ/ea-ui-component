@@ -1,5 +1,10 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import stylesheet from "./index.scss?inline";
 
@@ -48,7 +53,6 @@ export class EaCard extends EaBase {
 
   @attribute({
     type: Enum(SHADOW_TYPES),
-    default: "always",
     observer(this: EaCard) {
       this.updateContainerClasslist();
     },
@@ -57,7 +61,6 @@ export class EaCard extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaCard, newVal: string) {
       this._headerSlot.innerText = newVal;
       this._states.isHeaderEmpty = !newVal;
@@ -68,7 +71,6 @@ export class EaCard extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaCard, newVal: string) {
       this._footerSlot.innerText = newVal;
       this._states.isFooterEmpty = !newVal;

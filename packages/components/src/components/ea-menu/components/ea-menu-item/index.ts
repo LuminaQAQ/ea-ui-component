@@ -1,5 +1,10 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-menu-item" as const;
@@ -30,13 +35,11 @@ export class EaMenuItem extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
   })
   index: string = "";
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: {
       ariaAttr: "aria-disabled",
       map: v => String(v),
@@ -50,7 +53,6 @@ export class EaMenuItem extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaMenuItem) {
       this.updateContainerClasslist();
     },

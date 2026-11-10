@@ -1,5 +1,11 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, property, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  property,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import stylesheet from "./index.scss?inline";
 import "@/components/ea-icon/index";
@@ -63,7 +69,6 @@ export class EaSubMenu extends EaBase {
 
   @property({
     type: Boolean,
-    default: false,
     a11y: {
       ariaAttr: "aria-expanded",
       target: bem.ce("title"),
@@ -76,7 +81,6 @@ export class EaSubMenu extends EaBase {
 
   @property({
     type: Boolean,
-    default: false,
     a11y: {
       ariaAttr: "inert",
       target: ".ea-sub-menu__content",
@@ -87,13 +91,11 @@ export class EaSubMenu extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
   })
   index: string = "";
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: {
       ariaAttr: "aria-disabled",
       map: v => String(v),
@@ -106,7 +108,6 @@ export class EaSubMenu extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaSubMenu) {
       this.updateContainerClasslist();
     },
@@ -115,7 +116,6 @@ export class EaSubMenu extends EaBase {
 
   @attribute({
     type: Enum(["horizontal", "vertical"]),
-    default: "vertical",
     observer(this: EaSubMenu, newVal: string) {
       this._handleModeChange(newVal);
       this.updateContainerClasslist();
@@ -125,7 +125,6 @@ export class EaSubMenu extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaSubMenu, newVal: string) {
       if (this._titleSlot) {
         this._titleSlot.textContent = newVal;

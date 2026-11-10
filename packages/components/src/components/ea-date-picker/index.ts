@@ -1,7 +1,12 @@
 import { EaFormAssociatedBase } from "@easy-component-ui/core/core/EaFormAssociatedBase";
 import { createBEM } from "@easy-component-ui/core/utils/bem";
 
-import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 
 import { html } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
@@ -135,7 +140,6 @@ export class EaDatePicker extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaDatePicker, newVal: string) {
       this._inputElement.label = newVal;
     },
@@ -144,7 +148,6 @@ export class EaDatePicker extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "auto",
     observer(this: EaDatePicker, newVal: string) {
       this._container.style.setProperty("--ea-date-picker-width", newVal);
     },
@@ -153,7 +156,6 @@ export class EaDatePicker extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaDatePicker, newVal: string) {
       let dateValue = newVal;
       if (isNaN(new Date(newVal).getTime()) && newVal !== "") {
@@ -177,7 +179,6 @@ export class EaDatePicker extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaDatePicker, newVal: string) {
       this._inputElement.setAttribute("placeholder", newVal);
     },
@@ -186,7 +187,6 @@ export class EaDatePicker extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     a11y: {
       ariaAttr: "aria-disabled",
       map: v => String(v),
@@ -204,7 +204,6 @@ export class EaDatePicker extends EaFormAssociatedBase {
 
   @attribute({
     type: Enum(["left", "center", "right"]),
-    default: "left",
     observer(this: EaDatePicker) {
       this.updateContainerClasslist();
     },
@@ -213,19 +212,16 @@ export class EaDatePicker extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "YYYY-MM-DD",
   })
   displayFormat: string = "YYYY-MM-DD";
 
   @attribute({
     type: String,
-    default: "YYYY-MM-DD",
   })
   valueFormat: string = "YYYY-MM-DD";
 
   @attribute({
     type: Enum(["date", "month", "year"]),
-    default: "date",
     observer(this: EaDatePicker, newVal: DatePickerVariant) {
       if (newVal === "year") {
         this._switchToYearMode();
@@ -240,7 +236,6 @@ export class EaDatePicker extends EaFormAssociatedBase {
 
   @attribute({
     type: Enum(["large", "default", "small"]),
-    default: "default",
     observer(this: EaDatePicker, newVal: DatePickerSize) {
       this._inputElement.setAttribute("size", newVal);
       this._yearBtn.setAttribute("size", newVal);
@@ -257,7 +252,6 @@ export class EaDatePicker extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaDatePicker, newVal: boolean) {
       this._inputElement.toggleAttribute("required", newVal);
     },

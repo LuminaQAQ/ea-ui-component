@@ -1,5 +1,9 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { VARIANT_TYPES, type VariantType } from "@constants/variant";
 import stylesheet from "./index.scss?inline";
@@ -23,9 +27,8 @@ export class EaButtonGroup extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaButtonGroup, newVal: boolean) {
-      this._defaultSlot?.assignedElements().forEach((button) => {
+      this._defaultSlot?.assignedElements().forEach(button => {
         if (button.tagName === "EA-BUTTON") {
           button.toggleAttribute("disabled", newVal);
         }
@@ -36,9 +39,8 @@ export class EaButtonGroup extends EaBase {
 
   @attribute({
     type: ["small", "medium", "large"] as const,
-    default: "medium",
     observer(this: EaButtonGroup, newVal: string) {
-      this.querySelectorAll("ea-button").forEach((button) => {
+      this.querySelectorAll("ea-button").forEach(button => {
         button.setAttribute("size", newVal);
       });
     },
@@ -47,9 +49,8 @@ export class EaButtonGroup extends EaBase {
 
   @attribute({
     type: Enum([...VARIANT_TYPES, "normal"]),
-    default: "normal",
     observer(this: EaButtonGroup, newVal: string) {
-      this.querySelectorAll("ea-button").forEach((button) => {
+      this.querySelectorAll("ea-button").forEach(button => {
         button.setAttribute("variant", newVal);
       });
     },

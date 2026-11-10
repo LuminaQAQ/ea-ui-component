@@ -1,5 +1,11 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, property, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  property,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { EaImageLoadEvent } from "./events/EaImageLoadEvent";
 import { EaImageErrorEvent } from "./events/EaImageErrorEvent";
@@ -9,12 +15,7 @@ const TAG_NAME = "ea-image" as const;
 const bem = createBEM(TAG_NAME);
 
 export type ImageFit =
-  | ""
-  | "fill"
-  | "contain"
-  | "cover"
-  | "none"
-  | "scale-down";
+  "" | "fill" | "contain" | "cover" | "none" | "scale-down";
 export type ImageLoading = "lazy" | "eager";
 export type ImageStatus = "loading" | "error" | "success";
 
@@ -83,7 +84,6 @@ export class EaImage extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     async observer(this: EaImage, newVal: string) {
       this._loadImage(newVal);
     },
@@ -92,7 +92,6 @@ export class EaImage extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaImage, newVal: string) {
       if (!CSS.supports("width", newVal))
         return console.warn(
@@ -106,7 +105,6 @@ export class EaImage extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaImage, newVal: string) {
       if (!CSS.supports("height", newVal))
         return console.warn(
@@ -120,7 +118,6 @@ export class EaImage extends EaBase {
 
   @attribute({
     type: Enum(["", "fill", "contain", "cover", "none", "scale-down"]),
-    default: "",
     observer(this: EaImage, newVal: ImageFit) {
       if (!CSS.supports("object-fit", newVal))
         return console.warn(
@@ -134,7 +131,6 @@ export class EaImage extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaImage, newVal: string) {
       this._image.alt = newVal;
     },
@@ -143,7 +139,6 @@ export class EaImage extends EaBase {
 
   @attribute({
     type: Enum(["lazy", "eager"]),
-    default: "eager",
     observer(this: EaImage, newVal: ImageLoading) {
       this._image.setAttribute("loading", newVal);
     },
@@ -152,7 +147,6 @@ export class EaImage extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaImage, newVal: string) {
       this._image.setAttribute("referrerpolicy", newVal);
     },
@@ -161,7 +155,6 @@ export class EaImage extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaImage, newVal: string) {
       this._image.setAttribute("crossorigin", newVal);
     },
@@ -170,7 +163,6 @@ export class EaImage extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
   })
   lazy: boolean = false;
 
@@ -178,7 +170,6 @@ export class EaImage extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     async observer(this: EaImage, newVal: boolean) {
       if (newVal) {
         await import("@/components/ea-image-preview/index.js");
@@ -189,7 +180,6 @@ export class EaImage extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     async observer(this: EaImage, newVal: boolean) {
       await this._updatePreviewProperty("closeOnClickModal", !newVal);
     },
@@ -198,7 +188,6 @@ export class EaImage extends EaBase {
 
   @attribute({
     type: Number,
-    default: 2000,
     async observer(this: EaImage, newVal: number) {
       await this._updatePreviewProperty("zIndex", String(newVal));
     },
@@ -207,7 +196,6 @@ export class EaImage extends EaBase {
 
   @attribute({
     type: Number,
-    default: 0,
     async observer(this: EaImage, newVal: number) {
       await this._updatePreviewProperty("initialIndex", newVal);
     },
@@ -216,7 +204,6 @@ export class EaImage extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: true,
     async observer(this: EaImage, newVal: boolean) {
       await this._updatePreviewProperty("closeOnPressEscape", newVal);
     },
@@ -225,7 +212,6 @@ export class EaImage extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: true,
     async observer(this: EaImage, newVal: boolean) {
       await this._updatePreviewProperty("infinite", newVal);
     },
@@ -234,7 +220,6 @@ export class EaImage extends EaBase {
 
   @attribute({
     type: Number,
-    default: 1.2,
     async observer(this: EaImage, newVal: number) {
       await this._updatePreviewProperty("zoomRate", newVal);
     },
@@ -243,7 +228,6 @@ export class EaImage extends EaBase {
 
   @attribute({
     type: Number,
-    default: 1,
     async observer(this: EaImage, newVal: number) {
       await this._updatePreviewProperty("scale", newVal);
     },
@@ -252,7 +236,6 @@ export class EaImage extends EaBase {
 
   @attribute({
     type: Number,
-    default: 0.2,
     async observer(this: EaImage, newVal: number) {
       await this._updatePreviewProperty("minScale", newVal);
     },
@@ -261,7 +244,6 @@ export class EaImage extends EaBase {
 
   @attribute({
     type: Number,
-    default: 7,
     async observer(this: EaImage, newVal: number) {
       await this._updatePreviewProperty("maxScale", newVal);
     },
@@ -270,7 +252,6 @@ export class EaImage extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     async observer(this: EaImage, newVal: boolean) {
       await this._updatePreviewProperty("showProgress", newVal);
     },
@@ -281,7 +262,6 @@ export class EaImage extends EaBase {
 
   @property({
     type: Array,
-    default: [],
     async observer(this: EaImage, newVal: string[]) {
       if (!this.preview)
         return console.warn("[EaImage] Preview is not enabled.");

@@ -1,5 +1,9 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+} from "@easy-component-ui/core/decorator";
 import { html } from "@easy-component-ui/core/utils/html";
 import { defaultAvatar, errorAvatar } from "./assets/avatarPlaceholder";
 import stylesheet from "./index.scss?inline";
@@ -44,7 +48,6 @@ export class EaAvatar extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaAvatar, newVal: string) {
       if (this.src) return;
       if (newVal) {
@@ -60,7 +63,6 @@ export class EaAvatar extends EaBase {
 
   @attribute({
     type: ["circle", "square"] as const,
-    default: "circle",
     observer(this: EaAvatar) {
       this.updateContainerClasslist();
     },
@@ -69,7 +71,6 @@ export class EaAvatar extends EaBase {
 
   @attribute({
     type: String,
-    default: "default",
     observer(this: EaAvatar, newVal: string) {
       const enumValues = ["default", "small", "large"] as const;
       const isEnumValue = enumValues.includes(
@@ -98,7 +99,6 @@ export class EaAvatar extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaAvatar, newVal: string) {
       if (newVal) {
         this._loadImage(newVal);
@@ -112,7 +112,6 @@ export class EaAvatar extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaAvatar, newVal: string) {
       const img = this._container?.querySelector(
         bem.ce("img")
@@ -126,7 +125,6 @@ export class EaAvatar extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaAvatar, newVal: string) {
       const img = this._container?.querySelector(
         bem.ce("img")
@@ -140,7 +138,6 @@ export class EaAvatar extends EaBase {
 
   @attribute({
     type: ["fill", "contain", "cover", "none", "scale-down"] as const,
-    default: "cover",
     observer(this: EaAvatar, newVal: string) {
       this.style.setProperty("--ea-avatar-fit", newVal);
     },

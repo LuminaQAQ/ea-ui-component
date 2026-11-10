@@ -1,5 +1,10 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { html } from "@easy-component-ui/core/utils/html";
 import { timeout } from "@easy-component-ui/core/utils/timeout";
 import stylesheet from "./index.scss?inline";
@@ -33,7 +38,6 @@ export class EaSkeleton extends EaBase {
 
   @attribute({
     type: Number,
-    default: 4,
     observer(this: EaSkeleton, newVal: number) {
       this._initDefaultSkeleton(newVal);
       this._updateAnimatedStatus(this.animated);
@@ -43,7 +47,6 @@ export class EaSkeleton extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaSkeleton, newVal: boolean) {
       this._updateAnimatedStatus(newVal);
     },
@@ -52,7 +55,6 @@ export class EaSkeleton extends EaBase {
 
   @attribute({
     type: Number,
-    default: 1,
     observer(this: EaSkeleton, newVal: number) {
       const elements = this._getTemplateElements();
       const fragment = this._renderTemplates(newVal, elements);
@@ -74,19 +76,16 @@ export class EaSkeleton extends EaBase {
 
   @attribute({
     type: Number,
-    default: 0,
   })
   throttleLeading: number = 0;
 
   @attribute({
     type: Number,
-    default: 0,
   })
   throttleTrailing: number = 0;
 
   @attribute({
     type: Boolean,
-    default: true,
     observer(this: EaSkeleton, newVal: boolean) {
       clearTimeout(this._loadingThrottle);
 
@@ -112,7 +111,9 @@ export class EaSkeleton extends EaBase {
 
   /** 获取模板插槽中的元素，若无则返回插槽元素本身 */
   private _getTemplateElements(): HTMLElement[] {
-    const slotted = [...this.querySelectorAll("[slot='template']")] as HTMLElement[];
+    const slotted = [
+      ...this.querySelectorAll("[slot='template']"),
+    ] as HTMLElement[];
     return slotted.length ? slotted : [this._templateSlot];
   }
 
@@ -162,9 +163,13 @@ export class EaSkeleton extends EaBase {
     const children: HTMLElement[] = assigned
       .filter(el => el.tagName.toLocaleLowerCase() === "ea-skeleton-item")
       .concat(
-        ...assigned.map(el => [...el.querySelectorAll("ea-skeleton-item")] as HTMLElement[])
+        ...assigned.map(
+          el => [...el.querySelectorAll("ea-skeleton-item")] as HTMLElement[]
+        )
       )
-      .concat([...this._templateSlot.querySelectorAll("ea-skeleton-item")] as HTMLElement[]);
+      .concat([
+        ...this._templateSlot.querySelectorAll("ea-skeleton-item"),
+      ] as HTMLElement[]);
 
     children.forEach(child => child.toggleAttribute("animated", isAnimated));
   }

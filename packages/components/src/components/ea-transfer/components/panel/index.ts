@@ -1,5 +1,11 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, property, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  property,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { i18nManager } from "@/utils/I18nManager";
 import "@components/ea-checkbox/index.js";
@@ -94,7 +100,6 @@ export class EaTransferPanel extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaTransferPanel) {
       this.updateContainerClasslist();
       this._handleDisabledUpdate();
@@ -104,7 +109,6 @@ export class EaTransferPanel extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaTransferPanel, newVal: string) {
       if (this._title) {
         this._title.textContent = newVal || "";
@@ -115,13 +119,11 @@ export class EaTransferPanel extends EaBase {
 
   @attribute({
     type: Enum(["source", "target"] as const),
-    default: "source",
   })
   type: PanelType = "source";
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaTransferPanel, newVal: boolean) {
       if (!this._states.isEaInputDefined) {
         customElements.whenDefined("ea-input").then(() => {
@@ -137,7 +139,6 @@ export class EaTransferPanel extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaTransferPanel, newVal: string) {
       if (!this.filterable) return;
       this._updateFilterPlaceholder(newVal);
@@ -147,7 +148,6 @@ export class EaTransferPanel extends EaBase {
 
   @property({
     type: Array,
-    default: [],
     observer(this: EaTransferPanel, newVal: HTMLElement[]) {
       this._handleDataUpdate(newVal);
     },
@@ -156,13 +156,11 @@ export class EaTransferPanel extends EaBase {
 
   @property({
     type: Function,
-    default: null,
   })
   filterMethod: ((query: string, item: any) => boolean) | null = null;
 
   @property({
     type: Object,
-    default: { key: "key", label: "label", disabled: "disabled" },
   })
   dataProps: Record<string, string> = {
     key: "key",
@@ -172,7 +170,6 @@ export class EaTransferPanel extends EaBase {
 
   @property({
     type: Object,
-    default: new Map(),
   })
   dataMap: Map<any, any> = new Map();
 

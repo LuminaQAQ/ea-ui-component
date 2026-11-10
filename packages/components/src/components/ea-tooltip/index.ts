@@ -1,6 +1,11 @@
 import { EaPopper } from "@common/ea-popper/index";
 import { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query, listen } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+  listen,
+} from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import stylesheet from "./index.scss?inline";
 
@@ -59,7 +64,6 @@ export class EaTooltip extends EaPopper {
 
   @attribute({
     type: Enum(TRIGGER_TYPES),
-    default: "hover",
     observer(this: EaTooltip) {
       this._initTriggerEvent();
     },
@@ -68,7 +72,6 @@ export class EaTooltip extends EaPopper {
 
   @attribute({
     type: Enum(EFFECT_TYPES),
-    default: "dark",
     observer(this: EaTooltip) {
       this.updateContainerClasslist();
     },
@@ -77,7 +80,6 @@ export class EaTooltip extends EaPopper {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaTooltip, newVal: string) {
       if (this._contentElement) {
         this._contentElement.textContent = newVal;

@@ -21,7 +21,6 @@ export class EaButton extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaButton, disabled: boolean) {
       this.updateContainerClasslist(disabled);
     },

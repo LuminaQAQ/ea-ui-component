@@ -1,5 +1,10 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, property, query } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  property,
+  query,
+} from "@easy-component-ui/core/decorator";
 import dayjs from "dayjs";
 import { timeout } from "@easy-component-ui/core/utils/timeout";
 import { parseToDate } from "@/utils/parseTime";
@@ -52,7 +57,6 @@ export class EaCountdown extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaCountdown, newVal: string) {
       this._handleValueChange(newVal);
     },
@@ -61,26 +65,23 @@ export class EaCountdown extends EaBase {
 
   @attribute({
     type: String,
-    default: "HH:mm:ss",
   })
   format: string = "HH:mm:ss";
 
   @attribute({
     type: Number,
-    default: 1000,
   })
   refreshInterval: number = 1000;
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaCountdown, newVal: string) {
       this._header.textContent = newVal;
     },
   })
   heading: string = "";
 
-  @property({ type: String, default: "" })
+  @property({ type: String })
   displayValue: string = "";
 
   /** 处理 value 属性变化，清理旧定时器并启动新倒计时 */

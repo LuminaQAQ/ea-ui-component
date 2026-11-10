@@ -114,7 +114,6 @@ export class EaColorPicker extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaColorPicker, newVal: string) {
       this._label.textContent = newVal;
     },
@@ -128,7 +127,6 @@ export class EaColorPicker extends EaFormAssociatedBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaColorPicker) {
       this.setValue(this.value || null);
       this._updateTriggerColor();
@@ -140,7 +138,6 @@ export class EaColorPicker extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaColorPicker) {
       this.updateContainerClasslist();
     },
@@ -154,7 +151,6 @@ export class EaColorPicker extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaColorPicker) {
       this.updateContainerClasslist();
       if (this._panel)
@@ -165,7 +161,6 @@ export class EaColorPicker extends EaFormAssociatedBase {
 
   @attribute({
     type: ["small", "medium", "large"] as const,
-    default: "",
     observer(this: EaColorPicker) {
       this.updateContainerClasslist();
     },
@@ -174,7 +169,6 @@ export class EaColorPicker extends EaFormAssociatedBase {
 
   @attribute({
     type: Enum(COLOR_FORMATS),
-    default: "hex",
     observer(this: EaColorPicker, newVal: string) {
       if (this._panel) this._panel.setAttribute("color-format", newVal);
     },
@@ -183,7 +177,6 @@ export class EaColorPicker extends EaFormAssociatedBase {
 
   @attribute({
     type: Boolean,
-    default: false,
     observer(this: EaColorPicker, newVal: boolean) {
       if (this._panel) this._panel.setAttribute("show-alpha", String(newVal));
     },
@@ -192,19 +185,16 @@ export class EaColorPicker extends EaFormAssociatedBase {
 
   @attribute({
     type: Number,
-    default: 0,
   })
   tabindex: number = 0;
 
   @attribute({
     type: Boolean,
-    default: false,
   })
   override required: boolean = false;
 
   @attribute({
     type: Enum(PLACEMENTS),
-    default: "bottom",
     observer(this: EaColorPicker, newVal: string) {
       this._popper.setAttribute("placement", newVal);
     },
@@ -213,7 +203,6 @@ export class EaColorPicker extends EaFormAssociatedBase {
 
   @property({
     type: Array,
-    default: [],
     observer(this: EaColorPicker, newVal: string[]) {
       if (!this._states.isPanelDefined) {
         customElements.whenDefined("ea-color-picker-panel").then(() => {

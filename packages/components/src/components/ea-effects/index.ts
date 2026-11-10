@@ -1,5 +1,9 @@
 import EaBase, { createBEM } from "@easy-component-ui/core/core/EaBase";
-import { CustomElement, attribute, query } from "@easy-component-ui/core/decorator";
+import {
+  CustomElement,
+  attribute,
+  query,
+} from "@easy-component-ui/core/decorator";
 import { html } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import stylesheet from "./index.scss?inline";
@@ -41,7 +45,6 @@ export class EaEffects extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaEffects, newVal: string, oldVal: string) {
       if (newVal !== oldVal) {
         this.updateContainerClasslist();
@@ -54,7 +57,6 @@ export class EaEffects extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: true,
     observer(this: EaEffects, newVal: boolean) {
       newVal ? this.show() : this.hide();
     },
@@ -63,7 +65,6 @@ export class EaEffects extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaEffects, newVal: string) {
       this._container?.style.setProperty("--ea-effects-duration", newVal || "");
     },
@@ -72,7 +73,6 @@ export class EaEffects extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaEffects, newVal: string) {
       this._container?.style.setProperty("--ea-effects-delay", newVal || "");
     },
@@ -81,7 +81,6 @@ export class EaEffects extends EaBase {
 
   @attribute({
     type: String,
-    default: "",
     observer(this: EaEffects, newVal: string) {
       this._container?.style.setProperty(
         "--ea-effects-timing-function",
@@ -93,7 +92,6 @@ export class EaEffects extends EaBase {
 
   @attribute({
     type: Number,
-    default: 1,
     observer(this: EaEffects, newVal: number) {
       this._container?.style.setProperty(
         "--ea-effects-iteration-count",
@@ -105,17 +103,16 @@ export class EaEffects extends EaBase {
 
   @attribute({
     type: Enum(["hover", "click", "manual", "scroll"]),
-    default: "manual",
     observer(this: EaEffects, newVal: "hover" | "click" | "manual" | "scroll") {
       this._rebuildTriggerListeners();
     },
   })
   trigger: "hover" | "click" | "manual" | "scroll" = "manual";
 
-  @attribute({ type: Boolean, default: true })
+  @attribute({ type: Boolean })
   scrollOnce: boolean = true;
 
-  @attribute({ type: String, default: "" })
+  @attribute({ type: String })
   scrollTarget: string = "";
 
   /** 重置动画状态，清除所有过渡类名和样式 */
