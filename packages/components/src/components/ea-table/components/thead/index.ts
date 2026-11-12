@@ -4,23 +4,28 @@ import type { ColumnOption } from "../../types";
 const sortIconRenderer = (text: string): string => {
   return h("button", "ea-table__sort-wrapper", { type: "button" }, [
     h("span", null, {}, text),
-    h(
-      "span",
-      "ea-table__sort",
-      { "aria-hidden": "true" },
-      [
-        h("ea-icon", "ea-table__sort-icon", {
+    h("span", "ea-table__sort", { "aria-hidden": "true" }, [
+      h(
+        "ea-icon",
+        "ea-table__sort-icon",
+        {
           part: "asc-icon",
           name: "angle-up",
           size: "small",
-        }, null),
-        h("ea-icon", "ea-table__sort-icon", {
+        },
+        null
+      ),
+      h(
+        "ea-icon",
+        "ea-table__sort-icon",
+        {
           part: "desc-icon",
           name: "angle-down",
           size: "small",
-        }, null),
-      ]
-    ),
+        },
+        null
+      ),
+    ]),
   ]);
 };
 
@@ -48,7 +53,10 @@ const renderThCell = (col: ColumnOption): string => {
     return null;
   };
 
-  const getColumnSortable = (sortable: boolean | undefined, text: string): string | null => {
+  const getColumnSortable = (
+    sortable: boolean | undefined,
+    text: string
+  ): string | null => {
     if (sortable) {
       return sortIconRenderer(text);
     }
@@ -87,7 +95,12 @@ const renderThCell = (col: ColumnOption): string => {
       "data-prop": col.prop || "",
       "data-order": "asc",
       "aria-sort": col.sortable ? "none" : undefined,
-      "aria-label": col.type === "selection" ? "Select all" : col.type === "index" ? "Index" : undefined,
+      "aria-label":
+        col.type === "selection"
+          ? "Select all"
+          : col.type === "index"
+            ? "Index"
+            : undefined,
     },
     content
   );
@@ -106,13 +119,16 @@ const renderTheadRows = (struct: ColumnOption[][]): string[] =>
   );
 
 export const theadRenderer = (columns: ColumnOption[]): string => {
-  const theadStruct: ColumnOption[][] = columns.reduce<ColumnOption[][]>((acc, col) => {
-    if (!acc[col.depth]) acc[col.depth] = [];
+  const theadStruct: ColumnOption[][] = columns.reduce<ColumnOption[][]>(
+    (acc, col) => {
+      if (!acc[col.depth]) acc[col.depth] = [];
 
-    acc[col.depth].push(col);
+      acc[col.depth].push(col);
 
-    return acc;
-  }, []);
+      return acc;
+    },
+    []
+  );
 
   return h(
     "thead",

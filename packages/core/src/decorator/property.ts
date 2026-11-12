@@ -1,5 +1,6 @@
 ﻿import type { PropertyOptions } from "../types/index";
 import { declareProperty } from "../schema";
+import { reportErrorOnce } from "../utils/diagnostics";
 
 /**
  * @property 装饰器 - 声明不映射到 HTML attribute 的 JavaScript 属性
@@ -24,7 +25,11 @@ import { declareProperty } from "../schema";
 function property(options: PropertyOptions) {
   return function (target: any, name?: string | symbol): void {
     if (typeof name !== "string" && typeof name !== "symbol") {
-      console.warn("property decorator: 无法识别的装饰器调用格式, name:", name);
+      reportErrorOnce(
+        "property-decorator",
+        "无法识别的装饰器调用格式, name:",
+        name
+      );
       return;
     }
 

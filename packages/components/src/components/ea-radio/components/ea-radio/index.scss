@@ -25,7 +25,7 @@ $ea-radio-size-type: (large, default, small);
   cursor: not-allowed;
 }
 
-:host(:invalid) {
+:host([data-invalid]) {
   .#{$name}__inner {
     border-color: var(--red-500);
     box-shadow: 0 0 0 2px var(--red-200);
@@ -175,3 +175,5 @@ $ea-radio-size-type: (large, default, small);
     }
   }
 }
+
+@include form-error-message;

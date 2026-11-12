@@ -1020,7 +1020,10 @@ describe("EaUpload Component", () => {
 
       const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
       expect(() => upload.submit()).not.toThrow();
-      expect(warnSpy).toHaveBeenCalledWith("No files to upload.");
+      expect(warnSpy).toHaveBeenCalledWith(
+        "[ea-ui] ea-upload",
+        "No files to upload, add files to fileList first."
+      );
       warnSpy.mockRestore();
     });
 

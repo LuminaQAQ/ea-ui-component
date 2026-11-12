@@ -1,6 +1,10 @@
 // ==================== HTML 全局类型声明 ====================
 
-import { GlobalHTMLElement, GlobalHTMLFormElement, GlobalValidityState } from "@utils/env";
+import {
+  GlobalHTMLElement,
+  GlobalHTMLFormElement,
+  GlobalValidityState,
+} from "@utils/env";
 
 declare global {
   interface HTMLElementTagNameMap {

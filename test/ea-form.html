@@ -4,11 +4,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Form 表单示例</title>
-    
 
     <style>
-      .row { margin: 1rem 0; display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
-      hr { margin: 2rem 0; border: none; border-top: 1px solid var(--grey-200, #e4e7ed); }
+      .row {
+        margin: 1rem 0;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+      hr {
+        margin: 2rem 0;
+        border: none;
+        border-top: 1px solid var(--grey-200, #e4e7ed);
+      }
 
       * {
         box-sizing: border-box;
@@ -93,16 +102,34 @@
   </head>
 
   <body>
-    <script type="module" src="../packages/components/src/components/ea-button/index.ts"></script>
-    <script type="module" src="../packages/components/src/components/ea-input/index.ts"></script>
+    <script
+      type="module"
+      src="../packages/components/src/components/ea-button/index.ts"
+    ></script>
+    <script
+      type="module"
+      src="../packages/components/src/components/ea-input/index.ts"
+    ></script>
     <script
       type="module"
       src="../packages/components/src/components/ea-input-number/index.ts"
     ></script>
-    <script type="module" src="../packages/components/src/components/ea-radio/index.ts"></script>
-    <script type="module" src="../packages/components/src/components/ea-checkbox/index.ts"></script>
-    <script type="module" src="../packages/components/src/components/ea-select/index.ts"></script>
-    <script type="module" src="../packages/components/src/components/ea-switch/index.ts"></script>
+    <script
+      type="module"
+      src="../packages/components/src/components/ea-radio/index.ts"
+    ></script>
+    <script
+      type="module"
+      src="../packages/components/src/components/ea-checkbox/index.ts"
+    ></script>
+    <script
+      type="module"
+      src="../packages/components/src/components/ea-select/index.ts"
+    ></script>
+    <script
+      type="module"
+      src="../packages/components/src/components/ea-switch/index.ts"
+    ></script>
     <script
       type="module"
       src="../packages/components/src/components/ea-date-picker/index.ts"
@@ -111,13 +138,22 @@
       type="module"
       src="../packages/components/src/components/ea-time-picker/index.ts"
     ></script>
-    <script type="module" src="../packages/components/src/components/ea-rate/index.ts"></script>
-    <script type="module" src="../packages/components/src/components/ea-slider/index.ts"></script>
+    <script
+      type="module"
+      src="../packages/components/src/components/ea-rate/index.ts"
+    ></script>
+    <script
+      type="module"
+      src="../packages/components/src/components/ea-slider/index.ts"
+    ></script>
     <script
       type="module"
       src="../packages/components/src/components/ea-color-picker/index.ts"
     ></script>
-    <script type="module" src="../packages/components/src/components/ea-transfer/index.ts"></script>
+    <script
+      type="module"
+      src="../packages/components/src/components/ea-transfer/index.ts"
+    ></script>
 
     <div class="container">
       <h1 class="page-title">📝 Form 表单组件示例</h1>
@@ -307,6 +343,115 @@
         <div class="output" id="complexOutput"></div>
       </div>
 
+      <!-- 表单校验 -->
+      <div class="card">
+        <h2 class="card-title">表单校验与错误提示</h2>
+
+        <div class="section-title">表单校验（原生拦截）</div>
+        <form id="validateForm">
+          <div class="row">
+            <ea-input
+              name="username"
+              label="用户名"
+              required
+              minlength="3"
+              placeholder="至少 3 个字符"
+              style="width: 240px"
+            ></ea-input>
+            <ea-input
+              name="email"
+              type="email"
+              label="邮箱"
+              required
+              placeholder="请输入邮箱"
+              style="width: 240px"
+            ></ea-input>
+          </div>
+          <div class="row">
+            <ea-button variant="primary" type="submit" size="small">
+              提交
+            </ea-button>
+          </div>
+        </form>
+        <div class="output" id="validateFormOutput"></div>
+
+        <div class="section-title">错误提示（data-error-display）</div>
+        <form id="errorDisplayForm">
+          <div class="row">
+            <ea-input
+              name="username"
+              label="默认气泡"
+              required
+              placeholder="请输入"
+              style="width: 240px"
+            ></ea-input>
+            <ea-input
+              name="email"
+              label="文案提示"
+              required
+              placeholder="请输入"
+              data-error-display="text"
+              style="width: 240px"
+            ></ea-input>
+          </div>
+          <div class="row">
+            <ea-button variant="primary" type="submit" size="small">
+              提交
+            </ea-button>
+          </div>
+        </form>
+
+        <div class="section-title">校验时机（data-validate-trigger）</div>
+        <form id="validateTriggerForm" data-validate-trigger="submit">
+          <div class="row">
+            <ea-input
+              name="username"
+              label="用户名"
+              required
+              placeholder="输入再清空，不会立刻报红"
+              style="width: 240px"
+            ></ea-input>
+          </div>
+          <div class="row">
+            <ea-button variant="primary" type="submit" size="small">
+              提交
+            </ea-button>
+          </div>
+        </form>
+
+        <div class="section-title">表单级配置</div>
+        <form
+          id="formSettingsForm"
+          data-validate-trigger="submit"
+          data-error-display="text"
+        >
+          <div class="form-row">
+            <ea-input
+              name="username"
+              label="用户名"
+              required
+              placeholder="请输入用户名"
+              style="width: 100%"
+            ></ea-input>
+            <ea-select
+              name="city"
+              label="城市"
+              required
+              placeholder="请选择城市"
+              data-error-display="native"
+              style="width: 100%"
+            >
+              <ea-option value="beijing">北京</ea-option>
+              <ea-option value="shanghai">上海</ea-option>
+            </ea-select>
+          </div>
+          <div class="button-group">
+            <ea-button variant="primary" type="submit" size="small">
+              提交
+            </ea-button>
+          </div>
+        </form>
+      </div>
       <!-- 各组件单独验证示例 -->
       <div class="card">
         <h2 class="card-title">各组件单独验证示例</h2>
@@ -608,6 +753,29 @@
             const data = Object.fromEntries(formData.entries());
             document.getElementById("complexOutput").textContent =
               "表单数据：\n" + JSON.stringify(data, null, 2);
+          });
+
+          // 表单校验示例
+          this.register("validateForm", e => {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+            document.getElementById("validateFormOutput").textContent =
+              "提交的数据：\n" + JSON.stringify(data, null, 2);
+          });
+
+          const validateDemos = [
+            { id: "errorDisplayForm", name: "错误提示" },
+            { id: "validateTriggerForm", name: "校验时机" },
+            { id: "formSettingsForm", name: "表单级配置" },
+          ];
+
+          validateDemos.forEach(({ id, name }) => {
+            this.register(id, e => {
+              e.preventDefault();
+              alert(`${name} 校验通过！`);
+            });
           });
 
           // 各组件验证表单

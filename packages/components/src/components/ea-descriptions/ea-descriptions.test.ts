@@ -28,9 +28,11 @@ describe("EaDescriptions", () => {
       const descriptions = document.createElement("ea-descriptions");
       container.appendChild(descriptions);
 
-      const containerEl = descriptions.shadowRoot!.querySelector("[part='container']");
+      const containerEl =
+        descriptions.shadowRoot!.querySelector("[part='container']");
       const bodyEl = descriptions.shadowRoot!.querySelector("[part='body']");
-      const captionEl = descriptions.shadowRoot!.querySelector("[part='caption']");
+      const captionEl =
+        descriptions.shadowRoot!.querySelector("[part='caption']");
 
       expect(containerEl).not.toBeNull();
       expect(bodyEl).not.toBeNull();
@@ -45,8 +47,11 @@ describe("EaDescriptions", () => {
       `;
       container.appendChild(descriptions);
 
-      const headerSlot = descriptions.shadowRoot!.querySelector("slot[name='header']");
-      const extraSlot = descriptions.shadowRoot!.querySelector("slot[name='extra']");
+      const headerSlot = descriptions.shadowRoot!.querySelector(
+        "slot[name='header']"
+      );
+      const extraSlot =
+        descriptions.shadowRoot!.querySelector("slot[name='extra']");
 
       expect(headerSlot).not.toBeNull();
       expect(extraSlot).not.toBeNull();
@@ -218,7 +223,9 @@ describe("EaDescriptions", () => {
 
       await descriptions.updateComplete;
 
-      const value = descriptions.style.getPropertyValue("--ea-descriptions-label-width");
+      const value = descriptions.style.getPropertyValue(
+        "--ea-descriptions-label-width"
+      );
       expect(value).toBe("120px");
     });
   });
@@ -234,7 +241,9 @@ describe("EaDescriptions", () => {
 
       await descriptions.updateComplete;
 
-      const tbody = descriptions.shadowRoot!.querySelector(".ea-descriptions__body");
+      const tbody = descriptions.shadowRoot!.querySelector(
+        ".ea-descriptions__body"
+      );
       expect(tbody).not.toBeNull();
       const rows = tbody!.querySelectorAll("tr");
       expect(rows.length).toBeGreaterThan(0);
@@ -249,7 +258,9 @@ describe("EaDescriptions", () => {
 
       await descriptions.updateComplete;
 
-      const cells = descriptions.shadowRoot!.querySelectorAll(".ea-descriptions__cell");
+      const cells = descriptions.shadowRoot!.querySelectorAll(
+        ".ea-descriptions__cell"
+      );
       expect(cells.length).toBeGreaterThan(0);
 
       const label = cells[0].querySelector(".ea-descriptions__label");
@@ -270,8 +281,12 @@ describe("EaDescriptions", () => {
 
       await descriptions.updateComplete;
 
-      const labels = descriptions.shadowRoot!.querySelectorAll("td.ea-descriptions__label");
-      const contents = descriptions.shadowRoot!.querySelectorAll("td.ea-descriptions__content");
+      const labels = descriptions.shadowRoot!.querySelectorAll(
+        "td.ea-descriptions__label"
+      );
+      const contents = descriptions.shadowRoot!.querySelectorAll(
+        "td.ea-descriptions__content"
+      );
       expect(labels.length).toBeGreaterThan(0);
       expect(contents.length).toBeGreaterThan(0);
     });
@@ -289,7 +304,9 @@ describe("EaDescriptions", () => {
       await descriptions.updateComplete;
 
       const thElements = descriptions.shadowRoot!.querySelectorAll("th");
-      const tdElements = descriptions.shadowRoot!.querySelectorAll("td.ea-descriptions__content");
+      const tdElements = descriptions.shadowRoot!.querySelectorAll(
+        "td.ea-descriptions__content"
+      );
       expect(thElements.length).toBeGreaterThan(0);
       expect(tdElements.length).toBeGreaterThan(0);
     });
@@ -320,7 +337,9 @@ describe("EaDescriptions", () => {
 
       await descriptions.updateComplete;
 
-      const tbody = descriptions.shadowRoot!.querySelector(".ea-descriptions__body");
+      const tbody = descriptions.shadowRoot!.querySelector(
+        ".ea-descriptions__body"
+      );
       expect(tbody!.children.length).toBe(0);
     });
 
@@ -333,7 +352,9 @@ describe("EaDescriptions", () => {
 
       await descriptions.updateComplete;
 
-      const tbody = descriptions.shadowRoot!.querySelector(".ea-descriptions__body");
+      const tbody = descriptions.shadowRoot!.querySelector(
+        ".ea-descriptions__body"
+      );
       expect(tbody!.children.length).toBeGreaterThan(0);
     });
 
@@ -349,7 +370,9 @@ describe("EaDescriptions", () => {
 
       await descriptions.updateComplete;
 
-      const rows = descriptions.shadowRoot!.querySelectorAll(".ea-descriptions__row");
+      const rows = descriptions.shadowRoot!.querySelectorAll(
+        ".ea-descriptions__row"
+      );
       expect(rows.length).toBeGreaterThanOrEqual(2);
     });
   });
@@ -697,7 +720,9 @@ describe("EaDescriptionsItem", () => {
         el.innerHTML = `<ea-descriptions-item label="Name">John</ea-descriptions-item>`;
         container.appendChild(el);
         await el.updateComplete;
-        const labels = el.shadowRoot!.querySelectorAll(".ea-descriptions__label");
+        const labels = el.shadowRoot!.querySelectorAll(
+          ".ea-descriptions__label"
+        );
         expect(labels.length).toBeGreaterThan(0);
         labels.forEach(label => {
           expect(label.getAttribute("role")).toBe("rowheader");

@@ -7,6 +7,7 @@ import {
   listen,
 } from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
+import { reportWarn } from "@easy-component-ui/core/utils/diagnostics";
 import { EaImageLoadEvent } from "./events/EaImageLoadEvent";
 import { EaImageErrorEvent } from "./events/EaImageErrorEvent";
 import stylesheet from "./index.scss?inline";
@@ -94,8 +95,9 @@ export class EaImage extends EaBase {
     type: String,
     observer(this: EaImage, newVal: string) {
       if (!CSS.supports("width", newVal))
-        return console.warn(
-          `[EaImage] The width value ${newVal} is not supported.`
+        return reportWarn(
+          TAG_NAME,
+          `The width value ${newVal} is not supported, expected a valid CSS width value.`
         );
 
       this.style.setProperty("--ea-image-width", newVal);
@@ -107,8 +109,9 @@ export class EaImage extends EaBase {
     type: String,
     observer(this: EaImage, newVal: string) {
       if (!CSS.supports("height", newVal))
-        return console.warn(
-          `[EaImage] The height value ${newVal} is not supported.`
+        return reportWarn(
+          TAG_NAME,
+          `The height value ${newVal} is not supported, expected a valid CSS height value.`
         );
 
       this.style.setProperty("--ea-image-height", newVal);
@@ -120,8 +123,9 @@ export class EaImage extends EaBase {
     type: Enum(["", "fill", "contain", "cover", "none", "scale-down"]),
     observer(this: EaImage, newVal: ImageFit) {
       if (!CSS.supports("object-fit", newVal))
-        return console.warn(
-          `[EaImage] The object-fit value ${newVal} is not supported.`
+        return reportWarn(
+          TAG_NAME,
+          `The object-fit value ${newVal} is not supported, expected one of [fill, contain, cover, none, scale-down].`
         );
 
       this.style.setProperty("--ea-image-fit", newVal);
@@ -264,7 +268,10 @@ export class EaImage extends EaBase {
     type: Array,
     async observer(this: EaImage, newVal: string[]) {
       if (!this.preview)
-        return console.warn("[EaImage] Preview is not enabled.");
+        return reportWarn(
+          TAG_NAME,
+          "Preview is not enabled, set preview to enable it."
+        );
 
       await customElements.whenDefined("ea-image-preview");
 

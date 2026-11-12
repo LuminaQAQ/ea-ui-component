@@ -7,6 +7,7 @@ import {
 } from "@easy-component-ui/core/decorator";
 import { timeout } from "@easy-component-ui/core/utils/timeout";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
+import { reportWarn } from "@easy-component-ui/core/utils/diagnostics";
 import {
   VARIANT_TYPES,
   VARIANT_DEFAULT,
@@ -119,7 +120,10 @@ export class EaTag extends EaBase {
         this._container.style.setProperty("--ea-tag-custom-color", color);
       } else {
         this._container.style.removeProperty("--ea-tag-custom-color");
-        console.warn(`[EaTag] The color value ${color} is not supported.`);
+        reportWarn(
+          TAG_NAME,
+          `The color value ${color} is not supported, expected a valid CSS color value.`
+        );
       }
     } catch {
       this._container.style.setProperty("--ea-tag-custom-color", color);

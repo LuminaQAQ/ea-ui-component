@@ -323,9 +323,10 @@ export class EaSwitch extends EaFormAssociatedBase {
     }
   }
 
+  /** 表单重置：回到关闭状态并复位校验状态 */
   formResetCallback(): void {
     this.value = false;
-    this.setValidity({});
+    this.$resetValidity();
   }
 
   $mount(): void {
@@ -347,6 +348,7 @@ export class EaSwitch extends EaFormAssociatedBase {
   }
 
   $updated(): void {
+    super.$updated();
     this.updateContainerClasslist();
   }
 
@@ -354,30 +356,14 @@ export class EaSwitch extends EaFormAssociatedBase {
     return this._container;
   }
 
-  /** 更新表单验证状态，required 时必须选中 */
-  updateValidity() {
-    const anchor = this._container ?? undefined;
-    const isChecked = this._parseValue(this.value) === this._parsedActiveValue;
-
-    if (this.required && !isChecked) {
-      this.internals?.setValidity(
-        { valueMissing: true },
-        "请开启此选项",
-        anchor
-      );
-    } else {
-      this.internals?.setValidity({}, "", anchor);
-    }
+  /** required 时未处于激活值即视为空值 */
+  protected $isEmpty(): boolean {
+    return this._parseValue(this.value) !== this._parsedActiveValue;
   }
 
-  checkValidity(): boolean {
-    this.updateValidity();
-    return this.internals?.validity?.valid ?? true;
-  }
-
-  reportValidity(): boolean {
-    this.updateValidity();
-    return this.internals?.reportValidity() ?? true;
+  protected $validationMessage(flag: string, limit?: number): string {
+    if (flag === "valueMissing") return "请开启此选项";
+    return super.$validationMessage(flag, limit);
   }
 }
 

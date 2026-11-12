@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y.js";
+import { waitForRender } from "../../test/utils/waitForRender";
 
 import "./index.ts";
 
@@ -939,6 +940,7 @@ describe("EaSteps Component", () => {
       container.appendChild(steps);
 
       await steps.updateComplete;
+      await waitForRender();
 
       const stepElements = steps.querySelectorAll("ea-step");
       const iconElement =

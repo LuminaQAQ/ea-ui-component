@@ -3,7 +3,10 @@ $name: ea-transfer-panel;
 :host {
   --#{$name}-width: 200px;
   --#{$name}-height: 300px;
-  --#{$name}-border-color: var(--grey-300);
+  --#{$name}-border-color: var(
+    --#{$name}-border-color-override,
+    var(--grey-300)
+  );
   --#{$name}-background-color: var(--white);
   --#{$name}-header-height: 40px;
   --#{$name}-header-background: var(--grey-100);

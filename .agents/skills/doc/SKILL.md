@@ -462,6 +462,7 @@ ea-overlay {
 - 类型为枚举值的属性，可选值列写出所有可选值
 - 属性名使用 camelCase
 - 仅包含 `@attribute` 装饰器声明的属性（映射 HTML attribute）
+- 用 `name` 选项映射到 `data-*` 的开关属性，按 HTML 属性名书写（如 `data-validate-trigger`），不写 camelCase
 
 ### Properties 表格
 
@@ -553,6 +554,17 @@ ea-overlay {
 
 ...
 ```
+
+### 表单类组件
+
+继承 `EaFormAssociatedBase` 的组件，Attributes 表格必须同时列出基类的两个校验开关（写在 `required` 行之后）：
+
+```markdown
+| data-validate-trigger | 错误样式的展示时机 | String | auto / submit / manual | auto |
+| data-error-display | 错误提示的展示方式 | String | native / text | native |
+```
+
+行为说明、form 级统配与优先级统一写在 [ea-form.md](file:///e:/repo/ea-ui-component/docs/ea-form.md) 的「校验时机与错误提示」章节，组件文档不重复展开。
 
 ### 弹出层类组件
 

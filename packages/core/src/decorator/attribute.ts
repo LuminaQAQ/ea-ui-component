@@ -1,5 +1,6 @@
 ﻿import type { AttributeOptions } from "../types/index";
 import { declareAttribute } from "../schema";
+import { reportErrorOnce } from "../utils/diagnostics";
 
 /**
  * @attribute 装饰器 - 声明映射到 HTML attribute 的属性
@@ -12,8 +13,9 @@ import { declareAttribute } from "../schema";
 function attribute(options: AttributeOptions) {
   return function (target: any, name?: string | symbol): void {
     if (typeof name !== "string" && typeof name !== "symbol") {
-      console.warn(
-        "attribute decorator: 无法识别的装饰器调用格式, name:",
+      reportErrorOnce(
+        "attribute-decorator",
+        "无法识别的装饰器调用格式, name:",
         name
       );
       return;

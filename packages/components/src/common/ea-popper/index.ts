@@ -5,6 +5,7 @@ import {
   query,
 } from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
+import { reportError } from "@easy-component-ui/core/utils/diagnostics";
 import { EaPopperShowEvent } from "./events/EaPopperShowEvent";
 import { EaPopperShownEvent } from "./events/EaPopperShownEvent";
 import { EaPopperHideEvent } from "./events/EaPopperHideEvent";
@@ -182,7 +183,7 @@ export class EaPopper extends EaBase {
         this.style.setProperty("--ea-popper-transform-x", `${x}px`);
         this.style.setProperty("--ea-popper-transform-y", `${y}px`);
       } catch (error) {
-        console.error(error);
+        reportError(TAG_NAME, error);
       }
     },
   })

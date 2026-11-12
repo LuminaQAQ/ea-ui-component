@@ -12,4 +12,3 @@ export class EaCollapseChangeEvent extends Event {
     this.detail = detail;
   }
 }
-

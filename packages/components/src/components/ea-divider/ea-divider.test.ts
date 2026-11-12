@@ -87,9 +87,8 @@ describe("EaDivider", () => {
       el.setAttribute("variant", "dashed");
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
-        ".ea-divider"
-      );
+      const containerEl =
+        el.shadowRoot!.querySelector<HTMLElement>(".ea-divider");
       expect(
         containerEl!.style.getPropertyValue("--ea-divider-border-style")
       ).toBe("dashed");
@@ -205,7 +204,9 @@ describe("EaDivider", () => {
       await el.updateComplete;
 
       const containerEl = el.shadowRoot!.querySelector(".ea-divider");
-      expect(containerEl!.classList.contains("ea-divider--vertical")).toBe(true);
+      expect(containerEl!.classList.contains("ea-divider--vertical")).toBe(
+        true
+      );
     });
   });
 

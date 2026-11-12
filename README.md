@@ -58,6 +58,29 @@ import "easy-component-ui/ea-input";
 </html>
 ```
 
+## 渲染完成与等待
+
+组件挂载后不会立即出现在 DOM 中，首次渲染完成前读取 `shadowRoot` 只能拿到空壳。需要拿到尺寸、子节点或做截图时，等 `updateComplete`：
+
+```javascript
+const button = document.querySelector("ea-button");
+
+await button.updateComplete;
+// 此时 shadowRoot 已渲染完成
+```
+
+`updateComplete` 在每次属性更新后重新变为未完成状态，等待它总是安全的，不会固定延时。
+
+批量等待（例如遍历页面上所有组件）用导出的两个工具函数：
+
+```javascript
+import { hasPendingUpdates, waitForPendingUpdates } from "easy-component-ui";
+
+if (hasPendingUpdates()) await waitForPendingUpdates();
+```
+
+`hasPendingUpdates()` 返回当前是否有组件正在更新；`waitForPendingUpdates()` 会先让出一个微任务，再把在途的更新排空（最多 10 轮），不会漏掉刚触发的更新。
+
 ## 组件列表
 
 ### Basic 基础组件

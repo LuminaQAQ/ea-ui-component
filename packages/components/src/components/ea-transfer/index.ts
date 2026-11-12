@@ -813,25 +813,15 @@ export class EaTransfer extends EaFormAssociatedBase {
     );
   }
 
-  updateValidity(): void {
-    const val = this.value;
-    const isEmpty = !val || (Array.isArray(val) && val.length === 0);
+  $mounted(): void {
+    super.$mounted();
 
-    if (this.required && isEmpty) {
-      this.internals.setValidity({ valueMissing: true }, "请至少选择一项");
-    } else {
-      this.internals.setValidity({}, "");
-    }
+    if (!this.hasAttribute("tabindex")) this.tabIndex = -1;
   }
 
-  checkValidity(): boolean {
-    this.updateValidity();
-    return this.internals.checkValidity();
-  }
-
-  reportValidity(): boolean {
-    this.updateValidity();
-    return this.internals.reportValidity();
+  protected $validationMessage(flag: string, limit?: number): string {
+    if (flag === "valueMissing") return "请至少选择一项";
+    return super.$validationMessage(flag, limit);
   }
 }
 

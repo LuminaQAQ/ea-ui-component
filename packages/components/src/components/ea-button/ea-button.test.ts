@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { runAxe, assertNoA11yViolations } from "../../test/utils/a11y";
+import { waitForRender } from "../../test/utils/waitForRender";
 
 import "./index";
 
@@ -982,7 +983,8 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      const containerEl = button.shadowRoot!.querySelector('[part="container"]');
+      const containerEl =
+        button.shadowRoot!.querySelector('[part="container"]');
       expect(containerEl).toBeDefined();
     });
 
@@ -1091,9 +1093,8 @@ describe("EaButton Component", () => {
       const submitHandler = vi.fn();
       form.addEventListener("submit", submitHandler);
 
-      const innerButton = button.shadowRoot!.querySelector<HTMLElement>(
-        ".ea-button"
-      );
+      const innerButton =
+        button.shadowRoot!.querySelector<HTMLElement>(".ea-button");
       innerButton!.click();
 
       expect(submitHandler).toHaveBeenCalled();
@@ -1116,9 +1117,8 @@ describe("EaButton Component", () => {
       await button.updateComplete;
 
       const resetSpy = vi.spyOn(form, "reset");
-      const innerButton = button.shadowRoot!.querySelector<HTMLElement>(
-        ".ea-button"
-      );
+      const innerButton =
+        button.shadowRoot!.querySelector<HTMLElement>(".ea-button");
       innerButton!.click();
 
       expect(resetSpy).toHaveBeenCalled();
@@ -1696,6 +1696,7 @@ describe("EaButtonGroup Component", () => {
       container.appendChild(group);
 
       await btn.updateComplete;
+      await waitForRender();
 
       expect(btn.getAttribute("size")).toBe("small");
       expect(btn.getAttribute("variant")).toBe("danger");

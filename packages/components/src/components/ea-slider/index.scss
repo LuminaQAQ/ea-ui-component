@@ -22,7 +22,7 @@ $name: ea-slider;
   width: 100%;
 }
 
-:host(:invalid) {
+:host([data-invalid]) {
   .#{$name}__form-label {
     color: var(--red-500);
   }
@@ -270,3 +270,5 @@ $name: ea-slider;
     --#{$name}-thumb-size: var(--#{$name}-thumb-size-large);
   }
 }
+
+@include form-error-message;

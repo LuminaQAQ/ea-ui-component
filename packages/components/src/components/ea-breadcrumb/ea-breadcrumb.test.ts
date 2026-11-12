@@ -231,7 +231,9 @@ describe("EaBreadcrumb Component", () => {
       item.removeAttribute("href");
       await item.updateComplete;
 
-      contentEl = item.shadowRoot!.querySelector(".ea-breadcrumb-item__content");
+      contentEl = item.shadowRoot!.querySelector(
+        ".ea-breadcrumb-item__content"
+      );
       expect(contentEl!.tagName.toLowerCase()).toBe("span");
     });
   });
@@ -605,7 +607,8 @@ describe("EaBreadcrumb Component", () => {
         const item = document.createElement("ea-breadcrumb-item");
         container.appendChild(item);
         await item.updateComplete;
-        const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+        const containerEl =
+          item.shadowRoot!.querySelector('[part="container"]');
         expect(containerEl!.getAttribute("role")).toBe("listitem");
       });
 

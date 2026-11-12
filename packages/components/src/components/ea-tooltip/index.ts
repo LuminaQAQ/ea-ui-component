@@ -7,6 +7,7 @@ import {
   listen,
 } from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
+import { reportWarn } from "@easy-component-ui/core/utils/diagnostics";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-tooltip" as const;
@@ -147,7 +148,10 @@ export class EaTooltip extends EaPopper {
     if (strategy) {
       strategy();
     } else {
-      console.warn(`[EaTooltip] trigger event ${this.trigger} is not exist`);
+      reportWarn(
+        TAG_NAME,
+        `trigger ${this.trigger} is not supported, fallback to hover.`
+      );
       this._triggerEventStrategies["hover"]();
     }
   }

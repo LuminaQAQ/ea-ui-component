@@ -7,6 +7,7 @@ import {
   query,
 } from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
+import { reportWarn } from "@easy-component-ui/core/utils/diagnostics";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-popover" as const;
@@ -153,7 +154,10 @@ export class EaPopover extends EaPopper {
     if (strategy) {
       strategy();
     } else {
-      console.warn(`[EaPopover] trigger event ${this.trigger} is not exist`);
+      reportWarn(
+        TAG_NAME,
+        `trigger ${this.trigger} is not supported, fallback to hover.`
+      );
       this._triggerEventStrategies["hover"]();
     }
   }

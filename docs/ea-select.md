@@ -528,18 +528,20 @@ createOptionExample.init();
 
 ### Select Attributes
 
-| 属性名            | 说明                               | 类型                              | 可选值                  | 默认值  |
-| :---------------- | :--------------------------------- | :-------------------------------- | :---------------------- | :------ |
-| placeholder       | 占位文本                           | string                            | —                       | —       |
-| disabled          | 是否禁用                           | boolean                           | —                       | false   |
-| clearable         | 是否可以清空选项                   | boolean                           | —                       | false   |
-| size              | 输入框尺寸                         | string                            | large / default / small | default |
-| multiple          | 是否多选                           | boolean                           | —                       | false   |
-| collapse-tags     | 多选时是否将选中值按文字的形式展示 | boolean                           | —                       | false   |
-| max-collapse-tags | 多选时最多显示标签数量             | number                            | —                       | 1       |
-| filterable        | 是否可搜索                         | boolean                           | —                       | false   |
-| required          | 是否必填                           | boolean                           | —                       | false   |
-| value / v-model   | 绑定值                             | string / number / boolean / array | —                       | —       |
+| 属性名                | 说明                               | 类型                              | 可选值                  | 默认值  |
+| :-------------------- | :--------------------------------- | :-------------------------------- | :---------------------- | :------ |
+| placeholder           | 占位文本                           | string                            | —                       | —       |
+| disabled              | 是否禁用                           | boolean                           | —                       | false   |
+| clearable             | 是否可以清空选项                   | boolean                           | —                       | false   |
+| size                  | 输入框尺寸                         | string                            | large / default / small | default |
+| multiple              | 是否多选                           | boolean                           | —                       | false   |
+| collapse-tags         | 多选时是否将选中值按文字的形式展示 | boolean                           | —                       | false   |
+| max-collapse-tags     | 多选时最多显示标签数量             | number                            | —                       | 1       |
+| filterable            | 是否可搜索                         | boolean                           | —                       | false   |
+| required              | 是否必填                           | boolean                           | —                       | false   |
+| data-validate-trigger | 错误样式的展示时机                 | String                            | auto / submit / manual  | auto    |
+| data-error-display    | 错误提示的展示方式                 | String                            | native / text           | native  |
+| value / v-model       | 绑定值                             | string / number / boolean / array | —                       | —       |
 
 ### Select Events
 

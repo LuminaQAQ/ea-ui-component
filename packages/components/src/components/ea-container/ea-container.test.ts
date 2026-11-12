@@ -125,13 +125,19 @@ describe("EaContainer", () => {
       await el.updateComplete;
 
       const containerEl = el.shadowRoot!.querySelector(".ea-container");
-      expect(containerEl!.classList.contains("ea-container--horizontal")).toBe(true);
+      expect(containerEl!.classList.contains("ea-container--horizontal")).toBe(
+        true
+      );
 
       el.setAttribute("direction", "vertical");
       await el.updateComplete;
 
-      expect(containerEl!.classList.contains("ea-container--vertical")).toBe(true);
-      expect(containerEl!.classList.contains("ea-container--horizontal")).toBe(false);
+      expect(containerEl!.classList.contains("ea-container--vertical")).toBe(
+        true
+      );
+      expect(containerEl!.classList.contains("ea-container--horizontal")).toBe(
+        false
+      );
     });
   });
 
@@ -505,7 +511,9 @@ describe("EaContainer", () => {
 
       const containerEl = el.shadowRoot!.querySelector(".ea-container");
       expect(containerEl!.classList.contains("ea-container")).toBe(true);
-      expect(containerEl!.classList.contains("ea-container--horizontal")).toBe(true);
+      expect(containerEl!.classList.contains("ea-container--horizontal")).toBe(
+        true
+      );
     });
 
     it("ea-container 设置 vertical 后应该有 ea-container--vertical 修饰符类名", async () => {
@@ -516,7 +524,9 @@ describe("EaContainer", () => {
       await el.updateComplete;
 
       const containerEl = el.shadowRoot!.querySelector(".ea-container");
-      expect(containerEl!.classList.contains("ea-container--vertical")).toBe(true);
+      expect(containerEl!.classList.contains("ea-container--vertical")).toBe(
+        true
+      );
     });
 
     it("ea-header 应该有 ea-header 块类名", () => {

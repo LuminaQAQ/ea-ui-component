@@ -143,7 +143,7 @@ export const buildFormData: FormDataBuilder = (
  * const request = createUploadRequest({
  *   action: '/upload',
  *   onSuccess: (e) => console.log('成功', e),
- *   onError: (e, err) => console.error('失败', err),
+ *   onError: (e, err) => reportError('ea-upload', err),
  * });
  * request.submit();
  * // 稍后取消

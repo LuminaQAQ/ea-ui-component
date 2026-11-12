@@ -11,5 +11,5 @@
     }
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "src/test/browser"]
+  "exclude": ["node_modules", "dist", "src/test/browser", "src/test/setup.ts"]
 }

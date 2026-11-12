@@ -1448,6 +1448,7 @@ describe("EaTransfer", () => {
       const el = document.createElement("ea-transfer");
       container.appendChild(el);
       await el.updateComplete;
+      await waitForRender();
       const results = await runAxe(el, {
         rules: {
           "button-name": { enabled: false },

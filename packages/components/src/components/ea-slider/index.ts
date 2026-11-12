@@ -650,26 +650,10 @@ export class EaSlider extends EaFormAssociatedBase {
     return this._input;
   }
 
-  updateValidity(): void {
-    const hasValue = this.value !== null && this.value !== undefined;
-
-    if (this.required && !hasValue) {
-      this.internals.setValidity({ valueMissing: true }, "请设置一个值", this);
-    } else {
-      this.internals.setValidity({}, "", this);
-    }
+  protected $validationMessage(flag: string, limit?: number): string {
+    if (flag === "valueMissing") return "请设置一个值";
+    return super.$validationMessage(flag, limit);
   }
-
-  checkValidity(): boolean {
-    this.updateValidity();
-    return this.internals.validity.valid;
-  }
-
-  reportValidity(): boolean {
-    this.updateValidity();
-    return this.internals.reportValidity();
-  }
-
   $mount(): void {
     this.setAttribute("role", "slider");
     this.tabIndex = 0;

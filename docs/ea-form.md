@@ -101,6 +101,33 @@ onMounted(() => {
     });
     // #endregion
     // ------- end -------
+
+    // ------- 5. 表单校验示例 -------
+    // #region
+    const validateForm = document.getElementById('validateForm');
+    const validateFormOutput = document.getElementById('validateFormOutput');
+
+    validateForm?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const data = Object.fromEntries(new FormData(validateForm).entries());
+        validateFormOutput.textContent = '提交的数据：\n' + JSON.stringify(data, null, 2);
+    });
+
+    const validateDemos = [
+        { id: 'errorDisplayForm', name: '错误提示' },
+        { id: 'validateTriggerForm', name: '校验时机' },
+        { id: 'formSettingsForm', name: '表单级配置' }
+    ];
+
+    validateDemos.forEach(({ id, name }) => {
+        const form = document.getElementById(id);
+        form?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert(`${name} 校验通过！`);
+        });
+    });
+    // #endregion
+    // ------- end -------
 })
 </script>
 
@@ -201,23 +228,15 @@ onMounted(() => {
 
 ## 引入
 
-::: code-group
+表单采用原生 `<form>` 元素，因此无需额外引入；页面中使用到的控件（`ea-input`、`ea-select` 等）各自按需引入即可。
 
-```html [原生引入]
-<script type="module">
-  import "./node_modules/easy-component-ui/dist/components/ea-form.js";
-</script>
-```
+## 自定义样式
 
-```js [Vite]
-import "easy-component-ui/ea-form";
-```
-
-:::
+移步到 [CSS Custom Properties](#form-css-custom-properties)。
 
 ## 基础表单
 
-包含常用的表单控件，展示基本的表单布局和数据收集功能。
+常用的表单控件组合，提交后输出表单数据。
 
 <div class="demo">
   <div class="demo-card">
@@ -433,9 +452,9 @@ basicForm.init();
 
 ## 复杂表单
 
-涵盖所有表单组件的综合示例，展示表单验证和数据收集功能。
+所有表单控件的组合，提交时校验必填项。
 
-<div class="row is-not-demo">
+<div class="row">
   <div class="demo-card">
     <form id="complexForm" class="demo-form">
       <div class="demo-section-title">基本信息</div>
@@ -822,13 +841,258 @@ complexTransfer.data = [
 
 ::::
 
+## 表单校验
+
+表单提交时，优先通过浏览器原生约束（如: `required`、`minlength`、`type="email"` 等）校验，不通过则不触发 `submit`。此时，`ea-button` 的 `type="submit"` 触发的是 [`form.requestSubmit()`](https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLFormElement/requestSubmit#%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E) 。
+
+<div class="demo">
+  <form id="validateForm">
+    <div class="row is-not-demo">
+      <ea-input
+        style="width: 240px"
+        name="username"
+        label="用户名"
+        required
+        minlength="3"
+        placeholder="至少 3 个字符"
+      ></ea-input>
+      <ea-input
+        style="width: 240px"
+        name="email"
+        type="email"
+        label="邮箱"
+        required
+        placeholder="请输入邮箱"
+      ></ea-input>
+    </div>
+    <div class="row is-not-demo">
+      <ea-button variant="primary" type="submit" size="small">提交</ea-button>
+    </div>
+  </form>
+</div>
+
+<div class="demo-output" id="validateFormOutput"></div>
+
+:::: details 查看代码
+
+::: code-group
+
+```html
+<form id="validateForm">
+  <ea-input
+    name="username"
+    label="用户名"
+    required
+    minlength="3"
+    placeholder="至少 3 个字符"
+  ></ea-input>
+  <ea-input
+    name="email"
+    type="email"
+    label="邮箱"
+    required
+    placeholder="请输入邮箱"
+  ></ea-input>
+  <ea-button variant="primary" type="submit">提交</ea-button>
+</form>
+```
+
+```js
+const form = document.getElementById("validateForm");
+
+form.addEventListener("submit", e => {
+  e.preventDefault();
+  const data = Object.fromEntries(new FormData(form).entries());
+  document.getElementById("validateFormOutput").textContent =
+    "提交的数据：\n" + JSON.stringify(data, null, 2);
+});
+```
+
+:::
+
+::::
+
+## 错误提示
+
+`data-error-display` 提供了两种配置。默认为 `native`，只用浏览器原生气泡；`text` 只在控件下方渲染文案，不弹浏览器原生气泡。
+
+<div class="demo">
+  <form id="errorDisplayForm">
+    <div class="row is-not-demo">
+      <ea-input
+        style="width: 240px"
+        name="username"
+        label="默认气泡"
+        required
+        placeholder="请输入"
+      ></ea-input>
+      <ea-input
+        style="width: 240px"
+        name="email"
+        label="文案提示"
+        required
+        placeholder="请输入"
+        data-error-display="text"
+      ></ea-input>
+    </div>
+    <div class="row is-not-demo">
+      <ea-button variant="primary" type="submit" size="small">提交</ea-button>
+    </div>
+  </form>
+</div>
+
+:::: details 查看代码
+
+::: code-group
+
+```html
+<form id="errorDisplayForm">
+  <ea-input name="username" label="默认气泡" required></ea-input>
+  <ea-input
+    name="email"
+    label="文案提示"
+    required
+    data-error-display="text"
+  ></ea-input>
+  <ea-button variant="primary" type="submit">提交</ea-button>
+</form>
+```
+
+```js
+const form = document.getElementById("errorDisplayForm");
+
+form.addEventListener("submit", e => {
+  e.preventDefault();
+  alert("错误提示 校验通过！");
+});
+```
+
+:::
+
+::::
+
+## 校验时机
+
+进入页面默认不产生检验效果。默认 `auto`：用户交互（`input` / `change` / `focusout`）或提交被拦截后就显示，校验通过后自动恢复。
+
+::: tip
+需要完全手动控制时则设置 `manual`，通过 `markTouched()` / `resetTouched()` 控制错误状态。
+:::
+
+<div class="demo">
+  <form id="validateTriggerForm" data-validate-trigger="submit">
+    <div class="row is-not-demo">
+      <ea-input
+        style="width: 240px"
+        name="username"
+        label="用户名"
+        required
+        placeholder="请输入"
+      ></ea-input>
+    </div>
+    <div class="row is-not-demo">
+      <ea-button variant="primary" type="submit" size="small">提交</ea-button>
+    </div>
+  </form>
+</div>
+
+:::: details 查看代码
+
+::: code-group
+
+```html
+<form data-validate-trigger="submit">
+  <ea-input name="username" label="用户名" required></ea-input>
+  <ea-button variant="primary" type="submit">提交</ea-button>
+</form>
+```
+
+```js
+const form = document.getElementById("validateTriggerForm");
+
+form.addEventListener("submit", e => {
+  e.preventDefault();
+  alert("校验通过！");
+});
+```
+
+:::
+
+::::
+
+## 表单级配置
+
+两个开关同样可以写在 `<form>` 上，控件自身的同名属性优先，form 上的属性改动即时生效。
+
+<div class="demo">
+  <form
+    id="formSettingsForm"
+    data-validate-trigger="submit"
+    data-error-display="text"
+  >
+    <div class="row is-not-demo">
+      <ea-input
+        style="width: 240px"
+        name="username"
+        label="用户名"
+        required
+        placeholder="请输入用户名"
+      ></ea-input>
+      <ea-select
+        style="width: 240px"
+        name="city"
+        label="城市"
+        required
+        placeholder="请选择城市"
+        data-error-display="native"
+      >
+        <ea-option value="beijing">北京</ea-option>
+        <ea-option value="shanghai">上海</ea-option>
+      </ea-select>
+    </div>
+    <div class="row is-not-demo">
+      <ea-button variant="primary" type="submit" size="small">提交</ea-button>
+    </div>
+  </form>
+</div>
+
+:::: details 查看代码
+
+::: code-group
+
+```html
+<form data-validate-trigger="submit" data-error-display="text">
+  <ea-input name="username" label="用户名" required></ea-input>
+  <ea-select
+    name="city"
+    label="城市"
+    required
+    data-error-display="native"
+  ></ea-select>
+  <ea-button variant="primary" type="submit">提交</ea-button>
+</form>
+```
+
+```js
+const form = document.getElementById("formSettingsForm");
+
+form.addEventListener("submit", e => {
+  e.preventDefault();
+  alert("表单级配置 校验通过！");
+});
+```
+
+:::
+
+::::
+
 ## 各组件验证示例
 
-以下是各表单组件的单独验证示例，展示不同组件的验证用法。
+以下是各表单组件的必填校验，点击提交时校验不通过会被拦截。
 
 ### 输入框验证
 
-<div class="row is-not-demo">
+<div class="row">
   <div class="component-card">
     <h4>输入框验证</h4>
     <form id="inputForm">
@@ -889,7 +1153,7 @@ inputForm.addEventListener("submit", e => {
 
 ### 数字输入验证
 
-<div class="row is-not-demo">
+<div class="row">
   <div class="component-card">
     <h4>数字输入验证</h4>
     <form id="inputNumberForm">
@@ -950,7 +1214,7 @@ inputNumberForm.addEventListener("submit", e => {
 
 ### 选择器验证
 
-<div class="row is-not-demo">
+<div class="row">
   <div class="component-card">
     <h4>选择器验证</h4>
     <form id="selectForm">
@@ -1015,7 +1279,7 @@ selectForm.addEventListener("submit", e => {
 
 ### 日期/时间选择器验证
 
-<div class="row is-not-demo">
+<div class="row">
   <div class="component-card">
     <h4>日期选择验证</h4>
     <form id="datePickerForm">
@@ -1033,7 +1297,7 @@ selectForm.addEventListener("submit", e => {
   </div>
 </div>
 
-<div class="row is-not-demo">
+<div class="row">
   <div class="component-card">
     <h4>时间选择验证</h4>
     <form id="timePickerForm">
@@ -1115,7 +1379,7 @@ timePickerForm.addEventListener("submit", e => {
 
 ### 单选/复选验证
 
-<div class="row is-not-demo">
+<div class="row">
   <div class="component-card">
     <h4>单选组验证</h4>
     <form id="radioForm">
@@ -1130,7 +1394,7 @@ timePickerForm.addEventListener("submit", e => {
   </div>
 </div>
 
-<div class="row is-not-demo">
+<div class="row">
   <div class="component-card">
     <h4>复选组验证</h4>
     <form id="checkboxForm">
@@ -1205,7 +1469,7 @@ checkboxForm.addEventListener("submit", e => {
 
 ### 评分组件验证
 
-<div class="row is-not-demo">
+<div class="row">
   <div class="component-card">
     <h4>评分验证</h4>
     <form id="rateForm">
@@ -1250,7 +1514,7 @@ rateForm.addEventListener("submit", e => {
 
 ### 开关组件验证
 
-<div class="row is-not-demo">
+<div class="row">
   <div class="component-card">
     <h4>开关验证</h4>
     <form id="switchForm">
@@ -1295,7 +1559,7 @@ switchForm.addEventListener("submit", e => {
 
 ### 颜色选择器验证
 
-<div class="row is-not-demo">
+<div class="row">
   <div class="component-card">
     <h4>颜色选择验证</h4>
     <form id="colorPickerForm">
@@ -1352,7 +1616,7 @@ colorPickerForm.addEventListener("submit", e => {
 
 ### 滑块组件验证
 
-<div class="row is-not-demo">
+<div class="demo">
   <div class="component-card">
     <h4>滑块验证</h4>
     <form id="sliderForm">
@@ -1415,7 +1679,7 @@ sliderForm.addEventListener("submit", e => {
 
 ### 穿梭框验证
 
-<div class="row is-not-demo">
+<div class="row">
   <div class="component-card" style="max-width: 100%;">
     <h4>穿梭框验证</h4>
     <form id="transferForm">
@@ -1480,7 +1744,7 @@ transferValidate.data = [
 
 ### 同意协议场景（单选复选框）
 
-<div class="row is-not-demo">
+<div class="row">
   <div class="component-card" style="max-width: 100%;">
     <h4>单选复选框（同意协议场景）</h4>
     <form id="singleCheckboxForm">
@@ -1529,28 +1793,30 @@ singleCheckboxForm.addEventListener("submit", e => {
 
 ## Form API
 
-所有表单组件均继承自 `EaFormAssociatedBase`，通过 `ElementInternals` API 实现与原生 `<form>` 的集成。
+所有表单组件均继承自 `EaFormAssociatedBase`，通过 `ElementInternals` 与原生 `<form>` 集成。
 
 ### Form Attributes
 
-以下属性适用于所有继承 `EaFormAssociatedBase` 的表单组件：
+适用于所有表单组件：
 
-| 属性名            | 说明                     | 类型            | 可选值 | 默认值     |
-| ----------------- | ------------------------ | --------------- | ------ | ---------- |
-| name              | 表单字段名               | string          | —      | —          |
-| value             | 字段值                   | string          | —      | —          |
-| label             | 标签文本                 | string          | —      | —          |
-| required          | 是否必填                 | boolean         | —      | false      |
-| disabled          | 是否禁用                 | boolean         | —      | false      |
-| form              | 关联的 form 元素（只读） | HTMLFormElement | —      | —          |
-| type              | 字段类型（只读）         | string          | —      | 组件标签名 |
-| validity          | 验证状态（只读）         | ValidityState   | —      | —          |
-| validationMessage | 验证消息（只读）         | string          | —      | —          |
-| willValidate      | 是否参与验证（只读）     | boolean         | —      | false      |
+| 属性名                | 说明                     | 类型            | 可选值                 | 默认值     |
+| --------------------- | ------------------------ | --------------- | ---------------------- | ---------- |
+| name                  | 表单字段名               | string          | —                      | —          |
+| value                 | 字段值                   | string          | —                      | —          |
+| label                 | 标签文本                 | string          | —                      | —          |
+| required              | 是否必填                 | boolean         | —                      | false      |
+| data-validate-trigger | 错误样式的展示时机       | string          | auto / submit / manual | auto       |
+| data-error-display    | 错误提示的展示方式       | string          | native / text          | native     |
+| disabled              | 是否禁用                 | boolean         | —                      | false      |
+| form                  | 关联的 form 元素（只读） | HTMLFormElement | —                      | —          |
+| type                  | 字段类型（只读）         | string          | —                      | 组件标签名 |
+| validity              | 验证状态（只读）         | ValidityState   | —                      | —          |
+| validationMessage     | 验证消息（只读）         | string          | —                      | —          |
+| willValidate          | 是否参与验证（只读）     | boolean         | —                      | false      |
 
 ### Validation Attributes
 
-以下验证属性适用于输入类表单组件（如 `ea-input`、`ea-input-number`）：
+以下验证属性适用于输入类组件，如 `ea-input`、`ea-input-number`：
 
 | 属性名    | 说明         | 类型   | 可选值 | 默认值 |
 | --------- | ------------ | ------ | ------ | ------ |
@@ -1566,10 +1832,18 @@ singleCheckboxForm.addEventListener("submit", e => {
 | ------------------- | ------------------------------------ | -------------------------------------- |
 | checkValidity       | 检查表单字段的有效性，返回 boolean   | —                                      |
 | reportValidity      | 报告验证结果并显示提示，返回 boolean | —                                      |
+| markTouched         | 展示当前校验结果的错误样式           | —                                      |
+| resetTouched        | 收起错误样式，回到未交互状态         | —                                      |
 | setCustomValidity   | 设置自定义验证消息                   | message: string                        |
 | setValidity         | 设置验证状态                         | flags: object, message: string         |
 | resetCustomValidity | 重置自定义验证消息                   | —                                      |
-| updateValidity      | 同步内部验证目标元素的验证状态       | —                                      |
+| updateValidity      | 按当前约束重算并发布校验状态         | —                                      |
 | getForm             | 获取关联的 form 元素                 | —                                      |
 | setValue            | 设置表单值（通过 ElementInternals）  | value: string / File / FormData / null |
 | removeValue         | 移除表单值（通过 ElementInternals）  | —                                      |
+
+### Form CSS Custom Properties
+
+| 属性名                | 说明                                         | 默认值         |
+| --------------------- | -------------------------------------------- | -------------- |
+| --ea-form-error-color | `data-error-display="text"` 时的错误文案颜色 | var(--red-500) |

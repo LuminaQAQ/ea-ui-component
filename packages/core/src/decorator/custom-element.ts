@@ -3,13 +3,10 @@
 } from "../utils/parseAttributeValue";
 import { StylesheetCache } from "../stores";
 import { finalize, resolveDefault } from "../schema";
-import type { ClassMeta, DeclaredType } from "../schema";
+import type { ClassMeta, DeclaredType, PropertyDecl } from "../schema";
 import { html } from "../utils/html";
-import type {
-  A11yOption,
-  EaElement,
-  EaElementConstructor,
-} from "../types/index";
+import { reportError } from "../utils/diagnostics";
+import type { EaElement, EaElementConstructor } from "../types/index";
 import {
   GlobalCustomElements,
   GlobalHTMLElement,
@@ -150,12 +147,12 @@ function createPropertyGetter(name: string, defaultValue: any) {
  * 创建属性的 setter 函数（不映射到 HTML attribute，仅作为 JS 属性）
  * @param name 属性名
  * @param observer 可选的观察者回调
- * @param a11y 可选的无障碍同步配置
+ * @param decl 属性声明，用于声明式 a11y / forward 同步
  */
 function createPropertySetter(
   name: string,
   observer?: (newVal: any, oldVal: any) => void,
-  a11y?: A11yOption
+  decl?: PropertyDecl
 ) {
   const storageKey = getPropertyStorageKey(name);
   return function (this: any, newVal: any) {
@@ -171,9 +168,11 @@ function createPropertySetter(
         observerResult = observer.call(this, newVal, oldVal);
       }
 
-      if (a11y) {
-        syncA11yAttribute(this, a11y, newVal);
+      if (decl) {
+        applyDeclaredSync(this, decl, newVal);
       }
+
+      this.requestUpdate?.(name, oldVal, newVal);
     } catch (e) {
       this._endUpdate?.();
       throw e;
@@ -240,13 +239,54 @@ function forwardAttribute(
 }
 
 /**
- * 将 a11y 配置同步到目标元素的 ARIA 属性
+ * 按声明同步属性值
+ * `a11y` 与 `forward` 共用同一条转发链路，避免两处歧义
  * @param instance 组件实例
- * @param a11y a11y 配置
- * @param value 当前属性值
+ * @param decl 属性声明
+ * @param value 当前值
+ * @param sourceAttr 源属性名，避免回写自身
  */
-function syncA11yAttribute(instance: any, a11y: A11yOption, value: any): void {
-  forwardAttribute(instance, a11y.target, a11y.ariaAttr, value, a11y.map);
+function applyDeclaredSync(
+  instance: any,
+  decl: PropertyDecl,
+  value: any,
+  sourceAttr?: string
+): void {
+  if (decl.a11y) {
+    forwardAttribute(
+      instance,
+      decl.a11y.target,
+      decl.a11y.ariaAttr,
+      value,
+      decl.a11y.map,
+      sourceAttr
+    );
+  }
+
+  if (decl.forward) {
+    forwardAttribute(
+      instance,
+      decl.forward.target,
+      decl.forward.attr,
+      value,
+      decl.forward.map,
+      sourceAttr
+    );
+  }
+}
+
+/**
+ * 首次同步声明式 a11y 属性
+ * 目标元素可能刚由 `mount()` 建好，构造期同步会空跑
+ * @param instance 组件实例
+ * @param meta 类元数据
+ */
+function syncAllDeclared(instance: any, meta: ClassMeta): void {
+  for (const [name, entry] of meta.props) {
+    if (!entry.decl.a11y) continue;
+
+    applyDeclaredSync(instance, { a11y: entry.decl.a11y }, instance[name]);
+  }
 }
 
 /**
@@ -317,32 +357,19 @@ function initBooleanDefaults(instance: any, meta: ClassMeta): void {
 }
 
 /**
- * 首次同步声明式 a11y 属性
- * @param instance 组件实例
- * @param meta 类元数据
- */
-function initA11yAttributes(instance: any, meta: ClassMeta): void {
-  for (const [name, entry] of meta.props) {
-    if (!entry.decl.a11y) continue;
-
-    syncA11yAttribute(instance, entry.decl.a11y, instance[name]);
-  }
-}
-
-/**
  * 定义响应式属性（不映射到 HTML attribute，仅作为 JS 属性）
  * @param instance 组件实例
  * @param name 属性名
  * @param defaultValue 默认值
  * @param observer 可选的观察者回调
- * @param a11y 可选的无障碍同步配置
+ * @param decl 属性声明，用于声明式 a11y / forward 同步
  */
 function defineReactiveProperty(
   instance: any,
   name: string,
   defaultValue: any,
   observer?: (newVal: any, oldVal: any) => void,
-  a11y?: A11yOption
+  decl?: PropertyDecl
 ): void {
   if (Object.getOwnPropertyDescriptor(instance, name)) {
     delete instance[name];
@@ -350,14 +377,14 @@ function defineReactiveProperty(
 
   Object.defineProperty(instance, name, {
     get: createPropertyGetter(name, defaultValue),
-    set: createPropertySetter(name, observer, a11y),
+    set: createPropertySetter(name, observer, decl),
     configurable: true,
     enumerable: true,
   });
 
-  if (a11y) {
-    // accessor 已安装，取值即默认值
-    syncA11yAttribute(instance, a11y, instance[name]);
+  if (decl?.a11y) {
+    // accessor 已安装，取值即默认值；目标不是 :host 时会在挂载后补同步
+    applyDeclaredSync(instance, { a11y: decl.a11y }, instance[name]);
   }
 }
 
@@ -527,10 +554,13 @@ function CustomElement(
               name,
               defaultValue,
               entry.decl.observer,
-              entry.decl.a11y
+              entry.decl
             );
           }
         }
+
+        // 每轮更新末尾按声明补同步（目标元素可能刚建好）
+        (this as any).$syncDeclared = () => syncAllDeclared(this, meta);
       }
 
       connectedCallback() {
@@ -538,7 +568,7 @@ function CustomElement(
 
         mount(this, classChain);
 
-        initA11yAttributes(this, meta);
+        syncAllDeclared(this, meta);
 
         const parentProto: any = CustomElementClass.prototype;
         if (typeof parentProto.connectedCallback === "function") {
@@ -592,20 +622,7 @@ function CustomElement(
 
             await decl.observer?.call(this, newValue, oldValue);
 
-            if (decl.a11y) {
-              syncA11yAttribute(this, decl.a11y, newValue);
-            }
-
-            if (decl.forward) {
-              forwardAttribute(
-                this,
-                decl.forward.target,
-                decl.forward.attr,
-                newValue,
-                decl.forward.map,
-                actualName
-              );
-            }
+            applyDeclaredSync(this, decl, newValue, actualName);
           } else if (
             typeof parentProto.attributeChangedCallback === "function"
           ) {
@@ -618,7 +635,7 @@ function CustomElement(
           }
         } catch (e) {
           if (isDevelopment()) {
-            console.error(e, this);
+            reportError("custom-element", e, this);
           }
         } finally {
           (this as any)._endUpdate?.();

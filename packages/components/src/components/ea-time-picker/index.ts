@@ -110,15 +110,18 @@ export class EaTimePicker extends EaFormAssociatedBase {
   })
   placeholder: string = "Select time";
 
+  /**
+   * 选中值
+   * 空值也要同步一次，否则清空或重置后内嵌输入框仍显示旧时间
+   */
   @attribute({
     type: String,
     observer(this: EaTimePicker, newVal: string) {
       this.setValue(newVal);
-      if (newVal) {
-        this._parseValue(newVal);
-        this._updateInputValue();
-        this._updateSelectionState();
-      }
+
+      this._parseValue(newVal ?? "");
+      this._updateInputValue();
+      this._updateSelectionState();
     },
   })
   value: string = "";
@@ -274,11 +277,11 @@ export class EaTimePicker extends EaFormAssociatedBase {
     return num < 10 ? `0${num}` : String(num);
   };
 
-  /** 同步内部 ea-input 的显示值 */
+  /** 同步内部 ea-input 的显示值，无值时清空 */
   private _updateInputValue = (): void => {
-    if (this._input) {
-      (this._input as any).value = this._timeValue;
-    }
+    if (!this._input) return;
+
+    (this._input as any).value = this.value ? this._timeValue : "";
   };
 
   /** 设置 ARIA 属性，遵循 W3C combobox 模式 */
@@ -721,24 +724,15 @@ export class EaTimePicker extends EaFormAssociatedBase {
     return this._input;
   }
 
-  updateValidity(): void {
-    const hasValue = this.value !== "" && this.value != null;
-
-    if (this.required && !hasValue) {
-      this.internals.setValidity({ valueMissing: true }, "请选择时间", this);
-    } else {
-      this.internals.setValidity({}, "", this);
-    }
+  protected $validationMessage(flag: string, limit?: number): string {
+    if (flag === "valueMissing") return "请选择时间";
+    return super.$validationMessage(flag, limit);
   }
+  /** 表单重置：清值并收起已展开的面板 */
+  formResetCallback(): void {
+    super.formResetCallback();
 
-  checkValidity(): boolean {
-    this.updateValidity();
-    return this.internals.validity.valid;
-  }
-
-  reportValidity(): boolean {
-    this.updateValidity();
-    return this.internals.reportValidity();
+    this._closeDropdown();
   }
 
   $mount(): void {

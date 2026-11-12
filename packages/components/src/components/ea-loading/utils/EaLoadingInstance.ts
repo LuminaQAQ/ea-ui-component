@@ -1,4 +1,7 @@
 import type { EaLoading } from "../index";
+import { reportWarn } from "@easy-component-ui/core/utils/diagnostics";
+
+const TAG_NAME = "ea-loading" as const;
 
 export interface EaLoadingOptions {
   lock?: boolean;
@@ -71,10 +74,7 @@ class EaLoadingInstance {
     return el;
   }
 
-  private _appendToHandler(
-    el: EaLoading,
-    target?: HTMLElement | string
-  ): void {
+  private _appendToHandler(el: EaLoading, target?: HTMLElement | string): void {
     if (!target || target === "body") {
       document.body.appendChild(el);
       return;
@@ -92,8 +92,9 @@ class EaLoadingInstance {
         document.body.appendChild(el);
       }
     } else {
-      console.warn(
-        `[EaLoading] TypeError: ${target} is not a valid element or selector.`
+      reportWarn(
+        TAG_NAME,
+        `target ${target} is not a valid element or selector, fallback to document.body.`
       );
       document.body.appendChild(el);
     }

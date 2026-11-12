@@ -5,4 +5,7 @@ import { EaDropdownMenu } from "./components/ea-dropdown-menu";
 export { EaDropdown, EaDropdownItem, EaDropdownMenu };
 
 export default { EaDropdown, EaDropdownItem, EaDropdownMenu };
-export { EaDropdownCommandEvent, type EaDropdownCommandEventDetail } from "./events/EaDropdownCommandEvent";
+export {
+  EaDropdownCommandEvent,
+  type EaDropdownCommandEventDetail,
+} from "./events/EaDropdownCommandEvent";

@@ -31,7 +31,7 @@ $name: ea-select;
   cursor: not-allowed;
 }
 
-:host(:invalid) {
+:host([data-invalid]) {
   .#{$name}__input::part(inner) {
     border-color: var(--#{$name}-border-invalid-color);
   }
@@ -185,3 +185,5 @@ $name: ea-select;
     }
   }
 }
+
+@include form-error-message;

@@ -43,7 +43,7 @@ $ea-switch-size-type: (large, default, small);
   display: inline-block;
 }
 
-:host(:invalid) {
+:host([data-invalid]) {
   .#{$name}__form-label {
     color: var(--red-500);
   }
@@ -189,3 +189,5 @@ $ea-switch-size-type: (large, default, small);
     }
   }
 }
+
+@include form-error-message;

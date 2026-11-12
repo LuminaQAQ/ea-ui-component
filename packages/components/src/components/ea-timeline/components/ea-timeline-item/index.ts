@@ -6,6 +6,7 @@ import {
 } from "@easy-component-ui/core/decorator";
 import { html } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
+import { reportWarn } from "@easy-component-ui/core/utils/diagnostics";
 import { VARIANT_TYPES, type VariantType } from "@constants/variant";
 import stylesheet from "./index.scss?inline";
 import "@/components/ea-icon/index";
@@ -82,8 +83,9 @@ export class EaTimelineItem extends EaBase {
         return;
       }
       if (!CSS.supports("color", newVal))
-        return console.warn(
-          `[EaTimelineItem] The color value ${newVal} is not supported.`
+        return reportWarn(
+          TAG_NAME,
+          `The color value ${newVal} is not supported, expected a valid CSS color value.`
         );
       if (!this._dot) return;
 

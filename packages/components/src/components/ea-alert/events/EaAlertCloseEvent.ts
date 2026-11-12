@@ -10,4 +10,3 @@ export class EaAlertCloseEvent extends Event {
     this.detail = detail;
   }
 }
-

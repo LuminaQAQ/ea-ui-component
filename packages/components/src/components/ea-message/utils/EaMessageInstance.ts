@@ -65,7 +65,10 @@ class EaMessageInstance {
     return el;
   }
 
-  private _durationHandler(el: EaMessageElement, duration: number = 3000): void {
+  private _durationHandler(
+    el: EaMessageElement,
+    duration: number = 3000
+  ): void {
     if (duration <= 0) return;
 
     timeout(() => {

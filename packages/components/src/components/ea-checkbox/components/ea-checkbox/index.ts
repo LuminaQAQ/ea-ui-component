@@ -261,9 +261,10 @@ export class EaCheckbox extends EaFormAssociatedBase {
     this._dispatchChangeEvent();
   }
 
+  /** 表单重置：取消选中并复位校验状态 */
   formResetCallback(): void {
     this.checked = false;
-    this.setValidity({});
+    this.$resetValidity();
   }
 
   $mount(): void {
@@ -275,6 +276,7 @@ export class EaCheckbox extends EaFormAssociatedBase {
   }
 
   $updated(): void {
+    super.$updated();
     this.updateContainerClasslist();
   }
 
@@ -282,25 +284,14 @@ export class EaCheckbox extends EaFormAssociatedBase {
     return this._container;
   }
 
-  /** 更新表单验证状态，required 时必须选中 */
-  updateValidity() {
-    const anchor = this._container ?? undefined;
-
-    if (this.required && !this.checked) {
-      this.internals?.setValidity({ valueMissing: true }, "请勾选此项", anchor);
-    } else {
-      this.internals?.setValidity({}, "", anchor);
-    }
+  /** required 时未勾选即视为空值 */
+  protected $isEmpty(): boolean {
+    return !this.checked;
   }
 
-  checkValidity(): boolean {
-    this.updateValidity();
-    return this.internals?.validity?.valid ?? true;
-  }
-
-  reportValidity(): boolean {
-    this.updateValidity();
-    return this.internals?.reportValidity() ?? true;
+  protected $validationMessage(flag: string, limit?: number): string {
+    if (flag === "valueMissing") return "请勾选此项";
+    return super.$validationMessage(flag, limit);
   }
 }
 

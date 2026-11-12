@@ -236,19 +236,21 @@ predefineExample.init();
 
 ### ColorPicker Attributes
 
-| 参数                  | 说明           | 类型    | 可选值                                                                                                                                                               | 默认值   |
-| --------------------- | -------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| label                 | 标签文本       | String  | —                                                                                                                                                                    | ""       |
-| value                 | 绑定值         | String  | —                                                                                                                                                                    | ""       |
-| disabled              | 是否禁用       | Boolean | —                                                                                                                                                                    | false    |
-| required              | 是否必填       | Boolean | —                                                                                                                                                                    | false    |
-| clearable             | 是否可清空     | Boolean | —                                                                                                                                                                    | false    |
-| size                  | 尺寸           | String  | `'small' \| 'medium' \| 'large'`                                                                                                                                     | ""       |
-| color-format          | 颜色格式       | String  | `'hsl' \| 'hsv' \| 'hex' \| 'rgb' \| 'rgba'`                                                                                                                         | "hex"    |
-| show-alpha            | 是否支持透明度 | Boolean | —                                                                                                                                                                    | false    |
-| tabindex              | Tab 键遍历顺序 | Number  | —                                                                                                                                                                    | 0        |
-| placement             | 弹出位置       | String  | `'top' \| 'top-start' \| 'top-end' \| 'bottom' \| 'bottom-start' \| 'bottom-end' \| 'left' \| 'left-start' \| 'left-end' \| 'right' \| 'right-start' \| 'right-end'` | "bottom" |
-| predefine <PropTag /> | 预定义颜色     | Array   | —                                                                                                                                                                    | []       |
+| 参数                  | 说明               | 类型    | 可选值                                                                                                                                                               | 默认值   |
+| --------------------- | ------------------ | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| label                 | 标签文本           | String  | —                                                                                                                                                                    | ""       |
+| value                 | 绑定值             | String  | —                                                                                                                                                                    | ""       |
+| disabled              | 是否禁用           | Boolean | —                                                                                                                                                                    | false    |
+| required              | 是否必填           | Boolean | —                                                                                                                                                                    | false    |
+| data-validate-trigger | 错误样式的展示时机 | String  | auto / submit / manual                                                                                                                                               | auto     |
+| data-error-display    | 错误提示的展示方式 | String  | native / text                                                                                                                                                        | native   |
+| clearable             | 是否可清空         | Boolean | —                                                                                                                                                                    | false    |
+| size                  | 尺寸               | String  | `'small' \| 'medium' \| 'large'`                                                                                                                                     | ""       |
+| color-format          | 颜色格式           | String  | `'hsl' \| 'hsv' \| 'hex' \| 'rgb' \| 'rgba'`                                                                                                                         | "hex"    |
+| show-alpha            | 是否支持透明度     | Boolean | —                                                                                                                                                                    | false    |
+| tabindex              | Tab 键遍历顺序     | Number  | —                                                                                                                                                                    | 0        |
+| placement             | 弹出位置           | String  | `'top' \| 'top-start' \| 'top-end' \| 'bottom' \| 'bottom-start' \| 'bottom-end' \| 'left' \| 'left-start' \| 'left-end' \| 'right' \| 'right-start' \| 'right-end'` | "bottom" |
+| predefine <PropTag /> | 预定义颜色         | Array   | —                                                                                                                                                                    | []       |
 
 ### ColorPicker CSS Part
 

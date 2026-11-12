@@ -5,6 +5,7 @@ import {
   query,
 } from "@easy-component-ui/core/decorator";
 import { emptyStatusSVG } from "./assets/emptyStatusSVG";
+import { reportWarn } from "@easy-component-ui/core/utils/diagnostics";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-empty" as const;
@@ -58,7 +59,10 @@ export class EaEmpty extends EaBase {
       }
 
       if (!CSS.supports("width", newVal)) {
-        console.warn(`[ea-empty] The size value ${newVal} is not supported.`);
+        reportWarn(
+          TAG_NAME,
+          `The size value ${newVal} is not supported, expected a valid CSS width value.`
+        );
         return;
       }
 

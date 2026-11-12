@@ -5,6 +5,7 @@ import {
   query,
 } from "@easy-component-ui/core/decorator";
 import { html } from "@easy-component-ui/core/utils/html";
+import { reportWarn } from "@easy-component-ui/core/utils/diagnostics";
 import { defaultAvatar, errorAvatar } from "./assets/avatarPlaceholder";
 import stylesheet from "./index.scss?inline";
 import "@/components/ea-icon/index";
@@ -79,8 +80,9 @@ export class EaAvatar extends EaBase {
       const isCSSValue = CSS.supports("width", newVal);
 
       if (!isEnumValue && !isCSSValue) {
-        console.warn(
-          "[ea-avatar] Please set size to one of [default, small, large] or a valid CSS width value"
+        reportWarn(
+          TAG_NAME,
+          "Please set size to one of [default, small, large] or a valid CSS width value"
         );
         this.style.setProperty(
           "--ea-avatar-size",

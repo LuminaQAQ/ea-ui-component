@@ -26,15 +26,15 @@ interface MessageBoxOptions {
   inputValue?: string;
   inputPattern?: string | RegExp | null;
   inputErrorMessage?: string;
-  inputValidator?: ((value: string) => boolean | string | Promise<boolean | string>) | null;
+  inputValidator?:
+    ((value: string) => boolean | string | Promise<boolean | string>) | null;
   center?: boolean;
   movable?: boolean;
   roundButton?: boolean;
   buttonSize?: "small" | "medium" | "large";
   appendTo?: string | HTMLElement;
   beforeClose?:
-    | ((action: Action, instance: HTMLElement, done: () => void) => void)
-    | null;
+    ((action: Action, instance: HTMLElement, done: () => void) => void) | null;
   callback?: (value: string, action: Action) => any;
 }
 
@@ -121,7 +121,11 @@ class EaMessageBoxInstance {
     const messageBox = document.createElement("ea-message-box");
 
     for (const k in options) {
-      if (k === "appendTo" || DEFERRED_BOOLEAN_KEYS.includes(k) || EXCLUDED_KEYS.includes(k)) {
+      if (
+        k === "appendTo" ||
+        DEFERRED_BOOLEAN_KEYS.includes(k) ||
+        EXCLUDED_KEYS.includes(k)
+      ) {
         continue;
       }
       const key = camelToKebab(k);

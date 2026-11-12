@@ -181,7 +181,14 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
     });
 
     it("应该支持不同的 justify 值", () => {
-      const justifies = ["start", "end", "center", "space-around", "space-between", "space-evenly"];
+      const justifies = [
+        "start",
+        "end",
+        "center",
+        "space-around",
+        "space-between",
+        "space-evenly",
+      ];
 
       for (const justify of justifies) {
         const row = document.createElement("ea-row");
@@ -246,7 +253,8 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       container.appendChild(row);
 
       expect(row.tag).toBe("div");
-      const containerElement = row.shadowRoot!.querySelector('[part="container"]');
+      const containerElement =
+        row.shadowRoot!.querySelector('[part="container"]');
       expect(containerElement!.tagName.toLowerCase()).toBe("div");
     });
 
@@ -256,7 +264,8 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       container.appendChild(row);
 
       expect(row.tag).toBe("section");
-      const containerElement = row.shadowRoot!.querySelector('[part="container"]');
+      const containerElement =
+        row.shadowRoot!.querySelector('[part="container"]');
       expect(containerElement!.tagName.toLowerCase()).toBe("section");
     });
   });
@@ -423,7 +432,8 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       container.appendChild(col);
 
       expect(col.tag).toBe("div");
-      const containerElement = col.shadowRoot!.querySelector('[part="container"]');
+      const containerElement =
+        col.shadowRoot!.querySelector('[part="container"]');
       expect(containerElement!.tagName.toLowerCase()).toBe("div");
     });
 
@@ -433,7 +443,8 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       container.appendChild(col);
 
       expect(col.tag).toBe("article");
-      const containerElement = col.shadowRoot!.querySelector('[part="container"]');
+      const containerElement =
+        col.shadowRoot!.querySelector('[part="container"]');
       expect(containerElement!.tagName.toLowerCase()).toBe("article");
     });
   });
@@ -789,7 +800,9 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       await row.updateComplete;
 
       expect(row.style.getPropertyValue("--ea-row-gutter")).toBe("20px");
-      expect(row.style.getPropertyValue("--ea-row-justify")).toBe("space-between");
+      expect(row.style.getPropertyValue("--ea-row-justify")).toBe(
+        "space-between"
+      );
       expect(row.style.getPropertyValue("--ea-row-align")).toBe("bottom");
     });
   });

@@ -382,9 +382,9 @@ describe("EaLink", () => {
       await link.updateComplete;
 
       const anchorElement = link.shadowRoot!.querySelector("a.ea-link");
-      expect(anchorElement!.classList.contains("ea-link--underline-hover")).toBe(
-        true
-      );
+      expect(
+        anchorElement!.classList.contains("ea-link--underline-hover")
+      ).toBe(true);
     });
   });
 
@@ -526,9 +526,8 @@ describe("EaLink", () => {
 
       await link.updateComplete;
 
-      const anchorElement = link.shadowRoot!.querySelector<HTMLAnchorElement>(
-        "a.ea-link"
-      );
+      const anchorElement =
+        link.shadowRoot!.querySelector<HTMLAnchorElement>("a.ea-link");
 
       const clickPromise = new Promise<void>(resolve => {
         anchorElement!.addEventListener("click", e => {

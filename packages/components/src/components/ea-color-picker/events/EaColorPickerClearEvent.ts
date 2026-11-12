@@ -8,4 +8,3 @@ export class EaColorPickerClearEvent extends Event {
     this.detail = detail || {};
   }
 }
-

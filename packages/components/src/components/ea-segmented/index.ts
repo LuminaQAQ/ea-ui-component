@@ -9,6 +9,7 @@ import {
 import { h } from "@easy-component-ui/core/utils/h";
 import { html } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
+import { reportWarn } from "@easy-component-ui/core/utils/diagnostics";
 import { EaSegmentedChangeEvent } from "./events/EaSegmentedChangeEvent";
 import stylesheet from "./index.scss?inline";
 
@@ -72,7 +73,11 @@ export class EaSegmented extends EaBase {
           "name",
           this.tagName + "-" + Math.random().toString(36).substring(2, 15)
         );
-        console.warn(`[${this.tagName}] name attribute is required.`, this);
+        reportWarn(
+          TAG_NAME,
+          "name attribute is required, an auto-generated value is used instead.",
+          this
+        );
       }
 
       this._renderOptions(newVal);

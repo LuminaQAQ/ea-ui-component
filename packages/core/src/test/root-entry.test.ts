@@ -28,7 +28,7 @@ describe.skipIf(!existsSync(distDir))(
   () => {
     it("根入口的运行时文件存在", () => {
       const target = resolveTarget(pkg.exports["."]);
-    
+
       expect(target).toBeDefined();
       expect(existsSync(resolve(pkgRoot, target as string))).toBe(true);
     });

@@ -7,6 +7,7 @@ import {
   listen,
 } from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
+import { reportWarn } from "@easy-component-ui/core/utils/diagnostics";
 import { EaPopconfirmConfirmEvent } from "./events/EaPopconfirmConfirmEvent";
 import { EaPopconfirmCancelEvent } from "./events/EaPopconfirmCancelEvent";
 import "@/components/ea-icon/index";
@@ -104,8 +105,9 @@ export class EaPopconfirm extends EaPopper {
     type: String,
     observer(this: EaPopconfirm, newVal: string) {
       if (!CSS.supports("color", newVal))
-        return console.warn(
-          `[EaPopconfirm] The color value ${newVal} is not supported.`
+        return reportWarn(
+          TAG_NAME,
+          `The color value ${newVal} is not supported, expected a valid CSS color value.`
         );
 
       this.style.setProperty("--ea-popconfirm-title-icon-color", newVal);

@@ -457,39 +457,41 @@ clearableInput.addEventListener("ea-clear", e => {
 
 ### Input Attributes
 
-| 参数            | 说明                  | 类型    | 可选值                                                                     | 默认值   |
-| --------------- | --------------------- | ------- | -------------------------------------------------------------------------- | -------- |
-| label           | 标签文本              | String  | —                                                                          | ''       |
-| type            | 输入框类型            | String  | text / textarea / password / number / email / tel / url / search / date 等 | text     |
-| size            | 输入框尺寸            | String  | large / default / small                                                    | default  |
-| value           | 输入框值              | String  | —                                                                          | ''       |
-| placeholder     | 占位符文本            | String  | —                                                                          | ''       |
-| maxlength       | 最大输入长度          | Number  | —                                                                          | —        |
-| minlength       | 最小输入长度          | Number  | —                                                                          | —        |
-| clearable       | 是否可清空            | Boolean | —                                                                          | false    |
-| clear-icon      | 清空图标名称          | String  | —                                                                          | xmark    |
-| disabled        | 是否禁用              | Boolean | —                                                                          | false    |
-| show-password   | 是否显示密码切换      | Boolean | —                                                                          | false    |
-| prefix-icon     | 前缀图标名称          | String  | —                                                                          | ''       |
-| suffix-icon     | 后缀图标名称          | String  | —                                                                          | ''       |
-| show-word-limit | 是否显示字数统计      | Boolean | —                                                                          | false    |
-| rows            | 文本域行数            | Number  | —                                                                          | 2        |
-| autosize        | 是否自动调整高度      | Boolean | —                                                                          | false    |
-| min-rows        | 自适应最小行数        | Number  | —                                                                          | —        |
-| max-rows        | 自适应最大行数        | Number  | —                                                                          | —        |
-| resize          | 文本域调整大小方式    | String  | none / both / horizontal / vertical                                        | vertical |
-| autocomplete    | 自动完成设置          | String  | on / off 等                                                                | off      |
-| name            | 字段名称              | String  | —                                                                          | ''       |
-| readonly        | 是否只读              | Boolean | —                                                                          | false    |
-| required        | 是否必填              | Boolean | —                                                                          | false    |
-| max             | 最大值（number 类型） | Number  | —                                                                          | —        |
-| min             | 最小值（number 类型） | Number  | —                                                                          | —        |
-| step            | 步长（number 类型）   | Number  | —                                                                          | 1        |
-| pattern         | 正则表达式模式        | String  | —                                                                          | —        |
-| autofocus       | 是否自动聚焦          | Boolean | —                                                                          | false    |
-| aria-label      | ARIA 标签             | String  | —                                                                          | ''       |
-| tabindex        | Tab 索引              | String  | —                                                                          | ''       |
-| inputmode       | 输入模式              | String  | numeric / tel / url / email 等                                             | ''       |
+| 参数                  | 说明                  | 类型    | 可选值                                                                     | 默认值   |
+| --------------------- | --------------------- | ------- | -------------------------------------------------------------------------- | -------- |
+| label                 | 标签文本              | String  | —                                                                          | ''       |
+| type                  | 输入框类型            | String  | text / textarea / password / number / email / tel / url / search / date 等 | text     |
+| size                  | 输入框尺寸            | String  | large / default / small                                                    | default  |
+| value                 | 输入框值              | String  | —                                                                          | ''       |
+| placeholder           | 占位符文本            | String  | —                                                                          | ''       |
+| maxlength             | 最大输入长度          | Number  | —                                                                          | —        |
+| minlength             | 最小输入长度          | Number  | —                                                                          | —        |
+| clearable             | 是否可清空            | Boolean | —                                                                          | false    |
+| clear-icon            | 清空图标名称          | String  | —                                                                          | xmark    |
+| disabled              | 是否禁用              | Boolean | —                                                                          | false    |
+| show-password         | 是否显示密码切换      | Boolean | —                                                                          | false    |
+| prefix-icon           | 前缀图标名称          | String  | —                                                                          | ''       |
+| suffix-icon           | 后缀图标名称          | String  | —                                                                          | ''       |
+| show-word-limit       | 是否显示字数统计      | Boolean | —                                                                          | false    |
+| rows                  | 文本域行数            | Number  | —                                                                          | 2        |
+| autosize              | 是否自动调整高度      | Boolean | —                                                                          | false    |
+| min-rows              | 自适应最小行数        | Number  | —                                                                          | —        |
+| max-rows              | 自适应最大行数        | Number  | —                                                                          | —        |
+| resize                | 文本域调整大小方式    | String  | none / both / horizontal / vertical                                        | vertical |
+| autocomplete          | 自动完成设置          | String  | on / off 等                                                                | off      |
+| name                  | 字段名称              | String  | —                                                                          | ''       |
+| readonly              | 是否只读              | Boolean | —                                                                          | false    |
+| required              | 是否必填              | Boolean | —                                                                          | false    |
+| data-validate-trigger | 错误样式的展示时机    | String  | auto / submit / manual                                                     | auto     |
+| data-error-display    | 错误提示的展示方式    | String  | native / text                                                              | native   |
+| max                   | 最大值（number 类型） | Number  | —                                                                          | —        |
+| min                   | 最小值（number 类型） | Number  | —                                                                          | —        |
+| step                  | 步长（number 类型）   | Number  | —                                                                          | 1        |
+| pattern               | 正则表达式模式        | String  | —                                                                          | —        |
+| autofocus             | 是否自动聚焦          | Boolean | —                                                                          | false    |
+| aria-label            | ARIA 标签             | String  | —                                                                          | ''       |
+| tabindex              | Tab 索引              | String  | —                                                                          | ''       |
+| inputmode             | 输入模式              | String  | numeric / tel / url / email 等                                             | ''       |
 
 ### Input CSS Part
 

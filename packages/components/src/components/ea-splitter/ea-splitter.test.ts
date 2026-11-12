@@ -288,7 +288,9 @@ describe("EaSplitterPanel", () => {
 
       const panel = splitter.querySelector("ea-splitter-panel");
       expect(panel!.shadowRoot).toBeTruthy();
-      expect(panel!.shadowRoot!.querySelector(".ea-splitter-panel")).toBeTruthy();
+      expect(
+        panel!.shadowRoot!.querySelector(".ea-splitter-panel")
+      ).toBeTruthy();
     });
 
     it("应该支持 CSS Parts", async () => {
@@ -301,7 +303,9 @@ describe("EaSplitterPanel", () => {
       await splitter.updateComplete;
 
       const panel = splitter.querySelector("ea-splitter-panel");
-      expect(panel!.shadowRoot!.querySelector('[part="container"]')).toBeTruthy();
+      expect(
+        panel!.shadowRoot!.querySelector('[part="container"]')
+      ).toBeTruthy();
     });
   });
 

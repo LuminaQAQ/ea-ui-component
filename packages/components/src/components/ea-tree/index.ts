@@ -7,6 +7,7 @@ import {
   listen,
 } from "@easy-component-ui/core/decorator";
 import { timeout } from "@easy-component-ui/core/utils/timeout";
+import { reportWarn } from "@easy-component-ui/core/utils/diagnostics";
 import "@components/ea-checkbox";
 import "@components/ea-icon";
 import { EaTreeCheckChangeEvent } from "./events/EaTreeCheckChangeEvent";
@@ -1025,19 +1026,22 @@ export class EaTree extends EaBase {
    */
   updateKeyChildren(key: any, data: any[]): boolean {
     if (!this.nodeKey) {
-      console.warn("updateKeyChildren requires node-key to be set");
+      reportWarn(TAG_NAME, "updateKeyChildren requires node-key to be set");
       return false;
     }
 
     const path = this._findPathByKey(key);
     if (!path) {
-      console.warn(`Node with key ${key} not found`);
+      reportWarn(TAG_NAME, `updateKeyChildren: node with key ${key} not found`);
       return false;
     }
 
     const state = this._nodeStates.get(path);
     if (!state || !state.hasChildren) {
-      console.warn("Target node is not a parent node");
+      reportWarn(
+        TAG_NAME,
+        `updateKeyChildren: node with key ${key} is not a parent node`
+      );
       return false;
     }
 
@@ -1095,7 +1099,8 @@ export class EaTree extends EaBase {
    */
   setCheckedNodes(nodes: any[]): boolean {
     if (!this.showCheckbox || !this.nodeKey) {
-      console.warn(
+      reportWarn(
+        TAG_NAME,
         "setCheckedNodes requires show-checkbox and node-key to be set"
       );
       return false;
@@ -1140,7 +1145,8 @@ export class EaTree extends EaBase {
    */
   setCheckedKeys(keys: any[], leafOnly: boolean = false): boolean {
     if (!this.showCheckbox || !this.nodeKey) {
-      console.warn(
+      reportWarn(
+        TAG_NAME,
         "setCheckedKeys requires show-checkbox and node-key to be set"
       );
       return false;
@@ -1167,19 +1173,22 @@ export class EaTree extends EaBase {
    */
   setChecked(keyOrData: any, checked: boolean): boolean {
     if (!this.showCheckbox || !this.nodeKey) {
-      console.warn("setChecked requires show-checkbox and node-key to be set");
+      reportWarn(
+        TAG_NAME,
+        "setChecked requires show-checkbox and node-key to be set"
+      );
       return false;
     }
 
     const path = this._resolvePath(keyOrData);
     if (!path) {
-      console.warn("Node not found");
+      reportWarn(TAG_NAME, "setChecked: node not found");
       return false;
     }
 
     const state = this._nodeStates.get(path);
     if (!state || state.disabled) {
-      console.warn("Cannot set checked state for disabled node");
+      reportWarn(TAG_NAME, "setChecked: cannot change a disabled node");
       return false;
     }
 
@@ -1195,7 +1204,7 @@ export class EaTree extends EaBase {
    */
   setCurrentKey(key: any, shouldAutoExpandParent: boolean = true): boolean {
     if (!this.nodeKey) {
-      console.warn("setCurrentKey requires node-key to be set");
+      reportWarn(TAG_NAME, "setCurrentKey requires node-key to be set");
       return false;
     }
 
@@ -1213,13 +1222,13 @@ export class EaTree extends EaBase {
 
     const path = this._findPathByKey(key);
     if (!path) {
-      console.warn(`Node with key ${key} not found`);
+      reportWarn(TAG_NAME, `setCurrentKey: node with key ${key} not found`);
       return false;
     }
 
     const state = this._nodeStates.get(path);
     if (!state || state.disabled) {
-      console.warn("Cannot select disabled node");
+      reportWarn(TAG_NAME, "setCurrentKey: cannot select a disabled node");
       return false;
     }
 
@@ -1240,7 +1249,7 @@ export class EaTree extends EaBase {
    */
   setCurrentNode(node: any, shouldAutoExpandParent: boolean = true): boolean {
     if (!this.nodeKey) {
-      console.warn("setCurrentNode requires node-key to be set");
+      reportWarn(TAG_NAME, "setCurrentNode requires node-key to be set");
       return false;
     }
 
@@ -1258,13 +1267,13 @@ export class EaTree extends EaBase {
 
     const path = this._findPathByData(node);
     if (!path) {
-      console.warn("Node not found");
+      reportWarn(TAG_NAME, "setCurrentNode: node not found");
       return false;
     }
 
     const state = this._nodeStates.get(path);
     if (!state || state.disabled) {
-      console.warn("Cannot select disabled node");
+      reportWarn(TAG_NAME, "setCurrentNode: cannot select a disabled node");
       return false;
     }
 
@@ -1284,7 +1293,7 @@ export class EaTree extends EaBase {
    */
   getNode(data: any): any {
     if (!this.nodeKey) {
-      console.warn("getNode requires node-key to be set");
+      reportWarn(TAG_NAME, "getNode requires node-key to be set");
       return null;
     }
 

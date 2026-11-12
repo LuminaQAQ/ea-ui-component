@@ -267,13 +267,22 @@ export class EaButton extends EaBase {
     }
   }
 
+  /**
+   * 点击处理
+   * submit 走原生 `requestSubmit` 以先跑约束校验，直接派发 submit 事件会绕过校验
+   * @param e 点击事件
+   */
   @listen("click")
   private _handleClick(e: Event) {
     if (this.type === "submit") {
       const form = this.closest("form");
       if (form) {
         e.preventDefault();
-        form.dispatchEvent(new Event("submit"));
+        if (typeof form.requestSubmit === "function") {
+          form.requestSubmit();
+        } else {
+          form.submit();
+        }
       }
     } else if (this.type === "reset") {
       const form = this.closest("form");

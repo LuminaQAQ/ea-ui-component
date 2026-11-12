@@ -6,6 +6,7 @@ import {
   listen,
 } from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
+import { reportWarn } from "@easy-component-ui/core/utils/diagnostics";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-tour" as const;
@@ -248,7 +249,11 @@ export class EaTour extends EaBase {
 
     const target = document.querySelector(selector);
     if (!target)
-      console.warn(`[EaTour] append-to ${selector} not found.`, this);
+      reportWarn(
+        TAG_NAME,
+        `append-to ${selector} not found, fallback to document.body.`,
+        this
+      );
 
     if (target && target !== this.parentElement) {
       this._appendHandled = true;
@@ -356,7 +361,10 @@ export class EaTour extends EaBase {
     const strategy = placementStrategies[placement];
 
     if (!strategy) {
-      console.warn(`[EaTourStep] placement ${placement} is not supported.`);
+      reportWarn(
+        "ea-tour-step",
+        `placement ${placement} is not supported, expected one of ${Object.keys(placementStrategies).join(", ")}.`
+      );
       return;
     }
 
@@ -400,8 +408,9 @@ export class EaTour extends EaBase {
     if (!targetSelector) {
       return this._handleCenterPosition();
     } else if (!target) {
-      return console.warn(
-        `[EaTour] target ${targetSelector} not found`,
+      return reportWarn(
+        TAG_NAME,
+        `target ${targetSelector} not found, check the target selector of the current step.`,
         children[current]
       );
     }

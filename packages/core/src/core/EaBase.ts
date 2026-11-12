@@ -4,8 +4,55 @@ import { createBEM } from "@utils/bem";
 import { attribute } from "@decorator/attribute";
 import { CustomElement } from "@decorator/custom-element";
 import { GlobalHTMLElement } from "@utils/env";
+import { reportError } from "@utils/diagnostics";
 
 export { createBEM };
+
+/**
+ * 组件生命周期状态
+ * `construct` / `styling` / `template` 属 `mounting` 的内部阶段，不对外暴露
+ */
+export type EaLifecycleState = "idle" | "mounting" | "ready" | "disconnected";
+
+/** 单个属性的变更记录 */
+export interface EaPropertyChange {
+  /** 变更前的值 */
+  readonly oldValue: unknown;
+  /** 变更后的值 */
+  readonly newValue: unknown;
+}
+
+/** 一轮更新合并后的变更表，键为属性名 */
+export type EaChangedMap = ReadonlyMap<string, EaPropertyChange>;
+
+/** 当前存在待完成更新的组件 */
+const pendingUpdates = new Set<EaBase>();
+
+/** 是否仍有组件处于待更新状态 */
+export function hasPendingUpdates(): boolean {
+  return pendingUpdates.size > 0;
+}
+
+/**
+ * 等待当前所有组件完成更新
+ *
+ * 属性回调可能触发子组件的新一轮更新，因此每轮排空后再检查一次；
+ * 先让出一个微任务，避免在 `connectedCallback` 之前调用时直接返回
+ */
+export async function waitForPendingUpdates(): Promise<void> {
+  await Promise.resolve();
+
+  for (let round = 0; round < 10; round += 1) {
+    if (pendingUpdates.size > 0) {
+      await Promise.all([...pendingUpdates].map(el => el.updateComplete));
+    }
+
+    await Promise.resolve();
+    await Promise.resolve();
+
+    if (pendingUpdates.size === 0) return;
+  }
+}
 
 /**
  * EA UI 组件基类
@@ -15,13 +62,33 @@ export { createBEM };
 export default class EaBase extends GlobalHTMLElement {
   // ==================== 属性定义 ====================
 
-  private _isRendered: Promise<void> | null = null;
   private _isInitialized: boolean = false;
-  private _rendered!: (value: void | PromiseLike<void>) => void;
+
+  /** 生命周期状态，对外只读 */
+  private _state: EaLifecycleState = "idle";
+
+  /** 就绪门：打开前属性回调挂起 */
+  private _readyGate: Promise<void> | null = null;
+  private _resolveReady: (() => void) | null = null;
 
   private _pendingUpdateCount: number = 0;
   private _pendingUpdatePromise: Promise<void> | null = null;
   private _pendingUpdateResolve: (() => void) | null = null;
+
+  /** 本轮待处理的属性变更 */
+  private _changed: Map<string, EaPropertyChange> | null = null;
+  private _updateScheduled = false;
+
+  /** 由 `@CustomElement` 注入：按声明同步 a11y 与 forward */
+  $syncDeclared?: () => void;
+
+  /**
+   * 当前生命周期状态
+   * 状态不承担就绪语义，“可回调”的时机由就绪门（`$mounted` 完成）决定
+   */
+  get lifecycleState(): EaLifecycleState {
+    return this._state;
+  }
 
   /**
    * 更新完成信号
@@ -51,13 +118,15 @@ export default class EaBase extends GlobalHTMLElement {
     this.attachShadow({ mode: "open" });
 
     this._isInitialized = false;
-    this._isRendered = new Promise<void>(resolve => {
-      this._rendered = resolve;
-    });
+    this._resetReadyGate();
   }
 
   // ==================== 生命周期钩子 ====================
 
+  /**
+   * 首次连接时进入挂载流程
+   * 挂载失败也要放行就绪门，否则属性回调会永久挂起
+   */
   connectedCallback(): void {
     if (this._isInitialized) return;
 
@@ -66,18 +135,32 @@ export default class EaBase extends GlobalHTMLElement {
       this.tabIndex = Number(tabindexAttr);
     }
 
+    if (this._state === "disconnected") this._resetReadyGate();
+    this._state = "mounting";
     this._beginUpdate();
 
-    requestAnimationFrame(async () => {
+    queueMicrotask(async () => {
+      if (!this.isConnected) {
+        this._openReadyGate();
+        this._endUpdate();
+        return;
+      }
+
       try {
         const mountResult = this.$mount() as unknown as
           Promise<void> | undefined;
 
-        this._rendered?.();
         this._isInitialized = true;
 
         await mountResult;
         await (this.$mounted() as unknown as Promise<void> | undefined);
+
+        this._state = "ready";
+        this._openReadyGate();
+      } catch (error) {
+        this._state = "ready";
+        this._openReadyGate();
+        reportError("mount", error, this);
       } finally {
         this._endUpdate();
       }
@@ -92,7 +175,8 @@ export default class EaBase extends GlobalHTMLElement {
     this.emit("unmounted", { detail: this });
 
     this._isInitialized = false;
-    this._isRendered = null;
+    this._state = "disconnected";
+    this._openReadyGate();
   }
 
   async attributeChangedCallback(
@@ -100,9 +184,85 @@ export default class EaBase extends GlobalHTMLElement {
     oldVal: string | null,
     newVal: string | null
   ): Promise<void> {
-    await this._isRendered;
+    await this._waitUntilReady();
 
-    this.$updated({ key: name, newVal, oldVal });
+    this.requestUpdate(name, oldVal, newVal);
+  }
+
+  // ==================== 就绪门 ====================
+
+  /**
+   * 等待挂载就绪
+   *
+   * 先让出一个微任务，确保同一同步批次内的 `connectedCallback`
+   * 已经把状态切到 `mounting`（否则“连接前到达”的回调会提前放行）
+   */
+  private async _waitUntilReady(): Promise<void> {
+    if (this._state === "ready" || this._state === "disconnected") return;
+
+    if (this._state === "idle") {
+      await this._readyGate;
+      return;
+    }
+
+    while (this._state === "mounting") {
+      await this._readyGate;
+    }
+  }
+
+  /** 重建就绪门；门打开前属性回调挂起 */
+  private _resetReadyGate(): void {
+    this._readyGate = new Promise<void>(resolve => {
+      this._resolveReady = resolve;
+    });
+  }
+
+  /** 打开就绪门；可重复调用 */
+  private _openReadyGate(): void {
+    const resolve = this._resolveReady;
+    this._resolveReady = null;
+    resolve?.();
+  }
+
+  // ==================== 更新调度 ====================
+
+  /**
+   * 登记一次属性变更
+   * 同一轮内的多次变更合并为一次 `performUpdate`
+   */
+  requestUpdate(name: string, oldValue: unknown, newValue: unknown): void {
+    if (!this._changed) this._changed = new Map();
+
+    const previous = this._changed.get(name);
+    this._changed.set(name, {
+      oldValue: previous ? previous.oldValue : oldValue,
+      newValue,
+    });
+
+    if (this._updateScheduled) return;
+
+    this._updateScheduled = true;
+    this._beginUpdate();
+
+    queueMicrotask(() => {
+      void this.performUpdate();
+    });
+  }
+
+  /** 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated` */
+  async performUpdate(): Promise<void> {
+    this._updateScheduled = false;
+
+    const changed: EaChangedMap = this._changed ?? new Map();
+    this._changed = null;
+
+    try {
+      this.$beforeUpdate(changed);
+      this.$syncDeclared?.();
+      this.$updated(changed);
+    } finally {
+      this._endUpdate();
+    }
   }
 
   // ==================== 更新信号 ====================
@@ -110,6 +270,7 @@ export default class EaBase extends GlobalHTMLElement {
   /** 标记一次更新开始 */
   _beginUpdate(): void {
     this._pendingUpdateCount += 1;
+    pendingUpdates.add(this);
 
     if (!this._pendingUpdatePromise) {
       this._pendingUpdatePromise = new Promise<void>(resolve => {
@@ -126,6 +287,7 @@ export default class EaBase extends GlobalHTMLElement {
       const resolve = this._pendingUpdateResolve;
       this._pendingUpdatePromise = null;
       this._pendingUpdateResolve = null;
+      pendingUpdates.delete(this);
       resolve();
     }
   }
@@ -163,12 +325,16 @@ export default class EaBase extends GlobalHTMLElement {
   $unmounted(): void {}
 
   /**
-   * 组件更新回调
-   * @param data 更新数据
+   * 组件更新前调用
+   * @param changed 本轮合并后的属性变更
    */
-  $updated(data: { key: string; newVal: any; oldVal?: any }): void {
-    this.emit("updated", { detail: data });
-  }
+  $beforeUpdate(_changed: EaChangedMap): void {}
+
+  /**
+   * 组件更新后调用
+   * @param changed 本轮合并后的属性变更
+   */
+  $updated(_changed: EaChangedMap): void {}
 
   // ==================== 事件系统 ====================
 

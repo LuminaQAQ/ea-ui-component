@@ -1317,6 +1317,45 @@ describe("EaCheckboxGroup Component", () => {
 
       expect(group.value).toEqual([]);
     });
+
+    it("重置后应收起错误样式", async () => {
+      const group = document.createElement("ea-checkbox-group");
+      group.setAttribute("required", "");
+      group.innerHTML = `<ea-checkbox label="A" value="a"></ea-checkbox>`;
+      container.appendChild(group);
+      await group.updateComplete;
+
+      group.dispatchEvent(new Event("input"));
+      expect(group.hasAttribute("data-invalid")).toBe(true);
+
+      group.formResetCallback();
+      await group.updateComplete;
+
+      expect(group.hasAttribute("data-invalid")).toBe(false);
+    });
+
+    it("勾选后应立即解除 required 校验，不用等下一次更新", async () => {
+      const group = document.createElement("ea-checkbox-group");
+      group.setAttribute("required", "");
+      group.innerHTML = `
+        <ea-checkbox label="A" value="a"></ea-checkbox>
+        <ea-checkbox label="B" value="b"></ea-checkbox>
+      `;
+      container.appendChild(group);
+      await group.updateComplete;
+
+      group.dispatchEvent(new Event("input"));
+      expect(group.validity?.valid).toBe(false);
+      expect(group.hasAttribute("data-invalid")).toBe(true);
+
+      const first = group.querySelector("ea-checkbox")!;
+      first.shadowRoot!.querySelector<HTMLInputElement>("input")!.click();
+      await group.updateComplete;
+
+      expect(group.value).toEqual(["a"]);
+      expect(group.validity?.valid).toBe(true);
+      expect(group.hasAttribute("data-invalid")).toBe(false);
+    });
   });
 
   describe("Accessibility", () => {

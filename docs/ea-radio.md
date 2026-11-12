@@ -265,15 +265,17 @@ import "easy-component-ui/ea-radio";
 
 ### RadioGroup Attributes
 
-| 参数     | 说明                   | 类型    | 可选值                          | 默认值 |
-| -------- | ---------------------- | ------- | ------------------------------- | ------ |
-| value    | 当前选中值             | string  | —                               | ''     |
-| label    | 表单标签文本           | string  | —                               | ''     |
-| name     | 组名（表单提交时使用） | string  | —                               | ''     |
-| disabled | 是否整体禁用           | boolean | —                               | false  |
-| size     | 组件尺寸               | string  | `large \| default \| small \| ` | ''     |
-| border   | 是否显示边框样式       | boolean | —                               | false  |
-| required | 是否必填               | boolean | —                               | false  |
+| 参数                  | 说明                   | 类型    | 可选值                          | 默认值 |
+| --------------------- | ---------------------- | ------- | ------------------------------- | ------ |
+| value                 | 当前选中值             | string  | —                               | ''     |
+| label                 | 表单标签文本           | string  | —                               | ''     |
+| name                  | 组名（表单提交时使用） | string  | —                               | ''     |
+| disabled              | 是否整体禁用           | boolean | —                               | false  |
+| size                  | 组件尺寸               | string  | `large \| default \| small \| ` | ''     |
+| border                | 是否显示边框样式       | boolean | —                               | false  |
+| required              | 是否必填               | boolean | —                               | false  |
+| data-validate-trigger | 错误样式的展示时机     | String  | auto / submit / manual          | auto   |
+| data-error-display    | 错误提示的展示方式     | String  | native / text                   | native |
 
 ### RadioGroup CSS Part
 

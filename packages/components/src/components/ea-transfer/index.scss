@@ -18,10 +18,8 @@ $name: ea-transfer;
   font-size: var(--#{$name}-font-size);
 }
 
-:host(:invalid) {
-  .#{$name}__panel--target {
-    border-color: var(--red-500);
-  }
+:host([data-invalid]) {
+  --#{$name}-panel-border-color-override: var(--red-500);
 }
 
 @include block($name) {
@@ -73,3 +71,5 @@ $name: ea-transfer;
     }
   }
 }
+
+@include form-error-message;

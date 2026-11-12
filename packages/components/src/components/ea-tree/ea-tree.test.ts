@@ -1373,6 +1373,7 @@ describe("EaTree", () => {
 
         expect(tree.setCheckedKeys([3])).toBe(false);
         expect(warnSpy).toHaveBeenCalledWith(
+          "[ea-ui] ea-tree",
           "setCheckedKeys requires show-checkbox and node-key to be set"
         );
       });
@@ -1385,6 +1386,7 @@ describe("EaTree", () => {
 
         expect(tree.setCheckedKeys([3])).toBe(false);
         expect(warnSpy).toHaveBeenCalledWith(
+          "[ea-ui] ea-tree",
           "setCheckedKeys requires show-checkbox and node-key to be set"
         );
       });
@@ -1428,6 +1430,7 @@ describe("EaTree", () => {
 
         expect(tree.setChecked(3, true)).toBe(false);
         expect(warnSpy).toHaveBeenCalledWith(
+          "[ea-ui] ea-tree",
           "setChecked requires show-checkbox and node-key to be set"
         );
       });
@@ -1440,6 +1443,7 @@ describe("EaTree", () => {
 
         expect(tree.setChecked(3, true)).toBe(false);
         expect(warnSpy).toHaveBeenCalledWith(
+          "[ea-ui] ea-tree",
           "setChecked requires show-checkbox and node-key to be set"
         );
       });
@@ -1483,7 +1487,8 @@ describe("EaTree", () => {
 
         expect(tree.setChecked(1, true)).toBe(false);
         expect(warnSpy).toHaveBeenCalledWith(
-          "Cannot set checked state for disabled node"
+          "[ea-ui] ea-tree",
+          "setChecked: cannot change a disabled node"
         );
       });
 
@@ -1497,7 +1502,10 @@ describe("EaTree", () => {
         await tree.updateComplete;
 
         expect(tree.setChecked(999, true)).toBe(false);
-        expect(warnSpy).toHaveBeenCalledWith("Node not found");
+        expect(warnSpy).toHaveBeenCalledWith(
+          "[ea-ui] ea-tree",
+          "setChecked: node not found"
+        );
       });
 
       it("应该支持通过数据对象设置勾选状态", async () => {
@@ -1525,6 +1533,7 @@ describe("EaTree", () => {
 
         expect(tree.setCheckedNodes([])).toBe(false);
         expect(warnSpy).toHaveBeenCalledWith(
+          "[ea-ui] ea-tree",
           "setCheckedNodes requires show-checkbox and node-key to be set"
         );
       });
@@ -1537,6 +1546,7 @@ describe("EaTree", () => {
 
         expect(tree.setCheckedNodes([])).toBe(false);
         expect(warnSpy).toHaveBeenCalledWith(
+          "[ea-ui] ea-tree",
           "setCheckedNodes requires show-checkbox and node-key to be set"
         );
       });
@@ -1626,6 +1636,7 @@ describe("EaTree", () => {
 
         expect(tree.setCurrentKey(1)).toBe(false);
         expect(warnSpy).toHaveBeenCalledWith(
+          "[ea-ui] ea-tree",
           "setCurrentKey requires node-key to be set"
         );
       });
@@ -1639,7 +1650,10 @@ describe("EaTree", () => {
         await tree.updateComplete;
 
         expect(tree.setCurrentKey(999)).toBe(false);
-        expect(warnSpy).toHaveBeenCalledWith("Node with key 999 not found");
+        expect(warnSpy).toHaveBeenCalledWith(
+          "[ea-ui] ea-tree",
+          "setCurrentKey: node with key 999 not found"
+        );
       });
 
       it("禁用节点返回 false", async () => {
@@ -1651,7 +1665,10 @@ describe("EaTree", () => {
         await tree.updateComplete;
 
         expect(tree.setCurrentKey(1)).toBe(false);
-        expect(warnSpy).toHaveBeenCalledWith("Cannot select disabled node");
+        expect(warnSpy).toHaveBeenCalledWith(
+          "[ea-ui] ea-tree",
+          "setCurrentKey: cannot select a disabled node"
+        );
       });
 
       it("应该选中指定 key 的节点", async () => {
@@ -1734,6 +1751,7 @@ describe("EaTree", () => {
 
         expect(tree.setCurrentNode(tree.data[0])).toBe(false);
         expect(warnSpy).toHaveBeenCalledWith(
+          "[ea-ui] ea-tree",
           "setCurrentNode requires node-key to be set"
         );
       });
@@ -1749,7 +1767,10 @@ describe("EaTree", () => {
         expect(tree.setCurrentNode({ id: 999, label: "Not exist" })).toBe(
           false
         );
-        expect(warnSpy).toHaveBeenCalledWith("Node not found");
+        expect(warnSpy).toHaveBeenCalledWith(
+          "[ea-ui] ea-tree",
+          "setCurrentNode: node not found"
+        );
       });
 
       it("应该选中指定节点", async () => {
@@ -1812,6 +1833,7 @@ describe("EaTree", () => {
 
         expect(tree.getNode(1)).toBe(null);
         expect(warnSpy).toHaveBeenCalledWith(
+          "[ea-ui] ea-tree",
           "getNode requires node-key to be set"
         );
       });
@@ -1970,6 +1992,7 @@ describe("EaTree", () => {
 
         expect(tree.updateKeyChildren(1, [])).toBe(false);
         expect(warnSpy).toHaveBeenCalledWith(
+          "[ea-ui] ea-tree",
           "updateKeyChildren requires node-key to be set"
         );
       });
@@ -1983,7 +2006,10 @@ describe("EaTree", () => {
         await tree.updateComplete;
 
         expect(tree.updateKeyChildren(999, [])).toBe(false);
-        expect(warnSpy).toHaveBeenCalledWith("Node with key 999 not found");
+        expect(warnSpy).toHaveBeenCalledWith(
+          "[ea-ui] ea-tree",
+          "updateKeyChildren: node with key 999 not found"
+        );
       });
 
       it("叶子节点返回 false", async () => {
@@ -1996,7 +2022,8 @@ describe("EaTree", () => {
 
         expect(tree.updateKeyChildren(3, [])).toBe(false);
         expect(warnSpy).toHaveBeenCalledWith(
-          "Target node is not a parent node"
+          "[ea-ui] ea-tree",
+          "updateKeyChildren: node with key 3 is not a parent node"
         );
       });
 

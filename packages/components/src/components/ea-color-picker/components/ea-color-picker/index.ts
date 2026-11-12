@@ -456,36 +456,22 @@ export class EaColorPicker extends EaFormAssociatedBase {
     return this;
   }
 
-  updateValidity() {
-    if (this.required && !this.value) {
-      this.setValidity({ valueMissing: true }, "请选择一个颜色");
-    } else {
-      this.setValidity({});
-    }
+  protected $isEmpty(): boolean {
+    return !this.value;
   }
 
-  checkValidity(): boolean {
-    this.updateValidity();
-    if (this.internals && typeof this.internals.checkValidity === "function") {
-      return this.internals.checkValidity();
-    }
-    return !this.required || !!this.value;
+  protected $validationMessage(flag: string, limit?: number): string {
+    if (flag === "valueMissing") return "请选择一个颜色";
+    return super.$validationMessage(flag, limit);
   }
-
-  reportValidity(): boolean {
-    this.updateValidity();
-    if (this.internals && typeof this.internals.reportValidity === "function") {
-      return this.internals.reportValidity();
-    }
-    return !this.required || !!this.value;
-  }
-
   $mount(): void {
     this.updateContainerClasslist();
     this._setupAria();
   }
 
   $mounted(): void {
+    super.$mounted();
+
     if (!this._panel) return;
 
     this._panel.setAttribute("color-format", this.colorFormat);

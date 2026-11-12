@@ -335,32 +335,32 @@ export class EaRate extends EaFormAssociatedBase {
     }
   };
 
+  $mounted(): void {
+    super.$mounted();
+
+    if (!this.hasAttribute("tabindex")) this.tabIndex = -1;
+  }
+
+  /** 验证目标：宿主自身 */
   get validationTarget(): HTMLElement {
     return this;
   }
 
-  updateValidity(): void {
-    if (this.required && !this.value) {
-      this.internals.setValidity(
-        { valueMissing: true },
-        "请选择一个评分",
-        this
-      );
-    } else {
-      this.internals.setValidity({}, "", this);
-    }
+  /** @returns 是否为空（未评分） */
+  protected $isEmpty(): boolean {
+    return !this.value;
   }
 
-  checkValidity(): boolean {
-    this.updateValidity();
-    return this.internals.checkValidity();
+  /**
+   * 必填文案
+   * @param flag 原生 validity 标记
+   * @param limit 长度类规则的阀值
+   * @returns 校验文案
+   */
+  protected $validationMessage(flag: string, limit?: number): string {
+    if (flag === "valueMissing") return "请选择一个评分";
+    return super.$validationMessage(flag, limit);
   }
-
-  reportValidity(): boolean {
-    this.updateValidity();
-    return this.internals.reportValidity();
-  }
-
   $mount(): void {
     this.setAttribute("role", "radiogroup");
     this._renderRateEl(this.getSymbol, this.value);

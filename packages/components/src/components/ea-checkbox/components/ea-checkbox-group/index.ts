@@ -140,11 +140,16 @@ export class EaCheckboxGroup extends EaFormAssociatedBase {
     });
   };
 
-  /** 更新子组件值 */
+  /**
+   * 更新子组件值
+   * 重新赋值而不是原地 push：原地修改不会触发更新，校验状态会滞后一拍
+   * @param isChecked 是否勾选
+   * @param updateValue 变化的选项值
+   */
   private _updateGroupValue = (isChecked: boolean, updateValue: any) => {
     if (isChecked) {
       const hasValue = this.value.some((item: any) => item === updateValue);
-      if (!hasValue) this.value.push(updateValue);
+      if (!hasValue) this.value = [...this.value, updateValue];
     } else {
       this.value = this.value.filter((item: any) => item !== updateValue);
     }
@@ -198,20 +203,27 @@ export class EaCheckboxGroup extends EaFormAssociatedBase {
     this._updateLimitStatus();
   };
 
+  /**
+   * 子项勾选变化
+   * change 不跨 shadow 传播且值可能原地变化，这里显式重算，否则勾选后仍然报必填
+   * @param e 变更事件
+   */
   @listen("change", undefined, { capture: true })
   private _handleChange = (e: Event): void => {
     if (!(e instanceof EaCheckboxChangeEvent)) return;
     const { checked, value } = e.detail;
     this._updateGroupValue(checked, value);
     this._updateLimitStatus();
+    this.updateValidity();
   };
 
+  /** 表单重置：清空选中值并复位校验状态 */
   formResetCallback(): void {
     this.value = [];
     this._checkboxItems?.forEach(checkbox => {
       checkbox.toggleAttribute("checked", false);
     });
-    this.setValidity({});
+    this.$resetValidity();
   }
 
   $mount(): void {
@@ -230,35 +242,28 @@ export class EaCheckboxGroup extends EaFormAssociatedBase {
     });
   }
 
+  /** 宿主自身不可聚焦，补 tabindex 让浏览器校验失败时能定位 */
+  $mounted(): void {
+    super.$mounted();
+
+    if (!this.hasAttribute("tabindex")) this.tabIndex = -1;
+  }
+
+  /** 验证目标：首个子选项，无子项时退回容器 */
   get validationTarget() {
     const firstCheckbox = this._checkboxItems?.[0];
     return firstCheckbox || this._container;
   }
 
-  /** 更新表单验证状态 */
-  updateValidity() {
-    const hasValue = Array.isArray(this.value) && this.value.length > 0;
-    const anchor = this.validationTarget ?? undefined;
-
-    if (this.required && !hasValue) {
-      this.internals?.setValidity(
-        { valueMissing: true },
-        "请至少选择一个选项",
-        anchor
-      );
-    } else {
-      this.internals?.setValidity({}, "", anchor);
-    }
-  }
-
-  checkValidity(): boolean {
-    this.updateValidity();
-    return this.internals?.validity?.valid ?? true;
-  }
-
-  reportValidity(): boolean {
-    this.updateValidity();
-    return this.internals?.reportValidity() ?? true;
+  /**
+   * 必填文案
+   * @param flag 原生 validity 标记
+   * @param limit 长度类规则的阀值
+   * @returns 校验文案
+   */
+  protected $validationMessage(flag: string, limit?: number): string {
+    if (flag === "valueMissing") return "请至少选择一个选项";
+    return super.$validationMessage(flag, limit);
   }
 }
 

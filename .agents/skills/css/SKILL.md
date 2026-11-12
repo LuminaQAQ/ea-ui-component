@@ -163,6 +163,23 @@ $name: ea-component-name;
 }
 ```
 
+### 表单错误态
+
+表单组件的错误态画在宿主属性上，不用 `:invalid`（`:invalid` 进页面就命中，首屏会报红）：
+
+```scss
+:host([data-invalid]) {
+  --#{$name}-border-color: var(--red-500);
+}
+
+@include form-error-message;
+```
+
+- `data-invalid`：校验未通过且已交互，用于红框、红字等错误样式
+- `data-invalid-message`：错误文案，由主题 mixin `form-error-message` 用 `::after` 渲染
+- 文案颜色可通过 `--ea-form-error-color` 定制；间距、字号已在 mixin 内引用主题变量
+- 子组件 shadow 内的样式改不到时，用 CSS 变量向下传递（如 `--ea-transfer-panel-border-color-override`）
+
 ## 响应式布局
 
 ```scss
@@ -239,4 +256,5 @@ updateContainerClasslist(): string {
 
 - [variables.scss](file:///e:/repo/ea-ui-component/packages/themes/src/styles/variables.scss) - 设计变量定义
 - [namespace.scss](file:///e:/repo/ea-ui-component/packages/themes/src/styles/namespace.scss) - BEM mixin 定义
+- [mixins.scss](file:///e:/repo/ea-ui-component/packages/themes/src/styles/mixins.scss) - 可复用样式 mixin（如 `form-error-message`）
 - [ea-alert/index.scss](file:///e:/repo/ea-ui-component/packages/components/src/components/ea-alert/index.scss) - 完整示例

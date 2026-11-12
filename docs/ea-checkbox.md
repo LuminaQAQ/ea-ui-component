@@ -382,18 +382,20 @@ limitExample.init();
 
 ### Checkbox Attributes
 
-| 参数          | 说明               | 类型    | 可选值                      | 默认值  |
-| ------------- | ------------------ | ------- | --------------------------- | ------- |
-| label         | 通过属性设置的文本 | string  | —                           | —       |
-| value         | 绑定值             | string  | —                           | —       |
-| name          | 原生的 `name` 属性 | string  | —                           | —       |
-| disabled      | 是否禁用           | boolean | —                           | false   |
-| checked       | 是否选中           | boolean | —                           | false   |
-| indeterminate | 是否为半选状态     | boolean | —                           | false   |
-| size          | 组件尺寸           | string  | `large \| default \| small` | default |
-| border        | 是否带边框样式     | boolean | —                           | false   |
-| limitDisabled | 是否被限制禁用     | boolean | —                           | false   |
-| required      | 是否必填           | boolean | —                           | false   |
+| 参数                  | 说明               | 类型    | 可选值                      | 默认值  |
+| --------------------- | ------------------ | ------- | --------------------------- | ------- |
+| label                 | 通过属性设置的文本 | string  | —                           | —       |
+| value                 | 绑定值             | string  | —                           | —       |
+| name                  | 原生的 `name` 属性 | string  | —                           | —       |
+| disabled              | 是否禁用           | boolean | —                           | false   |
+| checked               | 是否选中           | boolean | —                           | false   |
+| indeterminate         | 是否为半选状态     | boolean | —                           | false   |
+| size                  | 组件尺寸           | string  | `large \| default \| small` | default |
+| border                | 是否带边框样式     | boolean | —                           | false   |
+| limitDisabled         | 是否被限制禁用     | boolean | —                           | false   |
+| required              | 是否必填           | boolean | —                           | false   |
+| data-validate-trigger | 错误样式的展示时机 | String  | auto / submit / manual      | auto    |
+| data-error-display    | 错误提示的展示方式 | String  | native / text               | native  |
 
 ### Checkbox CSS Part
 
@@ -450,16 +452,18 @@ limitExample.init();
 
 ### CheckboxGroup Attributes
 
-| 参数     | 说明                                             | 类型    | 可选值                      | 默认值   |
-| -------- | ------------------------------------------------ | ------- | --------------------------- | -------- |
-| label    | 表单标签                                         | string  | —                           | —        |
-| name     | 若该组件位于表单内，则该 name 将作为该组值的键名 | string  | —                           | —        |
-| value    | 当前选中的值                                     | any[]   | —                           | []       |
-| size     | 尺寸                                             | string  | `large \| default \| small` | —        |
-| disabled | 是否禁用                                         | boolean | —                           | false    |
-| min      | 最少可选数量                                     | number  | —                           | 0        |
-| max      | 最多可选数量                                     | number  | —                           | Infinity |
-| required | 是否必填                                         | boolean | —                           | false    |
+| 参数                  | 说明                                             | 类型    | 可选值                      | 默认值   |
+| --------------------- | ------------------------------------------------ | ------- | --------------------------- | -------- |
+| label                 | 表单标签                                         | string  | —                           | —        |
+| name                  | 若该组件位于表单内，则该 name 将作为该组值的键名 | string  | —                           | —        |
+| value                 | 当前选中的值                                     | any[]   | —                           | []       |
+| size                  | 尺寸                                             | string  | `large \| default \| small` | —        |
+| disabled              | 是否禁用                                         | boolean | —                           | false    |
+| min                   | 最少可选数量                                     | number  | —                           | 0        |
+| max                   | 最多可选数量                                     | number  | —                           | Infinity |
+| required              | 是否必填                                         | boolean | —                           | false    |
+| data-validate-trigger | 错误样式的展示时机                               | String  | auto / submit / manual      | auto     |
+| data-error-display    | 错误提示的展示方式                               | String  | native / text               | native   |
 
 ### CheckboxGroup CSS Part
 

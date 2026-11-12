@@ -24,7 +24,7 @@ $name: ea-color-picker;
   display: inline-block;
 }
 
-:host(:invalid) {
+:host([data-invalid]) {
   .#{$name}__form-label {
     color: var(--red-500);
   }
@@ -34,7 +34,7 @@ $name: ea-color-picker;
   }
 }
 
-:host(:invalid:focus-within) {
+:host([data-invalid]:focus-within) {
   .#{$name}__trigger {
     border-color: var(--red-500);
     box-shadow: 0 0 0 2px rgba(245, 108, 108, 0.2);
@@ -167,3 +167,5 @@ $name: ea-color-picker;
     }
   }
 }
+
+@include form-error-message;

@@ -621,7 +621,7 @@ export class EaInputNumber extends EaFormAssociatedBase {
 
   formResetCallback() {
     this.value = this.defaultValue;
-    this.internals.setValidity({});
+    this.$resetValidity();
   }
 
   $mount(): void {

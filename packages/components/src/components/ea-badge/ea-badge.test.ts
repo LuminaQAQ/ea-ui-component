@@ -156,7 +156,7 @@ describe("EaBadge", () => {
   describe("Variant Attribute", () => {
     const variants = ["primary", "success", "warning", "danger", "info"];
 
-    variants.forEach((variant) => {
+    variants.forEach(variant => {
       if (variant === "danger") {
         it(`variant="${variant}" 不应添加修饰符类（默认 variant）`, async () => {
           const badge = document.createElement("ea-badge");
@@ -204,7 +204,9 @@ describe("EaBadge", () => {
       await badge.updateComplete;
 
       const badgeContainer = badge.shadowRoot!.querySelector(".ea-badge");
-      expect(badgeContainer!.classList.contains("ea-badge--danger")).toBe(false);
+      expect(badgeContainer!.classList.contains("ea-badge--danger")).toBe(
+        false
+      );
     });
 
     it("variant 属性变化时应该正确更新 class", async () => {
@@ -216,14 +218,20 @@ describe("EaBadge", () => {
       await badge.updateComplete;
 
       let badgeContainer = badge.shadowRoot!.querySelector(".ea-badge");
-      expect(badgeContainer!.classList.contains("ea-badge--primary")).toBe(true);
+      expect(badgeContainer!.classList.contains("ea-badge--primary")).toBe(
+        true
+      );
 
       badge.setAttribute("variant", "success");
       await badge.updateComplete;
 
       badgeContainer = badge.shadowRoot!.querySelector(".ea-badge");
-      expect(badgeContainer!.classList.contains("ea-badge--success")).toBe(true);
-      expect(badgeContainer!.classList.contains("ea-badge--primary")).toBe(false);
+      expect(badgeContainer!.classList.contains("ea-badge--success")).toBe(
+        true
+      );
+      expect(badgeContainer!.classList.contains("ea-badge--primary")).toBe(
+        false
+      );
     });
 
     it("从非默认 variant 切换回 danger 时应移除修饰符类", async () => {
@@ -235,14 +243,20 @@ describe("EaBadge", () => {
       await badge.updateComplete;
 
       let badgeContainer = badge.shadowRoot!.querySelector(".ea-badge");
-      expect(badgeContainer!.classList.contains("ea-badge--primary")).toBe(true);
+      expect(badgeContainer!.classList.contains("ea-badge--primary")).toBe(
+        true
+      );
 
       badge.setAttribute("variant", "danger");
       await badge.updateComplete;
 
       badgeContainer = badge.shadowRoot!.querySelector(".ea-badge");
-      expect(badgeContainer!.classList.contains("ea-badge--danger")).toBe(false);
-      expect(badgeContainer!.classList.contains("ea-badge--primary")).toBe(false);
+      expect(badgeContainer!.classList.contains("ea-badge--danger")).toBe(
+        false
+      );
+      expect(badgeContainer!.classList.contains("ea-badge--primary")).toBe(
+        false
+      );
     });
   });
 
@@ -481,7 +495,9 @@ describe("EaBadge", () => {
       const contentEl = badge.shadowRoot!.querySelector(".ea-badge__content");
 
       expect(contentEl!.textContent).toBe("99+");
-      expect(badgeContainer!.classList.contains("ea-badge--primary")).toBe(true);
+      expect(badgeContainer!.classList.contains("ea-badge--primary")).toBe(
+        true
+      );
       expect(badge.isDot).toBe(false);
       expect(badge.showZero).toBe(true);
     });
@@ -526,7 +542,9 @@ describe("EaBadge", () => {
       const badgeContainer = badge.shadowRoot!.querySelector(".ea-badge");
 
       expect(contentEl!.textContent).toBe("15");
-      expect(badgeContainer!.classList.contains("ea-badge--warning")).toBe(true);
+      expect(badgeContainer!.classList.contains("ea-badge--warning")).toBe(
+        true
+      );
     });
 
     it("is-dot 和 value 同时存在时 is-dot 优先", async () => {

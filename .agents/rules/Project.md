@@ -1,7 +1,7 @@
 # ea-ui-component 项目开发规范
 
-> **版本**: 3.10.1
-> **最后更新**: 2026-10-18
+> **版本**: 3.11.0
+> **最后更新**: 2026-11-12
 > **更新日志**: 见文末
 
 本项目是基于 Web Components 的组件库，使用 TypeScript 和装饰器模式实现，开发时必须遵循以下规范。
@@ -541,6 +541,48 @@ $name: ea-component-name;
 }
 ```
 
+### 复用主题 mixin
+
+同一段样式在多个组件重复时，抽到 `packages/themes/src/styles/mixins.scss`（全局已 `@use "mixins" as *`，组件内直接用）：
+
+```scss
+@mixin form-error-message {
+  :host([data-invalid-message])::after {
+    content: attr(data-invalid-message);
+    /* ... */
+  }
+}
+```
+
+组件 `index.scss` 里只写一行 `@include form-error-message;`。间距、字号优先引用 `variables.scss` 的变量（`--spacing-sm`、`--font-size-sm`），不在组件里硬编码 `12px` / `4px`。
+
+## 表单校验规范
+
+表单组件继承 `EaFormAssociatedBase`（用法见 `form-base` 技能），校验与错误态遵循以下契约。
+
+### 校验状态的发布
+
+- `$mounted()` / `$updated()` 会调用 `updateValidity()` 把结果发布到 `ElementInternals`，不依赖调用方手动触发
+- 子类只覆盖 `$validate()` / `$isEmpty()` / `$validationMessage()` / `$validationAnchor()`，不覆盖 `updateValidity()`
+- 自定义提交按钮必须走 `form.requestSubmit()`；`dispatchEvent(new Event("submit"))` 会绕开原生约束校验
+
+### 错误态与提示
+
+- 错误样式由宿主 `data-invalid` 属性驱动，**禁止**再绑 `:host(:invalid)`，否则首屏就报红
+- 错误文案写到宿主 `data-invalid-message` 属性，由主题 mixin `form-error-message` 渲染；组件 scss 只写一行 `@include form-error-message;`
+- 两个开关同时支持组件级与 `<form>` 级配置，优先级为「组件属性 > form 属性 > 默认值」：
+  - `data-validate-trigger`：`auto`（默认，交互或提交被拦后展示）/ `submit` / `manual`
+  - `data-error-display`：`native`（默认，只用浏览器气泡）/ `text`（只在控件下方渲染文案，不弹气泡）
+- 两种展示方式互斥：`text` 模式不向 `ElementInternals` 发布失效状态（浏览器没有可报告的错误，就不会弹气泡），因此这类控件不参与原生约束校验，提交由基类在根节点捕获阶段自行拦截，`form.checkValidity()` 也看不到它们；需要这些原生语义时用 `native`
+
+### 重置
+
+子类覆盖 `formResetCallback()` 时必须调用 `super.formResetCallback()` 或 `$resetValidity()`；直接 `setValidity({})` 会留下错误样式并抹掉 `required`。
+
+### 提示锚点
+
+锚点由 `$validationAnchor()` 优先指定，未指定时按「验证目标自身 > 目标内可见控件 > 目标自身 > 自身 shadow 内可见控件」解析。原生提示只在可见元素上渲染，锚到 `display:none` 的元素会静默不显示。
+
 ## 文档生成规范
 
 > 详见 `doc` 技能模块
@@ -730,6 +772,12 @@ $mount(): void {
 ---
 
 ## 更新日志
+
+### v3.11.0 (2026-11-12)
+
+- **新增「表单校验规范」章节**：validity 自动发布、`data-invalid` / `data-invalid-message` 错误态、`data-validate-trigger` / `data-error-display` 两层配置、重置钩子、锚点解析与 `requestSubmit` 提交
+- **CSS 规范新增「复用主题 mixin」**：重复样式抽到 `mixins.scss`，表单文案统一用 `form-error-message`；间距与字号引用变量而非硬编码
+- **技能同步**：`form-base` 重写为最新契约（含错误态、重置、锚点与常见陷阱），`css` 补 mixin 用法，`doc` 补表单属性表格要求
 
 ### v3.10.1 (2026-10-18)
 

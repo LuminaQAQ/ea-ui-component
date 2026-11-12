@@ -422,7 +422,9 @@ export class Color {
     return null;
   }
 
-  #validateColorObject(colorObj: Partial<ColorValue & HslValue & HsvValue>): ColorValue {
+  #validateColorObject(
+    colorObj: Partial<ColorValue & HslValue & HsvValue>
+  ): ColorValue {
     const { r, g, b, a = 1, h, s, l, v } = colorObj;
 
     if (r !== undefined && g !== undefined && b !== undefined) {

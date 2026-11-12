@@ -649,7 +649,9 @@ describe("EaSkeleton Component", () => {
       item.variant = "h1";
       await item.updateComplete;
 
-      expect(containerEl!.classList.contains("ea-skeleton-item--h1")).toBe(true);
+      expect(containerEl!.classList.contains("ea-skeleton-item--h1")).toBe(
+        true
+      );
 
       item.variant = "button";
       await item.updateComplete;
@@ -760,7 +762,8 @@ describe("EaSkeleton Component", () => {
         await item.updateComplete;
 
         expect(item.variant).toBe(variant);
-        const containerEl = item.shadowRoot!.querySelector('[part="container"]');
+        const containerEl =
+          item.shadowRoot!.querySelector('[part="container"]');
         expect(
           containerEl!.classList.contains(`ea-skeleton-item--${variant}`)
         ).toBe(true);

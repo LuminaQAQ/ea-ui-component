@@ -3,5 +3,11 @@ import { EaTag } from "./components/ea-tag";
 
 export { EaTag, EaCheckTag };
 export default { EaTag, EaCheckTag };
-export { EaTagRemoveEvent, type EaTagRemoveEventDetail } from "./events/EaTagRemoveEvent";
-export { EaCheckTagChangeEvent, type EaCheckTagChangeEventDetail } from "./events/EaCheckTagChangeEvent";
+export {
+  EaTagRemoveEvent,
+  type EaTagRemoveEventDetail,
+} from "./events/EaTagRemoveEvent";
+export {
+  EaCheckTagChangeEvent,
+  type EaCheckTagChangeEventDetail,
+} from "./events/EaCheckTagChangeEvent";

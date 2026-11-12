@@ -458,20 +458,22 @@ formatExample.init();
 
 ### DatePicker Attributes
 
-| 参数           | 说明                 | 类型    | 可选值                      | 默认值     |
-| -------------- | -------------------- | ------- | --------------------------- | ---------- |
-| value          | 日期值               | string  | —                           | —          |
-| variant        | 显示类型             | string  | `date \| month \| year`     | date       |
-| placeholder    | 输入框占位文本       | string  | —                           | —          |
-| disabled       | 是否禁用             | boolean | —                           | false      |
-| size           | 输入框尺寸           | string  | `large \| default \| small` | default    |
-| align          | 对齐方式             | string  | `left \| center \| right`   | left       |
-| display-format | 显示在输入框中的格式 | string  | 见[日期格式](#日期格式)     | YYYY-MM-DD |
-| value-format   | 绑定值的格式         | string  | 见[日期格式](#日期格式)     | YYYY-MM-DD |
-| label          | 输入框标签文本       | string  | —                           | ""         |
-| required       | 是否必填             | boolean | —                           | false      |
-| width          | 组件宽度             | string  | —                           | auto       |
-| locale         | 国际化语言           | string  | -                           | en-US      |
+| 参数                  | 说明                 | 类型    | 可选值                      | 默认值     |
+| --------------------- | -------------------- | ------- | --------------------------- | ---------- |
+| value                 | 日期值               | string  | —                           | —          |
+| variant               | 显示类型             | string  | `date \| month \| year`     | date       |
+| placeholder           | 输入框占位文本       | string  | —                           | —          |
+| disabled              | 是否禁用             | boolean | —                           | false      |
+| size                  | 输入框尺寸           | string  | `large \| default \| small` | default    |
+| align                 | 对齐方式             | string  | `left \| center \| right`   | left       |
+| display-format        | 显示在输入框中的格式 | string  | 见[日期格式](#日期格式)     | YYYY-MM-DD |
+| value-format          | 绑定值的格式         | string  | 见[日期格式](#日期格式)     | YYYY-MM-DD |
+| label                 | 输入框标签文本       | string  | —                           | ""         |
+| required              | 是否必填             | boolean | —                           | false      |
+| data-validate-trigger | 错误样式的展示时机   | String  | auto / submit / manual      | auto       |
+| data-error-display    | 错误提示的展示方式   | String  | native / text               | native     |
+| width                 | 组件宽度             | string  | —                           | auto       |
+| locale                | 国际化语言           | string  | -                           | en-US      |
 
 ### DatePicker CSS Part
 

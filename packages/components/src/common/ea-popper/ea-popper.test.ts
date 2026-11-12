@@ -66,7 +66,9 @@ describe("EaPopper Component", () => {
       expect(
         popper.shadowRoot!.querySelector('[part="reference"]')
       ).toBeTruthy();
-      expect(popper.shadowRoot!.querySelector('[part="original"]')).toBeTruthy();
+      expect(
+        popper.shadowRoot!.querySelector('[part="original"]')
+      ).toBeTruthy();
     });
 
     it("应该渲染默认 slot", () => {
@@ -1245,7 +1247,9 @@ describe("EaPopper Component", () => {
       const referenceEl = popper.shadowRoot!.querySelector(
         ".ea-popper__reference"
       );
-      const referenceSlot = referenceEl!.querySelector('slot[name="reference"]');
+      const referenceSlot = referenceEl!.querySelector(
+        'slot[name="reference"]'
+      );
 
       expect(referenceSlot).toBeTruthy();
     });

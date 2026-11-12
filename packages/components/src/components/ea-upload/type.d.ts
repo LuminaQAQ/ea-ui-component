@@ -4,11 +4,7 @@ export type Crossorigin = "" | "anonymous" | "use-credentials";
 export type ListType = "text" | "picture" | "picture-card";
 export type Method = "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "HEAD";
 export type UploadStatus =
-  | "pending"
-  | "uploading"
-  | "done"
-  | "error"
-  | "removed";
+  "pending" | "uploading" | "done" | "error" | "removed";
 
 export type UploadRequest = (
   options: UploadRequestOptions

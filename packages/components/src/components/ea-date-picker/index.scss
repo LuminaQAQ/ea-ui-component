@@ -35,13 +35,13 @@ $ea-date-picker-sizes: small, large;
   display: inline-block;
 }
 
-:host(:invalid) {
+:host([data-invalid]) {
   .#{$name}__input::part(inner) {
     border-color: var(--red-500);
   }
 }
 
-:host(:invalid:focus-within) {
+:host([data-invalid]:focus-within) {
   .#{$name}__input::part(inner) {
     border-color: var(--red-500);
     box-shadow: 0 0 0 2px rgba(245, 108, 108, 0.2);
@@ -268,3 +268,5 @@ $ea-date-picker-sizes: small, large;
     }
   }
 }
+
+@include form-error-message;

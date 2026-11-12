@@ -26,7 +26,8 @@ import type { EaTimePickerVisibleChangeEvent } from "../components/ea-time-picke
 
 declare global {
   interface GlobalEventHandlersEventMap {
-    "ea-clear": EaInputClearEvent | EaColorPickerClearEvent | EaSelectClearEvent;
+    "ea-clear":
+      EaInputClearEvent | EaColorPickerClearEvent | EaSelectClearEvent;
 
     "ea-current-change":
       | EaPaginationCurrentChangeEvent
@@ -39,7 +40,11 @@ declare global {
       | EaDatePickerChangeEvent
       | EaInputNumberChangeEvent;
 
-    "ea-close": EaOverlayCloseEvent | EaAlertCloseEvent | EaTourCloseEvent | EaMessageCloseEvent;
+    "ea-close":
+      | EaOverlayCloseEvent
+      | EaAlertCloseEvent
+      | EaTourCloseEvent
+      | EaMessageCloseEvent;
 
     "ea-open": EaOverlayOpenEvent | EaAlertOpenEvent;
 

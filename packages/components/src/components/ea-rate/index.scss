@@ -30,6 +30,14 @@ $name: ea-rate;
   }
 }
 
+:host([data-invalid]) {
+  --#{$name}-inactive-color: var(--red-500);
+
+  .#{$name}__label {
+    color: var(--red-500);
+  }
+}
+
 @include block($name) {
   display: inline-flex;
   align-items: center;
@@ -102,3 +110,5 @@ $name: ea-rate;
     }
   }
 }
+
+@include form-error-message;

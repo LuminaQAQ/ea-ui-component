@@ -7,6 +7,7 @@ import {
 } from "@easy-component-ui/core/decorator";
 import { html } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
+import { reportWarn } from "@easy-component-ui/core/utils/diagnostics";
 import "@/components/ea-icon/index";
 import "@/components/ea-button/index";
 import { EaTourCloseEvent } from "../../events/EaTourCloseEvent";
@@ -107,8 +108,9 @@ export class EaTourStep extends EaBase {
 
       customElements.whenDefined("ea-tour-step").then(() => {
         if (!document.querySelector(newVal))
-          return console.warn(
-            `[EaTour] target ${newVal} not a valid element selector.`,
+          return reportWarn(
+            TAG_NAME,
+            `target ${newVal} is not a valid element selector.`,
             this
           );
       });

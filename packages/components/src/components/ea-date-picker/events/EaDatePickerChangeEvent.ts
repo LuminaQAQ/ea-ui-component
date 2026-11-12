@@ -18,4 +18,3 @@ export class EaDatePickerChangeEvent extends Event {
     this.detail = detail;
   }
 }
-

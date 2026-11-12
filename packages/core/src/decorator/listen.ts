@@ -1,5 +1,6 @@
 ﻿import { GlobalHTMLElement } from "@utils/env";
 import type { EaElement } from "../types/index";
+import { reportError, reportErrorOnce } from "../utils/diagnostics";
 
 export interface ListenOptions {
   capture?: boolean;
@@ -219,7 +220,7 @@ export function listen(
       const propertyKey = propertyKeyOrContext as string;
 
       if (!propertyKey) {
-        console.error("listen decorator: 缺少方法名", {
+        reportErrorOnce("listen-decorator", "缺少方法名", {
           targetOrValue,
           propertyKeyOrContext,
           descriptor,
@@ -252,8 +253,9 @@ export function listen(
             if (typeof method === "function") {
               method.call(this, e);
             } else {
-              console.error(
-                `listen decorator: 事件 "${eventName}" 触发时找不到方法 "${propertyKey}"`,
+              reportError(
+                "listen-decorator",
+                `事件 "${eventName}" 触发时找不到方法 "${propertyKey}"`,
                 { instanceKeys: Object.keys(this), propertyKey }
               );
             }

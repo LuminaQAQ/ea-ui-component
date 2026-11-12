@@ -109,7 +109,9 @@ describe("EaCountdown Component", () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
 
-      expect(countdown.shadowRoot!.querySelector('[part="title"]')).toBeTruthy();
+      expect(
+        countdown.shadowRoot!.querySelector('[part="title"]')
+      ).toBeTruthy();
     });
 
     it("应该支持 content part", () => {

@@ -367,6 +367,33 @@ scss），与主配置保持一致，仅 `test.browser` 段不同。
 
 **断言原则**：只断言几何关系（尺寸 > 0、位置递增、宽度差 ≈ 位移量），不要断言硬编码像素值。
 
+## 表单校验测试要点
+
+| 场景     | 断言                                                                      |
+| -------- | ------------------------------------------------------------------------- |
+| 首屏     | `validity.valid === false`，但 `hasAttribute("data-invalid") === false`   |
+| 交互后   | 派发 `input` 后 `data-invalid` 出现                                       |
+| 填满     | `data-invalid` 消失，`checkValidity()` 为 true                            |
+| 重置     | `formResetCallback()` 后 `data-invalid` 消失，且 `required` 仍生效        |
+| 提示文案 | 仅 `data-error-display="text"` 时断言 `data-invalid-message`              |
+| 提示锚点 | `vi.spyOn(el.internals, "setValidity")`，读第三个参数（见 core 基类用例） |
+
+jsdom 没有布局，`getBoundingClientRect()` 恒为 0，可见性判断一律为 false。需要测「可见锚点」时显式造盒子：
+
+```typescript
+vi.spyOn(el, "getBoundingClientRect").mockReturnValue({
+  width: 20,
+  height: 20,
+  top: 0,
+  left: 0,
+  right: 20,
+  bottom: 20,
+  x: 0,
+  y: 0,
+  toJSON: () => ({}),
+} as DOMRect);
+```
+
 ## 运行命令
 
 ```bash

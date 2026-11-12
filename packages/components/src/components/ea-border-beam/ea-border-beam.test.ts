@@ -27,9 +27,8 @@ describe("EaBorderBeam", () => {
       const el = document.createElement("ea-border-beam");
       container.appendChild(el);
 
-      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
-        ".ea-border-beam"
-      );
+      const containerEl =
+        el.shadowRoot!.querySelector<HTMLElement>(".ea-border-beam");
       expect(containerEl).toBeDefined();
     });
 
@@ -143,9 +142,8 @@ describe("EaBorderBeam", () => {
       el.setAttribute("trigger", "hover");
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
-        ".ea-border-beam"
-      );
+      const containerEl =
+        el.shadowRoot!.querySelector<HTMLElement>(".ea-border-beam");
       expect(containerEl!.classList.contains("is-trigger-hover")).toBe(true);
     });
   });
@@ -175,9 +173,8 @@ describe("EaBorderBeam", () => {
       el.setAttribute("size", "56");
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
-        ".ea-border-beam"
-      );
+      const containerEl =
+        el.shadowRoot!.querySelector<HTMLElement>(".ea-border-beam");
       expect(
         containerEl!.style.getPropertyValue("--ea-border-beam-indicator-size")
       ).toBe("56px");
@@ -209,9 +206,8 @@ describe("EaBorderBeam", () => {
       el.setAttribute("line-width", "3");
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
-        ".ea-border-beam"
-      );
+      const containerEl =
+        el.shadowRoot!.querySelector<HTMLElement>(".ea-border-beam");
       expect(
         containerEl!.style.getPropertyValue(
           "--ea-border-beam-indicator-line-width"
@@ -245,9 +241,8 @@ describe("EaBorderBeam", () => {
       el.setAttribute("duration", "5");
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
-        ".ea-border-beam"
-      );
+      const containerEl =
+        el.shadowRoot!.querySelector<HTMLElement>(".ea-border-beam");
       expect(
         containerEl!.style.getPropertyValue("--ea-border-beam-duration")
       ).toBe("5s");
@@ -279,9 +274,8 @@ describe("EaBorderBeam", () => {
       el.setAttribute("start-delay", "2");
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
-        ".ea-border-beam"
-      );
+      const containerEl =
+        el.shadowRoot!.querySelector<HTMLElement>(".ea-border-beam");
       expect(
         containerEl!.style.getPropertyValue("--ea-border-beam-start-delay")
       ).toBe("2s");
@@ -299,9 +293,8 @@ describe("EaBorderBeam", () => {
 
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
-        ".ea-border-beam"
-      );
+      const containerEl =
+        el.shadowRoot!.querySelector<HTMLElement>(".ea-border-beam");
       expect(
         containerEl!.style.getPropertyValue("--ea-border-beam-indicator-size")
       ).toBe("56px");
@@ -326,9 +319,8 @@ describe("EaBorderBeam", () => {
 
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
-        ".ea-border-beam"
-      );
+      const containerEl =
+        el.shadowRoot!.querySelector<HTMLElement>(".ea-border-beam");
       expect(containerEl!.classList.contains("ea-border-beam")).toBe(true);
     });
 
@@ -339,9 +331,8 @@ describe("EaBorderBeam", () => {
 
       await el.updateComplete;
 
-      const containerEl = el.shadowRoot!.querySelector<HTMLElement>(
-        ".ea-border-beam"
-      );
+      const containerEl =
+        el.shadowRoot!.querySelector<HTMLElement>(".ea-border-beam");
       expect(containerEl!.classList.contains("is-trigger-hover")).toBe(true);
     });
   });

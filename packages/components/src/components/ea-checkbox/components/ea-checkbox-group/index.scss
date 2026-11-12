@@ -6,7 +6,7 @@ $name: ea-checkbox-group;
   display: block;
 }
 
-:host(:invalid) {
+:host([data-invalid]) {
   .#{$name}__form-label {
     color: var(--red-500);
   }
@@ -29,3 +29,5 @@ $name: ea-checkbox-group;
     }
   }
 }
+
+@include form-error-message;

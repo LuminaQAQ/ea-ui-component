@@ -5,6 +5,7 @@ import {
   query,
 } from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
+import { reportWarn } from "@easy-component-ui/core/utils/diagnostics";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-space" as const;
@@ -60,7 +61,10 @@ export class EaSpace extends EaBase {
     type: Enum(ALIGNMENT_TYPES),
     observer(this: EaSpace, newVal: AlignmentType) {
       if (newVal && !CSS.supports("align-items", newVal)) {
-        console.warn(`[ea-space] Invalid alignment value: ${newVal}`);
+        reportWarn(
+          TAG_NAME,
+          `alignment ${newVal} is not supported, expected one of ${ALIGNMENT_TYPES.filter(Boolean).join(", ")}.`
+        );
         return;
       }
       this.style.setProperty("--ea-space-alignment", newVal || "center");
@@ -83,7 +87,10 @@ export class EaSpace extends EaBase {
         this.updateContainerClasslist();
       } else {
         if (!CSS.supports("gap", newVal)) {
-          console.warn("[ea-space] Invalid size value");
+          reportWarn(
+            TAG_NAME,
+            `size ${newVal} is not supported, expected one of ${SIZE_TYPES.join(", ")} or a valid CSS gap value.`
+          );
           return;
         }
         this.style.setProperty("--ea-space-gap", newVal);

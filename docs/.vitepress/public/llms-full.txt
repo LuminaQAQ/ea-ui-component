@@ -2,7 +2,7 @@
 
 > 使用 WebComponent 编写的原生组件库
 
-生成时间：2026-11-10
+生成时间：2026-11-12
 
 全部标签：ea-affix, ea-alert, ea-aside, ea-avatar, ea-backtop, ea-badge, ea-border-beam, ea-breadcrumb, ea-breadcrumb-item, ea-button, ea-button-group, ea-calendar, ea-card, ea-carousel, ea-carousel-item, ea-check-tag, ea-checkbox, ea-checkbox-group, ea-col, ea-collapse, ea-collapse-item, ea-color-picker, ea-color-picker-panel, ea-container, ea-countdown, ea-date-picker, ea-descriptions, ea-descriptions-item, ea-dialog, ea-divider, ea-drawer, ea-dropdown, ea-dropdown-item, ea-dropdown-menu, ea-effects, ea-empty, ea-footer, ea-header, ea-icon, ea-image, ea-image-preview, ea-infinite-scroll, ea-input, ea-input-number, ea-link, ea-loading, ea-main, ea-menu, ea-menu-item, ea-menu-item-group, ea-message, ea-message-box, ea-notification, ea-option, ea-option-group, ea-page-header, ea-pagination, ea-popconfirm, ea-popover, ea-progress, ea-radio, ea-radio-group, ea-rate, ea-result, ea-row, ea-scrollbar, ea-segmented, ea-select, ea-skeleton, ea-skeleton-item, ea-slider, ea-space, ea-splitter, ea-splitter-bar, ea-splitter-panel, ea-statistic, ea-step, ea-steps, ea-sub-menu, ea-switch, ea-tab, ea-tab-panel, ea-table, ea-table-column, ea-tabs, ea-tag, ea-text, ea-theme-toggle, ea-time-picker, ea-timeline, ea-timeline-item, ea-tooltip, ea-tour, ea-tour-step, ea-transfer, ea-transfer-panel, ea-tree, ea-upload, ea-upload-file-item, ea-watermark
 
@@ -21,6 +21,10 @@
 - `offset: number = 0`
 - `target: string = ""`
 - `position: 'top' | 'bottom' = "top"`
+
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 
 ### 插槽
 - `(default)` — 默认插槽，需要固定的内容。
@@ -57,6 +61,10 @@
 - `show-after: number = 0`
 - `auto-close: number = 0`
 - `hide-after: number = 0`
+
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 
 ### 事件
 - `ea-close` — 关闭时触发，detail: `{ visible: false }`。
@@ -104,6 +112,10 @@
 - `label: string = ""`
 - `width: string = "300px"`
 
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
+
 ### 插槽
 - `(default)` — 默认插槽，用于放置侧边栏内容。
 
@@ -132,6 +144,10 @@
 - `src-set: string = ""`
 - `alt: string = ""`
 - `fit: 'fill' | 'contain' | 'cover' | 'none' | 'scale-down' = "cover"`
+
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 
 ### 事件
 - `error` — 图片加载失败时触发。
@@ -170,6 +186,10 @@
 - `right: string = "40px"`
 - `bottom: string = "40px"`
 - `smooth: boolean = true`
+
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 
 ### 插槽
 - `(default)` — 默认插槽，用于自定义按钮内容。
@@ -211,6 +231,10 @@
 - `offset-y: number = 0`
 - `show-zero: boolean = true`
 
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
+
 ### 插槽
 - `(default)` — 默认插槽，徽标定位的参考元素（如按钮、图标等）。
 - `content` — 自定义徽标内容，内部使用 `data-value` 标记值显示位置。
@@ -249,6 +273,10 @@
 - `duration: number = 10`
 - `start-delay: number = 0` — 光束动画开始延迟，单位 s
 
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
+
 ### 插槽
 - `(default)` — 默认插槽，需要应用边框光束效果的内容。
 
@@ -284,6 +312,10 @@
 - `locale: string = "en-US"` — 语言设置
 - `separator: string = "/"`
 
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
+
 ### 插槽
 - `(default)` — 默认插槽，用于放置 ea-breadcrumb-item 子组件。
 - `separator` — 自定义分隔符内容。
@@ -304,6 +336,10 @@
 ### 属性
 - `locale: string = "en-US"` — 语言设置
 - `href: string = ""`
+
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 
 ### 插槽
 - `(default)` — 默认插槽，用于放置面包屑项的内容。
@@ -352,6 +388,10 @@
 - `download: string = ""`
 - `toggle: boolean = false`
 
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
+
 ### 插槽
 - `(default)` — 默认插槽，用于按钮内容。
 
@@ -381,6 +421,10 @@
 - `size: 'small' | 'medium' | 'large' = "medium"`
 - `variant: 'primary' | 'success' | 'warning' | 'danger' | 'info' | 'normal' = "normal"`
 
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
+
 ### 插槽
 - `(default)` — 默认插槽，用于放置 ea-button。
 
@@ -401,6 +445,10 @@
 - `locale: string = "en-US"` — 语言设置
 - `value: string = ""`
 - `controller-type: 'button' | 'select' = "button"`
+
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 
 ### 事件
 - `ea-select` — 选择日期时触发，detail: `{ year, month, date, day, fullDate }`。
@@ -477,6 +525,10 @@
 - `header: string = ""`
 - `footer: string = ""`
 
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
+
 ### 插槽
 - `(default)` — 默认插槽，用于卡片内容。
 - `header` — 卡片标题区域。
@@ -518,6 +570,10 @@
 - `loop: boolean = true`
 - `pause-on-hover: boolean = true`
 - `indicator-position: '' | 'none' | 'outside' = ""`
+
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 
 ### 事件
 - `ea-change` — 当前索引变化时触发，detail: `{ current: number, prev: number }`。
@@ -568,6 +624,10 @@
 ### 属性
 - `locale: string = "en-US"` — 语言设置
 
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
+
 ### 插槽
 - `(default)` — 默认插槽，放置轮播项内容。
 
@@ -589,6 +649,10 @@
 - `checked: boolean = false`
 - `disabled: boolean = false`
 - `variant: 'primary' | 'success' | 'warning' | 'danger' | 'info' = "primary"`
+
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 
 ### 事件
 - `change` — 选中状态改变时触发，detail: `{ checked: boolean }`。
@@ -618,6 +682,8 @@
 - `disabled: boolean = false`
 - `value: string = ""`
 - `required: boolean = false`
+- `validate-trigger: '' | 'auto' | 'submit' | 'manual' = ""` — 错误样式的展示时机，映射 `data-validate-trigger`
+- `error-display: '' | 'text' | 'native' = ""` — 错误提示的展示方式，映射 `data-error-display`
 - `minlength: number = null` — 最小长度
 - `maxlength: number = null` — 最大长度
 - `min: number = null` — 最小值
@@ -631,15 +697,19 @@
 - `limit-disabled: boolean = false`
 
 ### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 - `getForm(): GlobalHTMLFormElement | null` — 获取关联的表单元素
 - `setValue(value: string | File | FormData | null): void` — 设置表单值
 - `removeValue(): void` — 移除表单值
-- `updateValidity(): void` — 更新表单验证状态，required 时必须选中
-- `checkValidity(): boolean`
-- `reportValidity(): boolean`
+- `updateValidity(): void` — 重算校验状态 子类不覆盖本方法，只覆盖 `$isEmpty` / `$validate` / `$validationMessage`
+- `markTouched(): void` — 展示当前校验结果的错误样式
+- `resetTouched(): void` — 收起错误样式，回到未交互状态
+- `checkValidity(): boolean` — 检查表单字段是否有效
+- `reportValidity(): boolean` — 报告表单字段的验证状态
 - `setValidity(flags: Record<string, boolean> = {}, message: string = ""): void` — 设置自定义验证错误消息
 - `setCustomValidity(message: string): void` — 设置自定义验证错误消息
-- `resetCustomValidity(): void` — 重置自定义验证错误消息
+- `resetCustomValidity(): void` — 重置自定义验证错误消息 清除后按当前规则重算，而不是直接宣布合法
 - `toggle(): void` — 切换选中状态
 
 ### 事件
@@ -690,6 +760,8 @@
 - `disabled: boolean = false`
 - `value: string = ""` — 字段值
 - `required: boolean = false`
+- `validate-trigger: '' | 'auto' | 'submit' | 'manual' = ""` — 错误样式的展示时机，映射 `data-validate-trigger`
+- `error-display: '' | 'text' | 'native' = ""` — 错误提示的展示方式，映射 `data-error-display`
 - `minlength: number = null` — 最小长度
 - `maxlength: number = null` — 最大长度
 - `min: number = 0`
@@ -699,15 +771,19 @@
 - `size: '' | 'small' | 'default' | 'large' = ""`
 
 ### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 - `getForm(): GlobalHTMLFormElement | null` — 获取关联的表单元素
 - `setValue(value: string | File | FormData | null): void` — 设置表单值
 - `removeValue(): void` — 移除表单值
-- `updateValidity(): void` — 更新表单验证状态
-- `checkValidity(): boolean`
-- `reportValidity(): boolean`
+- `updateValidity(): void` — 重算校验状态 子类不覆盖本方法，只覆盖 `$isEmpty` / `$validate` / `$validationMessage`
+- `markTouched(): void` — 展示当前校验结果的错误样式
+- `resetTouched(): void` — 收起错误样式，回到未交互状态
+- `checkValidity(): boolean` — 检查表单字段是否有效
+- `reportValidity(): boolean` — 报告表单字段的验证状态
 - `setValidity(flags: Record<string, boolean> = {}, message: string = ""): void` — 设置自定义验证错误消息
 - `setCustomValidity(message: string): void` — 设置自定义验证错误消息
-- `resetCustomValidity(): void` — 重置自定义验证错误消息
+- `resetCustomValidity(): void` — 重置自定义验证错误消息 清除后按当前规则重算，而不是直接宣布合法
 
 ### 插槽
 - `(default)` — 默认插槽，用于放置 ea-checkbox 子组件。
@@ -737,6 +813,10 @@
 - `pull: number = 0`
 - `tag: string = "div"`
 
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
+
 ### 插槽
 - `(default)` — 默认插槽，用于列内容。
 
@@ -765,6 +845,8 @@
 - `expand-icon-position: 'left' | 'right' = "right"`
 
 ### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 - `setActiveNames(newVal: ActiveValue): void` — 设置折叠项的展开状态
 
 ### 事件
@@ -793,6 +875,10 @@
 - `expand-icon-position: 'left' | 'right' = "right"`
 - `disabled: boolean = false`
 - `active: boolean = false`
+
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 
 ### 事件
 - `ea-collapse-item-click` — 点击标题时触发（内部通信），detail: `{ name: string, target: EaCollapseItem }`。
@@ -843,6 +929,8 @@
 - `disabled: boolean = false`
 - `value: string = ""`
 - `required: boolean = false`
+- `validate-trigger: '' | 'auto' | 'submit' | 'manual' = ""` — 错误样式的展示时机，映射 `data-validate-trigger`
+- `error-display: '' | 'text' | 'native' = ""` — 错误提示的展示方式，映射 `data-error-display`
 - `minlength: number = null` — 最小长度
 - `maxlength: number = null` — 最大长度
 - `min: number = null` — 最小值
@@ -857,15 +945,19 @@
 - `placement: 'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'left-start' | 'left-end' | 'right' | 'right-start' | 'right-end' = "bottom"`
 
 ### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 - `getForm(): GlobalHTMLFormElement | null` — 获取关联的表单元素
 - `setValue(value: string | File | FormData | null): void` — 设置表单值
 - `removeValue(): void` — 移除表单值
-- `updateValidity(): void`
-- `checkValidity(): boolean`
-- `reportValidity(): boolean`
+- `updateValidity(): void` — 重算校验状态 子类不覆盖本方法，只覆盖 `$isEmpty` / `$validate` / `$validationMessage`
+- `markTouched(): void` — 展示当前校验结果的错误样式
+- `resetTouched(): void` — 收起错误样式，回到未交互状态
+- `checkValidity(): boolean` — 检查表单字段是否有效
+- `reportValidity(): boolean` — 报告表单字段的验证状态
 - `setValidity(flags: Record<string, boolean> = {}, message: string = ""): void` — 设置自定义验证错误消息
 - `setCustomValidity(message: string): void` — 设置自定义验证错误消息
-- `resetCustomValidity(): void` — 重置自定义验证错误消息
+- `resetCustomValidity(): void` — 重置自定义验证错误消息 清除后按当前规则重算，而不是直接宣布合法
 - `show(): void`
 - `hide(): void`
 - `focus(): void`
@@ -921,6 +1013,8 @@
 - `clearable: boolean = true`
 
 ### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 - `resetCursorPosition(): void`
 
 ### 事件
@@ -968,6 +1062,10 @@
 - `locale: string = "en-US"` — 语言设置
 - `direction: 'horizontal' | 'vertical' = "horizontal"`
 
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
+
 ### 插槽
 - `(default)` — 默认插槽，用于放置 ea-header、ea-main、ea-footer、ea-aside 子组件。
 
@@ -993,6 +1091,10 @@
 - `format: string = "HH:mm:ss"`
 - `refresh-interval: number = 1000`
 - `heading: string = ""`
+
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 
 ### 事件
 - `ea-change` — 倒计时每次刷新时触发，detail: `{ value: number, displayValue: string }`。
@@ -1037,6 +1139,8 @@
 - `disabled: boolean = false`
 - `value: string = ""`
 - `required: boolean = false`
+- `validate-trigger: '' | 'auto' | 'submit' | 'manual' = ""` — 错误样式的展示时机，映射 `data-validate-trigger`
+- `error-display: '' | 'text' | 'native' = ""` — 错误提示的展示方式，映射 `data-error-display`
 - `minlength: number = null` — 最小长度
 - `maxlength: number = null` — 最大长度
 - `min: number = null` — 最小值
@@ -1052,15 +1156,19 @@
 - `size: 'large' | 'default' | 'small' = "default"`
 
 ### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 - `getForm(): GlobalHTMLFormElement | null` — 获取关联的表单元素
 - `setValue(value: string | File | FormData | null): void` — 设置表单值
 - `removeValue(): void` — 移除表单值
-- `updateValidity(): void`
-- `checkValidity(): boolean`
-- `reportValidity(): boolean`
+- `updateValidity(): void` — 重算校验状态 子类不覆盖本方法，只覆盖 `$isEmpty` / `$validate` / `$validationMessage`
+- `markTouched(): void` — 展示当前校验结果的错误样式
+- `resetTouched(): void` — 收起错误样式，回到未交互状态
+- `checkValidity(): boolean` — 检查表单字段是否有效
+- `reportValidity(): boolean` — 报告表单字段的验证状态
 - `setValidity(flags: Record<string, boolean> = {}, message: string = ""): void` — 设置自定义验证错误消息
 - `setCustomValidity(message: string): void` — 设置自定义验证错误消息
-- `resetCustomValidity(): void` — 重置自定义验证错误消息
+- `resetCustomValidity(): void` — 重置自定义验证错误消息 清除后按当前规则重算，而不是直接宣布合法
 - `focus(): void`
 - `blur(): void`
 - `handleOpen(): void`
@@ -1127,6 +1235,10 @@
 - `size: 'large' | 'default' | 'small' = "default"`
 - `label-width: string = ""`
 
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
+
 ### 插槽
 - `header` — 标题插槽。
 - `extra` — 右侧额外操作区插槽。
@@ -1170,6 +1282,10 @@
 - `label-width: string = ""`
 - `label-part: string = ""`
 - `content-part: string = ""`
+
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 
 ### 事件
 - `ea-descriptions-item-change` — 属性变化时触发，通知父组件重新渲染。
@@ -1255,6 +1371,10 @@
 - `variant: string = ""`
 - `content-position: 'start' | 'end' | 'center' = "center"`
 - `direction: 'horizontal' | 'vertical' = "horizontal"`
+
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 
 ### 插槽
 - `(default)` — 分隔线中间的自定义文案内容，为空时文案区域隐藏。
@@ -1376,6 +1496,10 @@
 - `disabled: boolean = false`
 - `command: string = ""`
 
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
+
 ### 事件
 - `ea-command` — 点击菜单项时触发（当设置了 command 属性），detail: `{ command: string }`。
 
@@ -1410,6 +1534,10 @@
 ### 属性
 - `locale: string = "en-US"` — 语言设置
 
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
+
 ### 插槽
 - `(default)` — 菜单项内容插槽。
 
@@ -1439,6 +1567,8 @@
 - `scroll-target: string = ""`
 
 ### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 - `reset(): void` — 重置动画状态，清除所有过渡类名和样式
 - `show(): void` — 显示内容，触发进入动画
 - `hide(): void` — 隐藏内容，触发离开动画
@@ -1471,6 +1601,10 @@
 - `image: string = ""`
 - `image-size: string = ""`
 - `description: string = ""`
+
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 
 ### 插槽
 - `image` — 自定义图片内容。
@@ -1508,6 +1642,10 @@
 - `label: string = ""`
 - `height: string = "60px"`
 
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
+
 ### 插槽
 - `(default)` — 默认插槽，用于放置底栏内容。
 
@@ -1532,6 +1670,10 @@
 - `locale: string = "en-US"` — 语言设置
 - `label: string = ""`
 - `height: string = "60px"`
+
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 
 ### 插槽
 - `(default)` — 默认插槽，用于放置顶栏内容。
@@ -1561,6 +1703,10 @@
 - `color: string = ""`
 - `size: string = ""`
 - `spin: boolean = false`
+
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 
 ### 插槽
 - `(default)` — 默认插槽，用于自定义内容。
@@ -1606,6 +1752,8 @@
 - `show-progress: boolean = false`
 
 ### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 - `setActiveItem(index: number): void` — 切换预览图片到指定索引
 - `reset(): void` — 重置图片预览状态
 - `showPreview(): void` — 显示图片预览
@@ -1709,6 +1857,10 @@
 - `distance: number = 0`
 - `label: string = ""`
 
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
+
 ### 事件
 - `ea-loadmore` — 占位元素进入可视区且 status 为 finished 时触发，detail: `{ finished: () => void, noMore: () => void }`。
 
@@ -1744,6 +1896,8 @@
 - `disabled: boolean = false`
 - `value: string = ""`
 - `required: boolean = false`
+- `validate-trigger: '' | 'auto' | 'submit' | 'manual' = ""` — 错误样式的展示时机，映射 `data-validate-trigger`
+- `error-display: '' | 'text' | 'native' = ""` — 错误提示的展示方式，映射 `data-error-display`
 - `minlength: number = null`
 - `maxlength: number = null`
 - `min: number = Number.MIN_SAFE_INTEGER`
@@ -1772,15 +1926,19 @@
 - `inputmode: string = ""`
 
 ### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 - `getForm(): GlobalHTMLFormElement | null` — 获取关联的表单元素
 - `setValue(value: string | File | FormData | null): void` — 设置表单值
 - `removeValue(): void` — 移除表单值
 - `updateValidity(): void`
-- `checkValidity(): boolean`
-- `reportValidity(): boolean`
+- `markTouched(): void` — 展示当前校验结果的错误样式
+- `resetTouched(): void` — 收起错误样式，回到未交互状态
+- `checkValidity(): boolean` — 检查表单字段是否有效
+- `reportValidity(): boolean` — 报告表单字段的验证状态
 - `setValidity(flags: Record<string, boolean> = {}, message: string = ""): void` — 设置自定义验证错误消息
 - `setCustomValidity(message: string): void` — 设置自定义验证错误消息
-- `resetCustomValidity(): void` — 重置自定义验证错误消息
+- `resetCustomValidity(): void` — 重置自定义验证错误消息 清除后按当前规则重算，而不是直接宣布合法
 - `focus(options?: FocusOptions): void`
 - `blur(): void`
 - `clear(): void`
@@ -1852,6 +2010,8 @@
 - `disabled: boolean = false`
 - `value: number = 0`
 - `required: boolean = false`
+- `validate-trigger: '' | 'auto' | 'submit' | 'manual' = ""` — 错误样式的展示时机，映射 `data-validate-trigger`
+- `error-display: '' | 'text' | 'native' = ""` — 错误提示的展示方式，映射 `data-error-display`
 - `minlength: number = null` — 最小长度
 - `maxlength: number = null` — 最大长度
 - `min: number = Number.MIN_SAFE_INTEGER`
@@ -1870,15 +2030,19 @@
 - `inputmode: string = ""`
 
 ### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 - `getForm(): GlobalHTMLFormElement | null` — 获取关联的表单元素
 - `setValue(value: string | File | FormData | null): void` — 设置表单值
 - `removeValue(): void` — 移除表单值
-- `updateValidity(): void` — 更新表单验证状态 使用内部 input 元素的 validity 状态
+- `updateValidity(): void` — 重算校验状态 子类不覆盖本方法，只覆盖 `$isEmpty` / `$validate` / `$validationMessage`
+- `markTouched(): void` — 展示当前校验结果的错误样式
+- `resetTouched(): void` — 收起错误样式，回到未交互状态
 - `checkValidity(): boolean` — 检查表单字段是否有效
 - `reportValidity(): boolean` — 报告表单字段的验证状态
 - `setValidity(flags: Record<string, boolean> = {}, message: string = ""): void` — 设置自定义验证错误消息
 - `setCustomValidity(message: string): void` — 设置自定义验证错误消息
-- `resetCustomValidity(): void` — 重置自定义验证错误消息
+- `resetCustomValidity(): void` — 重置自定义验证错误消息 清除后按当前规则重算，而不是直接宣布合法
 - `focus(options?: FocusOptions): void` — 聚焦输入框
 - `blur(): void` — 失焦输入框
 
@@ -1936,6 +2100,10 @@
 - `download: string = ""`
 - `icon: string = ""`
 
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
+
 ### 插槽
 - `(default)` — 默认插槽，用于链接文本内容。
 
@@ -1969,6 +2137,8 @@
 - `lock: boolean = false`
 
 ### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 - `close(): void` — 关闭加载
 
 ### 事件
@@ -2009,6 +2179,10 @@
 - `locale: string = "en-US"` — 语言设置
 - `label: string = ""`
 
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
+
 ### 插槽
 - `(default)` — 默认插槽，用于放置主要内容。
 
@@ -2037,6 +2211,10 @@
 - `default-active: string = ""`
 - `active: string = ""`
 - `collapse: boolean = false`
+
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 
 ### 事件
 - `select` — 菜单项被选中时触发，detail: `{ index: string, target: HTMLElement }`。
@@ -2071,6 +2249,10 @@
 - `disabled: boolean = false`
 - `active: boolean = false`
 
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
+
 ### 插槽
 - `(default)` — 菜单项内容的默认插槽。
 
@@ -2100,6 +2282,10 @@
 ### 属性
 - `locale: string = "en-US"` — 语言设置
 - `group-title: string = ""`
+
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 
 ### 插槽
 - `title` — 分组标题内容。
@@ -2137,6 +2323,8 @@
 - `offset: number = 0`
 
 ### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 - `close(): void` — 关闭消息（公共方法）
 
 ### 事件
@@ -2255,6 +2443,8 @@
 - `icon: string = ""`
 
 ### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 - `close(): void`
 
 ### 事件
@@ -2313,6 +2503,10 @@
 - `selected: boolean = false`
 - `disabled: boolean = false`
 
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
+
 ### 插槽
 - `(default)` — 默认插槽，用于选项内容。
 
@@ -2332,6 +2526,10 @@
 ### 属性
 - `locale: string = "en-US"` — 语言设置
 - `label: string = ""`
+
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 
 ### 插槽
 - `header` — 自定义分组头部内容。
@@ -2357,6 +2555,10 @@
 - `icon: string = "angle-left"`
 - `heading: string = ""`
 - `content: string = ""`
+
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 
 ### 事件
 - `ea-back` — 点击返回按钮时触发。
@@ -2416,6 +2618,10 @@
 - `size: 'large' | 'default' | 'small' = ""`
 - `hide-on-single-page: boolean = false`
 - `disabled: boolean = false`
+
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 
 ### 事件
 - `ea-current-change` — 当前页变化时触发，detail: `{ value: number }`。
@@ -2569,6 +2775,10 @@
 - `size: string = "126px"`
 - `show-text: boolean = true`
 
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
+
 ### 事件
 - `change` — 进度百分比变化时触发，detail: `{ percentage: number }`。
 
@@ -2614,6 +2824,8 @@
 - `disabled: boolean = false`
 - `value: string = ""`
 - `required: boolean = false` — 必填状态
+- `validate-trigger: '' | 'auto' | 'submit' | 'manual' = ""` — 错误样式的展示时机，映射 `data-validate-trigger`
+- `error-display: '' | 'text' | 'native' = ""` — 错误提示的展示方式，映射 `data-error-display`
 - `minlength: number = null` — 最小长度
 - `maxlength: number = null` — 最大长度
 - `min: number = null` — 最小值
@@ -2625,15 +2837,19 @@
 - `border: boolean = false`
 
 ### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 - `getForm(): GlobalHTMLFormElement | null` — 获取关联的表单元素
 - `setValue(value: string | File | FormData | null): void` — 设置表单值
 - `removeValue(): void` — 移除表单值
-- `updateValidity(): void` — 更新表单验证状态，required 时必须选中
-- `checkValidity(): boolean`
-- `reportValidity(): boolean`
+- `updateValidity(): void` — 重算校验状态 子类不覆盖本方法，只覆盖 `$isEmpty` / `$validate` / `$validationMessage`
+- `markTouched(): void` — 展示当前校验结果的错误样式
+- `resetTouched(): void` — 收起错误样式，回到未交互状态
+- `checkValidity(): boolean` — 检查表单字段是否有效
+- `reportValidity(): boolean` — 报告表单字段的验证状态
 - `setValidity(flags: Record<string, boolean> = {}, message: string = ""): void` — 设置自定义验证错误消息
 - `setCustomValidity(message: string): void` — 设置自定义验证错误消息
-- `resetCustomValidity(): void` — 重置自定义验证错误消息
+- `resetCustomValidity(): void` — 重置自定义验证错误消息 清除后按当前规则重算，而不是直接宣布合法
 - `focus(): void` — 获取焦点
 - `blur(): void` — 失去焦点
 
@@ -2684,6 +2900,8 @@
 - `disabled: boolean = false`
 - `value: string = ""`
 - `required: boolean = false`
+- `validate-trigger: '' | 'auto' | 'submit' | 'manual' = ""` — 错误样式的展示时机，映射 `data-validate-trigger`
+- `error-display: '' | 'text' | 'native' = ""` — 错误提示的展示方式，映射 `data-error-display`
 - `minlength: number = null` — 最小长度
 - `maxlength: number = null` — 最大长度
 - `min: number = null` — 最小值
@@ -2694,15 +2912,19 @@
 - `border: boolean = false`
 
 ### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 - `getForm(): GlobalHTMLFormElement | null` — 获取关联的表单元素
 - `setValue(value: string | File | FormData | null): void` — 设置表单值
 - `removeValue(): void` — 移除表单值
-- `updateValidity(): void` — 更新表单验证状态
-- `checkValidity(): boolean`
-- `reportValidity(): boolean`
+- `updateValidity(): void` — 重算校验状态 子类不覆盖本方法，只覆盖 `$isEmpty` / `$validate` / `$validationMessage`
+- `markTouched(): void` — 展示当前校验结果的错误样式
+- `resetTouched(): void` — 收起错误样式，回到未交互状态
+- `checkValidity(): boolean` — 检查表单字段是否有效
+- `reportValidity(): boolean` — 报告表单字段的验证状态
 - `setValidity(flags: Record<string, boolean> = {}, message: string = ""): void` — 设置自定义验证错误消息
 - `setCustomValidity(message: string): void` — 设置自定义验证错误消息
-- `resetCustomValidity(): void` — 重置自定义验证错误消息
+- `resetCustomValidity(): void` — 重置自定义验证错误消息 清除后按当前规则重算，而不是直接宣布合法
 
 ### 插槽
 - `(default)` — 默认插槽，用于放置 ea-radio 子组件。
@@ -2733,6 +2955,8 @@
 - `disabled: boolean = false`
 - `value: number = 0`
 - `required: boolean = false` — 必填状态
+- `validate-trigger: '' | 'auto' | 'submit' | 'manual' = ""` — 错误样式的展示时机，映射 `data-validate-trigger`
+- `error-display: '' | 'text' | 'native' = ""` — 错误提示的展示方式，映射 `data-error-display`
 - `minlength: number = null` — 最小长度
 - `maxlength: number = null` — 最大长度
 - `min: number = 0`
@@ -2743,15 +2967,19 @@
 - `readonly: boolean = false`
 
 ### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 - `getForm(): GlobalHTMLFormElement | null` — 获取关联的表单元素
 - `setValue(value: string | File | FormData | null): void` — 设置表单值
 - `removeValue(): void` — 移除表单值
-- `updateValidity(): void`
-- `checkValidity(): boolean`
-- `reportValidity(): boolean`
+- `updateValidity(): void` — 重算校验状态 子类不覆盖本方法，只覆盖 `$isEmpty` / `$validate` / `$validationMessage`
+- `markTouched(): void` — 展示当前校验结果的错误样式
+- `resetTouched(): void` — 收起错误样式，回到未交互状态
+- `checkValidity(): boolean` — 检查表单字段是否有效
+- `reportValidity(): boolean` — 报告表单字段的验证状态
 - `setValidity(flags: Record<string, boolean> = {}, message: string = ""): void` — 设置自定义验证错误消息
 - `setCustomValidity(message: string): void` — 设置自定义验证错误消息
-- `resetCustomValidity(): void` — 重置自定义验证错误消息
+- `resetCustomValidity(): void` — 重置自定义验证错误消息 清除后按当前规则重算，而不是直接宣布合法
 
 ### 事件
 - `change` — 评分值变化时触发，detail: `{ value: number }`。
@@ -2789,6 +3017,10 @@
 - `heading: string = ""`
 - `sub-title: string = ""`
 - `icon: string = ""`
+
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 
 ### 插槽
 - `icon` — 自定义图标内容。
@@ -2832,6 +3064,10 @@
 - `align: 'top' | 'middle' | 'bottom' = "top"`
 - `tag: string = "div"`
 
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
+
 ### 插槽
 - `(default)` — 默认插槽，用于放置 ea-col 列组件。
 
@@ -2861,6 +3097,8 @@
 - `always: boolean = false`
 
 ### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 - `scrollTo(optionsOrX?: ScrollToOptions | number, y?: number): void`
 
 ### 事件
@@ -2912,6 +3150,10 @@
 - `block: boolean = false`
 - `name: string = ""`
 
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
+
 ### 事件
 - `change` — 选项改变时触发，detail: `{ value: string }`。
 
@@ -2950,6 +3192,8 @@
 - `disabled: boolean = false`
 - `value: string = ""` — 字段值
 - `required: boolean = false`
+- `validate-trigger: '' | 'auto' | 'submit' | 'manual' = ""` — 错误样式的展示时机，映射 `data-validate-trigger`
+- `error-display: '' | 'text' | 'native' = ""` — 错误提示的展示方式，映射 `data-error-display`
 - `minlength: number = null` — 最小长度
 - `maxlength: number = null` — 最大长度
 - `min: number = null` — 最小值
@@ -2965,15 +3209,19 @@
 - `filterable: boolean = false`
 
 ### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 - `getForm(): GlobalHTMLFormElement | null` — 获取关联的表单元素
 - `setValue(value: string | File | FormData | null): void` — 设置表单值
 - `removeValue(): void` — 移除表单值
-- `updateValidity(): void`
-- `checkValidity(): boolean`
-- `reportValidity(): boolean`
+- `updateValidity(): void` — 重算校验状态 子类不覆盖本方法，只覆盖 `$isEmpty` / `$validate` / `$validationMessage`
+- `markTouched(): void` — 展示当前校验结果的错误样式
+- `resetTouched(): void` — 收起错误样式，回到未交互状态
+- `checkValidity(): boolean` — 检查表单字段是否有效
+- `reportValidity(): boolean` — 报告表单字段的验证状态
 - `setValidity(flags: Record<string, boolean> = {}, message: string = ""): void` — 设置自定义验证错误消息
 - `setCustomValidity(message: string): void` — 设置自定义验证错误消息
-- `resetCustomValidity(): void` — 重置自定义验证错误消息
+- `resetCustomValidity(): void` — 重置自定义验证错误消息 清除后按当前规则重算，而不是直接宣布合法
 - `show(): void`
 - `hide(): void`
 
@@ -3024,6 +3272,10 @@
 - `throttle-trailing: number = 0`
 - `loading: boolean = true`
 
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
+
 ### 插槽
 - `(default)` — 默认插槽，loading 结束后展示的真实内容。
 - `template` — 骨架屏模板插槽，用于自定义骨架屏布局。
@@ -3050,6 +3302,10 @@
 - `locale: string = "en-US"` — 语言设置
 - `variant: 'p' | 'text' | 'h1' | 'h3' | 'caption' | 'button' | 'image' | 'circle' | 'rect' = "p"`
 - `animated: boolean = false`
+
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 
 ### 插槽
 - `(default)` — 默认插槽。
@@ -3085,6 +3341,8 @@
 - `disabled: boolean = false`
 - `value: number = 0`
 - `required: boolean = false`
+- `validate-trigger: '' | 'auto' | 'submit' | 'manual' = ""` — 错误样式的展示时机，映射 `data-validate-trigger`
+- `error-display: '' | 'text' | 'native' = ""` — 错误提示的展示方式，映射 `data-error-display`
 - `minlength: number = null` — 最小长度
 - `maxlength: number = null` — 最大长度
 - `min: number = 0`
@@ -3100,15 +3358,19 @@
 - `size: 'large' | 'default' | 'small' = ""`
 
 ### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 - `getForm(): GlobalHTMLFormElement | null` — 获取关联的表单元素
 - `setValue(value: string | File | FormData | null): void` — 设置表单值
 - `removeValue(): void` — 移除表单值
-- `updateValidity(): void`
-- `checkValidity(): boolean`
-- `reportValidity(): boolean`
+- `updateValidity(): void` — 重算校验状态 子类不覆盖本方法，只覆盖 `$isEmpty` / `$validate` / `$validationMessage`
+- `markTouched(): void` — 展示当前校验结果的错误样式
+- `resetTouched(): void` — 收起错误样式，回到未交互状态
+- `checkValidity(): boolean` — 检查表单字段是否有效
+- `reportValidity(): boolean` — 报告表单字段的验证状态
 - `setValidity(flags: Record<string, boolean> = {}, message: string = ""): void` — 设置自定义验证错误消息
 - `setCustomValidity(message: string): void` — 设置自定义验证错误消息
-- `resetCustomValidity(): void` — 重置自定义验证错误消息
+- `resetCustomValidity(): void` — 重置自定义验证错误消息 清除后按当前规则重算，而不是直接宣布合法
 
 ### 事件
 - `change` — 值改变时触发（拖拽结束），detail: `{ value: number }`。
@@ -3166,6 +3428,10 @@
 - `fill: boolean = false`
 - `fill-ratio: number = 100`
 
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
+
 ### 插槽
 - `(default)` — 默认插槽，用于放置需要间距的子元素。
 
@@ -3194,6 +3460,10 @@
 ### 属性
 - `locale: string = "en-US"` — 语言设置
 - `layout: 'horizontal' | 'vertical' = "horizontal"`
+
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 
 ### 事件
 - `ea-panel-resize-start` — 开始调整面板大小时触发，detail: `{ size: number[] }`。
@@ -3225,6 +3495,10 @@
 - `label: string = ""`
 - `step: number = 10`
 
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
+
 ### CSS 变量
 - `--ea-splitter-bar-size` — 分隔条尺寸（水平模式为宽度，垂直模式为高度）。
 - `--ea-splitter-bar-color` — 分隔条默认颜色。
@@ -3249,6 +3523,10 @@
 - `min: string = ""`
 - `layout: 'horizontal' | 'vertical' = "horizontal"`
 
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
+
 ### 插槽
 - `(default)` — 默认插槽，用于面板内容。
 
@@ -3271,6 +3549,10 @@
 - `heading: string = ""`
 - `value: number = 0`
 
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
+
 ---
 
 ## ea-step
@@ -3291,6 +3573,10 @@
 - `simple: boolean = false`
 - `align-center: boolean = false`
 - `direction: string = "horizontal"`
+
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 
 ### 插槽
 - `icon` — 自定义图标内容。
@@ -3345,6 +3631,10 @@
 - `simple: boolean = false`
 - `direction: 'vertical' | 'horizontal' = "horizontal"`
 
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
+
 ### 插槽
 - `(default)` — 默认插槽，用于放置 ea-step 子组件。
 
@@ -3373,6 +3663,10 @@
 - `active: boolean = false`
 - `mode: 'horizontal' | 'vertical' = "vertical"`
 - `label: string = ""`
+
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 
 ### 事件
 - `ea-sub-menu-click` — 子菜单内菜单项点击时触发，detail: `{ index: string, itemIndex: string, target: HTMLElement }`。
@@ -3419,6 +3713,8 @@
 - `disabled: boolean = false`
 - `value: unknown = false`
 - `required: boolean = false`
+- `validate-trigger: '' | 'auto' | 'submit' | 'manual' = ""` — 错误样式的展示时机，映射 `data-validate-trigger`
+- `error-display: '' | 'text' | 'native' = ""` — 错误提示的展示方式，映射 `data-error-display`
 - `minlength: number = null` — 最小长度
 - `maxlength: number = null` — 最大长度
 - `min: number = null` — 最小值
@@ -3434,15 +3730,19 @@
 - `active-color: string = ""`
 
 ### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 - `getForm(): GlobalHTMLFormElement | null` — 获取关联的表单元素
 - `setValue(value: string | File | FormData | null): void` — 设置表单值
 - `removeValue(): void` — 移除表单值
-- `updateValidity(): void` — 更新表单验证状态，required 时必须选中
-- `checkValidity(): boolean`
-- `reportValidity(): boolean`
+- `updateValidity(): void` — 重算校验状态 子类不覆盖本方法，只覆盖 `$isEmpty` / `$validate` / `$validationMessage`
+- `markTouched(): void` — 展示当前校验结果的错误样式
+- `resetTouched(): void` — 收起错误样式，回到未交互状态
+- `checkValidity(): boolean` — 检查表单字段是否有效
+- `reportValidity(): boolean` — 报告表单字段的验证状态
 - `setValidity(flags: Record<string, boolean> = {}, message: string = ""): void` — 设置自定义验证错误消息
 - `setCustomValidity(message: string): void` — 设置自定义验证错误消息
-- `resetCustomValidity(): void` — 重置自定义验证错误消息
+- `resetCustomValidity(): void` — 重置自定义验证错误消息 清除后按当前规则重算，而不是直接宣布合法
 
 ### 事件
 - `change` — 状态发生变化时触发，detail: `{ value: unknown }`。
@@ -3491,6 +3791,10 @@
 - `editable: boolean = false`
 - `closable: boolean = false`
 
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
+
 ### 事件
 - `ea-tab-close-icon-click` — 点击关闭图标时触发，detail: `{ panel }`。
 
@@ -3516,6 +3820,10 @@
 - `name: string = ""`
 - `type: '' | 'card' | 'border-card' = ""`
 - `active: boolean = false`
+
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 
 ### 插槽
 - `(default)` — 默认插槽，用于面板的实际内容。
@@ -3543,6 +3851,8 @@
 - `show-summary: boolean = false`
 
 ### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 - `getCurrentRow(): { target: HTMLTableRowElement | null; value: unknown }`
 - `setCurrentRow(row?: unknown): void`
 
@@ -3627,6 +3937,10 @@
 - `sortable: boolean = false`
 - `fixed: 'left' | 'right' | 'false' | '' = "false"`
 
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
+
 ### 插槽
 - `header` — 自定义表头内容。
 - `(default)` — 默认插槽，用于列内容模板。
@@ -3653,6 +3967,10 @@
 - `active: string = ""`
 - `tab-position: 'top' | 'bottom' | 'left' | 'right' = "top"`
 - `editable: boolean = false`
+
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 
 ### 事件
 - `ea-tab-click` — 点击标签时触发，detail: `{ name, panel }`。
@@ -3703,6 +4021,10 @@
 - `effect: 'dark' | 'light' | 'plain' = "light"`
 - `round: boolean = false`
 
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
+
 ### 事件
 - `ea-remove` — 标签被移除后触发，detail: `{ text: string | null }`。
 
@@ -3736,6 +4058,10 @@
 - `line-clamp: number = 0`
 - `tag: 'span' | 'p' | 'b' | 'i' | 'sub' | 'sup' | 'ins' | 'del' | 'mark' = "span"`
 
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
+
 ### 插槽
 - `(default)` — 默认插槽，用于文本内容。
 
@@ -3767,6 +4093,10 @@
 - `locale: string = "en-US"` — 语言设置
 - `mode: string = "auto"`
 
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
+
 ### 事件
 - `ea-theme-toggle-change` — 主题切换时触发，detail: `{ mode: 'light' | 'dark' }`。
 
@@ -3794,8 +4124,10 @@
       return this.localName;
     }` — 字段类型，默认为标签名（可写，组件可覆盖）
 - `disabled: boolean = false`
-- `value: string = ""`
+- `value: string = ""` — 选中值 空值也要同步一次，否则清空或重置后内嵌输入框仍显示旧时间
 - `required: boolean = false`
+- `validate-trigger: '' | 'auto' | 'submit' | 'manual' = ""` — 错误样式的展示时机，映射 `data-validate-trigger`
+- `error-display: '' | 'text' | 'native' = ""` — 错误提示的展示方式，映射 `data-error-display`
 - `minlength: number = null` — 最小长度
 - `maxlength: number = null` — 最大长度
 - `min: number = null` — 最小值
@@ -3810,15 +4142,19 @@
 - `limit-range-end: string = "23:59:59"`
 
 ### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 - `getForm(): GlobalHTMLFormElement | null` — 获取关联的表单元素
 - `setValue(value: string | File | FormData | null): void` — 设置表单值
 - `removeValue(): void` — 移除表单值
-- `updateValidity(): void`
-- `checkValidity(): boolean`
-- `reportValidity(): boolean`
+- `updateValidity(): void` — 重算校验状态 子类不覆盖本方法，只覆盖 `$isEmpty` / `$validate` / `$validationMessage`
+- `markTouched(): void` — 展示当前校验结果的错误样式
+- `resetTouched(): void` — 收起错误样式，回到未交互状态
+- `checkValidity(): boolean` — 检查表单字段是否有效
+- `reportValidity(): boolean` — 报告表单字段的验证状态
 - `setValidity(flags: Record<string, boolean> = {}, message: string = ""): void` — 设置自定义验证错误消息
 - `setCustomValidity(message: string): void` — 设置自定义验证错误消息
-- `resetCustomValidity(): void` — 重置自定义验证错误消息
+- `resetCustomValidity(): void` — 重置自定义验证错误消息 清除后按当前规则重算，而不是直接宣布合法
 
 ### 事件
 - `change` — 值改变时触发，detail: `{ value }`。
@@ -3862,6 +4198,10 @@
 ### 属性
 - `locale: string = "en-US"` — 语言设置
 
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
+
 ### 插槽
 - `(default)` — 默认插槽，放置 ea-timeline-item 子节点。
 
@@ -3889,6 +4229,10 @@
 - `size: 'normal' | 'large' = ""`
 - `placement: 'top' | 'bottom' = ""`
 - `center: boolean = false`
+
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 
 ### 插槽
 - `(default)` — 默认插槽，放置时间线项的主内容。
@@ -3972,6 +4316,10 @@
 - `variant: 'default' | 'primary' = "default"`
 - `placement: 'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'left-start' | 'left-end' | 'right' | 'right-start' | 'right-end' = "bottom"`
 
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
+
 ### 事件
 - `ea-close` — 关闭引导时触发，detail: `{ current: number }`。
 - `ea-tour-change` — 步骤切换时触发，detail: `{ current: number }`。
@@ -4001,6 +4349,8 @@
 - `placement: 'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'left-start' | 'left-end' | 'right' | 'right-start' | 'right-end' = "bottom"`
 
 ### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 - `updateIndicators(allSteps: HTMLElement[]): void` — 更新步骤指示器
 
 ### 事件
@@ -4044,6 +4394,8 @@
 - `disabled: boolean = false`
 - `value: string = ""` — 字段值
 - `required: boolean = false` — 必填状态
+- `validate-trigger: '' | 'auto' | 'submit' | 'manual' = ""` — 错误样式的展示时机，映射 `data-validate-trigger`
+- `error-display: '' | 'text' | 'native' = ""` — 错误提示的展示方式，映射 `data-error-display`
 - `minlength: number = null` — 最小长度
 - `maxlength: number = null` — 最大长度
 - `min: number = null` — 最小值
@@ -4053,15 +4405,19 @@
 - `filter-placeholder: string = "请输入搜索内容"`
 
 ### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 - `getForm(): GlobalHTMLFormElement | null` — 获取关联的表单元素
 - `setValue(value: string | File | FormData | null): void` — 设置表单值
 - `removeValue(): void` — 移除表单值
-- `updateValidity(): void`
-- `checkValidity(): boolean`
-- `reportValidity(): boolean`
+- `updateValidity(): void` — 重算校验状态 子类不覆盖本方法，只覆盖 `$isEmpty` / `$validate` / `$validationMessage`
+- `markTouched(): void` — 展示当前校验结果的错误样式
+- `resetTouched(): void` — 收起错误样式，回到未交互状态
+- `checkValidity(): boolean` — 检查表单字段是否有效
+- `reportValidity(): boolean` — 报告表单字段的验证状态
 - `setValidity(flags: Record<string, boolean> = {}, message: string = ""): void` — 设置自定义验证错误消息
 - `setCustomValidity(message: string): void` — 设置自定义验证错误消息
-- `resetCustomValidity(): void` — 重置自定义验证错误消息
+- `resetCustomValidity(): void` — 重置自定义验证错误消息 清除后按当前规则重算，而不是直接宣布合法
 - `clearQuery(which: "left" | "right"): void` — 清空指定面板的搜索关键词
 
 ### 事件
@@ -4113,6 +4469,8 @@
 - `filter-placeholder: string = ""`
 
 ### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 - `clearList(): void` — 清空列表项
 - `clearQuery(): void` — 清空搜索关键词并重置过滤
 
@@ -4171,6 +4529,8 @@
 - `expand-on-icon-click: boolean = false`
 
 ### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 - `getHalfCheckedNodes(): any[]` — 获取半选中节点数据数组
 - `getHalfCheckedKeys(): any[]` — 获取半选中节点键值数组
 - `getCurrentKey(): any` — 获取当前选中节点的键值
@@ -4236,6 +4596,8 @@
 - `disabled: boolean = false`
 - `value: string = ""` — 字段值
 - `required: boolean = false` — 必填状态
+- `validate-trigger: '' | 'auto' | 'submit' | 'manual' = ""` — 错误样式的展示时机，映射 `data-validate-trigger`
+- `error-display: '' | 'text' | 'native' = ""` — 错误提示的展示方式，映射 `data-error-display`
 - `minlength: number = null` — 最小长度
 - `maxlength: number = null` — 最大长度
 - `min: number = null` — 最小值
@@ -4256,15 +4618,19 @@
 - `directory: boolean = false`
 
 ### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 - `getForm(): GlobalHTMLFormElement | null` — 获取关联的表单元素
 - `setValue(value: string | File | FormData | null): void` — 设置表单值
 - `removeValue(): void` — 移除表单值
-- `updateValidity(): void` — 更新表单验证状态 使用内部 input 元素的 validity 状态
+- `updateValidity(): void` — 重算校验状态 子类不覆盖本方法，只覆盖 `$isEmpty` / `$validate` / `$validationMessage`
+- `markTouched(): void` — 展示当前校验结果的错误样式
+- `resetTouched(): void` — 收起错误样式，回到未交互状态
 - `checkValidity(): boolean` — 检查表单字段是否有效
 - `reportValidity(): boolean` — 报告表单字段的验证状态
 - `setValidity(flags: Record<string, boolean> = {}, message: string = ""): void` — 设置自定义验证错误消息
 - `setCustomValidity(message: string): void` — 设置自定义验证错误消息
-- `resetCustomValidity(): void` — 重置自定义验证错误消息
+- `resetCustomValidity(): void` — 重置自定义验证错误消息 清除后按当前规则重算，而不是直接宣布合法
 - `clearFiles(): void` — 清空所有
 - `handleFileSelect(): void` — 触发文件选择对话框
 - `submit(): Promise<void>` — 提交上传
@@ -4318,6 +4684,10 @@
 ### 属性
 - `locale: string = "en-US"` — 语言设置
 - `list-type: string = "text"`
+
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 
 ### 事件
 - `ea-upload-file-delete` — 删除文件时触发，detail: `{ uid: string }`。
@@ -4373,6 +4743,10 @@
 - `z-index: number = 9`
 - `image: string = ""`
 - `content: string = "watermark"`
+
+### 方法
+- `requestUpdate(name: string, oldValue: unknown, newValue: unknown): void` — 登记一次属性变更 同一轮内的多次变更合并为一次 `performUpdate`
+- `performUpdate(): Promise<void>` — 执行一轮更新：`$beforeUpdate` → 声明式同步 → `$updated`
 
 ### 插槽
 - `(default)` — 默认插槽，需要叠加水印的内容。

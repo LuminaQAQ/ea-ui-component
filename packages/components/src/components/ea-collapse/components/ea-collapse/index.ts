@@ -7,6 +7,7 @@ import {
   listen,
 } from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
+import { reportError } from "@easy-component-ui/core/utils/diagnostics";
 import type { EaCollapseItem } from "../ea-collapse-item/index";
 import { EaCollapseChangeEvent } from "./events/EaCollapseChangeEvent";
 import stylesheet from "./index.scss?inline";
@@ -174,8 +175,9 @@ export class EaCollapse extends EaBase {
           this.setActiveNames([...currentActive, name]);
         }
       } catch {
-        console.error(
-          `${this.tagName}: When 'accordion' is false, 'active' should be an Array type.`,
+        reportError(
+          TAG_NAME,
+          "active must be an Array when accordion is false.",
           this
         );
       }

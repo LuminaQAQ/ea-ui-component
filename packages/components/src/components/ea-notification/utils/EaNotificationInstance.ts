@@ -1,5 +1,9 @@
 import { timeout } from "@easy-component-ui/core/utils/timeout";
-import type { EaNotificationElement, NotificationVariantType } from "../components/ea-notification/index";
+import { reportWarn } from "@easy-component-ui/core/utils/diagnostics";
+import type {
+  EaNotificationElement,
+  NotificationVariantType,
+} from "../components/ea-notification/index";
 
 export interface EaNotificationOptions {
   heading?: string;
@@ -93,8 +97,9 @@ class EaNotificationInstance {
       const parent = document.querySelector(appendTo);
       parent ? parent.appendChild(el) : document.body.appendChild(el);
     } else {
-      console.warn(
-        `[EaNotification] TypeError: ${appendTo} is not a valid element or selector.`
+      reportWarn(
+        "ea-notification",
+        `appendTo ${appendTo} is not a valid element or selector.`
       );
     }
   }

@@ -1015,33 +1015,9 @@ export class EaSelect extends EaFormAssociatedBase {
     });
   }
 
-  updateValidity() {
-    if (!this.internals || typeof this.internals.setValidity !== "function")
-      return;
-
-    const hasValue = this.multiple
-      ? Array.isArray(this.value) && this.value.length > 0
-      : this.value !== "" && this.value != null;
-
-    if (this.required && !hasValue) {
-      this.internals.setValidity(
-        { valueMissing: true },
-        "请选择一个选项",
-        this
-      );
-    } else {
-      this.internals.setValidity({}, "", this);
-    }
-  }
-
-  checkValidity(): boolean {
-    this.updateValidity();
-    return this.internals?.validity?.valid ?? true;
-  }
-
-  reportValidity(): boolean {
-    this.updateValidity();
-    return this.internals?.reportValidity() ?? true;
+  protected $validationMessage(flag: string, limit?: number): string {
+    if (flag === "valueMissing") return "请选择一个选项";
+    return super.$validationMessage(flag, limit);
   }
 }
 

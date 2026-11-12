@@ -498,6 +498,8 @@ marksSlider.marks = {
 | placement                 | 提示框位置           | String   | `'top' \| 'top-start' \| 'top-end' \| 'bottom' \| 'bottom-start' \| 'bottom-end' \| 'left' \| 'left-start' \| 'left-end' \| 'right' \| 'right-start' \| 'right-end'` | 'top'            |
 | size                      | 尺寸                 | String   | `'small' \| 'default' \| 'large'`                                                                                                                                    | ''               |
 | required                  | 是否必填             | Boolean  | —                                                                                                                                                                    | false            |
+| data-validate-trigger     | 错误样式的展示时机   | String   | auto / submit / manual                                                                                                                                               | auto             |
+| data-error-display        | 错误提示的展示方式   | String   | native / text                                                                                                                                                        | native           |
 | marks <PropTag />         | 标记点               | Object   | —                                                                                                                                                                    | null             |
 | formatTooltip <PropTag /> | 自定义提示框内容格式 | Function | —                                                                                                                                                                    | `value => value` |
 

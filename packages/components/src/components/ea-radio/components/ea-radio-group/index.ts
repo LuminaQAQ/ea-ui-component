@@ -225,12 +225,13 @@ export class EaRadioGroup extends EaFormAssociatedBase {
     }
   };
 
+  /** 表单重置：清空选中值并复位校验状态 */
   formResetCallback(): void {
     this.value = "";
     this._radioItems?.forEach(radio => {
       radio.toggleAttribute("checked", false);
     });
-    this.setValidity({});
+    this.$resetValidity();
   }
 
   $mount(): void {
@@ -259,30 +260,9 @@ export class EaRadioGroup extends EaFormAssociatedBase {
     return checkedRadio || this._radioItems?.[0] || this._container;
   }
 
-  /** 更新表单验证状态 */
-  updateValidity() {
-    const hasValue = this.value !== "" && this.value != null;
-    const anchor = this.validationTarget ?? undefined;
-
-    if (this.required && !hasValue) {
-      this.internals?.setValidity(
-        { valueMissing: true },
-        "请选择一个选项",
-        anchor
-      );
-    } else {
-      this.internals?.setValidity({}, "", anchor);
-    }
-  }
-
-  checkValidity(): boolean {
-    this.updateValidity();
-    return this.internals?.validity?.valid ?? true;
-  }
-
-  reportValidity(): boolean {
-    this.updateValidity();
-    return this.internals?.reportValidity() ?? true;
+  protected $validationMessage(flag: string, limit?: number): string {
+    if (flag === "valueMissing") return "请选择一个选项";
+    return super.$validationMessage(flag, limit);
   }
 }
 

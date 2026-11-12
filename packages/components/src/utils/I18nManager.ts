@@ -1,6 +1,7 @@
 type Locale = "zh-CN" | "en-US" | string;
 
-type MessageValue = string | string[] | ((params?: Record<string, string | number>) => string);
+type MessageValue =
+  string | string[] | ((params?: Record<string, string | number>) => string);
 
 interface CalendarMessages {
   selectYear: string;
@@ -95,7 +96,15 @@ class I18nManager {
           nextMonth: "下个月",
           today: "今天",
           weekDays: ["一", "二", "三", "四", "五", "六", "日"],
-          weekDaysFull: ["星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"],
+          weekDaysFull: [
+            "星期一",
+            "星期二",
+            "星期三",
+            "星期四",
+            "星期五",
+            "星期六",
+            "星期日",
+          ],
           months: [
             "一月",
             "二月",
@@ -117,8 +126,8 @@ class I18nManager {
           confirm: "确认",
         },
         pagination: {
-          total: (p) => `共 ${p!.total} 条`,
-          itemsPerPage: (p) => `每页 ${p!.size} 条`,
+          total: p => `共 ${p!.total} 条`,
+          itemsPerPage: p => `每页 ${p!.size} 条`,
           goto: "前往",
           page: "页",
         },
@@ -147,7 +156,7 @@ class I18nManager {
           filterPlaceholder: "输入关键词",
         },
         rate: {
-          star: (p) => `${p!.n} 星`,
+          star: p => `${p!.n} 星`,
         },
       },
       "en-US": {
@@ -160,7 +169,15 @@ class I18nManager {
           today: "Today",
 
           weekDays: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-          weekDaysFull: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+          weekDaysFull: [
+            "Sunday",
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+          ],
           months: [
             "January",
             "February",
@@ -196,8 +213,8 @@ class I18nManager {
           confirm: "Confirm",
         },
         pagination: {
-          total: (p) => `Total ${p!.total}`,
-          itemsPerPage: (p) => `${p!.size} per page`,
+          total: p => `Total ${p!.total}`,
+          itemsPerPage: p => `${p!.size} per page`,
           goto: "Goto",
           page: "",
         },
@@ -226,7 +243,7 @@ class I18nManager {
           filterPlaceholder: "Enter keyword",
         },
         rate: {
-          star: (p) => `${p!.n} star(s)`,
+          star: p => `${p!.n} star(s)`,
         },
       },
     },

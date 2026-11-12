@@ -398,18 +398,20 @@ eventExample.init();
 
 ### TimePicker Attributes
 
-| 参数              | 说明             | 类型    | 可选值                      | 默认值      |
-| ----------------- | ---------------- | ------- | --------------------------- | ----------- |
-| value             | 绑定值           | string  | —                           | ""          |
-| width             | 组件宽度         | string  | —                           | ""          |
-| disabled          | 是否禁用         | boolean | —                           | false       |
-| align             | 对齐方式         | string  | `left \| center \| right`   | left        |
-| placeholder       | 占位符           | string  | —                           | Select time |
-| size              | 输入框尺寸       | string  | `large \| default \| small` | default     |
-| label             | 输入框标签文本   | string  | —                           | ""          |
-| required          | 是否必填         | boolean | —                           | false       |
-| limit-range-start | 限制范围开始时间 | string  | —                           | 00:00:00    |
-| limit-range-end   | 限制范围结束时间 | string  | —                           | 23:59:59    |
+| 参数                  | 说明               | 类型    | 可选值                      | 默认值      |
+| --------------------- | ------------------ | ------- | --------------------------- | ----------- |
+| value                 | 绑定值             | string  | —                           | ""          |
+| width                 | 组件宽度           | string  | —                           | ""          |
+| disabled              | 是否禁用           | boolean | —                           | false       |
+| align                 | 对齐方式           | string  | `left \| center \| right`   | left        |
+| placeholder           | 占位符             | string  | —                           | Select time |
+| size                  | 输入框尺寸         | string  | `large \| default \| small` | default     |
+| label                 | 输入框标签文本     | string  | —                           | ""          |
+| required              | 是否必填           | boolean | —                           | false       |
+| data-validate-trigger | 错误样式的展示时机 | String  | auto / submit / manual      | auto        |
+| data-error-display    | 错误提示的展示方式 | String  | native / text               | native      |
+| limit-range-start     | 限制范围开始时间   | string  | —                           | 00:00:00    |
+| limit-range-end       | 限制范围结束时间   | string  | —                           | 23:59:59    |
 
 ### TimePicker CSS Part
 

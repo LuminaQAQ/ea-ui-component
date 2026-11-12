@@ -108,7 +108,9 @@ describe("EaStatistic Component", () => {
       const statistic = document.createElement("ea-statistic");
       container.appendChild(statistic);
 
-      expect(statistic.shadowRoot!.querySelector('[part="title"]')).toBeTruthy();
+      expect(
+        statistic.shadowRoot!.querySelector('[part="title"]')
+      ).toBeTruthy();
     });
 
     it("应该支持 content part", () => {
@@ -624,7 +626,9 @@ describe("EaStatistic Component", () => {
 
         await statistic.updateComplete;
 
-        const numberEl = statistic.shadowRoot!.querySelector(".ea-statistic__number");
+        const numberEl = statistic.shadowRoot!.querySelector(
+          ".ea-statistic__number"
+        );
         expect(numberEl!.getAttribute("aria-live")).toBe("polite");
       });
 
@@ -635,7 +639,9 @@ describe("EaStatistic Component", () => {
 
         await statistic.updateComplete;
 
-        const numberEl = statistic.shadowRoot!.querySelector(".ea-statistic__number");
+        const numberEl = statistic.shadowRoot!.querySelector(
+          ".ea-statistic__number"
+        );
         expect(numberEl!.getAttribute("aria-live")).toBe("polite");
       });
 
@@ -649,7 +655,9 @@ describe("EaStatistic Component", () => {
         statistic.setAttribute("value", "2000");
         await statistic.updateComplete;
 
-        const numberEl = statistic.shadowRoot!.querySelector(".ea-statistic__number");
+        const numberEl = statistic.shadowRoot!.querySelector(
+          ".ea-statistic__number"
+        );
         expect(numberEl!.getAttribute("aria-live")).toBe("polite");
       });
     });

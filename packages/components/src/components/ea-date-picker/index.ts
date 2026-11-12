@@ -828,24 +828,14 @@ export class EaDatePicker extends EaFormAssociatedBase {
     return this._inputElement;
   }
 
-  updateValidity(): void {
-    const hasValue = this.value !== "" && this.value != null;
-
-    if (this.required && !hasValue) {
-      this.internals.setValidity({ valueMissing: true }, "请选择日期", this);
-    } else {
-      this.internals.setValidity({}, "", this);
-    }
+  protected $validationMessage(flag: string, limit?: number): string {
+    if (flag === "valueMissing") return "请选择日期";
+    return super.$validationMessage(flag, limit);
   }
+  formResetCallback(): void {
+    super.formResetCallback();
 
-  checkValidity(): boolean {
-    this.updateValidity();
-    return this.internals.validity.valid;
-  }
-
-  reportValidity(): boolean {
-    this.updateValidity();
-    return this.internals.reportValidity();
+    this._closeDropdown(false);
   }
 
   $mount(): void {

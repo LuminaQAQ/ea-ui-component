@@ -177,25 +177,27 @@ import "easy-component-ui/ea-input-number";
 
 ### EaInputNumber Attributes
 
-| 参数         | 说明                         | 类型    | 可选值                      | 默认值                  |
-| ------------ | ---------------------------- | ------- | --------------------------- | ----------------------- |
-| label        | 输入框标签文本               | string  | —                           | (空)                    |
-| value        | 当前值                       | number  | —                           | 0                       |
-| valueOnClear | 清空时使用的值               | number  | —                           | -                       |
-| min          | 设置允许的最小值             | number  | —                           | Number.MIN_SAFE_INTEGER |
-| max          | 设置允许的最大值             | number  | —                           | Number.MAX_SAFE_INTEGER |
-| required     | 是否必填                     | boolean | —                           | false                   |
-| step         | 计数器步长                   | number  | —                           | 1                       |
-| stepStrictly | 是否严格按 step 的倍数校验值 | boolean | —                           | false                   |
-| precision    | 值的小数精度（非负整数）     | number  | —                           | 0                       |
-| size         | 组件尺寸                     | string  | `large \| default \| small` | default                 |
-| readonly     | 原生 readonly 属性，是否只读 | boolean | —                           | false                   |
-| disabled     | 是否禁用                     | boolean | —                           | false                   |
-| controls     | 是否显示加减控制按钮         | boolean | —                           | true                    |
-| align        | 文本对齐方式                 | string  | `left \| center \| right`   | center                  |
-| name         | input 的 name / id           | string  | —                           | (空)                    |
-| placeholder  | 输入框占位文本               | string  | —                           | (空)                    |
-| inputmode    | 原生 input 的 inputmode 属性 | string  | —                           | (空)                    |
+| 参数                  | 说明                         | 类型    | 可选值                      | 默认值                  |
+| --------------------- | ---------------------------- | ------- | --------------------------- | ----------------------- |
+| label                 | 输入框标签文本               | string  | —                           | (空)                    |
+| value                 | 当前值                       | number  | —                           | 0                       |
+| valueOnClear          | 清空时使用的值               | number  | —                           | -                       |
+| min                   | 设置允许的最小值             | number  | —                           | Number.MIN_SAFE_INTEGER |
+| max                   | 设置允许的最大值             | number  | —                           | Number.MAX_SAFE_INTEGER |
+| required              | 是否必填                     | boolean | —                           | false                   |
+| data-validate-trigger | 错误样式的展示时机           | String  | auto / submit / manual      | auto                    |
+| data-error-display    | 错误提示的展示方式           | String  | native / text               | native                  |
+| step                  | 计数器步长                   | number  | —                           | 1                       |
+| stepStrictly          | 是否严格按 step 的倍数校验值 | boolean | —                           | false                   |
+| precision             | 值的小数精度（非负整数）     | number  | —                           | 0                       |
+| size                  | 组件尺寸                     | string  | `large \| default \| small` | default                 |
+| readonly              | 原生 readonly 属性，是否只读 | boolean | —                           | false                   |
+| disabled              | 是否禁用                     | boolean | —                           | false                   |
+| controls              | 是否显示加减控制按钮         | boolean | —                           | true                    |
+| align                 | 文本对齐方式                 | string  | `left \| center \| right`   | center                  |
+| name                  | input 的 name / id           | string  | —                           | (空)                    |
+| placeholder           | 输入框占位文本               | string  | —                           | (空)                    |
+| inputmode             | 原生 input 的 inputmode 属性 | string  | —                           | (空)                    |
 
 ### EaInputNumber CSS Part
 

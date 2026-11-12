@@ -11,3 +11,18 @@ $component-types: (
     --#{$component-name}-#{$type}-color: var(--#{$color}-#{$level}00);
   }
 }
+
+@mixin form-error-message {
+  :host([data-invalid-message])::after {
+    content: attr(data-invalid-message);
+
+    display: block;
+    flex-basis: 100%;
+    margin-top: var(--spacing-sm);
+
+    font-size: var(--font-size-sm);
+    line-height: 1.4;
+    color: var(--ea-form-error-color, var(--red-500));
+    text-align: left;
+  }
+}

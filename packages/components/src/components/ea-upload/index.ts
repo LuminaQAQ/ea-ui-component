@@ -8,6 +8,10 @@ import {
   property,
 } from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
+import {
+  reportError,
+  reportWarn,
+} from "@easy-component-ui/core/utils/diagnostics";
 import stylesheet from "./index.scss?inline";
 
 import "@components/ea-button/index";
@@ -208,7 +212,7 @@ export class EaUpload extends EaFormAssociatedBase {
       file: FileItem | FileItem[],
       files?: FileItem[]
     ) => {
-      console.error(error);
+      reportError(TAG_NAME, error);
     },
   })
   onError: EaUploadErrorCallback | null = null;
@@ -320,7 +324,7 @@ export class EaUpload extends EaFormAssociatedBase {
    */
   async submit(): Promise<void> {
     if (this.fileList.length === 0) {
-      console.warn("No files to upload.");
+      reportWarn(TAG_NAME, "No files to upload, add files to fileList first.");
       return;
     }
 

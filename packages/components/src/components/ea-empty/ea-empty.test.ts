@@ -145,7 +145,9 @@ describe("EaEmpty", () => {
       const empty = document.createElement("ea-empty");
       container.appendChild(empty);
 
-      const el = empty.shadowRoot!.querySelector('[part="default-image-front"]');
+      const el = empty.shadowRoot!.querySelector(
+        '[part="default-image-front"]'
+      );
       expect(el).toBeDefined();
     });
 
@@ -488,7 +490,8 @@ describe("EaEmpty", () => {
       await empty.updateComplete;
 
       expect(warnSpy).toHaveBeenCalledWith(
-        "[ea-empty] The size value invalid-value!!! is not supported."
+        "[ea-ui] ea-empty",
+        "The size value invalid-value!!! is not supported, expected a valid CSS width value."
       );
 
       warnSpy.mockRestore();
@@ -767,7 +770,9 @@ describe("EaEmpty", () => {
       expect(
         empty.shadowRoot!.querySelector(".ea-empty__description")
       ).toBeDefined();
-      expect(empty.shadowRoot!.querySelector(".ea-empty__bottom")).toBeDefined();
+      expect(
+        empty.shadowRoot!.querySelector(".ea-empty__bottom")
+      ).toBeDefined();
     });
 
     it("组件从 DOM 移除后应该不再存在于父容器", () => {

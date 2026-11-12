@@ -362,7 +362,7 @@ describe("default 跟随字段初值", () => {
 });
 
 describe("异步 $mount 的时序", () => {
-  it("$mount 未完成时属性 observer 已经执行", async () => {
+  it("$mount 未完成时属性 observer 挂起，挂载完成后执行", async () => {
     let releaseMount: (() => void) | undefined;
     const calls: unknown[] = [];
 
@@ -396,10 +396,11 @@ describe("异步 $mount 的时序", () => {
     el.setAttribute("value", "b");
     await tick();
 
-    // attributeChangedCallback 只等 _isRendered（$mount 已调用），不等挂载完成
-    expect(calls).toEqual(["b"]);
+    // 就绪点 = $mounted 完成，挂载未完成前不回调
+    expect(calls).toEqual([]);
 
     releaseMount?.();
     await flushMount();
+    expect(calls).toEqual(["b"]);
   });
 });

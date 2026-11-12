@@ -8,6 +8,7 @@ import {
 import { html } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { cssLengthToNumber } from "@easy-component-ui/core/utils/css-length";
+import { reportWarn } from "@easy-component-ui/core/utils/diagnostics";
 import { circleItem } from "./components/circleItem";
 import { dashboardItem } from "./components/dashboardItem";
 import { EaProgressChangeEvent } from "./events/EaProgressChangeEvent";
@@ -115,8 +116,9 @@ export class EaProgress extends EaBase {
     type: String,
     observer(this: EaProgress, newVal: string) {
       if (!CSS.supports("width", newVal))
-        return console.warn(
-          `[EaProgress] The width value ${newVal} is not supported.`
+        return reportWarn(
+          TAG_NAME,
+          `The stroke-width value ${newVal} is not supported, expected a valid CSS width value.`
         );
 
       this._container?.style.setProperty("--ea-progress-stroke-width", newVal);

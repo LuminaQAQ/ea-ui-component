@@ -826,35 +826,6 @@ export class EaInput extends EaFormAssociatedBase {
 
   updateValidity() {
     super.updateValidity();
-
-    const value = this.value || "";
-    if (
-      (this.minlength as number) > 0 &&
-      value.length > 0 &&
-      value.length < (this.minlength as number)
-    ) {
-      this.internals?.setValidity(
-        { tooShort: true },
-        `请至少输入 ${this.minlength as number} 个字符`,
-        this._original
-      );
-
-      this.internals?.reportValidity();
-    }
-
-    if (
-      (this.maxlength as number) > 0 &&
-      value.length > (this.maxlength as number)
-    ) {
-      this.internals?.setValidity(
-        { tooLong: true },
-        `请最多输入 ${this.maxlength as number} 个字符`,
-        this._original
-      );
-
-      this.internals?.reportValidity();
-    }
-
     this._syncAriaInvalid();
   }
 
@@ -865,16 +836,6 @@ export class EaInput extends EaFormAssociatedBase {
     } else {
       this._original.setAttribute("aria-invalid", "true");
     }
-  }
-
-  checkValidity(): boolean {
-    this.updateValidity();
-    return this.internals?.validity?.valid ?? true;
-  }
-
-  reportValidity(): boolean {
-    this.updateValidity();
-    return this.internals?.reportValidity() ?? true;
   }
 }
 

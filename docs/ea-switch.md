@@ -415,6 +415,8 @@ forbiddenExample.init();
 | activeColor              | 打开时的背景色                                           | string                    | —                           | ''      |
 | disabled                 | 是否禁用                                                 | boolean                   | —                           | false   |
 | required                 | 是否必填                                                 | boolean                   | —                           | false   |
+| data-validate-trigger    | 错误样式的展示时机                                       | String                    | auto / submit / manual      | auto    |
+| data-error-display       | 错误提示的展示方式                                       | String                    | native / text               | native  |
 | beforeChange <PropTag /> | 切换前的回调函数，返回 Promise                           | Function                  | —                           | null    |
 
 ### Switch CSS Part

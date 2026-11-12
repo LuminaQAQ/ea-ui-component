@@ -362,6 +362,24 @@ describe("EaTimePicker Component", () => {
       const input = timePicker.shadowRoot!.querySelector("ea-input");
       expect(input!.value).toBe("14:30:45");
     });
+
+    it("清空 value 后输入框显示也应变空", async () => {
+      const timePicker = document.createElement("ea-time-picker");
+      container.appendChild(timePicker);
+
+      await timePicker.updateComplete;
+
+      timePicker.value = "09:00:00";
+      await timePicker.updateComplete;
+
+      const input = timePicker.shadowRoot!.querySelector("ea-input");
+      expect(input!.value).toBe("09:00:00");
+
+      timePicker.value = "";
+      await timePicker.updateComplete;
+
+      expect(input!.value).toBe("");
+    });
   });
 
   describe("Disabled Attribute", () => {

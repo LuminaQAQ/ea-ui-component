@@ -1,5 +1,6 @@
 // jsdom 环境缺失 API 的集中 polyfill
 // 仅在对应 API 缺失时补齐，测试文件内已有覆盖仍会优先生效
+import { installElementInternalsPolyfill } from "../../../../internal/test-setup/element-internals";
 
 if (typeof window !== "undefined") {
   if (!window.ResizeObserver) {
@@ -232,56 +233,4 @@ if (typeof DragEvent === "undefined") {
     }
   };
 }
-
-if (typeof HTMLElement !== "undefined") {
-  const originalAttachInternals = (HTMLElement.prototype as any)
-    .attachInternals;
-  (HTMLElement.prototype as any).attachInternals = function () {
-    const internals: any = originalAttachInternals?.call(this) || {};
-    if (
-      !internals.setValidity ||
-      internals.setValidity.toString().includes("[native code]")
-    ) {
-      const state = { valid: true, message: "" };
-      internals.setValidity = function (flags: any, message: string) {
-        if (
-          flags &&
-          Object.keys(flags).length > 0 &&
-          Object.values(flags).some(v => v)
-        ) {
-          state.valid = false;
-          state.message = message || "";
-        } else {
-          state.valid = true;
-          state.message = "";
-        }
-      };
-      Object.defineProperty(internals, "validity", {
-        get: function () {
-          return { valid: state.valid, valueMissing: !state.valid };
-        },
-        configurable: true,
-      });
-      Object.defineProperty(internals, "validationMessage", {
-        get: function () {
-          return state.message;
-        },
-        configurable: true,
-      });
-      internals.willValidate = true;
-      internals.checkValidity = function () {
-        return state.valid;
-      };
-      internals.reportValidity = function () {
-        return state.valid;
-      };
-      Object.defineProperty(internals, "form", { value: null, writable: true });
-      internals.setFormValue =
-        internals.setFormValue ||
-        function () {
-          /* noop */
-        };
-    }
-    return internals;
-  };
-}
+installElementInternalsPolyfill();
