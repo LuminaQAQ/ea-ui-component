@@ -9,7 +9,7 @@ import {
   listen,
 } from "@easy-component-ui/core/decorator";
 
-import { html } from "@easy-component-ui/core/utils/html";
+import { html, setHTML } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { i18nManager } from "@/utils/I18nManager";
 
@@ -161,7 +161,7 @@ export class EaRate extends EaFormAssociatedBase {
   ): void {
     if (!renderer || !this._container) return;
 
-    this._container.innerHTML = "";
+    setHTML(this._container, "");
 
     i18nManager.locale = this.locale;
 
@@ -180,7 +180,7 @@ export class EaRate extends EaFormAssociatedBase {
       );
       span.tabIndex = isChecked ? 0 : -1;
 
-      span.innerHTML = html(renderer(index, activeValue));
+      setHTML(span, html(renderer(index, activeValue)));
 
       this._container.appendChild(span);
     }

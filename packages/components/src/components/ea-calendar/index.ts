@@ -5,7 +5,7 @@ import {
   query,
   listen,
 } from "@easy-component-ui/core/decorator";
-import { html } from "@easy-component-ui/core/utils/html";
+import { html, setHTML } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { i18nManager } from "@/utils/I18nManager";
 import dayjs, { type Dayjs } from "dayjs";
@@ -237,8 +237,9 @@ export class EaCalendar extends EaBase {
 
     if (signal.aborted) return;
 
-    this._controllerWrapper.innerHTML = html(
-      controllerTypeStrategies[controllerType]()
+    setHTML(
+      this._controllerWrapper,
+      html(controllerTypeStrategies[controllerType]())
     );
 
     if (controllerType === "select") {
@@ -362,7 +363,7 @@ export class EaCalendar extends EaBase {
     );
 
     this._title.textContent = `${currentYear} ${i18nManager.t("calendar.months")[currentMonth]}`;
-    this._tbody.innerHTML = this._renderDayCells();
+    setHTML(this._tbody, this._renderDayCells());
 
     const tableEl = this._container.querySelector("table");
     if (tableEl) {

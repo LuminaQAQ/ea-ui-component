@@ -7,6 +7,7 @@ import {
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { VARIANT_TYPES, type VariantType } from "@constants/variant";
 import stylesheet from "./index.scss?inline";
+import { setHTML } from "@easy-component-ui/core/utils/html";
 
 const TAG_NAME = "ea-badge" as const;
 const bem = createBEM(TAG_NAME);
@@ -157,7 +158,7 @@ export class EaBadge extends EaBase {
       valueEl.textContent = computedValue;
     }
 
-    this._content.innerHTML = cloned.innerHTML;
+    setHTML(this._content, cloned.innerHTML);
   }
 
   html(): string {

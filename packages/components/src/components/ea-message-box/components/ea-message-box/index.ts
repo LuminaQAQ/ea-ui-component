@@ -8,7 +8,7 @@ import {
   listen,
 } from "@easy-component-ui/core/decorator";
 import { createBEM } from "@easy-component-ui/core/utils/bem";
-import { html } from "@easy-component-ui/core/utils/html";
+import { html, setHTML } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { VARIANT_ICON_MAP } from "@constants/variant";
 import { EaMessageBoxConfirmEvent } from "../../events/EaMessageBoxConfirmEvent";
@@ -135,7 +135,8 @@ export class EaMessageBoxElement extends EaOverlay {
     observer(this: EaMessageBoxElement, newVal: string) {
       if (!this._description) return;
       if (this.dangerouslyUseHTMLString) {
-        this._description.innerHTML = html(newVal);
+        // @ea-html-safe 由 dangerouslyUseHTMLString 显式开启
+        setHTML(this._description, html(newVal));
       } else {
         this._description.textContent = newVal;
       }
@@ -410,11 +411,13 @@ export class EaMessageBoxElement extends EaOverlay {
 
   html(): string {
     const tpl = document.createElement("template");
-    tpl.innerHTML = super.html();
+    setHTML(tpl, super.html());
 
     const contentContainer = tpl.content.querySelector(".ea-overlay__content")!;
 
-    contentContainer.innerHTML = `
+    setHTML(
+      contentContainer,
+      `
       <div class='${bemMain()}' part='container'>
         <header class='${bemMain.e("header")}' part='header'>
           <div class='${bemMain.e("title-container")}' part='title-wrap'>
@@ -432,7 +435,8 @@ export class EaMessageBoxElement extends EaOverlay {
           </footer>
         </form>
       </div>
-    `;
+    `
+    );
 
     return tpl.innerHTML;
   }

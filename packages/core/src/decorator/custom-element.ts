@@ -12,6 +12,7 @@ import {
   GlobalHTMLElement,
   isDevelopment,
 } from "@utils/env";
+import { setHTML } from "@utils/html";
 
 /**
  * @description ea-ui 自定义元素装饰器选项
@@ -442,7 +443,7 @@ function renderTemplate(
 
   const sanitizedTemplate = html(template);
   const templateEl = document.createElement("template");
-  templateEl.innerHTML = sanitizedTemplate as string;
+  setHTML(templateEl, sanitizedTemplate);
 
   // 将内容追加到 shadowRoot
   shadowRoot.appendChild(templateEl.content);
@@ -460,7 +461,7 @@ function mount(
   const shadowRoot = element.shadowRoot;
   if (!shadowRoot) return;
 
-  shadowRoot.innerHTML = "";
+  setHTML(shadowRoot, "");
 
   applyStyles(classChain, shadowRoot);
   renderTemplate(element, shadowRoot);

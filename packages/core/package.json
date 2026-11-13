@@ -65,8 +65,7 @@
   },
   "homepage": "https://luminaqaq.github.io/ea-ui-component/",
   "dependencies": {
-    "@easy-component-ui/themes": "workspace:*",
-    "dompurify": "^3.3.1"
+    "@easy-component-ui/themes": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^24.0.14",

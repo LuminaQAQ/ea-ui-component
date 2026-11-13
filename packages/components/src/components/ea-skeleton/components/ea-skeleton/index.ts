@@ -5,7 +5,7 @@ import {
   query,
   listen,
 } from "@easy-component-ui/core/decorator";
-import { html } from "@easy-component-ui/core/utils/html";
+import { html, setHTML } from "@easy-component-ui/core/utils/html";
 import { timeout } from "@easy-component-ui/core/utils/timeout";
 import stylesheet from "./index.scss?inline";
 
@@ -67,7 +67,7 @@ export class EaSkeleton extends EaBase {
         elements.forEach(el => el.remove());
         this.appendChild(fragment);
       } else {
-        first.innerHTML = "";
+        setHTML(first, "");
         first.appendChild(fragment);
       }
     },
@@ -147,13 +147,16 @@ export class EaSkeleton extends EaBase {
     const children = this.querySelectorAll("ea-skeleton-item");
     if (children.length) return;
 
-    this._templateSlot.innerHTML = html(
-      `${Array.from({ length: rows })
-        .map(
-          () =>
-            `<ea-skeleton-item variant="p" ${this.animated ? "animated" : ""}></ea-skeleton-item>`
-        )
-        .join("")}`
+    setHTML(
+      this._templateSlot,
+      html(
+        `${Array.from({ length: rows })
+          .map(
+            () =>
+              `<ea-skeleton-item variant="p" ${this.animated ? "animated" : ""}></ea-skeleton-item>`
+          )
+          .join("")}`
+      )
     );
   }
 

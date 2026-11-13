@@ -5,7 +5,7 @@ import {
   query,
   listen,
 } from "@easy-component-ui/core/decorator";
-import { html } from "@easy-component-ui/core/utils/html";
+import { escapeHTML, html, setHTML } from "@easy-component-ui/core/utils/html";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-anchor-link" as const;
@@ -116,7 +116,7 @@ export class EaAnchorLink extends EaBase {
       <div class="${this.updateContainerClasslist()}" part="container">
         <a class="${bem.e("link")}" part="link" href="${this.href}">
           <span class="${bem.e("heading")}" part="heading">
-            <slot name="heading">${html(this.heading)}</slot>
+            <slot name="heading">${escapeHTML(this.heading)}</slot>
           </span>
         </a>
         <div class="${bem.e("children")}">
@@ -157,7 +157,7 @@ export class EaAnchorLink extends EaBase {
   private _updateHeading(): void {
     if (!this._headingSlot) return;
 
-    this._headingSlot.innerHTML = this.heading ? html(this.heading) : "";
+    setHTML(this._headingSlot, this.heading ? escapeHTML(this.heading) : "");
   }
 
   /** 更新是否包含子级 */

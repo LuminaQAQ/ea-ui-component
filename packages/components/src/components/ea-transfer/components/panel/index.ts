@@ -11,6 +11,7 @@ import { i18nManager } from "@/utils/I18nManager";
 import "@components/ea-checkbox/index.js";
 import "@components/ea-input/index.js";
 import stylesheet from "./index.scss?inline";
+import { setHTML } from "@easy-component-ui/core/utils/html";
 
 const TAG_NAME = "ea-transfer-panel" as const;
 const bem = createBEM(TAG_NAME);
@@ -247,7 +248,7 @@ export class EaTransferPanel extends EaBase {
   /** 清空列表项 */
   clearList(): void {
     if (this._list) {
-      this._list.innerHTML = "";
+      setHTML(this._list, "");
     }
   }
 

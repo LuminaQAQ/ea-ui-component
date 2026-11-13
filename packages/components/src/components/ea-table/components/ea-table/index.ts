@@ -7,7 +7,7 @@ import {
   listen,
   children,
 } from "@easy-component-ui/core/decorator";
-import { html } from "@easy-component-ui/core/utils/html";
+import { html, setHTML } from "@easy-component-ui/core/utils/html";
 import "@components/ea-empty/index";
 import { EaTableCellClickEvent } from "../../events/EaTableCellClickEvent";
 import { EaTableCellContextmenuEvent } from "../../events/EaTableCellContextmenuEvent";
@@ -303,9 +303,9 @@ export class EaTable extends EaBase {
     const thead = theadRenderer(columns);
     const tfoot = tfootRenderer(columns);
 
-    this._colgroup.innerHTML = colgroup;
-    this._thead.innerHTML = thead;
-    this._tfoot.innerHTML = tfoot;
+    setHTML(this._colgroup, colgroup);
+    setHTML(this._thead, thead);
+    setHTML(this._tfoot, tfoot);
   }
 
   $mount(): void {
@@ -357,7 +357,7 @@ export class EaTable extends EaBase {
     this._selectAbortController = new AbortController();
 
     this._states.isDataRendered = false;
-    this._tbody.innerHTML = "";
+    setHTML(this._tbody, "");
     this._states.dataSource = new WeakMap();
     this._states.originData = dataSource;
 
@@ -391,7 +391,7 @@ export class EaTable extends EaBase {
         });
         td.appendChild(templateContent);
       } else if (column.type) {
-        td.innerHTML = typeTemplate[column.type]?.() || "";
+        setHTML(td, typeTemplate[column.type]?.() || "");
       } else {
         td.setAttribute("data-scope", column.prop || "");
       }

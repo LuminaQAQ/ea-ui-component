@@ -19,6 +19,7 @@ import { EaTreeNodeContextmenuEvent } from "./events/EaTreeNodeContextmenuEvent"
 import { EaTreeNodeExpandEvent } from "./events/EaTreeNodeExpandEvent";
 import { EaTreeNodeSelectEvent } from "./events/EaTreeNodeSelectEvent";
 import stylesheet from "./index.scss?inline";
+import { setHTML } from "@easy-component-ui/core/utils/html";
 
 const TAG_NAME = "ea-tree" as const;
 const bem = createBEM(TAG_NAME);
@@ -149,12 +150,12 @@ export class EaTree extends EaBase {
     await customElements.whenDefined("ea-tree");
 
     this._nodeStates.clear();
-    this._container.innerHTML = "";
+    setHTML(this._container, "");
     this._focusedPath = null;
 
     if (newVal && newVal.length > 0) {
       this._buildNodeStates(newVal, "");
-      this._container.innerHTML = this._renderTree(newVal, "");
+      setHTML(this._container, this._renderTree(newVal, ""));
 
       const rootPaths = this._getRootPaths();
       if (rootPaths.length > 0) {
@@ -1060,7 +1061,7 @@ export class EaTree extends EaBase {
 
     const childrenEl = this._getChildrenElement(path);
     if (childrenEl) {
-      childrenEl.innerHTML = this._renderTree(data, path);
+      setHTML(childrenEl, this._renderTree(data, path));
     }
 
     timeout(() => {

@@ -6,7 +6,7 @@ import {
   query,
   listen,
 } from "@easy-component-ui/core/decorator";
-import { html } from "@easy-component-ui/core/utils/html";
+import { html, setHTML } from "@easy-component-ui/core/utils/html";
 import stylesheet from "./index.scss?inline";
 import type { FileItem, ListType } from "../../type";
 import EaProgress from "@/components/ea-progress";
@@ -96,7 +96,7 @@ export class EaUploadFileItem extends EaBase {
   render(): void {
     if (!this.item || !this._container) return;
     this._handleThumbUrl();
-    this._container.innerHTML = html(this._getBodyTemplate());
+    setHTML(this._container, html(this._getBodyTemplate()));
     this.updateContainerClasslist();
     this._bindThumbEvents();
   }

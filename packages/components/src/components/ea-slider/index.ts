@@ -10,7 +10,7 @@ import {
   query,
 } from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
-import { html } from "@easy-component-ui/core/utils/html";
+import { html, setHTML } from "@easy-component-ui/core/utils/html";
 import { EaSliderChangeEvent } from "./events/EaSliderChangeEvent";
 import { EaSliderInputEvent } from "./events/EaSliderInputEvent";
 import stylesheet from "./index.scss?inline";
@@ -356,7 +356,7 @@ export class EaSlider extends EaFormAssociatedBase {
         `<div class="${stop.className}" part="${stop.part}" style="${styleProp}: ${stop.percentage}%;"></div>`
     );
 
-    this._rail.innerHTML = html(stopElements.join(""));
+    setHTML(this._rail, html(stopElements.join("")));
   }
 
   /** 渲染 mark 标签到 marks 容器中 */
@@ -364,7 +364,7 @@ export class EaSlider extends EaFormAssociatedBase {
     if (!this._marks) return;
 
     if (!this.marks) {
-      this._marks.innerHTML = "";
+      setHTML(this._marks, "");
       return;
     }
 
@@ -385,7 +385,7 @@ export class EaSlider extends EaFormAssociatedBase {
       `;
     }
 
-    this._marks.innerHTML = html(marksHtml);
+    setHTML(this._marks, html(marksHtml));
   }
 
   /** 统一渲染 stops 和 marks */

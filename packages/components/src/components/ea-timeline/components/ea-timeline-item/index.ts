@@ -4,7 +4,7 @@ import {
   attribute,
   query,
 } from "@easy-component-ui/core/decorator";
-import { html } from "@easy-component-ui/core/utils/html";
+import { escapeHTML, html, setHTML } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { reportWarn } from "@easy-component-ui/core/utils/diagnostics";
 import { VARIANT_TYPES, type VariantType } from "@constants/variant";
@@ -107,11 +107,14 @@ export class EaTimelineItem extends EaBase {
     type: String,
     observer(this: EaTimelineItem, newVal: string) {
       if (newVal) {
-        this._dot.innerHTML = html(
-          `<ea-icon class="${bem.e("icon-dot")}" part="icon-dot" name="${newVal}"></ea-icon>`
+        setHTML(
+          this._dot,
+          html(
+            `<ea-icon class="${bem.e("icon-dot")}" part="icon-dot" name="${escapeHTML(newVal)}"></ea-icon>`
+          )
         );
       } else {
-        this._dot.innerHTML = "";
+        setHTML(this._dot, "");
       }
     },
   })

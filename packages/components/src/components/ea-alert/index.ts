@@ -6,7 +6,7 @@ import {
   listen,
   property,
 } from "@easy-component-ui/core/decorator";
-import { html } from "@easy-component-ui/core/utils/html";
+import { escapeHTML, html, setHTML } from "@easy-component-ui/core/utils/html";
 import { timeout } from "@easy-component-ui/core/utils/timeout";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import {
@@ -204,38 +204,48 @@ export class EaAlert extends EaBase {
 
   /** 更新标题内容，为空时恢复 slot */
   private _updateHeading(): void {
-    this._alertHeading.innerHTML =
-      html(this.heading) || '<slot name="heading"></slot>';
+    setHTML(
+      this._alertHeading,
+      escapeHTML(this.heading) || '<slot name="heading"></slot>'
+    );
   }
 
   /** 更新描述内容，为空时恢复 slot */
   private _updateDescription(): void {
     this._hasDescription = !!this.description;
-    this._alertDescription.innerHTML =
-      html(this.description) || "<slot></slot>";
+    setHTML(
+      this._alertDescription,
+      escapeHTML(this.description) || "<slot></slot>"
+    );
     this.updateContainerClasslist();
   }
 
   /** 更新图标内容 */
   private _updateIcon(): void {
-    this._alertIcon.innerHTML = this.showIcon
-      ? html(
-          `<ea-icon class="${bem.e("icon")}" name="${VARIANT_ICON_MAP[this.variant]}" part="icon"></ea-icon>`
-        )
-      : "";
+    setHTML(
+      this._alertIcon,
+      this.showIcon
+        ? html(
+            `<ea-icon class="${bem.e("icon")}" name="${VARIANT_ICON_MAP[this.variant]}" part="icon"></ea-icon>`
+          )
+        : ""
+    );
   }
 
   /** 更新关闭按钮内容，closable 为 false 时清空，closeText 为空时恢复图标 */
   private _updateCloseBtn(): void {
     if (!this.closable) {
-      this._alertCloseBtn.innerHTML = "";
+      setHTML(this._alertCloseBtn, "");
       return;
     }
-    this._alertCloseBtn.innerHTML = this.closeText
-      ? html(this.closeText)
-      : html(
-          `<ea-icon class="${bem.e("close-icon")}" name="xmark" part="close-icon"></ea-icon>`
-        );
+    setHTML(
+      this._alertCloseBtn,
+      this.closeText
+        ? escapeHTML(this.closeText)
+        : html(
+            `<ea-icon class="${bem.e("close-icon")}" name="xmark" part="close-icon"></ea-icon>`
+          )
+    );
   }
 
   /** 更新容器类名 */
@@ -264,7 +274,7 @@ export class EaAlert extends EaBase {
 
     const closeContent = this.closable
       ? this.closeText
-        ? html(this.closeText)
+        ? escapeHTML(this.closeText)
         : `<ea-icon class="${bem.e("close-icon")}" name="xmark" part="close-icon"></ea-icon>`
       : "";
 
@@ -275,10 +285,10 @@ export class EaAlert extends EaBase {
         </span>
         <div class="${bem.e("content")}" part='content-wrap'>
           <span class="${bem.e("heading")}" part='heading'>
-            <slot name="heading">${html(this.heading)}</slot>
+            <slot name="heading">${escapeHTML(this.heading)}</slot>
           </span>
           <p class="${bem.e("description")}" part='description'>
-            <slot>${html(this.description)}</slot>
+            <slot>${escapeHTML(this.description)}</slot>
           </p>
         </div>
         <button type="button" class="${bem.e("close-btn")}" part="close-btn" aria-label="Close">${closeContent}</button>

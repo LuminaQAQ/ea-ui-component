@@ -9,6 +9,7 @@ import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { VARIANT_TYPES, type VariantType } from "@constants/variant";
 import stylesheet from "./index.scss?inline";
 import "@/components/ea-icon/index";
+import { setHTML } from "@easy-component-ui/core/utils/html";
 
 const TAG_NAME = "ea-button" as const;
 const bem = createBEM(TAG_NAME);
@@ -230,7 +231,7 @@ export class EaButton extends EaBase {
     if (container.tagName.toLowerCase() === tag) return;
 
     const templateEl = document.createElement("template");
-    templateEl.innerHTML = this.html();
+    setHTML(templateEl, this.html());
     const newContainer = templateEl.content.firstElementChild as HTMLElement;
     if (!newContainer) return;
 

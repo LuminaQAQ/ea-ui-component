@@ -7,6 +7,7 @@ import {
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { VARIANT_TYPES } from "@constants/variant";
 import stylesheet from "./index.scss?inline";
+import { setHTML } from "@easy-component-ui/core/utils/html";
 
 const TAG_NAME = "ea-text" as const;
 const bem = createBEM(TAG_NAME);
@@ -120,7 +121,7 @@ export class EaText extends EaBase {
     const usesAdoptedStyleSheets =
       this.shadowRoot.adoptedStyleSheets?.length > 0;
 
-    this.shadowRoot.innerHTML = "";
+    setHTML(this.shadowRoot, "");
 
     if (!usesAdoptedStyleSheets) {
       const styleEl = document.createElement("style");
@@ -129,7 +130,7 @@ export class EaText extends EaBase {
     }
 
     const templateEl = document.createElement("template");
-    templateEl.innerHTML = this.html();
+    setHTML(templateEl, this.html());
     this.shadowRoot.appendChild(templateEl.content);
 
     if (this.lineClamp > 0) {

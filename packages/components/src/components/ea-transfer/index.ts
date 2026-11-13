@@ -17,6 +17,7 @@ import "@components/ea-button/index.js";
 import "@components/ea-icon/index.js";
 import "@components/ea-input/index.js";
 import stylesheet from "./index.scss?inline";
+import { escapeHTML, setHTML } from "@easy-component-ui/core/utils/html";
 
 const TAG_NAME = "ea-transfer" as const;
 const bem = createBEM(TAG_NAME);
@@ -410,16 +411,19 @@ export class EaTransfer extends EaFormAssociatedBase {
         li.setAttribute("role", "option");
         li.setAttribute("aria-selected", String(isChecked));
 
-        li.innerHTML = `
+        setHTML(
+          li,
+          `
         <ea-checkbox
           class="${panelBem.e("item-checkbox")}"
           ${isDisabled ? "disabled" : ""}
           ${isChecked && !isDisabled ? "checked" : ""}
           part="item-checkbox"
         >
-          <span class="${panelBem.e("item-label")}" part="item-label">${dataItem[label]}</span>
+          <span class="${panelBem.e("item-label")}" part="item-label">${escapeHTML(dataItem[label])}</span>
         </ea-checkbox>
-      `;
+      `
+        );
 
         this._states.dataMap.set(li, dataItem);
 

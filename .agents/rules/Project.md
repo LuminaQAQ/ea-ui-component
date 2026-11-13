@@ -377,17 +377,22 @@ bem({}, { disabled: true }); // "ea-component is-disabled"
 bem({ primary: true }, { active: this.active }); // 组合
 ```
 
-### HTML 安全处理
+### HTML 写入与转义
 
-使用 `html()` 函数处理可能包含 HTML 的内容（详见 `html-safe` 技能）：
+写 DOM 只走唯一入口，动态值一律转义（详见 `html-safe` 技能）：
 
 ```typescript
-import { html } from "@easy-component-ui/core/utils/html";
+import { escapeHTML, html, setHTML } from "@easy-component-ui/core/utils/html";
 
-this._container.innerHTML = html(newVal);
+setHTML(this._container, html(`<span>${escapeHTML(newVal)}</span>`));
 ```
 
-**注意：** `html()` 函数会自动保护 `<slot>` 标签不被 DOMPurify 清洗，并允许 `ea-` 前缀的自定义元素标签和属性。
+**约束：**
+
+1. 禁止写 `ele.innerHTML = ...` 与 `ele.insertAdjacentHTML(...)`，二者分别对应 `setHTML` / `insertHTML`；构建期门禁 `pnpm check:html` 会拦住未转义的插值
+2. 属性值、observer 新值、列表项数据都算动态值，**属性上下文（`class` / `name` / `style`）同样要转义**
+3. 组件库不在运行时清洗 HTML（无 DOMPurify）：`html()` 只声明模板可信，不做过滤
+4. `heading` / `description` / `label` 类文本属性按纯文本渲染，富文本走同名 slot；仅显式提供 `dangerously-use-html-string` 一类开关的组件允许传 HTML
 
 ### a11y 无障碍属性同步
 
@@ -717,18 +722,15 @@ await waitForRender(0); // 只等一帧（单 rAF）
 await waitForRender(200); // 等真实 200ms
 ```
 
-`$mount()` 与属性 `observer` 都挂在 `requestAnimationFrame` 上，部分组件 `$mount` 还会 `await import()` 懒加载子组件，故渲染/observer 更新需要等待；Shadow DOM 结构与属性值读取是同步的，无需等待。
+`$mount()` 在微任务中执行，属性回调在就绪门前挂起后批量执行；部分组件 `$mount` 还会 `await import()` 懒加载子组件，故渲染/observer 更新需要等待；Shadow DOM 结构与属性值读取是同步的，无需等待。批量等待可用 `waitForPendingUpdates()`。
 
-### DOMPurify 属性丢失问题
+### HTML 写入相关排查
 
-若测试中属性丢失或为空，优先考虑 DOMPurify 清洗问题，使用 DOM API 替代 HTML 字符串：
+模板渲染异常（内容变成字面标签、属性丢失）时按以下顺序定位：
 
-```typescript
-// 推荐：使用 DOM API
-const img = document.createElement("img");
-img.srcset = value;
-this._container.appendChild(img);
-```
+1. 期望富文本却显示成字面 `<b>` → 该属性按纯文本渲染，改用同名 slot
+2. 构建期报“模板插值需用 escapeHTML() 转义” → 补 `escapeHTML()`，确属内部受控内容才标 `@ea-html-safe`
+3. 需要设置 `srcset` 这类复杂属性时优先用 DOM API（`img.srcset = value`），不拼 HTML 字符串
 
 ## 常见陷阱与注意事项
 
@@ -772,6 +774,14 @@ $mount(): void {
 ---
 
 ## 更新日志
+
+### v3.12.0 (2026-11-13)
+
+- **「HTML 安全处理」改为「HTML 写入与转义」**：`setHTML()` / `insertHTML()` 作为唯一写入口，动态值（含属性上下文）一律 `escapeHTML()`；禁止直写 `innerHTML` / `insertAdjacentHTML`
+- **移除 DOMPurify 契约**：`html()` 退化为“声明模板可信”，不做运行期清洗；安全性由“转义动态值 + 构建期校验 `pnpm check:html`”保证
+- **文本属性按纯文本渲染**：`heading` / `description` / `label` 类属性不再当 HTML，富文本走同名 slot；仅 `dangerously-use-html-string` 类开关允许传 HTML
+- **测试等待说明更新**：`$mount()` 改为微任务 + 就绪门，批量等待用 `waitForPendingUpdates()`，不再提 `requestAnimationFrame`
+- **技能同步**：`html-safe` 重写为写入/转义契约（含门禁、白名单、`@ea-html-safe` 豁免）
 
 ### v3.11.0 (2026-11-12)
 
@@ -864,7 +874,7 @@ $mount(): void {
 - 修正生命周期方法签名：`$updated(data: { key, newVal, oldVal })`
 - 新增 `$mounted()` 生命周期方法
 - 新增 `$updateLocalization()` 生命周期方法
-- 新增 `html()` 函数的 slot 保护机制和 DOMPurify 配置说明
+- 新增 `html()` 函数的 slot 保护机制和 DOMPurify 配置说明（v3.12.0 已移除）
 - 补全目录结构：`common/`、`stores/`、`constants/`
 - 统一测试工具路径：`src/test/utils/waitForRender.js`
 - 添加版本追踪和更新日志

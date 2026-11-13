@@ -7,7 +7,7 @@ import {
   listen,
   children,
 } from "@easy-component-ui/core/decorator";
-import { html } from "@easy-component-ui/core/utils/html";
+import { html, setHTML } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { timeout } from "@easy-component-ui/core/utils/timeout";
 import "@/components/ea-icon/index";
@@ -283,7 +283,7 @@ export class EaCarousel extends EaBase {
         `<button class='${bem.e("indicator")}' part='indicator' role="tab" tabindex="${i === 0 ? 0 : -1}" data-index="${i}" aria-label="Slide ${i + 1}" aria-selected="${i === 0 ? "true" : "false"}" aria-controls="carousel-slide-${i}"></button>`
     ).join("");
 
-    this._indicatorWrap.innerHTML = html(indicatorButtons);
+    setHTML(this._indicatorWrap, html(indicatorButtons));
   };
 
   /** 初始化轮播项，创建首尾克隆 */
@@ -355,11 +355,11 @@ export class EaCarousel extends EaBase {
     const lastClone = this.querySelector('ea-carousel-item[slot="clone-last"]');
 
     if (firstClone && items[0]) {
-      firstClone.innerHTML = html(items[0].innerHTML);
+      setHTML(firstClone, html(items[0].innerHTML));
     }
 
     if (lastClone && items[items.length - 1]) {
-      lastClone.innerHTML = html(items[items.length - 1].innerHTML);
+      setHTML(lastClone, html(items[items.length - 1].innerHTML));
     }
   }
 

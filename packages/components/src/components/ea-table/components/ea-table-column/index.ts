@@ -6,7 +6,7 @@ import {
   query,
 } from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
-import { html } from "@easy-component-ui/core/utils/html";
+import { html, setHTML } from "@easy-component-ui/core/utils/html";
 import type { ColumnOption } from "../../types";
 import stylesheet from "./index.scss?inline";
 
@@ -153,7 +153,7 @@ export class EaTableColumn extends EaBase {
 
       if (assignedNodes) {
         const tpl = document.createElement("template");
-        tpl.innerHTML = html(assignedNodes);
+        setHTML(tpl, html(assignedNodes));
         template = tpl;
       } else {
         template = null;
@@ -253,7 +253,7 @@ export class EaTableColumn extends EaBase {
   }
 
   $mount(): void {
-    this.shadowRoot!.innerHTML = this.html();
+    setHTML(this.shadowRoot!, this.html());
   }
 
   $mounted(): void {

@@ -11,6 +11,7 @@ import { createBEM } from "@easy-component-ui/core/utils/bem";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import stylesheet from "./index.scss?inline";
 import "@/components/ea-icon/index";
+import { setHTML } from "@easy-component-ui/core/utils/html";
 
 const TAG_NAME = "ea-drawer" as const;
 const bem = createBEM(TAG_NAME);
@@ -125,11 +126,13 @@ export class EaDrawer extends EaOverlay {
 
   html(): string {
     const tpl = document.createElement("template");
-    tpl.innerHTML = super.html();
+    setHTML(tpl, super.html());
 
     const contentContainer = tpl.content.querySelector(".ea-overlay__content")!;
 
-    contentContainer.innerHTML = `
+    setHTML(
+      contentContainer,
+      `
       <div class='${bemMain()}' part='container'>
         <header class='${bemMain.e("header")}' part='header'>
           <slot name="title">
@@ -144,7 +147,8 @@ export class EaDrawer extends EaOverlay {
           <slot name='footer'></slot>
         </footer>
       </div>
-    `;
+    `
+    );
 
     return tpl.innerHTML;
   }

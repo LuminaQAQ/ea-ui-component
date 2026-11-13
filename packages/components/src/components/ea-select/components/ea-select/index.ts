@@ -15,6 +15,7 @@ import { EaSelectClearEvent } from "../../events/EaSelectClearEvent";
 import { EaSelectRemoveTagEvent } from "../../events/EaSelectRemoveTagEvent";
 import { EaSelectVisibleChangeEvent } from "../../events/EaSelectVisibleChangeEvent";
 import stylesheet from "./index.scss?inline";
+import { setHTML } from "@easy-component-ui/core/utils/html";
 
 const TAG_NAME = "ea-select" as const;
 const bem = createBEM(TAG_NAME);
@@ -483,7 +484,7 @@ export class EaSelect extends EaFormAssociatedBase {
       option.removeAttribute("selected");
     });
 
-    this._tagWrap.innerHTML = "";
+    setHTML(this._tagWrap, "");
 
     if (this.collapseTags && Array.isArray(selectValue)) {
       const max = Number(this.maxCollapseTags) || 1;
@@ -499,7 +500,7 @@ export class EaSelect extends EaFormAssociatedBase {
       template += templateRenderer(selectValue);
     }
 
-    this._tagWrap.innerHTML = template;
+    setHTML(this._tagWrap, template);
   }
 
   private _handleFilteredOptionStyle(filterValue: string): void {

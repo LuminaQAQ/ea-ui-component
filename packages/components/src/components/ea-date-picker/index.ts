@@ -8,7 +8,7 @@ import {
   listen,
 } from "@easy-component-ui/core/decorator";
 
-import { html } from "@easy-component-ui/core/utils/html";
+import { html, setHTML } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 
 import stylesheet from "./index.scss?inline";
@@ -468,7 +468,7 @@ export class EaDatePicker extends EaFormAssociatedBase {
       return `<button class='${bem.e("year-item")} ${isSelected ? bem.s("selected") : ""}' data-year='${y}' part='year-item' role='option' aria-selected='${isSelected}'>${y}</button>`;
     }).join("");
 
-    yearPanel.innerHTML = html(yearHtml);
+    setHTML(yearPanel, html(yearHtml));
   };
 
   /** 渲染月份面板选中状态 */

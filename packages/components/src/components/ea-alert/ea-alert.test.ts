@@ -2017,26 +2017,42 @@ describe("EaAlert", () => {
       expect(closeBtn!.querySelector("script")).toBeNull();
     });
 
-    it("heading 设置为安全 HTML 标签时应该保留", () => {
+    it("heading 按纯文本渲染，HTML 标签被转义", async () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("heading", "<b>Bold Heading</b>");
       container.appendChild(alert);
+      await alert.updateComplete;
 
       const headingEl = alert.shadowRoot!.querySelector(".ea-alert__heading");
-      expect(headingEl!.querySelector("b")).not.toBeNull();
-      expect(headingEl!.textContent).toContain("Bold Heading");
+      expect(headingEl!.querySelector("b")).toBeNull();
+      expect(headingEl!.textContent).toContain("<b>Bold Heading</b>");
     });
 
-    it("description 设置为安全 HTML 标签时应该保留", () => {
+    it("heading 需要富文本时通过 slot 提供", async () => {
+      const alert = document.createElement("ea-alert");
+      alert.innerHTML = '<b slot="heading">Bold Heading</b>';
+      container.appendChild(alert);
+      await alert.updateComplete;
+
+      const slot = alert.shadowRoot!.querySelector<HTMLSlotElement>(
+        'slot[name="heading"]'
+      );
+      expect(slot!.assignedElements()[0]?.tagName.toLowerCase()).toBe("b");
+    });
+
+    it("description 按纯文本渲染，HTML 标签被转义", async () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("description", "<em>Italic Description</em>");
       container.appendChild(alert);
+      await alert.updateComplete;
 
       const descriptionEl = alert.shadowRoot!.querySelector(
         ".ea-alert__description"
       );
-      expect(descriptionEl!.querySelector("em")).not.toBeNull();
-      expect(descriptionEl!.textContent).toContain("Italic Description");
+      expect(descriptionEl!.querySelector("em")).toBeNull();
+      expect(descriptionEl!.textContent).toContain(
+        "<em>Italic Description</em>"
+      );
     });
 
     it("关闭过程中 AbortController 应该正确管理 transitionend 监听", () => {

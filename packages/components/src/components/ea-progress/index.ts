@@ -5,7 +5,7 @@ import {
   property,
   query,
 } from "@easy-component-ui/core/decorator";
-import { html } from "@easy-component-ui/core/utils/html";
+import { html, setHTML } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { cssLengthToNumber } from "@easy-component-ui/core/utils/css-length";
 import { reportWarn } from "@easy-component-ui/core/utils/diagnostics";
@@ -265,8 +265,11 @@ export class EaProgress extends EaBase {
       ["success", "exception", "warning"].includes(this.status) &&
       !this.textInside
     ) {
-      this._text.innerHTML = html(
-        `<ea-icon class="${bem.e("status")}" name="${STATUS_ICON_MAP[this.status]}" part="status-icon"></ea-icon>`
+      setHTML(
+        this._text,
+        html(
+          `<ea-icon class="${bem.e("status")}" name="${STATUS_ICON_MAP[this.status]}" part="status-icon"></ea-icon>`
+        )
       );
     } else {
       this._text.textContent = this.percentage + "%";
@@ -326,7 +329,7 @@ export class EaProgress extends EaBase {
       dashboard: dashboardItem,
     };
 
-    this._container.innerHTML = itemOptions[this.variant];
+    setHTML(this._container, itemOptions[this.variant]);
 
     this.updateContainerClasslist();
   }

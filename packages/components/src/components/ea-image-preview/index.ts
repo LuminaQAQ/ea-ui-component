@@ -8,7 +8,7 @@ import {
   listen,
 } from "@easy-component-ui/core/decorator";
 import { createBEM } from "@easy-component-ui/core/utils/bem";
-import { html } from "@easy-component-ui/core/utils/html";
+import { html, insertHTML, setHTML } from "@easy-component-ui/core/utils/html";
 import "../ea-image/components/ea-image/index";
 import "@/components/ea-icon/index";
 import { EaImagePreviewErrorEvent } from "./events/EaImagePreviewErrorEvent";
@@ -192,7 +192,7 @@ export class EaImagePreview extends EaOverlay {
 
   html(): string {
     const tpl = document.createElement("template");
-    tpl.innerHTML = super.html();
+    setHTML(tpl, super.html());
 
     const contentContainer = tpl.content.querySelector(".ea-overlay__content")!;
 
@@ -219,7 +219,7 @@ export class EaImagePreview extends EaOverlay {
       </footer>
     `;
 
-    contentContainer.insertAdjacentHTML("beforebegin", html(toolbarHTML));
+    insertHTML(contentContainer, html(toolbarHTML), "beforebegin");
 
     return tpl.innerHTML;
   }
@@ -385,7 +385,7 @@ export class EaImagePreview extends EaOverlay {
         ? '<slot name="viewer-error" slot="error"></slot>'
         : "";
       const imgStr = `<ea-image class="ea-image-preview__img" fit="contain">${errorSlotHTML}</ea-image>`;
-      this._overlayContent.insertAdjacentHTML("afterbegin", html(imgStr));
+      insertHTML(this._overlayContent, html(imgStr), "afterbegin");
       const img = this._overlayContent.querySelector(
         ".ea-image-preview__img"
       ) as HTMLElement;

@@ -7,7 +7,7 @@ import {
   query,
   listen,
 } from "@easy-component-ui/core/decorator";
-import { html } from "@easy-component-ui/core/utils/html";
+import { escapeHTML, html } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { Color } from "@/utils/Color";
 import { EaColorPickerChangeEvent } from "../../events/EaColorPickerChangeEvent";
@@ -251,7 +251,7 @@ export class EaColorPicker extends EaFormAssociatedBase {
   html(): string {
     return html(`
       <label class="${bem.e("form-label")}" part="form-label"></label>
-      <div class="${bem()}" part="container" tabindex="${this.tabindex}">
+      <div class="${bem()}" part="container" tabindex="${escapeHTML(this.tabindex)}">
         <ea-popper
           class="${bem.e("popper")}"
           part="popper"

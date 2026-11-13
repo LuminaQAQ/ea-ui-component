@@ -480,19 +480,19 @@ autoCloseAlert.addEventListener("ea-close", () => {
 
 ### Alert Attributes
 
-| 参数        | 说明                     | 类型    | 可选值                                      | 默认值 |
-| ----------- | ------------------------ | ------- | ------------------------------------------- | ------ |
-| heading     | Alert 标题               | String  | —                                           | ''     |
-| description | 辅助性文字介绍           | String  | —                                           | ''     |
-| variant     | Alert 类型               | String  | primary / success / warning / info / danger | info   |
-| effect      | 选择提供的主题           | String  | light / dark                                | light  |
-| close-text  | 关闭按钮自定义文本       | String  | —                                           | ''     |
-| closable    | 是否可关闭               | Boolean | —                                           | true   |
-| show-icon   | 是否显示图标             | Boolean | —                                           | false  |
-| center      | 文字是否居中             | Boolean | —                                           | false  |
-| show-after  | 延迟显示，单位毫秒       | Number  | —                                           | 0      |
-| hide-after  | 延迟关闭，单位毫秒       | Number  | —                                           | 0      |
-| auto-close  | 自动关闭的延时，单位毫秒 | Number  | —                                           | 0      |
+| 参数        | 说明                         | 类型    | 可选值                                      | 默认值 |
+| ----------- | ---------------------------- | ------- | ------------------------------------------- | ------ |
+| heading     | Alert 标题，按纯文本渲染     | String  | —                                           | ''     |
+| description | 辅助性文字介绍，按纯文本渲染 | String  | —                                           | ''     |
+| variant     | Alert 类型                   | String  | primary / success / warning / info / danger | info   |
+| effect      | 选择提供的主题               | String  | light / dark                                | light  |
+| close-text  | 关闭按钮自定义文本           | String  | —                                           | ''     |
+| closable    | 是否可关闭                   | Boolean | —                                           | true   |
+| show-icon   | 是否显示图标                 | Boolean | —                                           | false  |
+| center      | 文字是否居中                 | Boolean | —                                           | false  |
+| show-after  | 延迟显示，单位毫秒           | Number  | —                                           | 0      |
+| hide-after  | 延迟关闭，单位毫秒           | Number  | —                                           | 0      |
+| auto-close  | 自动关闭的延时，单位毫秒     | Number  | —                                           | 0      |
 
 ### Alert CSS Part
 
@@ -511,11 +511,11 @@ autoCloseAlert.addEventListener("ea-close", () => {
 
 ### Alert Slots
 
-| 名称    | 说明                                              |
-| ------- | ------------------------------------------------- |
-| default | Alert 内容描述（当不设置 description 属性时生效） |
-| heading | 标题的内容（当不设置 heading 属性时生效）         |
-| icon    | 图标内容（当设置 show-icon 时生效）               |
+| 名称    | 说明                                                  |
+| ------- | ----------------------------------------------------- |
+| default | Alert 内容描述（当不设置 description 属性时生效）     |
+| heading | 标题的内容，支持富文本（当不设置 heading 属性时生效） |
+| icon    | 图标内容（当设置 show-icon 时生效）                   |
 
 ### Alert Methods
 

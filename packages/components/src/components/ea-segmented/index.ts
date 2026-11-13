@@ -7,7 +7,7 @@ import {
   listen,
 } from "@easy-component-ui/core/decorator";
 import { h } from "@easy-component-ui/core/utils/h";
-import { html } from "@easy-component-ui/core/utils/html";
+import { html, setHTML } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { reportWarn } from "@easy-component-ui/core/utils/diagnostics";
 import { EaSegmentedChangeEvent } from "./events/EaSegmentedChangeEvent";
@@ -252,8 +252,9 @@ export class EaSegmented extends EaBase {
       null
     );
 
-    this._container.innerHTML = html(
-      [optionsTemplate, indicatorTemplate].join("")
+    setHTML(
+      this._container,
+      html([optionsTemplate, indicatorTemplate].join(""))
     );
     this._updateIndicatorPosition(this.value);
     this._updateActiveDescendant();

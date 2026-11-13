@@ -5,7 +5,7 @@ import {
   query,
   listen,
 } from "@easy-component-ui/core/decorator";
-import { html } from "@easy-component-ui/core/utils/html";
+import { escapeHTML, html, setHTML } from "@easy-component-ui/core/utils/html";
 import { h } from "@easy-component-ui/core/utils/h";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import stylesheet from "./index.scss?inline";
@@ -328,7 +328,7 @@ export class EaDescriptions extends EaBase {
         part: `content cell ${item["content-part"] || ""}`,
         style: this._getCellStyle(item, false),
       },
-      html(item.content)
+      escapeHTML(item.content)
     );
   }
 
@@ -397,7 +397,7 @@ export class EaDescriptions extends EaBase {
           colspan: needsExtraColspan ? 6 - (index + 1) : item.colspan || 1,
           style: this._getCellStyle(item, false),
         },
-        html(item.content)
+        escapeHTML(item.content)
       );
 
       return [labelCell, contentCell];
@@ -441,7 +441,7 @@ export class EaDescriptions extends EaBase {
             : item.colspan || 1,
           style: this._getCellStyle(item, false),
         },
-        html(item.content)
+        escapeHTML(item.content)
       )
     );
 
@@ -466,9 +466,12 @@ export class EaDescriptions extends EaBase {
       ...this.querySelectorAll<EaDescriptionsItem>("ea-descriptions-item"),
     ];
 
-    this._tbody.innerHTML = this._handleChildrenDivide(children, this.column)
-      .map(this._variantRenderer[this._getVariant()].bind(this))
-      .join("");
+    setHTML(
+      this._tbody,
+      this._handleChildrenDivide(children, this.column)
+        .map(this._variantRenderer[this._getVariant()].bind(this))
+        .join("")
+    );
   }
 
   @listen("slotchange", "#defaultSlot")

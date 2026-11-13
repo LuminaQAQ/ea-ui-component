@@ -53,6 +53,29 @@ const button = document.querySelector("ea-button");
 button.disabled = true;
 ```
 
+## HTML 安全边界
+
+组件不内置运行期 HTML 清洗（不再依赖 DOMPurify）。模板由组件作者编写、视为可信；用户提供的属性值按纯文本插入，需要插入 HTML 时自行转义。
+
+```js
+import { escapeHTML, html, setHTML } from "easy-component-ui";
+
+// 动态值一律走 escapeHTML，属性上下文（含 class / name 等）同样适用
+const label = '<img src=x onerror="alert(1)">';
+setHTML(panel, html(`<span class="label">${escapeHTML(label)}</span>`));
+```
+
+| API            | 用途                                                    |
+| -------------- | ------------------------------------------------------- |
+| `escapeHTML()` | 转义 `& < > " '`，所有动态值的默认选择                  |
+| `html()`       | 声明模板可信；不做清洗，模板里含内联事件等会告警        |
+| `setHTML()`    | 唯一的 HTML 写入入口，负责把字符串写进元素或 ShadowRoot |
+| `insertHTML()` | 同上，用于在指定位置插入（`afterbegin` 等）             |
+
+::: tip
+确实需要渲染 HTML 的属性（如 `ea-message` 的 `message`）需显式开启对应开关，例如 `dangerously-use-html-string`；其余组件的 `heading`、`label` 等文本属性均按纯文本渲染，富文本请改用同名 slot。
+:::
+
 ## 注意事项
 
 1. **图标样式**：如果组件使用了图标（如 `ea-button` 的 `icon` 属性），必须引入 `icon-assets`

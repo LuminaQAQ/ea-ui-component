@@ -1,49 +1,89 @@
-import { describe, expect, it } from "vitest";
-import { html } from "@utils/html";
+import { beforeEach, afterEach, describe, expect, it, vi } from "vitest";
+
+import { resetDiagnostics } from "@utils/diagnostics";
+import { escapeHTML, html, setHTML } from "@utils/html";
+
+describe("escapeHTML()", () => {
+  it("转义尖括号、引号与与号", () => {
+    expect(escapeHTML(`<a href="x">'&'</a>`)).toBe(
+      "&lt;a href=&quot;x&quot;&gt;&#39;&amp;&#39;&lt;/a&gt;"
+    );
+  });
+
+  it("空值归一为空串", () => {
+    expect(escapeHTML(null)).toBe("");
+    expect(escapeHTML(undefined)).toBe("");
+  });
+
+  it("非字符串走 String()", () => {
+    expect(escapeHTML(0)).toBe("0");
+    expect(escapeHTML(false)).toBe("false");
+  });
+});
+
+describe("setHTML()", () => {
+  it("把字符串写入目标元素", () => {
+    const el = document.createElement("div");
+    setHTML(el, "<span>hi</span>");
+    expect(el.querySelector("span")?.textContent).toBe("hi");
+  });
+
+  it("空目标直接忽略", () => {
+    expect(() => setHTML(null, "<div></div>")).not.toThrow();
+    expect(() => setHTML(undefined, "<div></div>")).not.toThrow();
+  });
+
+  it("可以清空目标", () => {
+    const el = document.createElement("div");
+    el.appendChild(document.createElement("span"));
+    setHTML(el, "");
+    expect(el.childElementCount).toBe(0);
+  });
+});
 
 describe("html()", () => {
-  it("保留 ea- 自定义元素及其属性（CUSTOM_ELEMENT_HANDLING）", () => {
-    const out = html(
-      '<ea-button type="primary" data-x="1" aria-label="ok">文字</ea-button>'
-    );
-    expect(out).toContain("<ea-button");
-    expect(out).toContain('type="primary"');
-    expect(out).toContain('data-x="1"');
-    expect(out).toContain('aria-label="ok"');
-    expect(out).toContain("文字");
+  let warn: ReturnType<typeof vi.spyOn>;
+
+  beforeEach(() => {
+    resetDiagnostics();
+    warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
   });
 
-  it("slot 会被占位保护后再还原", () => {
-    const out = html('<div><slot name="icon"></slot><slot></slot></div>');
-    expect(out).toContain('<slot name="icon">');
-    expect(out).toContain("<slot>");
+  afterEach(() => {
+    warn.mockRestore();
+    resetDiagnostics();
   });
 
-  it("移除 script 及其内容", () => {
-    const out = html("<div>前置</div><script>alert(1)</script>");
-    expect(out).not.toContain("script");
-    expect(out).not.toContain("alert(1)");
-    expect(out).toContain("前置");
+  it("原样返回模板，保留 ea- 自定义元素与属性", () => {
+    const template =
+      '<ea-button type="primary" data-x="1" aria-label="ok">文字</ea-button>';
+    const out = html(template);
+
+    expect(out).toBe(template);
   });
 
-  it("未知标签被剥离、文本内容保留", () => {
-    const out = html("<my-widget>内容</my-widget>");
-    expect(out).not.toContain("my-widget");
-    expect(out).toContain("内容");
+  it("原样保留 slot", () => {
+    const template = '<div><slot name="icon"></slot><slot></slot></div>';
+
+    expect(html(template)).toBe(template);
   });
 
-  it("保留标准表单控件与常见属性", () => {
-    const out = html(
-      '<input type="text" value="v" disabled placeholder="p" /><a href="/x" target="_blank" rel="noopener">go</a>'
-    );
-    expect(out).toContain('type="text"');
-    expect(out).toContain("disabled");
-    expect(out).toContain('placeholder="p"');
-    expect(out).toContain('href="/x"');
-    expect(out).toContain('target="_blank"');
+  it("不再清洗模板内容", () => {
+    const template = "<div>前置</div><script>alert(1)</script>";
+
+    expect(html(template)).toBe(template);
   });
 
-  it("空串输入返回空串", () => {
-    expect(html("")).toBe("");
+  it("模板含可疑片段时告警，同一 key 只报一次", () => {
+    html("<script>alert(1)</script>");
+    html('<img src="x" onerror="alert(1)">');
+
+    expect(warn).toHaveBeenCalledTimes(1);
+  });
+
+  it("转义后的动态值不会触发告警", () => {
+    html(`<div>${escapeHTML("<script>alert(1)</script>")}</div>`);
+
+    expect(warn).not.toHaveBeenCalled();
   });
 });

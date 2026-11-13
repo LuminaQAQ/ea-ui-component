@@ -5,6 +5,7 @@ import {
   query,
 } from "@easy-component-ui/core/decorator";
 import stylesheet from "./index.scss?inline";
+import { setHTML } from "@easy-component-ui/core/utils/html";
 
 const TAG_NAME = "ea-breadcrumb-item" as const;
 const bem = createBEM(TAG_NAME);
@@ -75,7 +76,7 @@ export class EaBreadcrumbItem extends EaBase {
       if (isLink) {
         (newContent as HTMLAnchorElement).href = this.href;
       }
-      newContent.innerHTML = "<slot></slot>";
+      setHTML(newContent, "<slot></slot>");
 
       contentEl.replaceWith(newContent);
     }

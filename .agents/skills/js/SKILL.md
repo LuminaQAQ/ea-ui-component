@@ -351,25 +351,29 @@ $name: ea-component;
 
 ---
 
-## HTML 安全处理
+## HTML 写入与转义
 
-### html() 函数使用
+### 写入口与转义
 
 ```typescript
-import { html } from "@easy-component-ui/core/utils/html";
+import {
+  escapeHTML,
+  html,
+  setHTML,
+} from "@easy-component-ui/core/utils/html";
 
 @attribute({
   type: String,
   default: "",
   observer(this: EaAlert, newVal: string) {
-    // 安全地插入 HTML（自动过滤 XSS）
-    this._container.innerHTML = html(newVal);
+    // 动态值转义后插入，写入口只有 setHTML
+    setHTML(this._alertHeading, escapeHTML(newVal));
   },
 })
-content: string = "";
+heading: string = "";
 ```
 
-**注意：** `html()` 函数会进行 XSS 过滤，只允许安全的 HTML 标签。
+**注意：** `html()` 只声明模板可信，**不再做 XSS 过滤**；动态值必须用 `escapeHTML()`，构建期 `pnpm check:html` 会拦住未转义的插值。
 
 ---
 
@@ -563,7 +567,7 @@ private _renderData(data: any[]) {
     fragment.appendChild(node);
   });
 
-  this._container.innerHTML = "";
+  setHTML(this._container, "");
   this._container.appendChild(fragment);
 }
 ```
@@ -618,37 +622,15 @@ data: any[] = [];
 
 ## 测试开发技能
 
-### DOMPurify 属性丢失问题处理
+### HTML 写入相关排查
 
-**问题场景**：
-当测试失败，且组件属性（如 `srcset`）为空或丢失时，优先考虑 DOMPurify 清洗导致的问题。
+**问题场景**：测试失败，且组件渲染内容为空、属性丢失，或页面上出现字面的标签文本。
 
 **诊断步骤**：
 
-1. 检查组件是否使用 `html()` 函数处理包含该属性的 HTML 字符串
-2. 在浏览器中测试是否正常（DOMPurify 在浏览器和 JSDOM 环境行为可能不同）
-3. 确认属性值是否包含 `data:` URI（这类 URI 在 JSDOM 中可能被过滤）
-
-**解决方案**：
-使用 DOM API 替代 HTML 字符串：
-
-```typescript
-// ❌ 不推荐：HTML 字符串可能被清洗
-private _loadImage(src: string): void {
-  this._container.innerHTML = html(
-    `<img src="${src}" srcset="${this["src-set"]}" />`
-  );
-}
-
-// ✅ 推荐：使用 DOM API 设置属性
-private _renderImage(src: string): void {
-  const img = document.createElement("img");
-  img.src = src;
-  img.srcset = this["src-set"];  // 直接设置属性，绕过 DOMPurify
-  this._container.innerHTML = "";
-  this._container.appendChild(img);
-}
-```
+1. 期望富文本却显示成字面 `<b>` → 该属性按纯文本渲染，改用同名 slot
+2. `pnpm check:html` 报"模板插值需用 escapeHTML() 转义" → 补 `escapeHTML()`
+3. 复杂属性（如 `srcset`）优先用 DOM API 设置，不拼 HTML 字符串
 
 **参考案例**：
 
@@ -902,37 +884,15 @@ it("应该支持多属性组合", async () => {
 | 图片加载          | 100ms    | 图片资源加载                           |
 | DOM 结构验证      | 无需等待 | `expect(element).toBeDefined()`        |
 
-### DOMPurify 属性丢失问题处理
+### HTML 写入相关排查
 
-**问题场景**：
-当测试失败，且组件属性（如 `srcset`）为空或丢失时，优先考虑 DOMPurify 清洗导致的问题。
+**问题场景**：测试失败，且组件渲染内容为空、属性丢失，或页面上出现字面的标签文本。
 
 **诊断步骤**：
 
-1. 检查组件是否使用 `html()` 函数处理包含该属性的 HTML 字符串
-2. 在浏览器中测试是否正常（DOMPurify 在浏览器和 JSDOM 环境行为可能不同）
-3. 确认属性值是否包含 `data:` URI（这类 URI 在 JSDOM 中可能被过滤）
-
-**解决方案**：
-使用 DOM API 替代 HTML 字符串：
-
-```typescript
-// ❌ 不推荐：HTML 字符串可能被清洗
-private _loadImage(src: string): void {
-  this._container.innerHTML = html(
-    `<img src="${src}" srcset="${this["src-set"]}" />`
-  );
-}
-
-// ✅ 推荐：使用 DOM API 设置属性
-private _renderImage(src: string): void {
-  const img = document.createElement("img");
-  img.src = src;
-  img.srcset = this["src-set"];  // 直接设置属性，绕过 DOMPurify
-  this._container.innerHTML = "";
-  this._container.appendChild(img);
-}
-```
+1. 期望富文本却显示成字面 `<b>` → 该属性按纯文本渲染，改用同名 slot
+2. `pnpm check:html` 报"模板插值需用 escapeHTML() 转义" → 补 `escapeHTML()`
+3. 复杂属性（如 `srcset`）优先用 DOM API 设置，不拼 HTML 字符串
 
 **参考案例**：
 

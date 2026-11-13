@@ -6,7 +6,7 @@ import {
   query,
   listen,
 } from "@easy-component-ui/core/decorator";
-import { html } from "@easy-component-ui/core/utils/html";
+import { html, setHTML } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { i18nManager } from "@/utils/I18nManager";
 import { getPageItem } from "./components/pageItem.js";
@@ -290,7 +290,7 @@ export class EaPagination extends EaBase {
   private _updatePaginationStyle(currentPage: number = this.currentPage): void {
     if (!this._pagination || !this.layout?.includes("pager")) return;
 
-    this._pagination.innerHTML = html(this._getPagerTemplate(currentPage));
+    setHTML(this._pagination, html(this._getPagerTemplate(currentPage)));
 
     const els = this._pagination.querySelectorAll(bem.ce("page"));
     const target = this._pagination.querySelector(
@@ -401,11 +401,11 @@ export class EaPagination extends EaBase {
   private _handlePagerRender(): void {
     if (!this._pagination) return;
     if (!this.layout.includes("pager")) {
-      this._pagination.innerHTML = "";
+      setHTML(this._pagination, "");
       return;
     }
 
-    this._pagination.innerHTML = html(this._getPagerTemplate(this.currentPage));
+    setHTML(this._pagination, html(this._getPagerTemplate(this.currentPage)));
   }
 
   /** 渲染总数文本 */
@@ -485,7 +485,7 @@ export class EaPagination extends EaBase {
       this.pageSize = this.pageSizes[0];
     }
 
-    this._sizes.innerHTML = html(this.pageSizes.map(renderCallback).join(""));
+    setHTML(this._sizes, html(this.pageSizes.map(renderCallback).join("")));
     this._sizes.value = this.pageSize;
 
     if (this.disabled) {
@@ -519,7 +519,7 @@ export class EaPagination extends EaBase {
     }
 
     if (this._container && !skipInnerHTML) {
-      this._container.innerHTML = html(this._getLayoutHTML());
+      setHTML(this._container, html(this._getLayoutHTML()));
     }
 
     this._handleSizesRender();

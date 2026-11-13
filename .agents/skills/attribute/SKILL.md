@@ -63,10 +63,10 @@ disabled: boolean = false;
   type: String,
   default: "",
   observer(this: EaAlert, newVal: string) {
-    this._container.innerHTML = html(newVal);
+    setHTML(this._alertHeading, escapeHTML(newVal));
   },
 })
-content: string = "";
+heading: string = "";
 ```
 
 ### 枚举属性

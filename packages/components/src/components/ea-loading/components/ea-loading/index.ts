@@ -4,7 +4,7 @@ import {
   attribute,
   query,
 } from "@easy-component-ui/core/decorator";
-import { html } from "@easy-component-ui/core/utils/html";
+import { escapeHTML, html } from "@easy-component-ui/core/utils/html";
 import stylesheet from "./index.scss?inline";
 import "@/components/ea-icon/index";
 
@@ -154,7 +154,7 @@ export class EaLoading extends EaBase {
           <slot name="spinner">
             <ea-icon class="${bem.e("spinner")}" name="${this.spinner}" spin part="spinner"></ea-icon>
           </slot>
-          <div class="${bem.e("text")}" part="text">${html(this.text)}</div>
+          <div class="${bem.e("text")}" part="text">${escapeHTML(this.text)}</div>
         </div>
         <div class="${bem.e("content")}" part="content-wrap">
           <slot></slot>

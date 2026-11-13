@@ -1,97 +1,90 @@
 ---
 name: "html-safe"
-description: "HTML safety processing using html() function with DOMPurify. Invoke when inserting HTML content into components or debugging DOMPurify-related issues."
+description: "HTML writing and escaping contract: setHTML/insertHTML as the only write entry, escapeHTML for dynamic values, text attributes render as plain text. Invoke when writing component templates, inserting HTML content, or handling user-provided values."
 ---
 
-# HTML 安全处理
+# HTML 写入与转义
 
-使用 `html()` 函数安全地处理 HTML 内容，防止 XSS 攻击。
+组件库**不在运行时清洗 HTML**（已移除 DOMPurify）。模板由组件作者编写、视为可信；使用者提供的值转义后再插入。
 
 ## 导入
 
 ```typescript
-import { html } from "@easy-component-ui/core/utils/html";
+import {
+  escapeHTML,
+  html,
+  insertHTML,
+  setHTML,
+} from "@easy-component-ui/core/utils/html";
 ```
 
 ## API
 
-```typescript
-const html = (dirtyHTML: string): string
-```
+| API            | 签名                                         | 用途                                              |
+| -------------- | -------------------------------------------- | ------------------------------------------------- |
+| `escapeHTML()` | `(value: unknown): string`                   | 转义 `& < > " '`，`null` / `undefined` 归一为空串 |
+| `setHTML()`    | `(target, content: string): void`            | 唯一的 HTML 写入入口，空目标直接忽略              |
+| `insertHTML()` | `(target, content: string, position?): void` | 在指定位置插入（`afterbegin` 等）                 |
+| `html()`       | `(template: string): string`                 | 声明模板可信；不清洗，可疑片段走诊断告警          |
 
-## 核心行为
+## 三条规则
 
-1. **保护 `<slot>` 标签**：先用占位符 `___SLOT_N___` 替换所有 `<slot>` 和 `</slot>` 标签
-2. **DOMPurify 清洗**：使用以下配置进行 XSS 过滤：
-   - `USE_PROFILES: { html: true, svg: true, svgFilters: true }`
-   - `CUSTOM_ELEMENT_HANDLING`：
-     - `tagNameCheck: /^ea-/` — 允许所有 `ea-` 前缀的自定义元素标签
-     - `attributeNameCheck: /.*/` — 允许自定义元素上的所有属性名
-     - `allowCustomizedBuiltInElements: true`
-3. **恢复 `<slot>` 标签**：将占位符替换回原始的 `<slot>` 标签
+1. **写 DOM 只走写入口**：不写 `ele.innerHTML =`，不写 `ele.insertAdjacentHTML()`；两者都收在 `setHTML` / `insertHTML` 里。
+2. **动态值一律 `escapeHTML()`**：属性值、observer 收到的新值、列表项数据都算动态值；**属性上下文同样要转义**（`class` / `name` / `style` 里的 `"` 可以闭合属性）。
+3. **需要富文本时用 slot**：`heading`、`description`、`label` 一类文本属性按纯文本渲染；只有组件显式提供 `dangerously-use-html-string` 这类开关时才传 HTML。
 
-## 使用示例
+## 示例
 
-### 安全插入 HTML
+### 文本上下文
 
 ```typescript
 @attribute({
   type: String,
-  default: "",
   observer(this: EaAlert, newVal: string) {
-    this._container.innerHTML = html(newVal);
+    setHTML(this._alertHeading, escapeHTML(newVal));
   },
 })
-content: string = "";
+heading: string = "";
 ```
 
-### 在模板中使用
+### 属性上下文
 
 ```typescript
-html(): string {
-  return `
-    <div class="${bem()}" part="container">
-      <div class="${bem.e('body')}">${html(this.content)}</div>
-      <slot></slot>
-    </div>
-  `;
-}
+setHTML(
+  this._iconContainer,
+  `<ea-icon name="${escapeHTML(this.icon)}" part="icon"></ea-icon>`
+);
 ```
 
-## DOMPurify 属性丢失问题
+### 富文本走 slot
 
-### 问题场景
+```html
+<ea-alert heading="纯文本标题">
+  <b slot="heading">富文本标题</b>
+</ea-alert>
+```
 
-在 JSDOM 测试环境中，DOMPurify 对某些属性（如 `srcset`）的处理比浏览器更严格，可能导致属性被清洗掉。
+### 显式信任通道
 
-### 诊断步骤
-
-1. 检查组件是否使用 `html()` 函数处理包含该属性的 HTML 字符串
-2. 在浏览器中测试是否正常（DOMPurify 在浏览器和 JSDOM 环境行为可能不同）
-3. 确认属性值是否包含 `data:` URI（这类 URI 在 JSDOM 中可能被过滤）
-
-### 解决方案
-
-使用 DOM API 替代 HTML 字符串：
+确实由代码构造、不含外部输入的内容，可标注豁免（全库仅 3 处，均在 `dangerouslyUseHTMLString` 分支）：
 
 ```typescript
-// ❌ 不推荐：HTML 字符串可能被清洗
-private _loadImage(src: string): void {
-  this._container.innerHTML = html(
-    `<img src="${src}" srcset="${this["src-set"]}" />`
-  );
-}
-
-// ✅ 推荐：使用 DOM API 设置属性
-private _renderImage(src: string): void {
-  const img = document.createElement("img");
-  img.src = src;
-  img.srcset = this["src-set"];
-  this._container.innerHTML = "";
-  this._container.appendChild(img);
+if (this.dangerouslyUseHTMLString) {
+  // @ea-html-safe 由 dangerouslyUseHTMLString 显式开启
+  setHTML(this._messageContent, html(newVal));
 }
 ```
 
-### 参考案例
+## 门禁
 
-- [ea-avatar/index.ts](file:///e:/repo/ea-ui-component/packages/components/src/components/ea-avatar/index.ts) - 使用 DOM API 处理 srcset 属性
+`pnpm check:html`（已并入 `pnpm test`）扫描 `setHTML` / `insertHTML` / `html()` 上下文里的插值。
+
+- 规则实现：`packages/cli/src/lib/html-injection.ts`
+- 白名单按**数据来源**判定（`escapeHTML()`、`html()`、内部 `bem`、`this._renderXxx()`、常量表查值、布尔三元、同源 DOM 克隆），不绑 `this.` 前缀
+- 豁免只能用行内注释 `@ea-html-safe`，新增豁免需说明来源可信的理由
+
+## 常见问题
+
+- **文案里出现了字面 `<b>` 标签** → 属性按纯文本渲染，这是预期行为；要富文本就改用 slot。
+- **检查报"模板插值需用 escapeHTML() 转义"** → 优先加 `escapeHTML()`；确属内部受控内容再考虑 `@ea-html-safe`。
+- **以前依赖 `html()` 剥离 `script` / 未知标签** → 该行为已移除，安全性由"转义动态值 + 构建期校验"保证。

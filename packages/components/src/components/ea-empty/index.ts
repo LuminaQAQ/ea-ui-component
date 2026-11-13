@@ -7,6 +7,7 @@ import {
 import { emptyStatusSVG } from "./assets/emptyStatusSVG";
 import { reportWarn } from "@easy-component-ui/core/utils/diagnostics";
 import stylesheet from "./index.scss?inline";
+import { setHTML } from "@easy-component-ui/core/utils/html";
 
 const TAG_NAME = "ea-empty" as const;
 const bem = createBEM(TAG_NAME);
@@ -82,7 +83,10 @@ export class EaEmpty extends EaBase {
   /** 更新图片区域内容 */
   private _updateImage(imageUrl: string): void {
     if (!imageUrl) {
-      this._imageSlot.innerHTML = `<section class="${bem.e("default")}">${emptyStatusSVG}</section>`;
+      setHTML(
+        this._imageSlot,
+        `<section class="${bem.e("default")}">${emptyStatusSVG}</section>`
+      );
       return;
     }
 
@@ -91,7 +95,7 @@ export class EaEmpty extends EaBase {
     img.src = imageUrl;
     img.alt = "empty image";
     img.setAttribute("part", "image");
-    this._imageSlot.innerHTML = "";
+    setHTML(this._imageSlot, "");
     this._imageSlot.appendChild(img);
   }
 

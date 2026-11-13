@@ -4,7 +4,7 @@ import {
   attribute,
   query,
 } from "@easy-component-ui/core/decorator";
-import { html } from "@easy-component-ui/core/utils/html";
+import { escapeHTML, html, setHTML } from "@easy-component-ui/core/utils/html";
 import { reportWarn } from "@easy-component-ui/core/utils/diagnostics";
 import { defaultAvatar, errorAvatar } from "./assets/avatarPlaceholder";
 import stylesheet from "./index.scss?inline";
@@ -52,11 +52,14 @@ export class EaAvatar extends EaBase {
     observer(this: EaAvatar, newVal: string) {
       if (this.src) return;
       if (newVal) {
-        this._container.innerHTML = html(
-          `<ea-icon class="${bem.e("icon")}" name="${newVal}" part="icon-avatar"></ea-icon>`
+        setHTML(
+          this._container,
+          html(
+            `<ea-icon class="${bem.e("icon")}" name="${escapeHTML(newVal)}" part="icon-avatar"></ea-icon>`
+          )
         );
       } else {
-        this._container.innerHTML = html(`<slot>${defaultAvatar}</slot>`);
+        setHTML(this._container, html(`<slot>${defaultAvatar}</slot>`));
       }
     },
   })
@@ -164,11 +167,14 @@ export class EaAvatar extends EaBase {
    */
   private _renderFallback(): void {
     if (this.icon) {
-      this._container.innerHTML = html(
-        `<ea-icon class="${bem.e("icon")}" name="${this.icon}" part="icon-avatar"></ea-icon>`
+      setHTML(
+        this._container,
+        html(
+          `<ea-icon class="${bem.e("icon")}" name="${escapeHTML(this.icon)}" part="icon-avatar"></ea-icon>`
+        )
       );
     } else {
-      this._container.innerHTML = html(`<slot>${defaultAvatar}</slot>`);
+      setHTML(this._container, html(`<slot>${defaultAvatar}</slot>`));
     }
   }
 
@@ -196,7 +202,7 @@ export class EaAvatar extends EaBase {
     preloader.addEventListener(
       "error",
       () => {
-        this._container.innerHTML = html(`<slot>${errorAvatar}</slot>`);
+        setHTML(this._container, html(`<slot>${errorAvatar}</slot>`));
         this.emit("error");
         this._srcController?.abort();
       },
@@ -217,7 +223,7 @@ export class EaAvatar extends EaBase {
 
     img.setAttribute("part", "img-avatar");
 
-    this._container.innerHTML = "";
+    setHTML(this._container, "");
     this._container.appendChild(img);
   }
 

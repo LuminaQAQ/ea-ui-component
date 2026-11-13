@@ -9,6 +9,7 @@ import {
 import { createBEM } from "@easy-component-ui/core/utils/bem";
 import stylesheet from "./index.scss?inline";
 import "@/components/ea-icon/index";
+import { setHTML } from "@easy-component-ui/core/utils/html";
 
 const TAG_NAME = "ea-dialog" as const;
 const bem = createBEM(TAG_NAME);
@@ -163,11 +164,13 @@ export class EaDialog extends EaOverlay {
 
   html(): string {
     const tpl = document.createElement("template");
-    tpl.innerHTML = super.html();
+    setHTML(tpl, super.html());
 
     const contentContainer = tpl.content.querySelector(".ea-overlay__content")!;
 
-    contentContainer.innerHTML = `
+    setHTML(
+      contentContainer,
+      `
       <div class='${bem()}' part='container'>
         <header class='${bem.e("header")}' part='header'>
           <slot name="header">
@@ -182,7 +185,8 @@ export class EaDialog extends EaOverlay {
           <slot name='footer'></slot>
         </footer>
       </div>
-    `;
+    `
+    );
 
     return tpl.innerHTML;
   }

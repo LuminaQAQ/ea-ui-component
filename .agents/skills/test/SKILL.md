@@ -98,8 +98,8 @@ await waitForRender(200); // 等真实 200ms
 
 上述「须保留 `waitForRender()`」的场景，正解是**条件轮询**而非固定延时。ea-calendar 是典型例子：
 `_handleControllerRender` 是 fire-and-forget 的 async（`$mount()` 与 `controllerType` observer 都只调用
-不 await / 不 return），它先 `await importButtonComponent()` / `importSelectComponent()` 再写
-`_controllerWrapper.innerHTML`，之后还有 `await setTimeout(0)` 才挂载 `change` 监听器——这几段都在
+不 await / 不 return），它先 `await importButtonComponent()` / `importSelectComponent()` 再调
+`setHTML(this._controllerWrapper, ...)`，之后还有 `await setTimeout(0)` 才挂载 `change` 监听器——这几段都在
 `updateComplete` 覆盖范围之外。因此该文件的最终做法是：**控制器元素用 `waitForElement` 轮询占位**
 （`createCalendar` 只 `await calendar.updateComplete`，不再固定等 150ms），**一次性 `change` 事件用
 `vi.waitFor` 把「派发 + 断言」一起重试**。实测对比（各 20 次采样）：原写法丢失 2/20，`vi.waitFor` 0/20。
@@ -326,20 +326,13 @@ describe("Timer Component", () => {
   `vi.advanceTimersByTimeAsync(ms)` 手动推进（需要等待异步链时用 async 版本）
 - 只需等待属性更新时优先用 `await el.updateComplete`，它不受假定时器影响
 
-## DOMPurify 属性丢失问题
+## HTML 渲染相关的测试排查
 
-若测试中属性丢失或为空，优先考虑 DOMPurify 清洗问题：
+若测试中内容为空、属性丢失或出现字面标签：
 
-1. 检查组件是否使用 `html()` 函数处理包含该属性的 HTML 字符串
-2. 在浏览器中测试是否正常
-3. 使用 DOM API 替代 HTML 字符串
-
-```typescript
-// 推荐：使用 DOM API
-const img = document.createElement("img");
-img.srcset = value;
-this._container.appendChild(img);
-```
+1. 期望富文本却显示成字面 `<b>` → 该属性按纯文本渲染，改用同名 slot
+2. `pnpm check:html` 报未转义插值 → 在组件侧补 `escapeHTML()`
+3. 复杂属性（如 `srcset`）优先用 DOM API 设置（`img.srcset = value`），不拼 HTML 字符串
 
 ## 浏览器模式（真实布局套件）
 

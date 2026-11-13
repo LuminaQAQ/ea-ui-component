@@ -7,7 +7,7 @@ import {
   query,
   listen,
 } from "@easy-component-ui/core/decorator";
-import { html } from "@easy-component-ui/core/utils/html";
+import { escapeHTML, html, setHTML } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { EaInputClearEvent } from "./events/EaClearEvent";
 import { EaInputInputEvent } from "./events/EaInputInputEvent";
@@ -297,8 +297,11 @@ export class EaInput extends EaFormAssociatedBase {
     type: String,
     observer(this: EaInput, newVal: string) {
       if (newVal)
-        this._prefixSlot.innerHTML = html(
-          `<ea-icon class="${bem.e("prefix-icon")}" part="prefix-icon" name="${newVal}"></ea-icon>`
+        setHTML(
+          this._prefixSlot,
+          html(
+            `<ea-icon class="${bem.e("prefix-icon")}" part="prefix-icon" name="${escapeHTML(newVal)}"></ea-icon>`
+          )
         );
     },
   })
@@ -308,8 +311,11 @@ export class EaInput extends EaFormAssociatedBase {
     type: String,
     observer(this: EaInput, newVal: string) {
       if (newVal)
-        this._suffixIcon.innerHTML = html(
-          `<ea-icon class="${bem.e("suffix-icon-item")}" part="suffix-icon" name="${newVal}"></ea-icon>`
+        setHTML(
+          this._suffixIcon,
+          html(
+            `<ea-icon class="${bem.e("suffix-icon-item")}" part="suffix-icon" name="${escapeHTML(newVal)}"></ea-icon>`
+          )
         );
     },
   })
@@ -525,7 +531,7 @@ export class EaInput extends EaFormAssociatedBase {
         ? `<textarea id="${id}" class="${bem.e("original")}" part="original"></textarea>`
         : `<input id="${id}" class="${bem.e("original")}" type="${type}" part="original" />`;
 
-    this._originalWrapper.innerHTML = html(tpl);
+    setHTML(this._originalWrapper, html(tpl));
 
     this._original.value = this.value;
     this._original.disabled = this.disabled;

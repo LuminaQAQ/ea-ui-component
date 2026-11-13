@@ -5,7 +5,7 @@ import {
   query,
   listen,
 } from "@easy-component-ui/core/decorator";
-import { html } from "@easy-component-ui/core/utils/html";
+import { escapeHTML, setHTML } from "@easy-component-ui/core/utils/html";
 import { EaPageHeaderBackEvent } from "./events/EaPageHeaderBackEvent";
 import stylesheet from "./index.scss?inline";
 import "@/components/ea-icon/index";
@@ -90,23 +90,30 @@ export class EaPageHeader extends EaBase {
   private _updateIcon(): void {
     if (this.icon) {
       this._iconContainer.classList.remove(bem.s("hidden"));
-      this._iconContainer.innerHTML = `<slot name="icon"><ea-icon name="${this.icon}" part="back-icon"></ea-icon></slot>`;
+      setHTML(
+        this._iconContainer,
+        `<slot name="icon"><ea-icon name="${escapeHTML(this.icon)}" part="back-icon"></ea-icon></slot>`
+      );
     } else {
       this._iconContainer.classList.add(bem.s("hidden"));
-      this._iconContainer.innerHTML = `<slot name="icon"></slot>`;
+      setHTML(this._iconContainer, `<slot name="icon"></slot>`);
     }
   }
 
   /** 更新标题内容，为空时恢复 slot */
   private _updateHeading(): void {
-    this._headingContainer.innerHTML =
-      html(this.heading) || '<slot name="title">Back</slot>';
+    setHTML(
+      this._headingContainer,
+      escapeHTML(this.heading) || '<slot name="title">Back</slot>'
+    );
   }
 
   /** 更新内容区域，为空时恢复 slot */
   private _updateContent(): void {
-    this._contentContainer.innerHTML =
-      html(this.content) || '<slot name="content"></slot>';
+    setHTML(
+      this._contentContainer,
+      escapeHTML(this.content) || '<slot name="content"></slot>'
+    );
   }
 
   /** 渲染模板 */

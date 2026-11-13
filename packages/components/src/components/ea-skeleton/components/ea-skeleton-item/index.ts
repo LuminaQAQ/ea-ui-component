@@ -5,7 +5,7 @@ import {
   query,
 } from "@easy-component-ui/core/decorator";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
-import { html } from "@easy-component-ui/core/utils/html";
+import { html, setHTML } from "@easy-component-ui/core/utils/html";
 import { skeletonImageSVG } from "./assets/imageSVG";
 import stylesheet from "./index.scss?inline";
 
@@ -52,9 +52,9 @@ export class EaSkeletonItem extends EaBase {
     type: Enum(SKELETON_ITEM_VARIANTS),
     observer(this: EaSkeletonItem, newVal: SkeletonItemVariant) {
       if (newVal === "image") {
-        this._container.innerHTML = html(skeletonImageSVG);
+        setHTML(this._container, html(skeletonImageSVG));
       } else {
-        this._container.innerHTML = "";
+        setHTML(this._container, "");
       }
       this.updateContainerClasslist();
     },

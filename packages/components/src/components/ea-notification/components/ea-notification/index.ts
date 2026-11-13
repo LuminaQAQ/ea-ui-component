@@ -6,7 +6,7 @@ import {
   query,
   listen,
 } from "@easy-component-ui/core/decorator";
-import { html } from "@easy-component-ui/core/utils/html";
+import { html, setHTML } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import {
   cssLengthToNumber,
@@ -163,7 +163,8 @@ export class EaNotificationElement extends EaBase {
     type: String,
     observer(this: EaNotificationElement, newVal: string) {
       if (this.dangerouslyUseHTMLString) {
-        this._main.innerHTML = html(newVal);
+        // @ea-html-safe 由 dangerouslyUseHTMLString 显式开启
+        setHTML(this._main, html(newVal));
       } else {
         this._main.textContent = newVal;
       }

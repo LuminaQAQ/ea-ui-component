@@ -6,7 +6,7 @@ import {
   query,
   listen,
 } from "@easy-component-ui/core/decorator";
-import { html } from "@easy-component-ui/core/utils/html";
+import { escapeHTML, html, setHTML } from "@easy-component-ui/core/utils/html";
 import { Enum } from "@easy-component-ui/core/utils/Enum";
 import { Color, type ColorFormat as ColorUtilFormat } from "@/utils/Color";
 import { cssLengthToNumber } from "@easy-component-ui/core/utils/css-length";
@@ -581,22 +581,25 @@ export class EaColorPickerPanel extends EaBase {
     if (!this._predefineList) return;
 
     if (!list || list.length === 0) {
-      this._predefineList.innerHTML = "";
+      setHTML(this._predefineList, "");
       return;
     }
 
-    this._predefineList.innerHTML = html(
-      list
-        .map(
-          color => `
+    setHTML(
+      this._predefineList,
+      html(
+        list
+          .map(
+            color => `
           <div class="${bem.e("predefine-color")}"
             part="predefine-color"
-            style="background-color: ${color}"
-            data-color="${color}"
+            style="background-color: ${escapeHTML(color)}"
+            data-color="${escapeHTML(color)}"
           ></div>
         `
-        )
-        .join("")
+          )
+          .join("")
+      )
     );
   }
 
