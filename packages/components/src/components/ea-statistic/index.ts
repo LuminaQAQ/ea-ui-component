@@ -79,3 +79,4 @@ declare global {
     "ea-statistic": EaStatistic;
   }
 }
+import "../../styles/base";

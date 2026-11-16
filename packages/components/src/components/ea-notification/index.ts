@@ -4,3 +4,4 @@ import { EaNotification } from "./utils/EaNotificationInstance";
 (globalThis as any).$notify = EaNotification;
 
 export { EaNotificationElement, EaNotification };
+import "../../styles/base";

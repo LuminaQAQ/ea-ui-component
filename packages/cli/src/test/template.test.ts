@@ -75,6 +75,18 @@ describe("renderPlaceholders", () => {
     expect(out.split("\n").length).toBeGreaterThanOrEqual(3);
   });
 
+  it("基础样式注入行随工程形态增删", () => {
+    const tpl = ["A", "___BASE_STYLE_IMPORT___", "B"].join("\n");
+
+    expect(renderPlaceholders(tpl, baseCtx)).toBe("A\nB");
+    expect(
+      renderPlaceholders(tpl, {
+        ...baseCtx,
+        baseStyleImport: 'import "../../styles/base";',
+      })
+    ).toContain('import "../../styles/base";');
+  });
+
   it("不触碰 JS 模板插值与 SCSS 变量", () => {
     const tpl = "const s = `${___NAME___}`;\n$radius: 4px;";
     const out = renderPlaceholders(tpl, baseCtx);

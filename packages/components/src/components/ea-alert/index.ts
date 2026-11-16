@@ -363,3 +363,4 @@ declare global {
     "ea-alert": EaAlert;
   }
 }
+import "../../styles/base";

@@ -1,6 +1,5 @@
-// jsdom 环境缺失 API 的集中 polyfill
-// 仅在对应 API 缺失时补齐，测试文件内已有覆盖仍会优先生效
 import { installElementInternalsPolyfill } from "../../../../internal/test-setup/element-internals";
+import { configureDiagnostics } from "@easy-component-ui/core";
 
 if (typeof window !== "undefined") {
   if (!window.ResizeObserver) {
@@ -234,3 +233,8 @@ if (typeof DragEvent === "undefined") {
   };
 }
 installElementInternalsPolyfill();
+
+// jsdom 不实现 adoptedStyleSheets，降级告警在单测里属于预期行为，不刷屏
+configureDiagnostics({
+  filter: key => key !== "styles.adopted-unsupported",
+});

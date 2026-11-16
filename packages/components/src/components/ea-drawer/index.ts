@@ -255,3 +255,4 @@ declare global {
     "ea-drawer": EaDrawer;
   }
 }
+import "../../styles/base";

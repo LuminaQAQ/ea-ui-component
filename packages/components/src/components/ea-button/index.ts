@@ -3,3 +3,4 @@ import { EaButtonGroup } from "./components/ea-button-group";
 
 export { EaButton, EaButtonGroup };
 export default { EaButton, EaButtonGroup };
+import "../../styles/base";

@@ -70,6 +70,8 @@ export { EaUpload } from "./components/ea-upload";
 export { EaWatermark } from "./components/ea-watermark";
 // @ea-generated:end
 export type { EaGlobalCustomEventName } from "./types/events";
-import './components/ea-icon/index.scss';
+import "./styles/base";
 import { initTheme } from "@easy-component-ui/themes/controller";
+import "./components/ea-icon/index.scss";
+
 initTheme();

@@ -33,6 +33,7 @@ readdirSync(commonDir).forEach((file: string) => {
   }
 });
 
+entryConfigs["themes/base"] = resolve(themesDir, "entries/base.entry.ts");
 entryConfigs["themes/source"] = resolve(themesDir, "entries/source.entry.ts");
 entryConfigs["themes/light"] = resolve(themesDir, "entries/light.entry.ts");
 entryConfigs["themes/dark"] = resolve(themesDir, "entries/dark.entry.ts");

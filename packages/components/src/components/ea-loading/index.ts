@@ -10,3 +10,4 @@ declare global {
 (globalThis as any).$loading = EaLoadingService;
 
 export { EaLoading, EaLoadingService };
+import "../../styles/base";

@@ -465,3 +465,4 @@ declare global {
     "ea-popover": EaPopover;
   }
 }
+import "../../styles/base";

@@ -4,3 +4,4 @@ import { EaDescriptions } from "./components/ea-descriptions";
 export { EaDescriptions, EaDescriptionsItem };
 
 export default { EaDescriptions, EaDescriptionsItem };
+import "../../styles/base";

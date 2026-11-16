@@ -5,36 +5,67 @@ description: 了解如何使用 Easy UI 的主题系统，手动实现浅色/深
 
 # 主题切换
 
-Easy UI 采用双层 CSS 变量架构实现主题切换，支持浅色、深色和跟随系统三种模式。
+Easy UI 的主题只靠 CSS 变量实现，支持浅色、深色和跟随系统三种模式。
 
 ## 原理
 
-主题系统基于双层 CSS 变量：
+变量的定义分两层：
 
-- **源变量**（`--ea-source-*`）：定义在 `:root` 和 `html.dark` 上，随主题切换而变化
-- **组件变量**：定义在组件 `:host` 上，引用源变量作为值，在 Shadow DOM 内生效
+- **源变量**（`--ea-source-*`）写在 `:root` 和 `html.dark` 上，切换主题时改的是这一层
+- **组件变量**写在组件自己的 `:host` 上，值是 `var(--ea-source-*)`，所以在 Shadow DOM 里也能跟着变
 
-切换主题时，控制器在 `<html>` 元素上添加或移除 `dark` 类名，激活 `html.dark` 选择器下的深色变量覆盖，变更通过 CSS 变量自动传播到所有 Shadow DOM 组件。
+切换主题时，控制器在 `<html>` 上加或去掉 `dark` 类名，`html.dark` 下的深色变量随之生效，Shadow DOM 里的组件不需要额外处理。
 
-## 引入主题样式
+## 引入样式
 
-使用组件前必须引入主题样式：
+组件的颜色来自语义变量（`--color-*`、`--blue-*` 这些），它们不由 core 提供，需要你在外面注入一次。不做这一步，组件能渲染出来但没有配色。
+
+### 用组件库主包（推荐）
 
 ```js
-// 引入基础主题变量（包含浅色默认值）
-import "easy-component-ui/themes/source";
+import "easy-component-ui";
 ```
 
-如果需要深色主题支持，还需引入深色样式：
+主包入口已经调过 `setBaseStyles(themes/base)`。按需引入单个组件也一样，比如 `import "easy-component-ui/ea-button"`，组件入口会做同样的注入。
+
+### 只用 core 自己写组件
 
 ```js
-import "easy-component-ui/themes/source"; // 基础变量
-import "easy-component-ui/themes/dark"; // 深色覆盖变量
+import { setBaseStyles } from "@easy-component-ui/core";
+import baseStyles from "@easy-component-ui/themes/base";
+
+setBaseStyles(baseStyles);
+```
+
+想换成自己的颜色，直接传 CSS 字符串：`setBaseStyles([".my-theme { --color-blue: #0a84ff; }"])`。注意别传运行时拼出来的字符串，内容每次都不同的话，底层样式表就没法复用了。
+
+### 用文档级 CSS
+
+不想往 Shadow 里注入，也可以用 `<link>` 引入现成的 CSS：
+
+```html
+<link
+  rel="stylesheet"
+  href="./node_modules/@easy-component-ui/themes/dist/base.css"
+/>
+```
+
+`base.css` 和 `themes/base` 是同一份 SCSS 编出来的。里面的变量写成 `:host, :root`，两种场景都能命中：在 Shadow 里 `:host` 指宿主元素，在文档里 `:root` 指 `<html>`。元素重置（`input` 的背景、`ul` 的缩进等）只写在 `:host` 下面，放到文档里也不会影响页面原有样式。
+
+体积上，`themes/base` gzip 后约 1.3 kB，core 本身不带任何 CSS。
+
+## 引入配色变量
+
+上面注入的语义变量只是中转，真正的颜色值来自源变量。所以在用组件之前，还要把源变量引进来：
+
+```js
+import "easy-component-ui/themes/source"; // 浅色默认值
+import "easy-component-ui/themes/dark"; // 深色覆盖值
 ```
 
 ## 使用主题控制器
 
-主题控制器提供了完整的主题管理 API：
+控制器提供以下方法：
 
 ```js
 import {
@@ -190,10 +221,10 @@ onUnmounted(() => {
 
 ## 持久化
 
-主题偏好自动持久化到 `localStorage`（key 为 `ea-theme`）：
+主题偏好存在 `localStorage` 的 `ea-theme` 键里：
 
-- `setTheme("light")` — 存储 `"light"`
-- `setTheme("dark")` — 存储 `"dark"`
-- `setTheme("auto")` — 清除存储，跟随系统
+- `setTheme("light")` 存 `"light"`
+- `setTheme("dark")` 存 `"dark"`
+- `setTheme("auto")` 清除存储，跟随系统
 
-页面刷新后 `initTheme()` 会自动恢复上次的选择。
+刷新页面后 `initTheme()` 会自动恢复上次的选择。

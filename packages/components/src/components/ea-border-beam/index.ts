@@ -179,3 +179,4 @@ declare global {
     "ea-border-beam": EaBorderBeam;
   }
 }
+import "../../styles/base";

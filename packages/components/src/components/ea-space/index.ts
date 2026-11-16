@@ -179,3 +179,4 @@ declare global {
     "ea-space": EaSpace;
   }
 }
+import "../../styles/base";

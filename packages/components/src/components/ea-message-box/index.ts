@@ -16,3 +16,4 @@ declare global {
 (globalThis as any).$msgbox = EaMessageBox;
 
 export { EaMessageBox, EaMessageBoxElement };
+import "../../styles/base";

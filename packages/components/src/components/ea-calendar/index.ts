@@ -708,3 +708,4 @@ declare global {
     "ea-calendar": EaCalendar;
   }
 }
+import "../../styles/base";

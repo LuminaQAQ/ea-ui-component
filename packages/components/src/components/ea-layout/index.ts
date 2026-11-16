@@ -5,3 +5,4 @@ export { EaRow, EaCol };
 
 export default { EaRow, EaCol };
 export type { JustifyType, AlignType } from "./components/ea-row";
+import "../../styles/base";

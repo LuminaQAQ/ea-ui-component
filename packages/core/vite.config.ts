@@ -8,7 +8,6 @@ import {
   RESOLVE_EXTENSIONS,
   coreSourceAliases,
   createEsbuildOptions,
-  createScssOptions,
 } from "../../internal/vite-config/index";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -50,11 +49,6 @@ export default defineConfig({
       output: {
         entryFileNames: "[name].js",
       },
-    },
-  },
-  css: {
-    preprocessorOptions: {
-      scss: createScssOptions(resolve(__dirname, "../themes/src/styles")),
     },
   },
   resolve: {

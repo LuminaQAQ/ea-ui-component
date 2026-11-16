@@ -384,3 +384,4 @@ declare global {
     "ea-progress": EaProgress;
   }
 }
+import "../../styles/base";

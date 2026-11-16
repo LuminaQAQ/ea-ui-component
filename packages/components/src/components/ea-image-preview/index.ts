@@ -549,3 +549,4 @@ declare global {
     "ea-image-preview": EaImagePreview;
   }
 }
+import "../../styles/base";

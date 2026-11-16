@@ -896,3 +896,4 @@ declare global {
     "ea-upload": EaUpload;
   }
 }
+import "../../styles/base";

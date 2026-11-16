@@ -123,3 +123,4 @@ declare global {
     "ea-divider": EaDivider;
   }
 }
+import "../../styles/base";

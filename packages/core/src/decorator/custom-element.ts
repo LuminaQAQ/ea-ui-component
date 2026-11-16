@@ -1,11 +1,11 @@
 ﻿import parseAttributeValue, {
   parseDefaultValue,
 } from "../utils/parseAttributeValue";
-import { StylesheetCache } from "../stores";
+import { StylesheetCache, getBaseStyles } from "../stores";
 import { finalize, resolveDefault } from "../schema";
 import type { ClassMeta, DeclaredType, PropertyDecl } from "../schema";
 import { html } from "../utils/html";
-import { reportError } from "../utils/diagnostics";
+import { reportError, reportWarnOnce } from "../utils/diagnostics";
 import type { EaElement, EaElementConstructor } from "../types/index";
 import {
   GlobalCustomElements,
@@ -390,41 +390,60 @@ function defineReactiveProperty(
 }
 
 /**
- * 收集并应用组件样式
+ * 判断当前环境是否支持构造式样式表
+ * 需同时具备构造器、replaceSync 与 adopt 入口，缺一即视为不支持sn
+ */
+function supportsAdoptedStyleSheets(): boolean {
+  return (
+    "adoptedStyleSheets" in ShadowRoot.prototype &&
+    typeof CSSStyleSheet !== "undefined" &&
+    typeof CSSStyleSheet.prototype.replaceSync === "function"
+  );
+}
+
+/**
+ * 收集并应用组件样式，基础样式始终排在最前且只出现一次
  * @param classChain 组件类的原型链
  * @param shadowRoot 组件的 ShadowRoot
  */
 function applyStyles(classChain: any[], shadowRoot: ShadowRoot | null): void {
   if (!shadowRoot) return;
 
-  const allStyles: string[] = [];
+  const allStyles: string[] = [...getBaseStyles()];
+
   classChain.forEach(cls => {
     const classOptions = cls.customElementOptions;
-    if (classOptions?.styles) {
-      const classStyles = Array.isArray(classOptions.styles)
-        ? classOptions.styles
-        : [classOptions.styles];
-      allStyles.push(...classStyles);
-    }
+    if (!classOptions?.styles) return;
+
+    const classStyles = Array.isArray(classOptions.styles)
+      ? classOptions.styles
+      : [classOptions.styles];
+
+    allStyles.push(...classStyles);
   });
 
   const uniqueStyles = [...new Set(allStyles)];
 
   if (uniqueStyles.length === 0) return;
 
-  if (
-    "adoptedStyleSheets" in ShadowRoot.prototype &&
-    shadowRoot.adoptedStyleSheets !== undefined
-  ) {
+  if (supportsAdoptedStyleSheets()) {
     const sheets = uniqueStyles.map(css => StylesheetCache.getOrCreate(css));
+
     shadowRoot.adoptedStyleSheets = sheets;
-  } else {
-    uniqueStyles.forEach(css => {
-      const styleEl = document.createElement("style");
-      styleEl.textContent = css;
-      shadowRoot.appendChild(styleEl);
-    });
+    return;
   }
+
+  reportWarnOnce(
+    "styles.adopted-unsupported",
+    "当前环境不支持 adoptedStyleSheets，已退化为每个实例注入 <style>，同类实例不再共享样式表"
+  );
+
+  uniqueStyles.forEach(css => {
+    const styleEl = document.createElement("style");
+
+    styleEl.textContent = css;
+    shadowRoot.appendChild(styleEl);
+  });
 }
 
 /**

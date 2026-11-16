@@ -858,3 +858,4 @@ declare global {
     "ea-date-picker": EaDatePicker;
   }
 }
+import "../../styles/base";

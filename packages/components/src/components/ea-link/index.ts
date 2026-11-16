@@ -205,3 +205,4 @@ declare global {
     "ea-link": EaLink;
   }
 }
+import "../../styles/base";

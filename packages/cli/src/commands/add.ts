@@ -315,6 +315,13 @@ function existingComponentNames(cfg: ResolvedEaConfig): Set<string> {
   return names;
 }
 
+/** 组件根目录父级存在基础样式模块（styles/base.ts）时，入口需引入以注入语义变量层 */
+function baseStyleImportFor(componentRoot: string): string {
+  const baseFile = path.join(componentRoot, "..", "styles", "base.ts");
+
+  return fs.existsSync(baseFile) ? 'import "../../styles/base";' : "";
+}
+
 /** 组件渲染上下文：由归一化名与版本组装语义 token 所需的完整字段 */
 function makeContext(
   prefix: string,
@@ -364,6 +371,7 @@ function buildPlan(
     ? internalParts.map(p => ` * @dependency ${p.full}`).join("\n") + "\n *"
     : "";
   const mainImplCtx: RenderContext = { ...ctx, internalDeps, dependency };
+  const baseStyleImport = baseStyleImportFor(targetRoot);
 
   const files: PlannedFile[] = [];
   const scssOf = (implDir: string, implCtx: RenderContext) => ({
@@ -396,6 +404,7 @@ function buildPlan(
         )
         .join("\n"),
       exportList: allClasses.join(", "),
+      baseStyleImport,
     };
 
     files.push({
@@ -793,6 +802,7 @@ function buildUnderPlan(
         ? `import { ${subClass} } from "./components/${sub.full}";`
         : `import "./components/${sub.full}";`,
       exportList: isPublic ? `${mainClass}, ${subClass}` : mainClass,
+      baseStyleImport: baseStyleImportFor(path.dirname(path.dirname(rootPath))),
     };
     rootContent = renderTemplate("entry.ts.tpl", cfg, entryCtx);
   }

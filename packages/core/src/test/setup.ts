@@ -1,4 +1,4 @@
-// core 测试环境的 jsdom 补齐
+import { configureDiagnostics } from "@utils/diagnostics";
 import { installElementInternalsPolyfill } from "../../../../internal/test-setup/element-internals";
 
 // rAF
@@ -14,3 +14,8 @@ if (typeof globalThis.requestAnimationFrame !== "function") {
 }
 
 installElementInternalsPolyfill();
+
+// jsdom 不实现 adoptedStyleSheets，降级告警在单测里属于预期行为，不刷屏
+configureDiagnostics({
+  filter: key => key !== "styles.adopted-unsupported",
+});

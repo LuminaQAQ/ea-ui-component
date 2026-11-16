@@ -372,3 +372,4 @@ declare global {
     "ea-scrollbar": EaScrollbar;
   }
 }
+import "../../styles/base";

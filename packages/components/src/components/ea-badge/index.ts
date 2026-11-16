@@ -185,3 +185,4 @@ declare global {
     "ea-badge": EaBadge;
   }
 }
+import "../../styles/base";

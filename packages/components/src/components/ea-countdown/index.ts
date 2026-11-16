@@ -274,3 +274,4 @@ declare global {
     "ea-countdown": EaCountdown;
   }
 }
+import "../../styles/base";

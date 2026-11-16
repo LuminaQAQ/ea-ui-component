@@ -419,3 +419,4 @@ declare global {
     "ea-segmented": EaSegmented;
   }
 }
+import "../../styles/base";

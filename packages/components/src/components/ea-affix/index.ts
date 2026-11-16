@@ -250,3 +250,4 @@ declare global {
     "ea-affix": EaAffix;
   }
 }
+import "../../styles/base";

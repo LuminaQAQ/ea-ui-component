@@ -200,3 +200,4 @@ declare global {
     "ea-backtop": EaBacktop;
   }
 }
+import "../../styles/base";

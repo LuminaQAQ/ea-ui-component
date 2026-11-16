@@ -20,6 +20,11 @@ export const SCSS_ADDITIONAL_DATA = `
           @use "mixins" as *;
         `;
 
+export const TEST_TIMEOUTS = {
+  testTimeout: 15000,
+  hookTimeout: 15000,
+};
+
 export function createEsbuildOptions({
   target = "es2020",
 }: { target?: string } = {}) {
@@ -77,15 +82,22 @@ export function workspaceSourceAliases({
       find: /^@easy-component-ui\/themes\/([\w-]+)\.scss(\?.*)?$/,
       replacement: `${themesSrcDir}/styles/$1.scss$2`,
     },
+    {
+      find: "@easy-component-ui/themes/controller",
+      replacement: `${themesSrcDir}/controller.ts`,
+    },
+    {
+      find: "@easy-component-ui/themes/base",
+      replacement: `${themesSrcDir}/entries/base.entry.ts`,
+    },
+    {
+      find: /^@easy-component-ui\/themes\/(light|dark|source)$/,
+      replacement: `${themesSrcDir}/entries/$1.entry.ts`,
+    },
     { find: "@easy-component-ui/core", replacement: coreSrcDir },
     { find: "@easy-component-ui/themes", replacement: themesSrcDir },
   ];
 }
-
-export const TEST_TIMEOUTS = {
-  testTimeout: 15000,
-  hookTimeout: 15000,
-};
 
 export function createTestDefaults({
   maxWorkers = 4,

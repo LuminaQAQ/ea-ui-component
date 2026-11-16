@@ -19,19 +19,26 @@
       "import": "./dist/controller.js",
       "types": "./dist/types/controller.d.ts"
     },
+    "./base": {
+      "import": "./dist/base.js",
+      "types": "./dist/types/entries/base.entry.d.ts"
+    },
+    "./base.css": "./dist/base.css",
     "./light": {
       "import": "./dist/light.js",
-      "types": "./dist/types/light.d.ts"
+      "types": "./dist/types/entries/light.entry.d.ts"
     },
     "./dark": {
       "import": "./dist/dark.js",
-      "types": "./dist/types/dark.d.ts"
+      "types": "./dist/types/entries/dark.entry.d.ts"
     },
     "./source": {
       "import": "./dist/source.js",
-      "types": "./dist/types/source.d.ts"
+      "types": "./dist/types/entries/source.entry.d.ts"
     },
     "./variables.scss": "./src/styles/variables.scss",
+    "./reset.scss": "./src/styles/reset.scss",
+    "./base.scss": "./src/styles/base.scss",
     "./light.scss": "./src/styles/light.scss",
     "./dark.scss": "./src/styles/dark.scss",
     "./source.scss": "./src/styles/source.scss",
@@ -39,7 +46,7 @@
     "./namespace.scss": "./src/styles/namespace.scss"
   },
   "scripts": {
-    "build": "vite build",
+    "build": "vite build && sass --no-source-map --style=compressed src/styles/base.scss dist/base.css",
     "test:run": "vitest run",
     "typecheck": "tsc --noEmit"
   },

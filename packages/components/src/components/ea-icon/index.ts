@@ -203,3 +203,4 @@ declare global {
     "ea-icon": EaIcon;
   }
 }
+import "../../styles/base";

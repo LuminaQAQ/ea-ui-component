@@ -9,3 +9,4 @@ export {
   EaDropdownCommandEvent,
   type EaDropdownCommandEventDetail,
 } from "./events/EaDropdownCommandEvent";
+import "../../styles/base";

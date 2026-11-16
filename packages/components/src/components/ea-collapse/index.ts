@@ -9,3 +9,4 @@ export type {
   CollapseChangeDetail,
   BeforeCollapseCallback,
 } from "./components/ea-collapse";
+import "../../styles/base";

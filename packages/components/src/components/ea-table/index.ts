@@ -3,3 +3,4 @@ import { EaTableColumn } from "./components/ea-table-column";
 
 export { EaTable, EaTableColumn };
 export default { EaTable, EaTableColumn };
+import "../../styles/base";

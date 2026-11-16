@@ -852,3 +852,4 @@ declare global {
     "ea-input": EaInput;
   }
 }
+import "../../styles/base";

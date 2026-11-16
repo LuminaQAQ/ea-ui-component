@@ -4,3 +4,4 @@ import { EaTabPanel } from "./components/ea-tab-panel";
 
 export { EaTab, EaTabs, EaTabPanel };
 export default { EaTab, EaTabs, EaTabPanel };
+import "../../styles/base";

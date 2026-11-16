@@ -3,3 +3,4 @@ import { EaRadioGroup } from "./components/ea-radio-group";
 
 export { EaRadio, EaRadioGroup };
 export default { EaRadio, EaRadioGroup };
+import "../../styles/base";

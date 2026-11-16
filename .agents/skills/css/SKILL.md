@@ -110,6 +110,20 @@ $name: ea-component-name;
 
 3. **硬编码仅作为最后手段**：当不存在包含定义的变量时，才可以使用硬编码
 
+### 语义变量的来源
+
+组件 scss 只声明自己的 `:host` 组件变量（`var(--grey-100)` 这类引用），**不自己 `@use` 变量文件**。语义层由 `setBaseStyles()` 注入：
+
+| 文件             | 选择器         | 职责                                                                             |
+| ---------------- | -------------- | -------------------------------------------------------------------------------- |
+| `variables.scss` | `:host, :root` | 语义变量（`--color-*` / `--blue-*` …），保留 `var(--ea-source-*, fallback)` 中转 |
+| `reset.scss`     | `:host`        | Shadow 内元素基线（`input` 背景、`ul` 列表），文档级不生效                       |
+| `base.scss`      | —              | `@use "variables"; @use "reset"`，同时产出 `themes/base`（JS）与 `base.css`      |
+
+- 注入链：`packages/components/src/styles/base.ts` → 每个组件入口与聚合入口 → `setBaseStyles(themes/base)`；新增组件入口时**不要**再手写主题导入，`ea add` 生成的入口无需额外处理
+- 新增语义变量时只改 `variables.scss`（并确认 `light.scss` / `dark.scss` 同步），不要把它写进组件 scss
+- 不要在组件里重复声明 `--color-*` / `--blue-*` 这类全局语义变量
+
 ## 状态样式
 
 ### 显示/隐藏状态

@@ -1,5 +1,4 @@
-﻿import variable from "@easy-component-ui/themes/variables.scss?inline";
-import type { EaElement } from "../types/index";
+﻿import type { EaElement } from "../types/index";
 import { createBEM } from "@utils/bem";
 import { attribute } from "@decorator/attribute";
 import { CustomElement } from "@decorator/custom-element";
@@ -58,7 +57,7 @@ export async function waitForPendingUpdates(): Promise<void> {
  * EA UI 组件基类
  * 提供基础生命周期、事件系统、本地化支持
  */
-@CustomElement("ea-base", { styles: [variable], autoDefine: false })
+@CustomElement("ea-base", { autoDefine: false })
 export default class EaBase extends GlobalHTMLElement {
   // ==================== 属性定义 ====================
 

@@ -4,3 +4,4 @@ import { EaColorPickerPanel } from "./components/ea-color-picker-panel";
 export { EaColorPicker, EaColorPickerPanel };
 
 export default { EaColorPicker, EaColorPickerPanel };
+import "../../styles/base";

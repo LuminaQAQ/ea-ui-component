@@ -226,3 +226,4 @@ declare global {
     "ea-infinite-scroll": EaInfiniteScroll;
   }
 }
+import "../../styles/base";

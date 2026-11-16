@@ -346,3 +346,4 @@ declare global {
     "ea-effects": EaEffects;
   }
 }
+import "../../styles/base";

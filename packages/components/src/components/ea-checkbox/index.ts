@@ -4,3 +4,4 @@ import { EaCheckboxGroup } from "./components/ea-checkbox-group";
 export { EaCheckbox, EaCheckboxGroup };
 
 export default { EaCheckbox, EaCheckboxGroup };
+import "../../styles/base";

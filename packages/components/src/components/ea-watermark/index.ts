@@ -312,3 +312,4 @@ declare global {
     "ea-watermark": EaWatermark;
   }
 }
+import "../../styles/base";

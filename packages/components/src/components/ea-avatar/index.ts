@@ -278,3 +278,4 @@ declare global {
     "ea-avatar": EaAvatar;
   }
 }
+import "../../styles/base";

@@ -4,3 +4,4 @@ import { EaMessage } from "./utils/EaMessageInstance";
 (globalThis as any).$message = EaMessage;
 
 export { EaMessageElement, EaMessage };
+import "../../styles/base";

@@ -33,6 +33,7 @@
 | `___EXPORT_LIST___`    | 出口类名列表                   | entry        | `EaButton, EaButtonGroup`                       |
 | `___EXPORT_DEFAULT___` | 单组件值导出段                 | component.ts | `export default EaButton;`                      |
 | `___INTERNAL_DEPS___`  | 私有组件副作用注册路径         | component.ts | 每私有组件一行 `import "./components/x/index";` |
+| `___BASE_STYLE_IMPORT___` | 基础样式注入语句 | entry | 工程存在 `src/styles/base.ts` 时写入 `import "../../styles/base";`，否则整行删去 |
 | `___DEPENDENCY___`     | 私有组件 `@dependency` 文档块  | component.ts | ` * @dependency ea-x-item`                      |
 
 - token 值为空且独占整行时删除该行（如单组件不生成 `___SUB_IMPORTS___`）。

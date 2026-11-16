@@ -81,4 +81,4 @@ setHTML(panel, html(`<span class="label">${escapeHTML(label)}</span>`));
 1. **图标样式**：如果组件使用了图标（如 `ea-button` 的 `icon` 属性），必须引入 `icon-assets`
 2. **ES Module**：组件使用 ES Module 格式，需要通过 `type="module"` 引入
 3. **自定义元素**：所有组件标签以 `ea-` 开头，如 `<ea-button>`、`<ea-input>`
-4. **主题样式**：使用组件前必须引入主题样式 `easy-component-ui/themes/source`，详见 [主题切换](./theme.md)
+4. **主题样式**：引入主包 `easy-component-ui` 或按需引入单个组件时会自动注入语义变量层（`setBaseStyles(themes/base)`）；配色仍需引 `easy-component-ui/themes/source`（深色再加 `themes/dark`）。只引 core 自建组件时，需自行调 `setBaseStyles()` 或改用主题包的 `base.css`，详见 [主题切换](./theme.md)

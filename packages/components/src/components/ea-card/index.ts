@@ -144,3 +144,4 @@ declare global {
     "ea-card": EaCard;
   }
 }
+import "../../styles/base";

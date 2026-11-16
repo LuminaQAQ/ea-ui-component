@@ -387,3 +387,4 @@ declare global {
     "ea-rate": EaRate;
   }
 }
+import "../../styles/base";

@@ -329,3 +329,4 @@ declare global {
     "ea-tooltip": EaTooltip;
   }
 }
+import "../../styles/base";

@@ -647,3 +647,4 @@ declare global {
     "ea-input-number": EaInputNumber;
   }
 }
+import "../../styles/base";

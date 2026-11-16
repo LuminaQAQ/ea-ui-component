@@ -3,3 +3,4 @@ import { EaTimelineItem } from "./components/ea-timeline-item";
 
 export { EaTimeline, EaTimelineItem };
 export default { EaTimeline, EaTimelineItem };
+import "../../styles/base";

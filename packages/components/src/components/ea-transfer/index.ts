@@ -836,3 +836,4 @@ declare global {
     "ea-transfer": EaTransfer;
   }
 }
+import "../../styles/base";

@@ -120,3 +120,4 @@ declare global {
     "ea-theme-toggle-change": CustomEvent<EaThemeToggleEventDetail>;
   }
 }
+import "../../styles/base";

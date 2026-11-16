@@ -3,3 +3,4 @@ import { EaSteps } from "./components/ea-steps";
 
 export { EaStep, EaSteps };
 export default { EaStep, EaSteps };
+import "../../styles/base";

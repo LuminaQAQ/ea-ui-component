@@ -12,6 +12,7 @@ export {
 export { createBEM } from "@utils/bem";
 export { Enum } from "@utils/Enum";
 export { escapeHTML, html, insertHTML, setHTML } from "@utils/html";
+export { getBaseStyles, setBaseStyles, StylesheetCache } from "./stores";
 export { cssLengthToNumber, numberToCssLength } from "@utils/css-length";
 export { RovingTabindex } from "@utils/roving-tabindex";
 export { debounce, throttle, rafThrottle } from "@utils/performance";

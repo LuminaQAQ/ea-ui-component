@@ -141,3 +141,4 @@ declare global {
     "ea-result": EaResult;
   }
 }
+import "../../styles/base";

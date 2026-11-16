@@ -672,3 +672,4 @@ declare global {
     "ea-slider": EaSlider;
   }
 }
+import "../../styles/base";

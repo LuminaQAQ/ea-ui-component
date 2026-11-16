@@ -18,6 +18,7 @@ export default defineConfig({
     lib: {
       entry: {
         controller: resolve(srcDir, "controller.ts"),
+        base: resolve(srcDir, "entries/base.entry.ts"),
         light: resolve(srcDir, "entries/light.entry.ts"),
         dark: resolve(srcDir, "entries/dark.entry.ts"),
         source: resolve(srcDir, "entries/source.entry.ts"),

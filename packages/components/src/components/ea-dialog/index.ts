@@ -338,3 +338,4 @@ declare global {
     "ea-dialog": EaDialog;
   }
 }
+import "../../styles/base";

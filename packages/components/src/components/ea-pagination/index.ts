@@ -720,3 +720,4 @@ declare global {
     "ea-pagination": EaPagination;
   }
 }
+import "../../styles/base";

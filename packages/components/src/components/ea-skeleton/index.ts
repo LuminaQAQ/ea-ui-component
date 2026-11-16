@@ -3,3 +3,4 @@ import { EaSkeletonItem } from "./components/ea-skeleton-item";
 
 export { EaSkeleton, EaSkeletonItem };
 export default { EaSkeleton, EaSkeletonItem };
+import "../../styles/base";

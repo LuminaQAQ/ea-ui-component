@@ -64,6 +64,10 @@ export default defineConfig({
             return `${chunkInfo.name}.style.js`;
           }
 
+          if (chunkInfo.name === "base-styles") {
+            return "base-styles.js";
+          }
+
           return `components/[name].js`;
         },
         assetFileNames: "assets/icon.css",
@@ -74,7 +78,15 @@ export default defineConfig({
           const componentsPath = normalizePath(
             path.resolve(__dirname, "src/components")
           );
+          const stylesPath = normalizePath(
+            path.resolve(__dirname, "src/styles")
+          );
           const normalizedId = normalizePath(id);
+
+          // 基础样式模块被所有组件入口引用，单独成块避免被归入某个组件的 chunk
+          if (normalizedId.startsWith(stylesPath + "/")) {
+            return "base-styles";
+          }
           const findComponentName = (pathChunks: string[]): string | null => {
             const chunk = pathChunks.pop();
             if (!chunk) return null;

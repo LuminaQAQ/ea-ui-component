@@ -11,3 +11,4 @@ export {
   EaCheckTagChangeEvent,
   type EaCheckTagChangeEventDetail,
 } from "./events/EaCheckTagChangeEvent";
+import "../../styles/base";

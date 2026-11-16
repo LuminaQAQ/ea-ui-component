@@ -5,3 +5,4 @@ import { EaSubMenu } from "./components/ea-sub-menu";
 
 export { EaMenu, EaMenuItem, EaMenuItemGroup, EaSubMenu };
 export default { EaMenu, EaMenuItem, EaMenuItemGroup, EaSubMenu };
+import "../../styles/base";

@@ -165,3 +165,4 @@ declare global {
     "ea-page-header": EaPageHeader;
   }
 }
+import "../../styles/base";

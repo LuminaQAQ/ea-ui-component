@@ -139,3 +139,4 @@ declare global {
     "ea-empty": EaEmpty;
   }
 }
+import "../../styles/base";

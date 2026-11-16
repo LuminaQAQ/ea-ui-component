@@ -4,3 +4,4 @@ import { EaOptionGroup } from "./components/ea-option-group";
 
 export { EaSelect, EaOption, EaOptionGroup };
 export default { EaSelect, EaOption, EaOptionGroup };
+import "../../styles/base";

@@ -374,3 +374,4 @@ declare global {
     "ea-switch": EaSwitch;
   }
 }
+import "../../styles/base";

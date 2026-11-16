@@ -182,3 +182,4 @@ declare global {
     "ea-text": EaText;
   }
 }
+import "../../styles/base";

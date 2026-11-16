@@ -45,6 +45,8 @@ export interface RenderContext {
   exportDefault?: string;
   /** 私有组件副作用注册路径（component 模板用，如 import "./components/x/index";）；无则留空即省略 */
   internalDeps?: string;
+  /** 基础样式注入语句（entry 模板用，工程存在 styles/base.ts 时填写本行）；无则留空即整行删去 */
+  baseStyleImport?: string;
   /** 私有组件 JSDoc @dependency 块（component 模板用，每行形如 ` * @dependency ea-x-item`）；无则留空即省略 */
   dependency?: string;
 }
@@ -64,6 +66,7 @@ function tokenMap(ctx: RenderContext): Record<string, string> {
     ___EXPORT_LIST___: ctx.exportList ?? "",
     ___EXPORT_DEFAULT___: ctx.exportDefault ?? "",
     ___INTERNAL_DEPS___: ctx.internalDeps ?? "",
+    ___BASE_STYLE_IMPORT___: ctx.baseStyleImport ?? "",
     ___DEPENDENCY___: ctx.dependency ?? "",
   };
 }
